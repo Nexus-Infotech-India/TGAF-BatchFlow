@@ -57,7 +57,7 @@ async function resetDatabase(): Promise<void> {
         await prisma.user.update({
           where: { id: user.id },
           data: {
-            Role: { set: [] }
+            // Role: { set: [] }
           }
         });
       }
@@ -82,7 +82,7 @@ async function resetDatabase(): Promise<void> {
     await prisma.exportLog.deleteMany().catch(() => console.log('No ExportLog records to delete'));
     
     // Delete user-related data
-    await prisma.session?.deleteMany().catch(() => console.log('No Session records to delete'));
+    //await prisma.session?.deleteMany().catch(() => console.log('No Session records to delete'));
     await prisma.role.deleteMany().catch(() => console.log('No Role records to delete'));
     await prisma.user.deleteMany().catch(() => console.log('No User records to delete'));
     
