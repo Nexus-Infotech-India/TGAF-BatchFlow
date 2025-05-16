@@ -66,7 +66,7 @@ const MonthlyBatchSummary: React.FC = () => {
   const getPieChartData = () => {
     if (!summary) return [];
     
-    return Object.entries(summary.productDistribution).map(([name, value], index) => ({
+    return Object.entries(summary.productDistribution).map(([name, value]) => ({
       name,
       value,
     }));
@@ -179,7 +179,7 @@ const MonthlyBatchSummary: React.FC = () => {
                   dataKey="value"
                   label={({ name, percent }: { name: string; percent: number }) => `${name}: ${(percent * 100).toFixed(0)}%`}
                 >
-                  {getPieChartData().map((entry, index) => (
+                  {getPieChartData().map((_, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>

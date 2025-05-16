@@ -8,8 +8,6 @@ import AddUnit from "../../ui/standard/unit/AddUnit";
 import AddMethodology from "../../ui/standard/methodology/AddMethodology";
 import StandardCategory from "../../ui/standard/stanadardCategory/StandardCategory";
 import AddStandardCategory from "../../ui/standard/stanadardCategory/AddCategory";
-import ViewStandards from "../../ui/standard/standards/ViewStandards";
-import AddStandard from "../../ui/standard/standards/AddStandard";
 import StandardParameterList from "../../ui/standard/standardParameters/standardParamlist";
 import AddStandardParameter from "../../ui/standard/standardParameters/AddStandardParameter";
 import { motion } from "framer-motion";
@@ -82,7 +80,7 @@ export default function Standard() {
 
   const [activeTab, setActiveTab] = useState(0);
   const [showAddComponent, setShowAddComponent] = useState(false);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<{ id: string; name: string } | null>(null);
+  const [, setSelectedCategoryId] = useState<{ id: string; name: string } | null>(null);
 
   const handleCategorySelect = (categoryId: string, categoryName: string) => {
     setSelectedCategoryId({ id: categoryId, name: categoryName });
@@ -97,9 +95,7 @@ export default function Standard() {
     setShowAddComponent(false);
   };
 
-  const handleClearFilter = () => {
-    setSelectedCategoryId(null);
-  };
+ 
 
   // Define the tab icons
   const tabIcons = {

@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode} from "react";
 import { useStepForm } from "./stepForm";
 
 interface FormStepProps {
@@ -12,9 +12,9 @@ export const FormStep: React.FC<FormStepProps> = ({
   title,
   children,
   onValidate,
-  stepNumber
+  
 }) => {
-  const { currentStep, nextStep, prevStep, isLastStep, formData } = useStepForm();
+  const { currentStep, nextStep, prevStep, isLastStep } = useStepForm();
   
   // Handle form submission with validation
   const handleSubmit = async (e: React.FormEvent) => {

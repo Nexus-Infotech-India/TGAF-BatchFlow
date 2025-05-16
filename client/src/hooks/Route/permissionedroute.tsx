@@ -17,7 +17,7 @@ const PermissionedRoute: React.FC<PermissionedRouteProps> = ({
   permissionKey,
   element,
   path,
-  ...rest
+
 }) => {
   const { registerPageRoute } = useRoutes();
 

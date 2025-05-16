@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, ShieldCheck, Eye, Users, Copy, ChevronDown, ChevronUp } from 'lucide-react';
+import { FileText, ShieldCheck, Eye, Copy, ChevronDown, ChevronUp } from 'lucide-react';
 
 const TermsAndPolicies: React.FC = () => {
   const [expandedSection, setExpandedSection] = useState<string | null>("terms");

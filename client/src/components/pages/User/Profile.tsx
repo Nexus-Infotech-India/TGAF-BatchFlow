@@ -1,8 +1,8 @@
-import React from "react";
+
 import { useQuery } from "@tanstack/react-query";
 import { format, formatDistanceToNow } from "date-fns";
 import api, { API_ROUTES } from "../../../utils/api";
-import { CheckCircle } from "lucide-react";
+
 import LoadingState from "../../ui/User/LoadingState";
 import ErrorState from "../../ui/User/ErrorState";
 import ProfileHeader from "../../ui/User/ProfileHeader";

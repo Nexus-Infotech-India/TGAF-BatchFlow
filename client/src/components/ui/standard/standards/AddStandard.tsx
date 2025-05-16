@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import api, { API_ROUTES } from "../../../../utils/api";
 import { motion } from "framer-motion";
-import { Save, X, AlertCircle, Info, Tag, FileText, Package, Award, RefreshCw, CheckCircle, ChevronDown } from "lucide-react";
+import { Save, X, AlertCircle, Info, Tag, FileText, Award, RefreshCw, CheckCircle, ChevronDown } from "lucide-react";
 import { toast } from "react-toastify";
 
 interface AddStandardProps {

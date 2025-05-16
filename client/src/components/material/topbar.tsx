@@ -15,7 +15,7 @@ interface TopBarProps {
 }
 
 const TopBar: React.FC<TopBarProps> = ({ 
-  title, 
+ 
   navStack, 
   onNavigate, 
   actionButton 

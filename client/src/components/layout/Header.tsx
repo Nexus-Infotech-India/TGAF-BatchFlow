@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, User, Search, Menu, X, ChevronDown, Shield, Settings, LogOut } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Bell, User, Search, X, ChevronDown, Shield, Settings, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import api , { API_ROUTES } from "../../utils/api";
 
@@ -16,7 +16,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({ pageTitle, activeNavStack = [] })
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchBar, setShowSearchBar] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
+  
 
   // Notifications data fetch
   const { data: notifications = [] } = useQuery({
@@ -137,17 +137,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({ pageTitle, activeNavStack = [] })
   };
 
   // Notification type styling
-  const getNotificationStyles = (type: string) => {
-    switch(type) {
-      case 'alert': 
-        return "bg-gradient-to-r from-red-50 to-red-100 border-red-200 text-red-700";
-      case 'success': 
-        return "bg-gradient-to-r from-green-50 to-green-100 border-green-200 text-green-700";
-      case 'info':
-      default:
-        return "bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 text-blue-700";
-    }
-  };
+ 
 
   // Shimmering animation for title
   const titleVariants = {

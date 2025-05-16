@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   createColumnHelper,
   flexRender,
@@ -20,7 +20,7 @@ import {
   Folder, 
   RefreshCw, 
   AlertCircle,
-  Check,
+  
   Plus
 } from "lucide-react";
 import EditableCell from "../../../common/EditableCell";

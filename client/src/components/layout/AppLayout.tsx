@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Sidebar from '../ui/sidebar';
 import HeaderBar from './Header';
@@ -11,7 +11,7 @@ const AppLayout = () => {
     Array<{ title: string; path: string }>
   >([]);
   const location = useLocation();
-  const navigate = useNavigate();
+  
 
   // This function will be passed to Sidebar to communicate its state
   const handleSidebarToggle = (

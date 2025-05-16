@@ -1,5 +1,5 @@
 import React, { useState, createContext, useContext, ReactNode } from "react";
-import { StepIndicator } from "./stepIndicator";
+
 
 interface StepFormContextType {
   currentStep: number;

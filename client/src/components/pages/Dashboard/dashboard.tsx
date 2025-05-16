@@ -9,7 +9,7 @@ import StandardUsageMetrics from '../../ui/dashboard/Standarddata';
 
 
 const Dashboard: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

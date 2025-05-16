@@ -8,7 +8,7 @@ interface EditableCellProps {
   className?: string;
 }
 
-const EditableCell: React.FC<EditableCellProps> = ({ value, onSave , className}) => {
+const EditableCell: React.FC<EditableCellProps> = ({ value, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const inputRef = useRef<HTMLInputElement>(null);

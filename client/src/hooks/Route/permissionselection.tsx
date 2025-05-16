@@ -22,7 +22,7 @@ const PermissionSelector: React.FC<PermissionSelectorProps> = ({
   selectedPermissions,
   onChange
 }) => {
-  const [permissions, setPermissions] = useState<Permission[]>([]);
+  const [, setPermissions] = useState<Permission[]>([]);
   const [groupedPermissions, setGroupedPermissions] = useState<PermissionGroup>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
