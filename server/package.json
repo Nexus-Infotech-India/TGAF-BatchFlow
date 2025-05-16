@@ -1,0 +1,55 @@
+{
+  "scripts": {
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "dev": "nodemon src/server.ts",
+    "prepare": "husky install",
+    "seed": "ts-node prisma/seed.ts",
+    "reset-db": "ts-node /home/rameswar-panda/Nexus/Batchflow/server/src/utils/cleardata.ts",
+    
+    "build:schema": "./scripts/build-schema.sh",
+    "prisma:generate": "npm run build:schema && npx prisma generate",
+    "prisma:migrate:dev": "npm run build:schema && npx prisma migrate dev",
+    "prisma:migrate:deploy": "npm run build:schema && npx prisma migrate deploy",
+    "prisma:push": "npm run build:schema && npx prisma db push",
+    "prisma:studio": "npm run build:schema && npx prisma studio",
+    "prisma:validate": "npm run build:schema && npx prisma validate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.9",
+    "uuid": "^11.1.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/date-fns": "^2.6.3",
+    "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/node": "^22.15.14",
+    "@types/xlsx": "^0.0.36",
+    "eslint": "^9.24.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
+    "prettier": "^3.5.3",
+    "prisma": "^6.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.29.1"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
