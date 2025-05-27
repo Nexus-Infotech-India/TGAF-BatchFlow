@@ -30,15 +30,15 @@ app.use('/audit', auditRoutes);
 // Schedule background jobs
 // Run once at startup and then every 6 hours
 // This frequency balances timely updates with minimal performance impact
-cron.schedule('0 */6 * * *', async () => {
-  console.log('Running scheduled audit status update job...');
-  try {
-    const result = await updateAuditStatuses();
-    console.log('Audit status update result:', result);
-  } catch (err) {
-    console.error('Failed to run audit status update job:', err);
-  }
-});
+// cron.schedule('0 */6 * * *', async () => {
+//   console.log('Running scheduled audit status update job...');
+//   try {
+//     const result = await updateAuditStatuses();
+//     console.log('Audit status update result:', result);
+//   } catch (err) {
+//     console.error('Failed to run audit status update job:', err);
+//   }
+// });
 
 // Also run once at server startup to ensure statuses are updated immediately
 (async () => {
