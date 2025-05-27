@@ -9,7 +9,7 @@ import {
   SortingState,
 } from "@tanstack/react-table";
 import api, { API_ROUTES } from "../../../../utils/api";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   ArrowUpDown, 
   Calendar, 
@@ -19,9 +19,8 @@ import {
   Type, 
   RefreshCw,
   AlertCircle,
-  Search,
-  X,
-  Filter
+  Plus,
+  Hash
 } from "lucide-react";
 
 // Define the type for unit data
@@ -33,12 +32,15 @@ interface Unit {
   createdAt: string;
 }
 
-const ViewUnit: React.FC = () => {
+interface ViewUnitProps {
+  onAddUnitClick?: () => void;
+}
+
+const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [searchQuery, setSearchQuery] = useState("");
   
   // Fetch units using Tanstack Query
-  const { data, error, isLoading, isError } = useQuery({
+  const { data, error, isLoading, isError, refetch } = useQuery({
     queryKey: ["units"],
     queryFn: async () => {
       const token = localStorage.getItem("authToken");
@@ -55,93 +57,126 @@ const ViewUnit: React.FC = () => {
     },
   });
 
-  // Filter data based on search query
-  const filteredData = React.useMemo(() => {
-    if (!data) return [];
-    if (!searchQuery) return data;
-    
-    return data.filter(unit => 
-      unit.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      unit.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      unit.description.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [data, searchQuery]);
-
   // Column definition for Tanstack Table
   const columnHelper = createColumnHelper<Unit>();
   const columns = [
+    columnHelper.accessor("id", {
+      header: ({ column }) => (
+        <motion.button
+          onClick={() => column.toggleSorting()}
+          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
+            <Hash size={14} />
+          </div>
+          ID
+          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+        </motion.button>
+      ),
+      cell: ({ row }) => {
+        const id = row.original.id;
+        const shortId = `${id.slice(0, 8)}...`;
+        return (
+          <div className="flex items-center">
+            <span className="font-mono bg-gradient-to-r from-gray-50 to-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 shadow-sm">
+              {shortId}
+            </span>
+          </div>
+        );
+      },
+    }),
     columnHelper.accessor("name", {
       header: ({ column }) => (
-        <div className="flex items-center gap-2">
-          <Type size={16} className="text-blue-500" />
-          <button
-            onClick={() => column.toggleSorting()}
-            className="flex items-center gap-1 font-medium"
-          >
-            Name
-            <ArrowUpDown size={14} className="text-blue-500" />
-          </button>
-        </div>
+        <motion.button
+          onClick={() => column.toggleSorting()}
+          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="p-1.5 rounded-lg bg-green-50 text-green-600 group-hover:bg-green-100 transition-colors">
+            <Type size={14} />
+          </div>
+          Name
+          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+        </motion.button>
       ),
-      cell: ({ row }) => <div className="font-medium text-gray-800">{row.original.name}</div>,
+      cell: ({ row }) => (
+        <div className="font-medium text-gray-800">{row.original.name}</div>
+      ),
     }),
     columnHelper.accessor("symbol", {
       header: ({ column }) => (
-        <div className="flex items-center gap-2">
-          <Tag size={16} className="text-blue-500" />
-          <button
-            onClick={() => column.toggleSorting()}
-            className="flex items-center gap-1 font-medium"
-          >
-            Symbol
-            <ArrowUpDown size={14} className="text-blue-500" />
-          </button>
-        </div>
+        <motion.button
+          onClick={() => column.toggleSorting()}
+          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="p-1.5 rounded-lg bg-purple-50 text-purple-600 group-hover:bg-purple-100 transition-colors">
+            <Tag size={14} />
+          </div>
+          Symbol
+          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+        </motion.button>
       ),
       cell: ({ row }) => (
-        <div className="px-2.5 py-1 bg-blue-50 text-blue-700 rounded-md inline-block font-mono border border-blue-100">
+        <div className="bg-gradient-to-r from-purple-50 to-purple-100 text-purple-700 px-3 py-1.5 rounded-lg inline-block text-sm font-mono border border-purple-200 font-semibold">
           {row.original.symbol}
         </div>
       ),
     }),
     columnHelper.accessor("description", {
       header: ({ column }) => (
-        <div className="flex items-center gap-2">
-          <Info size={16} className="text-blue-500" />
-          <button
-            onClick={() => column.toggleSorting()}
-            className="flex items-center gap-1 font-medium"
-          >
-            Description
-            <ArrowUpDown size={14} className="text-blue-500" />
-          </button>
+        <motion.button
+          onClick={() => column.toggleSorting()}
+          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="p-1.5 rounded-lg bg-orange-50 text-orange-600 group-hover:bg-orange-100 transition-colors">
+            <Info size={14} />
+          </div>
+          Description
+          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+        </motion.button>
+      ),
+      cell: ({ row }) => (
+        <div className="text-gray-600 max-w-md">
+          {row.original.description || (
+            <span className="italic text-gray-400">No description provided</span>
+          )}
         </div>
       ),
-      cell: ({ row }) => <div className="max-w-md truncate">{row.original.description}</div>,
     }),
     columnHelper.accessor("createdAt", {
       header: ({ column }) => (
-        <div className="flex items-center gap-2">
-          <Calendar size={16} className="text-blue-500" />
-          <button
-            onClick={() => column.toggleSorting()}
-            className="flex items-center gap-1 font-medium"
-          >
-            Created At
-            <ArrowUpDown size={14} className="text-blue-500" />
-          </button>
-        </div>
+        <motion.button
+          onClick={() => column.toggleSorting()}
+          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
+            <Calendar size={14} />
+          </div>
+          Created At
+          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+        </motion.button>
       ),
       cell: ({ row }) => {
         const date = new Date(row.original.createdAt);
         return (
-          <div className="flex items-center gap-1 text-gray-600">
-            <Calendar size={14} className="text-blue-400" />
-            <span>
+          <div className="flex items-center gap-2">
+            <div className="p-1 bg-gray-50 rounded-full">
+              <Calendar size={12} className="text-gray-500" />
+            </div>
+            <span className="text-gray-600 text-sm font-medium">
               {date.toLocaleDateString(undefined, {
                 year: "numeric",
-                month: "short", 
-                day: "numeric"
+                month: "short",
+                day: "numeric",
               })}
             </span>
           </div>
@@ -151,7 +186,7 @@ const ViewUnit: React.FC = () => {
   ];
 
   const table = useReactTable({
-    data: filteredData || [],
+    data: data || [],
     columns,
     state: {
       sorting,
@@ -165,19 +200,19 @@ const ViewUnit: React.FC = () => {
   if (isLoading) {
     return (
       <motion.div 
-        className="flex flex-col items-center justify-center py-16"
+        className="flex flex-col items-center justify-center py-20 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <div className="relative h-16 w-16 mb-4">
+        <div className="relative h-16 w-16 mb-6">
           <motion.div 
             className="absolute top-0 left-0 w-full h-full rounded-full border-4 border-t-blue-500 border-r-blue-300 border-b-blue-100 border-l-blue-300"
             animate={{ rotate: 360 }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-          ></motion.div>
-          <Package className="h-6 w-6 text-blue-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+          />
         </div>
-        <p className="text-gray-700 font-medium">Loading measurement units...</p>
+        <p className="text-gray-700 font-medium text-lg">Loading units...</p>
+        <p className="text-gray-500 text-sm mt-2">Please wait while we fetch your data</p>
       </motion.div>
     );
   }
@@ -186,23 +221,23 @@ const ViewUnit: React.FC = () => {
   if (isError) {
     return (
       <motion.div 
-        className="mt-4 text-red-600 bg-red-50 border border-red-100 rounded-xl p-6 shadow-sm"
+        className="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-2xl p-8 shadow-sm"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
         <div className="flex items-start">
-          <div className="mr-4 p-1.5 bg-red-100 rounded-full">
+          <div className="mr-4 p-2 bg-red-100 rounded-xl">
             <AlertCircle className="h-6 w-6 text-red-500" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold mb-2">Error fetching units</h3>
+            <h3 className="text-lg font-semibold text-red-800 mb-2">Unable to load units</h3>
             <p className="text-sm text-red-700 mb-4">
-              {error instanceof Error ? error.message : "Unknown error occurred"}
+              {error instanceof Error ? error.message : "Failed to fetch units"}
             </p>
             <motion.button
-              className="px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg shadow-sm flex items-center gap-2"
-              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg shadow-sm flex items-center gap-2 hover:bg-red-50 transition-colors"
+              onClick={() => refetch()}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
@@ -218,153 +253,111 @@ const ViewUnit: React.FC = () => {
   // Render data table
   return (
     <motion.div 
-      className="mt-4"
+      className="h-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <motion.div 
-        className="bg-white border border-blue-100 rounded-xl shadow-md overflow-hidden"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-      >
-        <div className="p-6 border-b border-blue-100 bg-gradient-to-r from-blue-50 to-blue-100">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-3 mb-1">
-                <Package className="h-6 w-6 text-blue-600" />
-                <span>Measurement Units</span>
-              </h2>
-              <p className="text-gray-600">
-                Units used for measurement specifications and standards tracking.
-              </p>
-            </div>
-
-            {/* Search Box */}
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-blue-400" />
-              </div>
-              <input
-                type="text"
-                placeholder="Search units..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-9 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent outline-none"
-              />
-              {searchQuery && (
-                <button 
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setSearchQuery('')}
-                >
-                  <X className="h-4 w-4 text-blue-400" />
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-        
-        {!data || data.length === 0 ? (
-          <div className="text-center py-16 px-4">
-            <motion.div 
-              className="h-20 w-20 mx-auto mb-4 bg-blue-50 text-blue-400 rounded-full flex items-center justify-center"
-              animate={{ scale: [0.9, 1.1, 1] }}
-              transition={{ duration: 1.5, times: [0, 0.5, 1], repeat: Infinity, repeatType: "reverse" }}
-            >
-              <Package className="h-10 w-10" />
-            </motion.div>
-            <h3 className="text-xl font-medium text-gray-800 mb-2">No Units Found</h3>
-            <p className="text-gray-500 max-w-md mx-auto mb-6">
-              There are no measurement units available. Create a new unit to get started with measuring your standards.
-            </p>
-          </div>
-        ) : filteredData.length === 0 ? (
-          <div className="text-center py-16 px-4">
-            <div className="h-20 w-20 mx-auto mb-4 bg-blue-50 text-blue-400 rounded-full flex items-center justify-center">
-              <Filter className="h-10 w-10" />
-            </div>
-            <h3 className="text-xl font-medium text-gray-800 mb-2">No Matching Units</h3>
-            <p className="text-gray-500 max-w-md mx-auto mb-6">
-              No units match your search criteria. Try different keywords or clear the search.
-            </p>
-            <button 
-              onClick={() => setSearchQuery('')}
-              className="px-5 py-2.5 bg-blue-600 text-white rounded-lg inline-flex items-center gap-2"
-            >
-              <X size={16} />
-              Clear Search
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-blue-100">
-                <thead className="bg-blue-50">
-                  {table.getHeaderGroups().map(headerGroup => (
+      {!data || data.length === 0 ? (
+        <motion.div 
+          className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
+          <motion.div 
+            className="h-24 w-24 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-500 rounded-2xl flex items-center justify-center shadow-lg"
+            animate={{ scale: [0.9, 1.1, 1] }}
+            transition={{ duration: 2, times: [0, 0.5, 1], repeat: Infinity, repeatType: "reverse" }}
+          >
+            <Package className="h-12 w-12" />
+          </motion.div>
+          <h3 className="text-2xl font-bold text-gray-800 mb-3">No Units Found</h3>
+          <p className="text-gray-600 max-w-md mx-auto text-center mb-8 leading-relaxed">
+            Create measurement units to define the standards for your quality control processes. Units help standardize measurements across your organization.
+          </p>
+          
+          <motion.button 
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl shadow-lg inline-flex items-center gap-3 font-medium"
+            onClick={onAddUnitClick}
+            whileHover={{ 
+              scale: 1.05, 
+              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.3), 0 10px 10px -5px rgba(59, 130, 246, 0.15)" 
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Plus size={18} />
+            Create Your First Unit
+          </motion.button>
+        </motion.div>
+      ) : (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden h-full flex flex-col">
+          <div className="flex-1 overflow-hidden">
+            <div className="overflow-x-auto h-full">
+              <table className="min-w-full h-full">
+                <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 sticky top-0 z-10">
+                  {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
-                      {headerGroup.headers.map(header => (
-                        <th 
-                          key={header.id} 
-                          className="px-6 py-3.5 text-left text-xs font-medium text-blue-700 uppercase tracking-wider"
+                      {headerGroup.headers.map((header) => (
+                        <th
+                          key={header.id}
+                          className="px-6 py-4 text-left text-sm font-medium text-gray-700"
                         >
                           {header.isPlaceholder
                             ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                            : flexRender(header.column.columnDef.header, header.getContext())}
                         </th>
                       ))}
                     </tr>
                   ))}
                 </thead>
-                <tbody className="bg-white divide-y divide-blue-50">
-                  {table.getRowModel().rows.map((row, i) => (
-                    <motion.tr 
-                      key={row.id} 
-                      className="hover:bg-blue-50 transition-colors"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.2, delay: i * 0.05 }}
-                    >
-                      {row.getVisibleCells().map(cell => (
-                        <td key={cell.id} className="px-6 py-4 text-sm text-gray-700">
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </td>
-                      ))}
-                    </motion.tr>
-                  ))}
+                <tbody className="bg-white divide-y divide-gray-100">
+                  <AnimatePresence>
+                    {table.getRowModel().rows.map((row, i) => (
+                      <motion.tr 
+                        key={row.id} 
+                        className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.2, delay: i * 0.05 }}
+                        whileHover={{ scale: 1.01 }}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <td key={cell.id} className="px-6 py-4 text-sm text-gray-700">
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </td>
+                        ))}
+                      </motion.tr>
+                    ))}
+                  </AnimatePresence>
                 </tbody>
               </table>
             </div>
-          
-            <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100 border-t border-blue-100 flex items-center justify-between">
-              <p className="text-sm text-blue-700 font-medium flex items-center">
-                <Tag size={14} className="mr-2 text-blue-500" />
-                Showing {filteredData.length} {filteredData.length === 1 ? 'unit' : 'units'}
-                {searchQuery && data && data.length !== filteredData.length && (
-                  <span className="ml-1">
-                    (filtered from {data.length})
-                  </span>
-                )}
-              </p>
+          </div>
 
-              {searchQuery && (
-                <motion.button 
-                  onClick={() => setSearchQuery('')}
-                  className="text-sm text-blue-600 flex items-center gap-1 px-3 py-1.5 bg-white rounded-lg border border-blue-200 shadow-sm"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <X size={14} />
-                  <span>Clear filter</span>
-                </motion.button>
-              )}
+          {/* Enhanced Footer */}
+          <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 border-t border-gray-200 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Package size={14} className="text-blue-600" />
+              </div>
+              <p className="text-sm font-medium text-gray-700">
+                Showing <span className="text-blue-600 font-semibold">{table.getRowModel().rows.length}</span> units
+              </p>
             </div>
-          </>
-        )}
-      </motion.div>
+
+            <motion.button 
+              onClick={() => refetch()}
+              className="text-sm text-gray-600 flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
+              whileHover={{ scale: 1.05, y: -1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <RefreshCw size={14} />
+              <span className="font-medium">Refresh</span>
+            </motion.button>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };

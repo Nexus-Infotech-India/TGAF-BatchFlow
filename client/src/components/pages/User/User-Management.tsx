@@ -44,56 +44,59 @@ export default function UserManagement() {
   
   const authToken = localStorage.getItem("authToken");
 
-  // Fetch users
-  const { data: usersData, isLoading: isLoadingUsers, error: usersError, refetch: refetchUsers } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      try {
-        const response = await axios.get(`${API_ROUTES.AUTH.GET_ALL_USERS}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`
-          }
-        });
-        return response.data.users || [];
-      } catch (error) {
-        console.error("Error fetching users:", error);
-        throw error;
-      }
-    },
-    staleTime: 60000, // 1 minute
-  });
+ // Fetch users
+const { data: usersData, isLoading: isLoadingUsers, error: usersError, refetch: refetchUsers } = useQuery({
+  queryKey: ["users"],
+  queryFn: async () => {
+    try {
+      const response = await axios.get(`${API_ROUTES.AUTH.GET_ALL_USERS}`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      });
+      const users = response.data.users || response.data || [];
+      return Array.isArray(users) ? users : [];
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      throw error;
+    }
+  },
+  staleTime: 60000, // 1 minute
+});
 
-  // Fetch roles
-  const { data: rolesData, isLoading: isLoadingRoles, error: rolesError, refetch: refetchRoles } = useQuery({
-    queryKey: ["roles"],
-    queryFn: async () => {
-      try {
-        const response = await axios.get(API_ROUTES.AUTH.GET_ROLES, {
-          headers: {
-            Authorization: `Bearer ${authToken}`
-          }
-        });
-        return response.data.roles || [];
-      } catch (error) {
-        console.error("Error fetching roles:", error);
-        throw error;
-      }
-    },
-    staleTime: 60000, // 1 minute
-  });
+// Fetch roles
+const { data: rolesData, isLoading: isLoadingRoles, error: rolesError, refetch: refetchRoles } = useQuery({
+  queryKey: ["roles"],
+  queryFn: async () => {
+    try {
+      const response = await axios.get(API_ROUTES.AUTH.GET_ROLES, {
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      });
+      const roles = response.data.roles || response.data || [];
+      return Array.isArray(roles) ? roles : [];
+    } catch (error) {
+      console.error("Error fetching roles:", error);
+      throw error;
+    }
+  },
+  staleTime: 60000, // 1 minute
+});
 
+  
   // Filter users based on search query
-  const filteredUsers = usersData?.filter((user: User) => 
-    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.role.name.toLowerCase().includes(searchQuery.toLowerCase())
-  ) || [];
+const filteredUsers = Array.isArray(usersData) ? usersData.filter((user: User) => 
+  user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  user.role.name.toLowerCase().includes(searchQuery.toLowerCase())
+) : [];
 
-  // Filter roles based on search query
-  const filteredRoles = rolesData?.filter((role: Role) => 
-    role.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    role.description.toLowerCase().includes(searchQuery.toLowerCase())
-  ) || [];
+// Filter roles based on search query
+const filteredRoles = Array.isArray(rolesData) ? rolesData.filter((role: Role) => 
+  role.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  role.description.toLowerCase().includes(searchQuery.toLowerCase())
+) : [];
 
   const formatDate = (dateString: string) => {
     if (!dateString) return "N/A";

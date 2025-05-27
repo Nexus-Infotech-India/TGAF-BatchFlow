@@ -1,0 +1,145 @@
+/* Custom Calendar Styling */
+.custom-calendar .ant-picker-calendar-header {
+  padding: 12px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e0e7ff;
+}
+
+.custom-calendar .ant-picker-panel {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.custom-calendar .ant-picker-cell {
+  padding: 4px !important;
+  height: 120px;
+}
+
+.custom-calendar .ant-picker-cell .ant-picker-cell-inner {
+  height: 100%;
+  min-height: 80px;
+  transition: all 0.2s;
+  padding: 2px;
+}
+
+.custom-calendar .selected-date {
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 1px solid #2563eb;
+  transform: scale(1.02);
+}
+
+.custom-calendar .weekend-date {
+  background-color: #f9fafb;
+}
+
+.custom-calendar .current-date {
+  background-color: rgba(37, 99, 235, 0.05);
+  position: relative;
+}
+
+.custom-calendar .ant-badge {
+  width: 100%;
+}
+
+.custom-calendar .ant-badge-status-text {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* Cell hover animation */
+.custom-calendar .ant-picker-cell-inner:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Day drawer styles */
+.day-details-drawer .ant-drawer-body {
+  padding: 16px;
+  background-color: #fafafa;
+}
+
+.day-details-drawer .ant-drawer-header {
+  background-color: #f0f7ff;
+  border-bottom: 1px solid #bfdbfe;
+}
+
+/* Calendar description modal */
+.calendar-description-modal .ant-modal-header {
+  background-color: #f0f7ff;
+  border-bottom: 1px solid #bfdbfe;
+}
+
+.calendar-description-modal .ant-modal-content {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Training status colors */
+.status-tag-SCHEDULED {
+  color: #1890ff;
+  background: #e6f7ff;
+  border-color: #91d5ff;
+}
+
+.status-tag-IN_PROGRESS {
+  color: #faad14;
+  background: #fffbe6;
+  border-color: #ffe58f;
+}
+
+.status-tag-COMPLETED {
+  color: #52c41a;
+  background: #f6ffed;
+  border-color: #b7eb8f;
+}
+
+.status-tag-CANCELLED {
+  color: #f5222d;
+  background: #fff1f0;
+  border-color: #ffa39e;
+}
+
+.status-tag-POSTPONED {
+  color: #722ed1;
+  background: #f9f0ff;
+  border-color: #d3adf7;
+}
+
+/* Select dropdown custom styling */
+.select-dropdown-custom .ant-select-item-option-selected {
+  background-color: #f0f7ff;
+}
+
+.select-dropdown-custom .ant-select-item-option-active {
+  background-color: #f0f7ff;
+}
+
+/* Animation improvements */
+.training-calendar-container {
+  perspective: 1000px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.ant-badge-status-dot {
+  transition: transform 0.2s;
+}
+
+.ant-badge:hover .ant-badge-status-dot {
+  transform: scale(1.2);
+}

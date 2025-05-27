@@ -10,9 +10,9 @@ const notificationService = new NotificationService();
 
 
 export class BatchController {
-  // Create a new batch (Maker role)
- // Update the createBatch method
- async createBatch(req: Request, res: Response): Promise<void> {
+ 
+
+async createBatch(req: Request, res: Response): Promise<void> {
   try {
     if (!req.user) {
       res.status(401).json({ message: 'Unauthorized' });
@@ -169,9 +169,6 @@ export class BatchController {
   }
 }
 
-  // Get all batches with filtering
-  // Get all batches with filtering
-// Update the getBatches method
 async getBatches(req: Request, res: Response): Promise<void> {
   try {
     const filters: BatchFilter = req.query as any;
@@ -307,7 +304,9 @@ async getBatches(req: Request, res: Response): Promise<void> {
           parameter: pv.parameter,
           value: pv.value,
           unit: pv.unit,
-          methodology: pv.methodology
+          methodology: pv.methodology,
+          verificationResult: pv.verificationResult,
+          verificationRemark: pv.verificationRemark
         });
       });
       
@@ -347,109 +346,6 @@ async getBatches(req: Request, res: Response): Promise<void> {
   }
 }
 
-  // Get batch details by ID
-  // Update the getBatchById method
-// async getBatchById(req: Request, res: Response): Promise<void> {
-//   try {
-//     const { id } = req.params;
-    
-//     const batch = await prisma.batch.findUnique({
-//       where: { id },
-//       include: {
-//         Product: true,
-//         parameterValues: {
-//           include: {
-//             parameter: {
-//               include: {
-//                 category: true
-//               }
-//             },
-//             unit: true,
-//             methodology: true
-//           }
-//         },
-//         User_Batch_makerIdToUser: {
-//           select: {
-//             id: true,
-//             name: true,
-//             email: true
-//           }
-//         },
-//         User_Batch_checkerIdToUser: {
-//           select: {
-//             id: true,
-//             name: true,
-//             email: true
-//           }
-//         },
-//         standards: {
-//           include: {
-//             Category: true,
-//             definitions: {
-//               include: {
-//                 parameter: true,
-//                 unit: true,
-//                 methodology: true
-//               }
-//             }
-//           }
-//         },
-//         methodologies: true,
-//         unitOfMeasurements: true,
-//         ActivityLog: {
-//           orderBy: {
-//             createdAt: 'desc'
-//           },
-//           include: {
-//             User: {
-//               select: {
-//                 name: true,
-//                 email: true
-//               }
-//             }
-//           }
-//         }
-//       }
-//     });
-    
-//     if (!batch) {
-//       res.status(404).json({ message: 'Batch not found' });
-//       return;
-//     }
-    
-//     // Organize parameter values by category for easier client-side consumption
-//     const parametersByCategory: Record<string, any[]> = {};
-    
-//     batch.parameterValues.forEach(pv => {
-//       const categoryName = pv.parameter.category.name;
-//       if (!parametersByCategory[categoryName]) {
-//         parametersByCategory[categoryName] = [];
-//       }
-      
-//       parametersByCategory[categoryName].push({
-//         id: pv.id,
-//         parameter: pv.parameter,
-//         value: pv.value,
-//         unit: pv.unit,
-//         methodology: pv.methodology
-//       });
-//     });
-    
-//     // Format the response
-//     const formattedBatch = {
-//       ...batch,
-//       parameterValuesByCategory: parametersByCategory
-//     };
-    
-//     res.status(200).json({ batch: formattedBatch });
-//   } catch (error) {
-//     console.error('Get batch by ID error:', error);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// }
-
-  // Update a batch (only if in DRAFT status)
- // Update the updateBatch method
 async updateBatch(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;
@@ -603,7 +499,6 @@ async updateBatch(req: Request, res: Response): Promise<void> {
   }
 }
 
-  // Submit batch for review (Maker)
 async submitBatch(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
@@ -683,7 +578,6 @@ async submitBatch(req: Request, res: Response): Promise<void> {
     }
   }
 
-  // Approve batch (Checker)
 async approveBatch(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user) {
@@ -749,7 +643,6 @@ async approveBatch(req: Request, res: Response): Promise<void> {
     }
   }
 
-  // Reject batch (Checker)
 async rejectBatch(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user) {
@@ -822,7 +715,6 @@ async rejectBatch(req: Request, res: Response): Promise<void> {
     }
   }
 
-    // Export batches to Excel file
 async exportToExcel(req: Request, res: Response): Promise<void> {
       try {
         const batches = await prisma.batch.findMany({
@@ -917,7 +809,6 @@ async getActivityLogs(req: Request, res: Response): Promise<void> {
       }
     }
 
-// Add this method to the BatchController class
 
 async generateCertificateOfAnalysis(req: Request, res: Response): Promise<void> {
   try {
@@ -1119,6 +1010,493 @@ async generateCertificateOfAnalysis(req: Request, res: Response): Promise<void> 
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+
+async getParametersByProductId(req: Request, res: Response): Promise<void> {
+  try {
+    const { productId } = req.params;
+    
+    if (!productId) {
+      res.status(400).json({ message: 'Product ID is required' });
+      return;
+    }
+    
+    // Check if product exists
+    const product = await prisma.product.findUnique({
+      where: { id: productId }
+    });
+    
+    if (!product) {
+      res.status(404).json({ message: 'Product not found' });
+      return;
+    }
+    
+    // Get parameters specifically linked to this product through ProductParameter
+    const productParameters = await prisma.productParameter.findMany({
+      where: { productId },
+      include: {
+        parameter: {
+          include: {
+            category: true,
+            standards: {
+              where: {
+                status: 'ACTIVE'
+              },
+              include: {
+                unit: true,
+                methodology: true
+              },
+              orderBy: {
+                updatedAt: 'desc'
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        parameter: {
+          category: {
+            name: 'asc'
+          }
+        }
+      }
+    });
+    
+    // Group parameters by category
+    const parametersByCategory: Record<string, any[]> = {};
+    
+    productParameters.forEach(pp => {
+      const categoryName = pp.parameter.category.name;
+      if (!parametersByCategory[categoryName]) {
+        parametersByCategory[categoryName] = [];
+      }
+      
+      // Include productType in the response for better context
+      const parameterWithContext = {
+        ...pp.parameter,
+        isRequired: pp.isRequired,
+        linkedAt: pp.createdAt
+      };
+      
+      parametersByCategory[categoryName].push(parameterWithContext);
+    });
+    
+    // Sort categories for consistent output
+    const sortedCategories: Record<string, any[]> = {};
+    Object.keys(parametersByCategory)
+      .sort()
+      .forEach(key => {
+        sortedCategories[key] = parametersByCategory[key];
+      });
+    
+    res.status(200).json({
+      product: product.name,
+      productCode: product.code,
+      parametersByCategory: sortedCategories,
+      totalParameters: productParameters.length,
+      categoriesCount: Object.keys(sortedCategories).length
+    });
+  } catch (error) {
+    console.error('Get product parameters error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+async getBatchesForVerification(req: Request, res: Response): Promise<void> {
+  try {
+    if (!req.user) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    // Include SUBMITTED, APPROVED, and REJECTED batches for verification view
+    const batches = await prisma.batch.findMany({
+      where: {
+        status: {
+          in: [BatchStatus.SUBMITTED, BatchStatus.APPROVED, BatchStatus.REJECTED]
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      include: {
+        Product: {
+          select: {
+            id: true,
+            name: true,
+            code: true
+          }
+        },
+        User_Batch_makerIdToUser: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        },
+        User_Batch_checkerIdToUser: {
+          select: {
+            id: true,
+            name: true,
+            email: true
+          }
+        },
+        parameterValues: {
+          include: {
+            parameter: {
+              include: {
+                category: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Format response with parameter count by category
+    const formattedBatches = batches.map(batch => {
+      const parametersByCategory: Record<string, number> = {};
+      
+      batch.parameterValues.forEach(pv => {
+        const categoryName = pv.parameter.category.name;
+        parametersByCategory[categoryName] = (parametersByCategory[categoryName] || 0) + 1;
+      });
+
+      return {
+        id: batch.id,
+        batchNumber: batch.batchNumber,
+        product: batch.Product,
+        maker: batch.User_Batch_makerIdToUser,
+        checker: batch.User_Batch_checkerIdToUser,
+        dateOfProduction: batch.dateOfProduction,
+        bestBeforeDate: batch.bestBeforeDate,
+        sampleAnalysisStarted: batch.sampleAnalysisStarted,
+        sampleAnalysisCompleted: batch.sampleAnalysisCompleted,
+        sampleAnalysisStatus: batch.sampleAnalysisStatus,
+        status: batch.status, // Include the batch status
+        rejectionRemarks: batch.rejectionRemarks, // Include rejection remarks
+        totalParameters: batch.parameterValues.length,
+        parametersByCategory,
+        createdAt: batch.createdAt,
+        updatedAt: batch.updatedAt
+      };
+    });
+
+    res.status(200).json({
+      batches: formattedBatches,
+      totalCount: formattedBatches.length
+    });
+  } catch (error) {
+    console.error('Get batches for verification error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+async getBatchParametersForVerification(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    
+    if (!req.user) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    // Get batch with all parameter values
+    const batch = await prisma.batch.findUnique({
+      where: { id },
+      include: {
+        Product: true,
+        User_Batch_makerIdToUser: {
+          select: {
+            name: true,
+            email: true
+          }
+        },
+        User_Batch_checkerIdToUser: {
+          select: {
+            name: true,
+            email: true
+          }
+        },
+        parameterValues: {
+          include: {
+            parameter: {
+              include: {
+                category: true,
+                standards: {
+                  where: {
+                    status: 'ACTIVE'
+                  },
+                  include: {
+                    unit: true,
+                    methodology: true
+                  },
+                  orderBy: {
+                    updatedAt: 'desc'
+                  },
+                  take: 1
+                }
+              }
+            },
+            unit: true,
+            methodology: true
+          }
+        }
+      }
+    });
+
+    if (!batch) {
+      res.status(404).json({ message: 'Batch not found' });
+      return;
+    }
+
+    // Allow viewing parameters for SUBMITTED, APPROVED, and REJECTED batches
+    if (!['SUBMITTED', 'APPROVED', 'REJECTED'].includes(batch.status)) {
+      res.status(400).json({ message: 'Batch is not available for verification' });
+      return;
+    }
+
+    // Group parameters by category
+    const parametersByCategory: Record<string, any[]> = {};
+    
+    batch.parameterValues.forEach(pv => {
+      const categoryName = pv.parameter.category.name;
+      
+      if (!parametersByCategory[categoryName]) {
+        parametersByCategory[categoryName] = [];
+      }
+
+      // Get standard definition if available
+      const standardDef = pv.parameter.standards.length > 0 
+        ? pv.parameter.standards[0] 
+        : null;
+
+      parametersByCategory[categoryName].push({
+        id: pv.id,
+        parameterId: pv.parameterId,
+        parameterName: pv.parameter.name,
+        parameterDescription: pv.parameter.description,
+        dataType: pv.parameter.dataType,
+        currentValue: pv.value,
+        currentUnit: pv.unit,
+        currentMethodology: pv.methodology,
+        standardDefinition: standardDef ? {
+          standardValue: standardDef.standardValue,
+          unit: standardDef.unit,
+          methodology: standardDef.methodology
+        } : null,
+        // Include verification data if available (for already verified batches)
+        verificationResult: (pv as any).verificationResult || null,
+        verificationRemark: (pv as any).verificationRemark || null
+      });
+    });
+
+    // Sort categories alphabetically
+    const sortedCategories: Record<string, any[]> = {};
+    Object.keys(parametersByCategory)
+      .sort()
+      .forEach(key => {
+        sortedCategories[key] = parametersByCategory[key];
+      });
+
+    res.status(200).json({
+      batch: {
+        id: batch.id,
+        batchNumber: batch.batchNumber,
+        product: batch.Product,
+        maker: batch.User_Batch_makerIdToUser,
+        checker: batch.User_Batch_checkerIdToUser,
+        dateOfProduction: batch.dateOfProduction,
+        bestBeforeDate: batch.bestBeforeDate,
+        sampleAnalysisStarted: batch.sampleAnalysisStarted,
+        sampleAnalysisCompleted: batch.sampleAnalysisCompleted,
+        sampleAnalysisStatus: batch.sampleAnalysisStatus,
+        status: batch.status, // Include batch status
+        rejectionRemarks: batch.rejectionRemarks // Include rejection remarks
+      },
+      parametersByCategory: sortedCategories,
+      totalParameters: batch.parameterValues.length,
+      categoriesCount: Object.keys(sortedCategories).length
+    });
+  } catch (error) {
+    console.error('Get batch parameters for verification error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+async updateParameterVerification(req: Request, res: Response): Promise<void> {
+  try {
+    const { batchId } = req.params;
+    const { parameterVerifications } = req.body;
+    
+    if (!req.user) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    const userId = req.user.id;
+
+    // Validate input
+    if (!parameterVerifications || !Array.isArray(parameterVerifications)) {
+      res.status(400).json({ message: 'Parameter verifications array is required' });
+      return;
+    }
+
+    // Get batch and verify it's in correct status
+    const batch = await prisma.batch.findUnique({
+      where: { id: batchId },
+      include: {
+        parameterValues: true
+      }
+    });
+
+    if (!batch) {
+      res.status(404).json({ message: 'Batch not found' });
+      return;
+    }
+
+    if (batch.status !== BatchStatus.SUBMITTED) {
+      res.status(400).json({ message: 'Batch is not available for verification' });
+      return;
+    }
+
+    // Create new table for parameter verification results
+    // Since this is a new feature, we need to add verification fields to BatchParameterValue
+    // or create a new verification table
+
+    await prisma.$transaction(async (prisma) => {
+      // Update each parameter verification
+      for (const verification of parameterVerifications) {
+        const { parameterValueId, verificationResult, verificationRemark } = verification;
+        
+        if (!parameterValueId || !verificationResult) {
+          throw new Error('Parameter value ID and verification result are required');
+        }
+
+        // For now, we'll add verification fields to BatchParameterValue
+        // You might want to create a separate ParameterVerification table
+        await prisma.batchParameterValue.update({
+          where: { id: parameterValueId },
+          data: {
+            // Add these fields to your schema:
+            verificationResult: verificationResult,
+            verificationRemark: verificationRemark || null,
+            verifiedById: userId,
+            verifiedAt: new Date(),
+            updatedAt: new Date()
+          }
+        });
+      }
+
+      // Log verification activity
+      await prisma.activityLog.create({
+        data: {
+          id: uuidv4(),
+          userId,
+          batchId,
+          action: 'VERIFY_PARAMETERS',
+          details: `Verified ${parameterVerifications.length} parameters for batch ${batch.batchNumber}`,
+        }
+      });
+    });
+
+    res.status(200).json({ 
+      message: 'Parameter verification updated successfully',
+      verifiedCount: parameterVerifications.length 
+    });
+  } catch (error) {
+    console.error('Update parameter verification error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+async completeBatchVerification(req: Request, res: Response): Promise<void> {
+  try {
+    const { batchId } = req.params;
+    const { action, remarks } = req.body; // action: 'APPROVE' | 'REJECT'
+    
+    if (!req.user) {
+      res.status(401).json({ message: 'Unauthorized' });
+      return;
+    }
+
+    const userId = req.user.id;
+
+    if (!action || !['APPROVE', 'REJECT'].includes(action)) {
+      res.status(400).json({ message: 'Valid action (APPROVE/REJECT) is required' });
+      return;
+    }
+
+    if (action === 'REJECT' && !remarks) {
+      res.status(400).json({ message: 'Remarks are required for rejection' });
+      return;
+    }
+
+    // Get batch
+    const batch = await prisma.batch.findUnique({
+      where: { id: batchId },
+      include: {
+        Product: true,
+        User_Batch_makerIdToUser: true
+      }
+    });
+
+    if (!batch) {
+      res.status(404).json({ message: 'Batch not found' });
+      return;
+    }
+
+    if (batch.status !== BatchStatus.SUBMITTED) {
+      res.status(400).json({ message: 'Batch is not available for verification' });
+      return;
+    }
+
+    // Update batch status
+    const newStatus = action === 'APPROVE' ? BatchStatus.APPROVED : BatchStatus.REJECTED;
+    
+    await prisma.batch.update({
+      where: { id: batchId },
+      data: {
+        status: newStatus,
+        checkerId: userId,
+        rejectionRemarks: action === 'REJECT' ? remarks : null,
+        updatedAt: new Date()
+      }
+    });
+
+    // Log activity
+    await prisma.activityLog.create({
+      data: {
+        id: uuidv4(),
+        userId,
+        batchId,
+        action: action === 'APPROVE' ? 'APPROVE_BATCH' : 'REJECT_BATCH',
+        details: action === 'APPROVE' 
+          ? `Approved batch ${batch.batchNumber} after verification`
+          : `Rejected batch ${batch.batchNumber}: ${remarks}`,
+      }
+    });
+
+    // Notify maker
+    await notificationService.createNotification({
+      userId: batch.makerId,
+      batchId,
+      message: action === 'APPROVE'
+        ? `Your batch ${batch.batchNumber} (${batch.Product.name}) has been approved after verification`
+        : `Your batch ${batch.batchNumber} (${batch.Product.name}) has been rejected: ${remarks}`,
+      type: action === 'APPROVE' ? 'BATCH_APPROVED' : 'BATCH_REJECTED'
+    });
+
+    res.status(200).json({ 
+      message: `Batch ${action.toLowerCase()}d successfully` 
+    });
+  } catch (error) {
+    console.error('Complete batch verification error:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+
  
 
 }

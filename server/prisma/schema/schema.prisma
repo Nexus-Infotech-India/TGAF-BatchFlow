@@ -100,6 +100,22 @@ model Product {
   createdAt DateTime @default(now())
   updatedAt DateTime
   Batch     Batch[]
+  standardCategories ProductStandardCategory[]
+  parameters ProductParameter[]
+}
+
+model ProductParameter {
+  id            String          @id @default(uuid())
+  productId     String
+  parameterId   String
+  isRequired    Boolean         @default(true)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  
+  product       Product         @relation(fields: [productId], references: [id])
+  parameter     StandardParameter @relation(fields: [parameterId], references: [id])
+
+  @@unique([productId, parameterId])
 }
 
 model Role {
@@ -146,14 +162,26 @@ model User {
   // Training relations
   trainerTrainings            Training[]     @relation("TrainerTrainings")
   createdTrainings            Training[]     @relation("CreatedTrainings")
-  trainingParticipations      TrainingParticipant[]
-  attendances                 Attendance[]
   uploadedDocuments           TrainingDocument[]
   uploadedPhotos              TrainingPhoto[]
-  feedbacks                   TrainingFeedback[]
   assignedFollowups           TrainingFollowup[] @relation("AssignedFollowups")
   createdFollowups            TrainingFollowup[] @relation("CreatedFollowups")
   trainingNotifications       TrainingNotification[]
+  auditorProfile         Auditor?             @relation("UserAuditor")
+  auditeeAudits          Audit[]              @relation("AuditeeAudits")
+  createdAudits          Audit[]              @relation("CreatedAudits")
+  assignedFindings       Finding[]            @relation("AssignedFindings")
+  assignedActions        CorrectiveAction[]   @relation("AssignedActions")
+  verifiedActions        CorrectiveAction[]   @relation("VerifiedActions")
+  uploadedAuditDocuments AuditDocument[]
+  createdReminders       AuditReminder[]      @relation("CreatedReminders")
+  receivedReminders      AuditReminder[]      @relation("ReceivedReminders")
+  auditNotifications     AuditNotification[]  @relation("AuditNotifications")
+  responsibleForChecklistItems PreAuditChecklistItem[] @relation("ResponsibleForChecklistItems")
+  createdChecklistItems        PreAuditChecklistItem[] @relation("CreatedChecklistItems")
+  inspectedItems        AuditInspectionItem[] @relation("InspectedItems")
+  uploadedFeedbackForms       FeedbackForm[]
+  uploadedSessionPhotos  TrainingSessionPhoto[]  @relation("UploadedSessionPhotos")
 }
 
 enum BatchStatus {
@@ -205,6 +233,21 @@ model StandardCategory {
   updatedAt   DateTime
   parameters  StandardParameter[]
   Standards   Standard[]
+  products    ProductStandardCategory[]
+}
+
+model ProductStandardCategory {
+  id            String          @id @default(uuid())
+  productId     String
+  categoryId    String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  
+  // Relations
+  product       Product         @relation(fields: [productId], references: [id])
+  category      StandardCategory @relation(fields: [categoryId], references: [id])
+
+  @@unique([productId, categoryId])
 }
 
 enum StandardStatus {
@@ -217,6 +260,7 @@ model StandardParameter {
   id               String            @id
   name             String            // "Appearance", "Texture", "Moisture %Max", etc.
   categoryId       String
+  productType      String?   
   description      String?
   dataType         ParameterDataType // Type of data this parameter stores
   createdAt        DateTime          @default(now())
@@ -227,6 +271,9 @@ model StandardParameter {
   category         StandardCategory  @relation(fields: [categoryId], references: [id])
   batchValues      BatchParameterValue[]
   standards        StandardDefinition[]
+  products         ProductParameter[]
+
+  @@unique([name, categoryId, productType])
 }
 
 model StandardDefinition {
@@ -264,9 +311,13 @@ model BatchParameterValue {
   id              String            @id
   batchId         String
   parameterId     String
-  value           String            // Store all values as strings, convert as needed
+  value           String            
   unitId          String?
   methodologyId   String?
+  verificationResult    String?           
+  verificationRemark    String?           
+  verifiedById          String?           
+  verifiedAt            DateTime?         
   createdAt       DateTime          @default(now())
   updatedAt       DateTime
   

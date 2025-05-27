@@ -1,5 +1,4 @@
 #!/bin/bash
-# filepath: /home/rameswar-panda/Nexus/Batchflow/server/scripts/build-schema.sh
 
 OUTPUT_DIR="./prisma"
 OUTPUT_FILE="${OUTPUT_DIR}/schema.prisma"
@@ -45,8 +44,18 @@ if [ -f "$SCHEMA_DIR/training.prisma" ]; then
   echo "// Models and enums from training.prisma" >> $OUTPUT_FILE
   # Extract model definitions and enums from training.prisma
   sed -n '/^model\|^enum/,/^}/p' $SCHEMA_DIR/training.prisma >> $OUTPUT_FILE
+  echo "" >> $OUTPUT_FILE
 else
   echo "Warning: $SCHEMA_DIR/training.prisma not found"
+fi
+
+# Add the audit.prisma file
+if [ -f "$SCHEMA_DIR/audit.prisma" ]; then
+  echo "// Models and enums from audit.prisma" >> $OUTPUT_FILE
+  # Extract model definitions and enums from audit.prisma
+  sed -n '/^model\|^enum/,/^}/p' $SCHEMA_DIR/audit.prisma >> $OUTPUT_FILE
+else
+  echo "Warning: $SCHEMA_DIR/audit.prisma not found"
 fi
 
 echo "Schema successfully built at $OUTPUT_FILE"

@@ -44,6 +44,14 @@ export const API_ROUTES = {
     EXPORT_BATCHES: `${BASE_URL}/batch/batches/export`,
     GET_ACTIVITY_LOGS: `${BASE_URL}/batch/logs`,
     GENERATE_CERTIFICATE: (id: string) => `${BASE_URL}/batch/batches/${id}/certificate`,
+
+    GET_BATCHES_FOR_VERIFICATION: `${BASE_URL}/batch/verification/batches`,
+    GET_BATCH_PARAMETERS_FOR_VERIFICATION: (batchId: string) => 
+      `${BASE_URL}/batch/verification/batches/${batchId}/parameters`,
+    UPDATE_PARAMETER_VERIFICATION: (batchId: string) => 
+      `${BASE_URL}/batch/verification/batches/${batchId}/parameters`,
+    COMPLETE_BATCH_VERIFICATION: (batchId: string) => 
+      `${BASE_URL}/batch/verification/batches/${batchId}/complete`,
   },
 
   PRODUCT: {
@@ -52,6 +60,7 @@ export const API_ROUTES = {
     GET_PRODUCT_BY_ID: (id: string) => `${BASE_URL}/product/products/${id}`,
     UPDATE_PRODUCT: (id: string) => `${BASE_URL}/product/products/${id}`,
     DELETE_PRODUCT: (id: string) => `${BASE_URL}/product/products/${id}`,
+    GET_PARAMETERS_BY_PRODUCT_ID: (productId: string) => `${BASE_URL}/batch/parameters/product/${productId}`,
   },
 
   STANDARD: {
@@ -88,5 +97,124 @@ export const API_ROUTES = {
     QUALITY_METRICS: `${BASE_URL}/dashboard/quality-metrics`,
     MONTHLY_SUMMARY: `${BASE_URL}/dashboard/monthly-summary`,
     STANDARD_USAGE: `${BASE_URL}/dashboard/standard-usage`,
+  },
+  TRAINING: {
+    CREATE_TRAINING: `${BASE_URL}/training`,
+    SUBMIT_FEEDBACK: (trainingId: string) => `${BASE_URL}/training/${trainingId}/feedback`,
+    GET_ALL_TRAININGS: `${BASE_URL}/training/get`,
+    GET_TRAINING_BY_ID: (trainingId: string) => `${BASE_URL}/training/${trainingId}`,
+    GET_TRAINING_PARTICIPANTS: (trainingId: string) => `${BASE_URL}/training/${trainingId}/participants`,
+    UPDATE_TRAINING_STATUS: (trainingId: string) => `${BASE_URL}/training/${trainingId}/status`,
+    UPDATE_TRAINING: (trainingId: string) => `${BASE_URL}/training/${trainingId}`,
+    DELETE_TRAINING: (trainingId: string) => `${BASE_URL}/training/${trainingId}`,
+
+    UPLOAD_DOCUMENT: (trainingId: string) => `${BASE_URL}/training/${trainingId}/documents`,
+    GET_TRAINING_DOCUMENTS: (trainingId: string) => `${BASE_URL}/training/${trainingId}/documents`,
+    GET_ALL_DOCUMENTS: `${BASE_URL}/training/documents/all`,
+    GET_DOCUMENT_BY_ID: (documentId: string) => `${BASE_URL}/training/documents/${documentId}`,
+    UPDATE_DOCUMENT_METADATA: (documentId: string) => `${BASE_URL}/training/documents/${documentId}`,
+    DELETE_DOCUMENT: (documentId: string) => `${BASE_URL}/training/documents/${documentId}`,
+    BATCH_DELETE_DOCUMENTS: `${BASE_URL}/training/documents/batch-delete`,
+
+    ADD_PARTICIPANTS: (trainingId: string) => `${BASE_URL}/training/${trainingId}/participants`,
+    REMOVE_PARTICIPANT: (trainingId: string, participantId: string) => `${BASE_URL}/training/${trainingId}/participants/${participantId}`,
+    UPDATE_PARTICIPANT_STATUS: (trainingId: string, participantId: string) => `${BASE_URL}/training/${trainingId}/participants/${participantId}`,
+    RESEND_PARTICIPANT_INVITE: (trainingId: string, participantId: string) => `${BASE_URL}/training/${trainingId}/participants/${participantId}/resend-invite`,
+    GET_PARTICIPANTS: (trainingId: string) => `${BASE_URL}/training/${trainingId}/participants`,
+    HANDLE_INVITATION_RESPONSE: `${BASE_URL}/training/respond`,
+
+    ADD_TRAINING_SESSION: (trainingId: string) => `${BASE_URL}/training/${trainingId}/sessions`,
+    GET_TRAINING_SESSIONS: (trainingId: string) => `${BASE_URL}/training/${trainingId}/sessions`,
+    GET_SESSION_BY_ID: ( sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}`,
+    UPDATE_TRAINING_SESSION: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}`,
+    DELETE_TRAINING_SESSION: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}`,
+    RECORD_ATTENDANCE: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}/attendance`,
+    GET_SESSION_ATTENDANCE: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}/attendance`,
+    UPDATE_SESSION_STATUS: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}/status`,
+    UPLOAD_SESSION_DOCUMENT: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}/documents`,
+    GET_SESSION_DOCUMENTS: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}/documents`,
+    DELETE_SESSION_DOCUMENT: (documentId: string) => `${BASE_URL}/training/documents/${documentId}/session`,
+
+    GET_MONTHLY_CALENDAR: `${BASE_URL}/training/calendar/monthly`,
+    GET_DAILY_CALENDAR: (date: string)=>`${BASE_URL}/training/calendar/daily/${date}`,
+    UPDATE_CALENDAR_DESCRIPTION: (month: string, year: string) => `${BASE_URL}/training/calender/${month}/${year}/description`,
+    GET_CALENDAR_STATISTICS: `${BASE_URL}/training/calendar/statistics`,
+
+    GET_TRAINING_SUMMARY_STATS: `${BASE_URL}/dashboard/summaryy`,
+    GET_TRAINING_FEEDBACK_STATS: `${BASE_URL}/dashboard/feedback`,
+    GET_TRAINING_PARTICIPANT_ENGAGEMENT_STATS: `${BASE_URL}/dashboard/engagement`,
+    GET_TRAINING_ATTENDANCE_STATS: `${BASE_URL}/dashboard/attendance`,
+    GET_TRAINING_TRAINER_STATS: `${BASE_URL}/dashboard/trainers`,
+    GET_TRAINING_MONTHLY_STATS: `${BASE_URL}/dashboard/monthly`,
+    GET_TRAINING_DASHBOARD_STATS: `${BASE_URL}/dashboard`,
+
+    UPLOAD_SESSION_PHOTO: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}/photos`,
+    GET_SESSION_PHOTOS: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}/photos`,
+    DELETE_SESSION_PHOTO: (photoId: string) => `${BASE_URL}/training/photos/${photoId}`,
+    UPDATE_SESSION_PHOTO_CAPTION: (photoId: string) => `${BASE_URL}/training/photos/${photoId}`,
+
+    UPLOAD_FEEDBACK_FORM: (sessionId: string, participantId: string) => 
+      `${BASE_URL}/training/sessions/${sessionId}/participants/${participantId}/feedback`,
+    GET_SESSION_FEEDBACK_FORMS: (sessionId: string) => 
+      `${BASE_URL}/training/sessions/${sessionId}/feedback-forms`,
+    GET_TRAINING_FEEDBACK_FORMS: (trainingId: string) => 
+      `${BASE_URL}/training/trainings/${trainingId}/feedback-forms`,
+  },
+  AUDIT: {
+    // ===== Audit Base Routes =====
+    CREATE_AUDIT: `${BASE_URL}/audit`,
+    GET_AUDITS: `${BASE_URL}/audit`,
+    GET_AUDIT_STATISTICS: `${BASE_URL}/audit/statistics`,
+    GET_AUDIT_BY_ID: (id: string) => `${BASE_URL}/audit/${id}`,
+    UPDATE_AUDIT: (id: string) => `${BASE_URL}/audit/${id}`,
+    DELETE_AUDIT: (id: string) => `${BASE_URL}/audit/${id}`,
+    CHANGE_AUDIT_STATUS: (id: string) => `${BASE_URL}/audit/${id}/status`,
+    
+    // ===== Preparation Phase =====
+    SEND_NOTIFICATIONS: (auditId: string) => `${BASE_URL}/audit/${auditId}/notifications`,
+    UPLOAD_DOCUMENT: (auditId: string) => `${BASE_URL}/audit/${auditId}/documents`,
+    GET_DOCUMENTS: (auditId: string) => `${BASE_URL}/audit/${auditId}/documents`,
+    CREATE_CHECKLIST: (auditId: string) => `${BASE_URL}/audit/${auditId}/checklist`,
+    GET_CHECKLIST: (auditId: string) => `${BASE_URL}/audit/${auditId}/checklist`,
+    UPDATE_CHECKLIST_ITEM: (id: string) => `${BASE_URL}/audit/checklist/${id}`,
+    GET_PREVIOUS_ACTIONS: (auditId: string) => `${BASE_URL}/audit/${auditId}/previous-actions`,
+    
+    // ===== Execution Phase =====
+    START_EXECUTION: (auditId: string) => `${BASE_URL}/audit/${auditId}/execution/start`,
+    CREATE_FINDING: (auditId: string) => `${BASE_URL}/audit/${auditId}/findings`,
+    GET_FINDINGS: (auditId: string) => `${BASE_URL}/audit/${auditId}/findings`,
+    GET_FINDING_BY_ID: (id: string) => `${BASE_URL}/audit/findings/${id}`,
+    UPDATE_FINDING: (id: string) => `${BASE_URL}/audit/findings/${id}`,
+    CREATE_INSPECTION_CHECKLIST: (auditId: string) => `${BASE_URL}/audit/${auditId}/inspection-checklist`,
+    GET_INSPECTION_CHECKLISTS: (auditId: string) => `${BASE_URL}/audit/${auditId}/inspection-checklists`,
+    COMPLETE_EXECUTION: (auditId: string) => `${BASE_URL}/audit/${auditId}/execution/complete`,
+    GET_INSPECTION_ITEM: (itemId: string) => `${BASE_URL}/audit/inspection-items/${itemId}`,
+    UPDATE_INSPECTION_ITEM: (itemId: string) => `${BASE_URL}/audit/inspection-items/${itemId}`,
+    
+    // ===== Report Generation =====
+    GENERATE_REPORT: (auditId: string) => `${BASE_URL}/audit/${auditId}/report`,
+    GET_REPORTS: (auditId: string) => `${BASE_URL}/audit/${auditId}/reports`,
+    
+    // ===== Follow-up Phase =====
+    CREATE_CORRECTIVE_ACTION: (auditId: string) => `${BASE_URL}/audit/${auditId}/corrective-actions`,
+    GET_CORRECTIVE_ACTIONS: (auditId: string) => `${BASE_URL}/audit/${auditId}/corrective-actions`,
+    UPDATE_CORRECTIVE_ACTION: (id: string) => `${BASE_URL}/audit/corrective-actions/${id}`,
+    CLOSE_AUDIT: (auditId: string) => `${BASE_URL}/audit/${auditId}/close`,
+    GET_AUDITS_FOR_CALENDAR: `${BASE_URL}/audit/calendar/events`,
+
+    GET_ALL_DEPARTMENTS: `${BASE_URL}/audit/departments`,
+    CREATE_DEPARTMENT: `${BASE_URL}/audit/departments`,
+
+    DELETE_DOCUMENT: (auditId: string, documentId: string) => 
+      `${BASE_URL}audit/${auditId}/documents/${documentId}`,
+  },
+  AUDIT_DASHBOARD: {
+    OVERVIEW: `${BASE_URL}/audit/dashboard/overview`,
+    BATCH_TRENDS: `${BASE_URL}/audit/dashboard/batch-trends`,
+    PRODUCT_PERFORMANCE: `${BASE_URL}/audit/dashboard/product-performance`,
+    USER_ACTIVITY: `${BASE_URL}/audit/dashboard/user-activity`,
+    QUALITY_METRICS: `${BASE_URL}/audit/dashboard/quality-metrics`,
+    MONTHLY_SUMMARY: `${BASE_URL}/audit/dashboard/monthly-summary`,
+    STANDARD_USAGE: `${BASE_URL}/audit/dashboard/standard-usage`,
   },
 };

@@ -17,9 +17,9 @@ import {
   List,
   Plus,
   Database,
-  FileText
+  FileText,
+  Hash
 } from "lucide-react";
-
 
 interface StandardParameter {
   id: string;
@@ -73,73 +73,116 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
   // Column definition for TanStack Table
   const columnHelper = createColumnHelper<StandardParameter>();
   const columns = [
+    columnHelper.accessor("id", {
+      header: ({ column }) => (
+        <motion.button
+          onClick={() => column.toggleSorting()}
+          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
+            <Hash size={14} />
+          </div>
+          ID
+          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+        </motion.button>
+      ),
+      cell: ({ row }) => {
+        const id = row.original.id;
+        const shortId = `${id.slice(0, 8)}...`;
+        return (
+          <div className="flex items-center">
+            <span className="font-mono bg-gradient-to-r from-gray-50 to-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 shadow-sm">
+              {shortId}
+            </span>
+          </div>
+        );
+      },
+    }),
     columnHelper.accessor("name", {
       header: ({ column }) => (
-        <div className="flex items-center gap-2">
-          <Tag size={16} className="text-blue-500" />
-          <button
-            onClick={() => column.toggleSorting()}
-            className="flex items-center gap-1 font-medium"
-          >
-            Name
-            <ArrowUpDown size={14} className="text-blue-500" />
-          </button>
-        </div>
+        <motion.button
+          onClick={() => column.toggleSorting()}
+          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="p-1.5 rounded-lg bg-green-50 text-green-600 group-hover:bg-green-100 transition-colors">
+            <Tag size={14} />
+          </div>
+          Name
+          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+        </motion.button>
       ),
-      cell: ({ getValue }) => <div className="font-medium text-blue-700">{getValue()}</div>,
+      cell: ({ getValue }) => (
+        <div className="font-medium text-gray-800">{getValue()}</div>
+      ),
     }),
     columnHelper.accessor("category.name", {
       header: ({ column }) => (
-        <div className="flex items-center gap-2">
-          <List size={16} className="text-blue-500" />
-          <button
-            onClick={() => column.toggleSorting()}
-            className="flex items-center gap-1 font-medium"
-          >
-            Category
-            <ArrowUpDown size={14} className="text-blue-500" />
-          </button>
-        </div>
+        <motion.button
+          onClick={() => column.toggleSorting()}
+          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
+            <List size={14} />
+          </div>
+          Category
+          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+        </motion.button>
       ),
       cell: ({ getValue }) => (
-        <div className="bg-blue-50 text-blue-700 px-2 py-1 rounded-md inline-block text-sm">
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 px-3 py-1.5 rounded-lg inline-block text-sm font-medium border border-blue-200">
           {getValue()}
         </div>
       ),
     }),
     columnHelper.accessor("dataType", {
       header: ({ column }) => (
-        <div className="flex items-center gap-2">
-          <Database size={16} className="text-blue-500" />
-          <button
-            onClick={() => column.toggleSorting()}
-            className="flex items-center gap-1 font-medium"
-          >
-            Data Type
-            <ArrowUpDown size={14} className="text-blue-500" />
-          </button>
-        </div>
+        <motion.button
+          onClick={() => column.toggleSorting()}
+          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="p-1.5 rounded-lg bg-orange-50 text-orange-600 group-hover:bg-orange-100 transition-colors">
+            <Database size={14} />
+          </div>
+          Data Type
+          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+        </motion.button>
       ),
       cell: ({ getValue }) => (
-        <div className="bg-gray-100 text-gray-700 px-2 py-1 rounded-md inline-block text-sm">
+        <div className="bg-gradient-to-r from-orange-50 to-orange-100 text-orange-700 px-3 py-1.5 rounded-lg inline-block text-sm font-medium border border-orange-200">
           {formatDataType(getValue())}
         </div>
       ),
     }),
     columnHelper.accessor("description", {
       header: ({ column }) => (
-        <div className="flex items-center gap-2">
-          <FileText size={16} className="text-blue-500" />
-          <button
-            onClick={() => column.toggleSorting()}
-            className="flex items-center gap-1 font-medium"
-          >
-            Description
-            <ArrowUpDown size={14} className="text-blue-500" />
-          </button>
+        <motion.button
+          onClick={() => column.toggleSorting()}
+          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
+            <FileText size={14} />
+          </div>
+          Description
+          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+        </motion.button>
+      ),
+      cell: ({ getValue }) => (
+        <div className="text-gray-600 max-w-md">
+          {getValue() || (
+            <span className="italic text-gray-400">No description provided</span>
+          )}
         </div>
       ),
-      cell: ({ getValue }) => <div className="text-gray-600 max-w-md truncate">{getValue() || "No description provided"}</div>,
     }),
   ];
 
@@ -158,18 +201,19 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
   if (isLoading) {
     return (
       <motion.div 
-        className="flex flex-col items-center justify-center py-12"
+        className="flex flex-col items-center justify-center py-20 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <div className="relative h-16 w-16 mb-4">
+        <div className="relative h-16 w-16 mb-6">
           <motion.div 
             className="absolute top-0 left-0 w-full h-full rounded-full border-4 border-t-blue-500 border-r-blue-300 border-b-blue-100 border-l-blue-300"
             animate={{ rotate: 360 }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-          ></motion.div>
+          />
         </div>
-        <p className="text-gray-700 font-medium">Loading parameters...</p>
+        <p className="text-gray-700 font-medium text-lg">Loading parameters...</p>
+        <p className="text-gray-500 text-sm mt-2">Please wait while we fetch your data</p>
       </motion.div>
     );
   }
@@ -178,22 +222,22 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
   if (error) {
     return (
       <motion.div 
-        className="mt-4 text-red-600 bg-red-50 border border-red-100 rounded-xl p-6 shadow-sm"
+        className="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-2xl p-8 shadow-sm"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
         <div className="flex items-start">
-          <div className="mr-4 p-1.5 bg-red-100 rounded-full">
+          <div className="mr-4 p-2 bg-red-100 rounded-xl">
             <AlertCircle className="h-6 w-6 text-red-500" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold mb-2">Error fetching parameters</h3>
+            <h3 className="text-lg font-semibold text-red-800 mb-2">Unable to load parameters</h3>
             <p className="text-sm text-red-700 mb-4">
               {error}
             </p>
             <motion.button
-              className="px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg shadow-sm flex items-center gap-2"
+              className="px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg shadow-sm flex items-center gap-2 hover:bg-red-50 transition-colors"
               onClick={() => fetchParameters()}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
@@ -210,88 +254,55 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
   // Render data table
   return (
     <motion.div 
-      className="mt-4"
+      className="h-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <motion.div 
-        className="bg-white border border-blue-100 rounded-xl shadow-md overflow-hidden"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-      >
-        <div className="p-6 border-b border-blue-100 bg-gradient-to-r from-blue-50 to-blue-100">
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-3 mb-1">
-                <Tag className="h-6 w-6 text-blue-600" />
-                <span>Standard Parameters</span>
-              </h2>
-              <p className="text-gray-600">
-                Manage the parameters used to define quality standards for your products.
-              </p>
-            </div>
-
-            <motion.button
-              onClick={onAddParameterClick}
-              className="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl shadow-md flex items-center gap-2"
-              whileHover={{ 
-                scale: 1.03, 
-                boxShadow: "0 10px 15px -3px rgba(59, 130, 246, 0.3), 0 4px 6px -2px rgba(59, 130, 246, 0.15)" 
-              }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 400, damping: 15 }}
-            >
-              <Plus size={18} />
-              <span>Add Parameter</span>
-            </motion.button>
-          </div>
-        </div>
-
-        {parameters.length === 0 ? (
+      {parameters.length === 0 ? (
+        <motion.div 
+          className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-12"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+        >
           <motion.div 
-            className="text-center py-16 px-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
+            className="h-24 w-24 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-500 rounded-2xl flex items-center justify-center shadow-lg"
+            animate={{ scale: [0.9, 1.1, 1] }}
+            transition={{ duration: 2, times: [0, 0.5, 1], repeat: Infinity, repeatType: "reverse" }}
           >
-            <motion.div 
-              className="h-20 w-20 mx-auto mb-4 bg-blue-50 text-blue-400 rounded-full flex items-center justify-center"
-              animate={{ scale: [0.9, 1.1, 1] }}
-              transition={{ duration: 1.5, times: [0, 0.5, 1], repeat: Infinity, repeatType: "reverse" }}
-            >
-              <Tag className="h-10 w-10" />
-            </motion.div>
-            <h3 className="text-xl font-medium text-gray-800 mb-2">No Parameters Found</h3>
-            <p className="text-gray-500 max-w-md mx-auto mb-6">
-              Create parameters to define what can be measured in your standards.
-            </p>
-            
-            <motion.button 
-              className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl shadow-md inline-flex items-center gap-2"
-              onClick={onAddParameterClick}
-              whileHover={{ 
-                scale: 1.03, 
-                boxShadow: "0 10px 15px -3px rgba(59, 130, 246, 0.3), 0 4px 6px -2px rgba(59, 130, 246, 0.15)" 
-              }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <Plus size={16} />
-              Create First Parameter
-            </motion.button>
+            <Tag className="h-12 w-12" />
           </motion.div>
-        ) : (
-          <>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-blue-100">
-                <thead className="bg-blue-50">
+          <h3 className="text-2xl font-bold text-gray-800 mb-3">No Parameters Found</h3>
+          <p className="text-gray-600 max-w-md mx-auto text-center mb-8 leading-relaxed">
+            Create parameters to define what can be measured in your standards. Parameters help establish the criteria for quality control.
+          </p>
+          
+          <motion.button 
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl shadow-lg inline-flex items-center gap-3 font-medium"
+            onClick={onAddParameterClick}
+            whileHover={{ 
+              scale: 1.05, 
+              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.3), 0 10px 10px -5px rgba(59, 130, 246, 0.15)" 
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Plus size={18} />
+            Create Your First Parameter
+          </motion.button>
+        </motion.div>
+      ) : (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden h-full flex flex-col">
+          <div className="flex-1 overflow-hidden">
+            <div className="overflow-x-auto h-full">
+              <table className="min-w-full h-full">
+                <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 sticky top-0 z-10">
                   {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
                       {headerGroup.headers.map((header) => (
                         <th
                           key={header.id}
-                          className="px-6 py-3.5 text-left text-xs font-medium text-blue-700 uppercase tracking-wider"
+                          className="px-6 py-4 text-left text-sm font-medium text-gray-700"
                         >
                           {header.isPlaceholder
                             ? null
@@ -301,15 +312,16 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
                     </tr>
                   ))}
                 </thead>
-                <tbody className="bg-white divide-y divide-blue-50">
+                <tbody className="bg-white divide-y divide-gray-100">
                   <AnimatePresence>
                     {table.getRowModel().rows.map((row, i) => (
                       <motion.tr 
                         key={row.id} 
-                        className="hover:bg-blue-50 transition-colors"
+                        className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.2, delay: i * 0.05 }}
+                        whileHover={{ scale: 1.01 }}
                       >
                         {row.getVisibleCells().map((cell) => (
                           <td key={cell.id} className="px-6 py-4 text-sm text-gray-700">
@@ -322,26 +334,31 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
                 </tbody>
               </table>
             </div>
+          </div>
 
-            <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100 border-t border-blue-100 flex items-center justify-between">
-              <p className="text-sm text-blue-700 font-medium flex items-center">
-                <Tag size={14} className="mr-2 text-blue-500" />
-                Showing {table.getRowModel().rows.length} parameters
+          {/* Enhanced Footer */}
+          <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 border-t border-gray-200 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <Tag size={14} className="text-blue-600" />
+              </div>
+              <p className="text-sm font-medium text-gray-700">
+                Showing <span className="text-blue-600 font-semibold">{table.getRowModel().rows.length}</span> parameters
               </p>
-
-              <motion.button 
-                onClick={fetchParameters}
-                className="text-sm text-blue-600 flex items-center gap-1 px-3 py-1.5 bg-white rounded-lg border border-blue-200 shadow-sm"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <RefreshCw size={14} />
-                <span>Refresh</span>
-              </motion.button>
             </div>
-          </>
-        )}
-      </motion.div>
+
+            <motion.button 
+              onClick={fetchParameters}
+              className="text-sm text-gray-600 flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
+              whileHover={{ scale: 1.05, y: -1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <RefreshCw size={14} />
+              <span className="font-medium">Refresh</span>
+            </motion.button>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };

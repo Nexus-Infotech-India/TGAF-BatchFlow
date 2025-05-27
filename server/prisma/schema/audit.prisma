@@ -1,0 +1,234 @@
+enum AuditType {
+  INTERNAL
+  EXTERNAL
+}
+
+enum AuditStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  DELAYED
+}
+
+enum FindingType {
+  OBSERVATION
+  NON_CONFORMITY
+  MAJOR_NON_CONFORMITY
+  OPPORTUNITY_FOR_IMPROVEMENT
+}
+
+enum FindingStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  VERIFIED
+  CLOSED
+}
+
+enum AuditDocumentType {
+  CHECKLIST
+  PROCEDURE
+  CERTIFICATE
+  EVIDENCE
+  REPORT
+  OTHER
+}
+
+model Auditor {
+  id              String    @id @default(uuid())
+  name            String
+  email           String
+  userId          String?   @unique
+  isExternal      Boolean   @default(false)
+  firmName        String?   // Only for external auditors
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  user            User?     @relation("UserAuditor", fields: [userId], references: [id])
+  audits          Audit[]   
+}
+
+model Audit {
+  id              String       @id @default(uuid())
+  name            String
+  auditType       AuditType
+  status          AuditStatus  @default(PLANNED)
+  startDate       DateTime
+  endDate         DateTime?
+  auditorId       String
+  auditeeId       String?
+  firmName        String?
+  departmentId    String?
+  objectives      String?
+  scope           String?
+  summary         String?
+  createdById     String
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  
+  // Relations
+  auditor         Auditor      @relation(fields: [auditorId], references: [id])
+  auditee         User?        @relation("AuditeeAudits", fields: [auditeeId], references: [id])
+  department      Department?  @relation(fields: [departmentId], references: [id])
+  createdBy       User         @relation("CreatedAudits", fields: [createdById], references: [id])
+  
+  findings        Finding[]
+  documents       AuditDocument[]
+  actions         CorrectiveAction[]
+  reminders       AuditReminder[]
+  notifications   AuditNotification[]
+  checklistItems   PreAuditChecklistItem[]
+  inspectionItems   AuditInspectionItem[]
+}
+
+model AuditInspectionItem {
+  id                String    @id @default(uuid())
+  auditId           String
+  areaName          String    // Storage, Cleaning, Training, Lab, etc.
+  itemName          String
+  description       String?
+  standardReference String?   // Reference to relevant standard
+  isCompliant       Boolean?
+  comments          String?
+  evidence          String?   // URL to photo or document
+  inspectedById     String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // Relations
+  audit             Audit     @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  inspectedBy       User?      @relation("InspectedItems", fields: [inspectedById], references: [id])
+}
+
+model Department {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // Relations
+  audits      Audit[]
+}
+
+model Finding {
+  id              String          @id @default(uuid())
+  auditId         String
+  title           String
+  description     String
+  findingType     FindingType
+  status          FindingStatus   @default(OPEN)
+  priority        Priority?       @default(MEDIUM) 
+  dueDate         DateTime?
+  assignedToId    String?
+  evidence        String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  closedAt        DateTime?
+  
+  // Relations
+  audit           Audit           @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  assignedTo      User?           @relation("AssignedFindings", fields: [assignedToId], references: [id])
+  actions         CorrectiveAction[]
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model CorrectiveAction {
+  id              String    @id @default(uuid())
+  auditId         String
+  findingId       String?
+  title           String
+  description     String
+  actionType      String    // CORRECTIVE, PREVENTIVE
+  assignedToId    String
+  dueDate         DateTime
+  status          String    // OPEN, IN_PROGRESS, COMPLETED, VERIFIED
+  completedAt     DateTime?
+  verifiedAt      DateTime?
+  verifiedById    String?
+  evidence        String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  audit           Audit     @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  finding         Finding?  @relation(fields: [findingId], references: [id])
+  assignedTo      User      @relation("AssignedActions", fields: [assignedToId], references: [id])
+  verifiedBy      User?     @relation("VerifiedActions", fields: [verifiedById], references: [id])
+}
+
+model AuditDocument {
+  id              String        @id @default(uuid())
+  auditId         String
+  title           String
+  description     String?
+  documentType    AuditDocumentType
+  fileUrl         String
+  filePath        String?
+  uploadedById    String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  // Relations
+  audit           Audit         @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  uploadedBy      User          @relation(fields: [uploadedById], references: [id])
+}
+
+model PreAuditChecklistItem {
+  id              String    @id @default(uuid())
+  auditId         String
+  description     String
+  isCompleted     Boolean   @default(false)
+  comments        String?
+  responsibleId   String
+  dueDate         DateTime?
+  completedAt     DateTime?
+  createdById     String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relations
+  audit           Audit     @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  responsible     User      @relation("ResponsibleForChecklistItems", fields: [responsibleId], references: [id])
+  createdBy       User      @relation("CreatedChecklistItems", fields: [createdById], references: [id])
+}
+
+model AuditReminder {
+  id              String    @id @default(uuid())
+  auditId         String
+  title           String
+  message         String
+  dueDate         DateTime
+  status          String    // PENDING, SENT, DISMISSED
+  recipientId     String
+  createdById     String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  sentAt          DateTime?
+  
+  // Relations
+  audit           Audit     @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  recipient       User      @relation("ReceivedReminders", fields: [recipientId], references: [id])
+  createdBy       User      @relation("CreatedReminders", fields: [createdById], references: [id])
+}
+
+model AuditNotification {
+  id          String    @id @default(uuid())
+  auditId     String
+  userId      String
+  title       String
+  message     String
+  isRead      Boolean   @default(false)
+  sentAt      DateTime  @default(now())
+  readAt      DateTime?
+  
+  // Relations
+  audit       Audit     @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  user        User      @relation("AuditNotifications", fields: [userId], references: [id])
+}

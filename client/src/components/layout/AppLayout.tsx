@@ -21,52 +21,126 @@ const AppLayout = () => {
   };
 
   // Update page title based on route
-  useEffect(() => {
-    const path = location.pathname;
-    let title = 'BatchFlow';
-    let currentNavStack = [{ title: 'Home', path: '/' }];
+ useEffect(() => {
+  const path = location.pathname;
+  let title = 'BatchFlow';
+  let currentNavStack = [{ title: 'Home', path: '/' }];
 
-    if (path.includes('/dashboard')) {
-      title = 'Dashboard';
-      currentNavStack = [
-        { title: 'Home', path: '/' },
-        { title: 'Dashboard', path: '/dashboard' },
-      ];
-    } else if (path.includes('/batches')) {
-      title = 'Batch Management';
-      currentNavStack = [
-        { title: 'Home', path: '/' },
-        { title: 'Batches', path: '/batches' },
-      ];
-    } else if (path.includes('/standards')) {
-      title = 'Standards';
-      currentNavStack = [
-        { title: 'Home', path: '/' },
-        { title: 'Standards', path: '/standards' },
-      ];
-    } else if (path.includes('/units')) {
-      title = 'Units';
-      currentNavStack = [
-        { title: 'Home', path: '/' },
-        { title: 'Units', path: '/units' },
-      ];
-    } else if (path.includes('/activity-logs')) {
-      title = 'Activity Logs';
-      currentNavStack = [
-        { title: 'Home', path: '/' },
-        { title: 'Activity Logs', path: '/activity-logs' },
-      ];
-    } else if (path.includes('/settings')) {
-      title = 'Settings';
-      currentNavStack = [
-        { title: 'Home', path: '/' },
-        { title: 'Settings', path: '/settings' },
-      ];
+  if (path.includes('/dashboard')) {
+    title = 'Dashboard';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Dashboard', path: '/dashboard' },
+    ];
+  } else if (path.includes('/batches')) {
+    title = 'Batch Management';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Batches', path: '/batches' },
+    ];
+  } else if (path.includes('/standards')) {
+    title = 'Standards';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Standards', path: '/standards' },
+    ];
+  } else if (path.includes('/units')) {
+    title = 'Units';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Units', path: '/units' },
+    ];
+  } else if (path.includes('/activity-logs')) {
+    title = 'Activity Logs';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Activity Logs', path: '/activity-logs' },
+    ];
+  } else if (path.includes('/settings')) {
+    title = 'Settings';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Settings', path: '/settings' },
+    ];
+  } 
+  // Add breadcrumb for document-library
+  else if (path.includes('/document-library')) {
+    title = 'Document Library';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Document Library', path: '/document-library' },
+    ];
+  }
+  // Add breadcrumbs for training paths
+  else if (path.includes('/trainings')) {
+    title = 'Training Management';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Trainings', path: '/trainings' },
+    ];
+    
+    // Add specific training subpaths if needed
+    if (path.includes('/create')) {
+      currentNavStack.push({ title: 'Create', path: '/trainings/create' });
+      title = 'Create Training';
+    } else if (path.match(/\/trainings\/edit\/\w+/)) {
+      const id = path.split('/').pop();
+      currentNavStack.push({ title: 'Edit', path: `/trainings/edit/${id}` });
+      title = 'Edit Training';
+    } else if (path.match(/\/trainings\/\w+/)) {
+      const id = path.split('/').pop();
+      currentNavStack.push({ title: 'Details', path: `/trainings/${id}` });
+      title = 'Training Details';
     }
+  }
+  // Add breadcrumbs for audit paths
+  else if (path.includes('/audits')) {
+    title = 'Audit Management';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Audits', path: '/audits' },
+    ];
+    
+    if (path.includes('/checklist')) {
+      currentNavStack.push({ title: 'Checklists', path: '/audits/checklist' });
+    } else if (path.includes('/inspection')) {
+      currentNavStack.push({ title: 'Inspections', path: '/audits/inspection-checklist' });
+    }
+  }
+  // Add breadcrumbs for profile and access control
+  else if (path.includes('/profile')) {
+    title = 'User Profile';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Profile', path: '/profile' },
+    ];
+  }
+  else if (path.includes('/access-control')) {
+    title = 'Access Control';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Access Control', path: '/access-control' },
+    ];
+  }
+  // Add calendar routes
+  else if (path.includes('/training-calender')) {
+    title = 'Training Calendar';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Training Calendar', path: '/training-calender' },
+    ];
+  }
+  else if (path.includes('/audit/calender')) {
+    title = 'Audit Calendar';
+    currentNavStack = [
+      { title: 'Home', path: '/' },
+      { title: 'Audit Calendar', path: '/audit/calender' },
+    ];
+  }
 
-    setPageTitle(title);
-    setNavStack(currentNavStack);
-  }, [location]);
+  setPageTitle(title);
+  setNavStack(currentNavStack);
+}, [location]);
 
   return (
     <div className="flex min-h-screen">

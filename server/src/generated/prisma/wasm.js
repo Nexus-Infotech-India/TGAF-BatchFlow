@@ -186,6 +186,15 @@ exports.Prisma.ProductScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ProductParameterScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  parameterId: 'parameterId',
+  isRequired: 'isRequired',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.RoleScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -234,10 +243,19 @@ exports.Prisma.StandardCategoryScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ProductStandardCategoryScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  categoryId: 'categoryId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.StandardParameterScalarFieldEnum = {
   id: 'id',
   name: 'name',
   categoryId: 'categoryId',
+  productType: 'productType',
   description: 'description',
   dataType: 'dataType',
   createdAt: 'createdAt',
@@ -264,6 +282,10 @@ exports.Prisma.BatchParameterValueScalarFieldEnum = {
   value: 'value',
   unitId: 'unitId',
   methodologyId: 'methodologyId',
+  verificationResult: 'verificationResult',
+  verificationRemark: 'verificationRemark',
+  verifiedById: 'verifiedById',
+  verifiedAt: 'verifiedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -302,6 +324,7 @@ exports.Prisma.TrainingSessionScalarFieldEnum = {
   startTime: 'startTime',
   endTime: 'endTime',
   venue: 'venue',
+  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -309,11 +332,24 @@ exports.Prisma.TrainingSessionScalarFieldEnum = {
 exports.Prisma.TrainingDocumentScalarFieldEnum = {
   id: 'id',
   trainingId: 'trainingId',
+  sessionId: 'sessionId',
   title: 'title',
   description: 'description',
   fileUrl: 'fileUrl',
+  filePath: 'filePath',
   documentType: 'documentType',
   uploadedById: 'uploadedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ParticipantScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  organization: 'organization',
+  position: 'position',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -321,7 +357,7 @@ exports.Prisma.TrainingDocumentScalarFieldEnum = {
 exports.Prisma.TrainingParticipantScalarFieldEnum = {
   id: 'id',
   trainingId: 'trainingId',
-  userId: 'userId',
+  participantId: 'participantId',
   inviteSent: 'inviteSent',
   inviteSentAt: 'inviteSentAt',
   inviteAccepted: 'inviteAccepted',
@@ -333,7 +369,7 @@ exports.Prisma.AttendanceScalarFieldEnum = {
   id: 'id',
   trainingId: 'trainingId',
   sessionId: 'sessionId',
-  userId: 'userId',
+  participantId: 'participantId',
   status: 'status',
   remarks: 'remarks',
   signatureUrl: 'signatureUrl',
@@ -353,7 +389,7 @@ exports.Prisma.TrainingPhotoScalarFieldEnum = {
 exports.Prisma.TrainingFeedbackScalarFieldEnum = {
   id: 'id',
   trainingId: 'trainingId',
-  userId: 'userId',
+  participantId: 'participantId',
   contentRating: 'contentRating',
   trainerRating: 'trainerRating',
   materialRating: 'materialRating',
@@ -363,6 +399,17 @@ exports.Prisma.TrainingFeedbackScalarFieldEnum = {
   suggestedImprovements: 'suggestedImprovements',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FeedbackFormScalarFieldEnum = {
+  id: 'id',
+  trainingId: 'trainingId',
+  sessionId: 'sessionId',
+  participantId: 'participantId',
+  fileUrl: 'fileUrl',
+  filePath: 'filePath',
+  submittedAt: 'submittedAt',
+  uploadedById: 'uploadedById'
 };
 
 exports.Prisma.TrainingFollowupScalarFieldEnum = {
@@ -382,6 +429,166 @@ exports.Prisma.TrainingFollowupScalarFieldEnum = {
 exports.Prisma.TrainingNotificationScalarFieldEnum = {
   id: 'id',
   trainingId: 'trainingId',
+  userId: 'userId',
+  title: 'title',
+  message: 'message',
+  isRead: 'isRead',
+  sentAt: 'sentAt',
+  readAt: 'readAt'
+};
+
+exports.Prisma.TrainingInviteTokenScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  action: 'action',
+  trainingId: 'trainingId',
+  participantId: 'participantId',
+  email: 'email',
+  expiresAt: 'expiresAt',
+  used: 'used',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.TrainingSessionPhotoScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  photoUrl: 'photoUrl',
+  caption: 'caption',
+  uploadedById: 'uploadedById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AuditorScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  userId: 'userId',
+  isExternal: 'isExternal',
+  firmName: 'firmName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AuditScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  auditType: 'auditType',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  auditorId: 'auditorId',
+  auditeeId: 'auditeeId',
+  firmName: 'firmName',
+  departmentId: 'departmentId',
+  objectives: 'objectives',
+  scope: 'scope',
+  summary: 'summary',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AuditInspectionItemScalarFieldEnum = {
+  id: 'id',
+  auditId: 'auditId',
+  areaName: 'areaName',
+  itemName: 'itemName',
+  description: 'description',
+  standardReference: 'standardReference',
+  isCompliant: 'isCompliant',
+  comments: 'comments',
+  evidence: 'evidence',
+  inspectedById: 'inspectedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DepartmentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FindingScalarFieldEnum = {
+  id: 'id',
+  auditId: 'auditId',
+  title: 'title',
+  description: 'description',
+  findingType: 'findingType',
+  status: 'status',
+  priority: 'priority',
+  dueDate: 'dueDate',
+  assignedToId: 'assignedToId',
+  evidence: 'evidence',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  closedAt: 'closedAt'
+};
+
+exports.Prisma.CorrectiveActionScalarFieldEnum = {
+  id: 'id',
+  auditId: 'auditId',
+  findingId: 'findingId',
+  title: 'title',
+  description: 'description',
+  actionType: 'actionType',
+  assignedToId: 'assignedToId',
+  dueDate: 'dueDate',
+  status: 'status',
+  completedAt: 'completedAt',
+  verifiedAt: 'verifiedAt',
+  verifiedById: 'verifiedById',
+  evidence: 'evidence',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AuditDocumentScalarFieldEnum = {
+  id: 'id',
+  auditId: 'auditId',
+  title: 'title',
+  description: 'description',
+  documentType: 'documentType',
+  fileUrl: 'fileUrl',
+  filePath: 'filePath',
+  uploadedById: 'uploadedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PreAuditChecklistItemScalarFieldEnum = {
+  id: 'id',
+  auditId: 'auditId',
+  description: 'description',
+  isCompleted: 'isCompleted',
+  comments: 'comments',
+  responsibleId: 'responsibleId',
+  dueDate: 'dueDate',
+  completedAt: 'completedAt',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AuditReminderScalarFieldEnum = {
+  id: 'id',
+  auditId: 'auditId',
+  title: 'title',
+  message: 'message',
+  dueDate: 'dueDate',
+  status: 'status',
+  recipientId: 'recipientId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  sentAt: 'sentAt'
+};
+
+exports.Prisma.AuditNotificationScalarFieldEnum = {
+  id: 'id',
+  auditId: 'auditId',
   userId: 'userId',
   title: 'title',
   message: 'message',
@@ -476,6 +683,50 @@ exports.AttendanceStatus = exports.$Enums.AttendanceStatus = {
   EXCUSED: 'EXCUSED'
 };
 
+exports.AuditType = exports.$Enums.AuditType = {
+  INTERNAL: 'INTERNAL',
+  EXTERNAL: 'EXTERNAL'
+};
+
+exports.AuditStatus = exports.$Enums.AuditStatus = {
+  PLANNED: 'PLANNED',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  DELAYED: 'DELAYED'
+};
+
+exports.FindingType = exports.$Enums.FindingType = {
+  OBSERVATION: 'OBSERVATION',
+  NON_CONFORMITY: 'NON_CONFORMITY',
+  MAJOR_NON_CONFORMITY: 'MAJOR_NON_CONFORMITY',
+  OPPORTUNITY_FOR_IMPROVEMENT: 'OPPORTUNITY_FOR_IMPROVEMENT'
+};
+
+exports.FindingStatus = exports.$Enums.FindingStatus = {
+  OPEN: 'OPEN',
+  IN_PROGRESS: 'IN_PROGRESS',
+  RESOLVED: 'RESOLVED',
+  VERIFIED: 'VERIFIED',
+  CLOSED: 'CLOSED'
+};
+
+exports.Priority = exports.$Enums.Priority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  CRITICAL: 'CRITICAL'
+};
+
+exports.AuditDocumentType = exports.$Enums.AuditDocumentType = {
+  CHECKLIST: 'CHECKLIST',
+  PROCEDURE: 'PROCEDURE',
+  CERTIFICATE: 'CERTIFICATE',
+  EVIDENCE: 'EVIDENCE',
+  REPORT: 'REPORT',
+  OTHER: 'OTHER'
+};
+
 exports.Prisma.ModelName = {
   ActivityLog: 'ActivityLog',
   Batch: 'Batch',
@@ -484,11 +735,13 @@ exports.Prisma.ModelName = {
   Notification: 'Notification',
   Permission: 'Permission',
   Product: 'Product',
+  ProductParameter: 'ProductParameter',
   Role: 'Role',
   UnitOfMeasurement: 'UnitOfMeasurement',
   User: 'User',
   Standard: 'Standard',
   StandardCategory: 'StandardCategory',
+  ProductStandardCategory: 'ProductStandardCategory',
   StandardParameter: 'StandardParameter',
   StandardDefinition: 'StandardDefinition',
   BatchParameterValue: 'BatchParameterValue',
@@ -496,12 +749,26 @@ exports.Prisma.ModelName = {
   Training: 'Training',
   TrainingSession: 'TrainingSession',
   TrainingDocument: 'TrainingDocument',
+  Participant: 'Participant',
   TrainingParticipant: 'TrainingParticipant',
   Attendance: 'Attendance',
   TrainingPhoto: 'TrainingPhoto',
   TrainingFeedback: 'TrainingFeedback',
+  FeedbackForm: 'FeedbackForm',
   TrainingFollowup: 'TrainingFollowup',
-  TrainingNotification: 'TrainingNotification'
+  TrainingNotification: 'TrainingNotification',
+  TrainingInviteToken: 'TrainingInviteToken',
+  TrainingSessionPhoto: 'TrainingSessionPhoto',
+  Auditor: 'Auditor',
+  Audit: 'Audit',
+  AuditInspectionItem: 'AuditInspectionItem',
+  Department: 'Department',
+  Finding: 'Finding',
+  CorrectiveAction: 'CorrectiveAction',
+  AuditDocument: 'AuditDocument',
+  PreAuditChecklistItem: 'PreAuditChecklistItem',
+  AuditReminder: 'AuditReminder',
+  AuditNotification: 'AuditNotification'
 };
 
 /**
