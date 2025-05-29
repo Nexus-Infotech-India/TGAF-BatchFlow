@@ -357,24 +357,25 @@ const EnhancedHome = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
           >
-            <motion.button
-              className="group relative px-8 py-3 text-base font-bold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl shadow-lg hover:shadow-blue-500/25 focus:outline-none focus:ring-2 focus:ring-blue-300/50 transition-all overflow-hidden"
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
-              <motion.div
-                className="absolute inset-0 bg-white/15 rounded-2xl"
-                initial={{ x: "-100%" }}
-                whileHover={{ x: "100%" }}
-                transition={{ duration: 0.5 }}
-              />
-              <div className="relative flex items-center gap-2">
-                <Rocket className="w-4 h-4" />
-                Get Started Now
-                <ArrowRight className="group-hover:translate-x-1 transition-transform duration-250" size={16} />
-              </div>
-            </motion.button>
+           <motion.button
+  className="group relative px-8 py-3 text-base font-bold text-white bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl shadow-lg hover:shadow-blue-500/25 focus:outline-none focus:ring-2 focus:ring-blue-300/50 transition-all overflow-hidden"
+  whileHover={{ scale: 1.02, y: -2 }}
+  whileTap={{ scale: 0.98 }}
+  onClick={() => window.location.href = "/login"}
+>
+  <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-400"></div>
+  <motion.div
+    className="absolute inset-0 bg-white/15 rounded-2xl"
+    initial={{ x: "-100%" }}
+    whileHover={{ x: "100%" }}
+    transition={{ duration: 0.5 }}
+  />
+  <div className="relative flex items-center gap-2">
+    <Rocket className="w-4 h-4" />
+    Get Started Now
+    <ArrowRight className="group-hover:translate-x-1 transition-transform duration-250" size={16} />
+  </div>
+</motion.button>
 
             <motion.button
               onClick={() => {
