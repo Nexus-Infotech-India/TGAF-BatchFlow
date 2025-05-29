@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('Starting seed data creation for hot pepper powder categories and parameters...');
   
-  // Create additional units needed for hot pepper powder
+  // Create units of measurement first, matching exactly what's in the COA
   const units = [
     {
       name: 'Percentage',
@@ -53,6 +53,11 @@ async function main() {
       name: 'Unitless',
       symbol: '-',
       description: 'Qualitative or descriptive parameter with no unit'
+    },
+    {
+      name: 'CFU per 25 gram',
+      symbol: '25g',
+      description: 'Colony forming units per 25 grams'
     }
   ];
   
@@ -91,7 +96,7 @@ async function main() {
   
   console.log(`Created product: ${hotPepperPowder.name} (${hotPepperPowder.id})`);
   
-  // Create the standard categories from the COA
+  // Create the standard categories matching what's in the COA
   const categories = [
     {
       name: 'Organoleptic',
@@ -150,7 +155,7 @@ async function main() {
     console.log(`Linked category ${createdCategory.name} with product ${hotPepperPowder.name}`);
   }
   
-  // Create parameters for each category - Using generic names with PEPPER productType
+  // Create parameters for each category - Using names and units from the COA
   const parameters = [
     // Organoleptic parameters
     {
@@ -158,21 +163,24 @@ async function main() {
       description: 'Visual appearance of the hot pepper powder',
       categoryName: 'Organoleptic',
       dataType: 'TEXT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'Unitless' // Visual test in COA
     },
     {
       name: 'Color',
       description: 'Color of the hot pepper powder',
       categoryName: 'Organoleptic',
       dataType: 'TEXT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'Unitless' // Visual test in COA
     },
     {
       name: 'Aroma',
       description: 'Aroma/smell characteristics of the hot pepper powder',
       categoryName: 'Organoleptic',
       dataType: 'TEXT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'Unitless' // Sensory test in COA
     },
     
     // Physical parameters
@@ -181,21 +189,24 @@ async function main() {
       description: 'Size of hot pepper powder particles',
       categoryName: 'Physical',
       dataType: 'TEXT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'Unitless' // Descriptive in COA
     },
     {
-      name: 'Pass through US sieve #20 (min) 420mm',
+      name: 'Pass through US sieve #40 (min) 420mm',
       description: 'Percentage passing through 420mm sieve',
       categoryName: 'Physical',
       dataType: 'FLOAT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'Percentage' // % in COA
     },
     {
       name: 'Extraneous & Foreign Matter (Max)',
       description: 'Maximum foreign matter content in pepper',
       categoryName: 'Physical',
       dataType: 'FLOAT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'Weight/weight' // %w/w in COA
     },
     
     // Chemical Characteristics parameters
@@ -204,42 +215,48 @@ async function main() {
       description: 'Maximum moisture content in pepper',
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'Volume/weight' // %v/w in COA
     },
     {
       name: 'Total Ash (max)',
       description: 'Maximum total ash content in pepper',
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'Weight/weight' // %w/w in COA
     },
     {
       name: 'Acid Insoluble Ash (max)',
       description: 'Maximum acid insoluble ash content in pepper',
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'Weight/weight' // %w/w in COA
     },
     {
       name: 'Scoville Heat (Capsaicin)',
       description: 'Scoville heat units - capsaicin content',
       categoryName: 'Chemical Characteristics',
       dataType: 'INTEGER',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'SHU' // SHU in COA
     },
     {
       name: 'Colour Value',
       description: 'ASTA color value for pepper',
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'ASTA' // ASTA in COA
     },
     {
       name: 'Aflatoxin Total',
       description: 'Total aflatoxin content in pepper',
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'PPB' // ppb in COA
     },
     
     // Microbiology parameters
@@ -248,42 +265,48 @@ async function main() {
       description: 'Total microbial plate count in pepper',
       categoryName: 'Microbiology',
       dataType: 'INTEGER',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'CFU per gram' // cfu/g in COA
     },
     {
-      name: 'Yeast/mold',
+      name: 'Yeast/mould',
       description: 'Yeast and mold count in pepper',
       categoryName: 'Microbiology',
       dataType: 'INTEGER',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'CFU per gram' // cfu/g in COA
     },
     {
       name: 'Salmonella',
       description: 'Presence of Salmonella in pepper',
       categoryName: 'Microbiology',
       dataType: 'TEXT',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'CFU per 25 gram' // 25g in COA
     },
     {
       name: 'Coliforms',
       description: 'Coliform bacteria count in pepper',
       categoryName: 'Microbiology',
       dataType: 'INTEGER',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'CFU per gram' // cfu/g in COA
     },
     {
       name: 'E.coli',
       description: 'E. coli count in pepper',
       categoryName: 'Microbiology',
       dataType: 'INTEGER',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'CFU per gram' // cfu/g in COA
     },
     {
       name: 'Staph.aureus',
       description: 'Staphylococcus aureus count in pepper',
       categoryName: 'Microbiology',
       dataType: 'INTEGER',
-      productType: 'PEPPER'
+      productType: 'PEPPER',
+      unitName: 'CFU per gram' // cfu/g in COA
     }
   ];
   
@@ -298,27 +321,59 @@ async function main() {
       continue;
     }
     
-    // Create the parameter with productType
+    // Find the unit
+    const unit = createdUnits[param.unitName];
+    
+    if (!unit) {
+      console.log(`Unit not found for parameter: ${param.name}`);
+      continue;
+    }
+    
+    // Create the parameter with productType and unitId
     const parameterId = uuidv4();
-    const createdParam = await prisma.standardParameter.create({
-      data: {
+    const createdParam = await prisma.standardParameter.upsert({
+      where: {
+        name_categoryId_productType: {
+          name: param.name,
+          categoryId: category.id,
+          productType: param.productType || '',
+        }
+      },
+      update: {
+        description: param.description,
+        dataType: param.dataType as ParameterDataType,
+        unitId: unit.id,
+        updatedAt: new Date()
+      },
+      create: {
         id: parameterId,
         name: param.name,
         description: param.description,
         dataType: param.dataType as ParameterDataType,
         categoryId: category.id,
-        productType: param.productType,
+        productType: param.productType || '',
+        unitId: unit.id, // Associate the unit directly with the parameter
         createdAt: new Date(),
         updatedAt: new Date()
       }
     });
     
-    console.log(`Created parameter: ${createdParam.name} (${createdParam.productType}) for category ${param.categoryName}`);
+    console.log(`Created/Updated parameter: ${createdParam.name} (${createdParam.productType}) with unit ${param.unitName}`);
     createdParameters.push(createdParam);
     
     // Link parameter to hot pepper powder product
-    await prisma.productParameter.create({
-      data: {
+    await prisma.productParameter.upsert({
+      where: {
+        productId_parameterId: {
+          productId: hotPepperPowder.id,
+          parameterId: createdParam.id,
+        }
+      },
+      update: {
+        isRequired: true,
+        updatedAt: new Date()
+      },
+      create: {
         id: uuidv4(),
         productId: hotPepperPowder.id,
         parameterId: createdParam.id,

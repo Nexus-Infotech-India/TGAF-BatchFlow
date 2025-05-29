@@ -137,6 +137,7 @@ model UnitOfMeasurement {
   updatedAt        DateTime
   Standards        Standard[] @relation("StandardUnits") 
   batchParameterValues BatchParameterValue[]
+  standardParameters   StandardParameter[]
   standardDefinitions  StandardDefinition[]
   batches          Batch[] 
 }
@@ -260,6 +261,7 @@ model StandardParameter {
   id               String            @id
   name             String            // "Appearance", "Texture", "Moisture %Max", etc.
   categoryId       String
+  unitId           String?  
   productType      String?   
   description      String?
   dataType         ParameterDataType // Type of data this parameter stores
@@ -270,6 +272,7 @@ model StandardParameter {
   // Relations
   category         StandardCategory  @relation(fields: [categoryId], references: [id])
   batchValues      BatchParameterValue[]
+  unit             UnitOfMeasurement? @relation(fields: [unitId], references: [id]) // Add this relation
   standards        StandardDefinition[]
   products         ProductParameter[]
 

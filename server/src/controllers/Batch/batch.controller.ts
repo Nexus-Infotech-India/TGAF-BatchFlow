@@ -1038,6 +1038,7 @@ async getParametersByProductId(req: Request, res: Response): Promise<void> {
         parameter: {
           include: {
             category: true,
+            unit: true,
             standards: {
               where: {
                 status: 'ACTIVE'

@@ -5003,6 +5003,7 @@ export namespace Prisma {
   export type UnitOfMeasurementCountOutputType = {
     Standards: number
     batchParameterValues: number
+    standardParameters: number
     standardDefinitions: number
     batches: number
   }
@@ -5010,6 +5011,7 @@ export namespace Prisma {
   export type UnitOfMeasurementCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Standards?: boolean | UnitOfMeasurementCountOutputTypeCountStandardsArgs
     batchParameterValues?: boolean | UnitOfMeasurementCountOutputTypeCountBatchParameterValuesArgs
+    standardParameters?: boolean | UnitOfMeasurementCountOutputTypeCountStandardParametersArgs
     standardDefinitions?: boolean | UnitOfMeasurementCountOutputTypeCountStandardDefinitionsArgs
     batches?: boolean | UnitOfMeasurementCountOutputTypeCountBatchesArgs
   }
@@ -5037,6 +5039,13 @@ export namespace Prisma {
    */
   export type UnitOfMeasurementCountOutputTypeCountBatchParameterValuesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BatchParameterValueWhereInput
+  }
+
+  /**
+   * UnitOfMeasurementCountOutputType without action
+   */
+  export type UnitOfMeasurementCountOutputTypeCountStandardParametersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StandardParameterWhereInput
   }
 
   /**
@@ -16223,6 +16232,7 @@ export namespace Prisma {
     updatedAt?: boolean
     Standards?: boolean | UnitOfMeasurement$StandardsArgs<ExtArgs>
     batchParameterValues?: boolean | UnitOfMeasurement$batchParameterValuesArgs<ExtArgs>
+    standardParameters?: boolean | UnitOfMeasurement$standardParametersArgs<ExtArgs>
     standardDefinitions?: boolean | UnitOfMeasurement$standardDefinitionsArgs<ExtArgs>
     batches?: boolean | UnitOfMeasurement$batchesArgs<ExtArgs>
     _count?: boolean | UnitOfMeasurementCountOutputTypeDefaultArgs<ExtArgs>
@@ -16259,6 +16269,7 @@ export namespace Prisma {
   export type UnitOfMeasurementInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Standards?: boolean | UnitOfMeasurement$StandardsArgs<ExtArgs>
     batchParameterValues?: boolean | UnitOfMeasurement$batchParameterValuesArgs<ExtArgs>
+    standardParameters?: boolean | UnitOfMeasurement$standardParametersArgs<ExtArgs>
     standardDefinitions?: boolean | UnitOfMeasurement$standardDefinitionsArgs<ExtArgs>
     batches?: boolean | UnitOfMeasurement$batchesArgs<ExtArgs>
     _count?: boolean | UnitOfMeasurementCountOutputTypeDefaultArgs<ExtArgs>
@@ -16271,6 +16282,7 @@ export namespace Prisma {
     objects: {
       Standards: Prisma.$StandardPayload<ExtArgs>[]
       batchParameterValues: Prisma.$BatchParameterValuePayload<ExtArgs>[]
+      standardParameters: Prisma.$StandardParameterPayload<ExtArgs>[]
       standardDefinitions: Prisma.$StandardDefinitionPayload<ExtArgs>[]
       batches: Prisma.$BatchPayload<ExtArgs>[]
     }
@@ -16677,6 +16689,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     Standards<T extends UnitOfMeasurement$StandardsArgs<ExtArgs> = {}>(args?: Subset<T, UnitOfMeasurement$StandardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batchParameterValues<T extends UnitOfMeasurement$batchParameterValuesArgs<ExtArgs> = {}>(args?: Subset<T, UnitOfMeasurement$batchParameterValuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchParameterValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    standardParameters<T extends UnitOfMeasurement$standardParametersArgs<ExtArgs> = {}>(args?: Subset<T, UnitOfMeasurement$standardParametersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardParameterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     standardDefinitions<T extends UnitOfMeasurement$standardDefinitionsArgs<ExtArgs> = {}>(args?: Subset<T, UnitOfMeasurement$standardDefinitionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardDefinitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     batches<T extends UnitOfMeasurement$batchesArgs<ExtArgs> = {}>(args?: Subset<T, UnitOfMeasurement$batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -17147,6 +17160,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BatchParameterValueScalarFieldEnum | BatchParameterValueScalarFieldEnum[]
+  }
+
+  /**
+   * UnitOfMeasurement.standardParameters
+   */
+  export type UnitOfMeasurement$standardParametersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StandardParameter
+     */
+    select?: StandardParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StandardParameter
+     */
+    omit?: StandardParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StandardParameterInclude<ExtArgs> | null
+    where?: StandardParameterWhereInput
+    orderBy?: StandardParameterOrderByWithRelationInput | StandardParameterOrderByWithRelationInput[]
+    cursor?: StandardParameterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StandardParameterScalarFieldEnum | StandardParameterScalarFieldEnum[]
   }
 
   /**
@@ -22587,6 +22624,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     categoryId: string | null
+    unitId: string | null
     productType: string | null
     description: string | null
     dataType: $Enums.ParameterDataType | null
@@ -22598,6 +22636,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     categoryId: string | null
+    unitId: string | null
     productType: string | null
     description: string | null
     dataType: $Enums.ParameterDataType | null
@@ -22609,6 +22648,7 @@ export namespace Prisma {
     id: number
     name: number
     categoryId: number
+    unitId: number
     productType: number
     description: number
     dataType: number
@@ -22622,6 +22662,7 @@ export namespace Prisma {
     id?: true
     name?: true
     categoryId?: true
+    unitId?: true
     productType?: true
     description?: true
     dataType?: true
@@ -22633,6 +22674,7 @@ export namespace Prisma {
     id?: true
     name?: true
     categoryId?: true
+    unitId?: true
     productType?: true
     description?: true
     dataType?: true
@@ -22644,6 +22686,7 @@ export namespace Prisma {
     id?: true
     name?: true
     categoryId?: true
+    unitId?: true
     productType?: true
     description?: true
     dataType?: true
@@ -22728,6 +22771,7 @@ export namespace Prisma {
     id: string
     name: string
     categoryId: string
+    unitId: string | null
     productType: string | null
     description: string | null
     dataType: $Enums.ParameterDataType
@@ -22756,6 +22800,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     categoryId?: boolean
+    unitId?: boolean
     productType?: boolean
     description?: boolean
     dataType?: boolean
@@ -22763,6 +22808,7 @@ export namespace Prisma {
     updatedAt?: boolean
     category?: boolean | StandardCategoryDefaultArgs<ExtArgs>
     batchValues?: boolean | StandardParameter$batchValuesArgs<ExtArgs>
+    unit?: boolean | StandardParameter$unitArgs<ExtArgs>
     standards?: boolean | StandardParameter$standardsArgs<ExtArgs>
     products?: boolean | StandardParameter$productsArgs<ExtArgs>
     _count?: boolean | StandardParameterCountOutputTypeDefaultArgs<ExtArgs>
@@ -22772,30 +22818,35 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     categoryId?: boolean
+    unitId?: boolean
     productType?: boolean
     description?: boolean
     dataType?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     category?: boolean | StandardCategoryDefaultArgs<ExtArgs>
+    unit?: boolean | StandardParameter$unitArgs<ExtArgs>
   }, ExtArgs["result"]["standardParameter"]>
 
   export type StandardParameterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
     categoryId?: boolean
+    unitId?: boolean
     productType?: boolean
     description?: boolean
     dataType?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     category?: boolean | StandardCategoryDefaultArgs<ExtArgs>
+    unit?: boolean | StandardParameter$unitArgs<ExtArgs>
   }, ExtArgs["result"]["standardParameter"]>
 
   export type StandardParameterSelectScalar = {
     id?: boolean
     name?: boolean
     categoryId?: boolean
+    unitId?: boolean
     productType?: boolean
     description?: boolean
     dataType?: boolean
@@ -22803,19 +22854,22 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type StandardParameterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "categoryId" | "productType" | "description" | "dataType" | "createdAt" | "updatedAt", ExtArgs["result"]["standardParameter"]>
+  export type StandardParameterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "categoryId" | "unitId" | "productType" | "description" | "dataType" | "createdAt" | "updatedAt", ExtArgs["result"]["standardParameter"]>
   export type StandardParameterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | StandardCategoryDefaultArgs<ExtArgs>
     batchValues?: boolean | StandardParameter$batchValuesArgs<ExtArgs>
+    unit?: boolean | StandardParameter$unitArgs<ExtArgs>
     standards?: boolean | StandardParameter$standardsArgs<ExtArgs>
     products?: boolean | StandardParameter$productsArgs<ExtArgs>
     _count?: boolean | StandardParameterCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StandardParameterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | StandardCategoryDefaultArgs<ExtArgs>
+    unit?: boolean | StandardParameter$unitArgs<ExtArgs>
   }
   export type StandardParameterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | StandardCategoryDefaultArgs<ExtArgs>
+    unit?: boolean | StandardParameter$unitArgs<ExtArgs>
   }
 
   export type $StandardParameterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -22823,6 +22877,7 @@ export namespace Prisma {
     objects: {
       category: Prisma.$StandardCategoryPayload<ExtArgs>
       batchValues: Prisma.$BatchParameterValuePayload<ExtArgs>[]
+      unit: Prisma.$UnitOfMeasurementPayload<ExtArgs> | null
       standards: Prisma.$StandardDefinitionPayload<ExtArgs>[]
       products: Prisma.$ProductParameterPayload<ExtArgs>[]
     }
@@ -22830,6 +22885,7 @@ export namespace Prisma {
       id: string
       name: string
       categoryId: string
+      unitId: string | null
       productType: string | null
       description: string | null
       dataType: $Enums.ParameterDataType
@@ -23231,6 +23287,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     category<T extends StandardCategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StandardCategoryDefaultArgs<ExtArgs>>): Prisma__StandardCategoryClient<$Result.GetResult<Prisma.$StandardCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     batchValues<T extends StandardParameter$batchValuesArgs<ExtArgs> = {}>(args?: Subset<T, StandardParameter$batchValuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchParameterValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    unit<T extends StandardParameter$unitArgs<ExtArgs> = {}>(args?: Subset<T, StandardParameter$unitArgs<ExtArgs>>): Prisma__UnitOfMeasurementClient<$Result.GetResult<Prisma.$UnitOfMeasurementPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     standards<T extends StandardParameter$standardsArgs<ExtArgs> = {}>(args?: Subset<T, StandardParameter$standardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardDefinitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     products<T extends StandardParameter$productsArgs<ExtArgs> = {}>(args?: Subset<T, StandardParameter$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductParameterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -23265,6 +23322,7 @@ export namespace Prisma {
     readonly id: FieldRef<"StandardParameter", 'String'>
     readonly name: FieldRef<"StandardParameter", 'String'>
     readonly categoryId: FieldRef<"StandardParameter", 'String'>
+    readonly unitId: FieldRef<"StandardParameter", 'String'>
     readonly productType: FieldRef<"StandardParameter", 'String'>
     readonly description: FieldRef<"StandardParameter", 'String'>
     readonly dataType: FieldRef<"StandardParameter", 'ParameterDataType'>
@@ -23687,6 +23745,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BatchParameterValueScalarFieldEnum | BatchParameterValueScalarFieldEnum[]
+  }
+
+  /**
+   * StandardParameter.unit
+   */
+  export type StandardParameter$unitArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UnitOfMeasurement
+     */
+    select?: UnitOfMeasurementSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UnitOfMeasurement
+     */
+    omit?: UnitOfMeasurementOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UnitOfMeasurementInclude<ExtArgs> | null
+    where?: UnitOfMeasurementWhereInput
   }
 
   /**
@@ -54548,6 +54625,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     categoryId: 'categoryId',
+    unitId: 'unitId',
     productType: 'productType',
     description: 'description',
     dataType: 'dataType',
@@ -55903,6 +55981,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"UnitOfMeasurement"> | Date | string
     Standards?: StandardListRelationFilter
     batchParameterValues?: BatchParameterValueListRelationFilter
+    standardParameters?: StandardParameterListRelationFilter
     standardDefinitions?: StandardDefinitionListRelationFilter
     batches?: BatchListRelationFilter
   }
@@ -55916,6 +55995,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     Standards?: StandardOrderByRelationAggregateInput
     batchParameterValues?: BatchParameterValueOrderByRelationAggregateInput
+    standardParameters?: StandardParameterOrderByRelationAggregateInput
     standardDefinitions?: StandardDefinitionOrderByRelationAggregateInput
     batches?: BatchOrderByRelationAggregateInput
   }
@@ -55932,6 +56012,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"UnitOfMeasurement"> | Date | string
     Standards?: StandardListRelationFilter
     batchParameterValues?: BatchParameterValueListRelationFilter
+    standardParameters?: StandardParameterListRelationFilter
     standardDefinitions?: StandardDefinitionListRelationFilter
     batches?: BatchListRelationFilter
   }, "id" | "name">
@@ -56337,6 +56418,7 @@ export namespace Prisma {
     id?: StringFilter<"StandardParameter"> | string
     name?: StringFilter<"StandardParameter"> | string
     categoryId?: StringFilter<"StandardParameter"> | string
+    unitId?: StringNullableFilter<"StandardParameter"> | string | null
     productType?: StringNullableFilter<"StandardParameter"> | string | null
     description?: StringNullableFilter<"StandardParameter"> | string | null
     dataType?: EnumParameterDataTypeFilter<"StandardParameter"> | $Enums.ParameterDataType
@@ -56344,6 +56426,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"StandardParameter"> | Date | string
     category?: XOR<StandardCategoryScalarRelationFilter, StandardCategoryWhereInput>
     batchValues?: BatchParameterValueListRelationFilter
+    unit?: XOR<UnitOfMeasurementNullableScalarRelationFilter, UnitOfMeasurementWhereInput> | null
     standards?: StandardDefinitionListRelationFilter
     products?: ProductParameterListRelationFilter
   }
@@ -56352,6 +56435,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     categoryId?: SortOrder
+    unitId?: SortOrderInput | SortOrder
     productType?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     dataType?: SortOrder
@@ -56359,6 +56443,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     category?: StandardCategoryOrderByWithRelationInput
     batchValues?: BatchParameterValueOrderByRelationAggregateInput
+    unit?: UnitOfMeasurementOrderByWithRelationInput
     standards?: StandardDefinitionOrderByRelationAggregateInput
     products?: ProductParameterOrderByRelationAggregateInput
   }
@@ -56371,6 +56456,7 @@ export namespace Prisma {
     NOT?: StandardParameterWhereInput | StandardParameterWhereInput[]
     name?: StringFilter<"StandardParameter"> | string
     categoryId?: StringFilter<"StandardParameter"> | string
+    unitId?: StringNullableFilter<"StandardParameter"> | string | null
     productType?: StringNullableFilter<"StandardParameter"> | string | null
     description?: StringNullableFilter<"StandardParameter"> | string | null
     dataType?: EnumParameterDataTypeFilter<"StandardParameter"> | $Enums.ParameterDataType
@@ -56378,6 +56464,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"StandardParameter"> | Date | string
     category?: XOR<StandardCategoryScalarRelationFilter, StandardCategoryWhereInput>
     batchValues?: BatchParameterValueListRelationFilter
+    unit?: XOR<UnitOfMeasurementNullableScalarRelationFilter, UnitOfMeasurementWhereInput> | null
     standards?: StandardDefinitionListRelationFilter
     products?: ProductParameterListRelationFilter
   }, "id" | "name_categoryId_productType">
@@ -56386,6 +56473,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     categoryId?: SortOrder
+    unitId?: SortOrderInput | SortOrder
     productType?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     dataType?: SortOrder
@@ -56403,6 +56491,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"StandardParameter"> | string
     name?: StringWithAggregatesFilter<"StandardParameter"> | string
     categoryId?: StringWithAggregatesFilter<"StandardParameter"> | string
+    unitId?: StringNullableWithAggregatesFilter<"StandardParameter"> | string | null
     productType?: StringNullableWithAggregatesFilter<"StandardParameter"> | string | null
     description?: StringNullableWithAggregatesFilter<"StandardParameter"> | string | null
     dataType?: EnumParameterDataTypeWithAggregatesFilter<"StandardParameter"> | $Enums.ParameterDataType
@@ -59342,6 +59431,7 @@ export namespace Prisma {
     updatedAt: Date | string
     Standards?: StandardCreateNestedManyWithoutUnitsInput
     batchParameterValues?: BatchParameterValueCreateNestedManyWithoutUnitInput
+    standardParameters?: StandardParameterCreateNestedManyWithoutUnitInput
     standardDefinitions?: StandardDefinitionCreateNestedManyWithoutUnitInput
     batches?: BatchCreateNestedManyWithoutUnitOfMeasurementsInput
   }
@@ -59355,6 +59445,7 @@ export namespace Prisma {
     updatedAt: Date | string
     Standards?: StandardUncheckedCreateNestedManyWithoutUnitsInput
     batchParameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutUnitInput
+    standardParameters?: StandardParameterUncheckedCreateNestedManyWithoutUnitInput
     standardDefinitions?: StandardDefinitionUncheckedCreateNestedManyWithoutUnitInput
     batches?: BatchUncheckedCreateNestedManyWithoutUnitOfMeasurementsInput
   }
@@ -59368,6 +59459,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Standards?: StandardUpdateManyWithoutUnitsNestedInput
     batchParameterValues?: BatchParameterValueUpdateManyWithoutUnitNestedInput
+    standardParameters?: StandardParameterUpdateManyWithoutUnitNestedInput
     standardDefinitions?: StandardDefinitionUpdateManyWithoutUnitNestedInput
     batches?: BatchUpdateManyWithoutUnitOfMeasurementsNestedInput
   }
@@ -59381,6 +59473,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Standards?: StandardUncheckedUpdateManyWithoutUnitsNestedInput
     batchParameterValues?: BatchParameterValueUncheckedUpdateManyWithoutUnitNestedInput
+    standardParameters?: StandardParameterUncheckedUpdateManyWithoutUnitNestedInput
     standardDefinitions?: StandardDefinitionUncheckedUpdateManyWithoutUnitNestedInput
     batches?: BatchUncheckedUpdateManyWithoutUnitOfMeasurementsNestedInput
   }
@@ -59833,6 +59926,7 @@ export namespace Prisma {
     updatedAt: Date | string
     category: StandardCategoryCreateNestedOneWithoutParametersInput
     batchValues?: BatchParameterValueCreateNestedManyWithoutParameterInput
+    unit?: UnitOfMeasurementCreateNestedOneWithoutStandardParametersInput
     standards?: StandardDefinitionCreateNestedManyWithoutParameterInput
     products?: ProductParameterCreateNestedManyWithoutParameterInput
   }
@@ -59841,6 +59935,7 @@ export namespace Prisma {
     id: string
     name: string
     categoryId: string
+    unitId?: string | null
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
@@ -59861,6 +59956,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: StandardCategoryUpdateOneRequiredWithoutParametersNestedInput
     batchValues?: BatchParameterValueUpdateManyWithoutParameterNestedInput
+    unit?: UnitOfMeasurementUpdateOneWithoutStandardParametersNestedInput
     standards?: StandardDefinitionUpdateManyWithoutParameterNestedInput
     products?: ProductParameterUpdateManyWithoutParameterNestedInput
   }
@@ -59869,6 +59965,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    unitId?: NullableStringFieldUpdateOperationsInput | string | null
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
@@ -59883,6 +59980,7 @@ export namespace Prisma {
     id: string
     name: string
     categoryId: string
+    unitId?: string | null
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
@@ -59904,6 +60002,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    unitId?: NullableStringFieldUpdateOperationsInput | string | null
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
@@ -62920,6 +63019,16 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type StandardParameterListRelationFilter = {
+    every?: StandardParameterWhereInput
+    some?: StandardParameterWhereInput
+    none?: StandardParameterWhereInput
+  }
+
+  export type StandardParameterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UnitOfMeasurementCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -63198,16 +63307,6 @@ export namespace Prisma {
     _max?: NestedEnumStandardStatusFilter<$PrismaModel>
   }
 
-  export type StandardParameterListRelationFilter = {
-    every?: StandardParameterWhereInput
-    some?: StandardParameterWhereInput
-    none?: StandardParameterWhereInput
-  }
-
-  export type StandardParameterOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type StandardCategoryCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -63268,6 +63367,11 @@ export namespace Prisma {
     not?: NestedEnumParameterDataTypeFilter<$PrismaModel> | $Enums.ParameterDataType
   }
 
+  export type UnitOfMeasurementNullableScalarRelationFilter = {
+    is?: UnitOfMeasurementWhereInput | null
+    isNot?: UnitOfMeasurementWhereInput | null
+  }
+
   export type StandardParameterNameCategoryIdProductTypeCompoundUniqueInput = {
     name: string
     categoryId: string
@@ -63278,6 +63382,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     categoryId?: SortOrder
+    unitId?: SortOrder
     productType?: SortOrder
     description?: SortOrder
     dataType?: SortOrder
@@ -63289,6 +63394,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     categoryId?: SortOrder
+    unitId?: SortOrder
     productType?: SortOrder
     description?: SortOrder
     dataType?: SortOrder
@@ -63300,6 +63406,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     categoryId?: SortOrder
+    unitId?: SortOrder
     productType?: SortOrder
     description?: SortOrder
     dataType?: SortOrder
@@ -63315,11 +63422,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumParameterDataTypeFilter<$PrismaModel>
     _max?: NestedEnumParameterDataTypeFilter<$PrismaModel>
-  }
-
-  export type UnitOfMeasurementNullableScalarRelationFilter = {
-    is?: UnitOfMeasurementWhereInput | null
-    isNot?: UnitOfMeasurementWhereInput | null
   }
 
   export type MethodologyNullableScalarRelationFilter = {
@@ -65554,6 +65656,13 @@ export namespace Prisma {
     connect?: BatchParameterValueWhereUniqueInput | BatchParameterValueWhereUniqueInput[]
   }
 
+  export type StandardParameterCreateNestedManyWithoutUnitInput = {
+    create?: XOR<StandardParameterCreateWithoutUnitInput, StandardParameterUncheckedCreateWithoutUnitInput> | StandardParameterCreateWithoutUnitInput[] | StandardParameterUncheckedCreateWithoutUnitInput[]
+    connectOrCreate?: StandardParameterCreateOrConnectWithoutUnitInput | StandardParameterCreateOrConnectWithoutUnitInput[]
+    createMany?: StandardParameterCreateManyUnitInputEnvelope
+    connect?: StandardParameterWhereUniqueInput | StandardParameterWhereUniqueInput[]
+  }
+
   export type StandardDefinitionCreateNestedManyWithoutUnitInput = {
     create?: XOR<StandardDefinitionCreateWithoutUnitInput, StandardDefinitionUncheckedCreateWithoutUnitInput> | StandardDefinitionCreateWithoutUnitInput[] | StandardDefinitionUncheckedCreateWithoutUnitInput[]
     connectOrCreate?: StandardDefinitionCreateOrConnectWithoutUnitInput | StandardDefinitionCreateOrConnectWithoutUnitInput[]
@@ -65578,6 +65687,13 @@ export namespace Prisma {
     connectOrCreate?: BatchParameterValueCreateOrConnectWithoutUnitInput | BatchParameterValueCreateOrConnectWithoutUnitInput[]
     createMany?: BatchParameterValueCreateManyUnitInputEnvelope
     connect?: BatchParameterValueWhereUniqueInput | BatchParameterValueWhereUniqueInput[]
+  }
+
+  export type StandardParameterUncheckedCreateNestedManyWithoutUnitInput = {
+    create?: XOR<StandardParameterCreateWithoutUnitInput, StandardParameterUncheckedCreateWithoutUnitInput> | StandardParameterCreateWithoutUnitInput[] | StandardParameterUncheckedCreateWithoutUnitInput[]
+    connectOrCreate?: StandardParameterCreateOrConnectWithoutUnitInput | StandardParameterCreateOrConnectWithoutUnitInput[]
+    createMany?: StandardParameterCreateManyUnitInputEnvelope
+    connect?: StandardParameterWhereUniqueInput | StandardParameterWhereUniqueInput[]
   }
 
   export type StandardDefinitionUncheckedCreateNestedManyWithoutUnitInput = {
@@ -65618,6 +65734,20 @@ export namespace Prisma {
     update?: BatchParameterValueUpdateWithWhereUniqueWithoutUnitInput | BatchParameterValueUpdateWithWhereUniqueWithoutUnitInput[]
     updateMany?: BatchParameterValueUpdateManyWithWhereWithoutUnitInput | BatchParameterValueUpdateManyWithWhereWithoutUnitInput[]
     deleteMany?: BatchParameterValueScalarWhereInput | BatchParameterValueScalarWhereInput[]
+  }
+
+  export type StandardParameterUpdateManyWithoutUnitNestedInput = {
+    create?: XOR<StandardParameterCreateWithoutUnitInput, StandardParameterUncheckedCreateWithoutUnitInput> | StandardParameterCreateWithoutUnitInput[] | StandardParameterUncheckedCreateWithoutUnitInput[]
+    connectOrCreate?: StandardParameterCreateOrConnectWithoutUnitInput | StandardParameterCreateOrConnectWithoutUnitInput[]
+    upsert?: StandardParameterUpsertWithWhereUniqueWithoutUnitInput | StandardParameterUpsertWithWhereUniqueWithoutUnitInput[]
+    createMany?: StandardParameterCreateManyUnitInputEnvelope
+    set?: StandardParameterWhereUniqueInput | StandardParameterWhereUniqueInput[]
+    disconnect?: StandardParameterWhereUniqueInput | StandardParameterWhereUniqueInput[]
+    delete?: StandardParameterWhereUniqueInput | StandardParameterWhereUniqueInput[]
+    connect?: StandardParameterWhereUniqueInput | StandardParameterWhereUniqueInput[]
+    update?: StandardParameterUpdateWithWhereUniqueWithoutUnitInput | StandardParameterUpdateWithWhereUniqueWithoutUnitInput[]
+    updateMany?: StandardParameterUpdateManyWithWhereWithoutUnitInput | StandardParameterUpdateManyWithWhereWithoutUnitInput[]
+    deleteMany?: StandardParameterScalarWhereInput | StandardParameterScalarWhereInput[]
   }
 
   export type StandardDefinitionUpdateManyWithoutUnitNestedInput = {
@@ -65672,6 +65802,20 @@ export namespace Prisma {
     update?: BatchParameterValueUpdateWithWhereUniqueWithoutUnitInput | BatchParameterValueUpdateWithWhereUniqueWithoutUnitInput[]
     updateMany?: BatchParameterValueUpdateManyWithWhereWithoutUnitInput | BatchParameterValueUpdateManyWithWhereWithoutUnitInput[]
     deleteMany?: BatchParameterValueScalarWhereInput | BatchParameterValueScalarWhereInput[]
+  }
+
+  export type StandardParameterUncheckedUpdateManyWithoutUnitNestedInput = {
+    create?: XOR<StandardParameterCreateWithoutUnitInput, StandardParameterUncheckedCreateWithoutUnitInput> | StandardParameterCreateWithoutUnitInput[] | StandardParameterUncheckedCreateWithoutUnitInput[]
+    connectOrCreate?: StandardParameterCreateOrConnectWithoutUnitInput | StandardParameterCreateOrConnectWithoutUnitInput[]
+    upsert?: StandardParameterUpsertWithWhereUniqueWithoutUnitInput | StandardParameterUpsertWithWhereUniqueWithoutUnitInput[]
+    createMany?: StandardParameterCreateManyUnitInputEnvelope
+    set?: StandardParameterWhereUniqueInput | StandardParameterWhereUniqueInput[]
+    disconnect?: StandardParameterWhereUniqueInput | StandardParameterWhereUniqueInput[]
+    delete?: StandardParameterWhereUniqueInput | StandardParameterWhereUniqueInput[]
+    connect?: StandardParameterWhereUniqueInput | StandardParameterWhereUniqueInput[]
+    update?: StandardParameterUpdateWithWhereUniqueWithoutUnitInput | StandardParameterUpdateWithWhereUniqueWithoutUnitInput[]
+    updateMany?: StandardParameterUpdateManyWithWhereWithoutUnitInput | StandardParameterUpdateManyWithWhereWithoutUnitInput[]
+    deleteMany?: StandardParameterScalarWhereInput | StandardParameterScalarWhereInput[]
   }
 
   export type StandardDefinitionUncheckedUpdateManyWithoutUnitNestedInput = {
@@ -67294,6 +67438,12 @@ export namespace Prisma {
     connect?: BatchParameterValueWhereUniqueInput | BatchParameterValueWhereUniqueInput[]
   }
 
+  export type UnitOfMeasurementCreateNestedOneWithoutStandardParametersInput = {
+    create?: XOR<UnitOfMeasurementCreateWithoutStandardParametersInput, UnitOfMeasurementUncheckedCreateWithoutStandardParametersInput>
+    connectOrCreate?: UnitOfMeasurementCreateOrConnectWithoutStandardParametersInput
+    connect?: UnitOfMeasurementWhereUniqueInput
+  }
+
   export type StandardDefinitionCreateNestedManyWithoutParameterInput = {
     create?: XOR<StandardDefinitionCreateWithoutParameterInput, StandardDefinitionUncheckedCreateWithoutParameterInput> | StandardDefinitionCreateWithoutParameterInput[] | StandardDefinitionUncheckedCreateWithoutParameterInput[]
     connectOrCreate?: StandardDefinitionCreateOrConnectWithoutParameterInput | StandardDefinitionCreateOrConnectWithoutParameterInput[]
@@ -67353,6 +67503,16 @@ export namespace Prisma {
     update?: BatchParameterValueUpdateWithWhereUniqueWithoutParameterInput | BatchParameterValueUpdateWithWhereUniqueWithoutParameterInput[]
     updateMany?: BatchParameterValueUpdateManyWithWhereWithoutParameterInput | BatchParameterValueUpdateManyWithWhereWithoutParameterInput[]
     deleteMany?: BatchParameterValueScalarWhereInput | BatchParameterValueScalarWhereInput[]
+  }
+
+  export type UnitOfMeasurementUpdateOneWithoutStandardParametersNestedInput = {
+    create?: XOR<UnitOfMeasurementCreateWithoutStandardParametersInput, UnitOfMeasurementUncheckedCreateWithoutStandardParametersInput>
+    connectOrCreate?: UnitOfMeasurementCreateOrConnectWithoutStandardParametersInput
+    upsert?: UnitOfMeasurementUpsertWithoutStandardParametersInput
+    disconnect?: UnitOfMeasurementWhereInput | boolean
+    delete?: UnitOfMeasurementWhereInput | boolean
+    connect?: UnitOfMeasurementWhereUniqueInput
+    update?: XOR<XOR<UnitOfMeasurementUpdateToOneWithWhereWithoutStandardParametersInput, UnitOfMeasurementUpdateWithoutStandardParametersInput>, UnitOfMeasurementUncheckedUpdateWithoutStandardParametersInput>
   }
 
   export type StandardDefinitionUpdateManyWithoutParameterNestedInput = {
@@ -70632,6 +70792,7 @@ export namespace Prisma {
     updatedAt: Date | string
     Standards?: StandardCreateNestedManyWithoutUnitsInput
     batchParameterValues?: BatchParameterValueCreateNestedManyWithoutUnitInput
+    standardParameters?: StandardParameterCreateNestedManyWithoutUnitInput
     standardDefinitions?: StandardDefinitionCreateNestedManyWithoutUnitInput
   }
 
@@ -70644,6 +70805,7 @@ export namespace Prisma {
     updatedAt: Date | string
     Standards?: StandardUncheckedCreateNestedManyWithoutUnitsInput
     batchParameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutUnitInput
+    standardParameters?: StandardParameterUncheckedCreateNestedManyWithoutUnitInput
     standardDefinitions?: StandardDefinitionUncheckedCreateNestedManyWithoutUnitInput
   }
 
@@ -71870,6 +72032,7 @@ export namespace Prisma {
     updatedAt: Date | string
     category: StandardCategoryCreateNestedOneWithoutParametersInput
     batchValues?: BatchParameterValueCreateNestedManyWithoutParameterInput
+    unit?: UnitOfMeasurementCreateNestedOneWithoutStandardParametersInput
     standards?: StandardDefinitionCreateNestedManyWithoutParameterInput
   }
 
@@ -71877,6 +72040,7 @@ export namespace Prisma {
     id: string
     name: string
     categoryId: string
+    unitId?: string | null
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
@@ -71943,6 +72107,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: StandardCategoryUpdateOneRequiredWithoutParametersNestedInput
     batchValues?: BatchParameterValueUpdateManyWithoutParameterNestedInput
+    unit?: UnitOfMeasurementUpdateOneWithoutStandardParametersNestedInput
     standards?: StandardDefinitionUpdateManyWithoutParameterNestedInput
   }
 
@@ -71950,6 +72115,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    unitId?: NullableStringFieldUpdateOperationsInput | string | null
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
@@ -72197,6 +72363,44 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type StandardParameterCreateWithoutUnitInput = {
+    id: string
+    name: string
+    productType?: string | null
+    description?: string | null
+    dataType: $Enums.ParameterDataType
+    createdAt?: Date | string
+    updatedAt: Date | string
+    category: StandardCategoryCreateNestedOneWithoutParametersInput
+    batchValues?: BatchParameterValueCreateNestedManyWithoutParameterInput
+    standards?: StandardDefinitionCreateNestedManyWithoutParameterInput
+    products?: ProductParameterCreateNestedManyWithoutParameterInput
+  }
+
+  export type StandardParameterUncheckedCreateWithoutUnitInput = {
+    id: string
+    name: string
+    categoryId: string
+    productType?: string | null
+    description?: string | null
+    dataType: $Enums.ParameterDataType
+    createdAt?: Date | string
+    updatedAt: Date | string
+    batchValues?: BatchParameterValueUncheckedCreateNestedManyWithoutParameterInput
+    standards?: StandardDefinitionUncheckedCreateNestedManyWithoutParameterInput
+    products?: ProductParameterUncheckedCreateNestedManyWithoutParameterInput
+  }
+
+  export type StandardParameterCreateOrConnectWithoutUnitInput = {
+    where: StandardParameterWhereUniqueInput
+    create: XOR<StandardParameterCreateWithoutUnitInput, StandardParameterUncheckedCreateWithoutUnitInput>
+  }
+
+  export type StandardParameterCreateManyUnitInputEnvelope = {
+    data: StandardParameterCreateManyUnitInput | StandardParameterCreateManyUnitInput[]
+    skipDuplicates?: boolean
+  }
+
   export type StandardDefinitionCreateWithoutUnitInput = {
     id: string
     standardValue: string
@@ -72310,6 +72514,37 @@ export namespace Prisma {
   export type BatchParameterValueUpdateManyWithWhereWithoutUnitInput = {
     where: BatchParameterValueScalarWhereInput
     data: XOR<BatchParameterValueUpdateManyMutationInput, BatchParameterValueUncheckedUpdateManyWithoutUnitInput>
+  }
+
+  export type StandardParameterUpsertWithWhereUniqueWithoutUnitInput = {
+    where: StandardParameterWhereUniqueInput
+    update: XOR<StandardParameterUpdateWithoutUnitInput, StandardParameterUncheckedUpdateWithoutUnitInput>
+    create: XOR<StandardParameterCreateWithoutUnitInput, StandardParameterUncheckedCreateWithoutUnitInput>
+  }
+
+  export type StandardParameterUpdateWithWhereUniqueWithoutUnitInput = {
+    where: StandardParameterWhereUniqueInput
+    data: XOR<StandardParameterUpdateWithoutUnitInput, StandardParameterUncheckedUpdateWithoutUnitInput>
+  }
+
+  export type StandardParameterUpdateManyWithWhereWithoutUnitInput = {
+    where: StandardParameterScalarWhereInput
+    data: XOR<StandardParameterUpdateManyMutationInput, StandardParameterUncheckedUpdateManyWithoutUnitInput>
+  }
+
+  export type StandardParameterScalarWhereInput = {
+    AND?: StandardParameterScalarWhereInput | StandardParameterScalarWhereInput[]
+    OR?: StandardParameterScalarWhereInput[]
+    NOT?: StandardParameterScalarWhereInput | StandardParameterScalarWhereInput[]
+    id?: StringFilter<"StandardParameter"> | string
+    name?: StringFilter<"StandardParameter"> | string
+    categoryId?: StringFilter<"StandardParameter"> | string
+    unitId?: StringNullableFilter<"StandardParameter"> | string | null
+    productType?: StringNullableFilter<"StandardParameter"> | string | null
+    description?: StringNullableFilter<"StandardParameter"> | string | null
+    dataType?: EnumParameterDataTypeFilter<"StandardParameter"> | $Enums.ParameterDataType
+    createdAt?: DateTimeFilter<"StandardParameter"> | Date | string
+    updatedAt?: DateTimeFilter<"StandardParameter"> | Date | string
   }
 
   export type StandardDefinitionUpsertWithWhereUniqueWithoutUnitInput = {
@@ -74597,6 +74832,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     batchParameterValues?: BatchParameterValueCreateNestedManyWithoutUnitInput
+    standardParameters?: StandardParameterCreateNestedManyWithoutUnitInput
     standardDefinitions?: StandardDefinitionCreateNestedManyWithoutUnitInput
     batches?: BatchCreateNestedManyWithoutUnitOfMeasurementsInput
   }
@@ -74609,6 +74845,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     batchParameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutUnitInput
+    standardParameters?: StandardParameterUncheckedCreateNestedManyWithoutUnitInput
     standardDefinitions?: StandardDefinitionUncheckedCreateNestedManyWithoutUnitInput
     batches?: BatchUncheckedCreateNestedManyWithoutUnitOfMeasurementsInput
   }
@@ -74884,6 +75121,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     batchValues?: BatchParameterValueCreateNestedManyWithoutParameterInput
+    unit?: UnitOfMeasurementCreateNestedOneWithoutStandardParametersInput
     standards?: StandardDefinitionCreateNestedManyWithoutParameterInput
     products?: ProductParameterCreateNestedManyWithoutParameterInput
   }
@@ -74891,6 +75129,7 @@ export namespace Prisma {
   export type StandardParameterUncheckedCreateWithoutCategoryInput = {
     id: string
     name: string
+    unitId?: string | null
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
@@ -74989,20 +75228,6 @@ export namespace Prisma {
   export type StandardParameterUpdateManyWithWhereWithoutCategoryInput = {
     where: StandardParameterScalarWhereInput
     data: XOR<StandardParameterUpdateManyMutationInput, StandardParameterUncheckedUpdateManyWithoutCategoryInput>
-  }
-
-  export type StandardParameterScalarWhereInput = {
-    AND?: StandardParameterScalarWhereInput | StandardParameterScalarWhereInput[]
-    OR?: StandardParameterScalarWhereInput[]
-    NOT?: StandardParameterScalarWhereInput | StandardParameterScalarWhereInput[]
-    id?: StringFilter<"StandardParameter"> | string
-    name?: StringFilter<"StandardParameter"> | string
-    categoryId?: StringFilter<"StandardParameter"> | string
-    productType?: StringNullableFilter<"StandardParameter"> | string | null
-    description?: StringNullableFilter<"StandardParameter"> | string | null
-    dataType?: EnumParameterDataTypeFilter<"StandardParameter"> | $Enums.ParameterDataType
-    createdAt?: DateTimeFilter<"StandardParameter"> | Date | string
-    updatedAt?: DateTimeFilter<"StandardParameter"> | Date | string
   }
 
   export type StandardUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -75212,6 +75437,37 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type UnitOfMeasurementCreateWithoutStandardParametersInput = {
+    id: string
+    name: string
+    symbol: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Standards?: StandardCreateNestedManyWithoutUnitsInput
+    batchParameterValues?: BatchParameterValueCreateNestedManyWithoutUnitInput
+    standardDefinitions?: StandardDefinitionCreateNestedManyWithoutUnitInput
+    batches?: BatchCreateNestedManyWithoutUnitOfMeasurementsInput
+  }
+
+  export type UnitOfMeasurementUncheckedCreateWithoutStandardParametersInput = {
+    id: string
+    name: string
+    symbol: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    Standards?: StandardUncheckedCreateNestedManyWithoutUnitsInput
+    batchParameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutUnitInput
+    standardDefinitions?: StandardDefinitionUncheckedCreateNestedManyWithoutUnitInput
+    batches?: BatchUncheckedCreateNestedManyWithoutUnitOfMeasurementsInput
+  }
+
+  export type UnitOfMeasurementCreateOrConnectWithoutStandardParametersInput = {
+    where: UnitOfMeasurementWhereUniqueInput
+    create: XOR<UnitOfMeasurementCreateWithoutStandardParametersInput, UnitOfMeasurementUncheckedCreateWithoutStandardParametersInput>
+  }
+
   export type StandardDefinitionCreateWithoutParameterInput = {
     id: string
     standardValue: string
@@ -75319,6 +75575,43 @@ export namespace Prisma {
     data: XOR<BatchParameterValueUpdateManyMutationInput, BatchParameterValueUncheckedUpdateManyWithoutParameterInput>
   }
 
+  export type UnitOfMeasurementUpsertWithoutStandardParametersInput = {
+    update: XOR<UnitOfMeasurementUpdateWithoutStandardParametersInput, UnitOfMeasurementUncheckedUpdateWithoutStandardParametersInput>
+    create: XOR<UnitOfMeasurementCreateWithoutStandardParametersInput, UnitOfMeasurementUncheckedCreateWithoutStandardParametersInput>
+    where?: UnitOfMeasurementWhereInput
+  }
+
+  export type UnitOfMeasurementUpdateToOneWithWhereWithoutStandardParametersInput = {
+    where?: UnitOfMeasurementWhereInput
+    data: XOR<UnitOfMeasurementUpdateWithoutStandardParametersInput, UnitOfMeasurementUncheckedUpdateWithoutStandardParametersInput>
+  }
+
+  export type UnitOfMeasurementUpdateWithoutStandardParametersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Standards?: StandardUpdateManyWithoutUnitsNestedInput
+    batchParameterValues?: BatchParameterValueUpdateManyWithoutUnitNestedInput
+    standardDefinitions?: StandardDefinitionUpdateManyWithoutUnitNestedInput
+    batches?: BatchUpdateManyWithoutUnitOfMeasurementsNestedInput
+  }
+
+  export type UnitOfMeasurementUncheckedUpdateWithoutStandardParametersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    symbol?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    Standards?: StandardUncheckedUpdateManyWithoutUnitsNestedInput
+    batchParameterValues?: BatchParameterValueUncheckedUpdateManyWithoutUnitNestedInput
+    standardDefinitions?: StandardDefinitionUncheckedUpdateManyWithoutUnitNestedInput
+    batches?: BatchUncheckedUpdateManyWithoutUnitOfMeasurementsNestedInput
+  }
+
   export type StandardDefinitionUpsertWithWhereUniqueWithoutParameterInput = {
     where: StandardDefinitionWhereUniqueInput
     update: XOR<StandardDefinitionUpdateWithoutParameterInput, StandardDefinitionUncheckedUpdateWithoutParameterInput>
@@ -75361,6 +75654,7 @@ export namespace Prisma {
     updatedAt: Date | string
     category: StandardCategoryCreateNestedOneWithoutParametersInput
     batchValues?: BatchParameterValueCreateNestedManyWithoutParameterInput
+    unit?: UnitOfMeasurementCreateNestedOneWithoutStandardParametersInput
     products?: ProductParameterCreateNestedManyWithoutParameterInput
   }
 
@@ -75368,6 +75662,7 @@ export namespace Prisma {
     id: string
     name: string
     categoryId: string
+    unitId?: string | null
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
@@ -75391,6 +75686,7 @@ export namespace Prisma {
     updatedAt: Date | string
     Standards?: StandardCreateNestedManyWithoutUnitsInput
     batchParameterValues?: BatchParameterValueCreateNestedManyWithoutUnitInput
+    standardParameters?: StandardParameterCreateNestedManyWithoutUnitInput
     batches?: BatchCreateNestedManyWithoutUnitOfMeasurementsInput
   }
 
@@ -75403,6 +75699,7 @@ export namespace Prisma {
     updatedAt: Date | string
     Standards?: StandardUncheckedCreateNestedManyWithoutUnitsInput
     batchParameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutUnitInput
+    standardParameters?: StandardParameterUncheckedCreateNestedManyWithoutUnitInput
     batches?: BatchUncheckedCreateNestedManyWithoutUnitOfMeasurementsInput
   }
 
@@ -75627,6 +75924,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: StandardCategoryUpdateOneRequiredWithoutParametersNestedInput
     batchValues?: BatchParameterValueUpdateManyWithoutParameterNestedInput
+    unit?: UnitOfMeasurementUpdateOneWithoutStandardParametersNestedInput
     products?: ProductParameterUpdateManyWithoutParameterNestedInput
   }
 
@@ -75634,6 +75932,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    unitId?: NullableStringFieldUpdateOperationsInput | string | null
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
@@ -75663,6 +75962,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Standards?: StandardUpdateManyWithoutUnitsNestedInput
     batchParameterValues?: BatchParameterValueUpdateManyWithoutUnitNestedInput
+    standardParameters?: StandardParameterUpdateManyWithoutUnitNestedInput
     batches?: BatchUpdateManyWithoutUnitOfMeasurementsNestedInput
   }
 
@@ -75675,6 +75975,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Standards?: StandardUncheckedUpdateManyWithoutUnitsNestedInput
     batchParameterValues?: BatchParameterValueUncheckedUpdateManyWithoutUnitNestedInput
+    standardParameters?: StandardParameterUncheckedUpdateManyWithoutUnitNestedInput
     batches?: BatchUncheckedUpdateManyWithoutUnitOfMeasurementsNestedInput
   }
 
@@ -75949,6 +76250,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     category: StandardCategoryCreateNestedOneWithoutParametersInput
+    unit?: UnitOfMeasurementCreateNestedOneWithoutStandardParametersInput
     standards?: StandardDefinitionCreateNestedManyWithoutParameterInput
     products?: ProductParameterCreateNestedManyWithoutParameterInput
   }
@@ -75957,6 +76259,7 @@ export namespace Prisma {
     id: string
     name: string
     categoryId: string
+    unitId?: string | null
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
@@ -75979,6 +76282,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     Standards?: StandardCreateNestedManyWithoutUnitsInput
+    standardParameters?: StandardParameterCreateNestedManyWithoutUnitInput
     standardDefinitions?: StandardDefinitionCreateNestedManyWithoutUnitInput
     batches?: BatchCreateNestedManyWithoutUnitOfMeasurementsInput
   }
@@ -75991,6 +76295,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     Standards?: StandardUncheckedCreateNestedManyWithoutUnitsInput
+    standardParameters?: StandardParameterUncheckedCreateNestedManyWithoutUnitInput
     standardDefinitions?: StandardDefinitionUncheckedCreateNestedManyWithoutUnitInput
     batches?: BatchUncheckedCreateNestedManyWithoutUnitOfMeasurementsInput
   }
@@ -76104,6 +76409,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: StandardCategoryUpdateOneRequiredWithoutParametersNestedInput
+    unit?: UnitOfMeasurementUpdateOneWithoutStandardParametersNestedInput
     standards?: StandardDefinitionUpdateManyWithoutParameterNestedInput
     products?: ProductParameterUpdateManyWithoutParameterNestedInput
   }
@@ -76112,6 +76418,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    unitId?: NullableStringFieldUpdateOperationsInput | string | null
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
@@ -76140,6 +76447,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Standards?: StandardUpdateManyWithoutUnitsNestedInput
+    standardParameters?: StandardParameterUpdateManyWithoutUnitNestedInput
     standardDefinitions?: StandardDefinitionUpdateManyWithoutUnitNestedInput
     batches?: BatchUpdateManyWithoutUnitOfMeasurementsNestedInput
   }
@@ -76152,6 +76460,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Standards?: StandardUncheckedUpdateManyWithoutUnitsNestedInput
+    standardParameters?: StandardParameterUncheckedUpdateManyWithoutUnitNestedInput
     standardDefinitions?: StandardDefinitionUncheckedUpdateManyWithoutUnitNestedInput
     batches?: BatchUncheckedUpdateManyWithoutUnitOfMeasurementsNestedInput
   }
@@ -84610,6 +84919,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Standards?: StandardUpdateManyWithoutUnitsNestedInput
     batchParameterValues?: BatchParameterValueUpdateManyWithoutUnitNestedInput
+    standardParameters?: StandardParameterUpdateManyWithoutUnitNestedInput
     standardDefinitions?: StandardDefinitionUpdateManyWithoutUnitNestedInput
   }
 
@@ -84622,6 +84932,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     Standards?: StandardUncheckedUpdateManyWithoutUnitsNestedInput
     batchParameterValues?: BatchParameterValueUncheckedUpdateManyWithoutUnitNestedInput
+    standardParameters?: StandardParameterUncheckedUpdateManyWithoutUnitNestedInput
     standardDefinitions?: StandardDefinitionUncheckedUpdateManyWithoutUnitNestedInput
   }
 
@@ -85180,6 +85491,17 @@ export namespace Prisma {
     updatedAt: Date | string
   }
 
+  export type StandardParameterCreateManyUnitInput = {
+    id: string
+    name: string
+    categoryId: string
+    productType?: string | null
+    description?: string | null
+    dataType: $Enums.ParameterDataType
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
   export type StandardDefinitionCreateManyUnitInput = {
     id: string
     parameterId: string
@@ -85273,6 +85595,45 @@ export namespace Prisma {
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type StandardParameterUpdateWithoutUnitInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    productType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    category?: StandardCategoryUpdateOneRequiredWithoutParametersNestedInput
+    batchValues?: BatchParameterValueUpdateManyWithoutParameterNestedInput
+    standards?: StandardDefinitionUpdateManyWithoutParameterNestedInput
+    products?: ProductParameterUpdateManyWithoutParameterNestedInput
+  }
+
+  export type StandardParameterUncheckedUpdateWithoutUnitInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    productType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batchValues?: BatchParameterValueUncheckedUpdateManyWithoutParameterNestedInput
+    standards?: StandardDefinitionUncheckedUpdateManyWithoutParameterNestedInput
+    products?: ProductParameterUncheckedUpdateManyWithoutParameterNestedInput
+  }
+
+  export type StandardParameterUncheckedUpdateManyWithoutUnitInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    productType?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -87090,6 +87451,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batchParameterValues?: BatchParameterValueUpdateManyWithoutUnitNestedInput
+    standardParameters?: StandardParameterUpdateManyWithoutUnitNestedInput
     standardDefinitions?: StandardDefinitionUpdateManyWithoutUnitNestedInput
     batches?: BatchUpdateManyWithoutUnitOfMeasurementsNestedInput
   }
@@ -87102,6 +87464,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batchParameterValues?: BatchParameterValueUncheckedUpdateManyWithoutUnitNestedInput
+    standardParameters?: StandardParameterUncheckedUpdateManyWithoutUnitNestedInput
     standardDefinitions?: StandardDefinitionUncheckedUpdateManyWithoutUnitNestedInput
     batches?: BatchUncheckedUpdateManyWithoutUnitOfMeasurementsNestedInput
   }
@@ -87118,6 +87481,7 @@ export namespace Prisma {
   export type StandardParameterCreateManyCategoryInput = {
     id: string
     name: string
+    unitId?: string | null
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
@@ -87153,6 +87517,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batchValues?: BatchParameterValueUpdateManyWithoutParameterNestedInput
+    unit?: UnitOfMeasurementUpdateOneWithoutStandardParametersNestedInput
     standards?: StandardDefinitionUpdateManyWithoutParameterNestedInput
     products?: ProductParameterUpdateManyWithoutParameterNestedInput
   }
@@ -87160,6 +87525,7 @@ export namespace Prisma {
   export type StandardParameterUncheckedUpdateWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    unitId?: NullableStringFieldUpdateOperationsInput | string | null
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
@@ -87173,6 +87539,7 @@ export namespace Prisma {
   export type StandardParameterUncheckedUpdateManyWithoutCategoryInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    unitId?: NullableStringFieldUpdateOperationsInput | string | null
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType

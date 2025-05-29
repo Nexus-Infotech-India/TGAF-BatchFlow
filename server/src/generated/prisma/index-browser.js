@@ -255,6 +255,7 @@ exports.Prisma.StandardParameterScalarFieldEnum = {
   id: 'id',
   name: 'name',
   categoryId: 'categoryId',
+  unitId: 'unitId',
   productType: 'productType',
   description: 'description',
   dataType: 'dataType',

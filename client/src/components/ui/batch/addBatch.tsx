@@ -112,20 +112,7 @@ const AddBatch: React.FC = () => {
     }
   });
   
-  const { data: unitsData = [] } = useQuery({
-    queryKey: ["units"],
-    queryFn: async () => {
-      try {
-        const response = await axios.get(API_ROUTES.UNIT.GET_UNITS, {
-          headers: { Authorization: `Bearer ${authToken}` }
-        });
-        return response.data?.units || [];
-      } catch (error) {
-        console.error("Error fetching units:", error);
-        return [];
-      }
-    }
-  });
+ 
 
   // Product-specific parameters query
   const { data: productParametersData, isLoading: isLoadingProductParameters } = useQuery({
@@ -658,114 +645,91 @@ const AddBatch: React.FC = () => {
                           <div className="p-0">
                             <div className="overflow-x-auto">
                               <table className="w-full">
-                                <thead className="bg-gray-50 border-b border-gray-200">
-                                  <tr>
-                                    <th className="text-left p-4 font-semibold text-gray-700 text-sm">Parameter</th>
-                                    <th className="text-left p-4 font-semibold text-gray-700 text-sm w-32">Value</th>
-                                    <th className="text-left p-4 font-semibold text-gray-700 text-sm w-32">Unit</th>
-                                    <th className="text-center p-4 font-semibold text-gray-700 text-sm w-20">Status</th>
-                                  </tr>
-                                </thead>
-                                 <tbody>
-                                  {categoryParams.map((parameter: any, paramIndex: number) => {
-                                    const paramValue = parameterValues.find(pv => pv.parameterId === parameter.id);
-                                    const hasValue = paramValue && paramValue.value.trim() !== "";
-                                    
-                                    return (
-                                      <motion.tr 
-                                        key={parameter.id}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{ delay: paramIndex * 0.05 }}
-                                        className={`border-b border-gray-100 hover:bg-blue-50/30 transition-colors ${
-                                          hasValue ? 'bg-green-50/30' : ''
-                                        }`}
-                                      >
-                                        <td className="p-4">
-                                          <div>
-                                            <div className="font-medium text-gray-800">{parameter.name}</div>
-                                            {parameter.description && (
-                                              <div className="text-xs text-gray-500 mt-0.5">{parameter.description}</div>
-                                            )}
-                                          </div>
-                                        </td>
-                                        <td className="p-4">
-                                          <input
-                                            type="text"
-                                            value={paramValue?.value || ''}
-                                            onChange={(e) => {
-                                              const value = e.target.value;
-                                              const existingParam = parameterValues.find(pv => pv.parameterId === parameter.id);
-                                              
-                                              if (existingParam) {
-                                                // Update existing parameter
-                                                setParameterValues(parameterValues.map(pv => 
-                                                  pv.parameterId === parameter.id ? { ...pv, value } : pv
-                                                ));
-                                              } else {
-                                                // Add new parameter
-                                                setParameterValues([...parameterValues, { 
-                                                  parameterId: parameter.id, 
-                                                  value,
-                                                  unitId: ""
-                                                }]);
-                                              }
-                                            }}
-                                            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                            placeholder="Enter value"
-                                          />
-                                        </td>
-                                        <td className="p-4">
-                                          <div className="relative">
-                                            <select
-                                              value={paramValue?.unitId || ""}
-                                              onChange={(e) => {
-                                                const unitId = e.target.value;
-                                                const existingParam = parameterValues.find(pv => pv.parameterId === parameter.id);
-                                                
-                                                if (existingParam) {
-                                                  // Update existing parameter
-                                                  setParameterValues(parameterValues.map(pv => 
-                                                    pv.parameterId === parameter.id ? { ...pv, unitId } : pv
-                                                  ));
-                                                } else if (unitId) {
-                                                  // Add new parameter if unit is selected
-                                                  setParameterValues([...parameterValues, { 
-                                                    parameterId: parameter.id, 
-                                                    value: "",
-                                                    unitId
-                                                  }]);
-                                                }
-                                              }}
-                                              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all appearance-none bg-white"
-                                            >
-                                              <option value="">No unit</option>
-                                              {unitsData?.map((unit: any) => (
-                                                <option key={unit.id} value={unit.id}>
-                                                  {unit.symbol}
-                                                </option>
-                                              ))}
-                                            </select>
-                                            <ChevronDown size={12} className="absolute top-3 right-2 text-gray-400 pointer-events-none" />
-                                          </div>
-                                        </td>
-                                        <td className="p-4 text-center">
-                                          <motion.div
-                                            initial={{ scale: 0 }}
-                                            animate={{ scale: 1 }}
-                                            className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
-                                              hasValue 
-                                                ? 'bg-green-100 text-green-600' 
-                                                : 'bg-gray-100 text-gray-400'
-                                            }`}
-                                          >
-                                            {hasValue ? <Check size={12} /> : <Clock size={12} />}
-                                          </motion.div>
-                                        </td>
-                                      </motion.tr>
-                                    );
-                                  })}
-                                </tbody>
+                               <thead className="bg-gray-50 border-b border-gray-200">
+  <tr>
+    <th className="text-left p-4 font-semibold text-gray-700 text-sm">Parameter</th>
+    <th className="text-left p-4 font-semibold text-gray-700 text-sm w-32">Value</th>
+    <th className="text-left p-4 font-semibold text-gray-700 text-sm w-32">Unit</th>
+    <th className="text-center p-4 font-semibold text-gray-700 text-sm w-20">Status</th>
+  </tr>
+</thead>
+                                <tbody>
+  {categoryParams.map((parameter: any, paramIndex: number) => {
+    const paramValue = parameterValues.find(pv => pv.parameterId === parameter.id);
+    const hasValue = paramValue && paramValue.value.trim() !== "";
+    
+    return (
+      <motion.tr 
+        key={parameter.id}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: paramIndex * 0.05 }}
+        className={`border-b border-gray-100 hover:bg-blue-50/30 transition-colors ${
+          hasValue ? 'bg-green-50/30' : ''
+        }`}
+      >
+        <td className="p-4">
+          <div>
+            <div className="font-medium text-gray-800">{parameter.name}</div>
+            {parameter.description && (
+              <div className="text-xs text-gray-500 mt-0.5">{parameter.description}</div>
+            )}
+          </div>
+        </td>
+        <td className="p-4">
+          <input
+            type="text"
+            value={paramValue?.value || ''}
+            onChange={(e) => {
+              const value = e.target.value;
+              const existingParam = parameterValues.find(pv => pv.parameterId === parameter.id);
+              
+              if (existingParam) {
+                // Update existing parameter
+                setParameterValues(parameterValues.map(pv => 
+                  pv.parameterId === parameter.id ? { ...pv, value } : pv
+                ));
+              } else {
+                // Add new parameter with the associated unit ID from parameter
+                setParameterValues([...parameterValues, { 
+                  parameterId: parameter.id, 
+                  value,
+                  unitId: parameter.unitId  // Use parameter's unitId directly
+                }]);
+              }
+            }}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+            placeholder="Enter value"
+          />
+        </td>
+        <td className="p-4">
+          <div className="flex items-center">
+            {parameter.unit ? (
+              <span className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg font-medium text-sm">
+                {parameter.unit.symbol}
+              </span>
+            ) : (
+              <span className="text-gray-400 italic text-sm">No unit</span>
+            )}
+          </div>
+        </td>
+        <td className="p-4 text-center">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
+              hasValue 
+                ? 'bg-green-100 text-green-600' 
+                : 'bg-gray-100 text-gray-400'
+            }`}
+          >
+            {hasValue ? <Check size={12} /> : <Clock size={12} />}
+          </motion.div>
+        </td>
+      </motion.tr>
+    );
+  })}
+</tbody>
                               </table>
                             </div>
                           </div>
