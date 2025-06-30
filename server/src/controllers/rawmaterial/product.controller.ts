@@ -1,0 +1,105 @@
+import { Request, Response } from 'express';
+import { PrismaClient } from '../../generated/prisma';
+const prisma = new PrismaClient();
+
+export class RawMaterialProductController {
+  // Create a new raw material product
+  static async createRawMaterialProduct(req: Request, res: Response) {
+    try {
+      const {
+        skuCode,
+        name,
+        category,
+        unitOfMeasurement,
+        minReorderLevel,
+        vendorId,
+      } = req.body;
+
+      const product = await prisma.rawMaterialProduct.create({
+        data: {
+          skuCode,
+          name,
+          category,
+          unitOfMeasurement,
+          minReorderLevel,
+          vendorId: vendorId || null,
+        },
+      });
+
+      res.status(201).json(product);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to create raw material product', details: error });
+    }
+  }
+
+  // Get all raw material products (with optional filter by category or vendor)
+  static async getRawMaterialProducts(req: Request, res: Response) {
+    try {
+      const { category, vendorId } = req.query;
+      const where: any = {};
+      if (category) where.category = category;
+      if (vendorId) where.vendorId = vendorId;
+
+      const products = await prisma.rawMaterialProduct.findMany({ where });
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch raw material products', details: error });
+    }
+  }
+
+  // Get a single raw material product by ID
+  static async getRawMaterialProductById(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const product = await prisma.rawMaterialProduct.findUnique({ where: { id } });
+      if (!product) {
+         res.status(404).json({ error: 'Raw material product not found' });
+      }
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch raw material product', details: error });
+    }
+  }
+
+  // Update raw material product details
+  static async updateRawMaterialProduct(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const {
+        skuCode,
+        name,
+        category,
+        unitOfMeasurement,
+        minReorderLevel,
+        vendorId,
+      } = req.body;
+
+      const product = await prisma.rawMaterialProduct.update({
+        where: { id },
+        data: {
+          skuCode,
+          name,
+          category,
+          unitOfMeasurement,
+          minReorderLevel,
+          vendorId: vendorId || null,
+        },
+      });
+
+      res.json(product);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to update raw material product', details: error });
+    }
+  }
+
+  // Delete a raw material product
+  static async deleteRawMaterialProduct(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      await prisma.rawMaterialProduct.delete({ where: { id } });
+      res.json({ message: 'Raw material product deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to delete raw material product', details: error });
+    }
+  }
+}

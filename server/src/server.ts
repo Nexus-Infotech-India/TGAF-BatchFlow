@@ -9,6 +9,7 @@ import productRoutes from './routes/product.route';
 import dashboardRoutes from './routes/dashboard.route';
 import trainingRoutes from './routes/training.route';
 import auditRoutes from './routes/audit.route';
+import rawRoutes from './routes/raw.route';
 import { updateAuditStatuses } from './jobs/updateauditstatus';
 
 const app = express();
@@ -26,6 +27,7 @@ app.use('/product', productRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/training', trainingRoutes);
 app.use('/audit', auditRoutes);
+app.use('/raw', rawRoutes);
 
 // Schedule background jobs
 // Run once at startup and then every 6 hours

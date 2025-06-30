@@ -598,6 +598,150 @@ exports.Prisma.AuditNotificationScalarFieldEnum = {
   readAt: 'readAt'
 };
 
+exports.Prisma.VendorScalarFieldEnum = {
+  id: 'id',
+  vendorCode: 'vendorCode',
+  name: 'name',
+  address: 'address',
+  contactPerson: 'contactPerson',
+  contactNumber: 'contactNumber',
+  email: 'email',
+  gstin: 'gstin',
+  bankDetails: 'bankDetails',
+  enabled: 'enabled',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RawMaterialProductScalarFieldEnum = {
+  id: 'id',
+  skuCode: 'skuCode',
+  name: 'name',
+  category: 'category',
+  unitOfMeasurement: 'unitOfMeasurement',
+  minReorderLevel: 'minReorderLevel',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  vendorId: 'vendorId'
+};
+
+exports.Prisma.PurchaseOrderScalarFieldEnum = {
+  id: 'id',
+  poNumber: 'poNumber',
+  vendorId: 'vendorId',
+  orderDate: 'orderDate',
+  expectedDate: 'expectedDate',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PurchaseOrderItemScalarFieldEnum = {
+  id: 'id',
+  purchaseOrderId: 'purchaseOrderId',
+  rawMaterialId: 'rawMaterialId',
+  quantityOrdered: 'quantityOrdered',
+  rate: 'rate',
+  quantityReceived: 'quantityReceived',
+  status: 'status'
+};
+
+exports.Prisma.StockEntryScalarFieldEnum = {
+  id: 'id',
+  rawMaterialId: 'rawMaterialId',
+  warehouseId: 'warehouseId',
+  batchNumber: 'batchNumber',
+  expiryDate: 'expiryDate',
+  quantity: 'quantity',
+  entryType: 'entryType',
+  referenceId: 'referenceId',
+  status: 'status',
+  reasonCode: 'reasonCode',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.WarehouseScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  location: 'location',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CleaningJobScalarFieldEnum = {
+  id: 'id',
+  rawMaterialId: 'rawMaterialId',
+  fromWarehouseId: 'fromWarehouseId',
+  toWarehouseId: 'toWarehouseId',
+  quantity: 'quantity',
+  status: 'status',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt'
+};
+
+exports.Prisma.CleaningLogScalarFieldEnum = {
+  id: 'id',
+  cleaningJobId: 'cleaningJobId',
+  from: 'from',
+  to: 'to',
+  dateTime: 'dateTime',
+  quantity: 'quantity',
+  status: 'status',
+  fromWarehouseId: 'fromWarehouseId',
+  toWarehouseId: 'toWarehouseId'
+};
+
+exports.Prisma.UnfinishedStockScalarFieldEnum = {
+  id: 'id',
+  cleaningJobId: 'cleaningJobId',
+  processingJobId: 'processingJobId',
+  skuCode: 'skuCode',
+  quantity: 'quantity',
+  reasonCode: 'reasonCode',
+  warehouseId: 'warehouseId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProcessingJobScalarFieldEnum = {
+  id: 'id',
+  inputRawMaterialId: 'inputRawMaterialId',
+  outputSkuId: 'outputSkuId',
+  quantityInput: 'quantityInput',
+  quantityOutput: 'quantityOutput',
+  conversionRatio: 'conversionRatio',
+  startedAt: 'startedAt',
+  finishedAt: 'finishedAt',
+  status: 'status'
+};
+
+exports.Prisma.FinishedGoodScalarFieldEnum = {
+  id: 'id',
+  skuCode: 'skuCode',
+  name: 'name',
+  category: 'category',
+  unitOfMeasurement: 'unitOfMeasurement',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ByProductScalarFieldEnum = {
+  id: 'id',
+  processingJobId: 'processingJobId',
+  skuCode: 'skuCode',
+  quantity: 'quantity',
+  warehouseId: 'warehouseId',
+  tag: 'tag',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.CurrentStockScalarFieldEnum = {
+  id: 'id',
+  rawMaterialId: 'rawMaterialId',
+  warehouseId: 'warehouseId',
+  currentQuantity: 'currentQuantity',
+  lastUpdated: 'lastUpdated'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -769,7 +913,20 @@ exports.Prisma.ModelName = {
   AuditDocument: 'AuditDocument',
   PreAuditChecklistItem: 'PreAuditChecklistItem',
   AuditReminder: 'AuditReminder',
-  AuditNotification: 'AuditNotification'
+  AuditNotification: 'AuditNotification',
+  Vendor: 'Vendor',
+  RawMaterialProduct: 'RawMaterialProduct',
+  PurchaseOrder: 'PurchaseOrder',
+  PurchaseOrderItem: 'PurchaseOrderItem',
+  StockEntry: 'StockEntry',
+  Warehouse: 'Warehouse',
+  CleaningJob: 'CleaningJob',
+  CleaningLog: 'CleaningLog',
+  UnfinishedStock: 'UnfinishedStock',
+  ProcessingJob: 'ProcessingJob',
+  FinishedGood: 'FinishedGood',
+  ByProduct: 'ByProduct',
+  CurrentStock: 'CurrentStock'
 };
 
 /**

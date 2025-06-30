@@ -217,4 +217,62 @@ export const API_ROUTES = {
     MONTHLY_SUMMARY: `${BASE_URL}/audit/dashboard/monthly-summary`,
     STANDARD_USAGE: `${BASE_URL}/audit/dashboard/standard-usage`,
   },
+  // ...existing code...
+  RAW: {
+    // Cleaning Jobs
+    CREATE_CLEANING_JOB: `${BASE_URL}/raw/cleaning`,
+    GET_CLEANING_JOBS: `${BASE_URL}/raw/cleaning`,
+    GET_CLEANING_JOB_BY_ID: (id: string) => `${BASE_URL}/raw/cleaning/${id}`,
+    UPDATE_CLEANING_JOB: (id: string) => `${BASE_URL}/raw/cleaning/${id}`,
+
+    // Processing Jobs
+    CREATE_PROCESSING_JOB: `${BASE_URL}/raw/processing`,
+    GET_PROCESSING_JOBS: `${BASE_URL}/raw/processing`,
+    GET_PROCESSING_JOB_BY_ID: (id: string) => `${BASE_URL}/raw/processing/${id}`,
+    UPDATE_PROCESSING_JOB: (id: string) => `${BASE_URL}/raw/processing/${id}`,
+
+    // Raw Material Products
+    CREATE_PRODUCT: `${BASE_URL}/raw/product`,
+    GET_PRODUCTS: `${BASE_URL}/raw/product`,
+    GET_PRODUCT_BY_ID: (id: string) => `${BASE_URL}/raw/product/${id}`,
+    UPDATE_PRODUCT: (id: string) => `${BASE_URL}/raw/product/${id}`,
+    DELETE_PRODUCT: (id: string) => `${BASE_URL}/raw/product/${id}`,
+
+    // Purchase Orders
+    CREATE_PURCHASE_ORDER: `${BASE_URL}/raw/purchase`,
+    GET_PURCHASE_ORDERS: `${BASE_URL}/raw/purchase`,
+    GET_PURCHASE_ORDER_BY_ID: (id: string) => `${BASE_URL}/raw/purchase/${id}`,
+    UPDATE_PURCHASE_ORDER: (id: string) => `${BASE_URL}/raw/purchase/${id}`,
+    UPDATE_PURCHASE_ORDER_ITEM: (itemId: string) => `${BASE_URL}/raw/purchase/item/${itemId}`,
+
+    // Stock Entries
+    CREATE_STOCK_ENTRY: `${BASE_URL}/raw/stock`,
+    GET_STOCK_ENTRIES: `${BASE_URL}/raw/stock`,
+    GET_STOCK_ENTRY_BY_ID: (id: string) => `${BASE_URL}/raw/stock/${id}`,
+    UPDATE_STOCK_ENTRY: (id: string) => `${BASE_URL}/raw/stock/${id}`,
+
+    // Unfinished Stock
+    CREATE_UNFINISHED_STOCK: `${BASE_URL}/raw/unfinished`,
+    GET_UNFINISHED_STOCKS: `${BASE_URL}/raw/unfinished`,
+    GET_UNFINISHED_STOCK_BY_ID: (id: string) => `${BASE_URL}/raw/unfinished/${id}`,
+    UPDATE_UNFINISHED_STOCK: (id: string) => `${BASE_URL}/raw/unfinished/${id}`,
+
+    // Vendors
+    CREATE_VENDOR: `${BASE_URL}/raw/vendor`,
+    GET_VENDORS: `${BASE_URL}/raw/vendor`,
+    GET_VENDOR_BY_ID: (id: string) => `${BASE_URL}/raw/vendor/${id}`,
+    UPDATE_VENDOR: (id: string) => `${BASE_URL}/raw/vendor/${id}`,
+    SET_VENDOR_STATUS: (id: string) => `${BASE_URL}/raw/vendor/${id}/status`,
+
+    // Warehouses
+    CREATE_WAREHOUSE: `${BASE_URL}/raw/warehouse`,
+    GET_WAREHOUSES: `${BASE_URL}/raw/warehouse`,
+    GET_WAREHOUSE_BY_ID: (id: string) => `${BASE_URL}/raw/warehouse/${id}`,
+    UPDATE_WAREHOUSE: (id: string) => `${BASE_URL}/raw/warehouse/${id}`,
+    DELETE_WAREHOUSE: (id: string) => `${BASE_URL}/raw/warehouse/${id}`,
+
+    // Stock Distribution
+    GET_CURRENT_STOCK_DISTRIBUTION: `${BASE_URL}/raw/stock`,
+  },
+
 };

@@ -29,6 +29,9 @@ import Dashboard from './components/pages/Dashboard/batchdashboard';
 import AuditFindingCreation from './components/ui/Audit/AuditFindings';
 import AuditDashboard from './components/pages/Dashboard/auditdashboard';
 import BatchVerification from './components/pages/Batch/batchverification';
+import PurchaseOrder from './components/ui/Order/PurchaseOrder';
+import PurchaseOrderList from './components/pages/Order/PurchaseOrder';
+import Stock from './components/pages/Stock/Stock';
 
 const App = () => {
   return (
@@ -54,9 +57,8 @@ const App = () => {
           <Route path="/training/respond" element={<TrainingRespond />} />
 
           <Route element={<AppLayout />}>
-            
             {/* ==================== COMMON ROUTES ==================== */}
-            
+
             {/* Dashboards */}
             <Route
               path="/operation-dashboard"
@@ -75,7 +77,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/trainings-dashboard"
               element={
@@ -93,7 +95,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audit-dashboard"
               element={
@@ -130,7 +132,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/document-library"
               element={
@@ -167,7 +169,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/profile"
               element={
@@ -185,7 +187,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/settings"
               element={
@@ -203,7 +205,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/access-control"
               element={
@@ -223,7 +225,7 @@ const App = () => {
             />
 
             {/* ==================== BATCH ROUTES ==================== */}
-            
+
             <Route
               path="/batches"
               element={
@@ -241,7 +243,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/create-batch"
               element={
@@ -259,7 +261,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/batches/verification"
               element={
@@ -277,7 +279,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/compare-batch"
               element={
@@ -297,7 +299,7 @@ const App = () => {
             />
 
             {/* ==================== TRAINING ROUTES ==================== */}
-            
+
             <Route
               path="/trainings"
               element={
@@ -315,7 +317,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/trainings/create"
               element={
@@ -333,7 +335,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/trainings/:id"
               element={
@@ -351,9 +353,12 @@ const App = () => {
                 />
               }
             />
-            
-            <Route path="/trainings/edit/:trainingId" element={<EditTraining />} />
-            
+
+            <Route
+              path="/trainings/edit/:trainingId"
+              element={<EditTraining />}
+            />
+
             <Route
               path="/training-calender"
               element={
@@ -373,7 +378,7 @@ const App = () => {
             />
 
             {/* ==================== AUDIT ROUTES ==================== */}
-            
+
             <Route
               path="/audits"
               element={
@@ -391,7 +396,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audits/new"
               element={
@@ -409,7 +414,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audits/:id"
               element={
@@ -427,7 +432,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audits/edit/:id"
               element={
@@ -445,7 +450,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audits/statistics"
               element={
@@ -463,7 +468,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audits/checklist"
               element={
@@ -481,7 +486,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audits/checklist/:auditId"
               element={
@@ -499,7 +504,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audits/findings"
               element={
@@ -517,7 +522,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audit/calender"
               element={
@@ -535,7 +540,7 @@ const App = () => {
                 />
               }
             />
-            
+
             {/* Inspection Checklist Routes */}
             <Route
               path="/audits/inspection-checklist"
@@ -554,7 +559,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audits/inspection-checklist/create"
               element={
@@ -572,7 +577,7 @@ const App = () => {
                 />
               }
             />
-            
+
             <Route
               path="/audits/:auditId/inspection-checklist/create"
               element={
@@ -590,6 +595,61 @@ const App = () => {
                 />
               }
             />
+
+            {/* ==================== RAW MATERIAL ROUTES ==================== */}
+            <Route
+              path="/raw/purchase-order"
+              element={
+                <PermissionedRoute
+                  path="/raw/purchase-order"
+                  element={
+                    <SecureRoute
+                      element={<PurchaseOrder />}
+                      permissionKey="manage_purchase_order"
+                    />
+                  }
+                  name="Inspection order"
+                  description="View and manage purchase orders for raw materials"
+                  permissionKey="manage_inspection_order"
+                />
+              }
+            />
+
+            <Route
+              path="/raw/purchase-history"
+              element={
+                <PermissionedRoute
+                  path="/purchase-orders"
+                  element={
+                    <SecureRoute
+                      element={<PurchaseOrderList />}
+                      permissionKey="manage_purchase_order"
+                    />
+                  }
+                  name="Purchase Orders"
+                  description="View and manage all purchase orders"
+                  permissionKey="manage_purchase_order"
+                />
+              }
+            />
+
+            <Route
+  path="/stock-distribution"
+  element={
+    <PermissionedRoute
+      path="/stock-distribution"
+      element={
+        <SecureRoute
+          element={<Stock />}
+          permissionKey="view_stock_distribution"
+        />
+      }
+      name="Stock Distribution"
+      description="Visualize current stock distribution across warehouses"
+      permissionKey="view_stock_distribution"
+    />
+  }
+/>
 
             {/* 404 Not Found */}
             <Route path="*" element={<NotFound />} />

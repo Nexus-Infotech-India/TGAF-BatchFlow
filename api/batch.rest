@@ -1,0 +1,219 @@
+### Create a new batch
+POST http://localhost:3000/api/batches
+Content-Type: application/json
+Authorization: Bearer {{maker_token
+
+{
+  "batchNumber": "BATCH001",
+  "productId": "product-id-1", // Replace with a valid product ID
+  "dateOfProduction": "2025-04-01",
+  "bestBeforeDate": "2025-10-01",
+  "sampleAnalysisStarted": "2025-04-02",
+  "sampleAnalysisCompleted": "2025-04-05",
+  "sampleAnalysisStatus": "PENDING",
+  "organolepticProperties": {
+    "appearance": "Bright yellow",
+    "texture": "Fine powder",
+    "odor": "Mild"
+  },
+  "physicalProperties": {
+    "particleSize": 0.5,
+    "particleSizeUnitId": "unit-id-1", // Replace with a valid unit ID
+    "retentionOn088mm": 0.1,
+    "retentionOn05mm": 0.05,
+    "foreignMatter": 0.01
+  },
+  "chemicalProperties": {
+    "moisturePercentMax": 5,
+    "waterActivity": 0.6,
+    "totalAshMax": 2,
+    "insolublAshInAcidMax": 0.5,
+    "curcumine": 3,
+    "bacillusCereus": 10,
+    "listeriaMonocytogenes": 0,
+    "clostridiumpPerfringens": 0,
+    "salmonella": 0,
+    "totalPlateCount": 100,
+    "eColi": 0,
+    "enterobacteriaceae": 10,
+    "yeastMoulds": 50,
+    "measurementUnitId": "unit-id-2" // Replace with a valid unit ID
+  }
+}
+
+###
+
+### Get all batches with filtering
+GET http://localhost:3000/api/batches?page=1&limit=10&status=DRAFT
+Authorization: Bearer {{checker_token
+
+###
+
+### Get batch details by ID
+GET http://localhost:3000/api/batches/{{batch_id}
+Authorization: Bearer {{checker_token}
+
+###
+
+### Update a batch
+PUT http://localhost:3000/api/batches/{{batch_id}
+Content-Type: application/json
+Authorization: Bearer {{maker_token}
+
+{
+  "batchNumber": "BATCH001-UPDATED",
+  "productId": "product-id-2", // Replace with a valid product ID
+  "dateOfProduction": "2025-04-02",
+  "bestBeforeDate": "2025-10-02",
+  "organolepticProperties": {
+    "appearance": "Bright yellow (updated)",
+    "texture": "Fine powder (updated)",
+    "odor": "Mild (updated)"
+  }
+}
+
+###
+
+### Submit a batch for review
+PUT http://localhost:3000/api/batches/{{batch_id}/submit
+Authorization: Bearer {{maker_token}
+
+###
+
+### Approve a batch
+PUT http://localhost:3000/api/batches/{{batch_id}/approve
+Authorization: Bearer {{checker_token}
+
+###
+
+### Reject a batch
+PUT http://localhost:3000/api/batches/{{batch_id}/reject
+Content-Type: application/json
+Authorization: Bearer {{checker_token}
+
+{
+  "rejectionRemarks": "The batch does not meet the required standards."
+}
+
+###
+
+### Export batches to Excel
+GET http://localhost:3000/api/batches/export
+Authorization: Bearer {{checker_token}
+###
+
+
+POST http://localhost:3000/standard/units
+Content-Type: application/json
+Authorization: Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZG1pbi11c2VyLWlkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTUyMzMwMywiZXhwIjoxNzQ1NjA5NzAzfQ.lKYYyrYxX_t8XyQrL0PWuTUo2f5IGEtGOovfx8t6WzI
+
+{
+  "name": "Percentage",
+  "symbol": "%",
+  "description": "Used to express moisture content."
+}
+
+###
+
+### Create a new batch
+POST http://localhost:3000/batch/batches
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3NTE1MmY2NC1lODFiLTQ2MzItYTUwNi05NWI5MDYwY2E1MTUiLCJlbWFpbCI6Im5ld3VzZXJAZXhhbXBsZS5jb20iLCJyb2xlIjoiTWFrZXIiLCJpYXQiOjE3NDU3Mzc1OTcsImV4cCI6MTc0NTgyMzk5N30.7dum4pvtQm6j7oNm41lr_00RaaLvCoLJoKtWFK7u-88
+
+{
+  "batchNumber": "BATCH002",
+  "productId": "3d656b42-ef2c-471a-be1f-ab9ece29c961",
+  "dateOfProduction": "2025-04-15",
+  "bestBeforeDate": "2025-10-15",
+  "sampleAnalysisStarted": "2025-04-16",
+  "sampleAnalysisCompleted": "2025-04-19",
+  "sampleAnalysisStatus": "COMPLETED",
+  "standardIds": ["181ac793-5e14-4ee5-9136-ebc82d0a3611"],
+  "methodologyIds": ["097509b9-6789-4e10-af3a-4c28e8bc57c1"],
+  "unitIds": ["6ab346ea-fdce-47d7-915b-add5bd2a0691"],
+  "organolepticProperties": {
+    "appearance": "Golden yellow powder",
+    "texture": "Fine and smooth",
+    "odor": "Characteristic, aromatic"
+  },
+  "physicalProperties": {
+    "particleSize": 0.3,
+    "particleSizeUnitId": "6ab346ea-fdce-47d7-915b-add5bd2a0691",
+    "retentionOn088mm": 0.2,
+    "retentionOn05mm": 0.08,
+    "foreignMatter": 0.005
+  },
+  "chemicalProperties": {
+    "moisturePercentMax": 8.5,
+    "waterActivity": 0.55,
+    "totalAshMax": 3.5,
+    "insolublAshInAcidMax": 0.7,
+    "curcumine": 5.2,
+    "bacillusCereus": 5,
+    "listeriaMonocytogenes": 0,
+    "clostridiumpPerfringens": 0,
+    "salmonella": "Absent",
+    "totalPlateCount": 85,
+    "eColi": 0,
+    "enterobacteriaceae": 5,
+    "yeastMoulds": 30,
+    "measurementUnitId": "6ab346ea-fdce-47d7-915b-add5bd2a0691"
+  }
+}
+
+###
+
+### Update a batch
+PUT http://localhost:3000/api/batches/{{batch_id}
+Content-Type: application/json
+Authorization: Bearer {{maker_token}
+
+{
+  "batchNumber": "BATCH002-REV1",
+  "productId": "3d656b42-ef2c-471a-be1f-ab9ece29c961",
+  "dateOfProduction": "2025-04-16",
+  "bestBeforeDate": "2025-10-16",
+  "sampleAnalysisStatus": "COMPLETED",
+  "standardIds": ["8f96c5a8-0d3e-4a5b-9c46-e8968b3d2c7a", "f29a1d6b-5c8e-4b7f-8d3a-e9c2b7d1e6f5", "c1d2e3f4-5678-9a0b-1c2d-3e4f5a6b7c8d"],
+  "methodologyIds": ["a2c3e4f5-6789-0b1c-2d3e-4f5a6b7c8d9e", "b3c4d5e6-7890-1a2b-3c4d-5e6f7a8b9c0d"],
+  "unitIds": ["12b3c4d5-6789-0a1b-2c3d-4e5f6a7b8c9d", "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f6a7b8"],
+  "organolepticProperties": {
+    "appearance": "Golden yellow powder with vibrant color",
+    "texture": "Fine and uniformly distributed",
+    "odor": "Characteristic, strong aromatic"
+  },
+  "physicalProperties": {
+    "particleSize": 0.25,
+    "particleSizeUnitId": "12b3c4d5-6789-0a1b-2c3d-4e5f6a7b8c9d",
+    "retentionOn088mm": 0.15,
+    "retentionOn05mm": 0.06,
+    "foreignMatter": 0.003
+  },
+  "chemicalProperties": {
+    "moisturePercentMax": 7.8,
+    "waterActivity": 0.52,
+    "totalAshMax": 3.2,
+    "insolublAshInAcidMax": 0.65,
+    "curcumine": 5.5,
+    "bacillusCereus": 3,
+    "listeriaMonocytogenes": 0,
+    "clostridiumpPerfringens": 0,
+    "salmonella": "Absent",
+    "totalPlateCount": 70,
+    "eColi": 0,
+    "enterobacteriaceae": 3,
+    "yeastMoulds": 25,
+    "measurementUnitId": "a1b2c3d4-e5f6-7890-a1b2-c3d4e5f6a7b8"
+  }
+}
+
+
+### Create a new product
+POST http://localhost:3000/product
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZG1pbi11c2VyLWlkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTczODI2NSwiZXhwIjoxNzQ1ODI0NjY1fQ.7suWGrSBPes96jPArYwkaEjZqVv0SQ1Rz-RsUENv_4U
+
+{
+  "name": "Test Product",
+  "code": "TP001"
+}

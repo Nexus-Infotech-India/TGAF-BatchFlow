@@ -1,0 +1,107 @@
+### Create a Warehouse
+POST http://localhost:3000/raw/warehouse
+Content-Type: application/json
+
+{
+  "name": "Main Warehouse",
+  "location": "Sector 21"
+}
+
+### Create a Vendor
+POST http://localhost:3000/raw/vendor
+Content-Type: application/json
+
+{
+  "name": "ABC Suppliers",
+  "address": "123 Market Road",
+  "contactPerson": "John Doe",
+  "contactNumber": "9876543210",
+  "email": "abc@suppliers.com",
+  "gstin": "29ABCDE1234F2Z5",
+  "bankDetails": "ICICI 1234567890"
+}
+
+### Create a Raw Material Product
+POST http://localhost:3000/raw/product
+Content-Type: application/json
+
+{
+  "skuCode": "RM-001",
+  "name": "Wheat",
+  "category": "Grains",
+  "unitOfMeasurement": "kg",
+  "minReorderLevel": 100,
+  "vendorId": "f09d8324-8522-443f-956f-32ebe942bcc5"
+}
+
+### Create a Cleaning Job
+POST http://localhost:3000/raw/cleaning
+Content-Type: application/json
+
+{
+  "rawMaterialId": "replace-with-product-id",
+  "fromWarehouseId": "replace-with-warehouse-id",
+  "toWarehouseId": "replace-with-warehouse-id",
+  "quantity": 500,
+  "status": "Pending",
+  "startedAt": "2024-06-29T10:00:00Z"
+}
+
+### Create a Processing Job
+POST http://localhost:3000/raw/processing
+Content-Type: application/json
+
+{
+  "inputRawMaterialId": "replace-with-product-id",
+  "outputSkuId": "replace-with-product-id",
+  "quantityInput": 500,
+  "quantityOutput": 450,
+  "conversionRatio": 0.9,
+  "startedAt": "2024-06-29T12:00:00Z",
+  "status": "In Progress"
+}
+
+### Create a Purchase Order
+POST http://localhost:3000/raw/purchase
+Content-Type: application/json
+
+{
+  "vendorId": "f09d8324-8522-443f-956f-32ebe942bcc5",
+  "orderDate": "2024-06-28",
+  "expectedDate": "2024-07-05",
+  "items": [
+    {
+      "rawMaterialId": "f1d1f983-a54f-4508-8add-8c67ab3bd9e3",
+      "quantityOrdered": 1000,
+      "rate": 25
+    }
+  ]
+}
+
+### Create a Stock Entry
+POST http://localhost:3000/raw/stock
+Content-Type: application/json
+
+{
+  "rawMaterialId": "replace-with-product-id",
+  "warehouseId": "replace-with-warehouse-id",
+  "batchNumber": "BATCH-001",
+  "expiryDate": "2025-06-29",
+  "quantity": 1000,
+  "entryType": "IN",
+  "referenceId": "replace-with-purchase-order-id",
+  "status": "Received"
+}
+
+### Create Unfinished Stock
+POST http://localhost:3000/raw/unfinished
+Content-Type: application/json
+
+{
+  "cleaningJobId": "replace-with-cleaning-job-id",
+  "processingJobId": null,
+  "skuCode": "RM-001",
+  "quantity": 10,
+  "reasonCode": "DAMAGED",
+  "warehouseId": "replace-with-warehouse-id"
+}

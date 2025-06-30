@@ -1,0 +1,73 @@
+### Register a new user
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZG1pbi11c2VyLWlkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTUyMzMwMywiZXhwIjoxNzQ1NjA5NzAzfQ.lKYYyrYxX_t8XyQrL0PWuTUo2f5IGEtGOovfx8t6WzI
+{
+  "email": "newuser@example.com",
+  "name": "New User",
+  "password": "Password123!",
+  "roleId": "3a363bb9-3493-49ba-9dba-b7528708ff80"  
+}
+
+###
+
+### Login with valid credentials
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+
+###
+
+### Get current user profile
+GET http://localhost:3000/api/auth/me
+Authorization: Bearer {{user_token}
+
+###
+
+### Change password
+PUT http://localhost:3000/api/auth/change-password
+Content-Type: application/json
+Authorization: Bearer {{user_token}
+
+{
+  "currentPassword": "Password123!",
+  "newPassword": "NewPassword123!"
+}
+
+###
+
+### Login with invalid credentials
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+
+###
+
+### Access protected route without token
+GET http://localhost:3000/api/auth/me
+
+###
+
+### Create a new role
+POST http://localhost:3000/auth/roles
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZG1pbi11c2VyLWlkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTUyMjgyOSwiZXhwIjoxNzQ1NjA5MjI5fQ.1G8wrTgJN-E9LZKCSW7fagMqpt1hr2H-dcxrDPFaegk
+
+{
+  "name": "Maker",
+  "description": "Can create and submit batches"
+}
+
+###
+
+### Get all roles
+GET http://localhost:3000/roles
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZG1pbi11c2VyLWlkIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsInJvbGUiOiJBZG1pbiIsImlhdCI6MTc0NTUyMjgyOSwiZXhwIjoxNzQ1NjA5MjI5fQ.1G8wrTgJN-E9LZKCSW7fagMqpt1hr2H-dcxrDPFaegk

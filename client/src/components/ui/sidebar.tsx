@@ -11,7 +11,9 @@ import {
   GraduationCap,
   Shield,
   File,
-  LucideLayoutDashboard
+  LucideLayoutDashboard,
+  LayoutDashboardIcon,
+  FileStack
 } from "lucide-react";
 import { usePermissions } from "../../hooks/permission"; // Import the permissions hook
 
@@ -93,6 +95,25 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
 
   // Parent groups with children
   const parentGroups: ParentGroup[] = [
+     {
+      key: "raw-material",
+      name: "Raw Material Man...",
+      icon: <PackageOpen size={20} />,
+      children: [
+        { 
+          path: "/raw-dashboard", 
+          name: "Dashboard", 
+          icon: <LayoutDashboardIcon size={18} />,
+          permissionKey: "view_audits" 
+        },
+         { 
+          path: "/raw/purchase-order", 
+          name: "Order", 
+          icon: <FileStack size={18} />,
+          permissionKey: "view_audits" 
+        },
+      ]
+    },
     {
       key: "batch-management",
       name: "Batch Management",

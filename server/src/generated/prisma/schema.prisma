@@ -1,5 +1,5 @@
 // Auto-generated schema - DO NOT EDIT DIRECTLY
-// Generated on: Thu 29 May 2025 12:32:10 PM IST
+// Generated on: Sun 29 Jun 2025 02:43:00 PM IST
 
 generator client {
   provider      = "prisma-client-js"
@@ -850,4 +850,190 @@ model AuditNotification {
   // Relations
   audit Audit @relation(fields: [auditId], references: [id], onDelete: Cascade)
   user  User  @relation("AuditNotifications", fields: [userId], references: [id])
+}
+// Models and enums from raw.prisma
+model Vendor {
+  id             String               @id @default(uuid())
+  vendorCode     String               @unique
+  name           String
+  address        String
+  contactPerson  String
+  contactNumber  String
+  email          String
+  gstin          String?
+  bankDetails    String?
+  enabled        Boolean              @default(true)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  purchaseOrders PurchaseOrder[]
+  rawMaterials   RawMaterialProduct[]
+}
+
+model RawMaterialProduct {
+  id                 String              @id @default(uuid())
+  skuCode            String              @unique
+  name               String
+  category           String
+  unitOfMeasurement  String
+  minReorderLevel    Int
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  vendorId           String?
+  vendor             Vendor?             @relation(fields: [vendorId], references: [id])
+  stockEntries       StockEntry[]
+  cleaningJobs       CleaningJob[]
+  processingJobs     ProcessingJob[]
+  purchaseOrderItems PurchaseOrderItem[]
+  currentStocks      CurrentStock[]
+}
+
+model PurchaseOrder {
+  id           String              @id @default(uuid())
+  poNumber     String              @unique
+  vendorId     String
+  vendor       Vendor              @relation(fields: [vendorId], references: [id])
+  orderDate    DateTime
+  expectedDate DateTime
+  status       String // e.g., Created, Approved, Received, Cancelled
+  items        PurchaseOrderItem[]
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+}
+
+model PurchaseOrderItem {
+  id               String             @id @default(uuid())
+  purchaseOrderId  String
+  purchaseOrder    PurchaseOrder      @relation(fields: [purchaseOrderId], references: [id])
+  rawMaterialId    String
+  rawMaterial      RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
+  quantityOrdered  Float
+  rate             Float
+  quantityReceived Float              @default(0)
+  status           String // e.g., Pending, Received, Rejected
+}
+
+model StockEntry {
+  id            String             @id @default(uuid())
+  rawMaterialId String
+  rawMaterial   RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
+  warehouseId   String
+  warehouse     Warehouse          @relation(fields: [warehouseId], references: [id])
+  batchNumber   String?
+  expiryDate    DateTime?
+  quantity      Float
+  entryType     String // IN, OUT, CLEANING, PROCESSING, REJECTED, etc.
+  referenceId   String? // Link to PO, CleaningJob, ProcessingJob, etc.
+  status        String
+  reasonCode    String?
+  createdAt     DateTime           @default(now())
+}
+
+model Warehouse {
+  id               String            @id @default(uuid())
+  name             String
+  location         String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  stockEntries     StockEntry[]
+  cleaningJobsFrom CleaningJob[]     @relation("CleaningFromWarehouse")
+  cleaningJobsTo   CleaningJob[]     @relation("CleaningToWarehouse")
+  unfinishedStocks UnfinishedStock[]
+  currentStocks    CurrentStock[]
+  byProducts       ByProduct[]
+  // Add these two lines for CleaningLog relations:
+  cleaningLogsFrom CleaningLog[]     @relation("CleaningFromWarehouse")
+  cleaningLogsTo   CleaningLog[]     @relation("CleaningToWarehouse")
+}
+
+model CleaningJob {
+  id              String             @id @default(uuid())
+  rawMaterialId   String
+  rawMaterial     RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
+  fromWarehouseId String
+  fromWarehouse   Warehouse          @relation("CleaningFromWarehouse", fields: [fromWarehouseId], references: [id])
+  toWarehouseId   String
+  toWarehouse     Warehouse          @relation("CleaningToWarehouse", fields: [toWarehouseId], references: [id])
+  quantity        Float
+  status          String // Sent, In-Progress, Cleaned, etc.
+  startedAt       DateTime
+  finishedAt      DateTime?
+  cleaningLogs    CleaningLog[]
+}
+
+model CleaningLog {
+  id            String      @id @default(uuid())
+  cleaningJobId String
+  cleaningJob   CleaningJob @relation(fields: [cleaningJobId], references: [id])
+  from          String
+  to            String
+  dateTime      DateTime
+  quantity      Float
+  status        String
+
+  fromWarehouseId String
+  fromWarehouse   Warehouse @relation("CleaningFromWarehouse", fields: [fromWarehouseId], references: [id])
+  toWarehouseId   String
+  toWarehouse     Warehouse @relation("CleaningToWarehouse", fields: [toWarehouseId], references: [id])
+}
+
+model UnfinishedStock {
+  id              String    @id @default(uuid())
+  cleaningJobId   String?
+  processingJobId String?
+  skuCode         String
+  quantity        Float
+  reasonCode      String // e.g., moisture, damage, breakage
+  warehouseId     String
+  warehouse       Warehouse @relation(fields: [warehouseId], references: [id])
+  createdAt       DateTime  @default(now())
+}
+
+model ProcessingJob {
+  id                 String             @id @default(uuid())
+  inputRawMaterialId String
+  inputRawMaterial   RawMaterialProduct @relation(fields: [inputRawMaterialId], references: [id])
+  outputSkuId        String
+  outputSku          FinishedGood       @relation(fields: [outputSkuId], references: [id])
+  quantityInput      Float
+  quantityOutput     Float
+  conversionRatio    Float
+  startedAt          DateTime
+  finishedAt         DateTime?
+  status             String // In-Progress, Completed, etc.
+  byProducts         ByProduct[]
+}
+
+model FinishedGood {
+  id                String          @id @default(uuid())
+  skuCode           String          @unique
+  name              String
+  category          String
+  unitOfMeasurement String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  processingJobs    ProcessingJob[]
+}
+
+model ByProduct {
+  id              String        @id @default(uuid())
+  processingJobId String
+  processingJob   ProcessingJob @relation(fields: [processingJobId], references: [id])
+  skuCode         String
+  quantity        Float
+  warehouseId     String
+  warehouse       Warehouse     @relation(fields: [warehouseId], references: [id])
+  tag             String // e.g., Processing_Waste, Semi_Finished
+  createdAt       DateTime      @default(now())
+}
+
+model CurrentStock {
+  id              String             @id @default(uuid())
+  rawMaterialId   String             @unique
+  rawMaterial     RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
+  warehouseId     String
+  warehouse       Warehouse          @relation(fields: [warehouseId], references: [id])
+  currentQuantity Float
+  lastUpdated     DateTime           @updatedAt
+
+  @@unique([rawMaterialId, warehouseId])
 }

@@ -58,4 +58,12 @@ else
   echo "Warning: $SCHEMA_DIR/audit.prisma not found"
 fi
 
+if [ -f "$SCHEMA_DIR/raw.prisma" ]; then
+  echo "// Models and enums from raw.prisma" >> $OUTPUT_FILE
+  # Extract model definitions and enums from audit.prisma
+  sed -n '/^model\|^enum/,/^}/p' $SCHEMA_DIR/raw.prisma >> $OUTPUT_FILE
+else
+  echo "Warning: $SCHEMA_DIR/raw.prisma not found"
+fi
+
 echo "Schema successfully built at $OUTPUT_FILE"
