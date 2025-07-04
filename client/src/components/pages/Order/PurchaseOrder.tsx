@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReceiveModal from "../../ui/Order/statusModal";
+import { useNavigate } from "react-router-dom";
 
 type Vendor = {
   id: string;
@@ -69,7 +70,7 @@ const PurchaseOrderList: React.FC = () => {
   const [showReceiveModal, setShowReceiveModal] = useState(false);
   const [receiveItemId, setReceiveItemId] = useState<string | null>(null);
   const [receiveDefaultQty, setReceiveDefaultQty] = useState<number>(0);
-
+  const navigate = useNavigate();
   // Cache for raw material details
   const [rawMaterialCache, setRawMaterialCache] = useState<Record<string, RawMaterial | null>>({});
 
@@ -78,102 +79,114 @@ const PurchaseOrderList: React.FC = () => {
   }, []);
 
   // Fetch raw material details for all items in expanded orders
-  useEffect(() => {
-    const fetchRawMaterials = async () => {
-      const idsToFetch = new Set<string>();
-      expandedOrderIds.forEach((orderId) => {
-        const order = orders.find((o) => o.id === orderId);
-        order?.items.forEach((item) => {
-          if (!(item.rawMaterialId in rawMaterialCache)) {
-            idsToFetch.add(item.rawMaterialId);
-          }
-        });
+ useEffect(() => {
+  const fetchRawMaterials = async () => {
+    const idsToFetch = new Set<string>();
+    expandedOrderIds.forEach((orderId) => {
+      const order = orders.find((o) => o.id === orderId);
+      order?.items.forEach((item) => {
+        if (!(item.rawMaterialId in rawMaterialCache)) {
+          idsToFetch.add(item.rawMaterialId);
+        }
       });
-      if (idsToFetch.size === 0) return;
-      const newCache: Record<string, RawMaterial | null> = {};
-      await Promise.all(
-        Array.from(idsToFetch).map(async (id) => {
-          try {
-            const res = await api.get(API_ROUTES.RAW.GET_PRODUCT_BY_ID(id));
-            newCache[id] = res.data;
-          } catch {
-            newCache[id] = null;
-          }
-        })
-      );
-      setRawMaterialCache((prev) => ({ ...prev, ...newCache }));
-    };
-    if (expandedOrderIds.length > 0) fetchRawMaterials();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expandedOrderIds, orders]);
-
-  const fetchOrders = async () => {
-    setLoading(true);
-    try {
-      const res = await api.get(API_ROUTES.RAW.GET_PURCHASE_ORDERS);
-      setOrders(res.data);
-    } catch {
-      // handle error
-    }
-    setLoading(false);
+    });
+    if (idsToFetch.size === 0) return;
+    const newCache: Record<string, RawMaterial | null> = {};
+    const authToken = localStorage.getItem('authToken');
+    await Promise.all(
+      Array.from(idsToFetch).map(async (id) => {
+        try {
+          const res = await api.get(API_ROUTES.RAW.GET_PRODUCT_BY_ID(id), {
+            headers: { Authorization: `Bearer ${authToken}` },
+          });
+          newCache[id] = res.data;
+        } catch {
+          newCache[id] = null;
+        }
+      })
+    );
+    setRawMaterialCache((prev) => ({ ...prev, ...newCache }));
   };
+  if (expandedOrderIds.length > 0) fetchRawMaterials();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [expandedOrderIds, orders]);
+
+ const fetchOrders = async () => {
+  setLoading(true);
+  try {
+    const authToken = localStorage.getItem('authToken');
+    const res = await api.get(API_ROUTES.RAW.GET_PURCHASE_ORDERS, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    setOrders(res.data);
+  } catch {
+    // handle error
+  }
+  setLoading(false);
+};
 
  
 
   // Item-level status change
  const handleItemStatusChange = async (itemId: string, status: string) => {
-    if (status === "Received") {
-      // Find the item to get default quantity
-      const orderItem = orders.flatMap(o => o.items).find(i => i.id === itemId);
-      setReceiveItemId(itemId);
-      setReceiveDefaultQty(orderItem?.quantityOrdered || 0);
-      setShowReceiveModal(true);
-      return;
-    }
-    setItemUpdatingId(itemId);
-    try {
-      await api.put(API_ROUTES.RAW.UPDATE_PURCHASE_ORDER_ITEM(itemId), { status });
-      setOrders((prev) =>
-        prev.map((order) => ({
-          ...order,
-          items: order.items.map((item) =>
-            item.id === itemId ? { ...item, status } : item
-          ),
-        }))
-      );
-    } catch {
-      // handle error
-    }
-    setItemUpdatingId(null);
-  };
+  if (status === "Received") {
+    // Find the item to get default quantity
+    const orderItem = orders.flatMap(o => o.items).find(i => i.id === itemId);
+    setReceiveItemId(itemId);
+    setReceiveDefaultQty(orderItem?.quantityOrdered || 0);
+    setShowReceiveModal(true);
+    return;
+  }
+  setItemUpdatingId(itemId);
+  try {
+    const authToken = localStorage.getItem('authToken');
+    await api.put(API_ROUTES.RAW.UPDATE_PURCHASE_ORDER_ITEM(itemId), { status }, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    setOrders((prev) =>
+      prev.map((order) => ({
+        ...order,
+        items: order.items.map((item) =>
+          item.id === itemId ? { ...item, status } : item
+        ),
+      }))
+    );
+  } catch {
+    // handle error
+  }
+  setItemUpdatingId(null);
+};
 
   const handleReceiveConfirm = async (warehouseId: string, quantity: number) => {
-    if (!receiveItemId) return;
-    setItemUpdatingId(receiveItemId);
-    try {
-      await api.put(API_ROUTES.RAW.UPDATE_PURCHASE_ORDER_ITEM(receiveItemId), {
-        status: "Received",
-        warehouseId,
-        quantityReceived: quantity,
-      });
-      setOrders((prev) =>
-        prev.map((order) => ({
-          ...order,
-          items: order.items.map((item) =>
-            item.id === receiveItemId
-              ? { ...item, status: "Received", quantityReceived: quantity }
-              : item
-          ),
-        }))
-      );
-    } catch {
-      // handle error
-    }
-    setItemUpdatingId(null);
-    setShowReceiveModal(false);
-    setReceiveItemId(null);
-    setReceiveDefaultQty(0);
-  };
+  if (!receiveItemId) return;
+  setItemUpdatingId(receiveItemId);
+  try {
+    const authToken = localStorage.getItem('authToken');
+    await api.put(API_ROUTES.RAW.UPDATE_PURCHASE_ORDER_ITEM(receiveItemId), {
+      status: "Received",
+      warehouseId,
+      quantityReceived: quantity,
+    }, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    setOrders((prev) =>
+      prev.map((order) => ({
+        ...order,
+        items: order.items.map((item) =>
+          item.id === receiveItemId
+            ? { ...item, status: "Received", quantityReceived: quantity }
+            : item
+        ),
+      }))
+    );
+  } catch {
+    // handle error
+  }
+  setItemUpdatingId(null);
+  setShowReceiveModal(false);
+  setReceiveItemId(null);
+  setReceiveDefaultQty(0);
+};
 
   const toggleExpand = (orderId: string) => {
     setExpandedOrderIds((prev) =>
@@ -208,6 +221,14 @@ const PurchaseOrderList: React.FC = () => {
                 <p className="text-gray-600 text-sm mt-0.5">
                   View and manage all purchase orders with status update options
                 </p>
+              </div>
+              <div className="ml-auto">
+                <button
+                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+                  onClick={() => navigate("/raw/purchase-order")}
+                >
+                  + Create New Order
+                </button>
               </div>
             </div>
           </div>

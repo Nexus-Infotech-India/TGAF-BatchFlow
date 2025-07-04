@@ -1,6 +1,7 @@
 ### Create a Warehouse
 POST http://localhost:3000/raw/warehouse
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZG1pbi11c2VyLWlkIiwiZW1haWwiOiJhZG1pbkB0Z2FncmlmYXJtcy5jb20iLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3NTEyOTQyMzQsImV4cCI6MTc4MjgzMDIzNH0.rrLqgNIDjIHLJvDzxO6F0VIy1tc9_gT8q1qRmaapUGk
 
 {
   "name": "Main Warehouse",
@@ -24,6 +25,7 @@ Content-Type: application/json
 ### Create a Raw Material Product
 POST http://localhost:3000/raw/product
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZG1pbi11c2VyLWlkIiwiZW1haWwiOiJhZG1pbkB0Z2FncmlmYXJtcy5jb20iLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3NTEyOTQyMzQsImV4cCI6MTc4MjgzMDIzNH0.rrLqgNIDjIHLJvDzxO6F0VIy1tc9_gT8q1qRmaapUGk
 
 {
   "skuCode": "RM-001",
@@ -31,7 +33,7 @@ Content-Type: application/json
   "category": "Grains",
   "unitOfMeasurement": "kg",
   "minReorderLevel": 100,
-  "vendorId": "f09d8324-8522-443f-956f-32ebe942bcc5"
+  "vendorId": ""
 }
 
 ### Create a Cleaning Job

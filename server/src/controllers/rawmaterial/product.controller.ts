@@ -26,6 +26,16 @@ export class RawMaterialProductController {
         },
       });
 
+       await prisma.transactionLog.create({
+        data: {
+          type: 'CREATE',
+          entity: 'RawMaterialProduct',
+          entityId: product.id,
+          userId: req.user?.id || 'system',
+          description: `Created raw material product: ${product.name} (${product.skuCode})`,
+        },
+      });
+
       res.status(201).json(product);
     } catch (error) {
       res.status(500).json({ error: 'Failed to create raw material product', details: error });
@@ -86,6 +96,16 @@ export class RawMaterialProductController {
         },
       });
 
+       await prisma.transactionLog.create({
+        data: {
+          type: 'UPDATE',
+          entity: 'RawMaterialProduct',
+          entityId: product.id,
+          userId: req.user?.id || 'system',
+          description: `Updated raw material product: ${product.name} (${product.skuCode})`,
+        },
+      });
+
       res.json(product);
     } catch (error) {
       res.status(500).json({ error: 'Failed to update raw material product', details: error });
@@ -93,10 +113,22 @@ export class RawMaterialProductController {
   }
 
   // Delete a raw material product
-  static async deleteRawMaterialProduct(req: Request, res: Response) {
+   static async deleteRawMaterialProduct(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      await prisma.rawMaterialProduct.delete({ where: { id } });
+      const deletedProduct = await prisma.rawMaterialProduct.delete({ where: { id } });
+
+      // Transaction log
+      await prisma.transactionLog.create({
+        data: {
+          type: 'DELETE',
+          entity: 'RawMaterialProduct',
+          entityId: deletedProduct.id,
+          userId: req.user?.id || 'system',
+          description: `Deleted raw material product: ${deletedProduct.name} (${deletedProduct.skuCode})`,
+        },
+      });
+
       res.json({ message: 'Raw material product deleted successfully' });
     } catch (error) {
       res.status(500).json({ error: 'Failed to delete raw material product', details: error });

@@ -13,7 +13,9 @@ import {
   File,
   LucideLayoutDashboard,
   LayoutDashboardIcon,
-  FileStack
+  FileStack,
+  ClipboardEdit,
+  SwitchCamera
 } from "lucide-react";
 import { usePermissions } from "../../hooks/permission"; // Import the permissions hook
 
@@ -106,11 +108,35 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
           icon: <LayoutDashboardIcon size={18} />,
           permissionKey: "view_audits" 
         },
-         { 
-          path: "/raw/purchase-order", 
+        //  { 
+        //   path: "/raw/purchase-order", 
+        //   name: "Order", 
+        //   icon: <FileStack size={18} />,
+        //   permissionKey: "view_audits" 
+        // },
+        { 
+          path: "/raw/purchase-history", 
           name: "Order", 
           icon: <FileStack size={18} />,
+          permissionKey: "view_history" 
+        },
+         { 
+          path: "/raw/cleaning-raw-materials", 
+          name: "Cleaning", 
+          icon: <ClipboardEdit size={18} />,
           permissionKey: "view_audits" 
+        },
+          { 
+          path: "/raw/processing-list", 
+          name: "Processing", 
+          icon: <SwitchCamera size={18} />,
+          permissionKey: "manage_purchase_order" 
+        },
+         { 
+          path: "/stock-distribution", 
+          name: "Stock Distribution", 
+          icon: <SwitchCamera size={18} />,
+          permissionKey: "view_distribution" 
         },
       ]
     },

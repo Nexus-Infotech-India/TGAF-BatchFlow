@@ -35,14 +35,17 @@ const ReceiveModal: React.FC<Props> = ({
     // eslint-disable-next-line
   }, [open, defaultQuantity]);
 
-  const fetchWarehouses = async () => {
-    try {
-      const res = await api.get(API_ROUTES.RAW.GET_WAREHOUSES);
-      setWarehouses(res.data);
-    } catch {
-      setWarehouses([]);
-    }
-  };
+ const fetchWarehouses = async () => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    const res = await api.get(API_ROUTES.RAW.GET_WAREHOUSES, {
+      headers: { Authorization: `Bearer ${authToken}` },
+    });
+    setWarehouses(res.data);
+  } catch {
+    setWarehouses([]);
+  }
+};
 
   const handleAddClick = () => setShowForm(true);
 
@@ -148,10 +151,12 @@ const WarehouseForm: React.FC<WarehouseFormProps> = ({ onCreated, onCancel }) =>
   const handleCreate = async () => {
     setLoading(true);
     try {
-      const res = await api.post(API_ROUTES.RAW.CREATE_WAREHOUSE, {
-        name,
-        location,
-      });
+      const authToken = localStorage.getItem('authToken');
+      const res = await api.post(
+        API_ROUTES.RAW.CREATE_WAREHOUSE,
+        { name, location },
+        { headers: { Authorization: `Bearer ${authToken}` } }
+      );
       onCreated(res.data);
     } catch {
       // handle error

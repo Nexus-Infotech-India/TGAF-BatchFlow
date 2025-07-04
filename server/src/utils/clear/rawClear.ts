@@ -17,6 +17,7 @@ async function clearDatabase() {
   await prisma.rawMaterialProduct.deleteMany();
   await prisma.vendor.deleteMany();
   await prisma.warehouse.deleteMany();
+  
 
   // Reset auto-increment IDs (for PostgreSQL)
   // Remove/comment if using UUIDs only

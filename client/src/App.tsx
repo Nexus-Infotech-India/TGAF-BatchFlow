@@ -32,6 +32,9 @@ import BatchVerification from './components/pages/Batch/batchverification';
 import PurchaseOrder from './components/ui/Order/PurchaseOrder';
 import PurchaseOrderList from './components/pages/Order/PurchaseOrder';
 import Stock from './components/pages/Stock/Stock';
+import CleaningRawMaterialList from './components/pages/cleanning/allItems';
+import TransactionalLog from './components/pages/Order/TransactionalLog';
+import ProcessingList from './components/pages/processing/processingList';
 
 const App = () => {
   return (
@@ -634,22 +637,76 @@ const App = () => {
             />
 
             <Route
-  path="/stock-distribution"
-  element={
-    <PermissionedRoute
-      path="/stock-distribution"
-      element={
-        <SecureRoute
-          element={<Stock />}
-          permissionKey="view_stock_distribution"
-        />
-      }
-      name="Stock Distribution"
-      description="Visualize current stock distribution across warehouses"
-      permissionKey="view_stock_distribution"
-    />
-  }
-/>
+              path="/stock-distribution"
+              element={
+                <PermissionedRoute
+                  path="/stock-distribution"
+                  element={
+                    <SecureRoute
+                      element={<Stock />}
+                      permissionKey="view_stock_distribution"
+                    />
+                  }
+                  name="Stock Distribution"
+                  description="Visualize current stock distribution across warehouses"
+                  permissionKey="view_stock_distribution"
+                />
+              }
+            />
+
+             <Route
+              path="/raw/cleaning-raw-materials"
+              element={
+                <PermissionedRoute
+                  path="/raw/cleaning-raw-materials"
+                  element={
+                    <SecureRoute
+                      element={<CleaningRawMaterialList />}
+                      permissionKey="manage_purchase_order"
+                    />
+                  }
+                  name="Cleaning Raw Materials"
+                  description="View all received raw materials for cleaning"
+                  permissionKey="manage_purchase_order"
+                />
+              }
+            />
+
+               <Route
+              path="/raw/transaction-logs"
+              element={
+                <PermissionedRoute
+                  path="/transaction-logs"
+                  element={
+                    <SecureRoute
+                      element={<TransactionalLog />}
+                      permissionKey="view_activity_logs"
+                    />
+                  }
+                  name="Transactional Logs"
+                  description="View all transactional logs in the system"
+                  permissionKey="view_activity_logs"
+                />
+              }
+            />
+
+                        <Route
+              path="/raw/processing-list"
+              element={
+                <PermissionedRoute
+                  path="/raw/processing-list"
+                  element={
+                    <SecureRoute
+                      element={<ProcessingList />}
+                      permissionKey="manage_purchase_order"
+                    />
+                  }
+                  name="Processing List"
+                  description="View all cleaned raw materials ready for processing"
+                  permissionKey="manage_purchase_order"
+                />
+              }
+            />
 
             {/* 404 Not Found */}
             <Route path="*" element={<NotFound />} />

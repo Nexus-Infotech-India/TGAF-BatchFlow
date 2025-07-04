@@ -12,8 +12,9 @@ export class VendorController {
         contactPerson,
         contactNumber,
         email,
-        gstin,
-        bankDetails,
+        bankName,
+        accountHolder,
+        accountNo,
       } = req.body;
 
       // Generate a unique vendor code (e.g., VEND-<timestamp>)
@@ -27,9 +28,20 @@ export class VendorController {
           contactPerson,
           contactNumber,
           email,
-          gstin,
-          bankDetails,
+          bankName,
+          accountHolder,
+          accountNo,
           enabled: true,
+        },
+      });
+
+      await prisma.transactionLog.create({
+        data: {
+          type: 'CREATE',
+          entity: 'Vendor',
+          entityId: vendor.id,
+          userId: req.user?.id || 'system',
+          description: `Created vendor: ${vendor.name}\nDetails: ${JSON.stringify(vendor, null, 2)}`,
         },
       });
 
@@ -60,7 +72,8 @@ export class VendorController {
       const { id } = req.params;
       const vendor = await prisma.vendor.findUnique({ where: { id } });
       if (!vendor) {
-         res.status(404).json({ error: 'Vendor not found' });
+        res.status(404).json({ error: 'Vendor not found' });
+        return;
       }
       res.json(vendor);
     } catch (error) {
@@ -78,8 +91,9 @@ export class VendorController {
         contactPerson,
         contactNumber,
         email,
-        gstin,
-        bankDetails,
+        bankName,
+        accountHolder,
+        accountNo,
         enabled,
       } = req.body;
 
@@ -91,9 +105,20 @@ export class VendorController {
           contactPerson,
           contactNumber,
           email,
-          gstin,
-          bankDetails,
+          bankName,
+          accountHolder,
+          accountNo,
           enabled,
+        },
+      });
+
+      await prisma.transactionLog.create({
+        data: {
+          type: 'UPDATE',
+          entity: 'Vendor',
+          entityId: vendor.id,
+          userId: req.user?.id || 'system',
+          description: `Updated vendor: ${vendor.name}\nDetails: ${JSON.stringify(vendor, null, 2)}`,
         },
       });
 
@@ -111,6 +136,15 @@ export class VendorController {
       const vendor = await prisma.vendor.update({
         where: { id },
         data: { enabled: Boolean(enabled) },
+      });
+      await prisma.transactionLog.create({
+        data: {
+          type: 'UPDATE',
+          entity: 'Vendor',
+          entityId: vendor.id,
+          userId: req.user?.id || 'system',
+          description: `Set vendor status: ${vendor.name} (enabled: ${vendor.enabled})\nDetails: ${JSON.stringify(vendor, null, 2)}`,
+        },
       });
       res.json(vendor);
     } catch (error) {

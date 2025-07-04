@@ -182,6 +182,7 @@ model User {
   createdChecklistItems        PreAuditChecklistItem[] @relation("CreatedChecklistItems")
   inspectedItems        AuditInspectionItem[] @relation("InspectedItems")
   uploadedFeedbackForms       FeedbackForm[]
+  transactionLogs   TransactionLog[] 
   uploadedSessionPhotos  TrainingSessionPhoto[]  @relation("UploadedSessionPhotos")
 }
 

@@ -10,6 +10,16 @@ export class WarehouseController {
       const warehouse = await prisma.warehouse.create({
         data: { name, location },
       });
+
+      await prisma.transactionLog.create({
+        data: {
+          type: 'CREATE',
+          entity: 'Warehouse',
+          entityId: warehouse.id,
+          userId: req.user?.id || 'system',
+          description: `Created warehouse: ${warehouse.name}\nDetails: ${JSON.stringify(warehouse, null, 2)}`,
+        },
+      });
       res.status(201).json(warehouse);
     } catch (error) {
       res.status(500).json({ error: 'Failed to create warehouse', details: error });
@@ -32,7 +42,7 @@ export class WarehouseController {
       const { id } = req.params;
       const warehouse = await prisma.warehouse.findUnique({ where: { id } });
       if (!warehouse) {
-         res.status(404).json({ error: 'Warehouse not found' });
+        res.status(404).json({ error: 'Warehouse not found' });
       }
       res.json(warehouse);
     } catch (error) {
@@ -49,6 +59,15 @@ export class WarehouseController {
         where: { id },
         data: { name, location },
       });
+      await prisma.transactionLog.create({
+        data: {
+          type: 'UPDATE',
+          entity: 'Warehouse',
+          entityId: warehouse.id,
+          userId: req.user?.id || 'system',
+          description: `Updated warehouse: ${warehouse.name}\nDetails: ${JSON.stringify(warehouse, null, 2)}`,
+        },
+      });
       res.json(warehouse);
     } catch (error) {
       res.status(500).json({ error: 'Failed to update warehouse', details: error });
@@ -59,7 +78,19 @@ export class WarehouseController {
   static async deleteWarehouse(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      await prisma.warehouse.delete({ where: { id } });
+      const warehouse = await prisma.warehouse.delete({ where: { id } });
+
+      // Transaction log
+      await prisma.transactionLog.create({
+        data: {
+          type: 'DELETE',
+          entity: 'Warehouse',
+          entityId: warehouse.id,
+          userId: req.user?.id || 'system',
+          description: `Deleted warehouse: ${warehouse.name}\nDetails: ${JSON.stringify(warehouse, null, 2)}`,
+        },
+      });
+
       res.json({ message: 'Warehouse deleted successfully' });
     } catch (error) {
       res.status(500).json({ error: 'Failed to delete warehouse', details: error });

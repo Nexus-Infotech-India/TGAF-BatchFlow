@@ -27,6 +27,15 @@ export class PurchaseOrderController {
         },
         include: { items: true },
       });
+        await prisma.transactionLog.create({
+        data: {
+          type: 'CREATE',
+          entity: 'PurchaseOrder',
+          entityId: purchaseOrder.id,
+          userId: req.user?.id || 'system',
+          description: `Created purchase order: ${poNumber}\nDetails: ${JSON.stringify(purchaseOrder, null, 2)}`,
+        },
+      });
       res.status(201).json(purchaseOrder);
     } catch (error) {
       res.status(500).json({ error: 'Failed to create purchase order', details: error });
@@ -59,7 +68,7 @@ export class PurchaseOrderController {
         include: { vendor: true, items: true },
       });
       if (!purchaseOrder) {
-         res.status(404).json({ error: 'Purchase order not found' });
+        res.status(404).json({ error: 'Purchase order not found' });
       }
       res.json(purchaseOrder);
     } catch (error) {
@@ -79,6 +88,15 @@ export class PurchaseOrderController {
           expectedDate: expectedDate ? new Date(expectedDate) : undefined,
         },
       });
+       await prisma.transactionLog.create({
+        data: {
+          type: 'UPDATE',
+          entity: 'PurchaseOrder',
+          entityId: purchaseOrder.id,
+          userId: req.user?.id || 'system',
+          description: `Updated purchase order: ${purchaseOrder.poNumber}\nDetails: ${JSON.stringify(purchaseOrder, null, 2)}`,
+        },
+      });
       res.json(purchaseOrder);
     } catch (error) {
       res.status(500).json({ error: 'Failed to update purchase order', details: error });
@@ -86,7 +104,7 @@ export class PurchaseOrderController {
   }
 
   // Update purchase order item (e.g., mark as received)
- static async updatePurchaseOrderItem(req: Request, res: Response) {
+  static async updatePurchaseOrderItem(req: Request, res: Response) {
     try {
       const { itemId } = req.params;
       const { quantityReceived, status, warehouseId } = req.body;
@@ -98,7 +116,7 @@ export class PurchaseOrderController {
           quantityReceived,
           status,
         },
-        include: { rawMaterial: true },
+        include: { rawMaterial: true, purchaseOrder: true },
       });
 
       // 2. Only update stock if item is marked as 'Received'
@@ -150,9 +168,47 @@ export class PurchaseOrderController {
         });
       }
 
+       await prisma.transactionLog.create({
+        data: {
+          type: 'UPDATE',
+          entity: 'PurchaseOrderItem',
+          entityId: item.id,
+          userId: req.user?.id || 'system',
+          description: `Updated purchase order item for PO: ${item.purchaseOrder.poNumber}\nItem Details: ${JSON.stringify(item, null, 2)}`,
+        },
+      });
+
       res.json(item);
     } catch (error) {
       res.status(500).json({ error: 'Failed to update purchase order item', details: error });
+    }
+  }
+
+  // Get all current stock items (renamed logic, same endpoint name)
+  static async getAllPurchaseOrderItems(req: Request, res: Response) {
+    try {
+      // Fetch all current stock entries, join with material and warehouse
+      const stocks = await prisma.currentStock.findMany({
+        include: {
+          rawMaterial: true,
+          warehouse: true,
+        },
+        orderBy: { lastUpdated: 'desc' },
+      });
+
+      // Format response for frontend
+      const result = stocks.map(stock => ({
+        rawMaterialId: stock.rawMaterialId,
+        materialName: stock.rawMaterial.name,
+        warehouseId: stock.warehouseId,
+        warehouseName: stock.warehouse.name,
+        currentQuantity: stock.currentQuantity,
+        lastUpdated: stock.lastUpdated,
+      }));
+
+      res.json(result);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch current stock', details: error });
     }
   }
 }

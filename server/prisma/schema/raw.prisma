@@ -6,8 +6,9 @@ model Vendor {
   contactPerson  String
   contactNumber  String
   email          String
-  gstin          String?
-  bankDetails    String?
+  bankName       String?
+  accountHolder  String?
+  accountNo      String?
   enabled        Boolean  @default(true)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -89,10 +90,11 @@ model Warehouse {
   // Add these two lines for CleaningLog relations:
   cleaningLogsFrom  CleaningLog[] @relation("CleaningFromWarehouse")
   cleaningLogsTo    CleaningLog[] @relation("CleaningToWarehouse")
+  finishedGoods     FinishedGood[]
 }
 
 model CleaningJob {
-  id                String   @id @default(uuid())
+  id                String   @id 
   rawMaterialId     String
   rawMaterial       RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
   fromWarehouseId   String
@@ -135,18 +137,15 @@ model UnfinishedStock {
 }
 
 model ProcessingJob {
-  id                String   @id @default(uuid())
+  id                String   @id 
   inputRawMaterialId String
   inputRawMaterial   RawMaterialProduct @relation(fields: [inputRawMaterialId], references: [id])
-  outputSkuId        String
-  outputSku          FinishedGood @relation(fields: [outputSkuId], references: [id])
   quantityInput      Float
-  quantityOutput     Float
-  conversionRatio    Float
   startedAt          DateTime
   finishedAt         DateTime?
   status             String // In-Progress, Completed, etc.
   byProducts         ByProduct[]
+  finishedGoods      FinishedGood[]
 }
 
 model FinishedGood {
@@ -155,9 +154,13 @@ model FinishedGood {
   name              String
   category          String
   unitOfMeasurement String
+  quantity          Float    // <-- Add this
+  warehouseId       String   // <-- Add this
+  warehouse         Warehouse @relation(fields: [warehouseId], references: [id])
+  processingJobId   String?  // <-- Optional: link to processing job
+  processingJob     ProcessingJob? @relation(fields: [processingJobId], references: [id])
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  processingJobs    ProcessingJob[]
 }
 
 model ByProduct {
@@ -169,17 +172,30 @@ model ByProduct {
   warehouseId       String
   warehouse         Warehouse @relation(fields: [warehouseId], references: [id])
   tag               String // e.g., Processing_Waste, Semi_Finished
+  reason            String?
   createdAt         DateTime @default(now())
 }
 
 model CurrentStock {
   id                String   @id @default(uuid())
-  rawMaterialId     String   @unique
+  rawMaterialId     String   
   rawMaterial       RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
   warehouseId       String
   warehouse         Warehouse @relation(fields: [warehouseId], references: [id])
   currentQuantity   Float
   lastUpdated       DateTime @updatedAt
-  
-  @@unique([rawMaterialId, warehouseId])
+   @@unique([rawMaterialId, warehouseId])
+ 
+}
+
+model TransactionLog {
+  id          String   @id @default(uuid())
+  type        String   
+  entity      String  
+  entityId    String   
+  userId      String   
+  description String   
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id])
 }

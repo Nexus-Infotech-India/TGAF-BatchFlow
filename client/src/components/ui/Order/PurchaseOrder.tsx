@@ -90,7 +90,10 @@ const PurchaseOrder = () => {
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [rawMaterials, setRawMaterials] = useState<RawMaterial[]>([]);
   const [vendorId, setVendorId] = useState('');
-  const [orderDate, setOrderDate] = useState('');
+  const [orderDate, setOrderDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().slice(0, 10);
+  });
   const [expectedDate, setExpectedDate] = useState('');
   const [items, setItems] = useState([
     { rawMaterialId: '', quantityOrdered: 1, rate: 0 },
@@ -114,7 +117,9 @@ const PurchaseOrder = () => {
   useEffect(() => {
     const fetchVendors = async () => {
       try {
-        const res = await api.get(API_ROUTES.RAW.GET_VENDORS);
+        const res = await api.get(API_ROUTES.RAW.GET_VENDORS, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` },
+        });
         setVendors(res.data);
       } catch {
         setVendors([]);
@@ -122,7 +127,9 @@ const PurchaseOrder = () => {
     };
     const fetchRawMaterials = async () => {
       try {
-        const res = await api.get(API_ROUTES.RAW.GET_PRODUCTS);
+        const res = await api.get(API_ROUTES.RAW.GET_PRODUCTS,{
+          headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` },
+        });
         setRawMaterials(res.data);
       } catch {
         setRawMaterials([]);
@@ -233,34 +240,41 @@ const PurchaseOrder = () => {
     );
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
-    setLoading(true);
-    setSuccessMsg('');
-    setErrorMsg('');
-    try {
-      await api.post(API_ROUTES.RAW.CREATE_PURCHASE_ORDER, {
+ const handleSubmit = async (e: { preventDefault: () => void }) => {
+  e.preventDefault();
+  setLoading(true);
+  setSuccessMsg('');
+  setErrorMsg('');
+  try {
+    const authToken = localStorage.getItem('authToken');
+    await api.post(
+      API_ROUTES.RAW.CREATE_PURCHASE_ORDER,
+      {
         vendorId,
         orderDate,
         expectedDate,
         items,
-      });
-      setSuccessMsg('Purchase order created successfully!');
-      setVendorId('');
-      setOrderDate('');
-      setExpectedDate('');
-      setItems([{ rawMaterialId: '', quantityOrdered: 1, rate: 0 }]);
-      setSelectedRawMaterials({});
-      setTimeout(() => {
-        navigate('/raw/purchase-history');
-      }, 1000);
-    } catch (err: any) {
-      setErrorMsg(
-        err?.response?.data?.error || 'Failed to create purchase order'
-      );
-    }
-    setLoading(false);
-  };
+      },
+      {
+        headers: { Authorization: `Bearer ${authToken}` },
+      }
+    );
+    setSuccessMsg('Purchase order created successfully!');
+    setVendorId('');
+    setOrderDate('');
+    setExpectedDate('');
+    setItems([{ rawMaterialId: '', quantityOrdered: 1, rate: 0 }]);
+    setSelectedRawMaterials({});
+    setTimeout(() => {
+      navigate('/raw/purchase-history');
+    }, 1000);
+  } catch (err: any) {
+    setErrorMsg(
+      err?.response?.data?.error || 'Failed to create purchase order'
+    );
+  }
+  setLoading(false);
+};
 
   return (
     <div className="min-h-screen bg-gray-50 rounded-2xl">
@@ -278,6 +292,15 @@ const PurchaseOrder = () => {
               <p className="text-gray-600 mt-1">
                 Generate a new purchase order for raw materials
               </p>
+            </div>
+            <div className="ml-auto">
+              <button
+                type="button"
+                className="inline-flex items-center px-4 py-2 bg-gray-200 text-gray-800 rounded-lg shadow hover:bg-gray-300 transition"
+                onClick={() => navigate('/raw/purchase-history')}
+              >
+                Back to List
+              </button>
             </div>
           </div>
         </div>
@@ -373,8 +396,8 @@ const PurchaseOrder = () => {
                       id="orderDate"
                       className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       value={orderDate}
-                      onChange={(e) => setOrderDate(e.target.value)}
-                      required
+                      disabled
+                      readOnly
                     />
                   </FormField>
 
@@ -461,20 +484,20 @@ const PurchaseOrder = () => {
                           <label className="block text-sm font-medium text-gray-700 mb-2">
                             Quantity
                           </label>
-                          <input
-                            type="number"
-                            min={1}
-                            className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            value={item.quantityOrdered}
-                            onChange={(e) =>
-                              handleItemChange(
-                                idx,
-                                'quantityOrdered',
-                                Number(e.target.value)
-                              )
-                            }
-                            required
-                          />
+                         <input
+  type="number"
+  min={1}
+  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+  value={item.quantityOrdered === 0 ? '' : item.quantityOrdered}
+  onChange={(e) =>
+    handleItemChange(
+      idx,
+      'quantityOrdered',
+      Number(e.target.value)
+    )
+  }
+  required
+/>
                         </div>
 
                         <div>
@@ -487,7 +510,7 @@ const PurchaseOrder = () => {
                               min={0}
                               step="0.01"
                               className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                              value={item.rate}
+                              value={item.rate === 0 ? '' : item.rate}
                               onChange={(e) =>
                                 handleItemChange(
                                   idx,

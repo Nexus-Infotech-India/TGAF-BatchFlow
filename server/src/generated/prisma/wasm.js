@@ -606,8 +606,9 @@ exports.Prisma.VendorScalarFieldEnum = {
   contactPerson: 'contactPerson',
   contactNumber: 'contactNumber',
   email: 'email',
-  gstin: 'gstin',
-  bankDetails: 'bankDetails',
+  bankName: 'bankName',
+  accountHolder: 'accountHolder',
+  accountNo: 'accountNo',
   enabled: 'enabled',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -705,10 +706,7 @@ exports.Prisma.UnfinishedStockScalarFieldEnum = {
 exports.Prisma.ProcessingJobScalarFieldEnum = {
   id: 'id',
   inputRawMaterialId: 'inputRawMaterialId',
-  outputSkuId: 'outputSkuId',
   quantityInput: 'quantityInput',
-  quantityOutput: 'quantityOutput',
-  conversionRatio: 'conversionRatio',
   startedAt: 'startedAt',
   finishedAt: 'finishedAt',
   status: 'status'
@@ -720,6 +718,9 @@ exports.Prisma.FinishedGoodScalarFieldEnum = {
   name: 'name',
   category: 'category',
   unitOfMeasurement: 'unitOfMeasurement',
+  quantity: 'quantity',
+  warehouseId: 'warehouseId',
+  processingJobId: 'processingJobId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -731,6 +732,7 @@ exports.Prisma.ByProductScalarFieldEnum = {
   quantity: 'quantity',
   warehouseId: 'warehouseId',
   tag: 'tag',
+  reason: 'reason',
   createdAt: 'createdAt'
 };
 
@@ -740,6 +742,16 @@ exports.Prisma.CurrentStockScalarFieldEnum = {
   warehouseId: 'warehouseId',
   currentQuantity: 'currentQuantity',
   lastUpdated: 'lastUpdated'
+};
+
+exports.Prisma.TransactionLogScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  entity: 'entity',
+  entityId: 'entityId',
+  userId: 'userId',
+  description: 'description',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -926,7 +938,8 @@ exports.Prisma.ModelName = {
   ProcessingJob: 'ProcessingJob',
   FinishedGood: 'FinishedGood',
   ByProduct: 'ByProduct',
-  CurrentStock: 'CurrentStock'
+  CurrentStock: 'CurrentStock',
+  TransactionLog: 'TransactionLog'
 };
 
 /**

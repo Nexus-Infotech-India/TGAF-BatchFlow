@@ -7,8 +7,13 @@ import { StockEntryController } from '../controllers/rawmaterial/stock.controlle
 import { UnfinishedStockController } from '../controllers/rawmaterial/unfinished.controller';
 import { VendorController } from '../controllers/rawmaterial/vendor.controller';
 import { WarehouseController } from '../controllers/rawmaterial/warehouse.controller';
+import { TransactionLogController } from '../controllers/rawmaterial/log.controller';
+import { authenticate } from '../middlewares/authMiddleware';
 
 const router = Router();
+
+// Apply authentication middleware to all routes below
+router.use(authenticate);
 
 // Cleaning Jobs
 router.post('/cleaning', CleaningJobController.createCleaningJob);
@@ -62,6 +67,9 @@ router.get('/warehouse/:id', WarehouseController.getWarehouseById);
 router.put('/warehouse/:id', WarehouseController.updateWarehouse);
 router.delete('/warehouse/:id', WarehouseController.deleteWarehouse);
 
-router.get('/stock', StockEntryController.getCurrentStockDistribution);;
+router.get('/stock', StockEntryController.getCurrentStockDistribution);
+router.get('/purchase-order-items', PurchaseOrderController.getAllPurchaseOrderItems);
+router.get('/transaction-logs', TransactionLogController.getAllTransactionLogs);
+router.get('/cleaned-materials', CleaningJobController.getCleanedMaterials);
 
 export default router;
