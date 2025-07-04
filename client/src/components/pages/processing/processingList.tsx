@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api, { API_ROUTES } from "../../../utils/api";
-import { Table, Button, Modal, Input, Select, Spin, message } from "antd";
+import { Button, Modal, Input, Select, message } from "antd";
 import { PlusOutlined, ReloadOutlined, EditOutlined } from "@ant-design/icons";
 import { motion, AnimatePresence } from "framer-motion";
 import { Package, TrendingUp, CheckCircle, FileText } from "lucide-react";
@@ -37,7 +37,7 @@ interface Warehouse {
 
 const ProcessingList: React.FC = () => {
   const [cleaningJobs, setCleaningJobs] = useState<CleaningMaterial[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
   const [processingJobs, setProcessingJobs] = useState<Record<string, ProcessingJob[]>>({});
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);

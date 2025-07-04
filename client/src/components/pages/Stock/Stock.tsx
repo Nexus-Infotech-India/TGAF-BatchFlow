@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
-import { Spin, Alert, Card, Empty, Button, Slider } from 'antd';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Spin, Alert, Card, Empty, Button } from 'antd';
+import { motion } from 'framer-motion';
 import {
   Boxes,
   Warehouse,
   ZoomIn,
   ZoomOut,
   RotateCcw,
-  TrendingUp,
-  Package,
   MapPin,
   BarChart3,
   Maximize2,
@@ -176,11 +174,6 @@ const Stock: React.FC = () => {
   const productColumnWidth = '200px';
 
   // Calculate warehouse column width dynamically
-  const availableWidth = `calc(100vw - 280px - ${productColumnWidth})`; // 280px for sidebar + padding
-  const warehouseColumnWidth =
-    warehouses.length > 0
-      ? `calc(${availableWidth} / ${warehouses.length})`
-      : '150px';
 
   // Animation variants
   const containerVariants = {
@@ -304,7 +297,7 @@ const Stock: React.FC = () => {
                 </div>
               </motion.div>
 
-              {warehouses.map((wh, index) => (
+              {warehouses.map((wh) => (
                 <motion.div
                   key={wh}
                   className="bg-gradient-to-r from-blue-600 to-blue-700 text-white flex flex-col items-center justify-center px-4 py-2 border-r border-blue-500 last:border-r-0"
@@ -325,7 +318,7 @@ const Stock: React.FC = () => {
               ))}
 
               {/* Data Rows */}
-              {products.map((prod, prodIndex) => (
+              {products.map((prod) => (
                 <React.Fragment key={prod}>
                   {/* Product Name Cell */}
                   <motion.div
@@ -341,7 +334,7 @@ const Stock: React.FC = () => {
                   </motion.div>
 
                   {/* Data Cells */}
-                  {warehouses.map((wh, whIndex) => {
+                  {warehouses.map((wh) => {
                     const item = matrix[prod][wh];
                     const q = item?.currentQuantity ?? 0;
                     // Normalize quantity for color

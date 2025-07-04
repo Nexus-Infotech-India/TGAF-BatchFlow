@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
-import { Table, Button, Modal, Input, Select, Spin, message } from 'antd';
+import { Button, Modal, Input, Select, message } from 'antd';
 import { EditOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -56,7 +56,7 @@ const statusIcons: Record<string, React.ReactNode> = {
 
 const AllItems: React.FC = () => {
   const [stock, setStock] = useState<StockItem[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
   const [cleaningJobs, setCleaningJobs] = useState<
     Record<string, CleaningJob[]>
@@ -270,68 +270,6 @@ const AllItems: React.FC = () => {
     .filter((j) => j.status === 'Cleaned').length;
 
   // Table columns for current stock
-  const columns = [
-    {
-      title: '',
-      key: 'expand',
-      width: 40,
-      render: (_: any, record: StockItem) => (
-        <Button
-          type="text"
-          size="small"
-          icon={
-            expandedRowKeys.includes(
-              `${record.rawMaterialId}_${record.warehouseId}`
-            ) ? (
-              <ReloadOutlined />
-            ) : (
-              <PlusOutlined />
-            )
-          }
-          onClick={() =>
-            handleExpand(
-              !expandedRowKeys.includes(
-                `${record.rawMaterialId}_${record.warehouseId}`
-              ),
-              record
-            )
-          }
-        />
-      ),
-    },
-    {
-      title: 'Material Name',
-      dataIndex: 'materialName',
-      key: 'materialName',
-      className: 'font-semibold text-gray-900',
-    },
-    {
-      title: 'Warehouse',
-      dataIndex: 'warehouseName',
-      key: 'warehouseName',
-      className: 'text-gray-600',
-    },
-    {
-      title: 'Current Quantity',
-      dataIndex: 'currentQuantity',
-      key: 'currentQuantity',
-      render: (qty: number) => <b>{qty}</b>,
-      className: 'text-gray-900',
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_: any, record: StockItem) => (
-        <Button
-          type="primary"
-          onClick={() => openTransferModal(record)}
-          disabled={record.currentQuantity <= 0}
-        >
-          Transfer
-        </Button>
-      ),
-    },
-  ];
 
   // Expanded row render: Cleaning jobs table
   const expandedRowRender = (record: StockItem) => {
