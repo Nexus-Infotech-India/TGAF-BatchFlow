@@ -13,6 +13,7 @@ interface CleaningMaterial {
   rawMaterial: { id: string; name: string };
   toWarehouse: { id: string; name: string };
   netQuantity: number;
+  availableQuantity: number;
   wastageQuantity: number;
   status: string;
   startedAt?: string;
@@ -136,7 +137,7 @@ const ProcessingList: React.FC = () => {
     setModal({
       visible: true,
       job,
-      quantity: job.netQuantity,
+      quantity: job.availableQuantity,
       warehouseId: job.toWarehouse.id,
       loading: false,
     });
@@ -490,8 +491,8 @@ const ProcessingList: React.FC = () => {
                           {record.toWarehouse?.name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          <b>{record.netQuantity}</b>
-                        </td>
+  <b>{record.availableQuantity}</b>
+</td>
                      
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-green-700">
                           <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border bg-green-50 text-green-700 border-green-200">
@@ -499,11 +500,15 @@ const ProcessingList: React.FC = () => {
                             {record.status}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-left">
-                          <Button type="primary" onClick={() => openModal(record)}>
-                            Initiate Processing
-                          </Button>
-                        </td>
+                       <td className="px-6 py-4 whitespace-nowrap text-left">
+  <Button
+    type="primary"
+    onClick={() => openModal(record)}
+    disabled={record.availableQuantity === 0}
+  >
+    Initiate Processing
+  </Button>
+</td>
                       </motion.tr>
                       <AnimatePresence>
                         {expandedRowKeys.includes(rowKey) && (
@@ -552,7 +557,7 @@ const ProcessingList: React.FC = () => {
           <Input
             type="number"
             min={1}
-            max={modal.job?.netQuantity}
+            max={modal.job?.availableQuantity}
             value={modal.quantity}
             onChange={(e) =>
               setModal((prev) => ({

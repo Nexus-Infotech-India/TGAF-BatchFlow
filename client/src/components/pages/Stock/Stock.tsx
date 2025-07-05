@@ -13,6 +13,8 @@ import {
   Maximize2,
   Grid3X3,
 } from 'lucide-react';
+import ProductPurchaseOrdersModal from './Timeline';
+import ProductPurchaseOrdersView from './Timeline';
 
 // Helper to interpolate color between multiple colors based on value (0-1)
 function interpolateColor(factor: number) {
@@ -72,31 +74,37 @@ const Stock: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [zoomLevel, setZoomLevel] = useState(100);
   const [viewMode, setViewMode] = useState<'compact' | 'detailed'>('detailed');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
- useEffect(() => {
-  const authToken = localStorage.getItem('authToken');
-  api
-    .get(API_ROUTES.RAW.GET_CURRENT_STOCK_DISTRIBUTION, {
-      headers: { Authorization: `Bearer ${authToken}` },
-    })
-    .then((res) => {
-      // Aggregate by rawMaterialId + warehouseId
-      const aggregate: Record<string, any> = {};
-      res.data.forEach((item: any) => {
-        const key = `${item.rawMaterial.id}_${item.warehouse.id}`;
-        if (!aggregate[key]) {
-          aggregate[key] = { ...item, currentQuantity: 0 };
-        }
-        aggregate[key].currentQuantity += item.currentQuantity ?? item.quantity ?? 0;
+  useEffect(() => {
+    const authToken = localStorage.getItem('authToken');
+    api
+      .get(API_ROUTES.RAW.GET_CURRENT_STOCK_DISTRIBUTION, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      })
+      .then((res) => {
+        // Aggregate by rawMaterialId + warehouseId
+        const aggregate: Record<string, any> = {};
+        res.data.forEach((item: any) => {
+          const key = `${item.rawMaterial.id}_${item.warehouse.id}`;
+          if (!aggregate[key]) {
+            aggregate[key] = { ...item, currentQuantity: 0 };
+          }
+          aggregate[key].currentQuantity +=
+            item.currentQuantity ?? item.quantity ?? 0;
+        });
+        setStock(Object.values(aggregate));
+        setLoading(false);
+      })
+      .catch((_err) => {
+        setError('Failed to load stock distribution');
+        setLoading(false);
       });
-      setStock(Object.values(aggregate));
-      setLoading(false);
-    })
-    .catch((_err) => {
-      setError('Failed to load stock distribution');
-      setLoading(false);
-    });
-}, []);
+  }, []);
 
   const handleZoomIn = () => setZoomLevel((prev) => Math.min(prev + 20, 200));
   const handleZoomOut = () => setZoomLevel((prev) => Math.max(prev - 20, 60));
@@ -208,187 +216,215 @@ const Stock: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-blue-50 to-white overflow-hidden">
-      {/* Header Section */}
-      <motion.div
-        className="p-6 pb-4"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          <div className="flex items-center space-x-3">
-            <div className="p-3 bg-blue-100 rounded-xl">
-              <BarChart3 className="w-8 h-8 text-blue-600" />
+    <>
+     {modalOpen && selectedProduct ? (
+        <ProductPurchaseOrdersView
+          onClose={() => setModalOpen(false)}
+          rawMaterialId={selectedProduct.id}
+          rawMaterialName={selectedProduct.name}
+        />
+      ) : (
+      <div className="h-screen bg-gradient-to-br from-blue-50 to-white overflow-hidden">
+        {/* Header Section */}
+        <motion.div
+          className="p-6 pb-4"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div className="flex items-center space-x-3">
+              <div className="p-3 bg-blue-100 rounded-xl">
+                <BarChart3 className="w-8 h-8 text-blue-600" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Stock Distribution Heatmap
+                </h1>
+                <p className="text-gray-600 mt-1">
+                  {products.length} products across {warehouses.length}{' '}
+                  warehouses
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Stock Distribution Heatmap
-              </h1>
-              <p className="text-gray-600 mt-1">
-                {products.length} products across {warehouses.length} warehouses
-              </p>
-            </div>
-          </div>
 
-          {/* Controls */}
-          <div className="flex items-center space-x-2">
-            <Button
-              type={viewMode === 'compact' ? 'primary' : 'default'}
-              icon={<Grid3X3 className="w-4 h-4" />}
-              onClick={() => setViewMode('compact')}
-              size="small"
-            >
-              Compact
-            </Button>
-            <Button
-              type={viewMode === 'detailed' ? 'primary' : 'default'}
-              icon={<Maximize2 className="w-4 h-4" />}
-              onClick={() => setViewMode('detailed')}
-              size="small"
-            >
-              Detailed
-            </Button>
-            <div className="border-l border-gray-300 ml-2 pl-2">
+            {/* Controls */}
+            <div className="flex items-center space-x-2">
               <Button
-                icon={<ZoomOut className="w-4 h-4" />}
-                onClick={handleZoomOut}
+                type={viewMode === 'compact' ? 'primary' : 'default'}
+                icon={<Grid3X3 className="w-4 h-4" />}
+                onClick={() => setViewMode('compact')}
                 size="small"
-              />
-              <Button
-                icon={<RotateCcw className="w-4 h-4" />}
-                onClick={handleResetZoom}
-                size="small"
-                className="mx-1"
-              />
-              <Button
-                icon={<ZoomIn className="w-4 h-4" />}
-                onClick={handleZoomIn}
-                size="small"
-              />
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Heatmap Section */}
-      <div className="px-6 pb-6 h-full">
-        <div className="h-full bg-white rounded-2xl shadow-2xl overflow-hidden">
-          <div className="h-full overflow-auto" style={scaleStyle}>
-            <motion.div
-              className="grid h-full"
-              style={{
-                gridTemplateColumns: `${productColumnWidth} repeat(${warehouses.length}, 1fr)`,
-                gridTemplateRows: `${headerHeight} repeat(${products.length}, ${cellHeight})`,
-                minHeight: '100%',
-              }}
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              {/* Header Row */}
-              <motion.div
-                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white flex items-center px-6 border-r border-blue-500"
-                variants={cellVariants}
               >
-                <div className="flex items-center space-x-2">
-                  <Boxes className="w-5 h-5" />
-                  <span className="font-bold text-lg">Product</span>
-                </div>
-              </motion.div>
+                Compact
+              </Button>
+              <Button
+                type={viewMode === 'detailed' ? 'primary' : 'default'}
+                icon={<Maximize2 className="w-4 h-4" />}
+                onClick={() => setViewMode('detailed')}
+                size="small"
+              >
+                Detailed
+              </Button>
+              <div className="border-l border-gray-300 ml-2 pl-2">
+                <Button
+                  icon={<ZoomOut className="w-4 h-4" />}
+                  onClick={handleZoomOut}
+                  size="small"
+                />
+                <Button
+                  icon={<RotateCcw className="w-4 h-4" />}
+                  onClick={handleResetZoom}
+                  size="small"
+                  className="mx-1"
+                />
+                <Button
+                  icon={<ZoomIn className="w-4 h-4" />}
+                  onClick={handleZoomIn}
+                  size="small"
+                />
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
-              {warehouses.map((wh) => (
+        {/* Heatmap Section */}
+        <div className="px-6 pb-6 h-full">
+          <div className="h-full bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className="h-full overflow-auto" style={scaleStyle}>
+              <motion.div
+                className="grid h-full"
+                style={{
+                  gridTemplateColumns: `${productColumnWidth} repeat(${warehouses.length}, 1fr)`,
+                  gridTemplateRows: `${headerHeight} repeat(${products.length}, ${cellHeight})`,
+                  minHeight: '100%',
+                }}
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                {/* Header Row */}
                 <motion.div
-                  key={wh}
-                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white flex flex-col items-center justify-center px-4 py-2 border-r border-blue-500 last:border-r-0"
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white flex items-center px-6 border-r border-blue-500"
                   variants={cellVariants}
                 >
-                  <div className="flex items-center space-x-2 mb-1">
-                    <Warehouse className="w-5 h-5" />
-                    <span className="font-bold text-lg text-center">{wh}</span>
+                  <div className="flex items-center space-x-2">
+                    <Boxes className="w-5 h-5" />
+                    <span className="font-bold text-lg">Product</span>
                   </div>
-                  {viewMode === 'detailed' && (
-                    <div className="text-xs opacity-75 flex items-center">
-                      <MapPin className="w-3 h-3 mr-1" />
-                      {stock.find((item) => item.warehouse.name === wh)
-                        ?.warehouse?.location || 'N/A'}
-                    </div>
-                  )}
                 </motion.div>
-              ))}
 
-              {/* Data Rows */}
-              {products.map((prod) => (
-                <React.Fragment key={prod}>
-                  {/* Product Name Cell */}
+                {warehouses.map((wh) => (
                   <motion.div
-                    className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 flex items-center px-6 border-r border-gray-300"
+                    key={wh}
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 text-white flex flex-col items-center justify-center px-4 py-2 border-r border-blue-500 last:border-r-0"
                     variants={cellVariants}
                   >
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full flex-shrink-0"></div>
-                      <span className="font-semibold text-gray-800 truncate">
-                        {prod}
+                    <div className="flex items-center space-x-2 mb-1">
+                      <Warehouse className="w-5 h-5" />
+                      <span className="font-bold text-lg text-center">
+                        {wh}
                       </span>
                     </div>
+                    {viewMode === 'detailed' && (
+                      <div className="text-xs opacity-75 flex items-center">
+                        <MapPin className="w-3 h-3 mr-1" />
+                        {stock.find((item) => item.warehouse.name === wh)
+                          ?.warehouse?.location || 'N/A'}
+                      </div>
+                    )}
                   </motion.div>
+                ))}
 
-                  {/* Data Cells */}
-                  {warehouses.map((wh) => {
-                    const item = matrix[prod][wh];
-                    const q = item?.currentQuantity ?? 0;
-                    // Normalize quantity for color
-                    const norm = maxQ === minQ ? 0 : (q - minQ) / (maxQ - minQ);
-                    const bg = q === 0 ? '#f3f4f6' : interpolateColor(norm);
-                    const textColor = norm > 0.6 ? '#ffffff' : '#1f2937';
+                {/* Data Rows */}
+                {products.map((prod) => (
+                  <React.Fragment key={prod}>
+                    {/* Product Name Cell */}
+                    <motion.div
+                      className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 flex items-center px-6 border-r border-gray-300 cursor-pointer hover:bg-blue-50"
+                      variants={cellVariants}
+                      onClick={() => {
+                        // Find the first item for this product to get its id
+                        const item = stock.find(
+                          (s) => s.rawMaterial.name === prod
+                        );
+                        if (item) {
+                          setSelectedProduct({
+                            id: item.rawMaterial.id,
+                            name: item.rawMaterial.name,
+                          });
+                          setModalOpen(true);
+                        }
+                      }}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 bg-blue-500 rounded-full flex-shrink-0"></div>
+                        <span className="font-semibold text-gray-800 truncate">
+                          {prod}
+                        </span>
+                      </div>
+                    </motion.div>
 
-                    return (
-                      <motion.div
-                        key={`${prod}-${wh}`}
-                        className="border-b border-r border-gray-200 last:border-r-0 flex items-center justify-center group cursor-pointer relative overflow-hidden"
-                        style={{
-                          backgroundColor: bg,
-                          color: textColor,
-                        }}
-                        variants={cellVariants}
-                        whileHover="hover"
-                        title={`${prod} in ${wh}: ${q} units`}
-                      >
-                        <div className="flex flex-col items-center justify-center h-full w-full p-2">
-                          {q > 0 ? (
-                            <>
-                              <span
-                                className={`font-bold ${viewMode === 'detailed' ? 'text-xl' : 'text-lg'}`}
-                              >
-                                {q.toLocaleString()}
-                              </span>
-                              {viewMode === 'detailed' && item && (
-                                <span className="text-xs opacity-75">
-                                  {item.rawMaterial.unitOfMeasurement || 'unit'}
+                    {/* Data Cells */}
+                    {warehouses.map((wh) => {
+                      const item = matrix[prod][wh];
+                      const q = item?.currentQuantity ?? 0;
+                      // Normalize quantity for color
+                      const norm =
+                        maxQ === minQ ? 0 : (q - minQ) / (maxQ - minQ);
+                      const bg = q === 0 ? '#f3f4f6' : interpolateColor(norm);
+                      const textColor = norm > 0.6 ? '#ffffff' : '#1f2937';
+
+                      return (
+                        <motion.div
+                          key={`${prod}-${wh}`}
+                          className="border-b border-r border-gray-200 last:border-r-0 flex items-center justify-center group cursor-pointer relative overflow-hidden"
+                          style={{
+                            backgroundColor: bg,
+                            color: textColor,
+                          }}
+                          variants={cellVariants}
+                          whileHover="hover"
+                          title={`${prod} in ${wh}: ${q} units`}
+                        >
+                          <div className="flex flex-col items-center justify-center h-full w-full p-2">
+                            {q > 0 ? (
+                              <>
+                                <span
+                                  className={`font-bold ${viewMode === 'detailed' ? 'text-xl' : 'text-lg'}`}
+                                >
+                                  {q.toLocaleString()}
                                 </span>
-                              )}
-                            </>
-                          ) : (
-                            <div className="flex flex-col items-center opacity-50">
-                              <span className="text-lg">—</span>
-                              {viewMode === 'detailed' && (
-                                <span className="text-xs">No Stock</span>
-                              )}
-                            </div>
-                          )}
-                        </div>
+                                {viewMode === 'detailed' && item && (
+                                  <span className="text-xs opacity-75">
+                                    {item.rawMaterial.unitOfMeasurement ||
+                                      'unit'}
+                                  </span>
+                                )}
+                              </>
+                            ) : (
+                              <div className="flex flex-col items-center opacity-50">
+                                <span className="text-lg">—</span>
+                                {viewMode === 'detailed' && (
+                                  <span className="text-xs">No Stock</span>
+                                )}
+                              </div>
+                            )}
+                          </div>
 
-                        {/* Hover overlay */}
-                      </motion.div>
-                    );
-                  })}
-                </React.Fragment>
-              ))}
-            </motion.div>
+                          {/* Hover overlay */}
+                        </motion.div>
+                      );
+                    })}
+                  </React.Fragment>
+                ))}
+              </motion.div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      )}
+    </>
   );
 };
 

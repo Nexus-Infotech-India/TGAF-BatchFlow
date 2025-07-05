@@ -141,7 +141,7 @@ export class CleaningJobController {
     }
   }
 
-  static async getCleanedMaterials(req: Request, res: Response) {
+ static async getCleanedMaterials(req: Request, res: Response) {
   try {
     const cleanedJobs = await prisma.cleaningJob.findMany({
       where: { status: 'Cleaned' },
@@ -183,6 +183,21 @@ export class CleaningJobController {
       }
       aggregated[key].netQuantity += job.netQuantity;
       aggregated[key].wastageQuantity += job.wastageQuantity;
+    }
+
+    // Subtract processed quantity for each group
+    for (const key of Object.keys(aggregated)) {
+      const { rawMaterialId, toWarehouseId } = aggregated[key];
+      // Sum all processing jobs for this rawMaterialId and toWarehouseId
+      const processed = await prisma.processingJob.aggregate({
+        where: {
+          inputRawMaterialId: rawMaterialId,
+          // warehouseId: toWarehouseId, // Removed because warehouseId does not exist in ProcessingJobWhereInput
+        },
+        _sum: { quantityInput: true }
+      });
+      const processedQty = processed._sum && processed._sum.quantityInput ? processed._sum.quantityInput : 0;
+      aggregated[key].availableQuantity = Math.max(aggregated[key].netQuantity - processedQty, 0);
     }
 
     res.json(Object.values(aggregated));

@@ -276,6 +276,8 @@ export const API_ROUTES = {
     GET_ALL_PURCHASE_ORDER_ITEMS: `${BASE_URL}/raw/purchase-order-items`,
     GET_ALL_TRANSACTION_LOGS: `${BASE_URL}/raw/transaction-logs`,
     GET_CLEANED_MATERIALS: `${BASE_URL}/raw/cleaned-materials`,
+    GET_PURCHASE_ORDERS_BY_PRODUCT: (rawMaterialId: string) => `${BASE_URL}/raw/purchase?rawMaterialId=${rawMaterialId}`,
+    GET_PURCHASE_ORDER_TIMELINE: (id: string) => `${BASE_URL}/raw/purchase/${id}/timeline`,
   },
 
 };

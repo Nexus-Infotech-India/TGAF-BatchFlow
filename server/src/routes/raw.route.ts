@@ -9,6 +9,7 @@ import { VendorController } from '../controllers/rawmaterial/vendor.controller';
 import { WarehouseController } from '../controllers/rawmaterial/warehouse.controller';
 import { TransactionLogController } from '../controllers/rawmaterial/log.controller';
 import { authenticate } from '../middlewares/authMiddleware';
+import { getPurchaseOrdersByProduct, getPurchaseOrderTimeline } from '../controllers/rawmaterial/time.controller';
 
 const router = Router();
 
@@ -71,5 +72,8 @@ router.get('/stock', StockEntryController.getCurrentStockDistribution);
 router.get('/purchase-order-items', PurchaseOrderController.getAllPurchaseOrderItems);
 router.get('/transaction-logs', TransactionLogController.getAllTransactionLogs);
 router.get('/cleaned-materials', CleaningJobController.getCleanedMaterials);
+
+router.get('/purchase', getPurchaseOrdersByProduct);
+router.get('/purchase/:id/timeline', getPurchaseOrderTimeline);
 
 export default router;

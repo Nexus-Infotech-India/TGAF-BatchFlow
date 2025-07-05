@@ -120,4 +120,6 @@ export class StockEntryController {
     res.status(500).json({ error: 'Failed to fetch current stock distribution', details: error });
   }
 }
+
+
 }
