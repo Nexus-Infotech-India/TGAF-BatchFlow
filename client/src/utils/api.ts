@@ -278,6 +278,14 @@ export const API_ROUTES = {
     GET_CLEANED_MATERIALS: `${BASE_URL}/raw/cleaned-materials`,
     GET_PURCHASE_ORDERS_BY_PRODUCT: (rawMaterialId: string) => `${BASE_URL}/raw/purchase?rawMaterialId=${rawMaterialId}`,
     GET_PURCHASE_ORDER_TIMELINE: (id: string) => `${BASE_URL}/raw/purchase/${id}/timeline`,
+
+    // Dashboard Stats Routes
+    GET_TOTAL_RAW_MATERIAL_STOCK: `${BASE_URL}/raw/dashboard/total-stock`,
+    GET_PENDING_PO_COUNT: `${BASE_URL}/raw/dashboard/pending-pos`,
+    GET_STOCK_UNDER_CLEANING: `${BASE_URL}/raw/dashboard/under-cleaning`,
+    GET_STOCK_IN_PROCESSING: `${BASE_URL}/raw/dashboard/in-processing`,
+    GET_LOW_STOCK_ALERTS: `${BASE_URL}/raw/dashboard/low-stock`,
+    GET_WASTE_STOCK: `${BASE_URL}/raw/dashboard/waste-stock`,
   },
 
 };

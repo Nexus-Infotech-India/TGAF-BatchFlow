@@ -10,6 +10,7 @@ import { WarehouseController } from '../controllers/rawmaterial/warehouse.contro
 import { TransactionLogController } from '../controllers/rawmaterial/log.controller';
 import { authenticate } from '../middlewares/authMiddleware';
 import { getPurchaseOrdersByProduct, getPurchaseOrderTimeline } from '../controllers/rawmaterial/time.controller';
+import { DashboardController } from '../controllers/rawmaterial/Dashboard.controller';
 
 const router = Router();
 
@@ -75,5 +76,12 @@ router.get('/cleaned-materials', CleaningJobController.getCleanedMaterials);
 
 router.get('/purchase', getPurchaseOrdersByProduct);
 router.get('/purchase/:id/timeline', getPurchaseOrderTimeline);
+
+router.get('/dashboard/total-stock', DashboardController.getTotalRawMaterialStock);
+router.get('/dashboard/pending-pos', DashboardController.getPendingPOCount);
+router.get('/dashboard/under-cleaning', DashboardController.getStockUnderCleaning);
+router.get('/dashboard/in-processing', DashboardController.getStockInProcessing);
+router.get('/dashboard/low-stock', DashboardController.getLowStockAlerts);
+router.get('/dashboard/waste-stock', DashboardController.getWasteStock);
 
 export default router;

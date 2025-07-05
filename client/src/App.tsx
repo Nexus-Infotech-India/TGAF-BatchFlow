@@ -35,6 +35,7 @@ import Stock from './components/pages/Stock/Stock';
 import CleaningRawMaterialList from './components/pages/cleanning/allItems';
 import TransactionalLog from './components/pages/Order/TransactionalLog';
 import ProcessingList from './components/pages/processing/processingList';
+import RawDashboard from './components/pages/Dashboard/rawDashboard';
 
 const App = () => {
   return (
@@ -654,7 +655,7 @@ const App = () => {
               }
             />
 
-             <Route
+            <Route
               path="/raw/cleaning-raw-materials"
               element={
                 <PermissionedRoute
@@ -672,7 +673,7 @@ const App = () => {
               }
             />
 
-               <Route
+            <Route
               path="/raw/transaction-logs"
               element={
                 <PermissionedRoute
@@ -690,7 +691,25 @@ const App = () => {
               }
             />
 
-                        <Route
+            <Route
+              path="/raw-dashboard"
+              element={
+                <PermissionedRoute
+                  path="/raw-dashboard"
+                  element={
+                    <SecureRoute
+                      element={<RawDashboard />}
+                      permissionKey="manage_raw_dashboard"
+                    />
+                  }
+                  name="Raw Dashboard"
+                  description="View all cleaned raw materials ready for processing"
+                  permissionKey="manage_raw_dashboard"
+                />
+              }
+            />
+
+            <Route
               path="/raw/processing-list"
               element={
                 <PermissionedRoute
