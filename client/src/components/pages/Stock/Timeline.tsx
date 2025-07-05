@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { List, Spin, Timeline, Card, Empty, Typography } from 'antd';
 import api, { API_ROUTES } from '../../../utils/api';
-import { head } from 'lodash';
 
 type PurchaseOrder = {
   id: string;

@@ -13,7 +13,6 @@ import {
   Maximize2,
   Grid3X3,
 } from 'lucide-react';
-import ProductPurchaseOrdersModal from './Timeline';
 import ProductPurchaseOrdersView from './Timeline';
 
 // Helper to interpolate color between multiple colors based on value (0-1)
