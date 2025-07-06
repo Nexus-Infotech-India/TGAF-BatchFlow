@@ -1,8 +1,20 @@
 "use client"
 
-import type React from "react"
-import { useEffect, useState } from "react"
+import React from "react"
+import { useEffect, useState, useCallback, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import {
+  MapPin,
+  ArrowLeft,
+  Package,
+  Truck,
+  Calendar,
+  Building,
+  Hash,
+  TrendingUp,
+  AlertCircle,
+  ChevronDown,
+} from "lucide-react"
 import api, { API_ROUTES } from "../../../utils/api"
 
 type PurchaseOrder = {
@@ -38,232 +50,319 @@ const ProductPurchaseOrdersView: React.FC<Props> = ({ onClose, rawMaterialId, ra
   const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null)
   const [timeline, setTimeline] = useState<PurchaseOrderTimeline | null>(null)
   const [timelineLoading, setTimelineLoading] = useState(false)
+  const [hoveredEvent, setHoveredEvent] = useState<number | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    if (rawMaterialId) {
-      setLoading(true)
-      setSelectedOrder(null)
-      setTimeline(null)
-      api
-        .get(API_ROUTES.RAW.GET_PURCHASE_ORDERS_BY_PRODUCT(rawMaterialId), {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        })
-        .then((res) => setOrders(res.data))
-        .catch(() => setOrders([]))
-        .finally(() => setLoading(false))
-    }
-  }, [rawMaterialId])
+  const fetchOrders = useCallback(async () => {
+    if (!rawMaterialId) return
 
-  const handleOrderClick = (order: PurchaseOrder) => {
-    setSelectedOrder(order)
-    setTimelineLoading(true)
-    api
-      .get(API_ROUTES.RAW.GET_PURCHASE_ORDER_TIMELINE(order.id), {
+    setLoading(true)
+    setError(null)
+    setSelectedOrder(null)
+    setTimeline(null)
+
+    try {
+      const response = await api.get(API_ROUTES.RAW.GET_PURCHASE_ORDERS_BY_PRODUCT(rawMaterialId), {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       })
-      .then((res) => setTimeline(res.data))
-      .catch(() => setTimeline(null))
-      .finally(() => setTimelineLoading(false))
-  }
+      setOrders(response.data || [])
+    } catch (err) {
+      console.error("Failed to fetch orders:", err)
+      setError("Failed to load purchase orders. Please try again.")
+      setOrders([])
+    } finally {
+      setLoading(false)
+    }
+  }, [rawMaterialId])
 
-  const handleBack = () => {
+  const fetchTimeline = useCallback(async (orderId: string) => {
+    setTimelineLoading(true)
+    setError(null)
+
+    try {
+      const response = await api.get(API_ROUTES.RAW.GET_PURCHASE_ORDER_TIMELINE(orderId), {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      })
+      setTimeline(response.data || null)
+    } catch (err) {
+      console.error("Failed to fetch timeline:", err)
+      setError("Failed to load timeline data. Please try again.")
+      setTimeline(null)
+    } finally {
+      setTimelineLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchOrders()
+  }, [fetchOrders])
+
+  const handleOrderClick = useCallback(
+    (order: PurchaseOrder) => {
+      setSelectedOrder(order)
+      fetchTimeline(order.id)
+    },
+    [fetchTimeline],
+  )
+
+  const handleBack = useCallback(() => {
     setSelectedOrder(null)
     setTimeline(null)
-  }
+    setError(null)
+  }, [])
 
-  const getEventColor = (type: string) => {
-    switch (type) {
-      case "ORDER_PLACED":
-        return "bg-blue-600 text-white"
-      case "RECEIVED":
-        return "bg-green-500 text-white"
-      case "CLEANING":
-      case "CLEANING_STARTED":
-        return "bg-orange-500 text-white"
-      case "CLEANED":
-        return "bg-teal-500 text-white"
-      case "PROCESSING":
-      case "PROCESSING_STARTED":
-        return "bg-purple-600 text-white"
-      case "PROCESSED":
-        return "bg-pink-500 text-white"
-      case "FINISHED_GOOD":
-        return "bg-yellow-500 text-white"
-      default:
-        return "bg-gray-400 text-white"
-    }
-  }
+  const eventConfig = useMemo(
+    () => ({
+      ORDER_PLACED: { color: "bg-blue-600", icon: "📋", label: "Order Placed" },
+      RECEIVED: { color: "bg-green-600", icon: "📦", label: "Received" },
+      CLEANING_STARTED: { color: "bg-orange-500", icon: "🧽", label: "Cleaning Started" },
+      CLEANED: { color: "bg-teal-600", icon: "✨", label: "Cleaned" },
+      PROCESSING_STARTED: { color: "bg-purple-600", icon: "⚙️", label: "Processing Started" },
+      PROCESSED: { color: "bg-pink-600", icon: "🔧", label: "Processed" },
+      FINISHED_GOOD: { color: "bg-yellow-600", icon: "✅", label: "Finished Good" },
+    }),
+    [],
+  )
 
-  const getEventIcon = (type: string) => {
-    switch (type) {
-      case "ORDER_PLACED":
-        return "📋"
-      case "RECEIVED":
-        return "📦"
-      case "CLEANING":
-      case "CLEANING_STARTED":
-        return "🧽"
-      case "CLEANED":
-        return "✨"
-      case "PROCESSING":
-      case "PROCESSING_STARTED":
-        return "⚙️"
-      case "PROCESSED":
-        return "🔧"
-      case "FINISHED_GOOD":
-        return "✅"
-      default:
-        return "⭕"
-    }
-  }
-
-  const SnakeTimeline = ({ events }: { events: TimelineEvent[] }) => {
-    const timelineHeight = 320;
+  const getEventConfig = (type: string) => {
     return (
-      <div className="relative w-full overflow-x-auto py-8">
-      <div className="min-w-max px-8" style={{ position: "relative", height: `${timelineHeight}px` }}>
-          {/* Snake Path SVG */}
-           <svg
-          className="absolute inset-0 pointer-events-none"
-          width={events.length * 280}
-          height={timelineHeight}
-          style={{ minWidth: `${events.length * 280}px`, height: `${timelineHeight}px` }}
-        >
-            <defs>
-              <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
-                <stop offset="50%" stopColor="#1d4ed8" stopOpacity="0.5" />
-                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.3" />
-              </linearGradient>
-            </defs>
-            <motion.path
-              d={`M 40 120 ${events
-                .map((_, index) => {
-                  const x = 40 + index * 280
-                  const y = index % 2 === 0 ? 120 : 200
-                  return `L ${x} ${y}`
-                })
-                .join(" ")}`}
-              stroke="url(#pathGradient)"
-              strokeWidth="3"
-              fill="none"
-              strokeDasharray="8,4"
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 2, ease: "easeInOut" }}
-            />
-          </svg>
+      eventConfig[type as keyof typeof eventConfig] || {
+        color: "bg-gray-500",
+        icon: "⭕",
+        label: type.replace(/_/g, " "),
+      }
+    )
+  }
 
-          {/* Timeline Events */}
-          <div className="relative flex" style={{ minWidth: `${events.length * 280}px` }}>
-            {events.map((event, index) => {
-              const isEven = index % 2 === 0
-              const yPosition = isEven ? "top-16" : "top-32"
+  const TimelineComponent = React.memo(({ events }: { events: TimelineEvent[] }) => {
+    const eventsPerRow = 5
+    const rows = useMemo(() => {
+      const result: TimelineEvent[][] = []
+      for (let i = 0; i < events.length; i += eventsPerRow) {
+        result.push(events.slice(i, i + eventsPerRow))
+      }
+      return result
+    }, [events])
 
-              return (
-                <motion.div
-                  key={index}
-                  className={`absolute ${yPosition}`}
-                  style={{ left: `${index * 280}px` }}
-                  initial={{ opacity: 0, y: isEven ? -20 : 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.2, duration: 0.6 }}
-                >
-                  {/* Event Card */}
-                  <motion.div
-                    className="relative bg-white rounded-xl shadow-lg border border-gray-100 p-4 w-64"
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                    {/* Arrow pointing to timeline */}
-                    <div
-                      className={`absolute ${
-                        isEven ? "bottom-[-8px]" : "top-[-8px]"
-                      } left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-transparent ${
-                        isEven ? "border-t-8 border-t-white" : "border-b-8 border-b-white"
-                      }`}
-                    />
+    const handleMouseEnter = useCallback((index: number) => {
+      setHoveredEvent(index)
+    }, [])
 
-                    {/* Event Icon */}
-                    <motion.div
-                      className={`w-12 h-12 rounded-full ${getEventColor(event.type)} flex items-center justify-center text-lg mb-3 mx-auto`}
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ delay: index * 0.2 + 0.3, type: "spring", stiffness: 400 }}
-                    >
-                      {getEventIcon(event.type)}
-                    </motion.div>
+    const handleMouseLeave = useCallback(() => {
+      setHoveredEvent(null)
+    }, [])
 
-                    {/* Event Content */}
-                    <div className="text-center">
-                      <h4 className="font-semibold text-gray-800 text-sm mb-2">{event.type.replace(/_/g, " ")}</h4>
-                      <p className="text-xs text-gray-600 mb-3 leading-relaxed">{event.details}</p>
-                      <div className="text-xs text-gray-500">
-                        <div className="font-medium">{new Date(event.date).toLocaleDateString()}</div>
-                        <div>{new Date(event.date).toLocaleTimeString()}</div>
+    if (!events.length) {
+      return (
+        <div className="flex flex-col items-center justify-center py-16 text-gray-500">
+          <AlertCircle className="h-12 w-12 mb-4" />
+          <h4 className="text-lg font-semibold mb-2">No Timeline Events</h4>
+          <p className="text-sm">No events found for this purchase order.</p>
+        </div>
+      )
+    }
+
+    return (
+      <div className="w-full p-8 overflow-hidden">
+        <div className="space-y-16">
+          {rows.map((rowEvents, rowIndex) => {
+            const isEvenRow = rowIndex % 2 === 0
+            const displayEvents = isEvenRow ? rowEvents : [...rowEvents].reverse()
+
+            return (
+              <div key={rowIndex} className="relative">
+                {/* Connection line */}
+                <div className="absolute top-6 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-200 via-blue-500 to-blue-200 z-0" />
+
+                {/* Events container */}
+                <div className="relative z-10 flex justify-between items-start">
+                  {displayEvents.map((event, eventIndex) => {
+                    const originalIndex = isEvenRow
+                      ? rowIndex * eventsPerRow + eventIndex
+                      : rowIndex * eventsPerRow + (rowEvents.length - 1 - eventIndex)
+                    const config = getEventConfig(event.type)
+
+                    return (
+                      <div
+                        key={originalIndex}
+                        className="flex flex-col items-center relative group"
+                        style={{ minWidth: "120px", maxWidth: "140px" }}
+                      >
+                        {/* Event pin */}
+                        <motion.div
+                          className={`relative w-12 h-12 ${config.color} rounded-full flex items-center justify-center shadow-lg cursor-pointer z-20 transition-all duration-200`}
+                          initial={{ scale: 0, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          transition={{
+                            delay: originalIndex * 0.1,
+                            duration: 0.4,
+                            type: "spring",
+                            stiffness: 300,
+                          }}
+                          whileHover={{
+                            scale: 1.15,
+                            y: -3,
+                            transition: { duration: 0.2 },
+                          }}
+                          onMouseEnter={() => handleMouseEnter(originalIndex)}
+                          onMouseLeave={handleMouseLeave}
+                          role="button"
+                          tabIndex={0}
+                          aria-label={`${config.label} - ${new Date(event.date).toLocaleDateString()}`}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              handleMouseEnter(originalIndex)
+                            }
+                          }}
+                        >
+                          <MapPin className="h-6 w-6 text-white" />
+                          <div className="absolute inset-0 flex items-center justify-center text-xs">{config.icon}</div>
+                        </motion.div>
+
+                        {/* Event label */}
+                        <motion.div
+                          className="mt-3 text-center"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: originalIndex * 0.1 + 0.2 }}
+                        >
+                          <div className="text-xs font-semibold text-gray-800 mb-1 leading-tight">{config.label}</div>
+                          <div className="text-xs text-gray-600">{new Date(event.date).toLocaleDateString()}</div>
+                        </motion.div>
+
+                        {/* Hover tooltip */}
+                        <AnimatePresence>
+                          {hoveredEvent === originalIndex && (
+                            <motion.div
+                              className="absolute bottom-full mb-4 bg-gray-900 text-white p-4 rounded-lg shadow-2xl z-50 min-w-80 max-w-96"
+                              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                              transition={{ duration: 0.2, ease: "easeOut" }}
+                              style={{
+                                left: "50%",
+                                transform: "translateX(-50%)",
+                                pointerEvents: "none",
+                              }}
+                            >
+                              <div className="text-sm font-bold mb-2 text-blue-300">{config.label}</div>
+                              <div className="text-xs text-gray-300 mb-3">{new Date(event.date).toLocaleString()}</div>
+                              <div className="text-sm leading-relaxed">{event.details}</div>
+                              {/* Tooltip arrow */}
+                              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900" />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
+                    )
+                  })}
+                </div>
+
+                {/* Row connector */}
+                {rowIndex < rows.length - 1 && (
+                  <motion.div
+                    className="flex justify-center mt-8"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: (rowIndex + 1) * eventsPerRow * 0.1 }}
+                  >
+                    <div className="flex flex-col items-center">
+                      <ChevronDown className="h-6 w-6 text-blue-500" />
+                      <div className="w-0.5 h-6 bg-blue-300" />
                     </div>
                   </motion.div>
-
-                  {/* Timeline Node */}
-                  <motion.div
-                    className={`absolute ${
-                      isEven ? "top-full mt-2" : "bottom-full mb-2"
-                    } left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-600 rounded-full border-4 border-white shadow-lg z-10`}
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: index * 0.2 + 0.5, type: "spring", stiffness: 400 }}
-                  />
-                </motion.div>
-              )
-            })}
-          </div>
+                )}
+              </div>
+            )
+          })}
         </div>
       </div>
     )
-  }
+  })
+
+  TimelineComponent.displayName = "TimelineComponent"
+
+  const ErrorDisplay = ({ message, onRetry }: { message: string; onRetry?: () => void }) => (
+    <motion.div
+      className="flex flex-col items-center justify-center py-16 text-center"
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+    >
+      <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+      <h3 className="text-lg font-semibold text-gray-800 mb-2">Something went wrong</h3>
+      <p className="text-gray-600 mb-4 max-w-md">{message}</p>
+      {onRetry && (
+        <button
+          onClick={onRetry}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Try Again
+        </button>
+      )}
+    </motion.div>
+  )
+
+  const LoadingSpinner = () => (
+    <motion.div
+      className="flex justify-center py-20"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <div className="relative">
+        <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+      </div>
+    </motion.div>
+  )
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="p-6 max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
-          className="mb-8 flex items-center"
+          className="mb-8 flex items-center justify-between"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <motion.button
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors mr-6 font-medium shadow-md"
-            onClick={onClose}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            ← Back to Stock Heatmap
-          </motion.button>
-          <h2 className="text-3xl font-bold text-gray-800">
-            {selectedOrder ? `Timeline: ${selectedOrder.orderNumber}` : `Purchase Orders for ${rawMaterialName}`}
-          </h2>
+          <div className="flex items-center gap-4">
+            <motion.button
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              onClick={selectedOrder ? handleBack : onClose}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label={selectedOrder ? "Back to Orders" : "Back to Dashboard"}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              {selectedOrder ? "Back to Orders" : "Back to Dashboard"}
+            </motion.button>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800">
+                {selectedOrder ? `Timeline: ${selectedOrder.orderNumber}` : `Purchase Orders for ${rawMaterialName}`}
+              </h2>
+              {selectedOrder && (
+                <p className="text-gray-600 text-sm mt-1">
+                  Vendor: {selectedOrder.vendor.name} • Date: {new Date(selectedOrder.orderDate).toLocaleDateString()}
+                </p>
+              )}
+            </div>
+          </div>
         </motion.div>
 
+        {/* Main Content */}
         <AnimatePresence mode="wait">
-          {loading ? (
-            <motion.div
-              key="loading"
-              className="flex justify-center py-20"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <div className="relative">
-                <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-                <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-blue-400 rounded-full animate-spin animation-delay-150"></div>
-              </div>
-            </motion.div>
+          {error ? (
+            <ErrorDisplay
+              key="error"
+              message={error}
+              onRetry={selectedOrder ? () => fetchTimeline(selectedOrder.id) : fetchOrders}
+            />
+          ) : loading ? (
+            <LoadingSpinner key="loading" />
           ) : !selectedOrder ? (
             <motion.div
               key="orders-list"
@@ -279,54 +378,70 @@ const ProductPurchaseOrdersView: React.FC<Props> = ({ onClose, rawMaterialId, ra
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="text-6xl mb-4">📋</div>
+                  <div className="p-4 bg-gray-100 rounded-full w-fit mx-auto mb-4">
+                    <Package className="h-8 w-8 text-gray-400" />
+                  </div>
                   <h3 className="text-xl font-semibold text-gray-600 mb-2">No Purchase Orders Found</h3>
                   <p className="text-gray-500">There are no purchase orders for this raw material.</p>
                 </motion.div>
               ) : (
-                <div className="grid gap-6">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {orders.map((order, index) => (
                     <motion.div
                       key={order.id}
-                      className="bg-white rounded-xl shadow-md border border-gray-100 p-6 cursor-pointer hover:shadow-lg transition-all duration-300 border-l-4 border-l-blue-600"
+                      className="bg-white rounded-xl shadow-md border border-gray-100 p-6 cursor-pointer hover:shadow-lg transition-all duration-300 hover:border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                       onClick={() => handleOrderClick(order)}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.5 }}
                       whileHover={{ scale: 1.02, y: -2 }}
                       whileTap={{ scale: 0.98 }}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          handleOrderClick(order)
+                        }
+                      }}
+                      aria-label={`View timeline for order ${order.orderNumber}`}
                     >
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h3 className="text-xl font-semibold text-gray-800 mb-4">{order.orderNumber}</h3>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                            <div>
-                              <span className="font-medium text-gray-700">Vendor:</span>
-                              <p className="text-gray-600 mt-1">{order.vendor.name}</p>
-                            </div>
-                            <div>
-                              <span className="font-medium text-gray-700">Quantity:</span>
-                              <p className="text-gray-600 mt-1">
-                                Ordered: {order.totalQuantity} | Received: {order.receivedQuantity}
-                              </p>
-                            </div>
-                            <div>
-                              <span className="font-medium text-gray-700">Date:</span>
-                              <p className="text-gray-600 mt-1">{new Date(order.orderDate).toLocaleString()}</p>
-                            </div>
-                          </div>
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="p-2 bg-blue-100 rounded-lg">
+                          <Truck className="h-5 w-5 text-blue-600" />
                         </div>
-                        <div className="ml-6">
-                          <span
-                            className={`px-4 py-2 rounded-full text-sm font-medium ${
-                              order.status === "COMPLETED"
-                                ? "bg-green-100 text-green-800"
-                                : order.status === "PENDING"
-                                  ? "bg-yellow-100 text-yellow-800"
-                                  : "bg-gray-100 text-gray-800"
-                            }`}
-                          >
-                            {order.status}
+                        <span
+                          className={`px-2 py-1 text-xs font-medium rounded-full ${
+                            order.status === "Received"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-orange-100 text-orange-800"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
+                      </div>
+
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <Hash className="h-4 w-4 text-gray-400" />
+                          <span className="font-semibold text-gray-900">{order.orderNumber}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <Building className="h-4 w-4 text-gray-400" />
+                          <span className="text-gray-700">{order.vendor.name}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4 text-gray-400" />
+                          <span className="text-gray-600 text-sm">
+                            {new Date(order.orderDate).toLocaleDateString()}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <TrendingUp className="h-4 w-4 text-gray-400" />
+                          <span className="text-gray-600 text-sm">
+                            Total: {order.totalQuantity} | Received: {order.receivedQuantity}
                           </span>
                         </div>
                       </div>
@@ -336,18 +451,7 @@ const ProductPurchaseOrdersView: React.FC<Props> = ({ onClose, rawMaterialId, ra
               )}
             </motion.div>
           ) : timelineLoading ? (
-            <motion.div
-              key="timeline-loading"
-              className="flex justify-center py-20"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <div className="relative">
-                <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-                <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-blue-400 rounded-full animate-spin animation-delay-150"></div>
-              </div>
-            </motion.div>
+            <LoadingSpinner key="timeline-loading" />
           ) : timeline ? (
             <motion.div
               key="timeline-view"
@@ -356,91 +460,24 @@ const ProductPurchaseOrdersView: React.FC<Props> = ({ onClose, rawMaterialId, ra
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.5 }}
             >
-              {/* Order Summary Card */}
               <motion.div
-                className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 mb-8 border border-blue-200"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <div>
-                      <span className="font-semibold text-gray-700">Vendor: </span>
-                      <span className="text-gray-900">{timeline.purchaseOrder.vendor.name}</span>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-gray-700">Ordered: </span>
-                      <span className="text-gray-900">{timeline.purchaseOrder.totalQuantity}</span>
-                      <span className="font-semibold text-gray-700"> | Received: </span>
-                      <span className="text-gray-900">{timeline.purchaseOrder.receivedQuantity}</span>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div>
-                      <span className="font-semibold text-gray-700">Date: </span>
-                      <span className="text-gray-900">
-                        {new Date(timeline.purchaseOrder.orderDate).toLocaleString()}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="font-semibold text-gray-700">Status: </span>
-                      <span
-                        className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          timeline.purchaseOrder.status === "COMPLETED"
-                            ? "bg-green-100 text-green-800"
-                            : timeline.purchaseOrder.status === "PENDING"
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        {timeline.purchaseOrder.status}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Snake Timeline */}
-              <motion.div
-                className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 mb-8"
+                className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               >
-                <h3 className="text-2xl font-bold mb-8 text-gray-800 text-center">Order Timeline</h3>
-                <SnakeTimeline events={timeline.events} />
-              </motion.div>
+                <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                  <h3 className="text-xl font-bold text-gray-800 text-center">Order Journey Timeline</h3>
+                  <p className="text-gray-600 text-center text-sm mt-1">
+                    Hover over any event to see detailed information
+                  </p>
+                </div>
 
-              {/* Back Button */}
-              <motion.div
-                className="flex justify-end"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-              >
-                <motion.button
-                  className="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium shadow-md"
-                  onClick={handleBack}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Back to Orders
-                </motion.button>
+                <TimelineComponent events={timeline.events} />
               </motion.div>
             </motion.div>
           ) : (
-            <motion.div
-              key="no-timeline"
-              className="text-center py-20"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="text-6xl mb-4">📊</div>
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">No Timeline Data</h3>
-              <p className="text-gray-500">Timeline information is not available for this order.</p>
-            </motion.div>
+            <ErrorDisplay key="no-timeline" message="Timeline information is not available for this order." />
           )}
         </AnimatePresence>
       </div>
