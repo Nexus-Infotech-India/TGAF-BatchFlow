@@ -204,6 +204,7 @@ export class PurchaseOrderController {
         warehouseName: stock.warehouse.name,
         currentQuantity: stock.currentQuantity,
         lastUpdated: stock.lastUpdated,
+         unitOfMeasurement: stock.rawMaterial.unitOfMeasurement,
       }));
 
       res.json(result);

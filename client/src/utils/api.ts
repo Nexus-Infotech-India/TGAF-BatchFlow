@@ -286,6 +286,12 @@ export const API_ROUTES = {
     GET_STOCK_IN_PROCESSING: `${BASE_URL}/raw/dashboard/in-processing`,
     GET_LOW_STOCK_ALERTS: `${BASE_URL}/raw/dashboard/low-stock`,
     GET_WASTE_STOCK: `${BASE_URL}/raw/dashboard/waste-stock`,
+    GET_TOTAL_VENDORS: `${BASE_URL}/raw/dashboard/total-vendors`,
+    GET_TOTAL_PURCHASE_ORDERS: `${BASE_URL}/raw/dashboard/total-purchase-orders`,
+    GET_RECENT_TRANSACTIONS: `${BASE_URL}/raw/dashboard/recent-transactions`,
+    GET_PRODUCT_WISE_WASTE: `${BASE_URL}/raw/dashboard/product-wise-waste`,
+    GET_STOCK_DISTRIBUTION: `${BASE_URL}/raw/dashboard/stock-distribution`,
+    GET_PRODUCT_WISE_CONVERSION: `${BASE_URL}/raw/dashboard/product-wise-conversion`,
   },
 
 };

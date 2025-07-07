@@ -83,5 +83,11 @@ router.get('/dashboard/under-cleaning', DashboardController.getStockUnderCleanin
 router.get('/dashboard/in-processing', DashboardController.getStockInProcessing);
 router.get('/dashboard/low-stock', DashboardController.getLowStockAlerts);
 router.get('/dashboard/waste-stock', DashboardController.getWasteStock);
+router.get('/dashboard/total-vendors', DashboardController.getTotalVendors);
+router.get('/dashboard/total-purchase-orders', DashboardController.getTotalPurchaseOrders);
+router.get('/dashboard/recent-transactions', DashboardController.getRecentTransactions);
+router.get('/dashboard/product-wise-waste', DashboardController.getProductWiseWasteStock);
+router.get('/dashboard/stock-distribution', DashboardController.getStockDistributionByWarehouse);
+router.get('/dashboard/product-wise-conversion', DashboardController.getProductWiseConversionRatio);
 
 export default router;

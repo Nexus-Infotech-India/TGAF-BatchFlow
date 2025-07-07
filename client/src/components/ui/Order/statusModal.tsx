@@ -24,6 +24,7 @@ const ReceiveModal: React.FC<Props> = ({
   const [showForm, setShowForm] = useState(false);
   const [selectedWarehouseId, setSelectedWarehouseId] = useState("");
   const [quantity, setQuantity] = useState<number>(defaultQuantity);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (open) {
@@ -49,11 +50,22 @@ const ReceiveModal: React.FC<Props> = ({
 
   const handleAddClick = () => setShowForm(true);
 
-  const handleConfirm = () => {
-    if (selectedWarehouseId && quantity > 0) {
-      onConfirm(selectedWarehouseId, quantity);
-    }
-  };
+ const handleConfirm = async () => {
+  if (!selectedWarehouseId) {
+    window.alert("Please select a warehouse.");
+    return;
+  }
+  if (!quantity || quantity <= 0) {
+    window.alert("Please enter a valid quantity.");
+    return;
+  }
+  setLoading(true);
+  try {
+    await onConfirm(selectedWarehouseId, quantity);
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (!open) return null;
 
@@ -63,6 +75,7 @@ const ReceiveModal: React.FC<Props> = ({
         <button
           className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
           onClick={onClose}
+          disabled={loading}
         >
           ×
         </button>
@@ -111,15 +124,38 @@ const ReceiveModal: React.FC<Props> = ({
               <button
                 className="px-4 py-1 rounded bg-gray-100 text-gray-700"
                 onClick={onClose}
+                disabled={loading}
               >
                 Cancel
               </button>
               <button
                 className="px-4 py-1 rounded bg-blue-600 text-white"
-                disabled={!selectedWarehouseId || !quantity}
+               
                 onClick={handleConfirm}
               >
-                OK
+              {loading ? (
+                  <span className="flex items-center">
+                    <svg className="animate-spin h-4 w-4 mr-2" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                      />
+                    </svg>
+                    Loading...
+                  </span>
+                ) : (
+                  "OK"
+                )}
               </button>
             </div>
           </div>
@@ -210,3 +246,134 @@ const WarehouseForm: React.FC<WarehouseFormProps> = ({ onCreated, onCancel }) =>
 };
 
 export default ReceiveModal;
+
+// ...existing code...
+
+// Edit Purchase Order Modal
+type EditOrderModalProps = {
+  open: boolean;
+  onClose: () => void;
+  onSave: (data: { expectedDate: string }) => void;
+  defaultExpectedDate: string;
+};
+
+export const EditOrderModal: React.FC<EditOrderModalProps> = ({
+  open,
+  onClose,
+  onSave,
+  defaultExpectedDate,
+}) => {
+  const [expectedDate, setExpectedDate] = useState(defaultExpectedDate);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setExpectedDate(defaultExpectedDate);
+  }, [defaultExpectedDate, open]);
+
+  const handleSave = async () => {
+    setLoading(true);
+    await onSave({ expectedDate });
+    setLoading(false);
+  };
+
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-blur bg-opacity-30">
+      <div className="bg-white rounded-lg shadow-xl max-w-sm w-full mx-auto p-6 relative">
+        <button
+          className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+          onClick={onClose}
+          disabled={loading}
+        >
+          ×
+        </button>
+        <h2 className="text-lg font-semibold mb-4">Edit Purchase Order</h2>
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Expected Date
+          </label>
+          <input
+            type="date"
+            className="w-full border rounded px-2 py-1"
+            value={expectedDate}
+            onChange={e => setExpectedDate(e.target.value)}
+          />
+        </div>
+        <div className="flex justify-end gap-2">
+          <button
+            className="px-4 py-1 rounded bg-gray-100 text-gray-700"
+            onClick={onClose}
+            disabled={loading}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-1 rounded bg-blue-600 text-white"
+            onClick={handleSave}
+            disabled={loading}
+          >
+            {loading ? "Saving..." : "Save"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Delete Purchase Order Modal
+type DeleteOrderModalProps = {
+  open: boolean;
+  onClose: () => void;
+  onDelete: () => void;
+  poNumber: string;
+};
+
+export const DeleteOrderModal: React.FC<DeleteOrderModalProps> = ({
+  open,
+  onClose,
+  onDelete,
+  poNumber,
+}) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setLoading(true);
+    await onDelete();
+    setLoading(false);
+  };
+
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-blur bg-opacity-30">
+      <div className="bg-white rounded-lg shadow-xl max-w-sm w-full mx-auto p-6 relative">
+        <button
+          className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+          onClick={onClose}
+          disabled={loading}
+        >
+          ×
+        </button>
+        <h2 className="text-lg font-semibold mb-4">Delete Purchase Order</h2>
+        <p className="mb-4 text-gray-700">
+          Are you sure you want to delete <b>{poNumber}</b>?
+        </p>
+        <div className="flex justify-end gap-2">
+          <button
+            className="px-4 py-1 rounded bg-gray-100 text-gray-700"
+            onClick={onClose}
+            disabled={loading}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-1 rounded bg-red-600 text-white"
+            onClick={handleDelete}
+            disabled={loading}
+          >
+            {loading ? "Deleting..." : "Delete"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

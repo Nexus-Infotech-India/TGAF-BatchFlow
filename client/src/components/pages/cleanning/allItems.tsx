@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
 import { Button, Modal, Input, Select, message } from 'antd';
 import { EditOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
@@ -10,10 +10,13 @@ import {
   FileText,
   XCircle,
 } from 'lucide-react';
+import { convertToBaseUOM } from '../../../hooks/unit';
+import UnitSelect from '../../ui/Unitselect';
 
 const { Option } = Select;
 
 interface StockItem {
+  unitOfMeasurement: ReactNode;
   rawMaterialId: string;
   materialName: string;
   warehouseId: string;
@@ -33,6 +36,17 @@ interface CleaningJob {
   finishedAt?: string;
   toWarehouse: { name: string };
   fromWarehouse: { name: string };
+  rawMaterial: {
+    id: string;
+    skuCode: string;
+    name: string;
+    category: string;
+    unitOfMeasurement: string;
+    minReorderLevel: number;
+    createdAt: string;
+    updatedAt: string;
+    vendorId: string | null;
+  };
 }
 
 interface Warehouse {
@@ -68,8 +82,9 @@ const AllItems: React.FC = () => {
   }>({ visible: false });
   const [transfer, setTransfer] = useState<{
     quantity: number;
+    unit?: string; // <-- add unit
     toWarehouseId: string;
-  }>({ quantity: 0, toWarehouseId: '' });
+  }>({ quantity: 0, unit: undefined, toWarehouseId: '' });
   const [transferLoading, setTransferLoading] = useState(false);
 
   // Status update modal state
@@ -118,6 +133,7 @@ const AllItems: React.FC = () => {
   };
 
   // Fetch cleaning jobs for a stock row
+  // ...existing code...
   const fetchCleaningJobs = async (
     rawMaterialId: string,
     warehouseId: string
@@ -129,14 +145,21 @@ const AllItems: React.FC = () => {
         },
         params: { rawMaterialId, fromWarehouseId: warehouseId },
       });
+      // Filter jobs to only those matching both rawMaterialId and fromWarehouseId
+      const filteredJobs = res.data.filter(
+        (job: CleaningJob) =>
+          job.rawMaterialId === rawMaterialId &&
+          job.fromWarehouseId === warehouseId
+      );
       setCleaningJobs((prev) => ({
         ...prev,
-        [`${rawMaterialId}_${warehouseId}`]: res.data,
+        [`${rawMaterialId}_${warehouseId}`]: filteredJobs,
       }));
     } catch {
       message.error('Failed to fetch cleaning jobs');
     }
   };
+  // ...existing code...
 
   useEffect(() => {
     fetchStock();
@@ -163,9 +186,23 @@ const AllItems: React.FC = () => {
   // Handle transfer submit
   const handleTransfer = async () => {
     if (!transferModal.item) return;
+    const uom = (transfer.unit || transferModal.item.unitOfMeasurement || '')
+      .toString()
+      .toLowerCase()
+      .trim();
+    const baseUom = (transferModal.item.unitOfMeasurement || '')
+      .toString()
+      .toLowerCase()
+      .trim();
+    let baseQuantity = transfer.quantity;
+
+    if (uom !== baseUom) {
+      baseQuantity = convertToBaseUOM(transfer.quantity, uom, baseUom);
+    }
+
     if (
-      transfer.quantity <= 0 ||
-      transfer.quantity > transferModal.item.currentQuantity
+      baseQuantity <= 0 ||
+      baseQuantity > transferModal.item.currentQuantity
     ) {
       message.error('Invalid quantity');
       return;
@@ -183,6 +220,7 @@ const AllItems: React.FC = () => {
           fromWarehouseId: transferModal.item.warehouseId,
           toWarehouseId: transfer.toWarehouseId,
           quantity: transfer.quantity,
+          unit: transfer.unit || transferModal.item.unitOfMeasurement,
           status: 'Sent',
           startedAt: new Date().toISOString(),
         },
@@ -257,13 +295,33 @@ const AllItems: React.FC = () => {
       setStatusModal((prev) => ({ ...prev, loading: false }));
     }
   };
+  const unitOrder = ['g', 'kg', 'ton'];
 
+  // Find the highest unit present in stock
+  const allUnits = stock
+    .map((s) =>
+      typeof s.unitOfMeasurement === 'string' ? s.unitOfMeasurement : ''
+    )
+    .filter(Boolean);
+  const highestUnit =
+    unitOrder
+      .slice()
+      .reverse()
+      .find((unit) => allUnits.includes(unit)) || '';
+
+  // Convert all quantities to the highest unit
+  const totalQuantity = stock.reduce((sum, s) => {
+    const unit =
+      typeof s.unitOfMeasurement === 'string' ? s.unitOfMeasurement : '';
+    if (unit && highestUnit && unit !== highestUnit) {
+      // Use your convertToBaseUOM or similar function to convert
+      return sum + convertToBaseUOM(s.currentQuantity, unit, highestUnit);
+    }
+    return sum + (s.currentQuantity || 0);
+  }, 0);
   // Stats for header
   const totalStock = stock.length;
-  const totalQuantity = stock.reduce(
-    (sum, s) => sum + (s.currentQuantity || 0),
-    0
-  );
+
   const totalJobs = Object.values(cleaningJobs).flat().length;
   const cleanedJobs = Object.values(cleaningJobs)
     .flat()
@@ -303,7 +361,10 @@ const AllItems: React.FC = () => {
           <tbody>
             {jobs.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-2 text-center text-gray-400 italic">
+                <td
+                  colSpan={6}
+                  className="px-4 py-2 text-center text-gray-400 italic"
+                >
                   No cleaning jobs found.
                 </td>
               </tr>
@@ -314,18 +375,18 @@ const AllItems: React.FC = () => {
                   {job.id}
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-900">
-                  {job.toWarehouse?.name || "-"}
+                  {job.toWarehouse?.name || '-'}
                 </td>
                 <td className="px-4 py-2 text-sm text-gray-900 text-right">
-                  {job.quantity}
+                  {job.quantity} {record.unitOfMeasurement}
                 </td>
                 <td className="px-4 py-2 text-center">
                   <span
-                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${statusColors[job.status] || "bg-gray-50 text-gray-700 border-gray-200"}`}
+                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${statusColors[job.status] || 'bg-gray-50 text-gray-700 border-gray-200'}`}
                   >
                     {statusIcons[job.status] || null}
                     {job.status}
-                    {job.status !== "Cleaned" && (
+                    {job.status !== 'Cleaned' && (
                       <Button
                         type="link"
                         icon={<EditOutlined />}
@@ -339,26 +400,26 @@ const AllItems: React.FC = () => {
                 <td className="px-4 py-2 text-center text-xs text-gray-900">
                   {job.startedAt && !isNaN(Date.parse(job.startedAt))
                     ? new Date(job.startedAt).toLocaleString(undefined, {
-                        year: "numeric",
-                        month: "numeric",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
                       })
-                    : "-"}
+                    : '-'}
                 </td>
                 <td className="px-4 py-2 text-center text-xs text-gray-900">
                   {job.finishedAt && !isNaN(Date.parse(job.finishedAt))
                     ? new Date(job.finishedAt).toLocaleString(undefined, {
-                        year: "numeric",
-                        month: "numeric",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
                       })
-                    : "-"}
+                    : '-'}
                 </td>
               </tr>
             ))}
@@ -432,7 +493,7 @@ const AllItems: React.FC = () => {
                           Total Quantity
                         </p>
                         <p className="text-2xl font-bold text-gray-900">
-                          {totalQuantity}
+                          {totalQuantity} {highestUnit}
                         </p>
                         <div className="flex items-center mt-1">
                           <CheckCircle
@@ -538,7 +599,9 @@ const AllItems: React.FC = () => {
                         {record.warehouseName}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <b>{record.currentQuantity}</b>
+                        <b>
+                          {record.currentQuantity} {record.unitOfMeasurement}
+                        </b>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-left">
                         <Button
@@ -575,14 +638,18 @@ const AllItems: React.FC = () => {
       </div>
 
       {/* Transfer Modal */}
-           <Modal
+      <Modal
         open={transferModal.visible}
         title={
           <div>
-            <span className="text-lg font-semibold text-blue-700">Transfer to Cleaning</span>
+            <span className="text-lg font-semibold text-blue-700">
+              Transfer to Cleaning
+            </span>
             <div className="text-xs text-gray-500 mt-1">
               {transferModal.item?.materialName && (
-                <>Material: <b>{transferModal.item.materialName}</b></>
+                <>
+                  Material: <b>{transferModal.item.materialName}</b>
+                </>
               )}
             </div>
           </div>
@@ -594,32 +661,46 @@ const AllItems: React.FC = () => {
         className="rounded-xl"
       >
         <div className="mb-3">
-          <div className="text-xs text-gray-500 mb-1">From Warehouse</div>
-          <div className="font-medium text-gray-800">{transferModal.item?.warehouseName}</div>
-        </div>
-        <div className="mb-3">
           <div className="text-xs text-gray-500 mb-1">Available Quantity</div>
-          <div className="font-medium text-gray-800">{transferModal.item?.currentQuantity}</div>
+          <div className="font-medium text-gray-800">
+            {transferModal.item?.currentQuantity}{' '}
+            {transferModal.item?.unitOfMeasurement}
+          </div>
         </div>
         <div className="mb-3">
           <div className="text-xs text-gray-500 mb-1">Quantity to transfer</div>
-          <Input
-            type="number"
-            min={1}
-            max={transferModal.item?.currentQuantity}
-            value={transfer.quantity}
-            onChange={(e) =>
-              setTransfer((prev) => ({
-                ...prev,
-                quantity: Number(e.target.value),
-              }))
-            }
-            placeholder="Enter quantity"
-            className="rounded"
-          />
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Input
+              type="number"
+              min={1}
+              max={transferModal.item?.currentQuantity}
+              value={transfer.quantity}
+              onChange={(e) =>
+                setTransfer((prev) => ({
+                  ...prev,
+                  quantity: Number(e.target.value),
+                }))
+              }
+              placeholder="Enter quantity"
+              className="rounded"
+              style={{ flex: 2 }}
+            />
+            <UnitSelect
+              value={transfer.unit}
+              baseUnit={transferModal.item?.unitOfMeasurement as string}
+              onChange={(val) =>
+                setTransfer((prev) => ({
+                  ...prev,
+                  unit: String(val),
+                }))
+              }
+            />
+          </div>
         </div>
         <div>
-          <div className="text-xs text-gray-500 mb-1">Destination warehouse</div>
+          <div className="text-xs text-gray-500 mb-1">
+            Destination warehouse
+          </div>
           <Select
             style={{ width: '100%' }}
             placeholder="Select destination warehouse"
@@ -645,7 +726,9 @@ const AllItems: React.FC = () => {
         open={statusModal.visible}
         title={
           <div>
-            <span className="text-lg font-semibold text-blue-700">Mark as Cleaned</span>
+            <span className="text-lg font-semibold text-blue-700">
+              Mark as Cleaned
+            </span>
             <div className="text-xs text-gray-500 mt-1">
               Cleaning Job ID: <b>{statusModal.job?.id}</b>
             </div>
@@ -659,27 +742,42 @@ const AllItems: React.FC = () => {
       >
         <div className="mb-3">
           <div className="text-xs text-gray-500 mb-1">Total Quantity</div>
-          <div className="font-medium text-gray-800">{statusModal.job?.quantity}</div>
+          <div className="font-medium text-gray-800">
+            {statusModal.job?.quantity}{' '}
+            {statusModal.job?.rawMaterial?.unitOfMeasurement}
+          </div>
         </div>
         <div className="mb-3">
-          <div className="text-xs text-gray-500 mb-1">Unfinished/Rejected Quantity</div>
-          <Input
-            type="number"
-            min={0}
-            max={statusModal.job?.quantity}
-            value={statusModal.leftoverQuantity}
-            onChange={(e) =>
-              setStatusModal((prev) => ({
-                ...prev,
-                leftoverQuantity: Number(e.target.value),
-              }))
-            }
-            placeholder="Enter unfinished/rejected quantity"
-            className="rounded"
-          />
+          <div className="text-xs text-gray-500 mb-1">
+            Unfinished/Rejected Quantity
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <Input
+              type="number"
+              min={0}
+              max={statusModal.job?.quantity}
+              value={statusModal.leftoverQuantity}
+              onChange={(e) =>
+                setStatusModal((prev) => ({
+                  ...prev,
+                  leftoverQuantity: Number(e.target.value),
+                }))
+              }
+              placeholder="Enter unfinished/rejected quantity"
+              className="rounded"
+              style={{ flex: 2 }}
+            />
+            <UnitSelect
+              value={statusModal.job?.rawMaterial?.unitOfMeasurement}
+              baseUnit={statusModal.job?.rawMaterial?.unitOfMeasurement}
+              onChange={() => {}}
+            />
+          </div>
         </div>
         <div>
-          <div className="text-xs text-gray-500 mb-1">Reason for unfinished/rejected material</div>
+          <div className="text-xs text-gray-500 mb-1">
+            Reason for unfinished/rejected material
+          </div>
           <Input.TextArea
             rows={2}
             value={statusModal.reason}

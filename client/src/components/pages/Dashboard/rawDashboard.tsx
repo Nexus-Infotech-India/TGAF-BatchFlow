@@ -11,12 +11,17 @@ import {
   AlertTriangle,
   Recycle,
   TrendingUp,
-  Eye,
   Loader2,
   Warehouse,
   Factory,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react"
 import api, { API_ROUTES } from "../../../utils/api"
+import { Bar, Doughnut } from "react-chartjs-2"
+import { Chart, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend } from "chart.js"
+
+Chart.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend)
 
 interface LowStockAlert {
   skuCode: string
@@ -54,6 +59,11 @@ const RawDashboard: React.FC = () => {
     total: 0,
   })
   const [loading, setLoading] = useState(true)
+  const [totalVendors, setTotalVendors] = useState<number>(0)
+  const [totalPurchaseOrders, setTotalPurchaseOrders] = useState<number>(0)
+  const [productWiseWaste, setProductWiseWaste] = useState<any>({ afterCleaning: [], afterProcessing: [] })
+  const [stockDistribution, setStockDistribution] = useState<any[]>([])
+  const [productWiseConversion, setProductWiseConversion] = useState<any[]>([])
 
   const authToken = localStorage.getItem("authToken")
 
@@ -68,9 +78,27 @@ const RawDashboard: React.FC = () => {
       api.get(API_ROUTES.RAW.GET_STOCK_IN_PROCESSING, { headers }),
       api.get(API_ROUTES.RAW.GET_LOW_STOCK_ALERTS, { headers }),
       api.get(API_ROUTES.RAW.GET_WASTE_STOCK, { headers }),
+      api.get(API_ROUTES.RAW.GET_TOTAL_VENDORS, { headers }),
+      api.get(API_ROUTES.RAW.GET_TOTAL_PURCHASE_ORDERS, { headers }),
+      api.get(API_ROUTES.RAW.GET_PRODUCT_WISE_WASTE, { headers }),
+      api.get(API_ROUTES.RAW.GET_STOCK_DISTRIBUTION, { headers }),
+      api.get(API_ROUTES.RAW.GET_PRODUCT_WISE_CONVERSION, { headers }),
     ])
       .then((responses) => {
-        const [totalStockRes, pendingPOsRes, cleaningRes, processingRes, lowStockRes, wasteRes] = responses
+        const [
+          totalStockRes,
+          pendingPOsRes,
+          cleaningRes,
+          processingRes,
+          lowStockRes,
+          wasteRes,
+          vendorsRes,
+          poRes,
+          productWiseWasteRes,
+          stockDistributionRes,
+          productWiseConversionRes,
+        ] = responses
+
         setTotalStock(totalStockRes.data.totalRawMaterialStock || 0)
         setTotalStockDetails(totalStockRes.data.details || [])
         setPendingPOs(pendingPOsRes.data.pendingPOs || 0)
@@ -87,6 +115,11 @@ const RawDashboard: React.FC = () => {
             total: 0,
           },
         )
+        setTotalVendors(vendorsRes.data.totalVendors || 0)
+        setTotalPurchaseOrders(poRes.data.totalPurchaseOrders || 0)
+        setProductWiseWaste(productWiseWasteRes.data.productWiseWaste || { afterCleaning: [], afterProcessing: [] })
+        setStockDistribution(stockDistributionRes.data.stockDistribution || [])
+        setProductWiseConversion(productWiseConversionRes.data.productWiseConversionRatio || [])
       })
       .finally(() => setLoading(false))
   }, [authToken])
@@ -112,71 +145,151 @@ const RawDashboard: React.FC = () => {
     },
   }
 
+  // Chart data preparation
+  const wasteLabels = [
+    ...new Set([
+      ...productWiseWaste.afterCleaning.map((w: any) => w.productName),
+      ...productWiseWaste.afterProcessing.map((w: any) => w.productName),
+    ]),
+  ]
+
+  const cleaningWasteData = wasteLabels.map(
+    (name) => productWiseWaste.afterCleaning.find((w: any) => w.productName === name)?.total || 0,
+  )
+  const processingWasteData = wasteLabels.map(
+    (name) => productWiseWaste.afterProcessing.find((w: any) => w.productName === name)?.total || 0,
+  )
+
+  const wasteBarData = {
+    labels: wasteLabels,
+    datasets: [
+      {
+        label: "After Cleaning",
+        data: cleaningWasteData,
+        backgroundColor: "rgba(59, 130, 246, 0.8)",
+        borderColor: "rgba(59, 130, 246, 1)",
+        borderWidth: 1,
+        borderRadius: 6,
+      },
+      {
+        label: "After Processing",
+        data: processingWasteData,
+        backgroundColor: "rgba(16, 185, 129, 0.8)",
+        borderColor: "rgba(16, 185, 129, 1)",
+        borderWidth: 1,
+        borderRadius: 6,
+      },
+    ],
+  }
+
+  const warehouseLabels = stockDistribution.map((w) => w.warehouse?.name || "N/A")
+  const warehouseTotals = stockDistribution.map((w) =>
+    w.items.reduce((sum: number, i: any) => sum + (i.quantity || 0), 0),
+  )
+
+  const warehousePieData = {
+    labels: warehouseLabels,
+    datasets: [
+      {
+        label: "Stock Distribution",
+        data: warehouseTotals,
+        backgroundColor: ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4", "#84CC16", "#F97316"],
+        borderWidth: 2,
+        borderColor: "#ffffff",
+      },
+    ],
+  }
+
+  const conversionLabels = productWiseConversion.map((p) => p.skuCode)
+  const conversionData = productWiseConversion.map((p) => Math.round((p.conversionPercentage || 0) * 100) / 100)
+
+  const conversionBarData = {
+    labels: conversionLabels,
+    datasets: [
+      {
+        label: "Conversion %",
+        data: conversionData,
+        backgroundColor: "rgba(251, 191, 36, 0.8)",
+        borderColor: "rgba(251, 191, 36, 1)",
+        borderWidth: 1,
+        borderRadius: 6,
+      },
+    ],
+  }
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center gap-4"
+          className="flex flex-col items-center gap-6 bg-white p-8 rounded-2xl shadow-lg"
         >
-          <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-          <p className="text-gray-600 font-medium">Loading dashboard...</p>
+          <div className="relative">
+            <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
+            <div className="absolute inset-0 h-12 w-12 animate-ping rounded-full bg-blue-200 opacity-20"></div>
+          </div>
+          <div className="text-center">
+            <p className="text-gray-800 font-semibold text-lg">Loading Dashboard</p>
+            <p className="text-gray-500 text-sm">Fetching real-time data...</p>
+          </div>
         </motion.div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Enhanced Header */}
       <motion.header
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white shadow-sm border-b border-gray-200"
+        className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-gray-200/50 sticky top-0 z-10"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-600 rounded-lg">
-                <Factory className="h-6 w-6 text-white" />
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg">
+                <Factory className="h-7 w-7 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Raw Material Dashboard</h1>
-                <p className="text-gray-600">Monitor your inventory and operations</p>
+                <h1 className="text-3xl font-bold text-gray-900">Raw Material Dashboard</h1>
+                <p className="text-gray-600 mt-1">Real-time inventory monitoring and analytics</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <TrendingUp className="h-4 w-4" />
-              <span>Real-time data</span>
+            <div className="flex items-center gap-3 bg-green-50 px-4 py-2 rounded-full">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-green-700 font-medium text-sm">Live Data</span>
             </div>
           </div>
         </div>
       </motion.header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Grid */}
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Enhanced Stats Grid - Better 4-column layout */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
         >
-          <StatCard
-            icon={<Package className="h-6 w-6" />}
-            label="Total Raw Material Stock"
-            value={totalStock}
-            unit="kg/litre"
-            color="blue"
-            details={totalStockDetails}
-            detailsFormatter={(details) =>
-              details.map(
-                (s) =>
-                  `${s.rawMaterial?.name || ""} (${s.rawMaterial?.skuCode || ""}): ${s.currentQuantity} in ${s.warehouse?.name || ""}`,
-              )
-            }
-          />
-
+          <div className="lg:col-span-2">
+            <StatCard
+              icon={<Package className="h-6 w-6" />}
+              label="Total Raw Material Stock"
+              value={totalStock}
+              unit="kg/litre"
+              color="blue"
+              details={totalStockDetails}
+              detailsFormatter={(details) =>
+                details.map(
+                  (s) =>
+                    `${s.rawMaterial?.name || ""} (${s.rawMaterial?.skuCode || ""}): ${s.currentQuantity} in ${s.warehouse?.name || ""}`,
+                )
+              }
+              large={true}
+            />
+          </div>
           <StatCard
             icon={<Truck className="h-6 w-6" />}
             label="POs Pending Delivery"
@@ -188,10 +301,17 @@ const RawDashboard: React.FC = () => {
               details.map((po) => `PO#${po.id} (${po.vendor?.name || ""}): ${po.items?.length || 0} items`)
             }
           />
-
+          <StatCard
+            icon={<Recycle className="h-6 w-6" />}
+            label="Waste Stock"
+            value={wasteStock.total}
+            unit="kg/litre"
+            color="red"
+            tooltip={`After Cleaning: ${wasteStock.afterCleaning.total}, After Processing: ${wasteStock.afterProcessing.total}`}
+          />
           <StatCard
             icon={<Search className="h-6 w-6" />}
-            label="Stock Under Cleaning"
+            label="Under Cleaning"
             value={stockUnderCleaning}
             unit="kg/litre"
             color="purple"
@@ -200,7 +320,6 @@ const RawDashboard: React.FC = () => {
               details.map((c) => `${c.rawMaterial?.name || ""}: ${c.quantity} (${c.status})`)
             }
           />
-
           <StatCard
             icon={<Settings className="h-6 w-6" />}
             label="In Processing"
@@ -212,168 +331,292 @@ const RawDashboard: React.FC = () => {
               details.map((p) => `${p.inputRawMaterial?.name || ""}: ${p.quantityInput} (${p.status})`)
             }
           />
-
           <StatCard
-            icon={<Recycle className="h-6 w-6" />}
-            label="Unusable/Waste Stock"
-            value={wasteStock.total}
-            unit="kg/litre"
-            color="red"
-            tooltip={`After Cleaning: ${wasteStock.afterCleaning.total}, After Processing: ${wasteStock.afterProcessing.total}`}
+            icon={<Warehouse className="h-6 w-6" />}
+            label="Total Vendors"
+            value={totalVendors}
+            unit="vendors"
+            color="indigo"
+          />
+          <StatCard
+            icon={<Factory className="h-6 w-6" />}
+            label="Purchase Orders"
+            value={totalPurchaseOrders}
+            unit="orders"
+            color="teal"
           />
         </motion.div>
 
-        {/* Low Stock Alerts */}
+        {/* Charts Section - Better Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Product-wise Waste Chart - Takes 2 columns */}
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200/50 p-6"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-blue-50 rounded-lg">
+                <Recycle className="h-5 w-5 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-900">Product-wise Waste Analysis</h3>
+                <p className="text-gray-500 text-sm">Waste generated after cleaning and processing</p>
+              </div>
+            </div>
+            <div className="h-80">
+              <Bar
+                data={wasteBarData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: "top",
+                      labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                      },
+                    },
+                  },
+                  scales: {
+                    x: {
+                      grid: { display: false },
+                      ticks: { font: { size: 12 } },
+                    },
+                    y: {
+                      beginAtZero: true,
+                      grid: { color: "rgba(0,0,0,0.05)" },
+                    },
+                  },
+                }}
+              />
+            </div>
+          </motion.div>
+
+          {/* Stock Distribution Pie Chart - Takes 1 column */}
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-6"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2 bg-green-50 rounded-lg">
+                <Warehouse className="h-5 w-5 text-green-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Stock Distribution</h3>
+                <p className="text-gray-500 text-sm">By warehouse</p>
+              </div>
+            </div>
+            <div className="h-80 flex items-center justify-center">
+              <Doughnut
+                data={warehousePieData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: "bottom",
+                      labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: { size: 11 },
+                      },
+                    },
+                  },
+                  cutout: "60%",
+                }}
+              />
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Conversion Ratio Chart - Full Width */}
         <motion.div
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="bg-white rounded-xl shadow-sm border border-gray-200 mb-8 overflow-hidden"
+          className="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-6 mb-8"
         >
-          <div className="px-6 py-4 border-b border-gray-200 bg-red-50">
-            <div className="flex items-center gap-3">
-              <AlertTriangle className="h-5 w-5 text-red-600" />
-              <h3 className="text-lg font-semibold text-gray-900">Low Stock Alerts</h3>
-              {lowStockAlerts.length > 0 && (
-                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
-                  {lowStockAlerts.length} alerts
-                </span>
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 bg-yellow-50 rounded-lg">
+              <TrendingUp className="h-5 w-5 text-yellow-600" />
+            </div>
+            <div>
+              <h3 className="text-xl font-semibold text-gray-900">Product-wise Conversion Efficiency</h3>
+              <p className="text-gray-500 text-sm">Conversion percentage by product SKU</p>
+            </div>
+          </div>
+          <div className="h-80">
+            <Bar
+              data={conversionBarData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false },
+                },
+                scales: {
+                  x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 12 } },
+                  },
+                  y: {
+                    beginAtZero: true,
+                    max: 100,
+                    grid: { color: "rgba(0,0,0,0.05)" },
+                    ticks: {
+                      callback: (value) => value + "%",
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
+        </motion.div>
+
+        {/* Alerts and Details Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Low Stock Alerts */}
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="bg-white rounded-2xl shadow-sm border border-gray-200/50 overflow-hidden"
+          >
+            <div className="px-6 py-4 bg-gradient-to-r from-red-50 to-orange-50 border-b border-gray-200/50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-red-100 rounded-lg">
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">Low Stock Alerts</h3>
+                    <p className="text-gray-500 text-sm">Items below minimum reorder level</p>
+                  </div>
+                </div>
+                {lowStockAlerts.length > 0 && (
+                  <span className="px-3 py-1 bg-red-100 text-red-800 text-sm font-medium rounded-full">
+                    {lowStockAlerts.length} alerts
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="p-6 max-h-96 overflow-y-auto">
+              {lowStockAlerts.length === 0 ? (
+                <div className="text-center py-8">
+                  <div className="p-4 bg-green-50 rounded-full w-fit mx-auto mb-4">
+                    <Package className="h-8 w-8 text-green-600" />
+                  </div>
+                  <p className="text-gray-600 font-medium">All stock levels are healthy!</p>
+                  <p className="text-gray-400 text-sm mt-1">No items below minimum reorder levels</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {lowStockAlerts.map((alert, index) => (
+                    <motion.div
+                      key={alert.skuCode}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="p-4 bg-red-50 rounded-xl border border-red-100"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <p className="font-semibold text-gray-900">{alert.name}</p>
+                          <p className="text-sm text-gray-500 font-mono">{alert.skuCode}</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm text-gray-500">Available</p>
+                          <p className="text-lg font-bold text-red-600">{alert.available}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600">Min Level: {alert.minReorderLevel}</span>
+                        <span className="text-red-600 font-medium">
+                          {alert.minReorderLevel - alert.available} units short
+                        </span>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               )}
             </div>
-          </div>
+          </motion.div>
 
-          <div className="p-6">
-            {lowStockAlerts.length === 0 ? (
-              <div className="text-center py-8">
-                <div className="p-3 bg-green-100 rounded-full w-fit mx-auto mb-4">
-                  <Package className="h-6 w-6 text-green-600" />
+          {/* Waste Stock Details */}
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="bg-white rounded-2xl shadow-sm border border-gray-200/50 overflow-hidden"
+          >
+            <div className="px-6 py-4 bg-gradient-to-r from-orange-50 to-red-50 border-b border-gray-200/50">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-orange-100 rounded-lg">
+                  <Recycle className="h-5 w-5 text-orange-600" />
                 </div>
-                <p className="text-gray-600">No SKUs below minimum reorder levels.</p>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Waste Stock Breakdown</h3>
+                  <p className="text-gray-500 text-sm">Detailed waste analysis</p>
+                </div>
               </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-gray-200">
-                      <th className="text-left py-3 px-4 font-semibold text-gray-900">SKU Code</th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-900">Name</th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-900">Available</th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-900">Min Reorder Level</th>
-                      <th className="text-left py-3 px-4 font-semibold text-gray-900">Stock Details</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {lowStockAlerts.map((alert, index) => (
-                      <motion.tr
-                        key={alert.skuCode}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="border-b border-gray-100 hover:bg-gray-50"
-                      >
-                        <td className="py-3 px-4 font-mono text-sm">{alert.skuCode}</td>
-                        <td className="py-3 px-4 font-medium">{alert.name}</td>
-                        <td className="py-3 px-4">
-                          <span className="px-2 py-1 bg-red-100 text-red-800 text-sm font-medium rounded">
-                            {alert.available}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-gray-600">{alert.minReorderLevel}</td>
-                        <td className="py-3 px-4">
-                          {alert.details && alert.details.length > 0 ? (
-                            <ul className="text-sm text-gray-600 space-y-1">
-                              {alert.details.map((d, idx) => (
-                                <li key={idx} className="flex items-center gap-2">
-                                  <Warehouse className="h-3 w-3" />
-                                  {d.currentQuantity} in {d.warehouse?.name || "N/A"}
-                                </li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <span className="text-gray-400">—</span>
-                          )}
-                        </td>
-                      </motion.tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        </motion.div>
-
-        {/* Waste Stock Details */}
-        <motion.div
-          variants={itemVariants}
-          initial="hidden"
-          animate="visible"
-          className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
-        >
-          <div className="px-6 py-4 border-b border-gray-200 bg-orange-50">
-            <div className="flex items-center gap-3">
-              <Recycle className="h-5 w-5 text-orange-600" />
-              <h3 className="text-lg font-semibold text-gray-900">Waste Stock Details</h3>
             </div>
-          </div>
-
-          <div className="p-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* After Cleaning */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Search className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">After Cleaning</h4>
-                    <p className="text-2xl font-bold text-blue-600">{wasteStock.afterCleaning.total}</p>
-                  </div>
+            <div className="p-6">
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                <div className="text-center p-4 bg-blue-50 rounded-xl">
+                  <Search className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600 mb-1">After Cleaning</p>
+                  <p className="text-2xl font-bold text-blue-600">{wasteStock.afterCleaning.total}</p>
                 </div>
+                <div className="text-center p-4 bg-green-50 rounded-xl">
+                  <Settings className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600 mb-1">After Processing</p>
+                  <p className="text-2xl font-bold text-green-600">{wasteStock.afterProcessing.total}</p>
+                </div>
+              </div>
 
+              <div className="space-y-4 max-h-48 overflow-y-auto">
                 {wasteStock.afterCleaning.details.length > 0 && (
-                  <div className="space-y-2">
-                    {wasteStock.afterCleaning.details.map((w, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-sm text-gray-600 p-2 bg-gray-50 rounded">
-                        <Warehouse className="h-3 w-3" />
-                        <span>
-                          {w.quantity} in {w.warehouse?.name || "N/A"}
-                        </span>
-                        {w.remarks && <span className="text-gray-500">({w.remarks})</span>}
-                      </div>
-                    ))}
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                      Cleaning Waste Details
+                    </h4>
+                    <div className="space-y-2">
+                      {wasteStock.afterCleaning.details.slice(0, 3).map((w, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-2 bg-blue-50 rounded-lg text-sm">
+                          <span className="text-gray-700">{w.warehouse?.name || "N/A"}</span>
+                          <span className="font-medium text-blue-700">{w.quantity}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
-              </div>
-
-              {/* After Processing */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <Settings className="h-4 w-4 text-green-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-gray-900">After Processing</h4>
-                    <p className="text-2xl font-bold text-green-600">{wasteStock.afterProcessing.total}</p>
-                  </div>
-                </div>
 
                 {wasteStock.afterProcessing.details.length > 0 && (
-                  <div className="space-y-2">
-                    {wasteStock.afterProcessing.details.map((w, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-sm text-gray-600 p-2 bg-gray-50 rounded">
-                        <Factory className="h-3 w-3" />
-                        <span>
-                          {w.quantity} in {w.warehouse?.name || "N/A"}
-                        </span>
-                        {w.processingJob?.id && <span className="text-gray-500">(Job: {w.processingJob.id})</span>}
-                      </div>
-                    ))}
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      Processing Waste Details
+                    </h4>
+                    <div className="space-y-2">
+                      {wasteStock.afterProcessing.details.slice(0, 3).map((w, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-2 bg-green-50 rounded-lg text-sm">
+                          <span className="text-gray-700">{w.warehouse?.name || "N/A"}</span>
+                          <span className="font-medium text-green-700">{w.quantity}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </div>
   )
@@ -384,13 +627,24 @@ interface StatCardProps {
   label: string
   value: number
   unit?: string
-  color: "blue" | "orange" | "purple" | "green" | "red"
+  color: "blue" | "orange" | "purple" | "green" | "red" | "indigo" | "teal"
   tooltip?: string
   details?: any[]
   detailsFormatter?: (details: any[]) => string[]
+  large?: boolean
 }
 
-const StatCard: React.FC<StatCardProps> = ({ icon, label, value, unit, color, tooltip, details, detailsFormatter }) => {
+const StatCard: React.FC<StatCardProps> = ({
+  icon,
+  label,
+  value,
+  unit,
+  color,
+  tooltip,
+  details,
+  detailsFormatter,
+  large = false,
+}) => {
   const [showDetails, setShowDetails] = useState(false)
 
   const colorClasses = {
@@ -399,30 +653,49 @@ const StatCard: React.FC<StatCardProps> = ({ icon, label, value, unit, color, to
       icon: "text-blue-600",
       value: "text-blue-600",
       border: "border-blue-200",
+      gradient: "from-blue-500 to-blue-600",
     },
     orange: {
       bg: "bg-orange-50",
       icon: "text-orange-600",
       value: "text-orange-600",
       border: "border-orange-200",
+      gradient: "from-orange-500 to-orange-600",
     },
     purple: {
       bg: "bg-purple-50",
       icon: "text-purple-600",
       value: "text-purple-600",
       border: "border-purple-200",
+      gradient: "from-purple-500 to-purple-600",
     },
     green: {
       bg: "bg-green-50",
       icon: "text-green-600",
       value: "text-green-600",
       border: "border-green-200",
+      gradient: "from-green-500 to-green-600",
     },
     red: {
       bg: "bg-red-50",
       icon: "text-red-600",
       value: "text-red-600",
       border: "border-red-200",
+      gradient: "from-red-500 to-red-600",
+    },
+    indigo: {
+      bg: "bg-indigo-50",
+      icon: "text-indigo-600",
+      value: "text-indigo-600",
+      border: "border-indigo-200",
+      gradient: "from-indigo-500 to-indigo-600",
+    },
+    teal: {
+      bg: "bg-teal-50",
+      icon: "text-teal-600",
+      value: "text-teal-600",
+      border: "border-teal-200",
+      gradient: "from-teal-500 to-teal-600",
     },
   }
 
@@ -435,32 +708,38 @@ const StatCard: React.FC<StatCardProps> = ({ icon, label, value, unit, color, to
         visible: { y: 0, opacity: 1 },
       }}
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="relative"
+      className="relative group"
     >
       <div
-        className={`bg-white rounded-xl p-6 shadow-sm border ${classes.border} hover:shadow-md transition-all duration-200 cursor-pointer`}
+        className={`bg-white rounded-2xl p-6 shadow-sm border border-gray-200/50 hover:shadow-lg transition-all duration-300 cursor-pointer h-full ${
+          large ? "lg:p-8" : ""
+        }`}
         title={tooltip}
         onClick={() => details && setShowDetails(!showDetails)}
       >
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
-            <div className={`inline-flex p-2 rounded-lg ${classes.bg} mb-4`}>
-              <div className={classes.icon}>{icon}</div>
-            </div>
-
-            <h3 className="text-sm font-medium text-gray-600 mb-2">{label}</h3>
-
-            <div className="flex items-baseline gap-2">
-              <span className={`text-2xl font-bold ${classes.value}`}>{value.toLocaleString()}</span>
-              {unit && <span className="text-sm text-gray-500">{unit}</span>}
-            </div>
+        <div className="flex items-start justify-between mb-4">
+          <div className={`p-3 rounded-xl bg-gradient-to-r ${classes.gradient} shadow-lg`}>
+            <div className="text-white">{icon}</div>
           </div>
-
           {details && details.length > 0 && (
-            <button className="p-1 hover:bg-gray-100 rounded">
-              <Eye className="h-4 w-4 text-gray-400" />
+            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              {showDetails ? (
+                <ChevronUp className="h-4 w-4 text-gray-400" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-gray-400" />
+              )}
             </button>
           )}
+        </div>
+
+        <div className="space-y-2">
+          <h3 className={`text-sm font-medium text-gray-600 ${large ? "lg:text-base" : ""}`}>{label}</h3>
+          <div className="flex items-baseline gap-2">
+            <span className={`font-bold ${classes.value} ${large ? "text-4xl lg:text-5xl" : "text-2xl"}`}>
+              {value.toLocaleString()}
+            </span>
+            {unit && <span className={`text-gray-500 ${large ? "text-base" : "text-sm"}`}>{unit}</span>}
+          </div>
         </div>
 
         {showDetails && details && detailsFormatter && (
@@ -470,16 +749,18 @@ const StatCard: React.FC<StatCardProps> = ({ icon, label, value, unit, color, to
             exit={{ opacity: 0, height: 0 }}
             className="mt-4 pt-4 border-t border-gray-200"
           >
-            <div className="space-y-1 max-h-32 overflow-y-auto">
+            <div className="space-y-2 max-h-32 overflow-y-auto">
               {detailsFormatter(details)
                 .slice(0, 3)
                 .map((detail, idx) => (
-                  <div key={idx} className="text-xs text-gray-600 p-1 bg-gray-50 rounded">
+                  <div key={idx} className="text-xs text-gray-600 p-2 bg-gray-50 rounded-lg">
                     {detail}
                   </div>
                 ))}
               {detailsFormatter(details).length > 3 && (
-                <div className="text-xs text-gray-500 italic">+{detailsFormatter(details).length - 3} more items</div>
+                <div className="text-xs text-gray-500 italic text-center">
+                  +{detailsFormatter(details).length - 3} more items
+                </div>
               )}
             </div>
           </motion.div>

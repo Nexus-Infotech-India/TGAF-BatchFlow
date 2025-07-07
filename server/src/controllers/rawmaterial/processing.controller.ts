@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '../../generated/prisma';
+import { convertToBaseUOM } from '../../utils/handler/activityLogger';
 const prisma = new PrismaClient();
 
 export class ProcessingJobController {
@@ -8,10 +9,27 @@ export class ProcessingJobController {
       const {
         inputRawMaterialId,
         quantityInput,
+        unit,
         startedAt,
         finishedAt,
         status,
       } = req.body;
+
+       const rawMaterial = await prisma.rawMaterialProduct.findUnique({
+        where: { id: inputRawMaterialId },
+        select: { unitOfMeasurement: true },
+      });
+      if (!rawMaterial) {
+        res.status(400).json({ error: 'Invalid inputRawMaterialId' });
+        return;
+      }
+
+      // Convert quantityInput to base unit
+      const baseQuantityInput = convertToBaseUOM(
+        quantityInput,
+        unit || rawMaterial.unitOfMeasurement,
+        rawMaterial.unitOfMeasurement
+      );
 
       // Generate custom ID like PJ00001
       const lastJob = await prisma.processingJob.findFirst({
@@ -29,7 +47,7 @@ export class ProcessingJobController {
         data: {
           id: newId,
           inputRawMaterialId,
-          quantityInput,
+          quantityInput: baseQuantityInput,
           startedAt: new Date(startedAt),
           finishedAt: finishedAt ? new Date(finishedAt) : undefined,
           status,
@@ -45,7 +63,11 @@ export class ProcessingJobController {
   static async getProcessingJobs(req: Request, res: Response) {
     try {
       const processingJobs = await prisma.processingJob.findMany({
-        include: { inputRawMaterial: true },
+        include: {
+    inputRawMaterial: true,
+    byProducts: { include: { warehouse: true } },
+    finishedGoods: { include: { warehouse: true } },
+  },
       });
       res.json(processingJobs);
     } catch (error) {

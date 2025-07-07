@@ -1,20 +1,40 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '../../generated/prisma';
+import { convertToBaseUOM } from '../../utils/handler/activityLogger';
+import { log } from 'console';
 const prisma = new PrismaClient();
 
 export class CleaningJobController {
   // Create a new cleaning job
-  static async createCleaningJob(req: Request, res: Response) {
+  static async createCleaningJob(req: Request, res: Response): Promise<void> {
     try {
       const {
         rawMaterialId,
         fromWarehouseId,
         toWarehouseId,
         quantity,
+        unit, // <-- Accept unit from request
         status,
         startedAt,
         finishedAt,
       } = req.body;
+
+      // Fetch base unit for the raw material
+      const rawMaterial = await prisma.rawMaterialProduct.findUnique({
+        where: { id: rawMaterialId },
+        select: { unitOfMeasurement: true },
+      });
+      if (!rawMaterial) {
+         res.status(400).json({ error: 'Invalid rawMaterialId' });
+         return;
+      }
+
+      // Convert quantity to base unit
+      const baseQuantity = convertToBaseUOM(
+        quantity,
+        unit || rawMaterial.unitOfMeasurement, // fallback to base if unit not provided
+        rawMaterial.unitOfMeasurement
+      );
 
       const lastJob = await prisma.cleaningJob.findFirst({
         orderBy: { id: 'desc' },
@@ -33,7 +53,7 @@ export class CleaningJobController {
           rawMaterialId,
           fromWarehouseId,
           toWarehouseId,
-          quantity,
+          quantity: baseQuantity, // <-- Store in base unit
           status,
           startedAt: new Date(startedAt),
           finishedAt: finishedAt ? new Date(finishedAt) : undefined,
@@ -48,13 +68,15 @@ export class CleaningJobController {
           },
         },
         data: {
-          currentQuantity: { decrement: quantity },
+          currentQuantity: { decrement: baseQuantity }, // <-- Use base unit
         },
       });
 
       res.status(201).json(cleaningJob);
     } catch (error) {
       res.status(500).json({ error: 'Failed to create cleaning job', details: error });
+      console.log(error);
+      
     }
   }
 
@@ -141,68 +163,68 @@ export class CleaningJobController {
     }
   }
 
- static async getCleanedMaterials(req: Request, res: Response) {
-  try {
-    const cleanedJobs = await prisma.cleaningJob.findMany({
-      where: { status: 'Cleaned' },
-      include: {
-        rawMaterial: true,
-        fromWarehouse: true,
-        toWarehouse: true,
-        cleaningLogs: true,
-      },
-    });
-
-    // Calculate netQuantity and wastage for each job
-    const jobsWithNet = await Promise.all(cleanedJobs.map(async (job) => {
-      const totalWastage = await prisma.unfinishedStock.aggregate({
-        where: { cleaningJobId: job.id },
-        _sum: { quantity: true }
-      });
-      const wastage = totalWastage._sum.quantity || 0;
-      return {
-        ...job,
-        netQuantity: job.quantity - wastage,
-        wastageQuantity: wastage,
-      };
-    }));
-
-    // Aggregate by rawMaterialId + toWarehouseId
-    const aggregated: Record<string, any> = {};
-    for (const job of jobsWithNet) {
-      const key = `${job.rawMaterialId}_${job.toWarehouseId}`;
-      if (!aggregated[key]) {
-        aggregated[key] = {
-          rawMaterialId: job.rawMaterialId,
-          toWarehouseId: job.toWarehouseId,
-          rawMaterial: job.rawMaterial,
-          toWarehouse: job.toWarehouse,
-          netQuantity: 0,
-          wastageQuantity: 0,
-        };
-      }
-      aggregated[key].netQuantity += job.netQuantity;
-      aggregated[key].wastageQuantity += job.wastageQuantity;
-    }
-
-    // Subtract processed quantity for each group
-    for (const key of Object.keys(aggregated)) {
-      const { rawMaterialId, toWarehouseId } = aggregated[key];
-      // Sum all processing jobs for this rawMaterialId and toWarehouseId
-      const processed = await prisma.processingJob.aggregate({
-        where: {
-          inputRawMaterialId: rawMaterialId,
-          // warehouseId: toWarehouseId, // Removed because warehouseId does not exist in ProcessingJobWhereInput
+  static async getCleanedMaterials(req: Request, res: Response) {
+    try {
+      const cleanedJobs = await prisma.cleaningJob.findMany({
+        where: { status: 'Cleaned' },
+        include: {
+          rawMaterial: true,
+          fromWarehouse: true,
+          toWarehouse: true,
+          cleaningLogs: true,
         },
-        _sum: { quantityInput: true }
       });
-      const processedQty = processed._sum && processed._sum.quantityInput ? processed._sum.quantityInput : 0;
-      aggregated[key].availableQuantity = Math.max(aggregated[key].netQuantity - processedQty, 0);
-    }
 
-    res.json(Object.values(aggregated));
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch cleaned materials', details: error });
+      // Calculate netQuantity and wastage for each job
+      const jobsWithNet = await Promise.all(cleanedJobs.map(async (job) => {
+        const totalWastage = await prisma.unfinishedStock.aggregate({
+          where: { cleaningJobId: job.id },
+          _sum: { quantity: true }
+        });
+        const wastage = totalWastage._sum.quantity || 0;
+        return {
+          ...job,
+          netQuantity: job.quantity - wastage,
+          wastageQuantity: wastage,
+        };
+      }));
+
+      // Aggregate by rawMaterialId + toWarehouseId
+      const aggregated: Record<string, any> = {};
+      for (const job of jobsWithNet) {
+        const key = `${job.rawMaterialId}_${job.toWarehouseId}`;
+        if (!aggregated[key]) {
+          aggregated[key] = {
+            rawMaterialId: job.rawMaterialId,
+            toWarehouseId: job.toWarehouseId,
+            rawMaterial: job.rawMaterial,
+            toWarehouse: job.toWarehouse,
+            netQuantity: 0,
+            wastageQuantity: 0,
+          };
+        }
+        aggregated[key].netQuantity += job.netQuantity;
+        aggregated[key].wastageQuantity += job.wastageQuantity;
+      }
+
+      // Subtract processed quantity for each group
+      for (const key of Object.keys(aggregated)) {
+        const { rawMaterialId, toWarehouseId } = aggregated[key];
+        // Sum all processing jobs for this rawMaterialId and toWarehouseId
+        const processed = await prisma.processingJob.aggregate({
+          where: {
+            inputRawMaterialId: rawMaterialId,
+            // warehouseId: toWarehouseId, // Removed because warehouseId does not exist in ProcessingJobWhereInput
+          },
+          _sum: { quantityInput: true }
+        });
+        const processedQty = processed._sum && processed._sum.quantityInput ? processed._sum.quantityInput : 0;
+        aggregated[key].availableQuantity = Math.max(aggregated[key].netQuantity - processedQty, 0);
+      }
+
+      res.json(Object.values(aggregated));
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch cleaned materials', details: error });
+    }
   }
-}
 }

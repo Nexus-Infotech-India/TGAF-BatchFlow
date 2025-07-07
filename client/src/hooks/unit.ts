@@ -1,38 +1,7 @@
-import { PrismaClient } from '../../generated/prisma';
-import { v4 as uuidv4 } from 'uuid';
-
-const prisma = new PrismaClient();
-
-interface ActivityLogParams {
-  userId: string;
-  action: string;
-  details?: string;
-  batchId?: string;
-}
-
-export const createActivityLog = async (params: ActivityLogParams) => {
-  try {
-    const { userId, action, details, batchId } = params;
-
-    await prisma.activityLog.create({
-      data: {
-        id: uuidv4(),
-        userId,
-        action,
-        details,
-        batchId,
-      },
-    });
-  } catch (error) {
-    console.error('Error creating activity log:', error);
-    // Don't throw the error to prevent disrupting the main flow
-  }
-};
-
 /**
  * Converts a quantity from one unit to the base unit.
- * Supported base units: kg, litre, piece
- * Supported conversions: g <-> kg, ml <-> litre
+ * Supported base units: ton, kg, g, litre, ml, piece
+ * Supported conversions: g <-> kg <-> ton, ml <-> litre, etc.
  */
 export function convertToBaseUOM(
   quantity: number,
