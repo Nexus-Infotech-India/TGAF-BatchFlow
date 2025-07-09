@@ -1,5 +1,5 @@
 // Auto-generated schema - DO NOT EDIT DIRECTLY
-// Generated on: Fri 04 Jul 2025 11:07:37 PM IST
+// Generated on: Tue 08 Jul 2025 09:01:12 PM IST
 
 generator client {
   provider = "prisma-client-js"
@@ -886,6 +886,7 @@ model Warehouse {
   cleaningLogsFrom  CleaningLog[] @relation("CleaningFromWarehouse")
   cleaningLogsTo    CleaningLog[] @relation("CleaningToWarehouse")
   finishedGoods     FinishedGood[]
+  reusableStocks    ReusableStock[]
 }
 model CleaningJob {
   id                String   @id 
@@ -985,4 +986,14 @@ model TransactionLog {
   createdAt   DateTime @default(now())
 
   user        User     @relation(fields: [userId], references: [id])
+}
+model ReusableStock {
+  id            String   @id @default(uuid())
+  cleaningJobId String?
+  processingJobId String? 
+  skuCode       String
+  quantity      Float
+  warehouseId   String
+  warehouse     Warehouse @relation(fields: [warehouseId], references: [id])
+  createdAt     DateTime @default(now())
 }

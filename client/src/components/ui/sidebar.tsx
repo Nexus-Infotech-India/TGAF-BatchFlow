@@ -96,138 +96,140 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
   ];
 
   // Parent groups with children
-  const parentGroups: ParentGroup[] = [
-     {
-      key: "raw-material",
-      name: "Raw Material Man...",
-      icon: <PackageOpen size={20} />,
-      children: [
-        { 
-          path: "/raw-dashboard", 
-          name: "Dashboard", 
-          icon: <LayoutDashboardIcon size={18} />,
-          permissionKey: "view_audits" 
-        },
-        //  { 
-        //   path: "/raw/purchase-order", 
-        //   name: "Order", 
-        //   icon: <FileStack size={18} />,
-        //   permissionKey: "view_audits" 
-        // },
-        { 
-          path: "/raw/purchase-history", 
-          name: "Order", 
-          icon: <FileStack size={18} />,
-          permissionKey: "view_history" 
-        },
-         { 
-          path: "/raw/cleaning-raw-materials", 
-          name: "Cleaning", 
-          icon: <ClipboardEdit size={18} />,
-          permissionKey: "view_audits" 
-        },
-          { 
-          path: "/raw/processing-list", 
-          name: "Processing", 
-          icon: <SwitchCamera size={18} />,
-          permissionKey: "manage_purchase_order" 
-        },
-         { 
-          path: "/stock-distribution", 
-          name: "Stock Distribution", 
-          icon: <SwitchCamera size={18} />,
-          permissionKey: "view_distribution" 
-        },
-      ]
-    },
-    {
-      key: "batch-management",
-      name: "Batch Management",
-      icon: <PackageOpen size={20} />,
-      children: [
-         { 
-          path: "/operation-dashboard", 
-          name: "Dashboard", 
-          icon: <LucideLayoutDashboard size={18} />,
-          permissionKey: "manage_standards" 
-        },
-        { 
-          path: "/batches", 
-          name: "Batches", 
-          icon: <PackageOpen size={18} />,
-          permissionKey: "view_batches" 
-        },
-        { 
-          path: "/standards", 
-          name: "Standards", 
-          icon: <Award size={18} />,
-          permissionKey: "manage_standards" 
-        },
-        // { 
-        //   path: "/compare-batch", 
-        //   name: "Compare Batch", 
-        //   icon: <Anchor size={18} />,
-        //   permissionKey: "review_batches" 
-        // },
-         { 
-          path: "/batches/verification", 
-          name: "Batch Verification", 
-          icon: <Award size={18} />,
-          permissionKey: "verify_batches" 
-        },
-      ]
-    },
-    {
-      key: "training",
-      name: "Training",
-      icon: <GraduationCap size={20} />,
-      children: [
-        { 
-          path: "/trainings-dashboard", 
-          name: "Dashboard", 
-          icon: <LucideLayoutDashboard size={18} />,
-          permissionKey: "training-dashboard" 
-        },
-        { 
-          path: "/trainings", 
-          name: "Training", 
-          icon: <Award size={18} />,
-          permissionKey: "manage_trainings" 
-        },
-        { 
-          path: "/training-calender", 
-          name: "Training Calendar", 
-          icon: <Calendar size={18} />,
-          permissionKey: "view_calender" 
-        },
-      ]
-    },
-    {
-      key: "audit-management",
-      name: "Audit Management",
-      icon: <Shield size={20} />,
-      children: [
-        { 
-          path: "/audit-dashboard", 
-          name: "Audit Dashboard", 
-          icon: <File size={18} />,
-          permissionKey: "view_audits" 
-        },
-         { 
-          path: "/audits", 
-          name: "Audit management", 
-          icon: <File size={18} />,
-          permissionKey: "view_audits" 
-        },
-        {
-          path: "/audit/calender",
-          name: "Audit Calendar",
-          icon: <Calendar size={18} />,
-          permissionKey: "view_calender"
-        }
-      ]
-    }
-  ];
+
+const parentGroups: ParentGroup[] = [
+  {
+    key: "raw-material",
+    name: "Raw Material Man...",
+    icon: <PackageOpen size={20} />,
+    children: [
+      { 
+        path: "/raw-dashboard", 
+        name: "Dashboard", 
+        icon: <LayoutDashboardIcon size={18} />,
+        permissionKey: "manage_raw_dashboard" // updated
+      },
+      // { 
+      //   path: "/raw/purchase-order", 
+      //   name: "Order", 
+      //   icon: <FileStack size={18} />,
+      //   permissionKey: "manage_purchase_order" // updated (if enabled)
+      // },
+      { 
+        path: "/raw/purchase-history", 
+        name: "Order", 
+        icon: <FileStack size={18} />,
+        permissionKey: "manage_purchase_order" // updated
+      },
+      { 
+        path: "/raw/cleaning-raw-materials", 
+        name: "Cleaning", 
+        icon: <ClipboardEdit size={18} />,
+        permissionKey: "manage_purchase_order" // updated
+      },
+      { 
+        path: "/raw/processing-list", 
+        name: "Processing", 
+        icon: <SwitchCamera size={18} />,
+        permissionKey: "manage_purchase_order"
+      },
+      { 
+        path: "/stock-distribution", 
+        name: "Stock Distribution", 
+        icon: <SwitchCamera size={18} />,
+        permissionKey: "view_stock_distribution" // updated
+      },
+    ]
+  },
+  {
+    key: "batch-management",
+    name: "Batch Management",
+    icon: <PackageOpen size={20} />,
+    children: [
+      { 
+        path: "/operation-dashboard", 
+        name: "Dashboard", 
+        icon: <LucideLayoutDashboard size={18} />,
+        permissionKey: "view_operation_dashboard" // updated
+      },
+      { 
+        path: "/batches", 
+        name: "Batches", 
+        icon: <PackageOpen size={18} />,
+        permissionKey: "view_batches"
+      },
+      { 
+        path: "/standards", 
+        name: "Standards", 
+        icon: <Award size={18} />,
+        permissionKey: "manage_standards"
+      },
+      // { 
+      //   path: "/compare-batch", 
+      //   name: "Compare Batch", 
+      //   icon: <Anchor size={18} />,
+      //   permissionKey: "review_batches"
+      // },
+      { 
+        path: "/batches/verification", 
+        name: "Batch Verification", 
+        icon: <Award size={18} />,
+        permissionKey: "verify_batches"
+      },
+    ]
+  },
+  {
+    key: "training",
+    name: "Training",
+    icon: <GraduationCap size={20} />,
+    children: [
+      { 
+        path: "/trainings-dashboard", 
+        name: "Dashboard", 
+        icon: <LucideLayoutDashboard size={18} />,
+        permissionKey: "view_training_dashboard" // updated
+      },
+      { 
+        path: "/trainings", 
+        name: "Training", 
+        icon: <Award size={18} />,
+        permissionKey: "manage_trainings"
+      },
+      { 
+        path: "/training-calender", 
+        name: "Training Calendar", 
+        icon: <Calendar size={18} />,
+        permissionKey: "view_training_calendar" // updated
+      },
+    ]
+  },
+  {
+    key: "audit-management",
+    name: "Audit Management",
+    icon: <Shield size={20} />,
+    children: [
+      { 
+        path: "/audit-dashboard", 
+        name: "Audit Dashboard", 
+        icon: <File size={18} />,
+        permissionKey: "view_audit_dashboard" // updated
+      },
+      { 
+        path: "/audits", 
+        name: "Audit management", 
+        icon: <File size={18} />,
+        permissionKey: "manage_audits" // updated
+      },
+      {
+        path: "/audit/calender",
+        name: "Audit Calendar",
+        icon: <Calendar size={18} />,
+        permissionKey: "view_audit_calendar" // updated
+      }
+    ]
+  }
+];
+
 
   // Filter independent items based on permissions
   const authorizedIndependentItems = isAdmin 

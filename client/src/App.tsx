@@ -358,10 +358,23 @@ const App = () => {
               }
             />
 
-            <Route
-              path="/trainings/edit/:trainingId"
-              element={<EditTraining />}
-            />
+           <Route
+  path="/trainings/edit/:trainingId"
+  element={
+    <PermissionedRoute
+      path="/trainings/edit/:trainingId"
+      element={
+        <SecureRoute
+          element={<EditTraining />}
+          permissionKey="edit_training"
+        />
+      }
+      name="Edit Training"
+      description="Edit training session details"
+      permissionKey="edit_training"
+    />
+  }
+/>
 
             <Route
               path="/training-calender"
@@ -601,38 +614,39 @@ const App = () => {
             />
 
             {/* ==================== RAW MATERIAL ROUTES ==================== */}
-            <Route
-              path="/raw/purchase-order"
-              element={
-                <PermissionedRoute
-                  path="/raw/purchase-order"
-                  element={
-                    <SecureRoute
-                      element={<PurchaseOrder />}
-                      permissionKey="manage_purchase_order"
-                    />
-                  }
-                  name="Inspection order"
-                  description="View and manage purchase orders for raw materials"
-                  permissionKey="manage_inspection_order"
-                />
-              }
-            />
+            
+<Route
+  path="/raw/purchase-order"
+  element={
+    <PermissionedRoute
+      path="/raw/purchase-order"
+      element={
+        <SecureRoute
+          element={<PurchaseOrder />}
+          permissionKey="manage_purchase_order" // unified
+        />
+      }
+      name="Purchase order"
+      description="View and manage purchase orders for raw materials"
+      permissionKey="manage_purchase_order" // unified
+    />
+  }
+/>
 
             <Route
               path="/raw/purchase-history"
               element={
                 <PermissionedRoute
-                  path="/purchase-orders"
+                  path="/purchase-history"
                   element={
                     <SecureRoute
                       element={<PurchaseOrderList />}
-                      permissionKey="manage_purchase_order"
+                      permissionKey="manage_purchase_history"
                     />
                   }
-                  name="Purchase Orders"
-                  description="View and manage all purchase orders"
-                  permissionKey="manage_purchase_order"
+                  name="Purchase History"
+                  description="View and manage all purchase history"
+                  permissionKey="manage_purchase_history"
                 />
               }
             />
@@ -663,12 +677,12 @@ const App = () => {
                   element={
                     <SecureRoute
                       element={<CleaningRawMaterialList />}
-                      permissionKey="manage_purchase_order"
+                      permissionKey="manage_cleaning_rawmaterials"
                     />
                   }
                   name="Cleaning Raw Materials"
                   description="View all received raw materials for cleaning"
-                  permissionKey="manage_purchase_order"
+                  permissionKey="manage_cleaning_rawmaterials"
                 />
               }
             />
@@ -717,12 +731,12 @@ const App = () => {
                   element={
                     <SecureRoute
                       element={<ProcessingList />}
-                      permissionKey="manage_purchase_order"
+                      permissionKey="manage_processing_list"
                     />
                   }
                   name="Processing List"
-                  description="View all cleaned raw materials ready for processing"
-                  permissionKey="manage_purchase_order"
+                  description="View all processing raw materials ready for processing"
+                  permissionKey="process_raw_materials"
                 />
               }
             />

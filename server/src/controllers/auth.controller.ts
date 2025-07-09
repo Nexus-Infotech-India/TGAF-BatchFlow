@@ -913,4 +913,4 @@ async syncPagePermissions(req: Request, res: Response): Promise<void> {
 
 }
 
-export default new AuthController();
+export default new AuthController()

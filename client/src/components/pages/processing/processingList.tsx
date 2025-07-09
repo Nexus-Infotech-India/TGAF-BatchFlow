@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
-import { Button, Modal, Input, Select, message } from 'antd';
+import { Button, Modal, Input, Select, message, Switch } from 'antd';
 import { PlusOutlined, ReloadOutlined, EditOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Package, TrendingUp, CheckCircle, FileText } from 'lucide-react';
@@ -75,6 +75,7 @@ const ProcessingList: React.FC = () => {
     reason: string;
     warehouseId: string;
     loading: boolean;
+    isReusable?: boolean;
   }>({
     visible: false,
     job: undefined,
@@ -83,6 +84,7 @@ const ProcessingList: React.FC = () => {
     reason: '',
     warehouseId: '',
     loading: false,
+    isReusable: false,
   });
 
   // Fetch cleaned materials
@@ -117,23 +119,26 @@ const ProcessingList: React.FC = () => {
   };
 
   // Fetch processing jobs for a cleaned material
- const fetchProcessingJobs = async (rawMaterialId: string, toWarehouseId: string) => {
-  try {
-    const res = await api.get(API_ROUTES.RAW.GET_PROCESSING_JOBS, {
-      params: { inputRawMaterialId: rawMaterialId },
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-      },
-    });
-    // Store jobs with composite key
-    setProcessingJobs((prev) => ({
-      ...prev,
-      [`${rawMaterialId}_${toWarehouseId}`]: res.data,
-    }));
-  } catch {
-    message.error('Failed to fetch processing jobs');
-  }
-};
+  const fetchProcessingJobs = async (
+    rawMaterialId: string,
+    toWarehouseId: string
+  ) => {
+    try {
+      const res = await api.get(API_ROUTES.RAW.GET_PROCESSING_JOBS, {
+        params: { inputRawMaterialId: rawMaterialId },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      });
+      // Store jobs with composite key
+      setProcessingJobs((prev) => ({
+        ...prev,
+        [`${rawMaterialId}_${toWarehouseId}`]: res.data,
+      }));
+    } catch {
+      message.error('Failed to fetch processing jobs');
+    }
+  };
 
   useEffect(() => {
     fetchCleaningJobs();
@@ -141,15 +146,15 @@ const ProcessingList: React.FC = () => {
   }, []);
 
   // Handle row expand/collapse
- const handleExpand = (expanded: boolean, record: CleaningMaterial) => {
-  const rowKey = record.rawMaterialId + record.toWarehouseId;
-  if (expanded) {
-    setExpandedRowKeys([rowKey]);
-    fetchProcessingJobs(record.rawMaterialId, record.toWarehouseId);
-  } else {
-    setExpandedRowKeys([]);
-  }
-};
+  const handleExpand = (expanded: boolean, record: CleaningMaterial) => {
+    const rowKey = record.rawMaterialId + record.toWarehouseId;
+    if (expanded) {
+      setExpandedRowKeys([rowKey]);
+      fetchProcessingJobs(record.rawMaterialId, record.toWarehouseId);
+    } else {
+      setExpandedRowKeys([]);
+    }
+  };
 
   // Open modal for initiating processing
   const openModal = (job: CleaningMaterial) => {
@@ -201,7 +206,7 @@ const ProcessingList: React.FC = () => {
         loading: false,
       });
       fetchCleaningJobs();
-     fetchProcessingJobs(modal.job.rawMaterial.id, modal.job.toWarehouse.id);
+      fetchProcessingJobs(modal.job.rawMaterial.id, modal.job.toWarehouse.id);
     } catch {
       message.error('Failed to initiate processing job');
       setModal((prev) => ({ ...prev, loading: false }));
@@ -319,7 +324,7 @@ const ProcessingList: React.FC = () => {
   // Expanded row render: Processing jobs table
   const expandedRowRender = (record: CleaningMaterial) => {
     const jobs =
-    processingJobs[`${record.rawMaterialId}_${record.toWarehouseId}`] || [];
+      processingJobs[`${record.rawMaterialId}_${record.toWarehouseId}`] || [];
     return (
       <div className="overflow-x-auto rounded-xl border border-gray-200 shadow bg-white mt-2 p-2">
         <table className="min-w-full divide-y divide-gray-200">
@@ -739,6 +744,19 @@ const ProcessingList: React.FC = () => {
               }
             />
           </div>
+        </div>
+        <div className="mb-3">
+          <div className="text-xs text-gray-500 mb-1">
+            Is this by-product reusable?
+          </div>
+          <Switch
+            checked={editStatusModal.isReusable}
+            onChange={(checked) =>
+              setEditStatusModal((prev) => ({ ...prev, isReusable: checked }))
+            }
+            checkedChildren="Yes"
+            unCheckedChildren="No"
+          />
         </div>
         <div className="mb-3">
           <div className="text-xs text-gray-500 mb-1">Reason</div>

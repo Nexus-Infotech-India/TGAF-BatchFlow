@@ -128,6 +128,7 @@ export class CleaningJobController {
         finishedAt,
         leftoverQuantity, // <-- Add these to destructure from req.body
         reasonCode,
+        isReusable,
       } = req.body;
 
       const cleaningJob = await prisma.cleaningJob.update({
@@ -155,6 +156,18 @@ export class CleaningJobController {
             warehouseId: cleaningJob.toWarehouseId,
           },
         });
+
+         if (isReusable) {
+          await prisma.reusableStock.create({
+            data: {
+              cleaningJobId: cleaningJob.id,
+              skuCode: unfinishedSku,
+              quantity: leftoverQuantity,
+              warehouseId: cleaningJob.toWarehouseId,
+              createdAt: new Date(),
+            },
+          });
+        }
       }
 
       res.json(cleaningJob);

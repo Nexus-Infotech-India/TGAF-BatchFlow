@@ -91,6 +91,7 @@ model Warehouse {
   cleaningLogsFrom  CleaningLog[] @relation("CleaningFromWarehouse")
   cleaningLogsTo    CleaningLog[] @relation("CleaningToWarehouse")
   finishedGoods     FinishedGood[]
+  reusableStocks    ReusableStock[]
 }
 
 model CleaningJob {
@@ -198,4 +199,15 @@ model TransactionLog {
   createdAt   DateTime @default(now())
 
   user        User     @relation(fields: [userId], references: [id])
+}
+
+model ReusableStock {
+  id            String   @id @default(uuid())
+  cleaningJobId String?
+  processingJobId String? 
+  skuCode       String
+  quantity      Float
+  warehouseId   String
+  warehouse     Warehouse @relation(fields: [warehouseId], references: [id])
+  createdAt     DateTime @default(now())
 }

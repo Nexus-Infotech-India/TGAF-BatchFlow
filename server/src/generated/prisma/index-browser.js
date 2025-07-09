@@ -754,6 +754,16 @@ exports.Prisma.TransactionLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ReusableStockScalarFieldEnum = {
+  id: 'id',
+  cleaningJobId: 'cleaningJobId',
+  processingJobId: 'processingJobId',
+  skuCode: 'skuCode',
+  quantity: 'quantity',
+  warehouseId: 'warehouseId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -939,7 +949,8 @@ exports.Prisma.ModelName = {
   FinishedGood: 'FinishedGood',
   ByProduct: 'ByProduct',
   CurrentStock: 'CurrentStock',
-  TransactionLog: 'TransactionLog'
+  TransactionLog: 'TransactionLog',
+  ReusableStock: 'ReusableStock'
 };
 
 /**

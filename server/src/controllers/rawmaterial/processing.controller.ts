@@ -133,6 +133,17 @@ export class ProcessingJobController {
             reason: bp.reason,
           },
         });
+        if (bp.isReusable) {
+    await prisma.reusableStock.create({
+      data: {
+        processingJobId: id,
+        skuCode: bp.skuCode,
+        quantity: bp.quantity,
+        warehouseId: bp.warehouseId,
+        createdAt: new Date(),
+      },
+    });
+  }
       }
     }
 

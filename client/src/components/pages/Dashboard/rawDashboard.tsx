@@ -1,8 +1,8 @@
-"use client"
+'use client';
 
-import type React from "react"
-import { useEffect, useState } from "react"
-import { motion } from "framer-motion"
+import type React from 'react';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   Package,
   Truck,
@@ -16,60 +16,76 @@ import {
   Factory,
   ChevronDown,
   ChevronUp,
-} from "lucide-react"
-import api, { API_ROUTES } from "../../../utils/api"
-import { Bar, Doughnut } from "react-chartjs-2"
-import { Chart, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend } from "chart.js"
+} from 'lucide-react';
+import api, { API_ROUTES } from '../../../utils/api';
+import { Bar, Doughnut } from 'react-chartjs-2';
+import {
+  Chart,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 
-Chart.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend)
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  Tooltip,
+  Legend
+);
 
 interface LowStockAlert {
-  skuCode: string
-  name: string
-  available: number
-  minReorderLevel: number
-  details: any[]
+  skuCode: string;
+  name: string;
+  available: number;
+  minReorderLevel: number;
+  details: any[];
 }
 
 interface WasteStock {
   afterCleaning: {
-    total: number
-    details: any[]
-  }
+    total: number;
+    details: any[];
+  };
   afterProcessing: {
-    total: number
-    details: any[]
-  }
-  total: number
+    total: number;
+    details: any[];
+  };
+  total: number;
 }
 
 const RawDashboard: React.FC = () => {
-  const [totalStock, setTotalStock] = useState<number>(0)
-  const [totalStockDetails, setTotalStockDetails] = useState<any[]>([])
-  const [pendingPOs, setPendingPOs] = useState<number>(0)
-  const [pendingPODetails, setPendingPODetails] = useState<any[]>([])
-  const [stockUnderCleaning, setStockUnderCleaning] = useState<number>(0)
-  const [cleaningDetails, setCleaningDetails] = useState<any[]>([])
-  const [stockInProcessing, setStockInProcessing] = useState<number>(0)
-  const [processingDetails, setProcessingDetails] = useState<any[]>([])
-  const [lowStockAlerts, setLowStockAlerts] = useState<LowStockAlert[]>([])
+  const [totalStock, setTotalStock] = useState<number>(0);
+  const [totalStockDetails, setTotalStockDetails] = useState<any[]>([]);
+  const [pendingPOs, setPendingPOs] = useState<number>(0);
+  const [pendingPODetails, setPendingPODetails] = useState<any[]>([]);
+  const [stockUnderCleaning, setStockUnderCleaning] = useState<number>(0);
+  const [cleaningDetails, setCleaningDetails] = useState<any[]>([]);
+  const [stockInProcessing, setStockInProcessing] = useState<number>(0);
+  const [processingDetails, setProcessingDetails] = useState<any[]>([]);
+  const [lowStockAlerts, setLowStockAlerts] = useState<LowStockAlert[]>([]);
   const [wasteStock, setWasteStock] = useState<WasteStock>({
     afterCleaning: { total: 0, details: [] },
     afterProcessing: { total: 0, details: [] },
     total: 0,
-  })
-  const [loading, setLoading] = useState(true)
-  const [totalVendors, setTotalVendors] = useState<number>(0)
-  const [totalPurchaseOrders, setTotalPurchaseOrders] = useState<number>(0)
-  const [productWiseWaste, setProductWiseWaste] = useState<any>({ afterCleaning: [], afterProcessing: [] })
-  const [stockDistribution, setStockDistribution] = useState<any[]>([])
-  const [productWiseConversion, setProductWiseConversion] = useState<any[]>([])
+  });
+  const [loading, setLoading] = useState(true);
+  const [totalVendors, setTotalVendors] = useState<number>(0);
+  const [totalPurchaseOrders, setTotalPurchaseOrders] = useState<number>(0);
+  const [productWiseWaste, setProductWiseWaste] = useState<any[]>([]);
+  //const [productWiseWaste, setProductWiseWaste] = useState<any>({ afterCleaning: [], afterProcessing: [] })
+  const [stockDistribution, setStockDistribution] = useState<any[]>([]);
+  const [productWiseConversion, setProductWiseConversion] = useState<any[]>([]);
 
-  const authToken = localStorage.getItem("authToken")
+  const authToken = localStorage.getItem('authToken');
 
   useEffect(() => {
-    setLoading(true)
-    const headers = { Authorization: `Bearer ${authToken}` }
+    setLoading(true);
+    const headers = { Authorization: `Bearer ${authToken}` };
 
     Promise.all([
       api.get(API_ROUTES.RAW.GET_TOTAL_RAW_MATERIAL_STOCK, { headers }),
@@ -97,32 +113,40 @@ const RawDashboard: React.FC = () => {
           productWiseWasteRes,
           stockDistributionRes,
           productWiseConversionRes,
-        ] = responses
+        ] = responses;
 
-        setTotalStock(totalStockRes.data.totalRawMaterialStock || 0)
-        setTotalStockDetails(totalStockRes.data.details || [])
-        setPendingPOs(pendingPOsRes.data.pendingPOs || 0)
-        setPendingPODetails(pendingPOsRes.data.details || [])
-        setStockUnderCleaning(cleaningRes.data.stockUnderCleaning || 0)
-        setCleaningDetails(cleaningRes.data.details || [])
-        setStockInProcessing(processingRes.data.stockInProcessing || 0)
-        setProcessingDetails(processingRes.data.details || [])
-        setLowStockAlerts(lowStockRes.data.lowStockAlerts || [])
+        setTotalStock(totalStockRes.data.totalRawMaterialStock || 0);
+        setTotalStockDetails(totalStockRes.data.details || []);
+        setPendingPOs(pendingPOsRes.data.pendingPOs || 0);
+        setPendingPODetails(pendingPOsRes.data.details || []);
+        setStockUnderCleaning(cleaningRes.data.stockUnderCleaning || 0);
+        setCleaningDetails(cleaningRes.data.details || []);
+        setStockInProcessing(processingRes.data.stockInProcessing || 0);
+        setProcessingDetails(processingRes.data.details || []);
+        setLowStockAlerts(lowStockRes.data.lowStockAlerts || []);
         setWasteStock(
           wasteRes.data.wasteStock || {
             afterCleaning: { total: 0, details: [] },
             afterProcessing: { total: 0, details: [] },
             total: 0,
-          },
-        )
-        setTotalVendors(vendorsRes.data.totalVendors || 0)
-        setTotalPurchaseOrders(poRes.data.totalPurchaseOrders || 0)
-        setProductWiseWaste(productWiseWasteRes.data.productWiseWaste || { afterCleaning: [], afterProcessing: [] })
-        setStockDistribution(stockDistributionRes.data.stockDistribution || [])
-        setProductWiseConversion(productWiseConversionRes.data.productWiseConversionRatio || [])
+          }
+        );
+        setTotalVendors(vendorsRes.data.totalVendors || 0);
+        setTotalPurchaseOrders(poRes.data.totalPurchaseOrders || 0);
+        // ...existing code...
+        setProductWiseWaste(
+          productWiseWasteRes.data.productWiseWasteStock || []
+        );
+        // ...existing code...
+        //setProductWiseWaste(productWiseWasteRes.data || []);
+        //setProductWiseWaste(productWiseWasteRes.data.productWiseWaste || { afterCleaning: [], afterProcessing: [] })
+        setStockDistribution(stockDistributionRes.data.stockDistribution || []);
+        setProductWiseConversion(
+          productWiseConversionRes.data.productWiseConversionRatio || []
+        );
       })
-      .finally(() => setLoading(false))
-  }, [authToken])
+      .finally(() => setLoading(false));
+  }, [authToken]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -132,7 +156,7 @@ const RawDashboard: React.FC = () => {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -143,79 +167,55 @@ const RawDashboard: React.FC = () => {
         duration: 0.5,
       },
     },
-  }
+  };
 
-  // Chart data preparation
-  const wasteLabels = [
-    ...new Set([
-      ...productWiseWaste.afterCleaning.map((w: any) => w.productName),
-      ...productWiseWaste.afterProcessing.map((w: any) => w.productName),
-    ]),
-  ]
-
-  const cleaningWasteData = wasteLabels.map(
-    (name) => productWiseWaste.afterCleaning.find((w: any) => w.productName === name)?.total || 0,
-  )
-  const processingWasteData = wasteLabels.map(
-    (name) => productWiseWaste.afterProcessing.find((w: any) => w.productName === name)?.total || 0,
-  )
-
-  const wasteBarData = {
-    labels: wasteLabels,
-    datasets: [
-      {
-        label: "After Cleaning",
-        data: cleaningWasteData,
-        backgroundColor: "rgba(59, 130, 246, 0.8)",
-        borderColor: "rgba(59, 130, 246, 1)",
-        borderWidth: 1,
-        borderRadius: 6,
-      },
-      {
-        label: "After Processing",
-        data: processingWasteData,
-        backgroundColor: "rgba(16, 185, 129, 0.8)",
-        borderColor: "rgba(16, 185, 129, 1)",
-        borderWidth: 1,
-        borderRadius: 6,
-      },
-    ],
-  }
-
-  const warehouseLabels = stockDistribution.map((w) => w.warehouse?.name || "N/A")
+  const warehouseLabels = stockDistribution.map(
+    (w) => w.warehouse?.name || 'N/A'
+  );
   const warehouseTotals = stockDistribution.map((w) =>
-    w.items.reduce((sum: number, i: any) => sum + (i.quantity || 0), 0),
-  )
+    w.items.reduce((sum: number, i: any) => sum + (i.quantity || 0), 0)
+  );
 
   const warehousePieData = {
     labels: warehouseLabels,
     datasets: [
       {
-        label: "Stock Distribution",
+        label: 'Stock Distribution',
         data: warehouseTotals,
-        backgroundColor: ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4", "#84CC16", "#F97316"],
+        backgroundColor: [
+          '#3B82F6',
+          '#10B981',
+          '#F59E0B',
+          '#EF4444',
+          '#8B5CF6',
+          '#06B6D4',
+          '#84CC16',
+          '#F97316',
+        ],
         borderWidth: 2,
-        borderColor: "#ffffff",
+        borderColor: '#ffffff',
       },
     ],
-  }
+  };
 
-  const conversionLabels = productWiseConversion.map((p) => p.skuCode)
-  const conversionData = productWiseConversion.map((p) => Math.round((p.conversionPercentage || 0) * 100) / 100)
+  const conversionLabels = productWiseConversion.map((p) => p.skuCode);
+  const conversionData = productWiseConversion.map(
+    (p) => Math.round((p.conversionPercentage || 0) * 100) / 100
+  );
 
   const conversionBarData = {
     labels: conversionLabels,
     datasets: [
       {
-        label: "Conversion %",
+        label: 'Conversion %',
         data: conversionData,
-        backgroundColor: "rgba(251, 191, 36, 0.8)",
-        borderColor: "rgba(251, 191, 36, 1)",
+        backgroundColor: 'rgba(251, 191, 36, 0.8)',
+        borderColor: 'rgba(251, 191, 36, 1)',
         borderWidth: 1,
         borderRadius: 6,
       },
     ],
-  }
+  };
 
   if (loading) {
     return (
@@ -230,12 +230,14 @@ const RawDashboard: React.FC = () => {
             <div className="absolute inset-0 h-12 w-12 animate-ping rounded-full bg-blue-200 opacity-20"></div>
           </div>
           <div className="text-center">
-            <p className="text-gray-800 font-semibold text-lg">Loading Dashboard</p>
+            <p className="text-gray-800 font-semibold text-lg">
+              Loading Dashboard
+            </p>
             <p className="text-gray-500 text-sm">Fetching real-time data...</p>
           </div>
         </motion.div>
       </div>
-    )
+    );
   }
 
   return (
@@ -253,13 +255,19 @@ const RawDashboard: React.FC = () => {
                 <Factory className="h-7 w-7 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">Raw Material Dashboard</h1>
-                <p className="text-gray-600 mt-1">Real-time inventory monitoring and analytics</p>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Raw Material Dashboard
+                </h1>
+                <p className="text-gray-600 mt-1">
+                  Real-time inventory monitoring and analytics
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-3 bg-green-50 px-4 py-2 rounded-full">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-green-700 font-medium text-sm">Live Data</span>
+              <span className="text-green-700 font-medium text-sm">
+                Live Data
+              </span>
             </div>
           </div>
         </div>
@@ -284,7 +292,7 @@ const RawDashboard: React.FC = () => {
               detailsFormatter={(details) =>
                 details.map(
                   (s) =>
-                    `${s.rawMaterial?.name || ""} (${s.rawMaterial?.skuCode || ""}): ${s.currentQuantity} in ${s.warehouse?.name || ""}`,
+                    `${s.rawMaterial?.name || ''} (${s.rawMaterial?.skuCode || ''}): ${s.currentQuantity} in ${s.warehouse?.name || ''}`
                 )
               }
               large={true}
@@ -298,7 +306,10 @@ const RawDashboard: React.FC = () => {
             color="orange"
             details={pendingPODetails}
             detailsFormatter={(details) =>
-              details.map((po) => `PO#${po.id} (${po.vendor?.name || ""}): ${po.items?.length || 0} items`)
+              details.map(
+                (po) =>
+                  `PO#${po.id} (${po.vendor?.name || ''}): ${po.items?.length || 0} items`
+              )
             }
           />
           <StatCard
@@ -317,7 +328,10 @@ const RawDashboard: React.FC = () => {
             color="purple"
             details={cleaningDetails}
             detailsFormatter={(details) =>
-              details.map((c) => `${c.rawMaterial?.name || ""}: ${c.quantity} (${c.status})`)
+              details.map(
+                (c) =>
+                  `${c.rawMaterial?.name || ''}: ${c.quantity} (${c.status})`
+              )
             }
           />
           <StatCard
@@ -328,7 +342,10 @@ const RawDashboard: React.FC = () => {
             color="green"
             details={processingDetails}
             detailsFormatter={(details) =>
-              details.map((p) => `${p.inputRawMaterial?.name || ""}: ${p.quantityInput} (${p.status})`)
+              details.map(
+                (p) =>
+                  `${p.inputRawMaterial?.name || ''}: ${p.quantityInput} (${p.status})`
+              )
             }
           />
           <StatCard
@@ -361,37 +378,63 @@ const RawDashboard: React.FC = () => {
                 <Recycle className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">Product-wise Waste Analysis</h3>
-                <p className="text-gray-500 text-sm">Waste generated after cleaning and processing</p>
+                <h3 className="text-xl font-semibold text-gray-900">
+                  Product-wise Waste Table
+                </h3>
+                <p className="text-gray-500 text-sm">
+                  Summary of raw material, cleaning, waste, and processing
+                </p>
               </div>
             </div>
-            <div className="h-80">
-              <Bar
-                data={wasteBarData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      position: "top",
-                      labels: {
-                        usePointStyle: true,
-                        padding: 20,
-                      },
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-xs md:text-sm border">
+                <thead>
+                  <tr className="bg-gradient-to-r from-gray-50 to-blue-50">
+                    <th className="border px-2 py-2 text-left font-semibold">
+                      Metric
+                    </th>
+                    {productWiseWaste?.map((p: any) => (
+                      <th
+                        key={p.productId}
+                        className="border px-2 py-2 font-semibold text-center"
+                      >
+                        {p.productName}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { label: 'Raw material', key: 'rawMaterial' },
+                    { label: 'Cleaning', key: 'cleaning' },
+                    {
+                      label: 'Waste after cleaning',
+                      key: 'wasteAfterCleaning',
                     },
-                  },
-                  scales: {
-                    x: {
-                      grid: { display: false },
-                      ticks: { font: { size: 12 } },
+                    { label: 'Cleaned', key: 'cleaned' },
+                    { label: 'Processing', key: 'processing' },
+                    {
+                      label: 'Waste after processing',
+                      key: 'wasteAfterProcessing',
                     },
-                    y: {
-                      beginAtZero: true,
-                      grid: { color: "rgba(0,0,0,0.05)" },
-                    },
-                  },
-                }}
-              />
+                    { label: 'Processed', key: 'processed' },
+                  ].map((row) => (
+                    <tr key={row.key} className="even:bg-blue-50/30">
+                      <td className="border px-2 py-2 font-medium">
+                        {row.label}
+                      </td>
+                      {productWiseWaste?.map((p: any) => (
+                        <td
+                          key={p.productId + row.key}
+                          className="border px-2 py-2 text-center"
+                        >
+                          {p[row.key]}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </motion.div>
 
@@ -407,7 +450,9 @@ const RawDashboard: React.FC = () => {
                 <Warehouse className="h-5 w-5 text-green-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">Stock Distribution</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Stock Distribution
+                </h3>
                 <p className="text-gray-500 text-sm">By warehouse</p>
               </div>
             </div>
@@ -419,7 +464,7 @@ const RawDashboard: React.FC = () => {
                   maintainAspectRatio: false,
                   plugins: {
                     legend: {
-                      position: "bottom",
+                      position: 'bottom',
                       labels: {
                         usePointStyle: true,
                         padding: 15,
@@ -427,7 +472,7 @@ const RawDashboard: React.FC = () => {
                       },
                     },
                   },
-                  cutout: "60%",
+                  cutout: '60%',
                 }}
               />
             </div>
@@ -446,8 +491,12 @@ const RawDashboard: React.FC = () => {
               <TrendingUp className="h-5 w-5 text-yellow-600" />
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-900">Product-wise Conversion Efficiency</h3>
-              <p className="text-gray-500 text-sm">Conversion percentage by product SKU</p>
+              <h3 className="text-xl font-semibold text-gray-900">
+                Product-wise Conversion Efficiency
+              </h3>
+              <p className="text-gray-500 text-sm">
+                Conversion percentage by product SKU
+              </p>
             </div>
           </div>
           <div className="h-80">
@@ -467,9 +516,9 @@ const RawDashboard: React.FC = () => {
                   y: {
                     beginAtZero: true,
                     max: 100,
-                    grid: { color: "rgba(0,0,0,0.05)" },
+                    grid: { color: 'rgba(0,0,0,0.05)' },
                     ticks: {
-                      callback: (value) => value + "%",
+                      callback: (value) => value + '%',
                     },
                   },
                 },
@@ -494,8 +543,12 @@ const RawDashboard: React.FC = () => {
                     <AlertTriangle className="h-5 w-5 text-red-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Low Stock Alerts</h3>
-                    <p className="text-gray-500 text-sm">Items below minimum reorder level</p>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      Low Stock Alerts
+                    </h3>
+                    <p className="text-gray-500 text-sm">
+                      Items below minimum reorder level
+                    </p>
                   </div>
                 </div>
                 {lowStockAlerts.length > 0 && (
@@ -511,8 +564,12 @@ const RawDashboard: React.FC = () => {
                   <div className="p-4 bg-green-50 rounded-full w-fit mx-auto mb-4">
                     <Package className="h-8 w-8 text-green-600" />
                   </div>
-                  <p className="text-gray-600 font-medium">All stock levels are healthy!</p>
-                  <p className="text-gray-400 text-sm mt-1">No items below minimum reorder levels</p>
+                  <p className="text-gray-600 font-medium">
+                    All stock levels are healthy!
+                  </p>
+                  <p className="text-gray-400 text-sm mt-1">
+                    No items below minimum reorder levels
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -526,16 +583,24 @@ const RawDashboard: React.FC = () => {
                     >
                       <div className="flex items-center justify-between mb-2">
                         <div>
-                          <p className="font-semibold text-gray-900">{alert.name}</p>
-                          <p className="text-sm text-gray-500 font-mono">{alert.skuCode}</p>
+                          <p className="font-semibold text-gray-900">
+                            {alert.name}
+                          </p>
+                          <p className="text-sm text-gray-500 font-mono">
+                            {alert.skuCode}
+                          </p>
                         </div>
                         <div className="text-right">
                           <p className="text-sm text-gray-500">Available</p>
-                          <p className="text-lg font-bold text-red-600">{alert.available}</p>
+                          <p className="text-lg font-bold text-red-600">
+                            {alert.available}
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Min Level: {alert.minReorderLevel}</span>
+                        <span className="text-gray-600">
+                          Min Level: {alert.minReorderLevel}
+                        </span>
                         <span className="text-red-600 font-medium">
                           {alert.minReorderLevel - alert.available} units short
                         </span>
@@ -560,8 +625,12 @@ const RawDashboard: React.FC = () => {
                   <Recycle className="h-5 w-5 text-orange-600" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Waste Stock Breakdown</h3>
-                  <p className="text-gray-500 text-sm">Detailed waste analysis</p>
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    Waste Stock Breakdown
+                  </h3>
+                  <p className="text-gray-500 text-sm">
+                    Detailed waste analysis
+                  </p>
                 </div>
               </div>
             </div>
@@ -570,12 +639,16 @@ const RawDashboard: React.FC = () => {
                 <div className="text-center p-4 bg-blue-50 rounded-xl">
                   <Search className="h-8 w-8 text-blue-600 mx-auto mb-2" />
                   <p className="text-sm text-gray-600 mb-1">After Cleaning</p>
-                  <p className="text-2xl font-bold text-blue-600">{wasteStock.afterCleaning.total}</p>
+                  <p className="text-2xl font-bold text-blue-600">
+                    {wasteStock.afterCleaning.total}
+                  </p>
                 </div>
                 <div className="text-center p-4 bg-green-50 rounded-xl">
                   <Settings className="h-8 w-8 text-green-600 mx-auto mb-2" />
                   <p className="text-sm text-gray-600 mb-1">After Processing</p>
-                  <p className="text-2xl font-bold text-green-600">{wasteStock.afterProcessing.total}</p>
+                  <p className="text-2xl font-bold text-green-600">
+                    {wasteStock.afterProcessing.total}
+                  </p>
                 </div>
               </div>
 
@@ -587,12 +660,21 @@ const RawDashboard: React.FC = () => {
                       Cleaning Waste Details
                     </h4>
                     <div className="space-y-2">
-                      {wasteStock.afterCleaning.details.slice(0, 3).map((w, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-2 bg-blue-50 rounded-lg text-sm">
-                          <span className="text-gray-700">{w.warehouse?.name || "N/A"}</span>
-                          <span className="font-medium text-blue-700">{w.quantity}</span>
-                        </div>
-                      ))}
+                      {wasteStock.afterCleaning.details
+                        .slice(0, 3)
+                        .map((w, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between p-2 bg-blue-50 rounded-lg text-sm"
+                          >
+                            <span className="text-gray-700">
+                              {w.warehouse?.name || 'N/A'}
+                            </span>
+                            <span className="font-medium text-blue-700">
+                              {w.quantity}
+                            </span>
+                          </div>
+                        ))}
                     </div>
                   </div>
                 )}
@@ -604,12 +686,21 @@ const RawDashboard: React.FC = () => {
                       Processing Waste Details
                     </h4>
                     <div className="space-y-2">
-                      {wasteStock.afterProcessing.details.slice(0, 3).map((w, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-2 bg-green-50 rounded-lg text-sm">
-                          <span className="text-gray-700">{w.warehouse?.name || "N/A"}</span>
-                          <span className="font-medium text-green-700">{w.quantity}</span>
-                        </div>
-                      ))}
+                      {wasteStock.afterProcessing.details
+                        .slice(0, 3)
+                        .map((w, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center justify-between p-2 bg-green-50 rounded-lg text-sm"
+                          >
+                            <span className="text-gray-700">
+                              {w.warehouse?.name || 'N/A'}
+                            </span>
+                            <span className="font-medium text-green-700">
+                              {w.quantity}
+                            </span>
+                          </div>
+                        ))}
                     </div>
                   </div>
                 )}
@@ -619,19 +710,19 @@ const RawDashboard: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 interface StatCardProps {
-  icon: React.ReactNode
-  label: string
-  value: number
-  unit?: string
-  color: "blue" | "orange" | "purple" | "green" | "red" | "indigo" | "teal"
-  tooltip?: string
-  details?: any[]
-  detailsFormatter?: (details: any[]) => string[]
-  large?: boolean
+  icon: React.ReactNode;
+  label: string;
+  value: number;
+  unit?: string;
+  color: 'blue' | 'orange' | 'purple' | 'green' | 'red' | 'indigo' | 'teal';
+  tooltip?: string;
+  details?: any[];
+  detailsFormatter?: (details: any[]) => string[];
+  large?: boolean;
 }
 
 const StatCard: React.FC<StatCardProps> = ({
@@ -645,61 +736,61 @@ const StatCard: React.FC<StatCardProps> = ({
   detailsFormatter,
   large = false,
 }) => {
-  const [showDetails, setShowDetails] = useState(false)
+  const [showDetails, setShowDetails] = useState(false);
 
   const colorClasses = {
     blue: {
-      bg: "bg-blue-50",
-      icon: "text-blue-600",
-      value: "text-blue-600",
-      border: "border-blue-200",
-      gradient: "from-blue-500 to-blue-600",
+      bg: 'bg-blue-50',
+      icon: 'text-blue-600',
+      value: 'text-blue-600',
+      border: 'border-blue-200',
+      gradient: 'from-blue-500 to-blue-600',
     },
     orange: {
-      bg: "bg-orange-50",
-      icon: "text-orange-600",
-      value: "text-orange-600",
-      border: "border-orange-200",
-      gradient: "from-orange-500 to-orange-600",
+      bg: 'bg-orange-50',
+      icon: 'text-orange-600',
+      value: 'text-orange-600',
+      border: 'border-orange-200',
+      gradient: 'from-orange-500 to-orange-600',
     },
     purple: {
-      bg: "bg-purple-50",
-      icon: "text-purple-600",
-      value: "text-purple-600",
-      border: "border-purple-200",
-      gradient: "from-purple-500 to-purple-600",
+      bg: 'bg-purple-50',
+      icon: 'text-purple-600',
+      value: 'text-purple-600',
+      border: 'border-purple-200',
+      gradient: 'from-purple-500 to-purple-600',
     },
     green: {
-      bg: "bg-green-50",
-      icon: "text-green-600",
-      value: "text-green-600",
-      border: "border-green-200",
-      gradient: "from-green-500 to-green-600",
+      bg: 'bg-green-50',
+      icon: 'text-green-600',
+      value: 'text-green-600',
+      border: 'border-green-200',
+      gradient: 'from-green-500 to-green-600',
     },
     red: {
-      bg: "bg-red-50",
-      icon: "text-red-600",
-      value: "text-red-600",
-      border: "border-red-200",
-      gradient: "from-red-500 to-red-600",
+      bg: 'bg-red-50',
+      icon: 'text-red-600',
+      value: 'text-red-600',
+      border: 'border-red-200',
+      gradient: 'from-red-500 to-red-600',
     },
     indigo: {
-      bg: "bg-indigo-50",
-      icon: "text-indigo-600",
-      value: "text-indigo-600",
-      border: "border-indigo-200",
-      gradient: "from-indigo-500 to-indigo-600",
+      bg: 'bg-indigo-50',
+      icon: 'text-indigo-600',
+      value: 'text-indigo-600',
+      border: 'border-indigo-200',
+      gradient: 'from-indigo-500 to-indigo-600',
     },
     teal: {
-      bg: "bg-teal-50",
-      icon: "text-teal-600",
-      value: "text-teal-600",
-      border: "border-teal-200",
-      gradient: "from-teal-500 to-teal-600",
+      bg: 'bg-teal-50',
+      icon: 'text-teal-600',
+      value: 'text-teal-600',
+      border: 'border-teal-200',
+      gradient: 'from-teal-500 to-teal-600',
     },
-  }
+  };
 
-  const classes = colorClasses[color]
+  const classes = colorClasses[color];
 
   return (
     <motion.div
@@ -712,13 +803,15 @@ const StatCard: React.FC<StatCardProps> = ({
     >
       <div
         className={`bg-white rounded-2xl p-6 shadow-sm border border-gray-200/50 hover:shadow-lg transition-all duration-300 cursor-pointer h-full ${
-          large ? "lg:p-8" : ""
+          large ? 'lg:p-8' : ''
         }`}
         title={tooltip}
         onClick={() => details && setShowDetails(!showDetails)}
       >
         <div className="flex items-start justify-between mb-4">
-          <div className={`p-3 rounded-xl bg-gradient-to-r ${classes.gradient} shadow-lg`}>
+          <div
+            className={`p-3 rounded-xl bg-gradient-to-r ${classes.gradient} shadow-lg`}
+          >
             <div className="text-white">{icon}</div>
           </div>
           {details && details.length > 0 && (
@@ -733,19 +826,31 @@ const StatCard: React.FC<StatCardProps> = ({
         </div>
 
         <div className="space-y-2">
-          <h3 className={`text-sm font-medium text-gray-600 ${large ? "lg:text-base" : ""}`}>{label}</h3>
+          <h3
+            className={`text-sm font-medium text-gray-600 ${large ? 'lg:text-base' : ''}`}
+          >
+            {label}
+          </h3>
           <div className="flex items-baseline gap-2">
-            <span className={`font-bold ${classes.value} ${large ? "text-4xl lg:text-5xl" : "text-2xl"}`}>
+            <span
+              className={`font-bold ${classes.value} ${large ? 'text-4xl lg:text-5xl' : 'text-2xl'}`}
+            >
               {value.toLocaleString()}
             </span>
-            {unit && <span className={`text-gray-500 ${large ? "text-base" : "text-sm"}`}>{unit}</span>}
+            {unit && (
+              <span
+                className={`text-gray-500 ${large ? 'text-base' : 'text-sm'}`}
+              >
+                {unit}
+              </span>
+            )}
           </div>
         </div>
 
         {showDetails && details && detailsFormatter && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
+            animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             className="mt-4 pt-4 border-t border-gray-200"
           >
@@ -753,7 +858,10 @@ const StatCard: React.FC<StatCardProps> = ({
               {detailsFormatter(details)
                 .slice(0, 3)
                 .map((detail, idx) => (
-                  <div key={idx} className="text-xs text-gray-600 p-2 bg-gray-50 rounded-lg">
+                  <div
+                    key={idx}
+                    className="text-xs text-gray-600 p-2 bg-gray-50 rounded-lg"
+                  >
                     {detail}
                   </div>
                 ))}
@@ -767,7 +875,7 @@ const StatCard: React.FC<StatCardProps> = ({
         )}
       </div>
     </motion.div>
-  )
-}
+  );
+};
 
-export default RawDashboard
+export default RawDashboard;

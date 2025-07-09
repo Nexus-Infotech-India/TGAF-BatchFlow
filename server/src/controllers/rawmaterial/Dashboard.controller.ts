@@ -13,7 +13,7 @@ export class DashboardController {
         },
       });
       const total = stocks.reduce((sum, s) => sum + (s.currentQuantity || 0), 0);
-      res.json({ 
+      res.json({
         totalRawMaterialStock: total,
         details: stocks
       });
@@ -24,27 +24,27 @@ export class DashboardController {
 
   // 🚚 POs Pending Delivery - Return all pending PO details
   static async getPendingPOCount(req: Request, res: Response) {
-  try {
-    // Find all purchase order items whose status is not 'Received'
-    const pendingItems = await prisma.purchaseOrderItem.findMany({
-      where: {
-        status: { not: 'Received' },
-      },
-      include: {
-        purchaseOrder: {
-          include: { vendor: true }
+    try {
+      // Find all purchase order items whose status is not 'Received'
+      const pendingItems = await prisma.purchaseOrderItem.findMany({
+        where: {
+          status: { not: 'Received' },
         },
-        rawMaterial: true,
-      }
-    });
-    res.json({
-      pendingPOs: pendingItems.length,
-      details: pendingItems
-    });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch pending PO items', details: error });
+        include: {
+          purchaseOrder: {
+            include: { vendor: true }
+          },
+          rawMaterial: true,
+        }
+      });
+      res.json({
+        pendingPOs: pendingItems.length,
+        details: pendingItems
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch pending PO items', details: error });
+    }
   }
-}
 
   // 🔍 Stock Under Cleaning - Return all cleaning jobs in progress
   static async getStockUnderCleaning(req: Request, res: Response) {
@@ -60,7 +60,7 @@ export class DashboardController {
         }
       });
       const total = cleaningJobs.reduce((sum, job) => sum + (job.quantity || 0), 0);
-      res.json({ 
+      res.json({
         stockUnderCleaning: total,
         details: cleaningJobs
       });
@@ -83,7 +83,7 @@ export class DashboardController {
         }
       });
       const total = processingJobs.reduce((sum, job) => sum + (job.quantityInput || 0), 0);
-      res.json({ 
+      res.json({
         stockInProcessing: total,
         details: processingJobs
       });
@@ -110,7 +110,7 @@ export class DashboardController {
           minReorderLevel: p.minReorderLevel,
           details: stocks.filter(s => s.rawMaterialId === p.id)
         }));
-      res.json({ 
+      res.json({
         lowStockAlerts: lowStock
       });
     } catch (error) {
@@ -145,7 +145,7 @@ export class DashboardController {
             details: byProduct
           },
           total: unfinished.reduce((sum, u) => sum + (u.quantity || 0), 0) +
-                 byProduct.reduce((sum, b) => sum + (b.quantity || 0), 0)
+            byProduct.reduce((sum, b) => sum + (b.quantity || 0), 0)
         }
       });
     } catch (error) {
@@ -184,72 +184,78 @@ export class DashboardController {
     }
   }
 
-static async getProductWiseWasteStock(req: Request, res: Response) {
-  try {
-    // Unfinished after cleaning
-    const unfinished = await prisma.unfinishedStock.findMany({
-      include: {
-        warehouse: true,
-      }
-    });
+  static async getProductWiseWasteStock(req: Request, res: Response) {
+    try {
+      // Fetch all products
+      const products = await prisma.rawMaterialProduct.findMany();
 
-    // Fetch all products to map id to name
-    const products = await prisma.rawMaterialProduct.findMany();
+      // Fetch all PO items (for raw material)
+      const poItems = await prisma.purchaseOrderItem.findMany();
 
-    // ByProduct after processing
-    const byProducts = await prisma.byProduct.findMany({
-      include: {
-        warehouse: true,
-        processingJob: {
-          include: { inputRawMaterial: true }
-        }
-      }
-    });
+      // Fetch all cleaning jobs
+      const cleaningJobs = await prisma.cleaningJob.findMany();
 
-    // Group unfinished by skuCode
-    const unfinishedByProduct: Record<string, any> = {};
-    unfinished.forEach(u => {
-      if (!unfinishedByProduct[u.skuCode]) {
-        // Extract productId from skuCode (before "-UNF-")
-        const productId = u.skuCode?.split('-UNF-')[0];
-        const product = products.find(p => p.id === productId);
-        unfinishedByProduct[u.skuCode] = {
-          skuCode: u.skuCode,
-          productName: product?.name || '',
-          total: 0,
-          details: []
+      // Fetch all unfinished stocks (waste after cleaning)
+      const unfinishedStocks = await prisma.unfinishedStock.findMany();
+
+      // Fetch all processing jobs
+      const processingJobs = await prisma.processingJob.findMany();
+
+      // Fetch all byProducts (waste after processing)
+      const byProducts = await prisma.byProduct.findMany({
+        include: { processingJob: true }
+      });
+
+      const summary = products.map(product => {
+        // Raw material ordered
+        const rawMaterial = poItems
+          .filter(item => item.rawMaterialId === product.id)
+          .reduce((sum, item) => sum + (item.quantityOrdered || 0), 0);
+
+        // Sent for cleaning
+        const cleaning = cleaningJobs
+          .filter(job => job.rawMaterialId === product.id)
+          .reduce((sum, job) => sum + (job.quantity || 0), 0);
+
+        // Waste after cleaning
+        const wasteAfterCleaning = unfinishedStocks
+          .filter(stock => stock.skuCode?.startsWith(product.id))
+          .reduce((sum, stock) => sum + (stock.quantity || 0), 0);
+
+        // Cleaned = Cleaning - Waste after cleaning
+        const cleaned = cleaning - wasteAfterCleaning;
+
+        // Sent for processing
+        const processing = processingJobs
+          .filter(job => job.inputRawMaterialId === product.id)
+          .reduce((sum, job) => sum + (job.quantityInput || 0), 0);
+
+        // Waste after processing
+        const wasteAfterProcessing = byProducts
+          .filter(bp => bp.processingJob?.inputRawMaterialId === product.id)
+          .reduce((sum, bp) => sum + (bp.quantity || 0), 0);
+
+        // Processed = Processing - Waste after processing
+        const processed = processing - wasteAfterProcessing;
+
+        return {
+          productId: product.id,
+          productName: product.name,
+          rawMaterial,
+          cleaning,
+          wasteAfterCleaning,
+          cleaned,
+          processing,
+          wasteAfterProcessing,
+          processed,
         };
-      }
-      unfinishedByProduct[u.skuCode].total += u.quantity || 0;
-      unfinishedByProduct[u.skuCode].details.push(u);
-    });
+      });
 
-    // Group byProduct by skuCode
-    const byProductByProduct: Record<string, any> = {};
-    byProducts.forEach(b => {
-      const sku = b.skuCode;
-      if (!byProductByProduct[sku]) {
-        byProductByProduct[sku] = {
-          skuCode: sku,
-          productName: b.processingJob?.inputRawMaterial?.name || '',
-          total: 0,
-          details: []
-        };
-      }
-      byProductByProduct[sku].total += b.quantity || 0;
-      byProductByProduct[sku].details.push(b);
-    });
-
-    res.json({
-      productWiseWaste: {
-        afterCleaning: Object.values(unfinishedByProduct),
-        afterProcessing: Object.values(byProductByProduct)
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch product-wise waste stock', details: error });
+      res.json({ productWiseWasteStock: summary });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch product-wise waste stock summary', details: error });
+    }
   }
-}
 
   static async getStockDistributionByWarehouse(req: Request, res: Response) {
     try {
@@ -303,7 +309,7 @@ static async getProductWiseWasteStock(req: Request, res: Response) {
         const totalFinished = fgAgg._sum.quantity || 0;
 
         // Calculate conversion ratio (avoid division by zero)
-      const conversionPercentage = totalOrdered > 0 ? ((totalFinished / totalOrdered) * 100) : null;
+        const conversionPercentage = totalOrdered > 0 ? ((totalFinished / totalOrdered) * 100) : null;
 
         result.push({
           skuCode: product.skuCode,
@@ -314,7 +320,7 @@ static async getProductWiseWasteStock(req: Request, res: Response) {
         });
       }
 
-     res.json({ productWiseConversionRatio: result });
+      res.json({ productWiseConversionRatio: result });
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch product-wise conversion ratio', details: error });
     }

@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
-import { Button, Modal, Input, Select, message } from 'antd';
+import { Button, Modal, Input, Select, message, Switch } from 'antd';
 import { EditOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -94,12 +94,14 @@ const AllItems: React.FC = () => {
     leftoverQuantity: number;
     reason: string;
     loading: boolean;
+    isReusable?: boolean;
   }>({
     visible: false,
     job: undefined,
     leftoverQuantity: 0,
     reason: '',
     loading: false,
+    isReusable: false,
   });
 
   // Fetch current stock
@@ -268,6 +270,7 @@ const AllItems: React.FC = () => {
           leftoverQuantity: statusModal.leftoverQuantity,
           reasonCode: statusModal.reason,
           finishedAt: new Date().toISOString(),
+          isReusable: statusModal.isReusable,
         },
         {
           headers: {
@@ -773,6 +776,17 @@ const AllItems: React.FC = () => {
               onChange={() => {}}
             />
           </div>
+          <div className="mb-3">
+  <div className="text-xs text-gray-500 mb-1">Is this wastage reusable?</div>
+  <Switch
+    checked={statusModal.isReusable}
+    onChange={(checked) =>
+      setStatusModal((prev) => ({ ...prev, isReusable: checked }))
+    }
+    checkedChildren="Yes"
+    unCheckedChildren="No"
+  />
+</div>
         </div>
         <div>
           <div className="text-xs text-gray-500 mb-1">
