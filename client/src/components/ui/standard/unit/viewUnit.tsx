@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
   createColumnHelper,
   flexRender,
@@ -7,21 +7,24 @@ import {
   getSortedRowModel,
   useReactTable,
   SortingState,
-} from "@tanstack/react-table";
-import api, { API_ROUTES } from "../../../../utils/api";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ArrowUpDown, 
-  Calendar, 
-  Info, 
+} from '@tanstack/react-table';
+import api, { API_ROUTES } from '../../../../utils/api';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  ArrowUpDown,
+  Calendar,
+  Info,
   Package,
-  Tag, 
-  Type, 
+  Tag,
+  Type,
   RefreshCw,
   AlertCircle,
   Plus,
-  Hash
-} from "lucide-react";
+  Hash,
+  Trash2, // Added for delete icon
+  X, // Added for modal close
+} from 'lucide-react';
+import { toast } from 'react-toastify';
 
 // Define the type for unit data
 interface Unit {
@@ -38,16 +41,19 @@ interface ViewUnitProps {
 
 const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
   const [sorting, setSorting] = useState<SortingState>([]);
-  
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // For modal visibility
+  const [unitToDelete, setUnitToDelete] = useState<Unit | null>(null); // Unit to delete
+  const [isDeleting, setIsDeleting] = useState(false); // Loading state for delete
+
   // Fetch units using Tanstack Query
   const { data, error, isLoading, isError, refetch } = useQuery({
-    queryKey: ["units"],
+    queryKey: ['units'],
     queryFn: async () => {
-      const token = localStorage.getItem("authToken");
+      const token = localStorage.getItem('authToken');
       if (!token) {
-        throw new Error("No token provided");
+        throw new Error('No token provided');
       }
-      
+
       const response = await api.get(API_ROUTES.UNIT.GET_UNITS, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -57,10 +63,50 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
     },
   });
 
+  const handleDelete = async () => {
+    if (!unitToDelete) return;
+    setIsDeleting(true);
+    try {
+      const authToken = localStorage.getItem('authToken');
+      await api.delete(API_ROUTES.UNIT.DELETE_UNIT(unitToDelete.id), {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      refetch(); // Refresh the list after deletion
+      toast.success('Unit deleted successfully!', {
+        position: 'bottom-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setShowDeleteModal(false);
+      setUnitToDelete(null);
+    } catch (err: any) {
+      console.error('Failed to delete unit:', err);
+      toast.error(
+        err.response?.data?.message ||
+          'Failed to delete unit. Please try again.',
+        {
+          position: 'bottom-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   // Column definition for Tanstack Table
   const columnHelper = createColumnHelper<Unit>();
   const columns = [
-    columnHelper.accessor("id", {
+    columnHelper.accessor('id', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
@@ -72,7 +118,10 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
             <Hash size={14} />
           </div>
           ID
-          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowUpDown
+            size={12}
+            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+          />
         </motion.button>
       ),
       cell: ({ row }) => {
@@ -87,7 +136,7 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
         );
       },
     }),
-    columnHelper.accessor("name", {
+    columnHelper.accessor('name', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
@@ -99,14 +148,17 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
             <Type size={14} />
           </div>
           Name
-          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowUpDown
+            size={12}
+            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+          />
         </motion.button>
       ),
       cell: ({ row }) => (
         <div className="font-medium text-gray-800">{row.original.name}</div>
       ),
     }),
-    columnHelper.accessor("symbol", {
+    columnHelper.accessor('symbol', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
@@ -118,7 +170,10 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
             <Tag size={14} />
           </div>
           Symbol
-          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowUpDown
+            size={12}
+            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+          />
         </motion.button>
       ),
       cell: ({ row }) => (
@@ -127,7 +182,7 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
         </div>
       ),
     }),
-    columnHelper.accessor("description", {
+    columnHelper.accessor('description', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
@@ -139,18 +194,23 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
             <Info size={14} />
           </div>
           Description
-          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowUpDown
+            size={12}
+            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+          />
         </motion.button>
       ),
       cell: ({ row }) => (
         <div className="text-gray-600 max-w-md">
           {row.original.description || (
-            <span className="italic text-gray-400">No description provided</span>
+            <span className="italic text-gray-400">
+              No description provided
+            </span>
           )}
         </div>
       ),
     }),
-    columnHelper.accessor("createdAt", {
+    columnHelper.accessor('createdAt', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
@@ -162,7 +222,10 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
             <Calendar size={14} />
           </div>
           Created At
-          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowUpDown
+            size={12}
+            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+          />
         </motion.button>
       ),
       cell: ({ row }) => {
@@ -174,14 +237,39 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
             </div>
             <span className="text-gray-600 text-sm font-medium">
               {date.toLocaleDateString(undefined, {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
               })}
             </span>
           </div>
         );
       },
+    }),
+    columnHelper.display({
+      id: 'delete',
+      header: () => (
+        <div className="flex items-center gap-2 font-semibold text-gray-700">
+          <div className="p-1.5 rounded-lg bg-red-50 text-red-600">
+            <Trash2 size={14} />
+          </div>
+          Delete
+        </div>
+      ),
+      cell: ({ row }) => (
+        <motion.button
+          onClick={() => {
+            setUnitToDelete(row.original);
+            setShowDeleteModal(true);
+          }}
+          className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm hover:shadow-md"
+          whileHover={{ scale: 1.05, y: -1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Trash2 size={14} />
+          Delete
+        </motion.button>
+      ),
     }),
   ];
 
@@ -199,20 +287,22 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
   // Render loading state
   if (isLoading) {
     return (
-      <motion.div 
+      <motion.div
         className="flex flex-col items-center justify-center py-20 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
         <div className="relative h-16 w-16 mb-6">
-          <motion.div 
+          <motion.div
             className="absolute top-0 left-0 w-full h-full rounded-full border-4 border-t-blue-500 border-r-blue-300 border-b-blue-100 border-l-blue-300"
             animate={{ rotate: 360 }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
           />
         </div>
         <p className="text-gray-700 font-medium text-lg">Loading units...</p>
-        <p className="text-gray-500 text-sm mt-2">Please wait while we fetch your data</p>
+        <p className="text-gray-500 text-sm mt-2">
+          Please wait while we fetch your data
+        </p>
       </motion.div>
     );
   }
@@ -220,7 +310,7 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
   // Render error state
   if (isError) {
     return (
-      <motion.div 
+      <motion.div
         className="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-2xl p-8 shadow-sm"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -231,9 +321,11 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
             <AlertCircle className="h-6 w-6 text-red-500" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-red-800 mb-2">Unable to load units</h3>
+            <h3 className="text-lg font-semibold text-red-800 mb-2">
+              Unable to load units
+            </h3>
             <p className="text-sm text-red-700 mb-4">
-              {error instanceof Error ? error.message : "Failed to fetch units"}
+              {error instanceof Error ? error.message : 'Failed to fetch units'}
             </p>
             <motion.button
               className="px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg shadow-sm flex items-center gap-2 hover:bg-red-50 transition-colors"
@@ -252,37 +344,47 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
 
   // Render data table
   return (
-    <motion.div 
+    <motion.div
       className="h-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
       {!data || data.length === 0 ? (
-        <motion.div 
+        <motion.div
           className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-12"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.2 }}
         >
-          <motion.div 
+          <motion.div
             className="h-24 w-24 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-500 rounded-2xl flex items-center justify-center shadow-lg"
             animate={{ scale: [0.9, 1.1, 1] }}
-            transition={{ duration: 2, times: [0, 0.5, 1], repeat: Infinity, repeatType: "reverse" }}
+            transition={{
+              duration: 2,
+              times: [0, 0.5, 1],
+              repeat: Infinity,
+              repeatType: 'reverse',
+            }}
           >
             <Package className="h-12 w-12" />
           </motion.div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-3">No Units Found</h3>
+          <h3 className="text-2xl font-bold text-gray-800 mb-3">
+            No Units Found
+          </h3>
           <p className="text-gray-600 max-w-md mx-auto text-center mb-8 leading-relaxed">
-            Create measurement units to define the standards for your quality control processes. Units help standardize measurements across your organization.
+            Create measurement units to define the standards for your quality
+            control processes. Units help standardize measurements across your
+            organization.
           </p>
-          
-          <motion.button 
+
+          <motion.button
             className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl shadow-lg inline-flex items-center gap-3 font-medium"
             onClick={onAddUnitClick}
-            whileHover={{ 
-              scale: 1.05, 
-              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.3), 0 10px 10px -5px rgba(59, 130, 246, 0.15)" 
+            whileHover={{
+              scale: 1.05,
+              boxShadow:
+                '0 20px 25px -5px rgba(59, 130, 246, 0.3), 0 10px 10px -5px rgba(59, 130, 246, 0.15)',
             }}
             whileTap={{ scale: 0.95 }}
           >
@@ -305,7 +407,10 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
                         >
                           {header.isPlaceholder
                             ? null
-                            : flexRender(header.column.columnDef.header, header.getContext())}
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
                         </th>
                       ))}
                     </tr>
@@ -314,8 +419,8 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
                 <tbody className="bg-white divide-y divide-gray-100">
                   <AnimatePresence>
                     {table.getRowModel().rows.map((row, i) => (
-                      <motion.tr 
-                        key={row.id} 
+                      <motion.tr
+                        key={row.id}
                         className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -323,8 +428,14 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
                         whileHover={{ scale: 1.01 }}
                       >
                         {row.getVisibleCells().map((cell) => (
-                          <td key={cell.id} className="px-6 py-4 text-sm text-gray-700">
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          <td
+                            key={cell.id}
+                            className="px-6 py-4 text-sm text-gray-700"
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
                           </td>
                         ))}
                       </motion.tr>
@@ -342,11 +453,15 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
                 <Package size={14} className="text-blue-600" />
               </div>
               <p className="text-sm font-medium text-gray-700">
-                Showing <span className="text-blue-600 font-semibold">{table.getRowModel().rows.length}</span> units
+                Showing{' '}
+                <span className="text-blue-600 font-semibold">
+                  {table.getRowModel().rows.length}
+                </span>{' '}
+                units
               </p>
             </div>
 
-            <motion.button 
+            <motion.button
               onClick={() => refetch()}
               className="text-sm text-gray-600 flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
               whileHover={{ scale: 1.05, y: -1 }}
@@ -358,6 +473,64 @@ const ViewUnit: React.FC<ViewUnitProps> = ({ onAddUnitClick }) => {
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {showDeleteModal && unitToDelete && (
+          <motion.div
+            className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white rounded-2xl p-6 shadow-xl max-w-md w-full mx-4"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Confirm Deletion
+                </h3>
+                <motion.button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="p-1 hover:bg-gray-100 rounded-full"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <X size={20} className="text-gray-500" />
+                </motion.button>
+              </div>
+              <p className="text-gray-600 mb-4">
+                Are you sure you want to delete the unit{' '}
+                <strong>"{unitToDelete.name}"</strong>? This action cannot be
+                undone if the unit is being used in parameters or standards.
+              </p>
+              <div className="flex gap-3">
+                <motion.button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete'}
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

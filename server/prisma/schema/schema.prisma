@@ -153,6 +153,7 @@ model User {
   ActivityLog                 ActivityLog[]
   Batch_Batch_checkerIdToUser Batch[]        @relation("Batch_checkerIdToUser")
   Batch_Batch_makerIdToUser   Batch[]        @relation("Batch_makerIdToUser")
+  BatchDrafts BatchDraft[] @relation("BatchDraftMaker")
   Notification                Notification[]
   Role                        Role           @relation(fields: [roleId], references: [id])
   StandardsCreated    Standard[] @relation("StandardCreatedBy")
@@ -184,6 +185,26 @@ model User {
   uploadedFeedbackForms       FeedbackForm[]
   transactionLogs   TransactionLog[] 
   uploadedSessionPhotos  TrainingSessionPhoto[]  @relation("UploadedSessionPhotos")
+}
+
+model BatchDraft {
+  id                      String   @id @default(uuid())
+  batchNumber             String?  @unique
+  productId               String?
+  dateOfProduction        DateTime?
+  bestBeforeDate          DateTime?
+  sampleAnalysisStarted   DateTime?
+  sampleAnalysisCompleted DateTime?
+  sampleAnalysisStatus    SampleAnalysisStatus? @default(PENDING)
+  makerId                 String
+  status                  BatchStatus           @default(DRAFT)
+  newProductName          String?
+  parameterValues         Json?                 // Store as JSON for flexibility
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+
+  // Relations
+   maker User @relation("BatchDraftMaker", fields: [makerId], references: [id])
 }
 
 enum BatchStatus {

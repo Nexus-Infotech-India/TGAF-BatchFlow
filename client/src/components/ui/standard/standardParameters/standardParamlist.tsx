@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   createColumnHelper,
   flexRender,
@@ -7,19 +7,22 @@ import {
   getSortedRowModel,
   useReactTable,
   SortingState,
-} from "@tanstack/react-table";
-import api, { API_ROUTES } from "../../../../utils/api";
-import { 
-  ArrowUpDown, 
-  Tag, 
-  RefreshCw, 
+} from '@tanstack/react-table';
+import api, { API_ROUTES } from '../../../../utils/api';
+import {
+  ArrowUpDown,
+  Tag,
+  RefreshCw,
   AlertCircle,
   List,
   Plus,
   Database,
   FileText,
-  Hash
-} from "lucide-react";
+  Hash,
+  Trash2, // Added for delete icon
+  X, // Added for modal close
+} from 'lucide-react';
+import { toast } from 'react-toastify';
 
 interface StandardParameter {
   id: string;
@@ -37,25 +40,34 @@ interface StandardParameterListProps {
   onAddParameterClick?: () => void;
 }
 
-const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddParameterClick }) => {
+const StandardParameterList: React.FC<StandardParameterListProps> = ({
+  onAddParameterClick,
+}) => {
   const [parameters, setParameters] = useState<StandardParameter[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // For modal visibility
+  const [parameterToDelete, setParameterToDelete] =
+    useState<StandardParameter | null>(null); // Parameter to delete
+  const [isDeleting, setIsDeleting] = useState(false); // Loading state for delete
 
   const fetchParameters = async () => {
     setIsLoading(true);
     try {
-      const authToken = localStorage.getItem("authToken");
-      const response = await api.get(API_ROUTES.STANDARD.GET_STANDARD_PARAMETERS, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      const authToken = localStorage.getItem('authToken');
+      const response = await api.get(
+        API_ROUTES.STANDARD.GET_STANDARD_PARAMETERS,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
       setParameters(response.data.parameters);
-      setError("");
+      setError('');
     } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to fetch parameters.");
+      setError(err.response?.data?.message || 'Failed to fetch parameters.');
     } finally {
       setIsLoading(false);
     }
@@ -65,15 +77,63 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
     fetchParameters();
   }, []);
 
+  const handleDelete = async () => {
+    if (!parameterToDelete) return;
+    setIsDeleting(true);
+    try {
+      const authToken = localStorage.getItem('authToken');
+      await api.delete(
+        API_ROUTES.STANDARD.DELETE_STANDARD_PARAMETER(parameterToDelete.id),
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      setParameters((prev) =>
+        prev.filter((param) => param.id !== parameterToDelete.id)
+      );
+      toast.success('Parameter deleted successfully!', {
+        position: 'bottom-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      setShowDeleteModal(false);
+      setParameterToDelete(null);
+    } catch (err: any) {
+      console.error('Failed to delete parameter:', err);
+      toast.error(
+        err.response?.data?.message ||
+          'Failed to delete parameter. Please try again.',
+        {
+          position: 'bottom-right',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   // Format data type for display
   const formatDataType = (dataType: string) => {
-    return dataType.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    return dataType
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, (c) => c.toUpperCase());
   };
 
   // Column definition for TanStack Table
   const columnHelper = createColumnHelper<StandardParameter>();
   const columns = [
-    columnHelper.accessor("id", {
+    columnHelper.accessor('id', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
@@ -85,7 +145,10 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
             <Hash size={14} />
           </div>
           ID
-          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowUpDown
+            size={12}
+            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+          />
         </motion.button>
       ),
       cell: ({ row }) => {
@@ -100,7 +163,7 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
         );
       },
     }),
-    columnHelper.accessor("name", {
+    columnHelper.accessor('name', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
@@ -112,14 +175,17 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
             <Tag size={14} />
           </div>
           Name
-          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowUpDown
+            size={12}
+            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+          />
         </motion.button>
       ),
       cell: ({ getValue }) => (
         <div className="font-medium text-gray-800">{getValue()}</div>
       ),
     }),
-    columnHelper.accessor("category.name", {
+    columnHelper.accessor('category.name', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
@@ -131,7 +197,10 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
             <List size={14} />
           </div>
           Category
-          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowUpDown
+            size={12}
+            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+          />
         </motion.button>
       ),
       cell: ({ getValue }) => (
@@ -140,7 +209,7 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
         </div>
       ),
     }),
-    columnHelper.accessor("dataType", {
+    columnHelper.accessor('dataType', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
@@ -152,7 +221,10 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
             <Database size={14} />
           </div>
           Data Type
-          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowUpDown
+            size={12}
+            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+          />
         </motion.button>
       ),
       cell: ({ getValue }) => (
@@ -161,7 +233,7 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
         </div>
       ),
     }),
-    columnHelper.accessor("description", {
+    columnHelper.accessor('description', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
@@ -173,15 +245,45 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
             <FileText size={14} />
           </div>
           Description
-          <ArrowUpDown size={12} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+          <ArrowUpDown
+            size={12}
+            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+          />
         </motion.button>
       ),
       cell: ({ getValue }) => (
         <div className="text-gray-600 max-w-md">
           {getValue() || (
-            <span className="italic text-gray-400">No description provided</span>
+            <span className="italic text-gray-400">
+              No description provided
+            </span>
           )}
         </div>
+      ),
+    }),
+    columnHelper.display({
+      id: 'delete',
+      header: () => (
+        <div className="flex items-center gap-2 font-semibold text-gray-700">
+          <div className="p-1.5 rounded-lg bg-red-50 text-red-600">
+            <Trash2 size={14} />
+          </div>
+          Delete
+        </div>
+      ),
+      cell: ({ row }) => (
+        <motion.button
+          onClick={() => {
+            setParameterToDelete(row.original);
+            setShowDeleteModal(true);
+          }}
+          className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm hover:shadow-md"
+          whileHover={{ scale: 1.05, y: -1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Trash2 size={14} />
+          Delete
+        </motion.button>
       ),
     }),
   ];
@@ -200,20 +302,24 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
   // Render loading state
   if (isLoading) {
     return (
-      <motion.div 
+      <motion.div
         className="flex flex-col items-center justify-center py-20 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
         <div className="relative h-16 w-16 mb-6">
-          <motion.div 
+          <motion.div
             className="absolute top-0 left-0 w-full h-full rounded-full border-4 border-t-blue-500 border-r-blue-300 border-b-blue-100 border-l-blue-300"
             animate={{ rotate: 360 }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
           />
         </div>
-        <p className="text-gray-700 font-medium text-lg">Loading parameters...</p>
-        <p className="text-gray-500 text-sm mt-2">Please wait while we fetch your data</p>
+        <p className="text-gray-700 font-medium text-lg">
+          Loading parameters...
+        </p>
+        <p className="text-gray-500 text-sm mt-2">
+          Please wait while we fetch your data
+        </p>
       </motion.div>
     );
   }
@@ -221,7 +327,7 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
   // Render error state
   if (error) {
     return (
-      <motion.div 
+      <motion.div
         className="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-2xl p-8 shadow-sm"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -232,10 +338,10 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
             <AlertCircle className="h-6 w-6 text-red-500" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-red-800 mb-2">Unable to load parameters</h3>
-            <p className="text-sm text-red-700 mb-4">
-              {error}
-            </p>
+            <h3 className="text-lg font-semibold text-red-800 mb-2">
+              Unable to load parameters
+            </h3>
+            <p className="text-sm text-red-700 mb-4">{error}</p>
             <motion.button
               className="px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg shadow-sm flex items-center gap-2 hover:bg-red-50 transition-colors"
               onClick={() => fetchParameters()}
@@ -253,37 +359,46 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
 
   // Render data table
   return (
-    <motion.div 
+    <motion.div
       className="h-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
       {parameters.length === 0 ? (
-        <motion.div 
+        <motion.div
           className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-12"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.2 }}
         >
-          <motion.div 
+          <motion.div
             className="h-24 w-24 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-500 rounded-2xl flex items-center justify-center shadow-lg"
             animate={{ scale: [0.9, 1.1, 1] }}
-            transition={{ duration: 2, times: [0, 0.5, 1], repeat: Infinity, repeatType: "reverse" }}
+            transition={{
+              duration: 2,
+              times: [0, 0.5, 1],
+              repeat: Infinity,
+              repeatType: 'reverse',
+            }}
           >
             <Tag className="h-12 w-12" />
           </motion.div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-3">No Parameters Found</h3>
+          <h3 className="text-2xl font-bold text-gray-800 mb-3">
+            No Parameters Found
+          </h3>
           <p className="text-gray-600 max-w-md mx-auto text-center mb-8 leading-relaxed">
-            Create parameters to define what can be measured in your standards. Parameters help establish the criteria for quality control.
+            Create parameters to define what can be measured in your standards.
+            Parameters help establish the criteria for quality control.
           </p>
-          
-          <motion.button 
+
+          <motion.button
             className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl shadow-lg inline-flex items-center gap-3 font-medium"
             onClick={onAddParameterClick}
-            whileHover={{ 
-              scale: 1.05, 
-              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.3), 0 10px 10px -5px rgba(59, 130, 246, 0.15)" 
+            whileHover={{
+              scale: 1.05,
+              boxShadow:
+                '0 20px 25px -5px rgba(59, 130, 246, 0.3), 0 10px 10px -5px rgba(59, 130, 246, 0.15)',
             }}
             whileTap={{ scale: 0.95 }}
           >
@@ -306,7 +421,10 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
                         >
                           {header.isPlaceholder
                             ? null
-                            : flexRender(header.column.columnDef.header, header.getContext())}
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
                         </th>
                       ))}
                     </tr>
@@ -315,8 +433,8 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
                 <tbody className="bg-white divide-y divide-gray-100">
                   <AnimatePresence>
                     {table.getRowModel().rows.map((row, i) => (
-                      <motion.tr 
-                        key={row.id} 
+                      <motion.tr
+                        key={row.id}
                         className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -324,8 +442,14 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
                         whileHover={{ scale: 1.01 }}
                       >
                         {row.getVisibleCells().map((cell) => (
-                          <td key={cell.id} className="px-6 py-4 text-sm text-gray-700">
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          <td
+                            key={cell.id}
+                            className="px-6 py-4 text-sm text-gray-700"
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
                           </td>
                         ))}
                       </motion.tr>
@@ -343,11 +467,15 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
                 <Tag size={14} className="text-blue-600" />
               </div>
               <p className="text-sm font-medium text-gray-700">
-                Showing <span className="text-blue-600 font-semibold">{table.getRowModel().rows.length}</span> parameters
+                Showing{' '}
+                <span className="text-blue-600 font-semibold">
+                  {table.getRowModel().rows.length}
+                </span>{' '}
+                parameters
               </p>
             </div>
 
-            <motion.button 
+            <motion.button
               onClick={fetchParameters}
               className="text-sm text-gray-600 flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
               whileHover={{ scale: 1.05, y: -1 }}
@@ -359,6 +487,64 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({ onAddPara
           </div>
         </div>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <AnimatePresence>
+        {showDeleteModal && parameterToDelete && (
+          <motion.div
+            className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white rounded-2xl p-6 shadow-xl max-w-md w-full mx-4"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  Confirm Deletion
+                </h3>
+                <motion.button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="p-1 hover:bg-gray-100 rounded-full"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <X size={20} className="text-gray-500" />
+                </motion.button>
+              </div>
+              <p className="text-gray-600 mb-4">
+                Are you sure you want to delete the parameter{' '}
+                <strong>"{parameterToDelete.name}"</strong>? This action cannot
+                be undone if the parameter is being used in products or batches.
+              </p>
+              <div className="flex gap-3">
+                <motion.button
+                  onClick={() => setShowDeleteModal(false)}
+                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Cancel
+                </motion.button>
+                <motion.button
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete'}
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

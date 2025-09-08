@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { PrismaClient, StandardStatus,ParameterDataType } from '../../generated/prisma';
+import { PrismaClient, StandardStatus, ParameterDataType } from '../../generated/prisma';
 import { v4 as uuidv4 } from 'uuid';
 import { JwtPayload } from '../../types/batchTypes';
 
@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export class StandardController {
   // Standard operations
-  
+
   // Create a new standard
   // async createStandard(req: Request, res: Response): Promise<void> {
   //   try {
@@ -15,7 +15,7 @@ export class StandardController {
   //       res.status(401).json({ message: 'Unauthorized: Invalid user information' });
   //       return;
   //     }
-  
+
   //     const userId = req.user.id;
   //     const { 
   //       name, 
@@ -26,37 +26,37 @@ export class StandardController {
   //       unitIds,
   //       parameterDefinitions 
   //     } = req.body;
-  
+
   //     // Validate required fields
   //     if (!name || !code || !description || !categoryId) {
   //       res.status(400).json({ message: 'Missing required fields' });
   //       return;
   //     }
-  
+
   //     // Check if standard with same name or code already exists
   //     const existingStandard = await prisma.standard.findFirst({
   //       where: {
   //         OR: [{ name }, { code }],
   //       },
   //     });
-  
+
   //     if (existingStandard) {
   //       res.status(400).json({ message: 'Standard with this name or code already exists' });
   //       return;
   //     }
-  
+
   //     // Check if category exists
   //     const category = await prisma.standardCategory.findUnique({
   //       where: { id: categoryId },
   //     });
-  
+
   //     if (!category) {
   //       res.status(404).json({ message: 'Standard category not found' });
   //       return;
   //     }
 
   //     const standardId = uuidv4();
-      
+
   //     // Create new standard
   //     const standard = await prisma.standard.create({
   //       data: {
@@ -76,12 +76,12 @@ export class StandardController {
   //         } : undefined,
   //       },
   //     });
-      
+
   //     // Create parameter definitions if provided
   //     if (parameterDefinitions && parameterDefinitions.length > 0) {
   //       for (const def of parameterDefinitions) {
   //         const definitionId = uuidv4();
-          
+
   //         await prisma.standardDefinition.create({
   //           data: {
   //             id: definitionId,
@@ -99,7 +99,7 @@ export class StandardController {
   //         });
   //       }
   //     }
-  
+
   //     // Log activity
   //     await prisma.activityLog.create({
   //       data: {
@@ -109,7 +109,7 @@ export class StandardController {
   //         details: `Created standard ${name} (${code})`,
   //       },
   //     });
-  
+
   //     // Fetch the complete standard with all relations
   //     const createdStandardWithRelations = await prisma.standard.findUnique({
   //       where: { id: standardId },
@@ -133,7 +133,7 @@ export class StandardController {
   //         }
   //       }
   //     });
-  
+
   //     res.status(201).json({
   //       message: 'Standard created successfully',
   //       standard: createdStandardWithRelations,
@@ -143,42 +143,42 @@ export class StandardController {
   //     res.status(500).json({ message: 'Internal server error' });
   //   }
   // }
-  
+
   // // Get all standards with filtering
   // async getStandards(req: Request, res: Response): Promise<void> {
   //   try {
   //     const { name, code, categoryId, status } = req.query;
-      
+
   //     // Build where conditions
   //     const whereConditions: any = {};
-      
+
   //     if (name) {
   //       whereConditions.name = {
   //         contains: name as string,
   //         mode: 'insensitive'
   //       };
   //     }
-      
+
   //     if (code) {
   //       whereConditions.code = {
   //         contains: code as string,
   //         mode: 'insensitive'
   //       };
   //     }
-      
+
   //     if (categoryId) {
   //       whereConditions.categoryId = categoryId as string;
   //     }
-      
+
   //     if (status) {
   //       whereConditions.status = status as StandardStatus;
   //     }
-      
+
   //     // Get standards with pagination
   //     const page = parseInt(req.query.page as string) || 1;
   //     const limit = parseInt(req.query.limit as string) || 10;
   //     const skip = (page - 1) * limit;
-      
+
   //     const standards = await prisma.standard.findMany({
   //       where: whereConditions,
   //       skip,
@@ -213,12 +213,12 @@ export class StandardController {
   //         }
   //       }
   //     });
-      
+
   //     // Get total count for pagination
   //     const totalCount = await prisma.standard.count({
   //       where: whereConditions
   //     });
-      
+
   //     res.status(200).json({
   //       standards,
   //       pagination: {
@@ -233,12 +233,12 @@ export class StandardController {
   //     res.status(500).json({ message: 'Internal server error' });
   //   }
   // }
-  
+
   // // Get standard by ID
   // async getStandardById(req: Request, res: Response): Promise<void> {
   //   try {
   //     const { id } = req.params;
-      
+
   //     const standard = await prisma.standard.findUnique({
   //       where: { id },
   //       include: {
@@ -274,19 +274,19 @@ export class StandardController {
   //         }
   //       }
   //     });
-      
+
   //     if (!standard) {
   //       res.status(404).json({ message: 'Standard not found' });
   //       return;
   //     }
-      
+
   //     res.status(200).json({ standard });
   //   } catch (error) {
   //     console.error('Get standard by ID error:', error);
   //     res.status(500).json({ message: 'Internal server error' });
   //   }
   // }
-  
+
   // // Update a standard
   // async updateStandard(req: Request, res: Response): Promise<void> {
   //   try {
@@ -306,7 +306,7 @@ export class StandardController {
   //       unitIds,
   //       parameterDefinitions
   //     } = req.body;
-      
+
   //     // Check if standard exists
   //     const existingStandard = await prisma.standard.findUnique({
   //       where: { id },
@@ -316,12 +316,12 @@ export class StandardController {
   //         definitions: true
   //       }
   //     });
-      
+
   //     if (!existingStandard) {
   //       res.status(404).json({ message: 'Standard not found' });
   //       return;
   //     }
-      
+
   //     // Check for duplicate name or code (excluding current record)
   //     const duplicateCheck = await prisma.standard.findFirst({
   //       where: {
@@ -334,12 +334,12 @@ export class StandardController {
   //         }
   //       }
   //     });
-      
+
   //     if (duplicateCheck) {
   //       res.status(400).json({ message: 'Another standard with this name or code already exists' });
   //       return;
   //     }
-      
+
   //     // Update standard
   //     const updatedStandard = await prisma.standard.update({
   //       where: { id },
@@ -361,12 +361,12 @@ export class StandardController {
   //         } : undefined
   //       }
   //     });
-      
+
   //     // Update parameter definitions
   //     if (parameterDefinitions && parameterDefinitions.length > 0) {
   //       // Get existing definition IDs for this standard
   //       const existingDefinitionIds = existingStandard.definitions.map(def => def.id);
-        
+
   //       // Process each definition
   //       for (const def of parameterDefinitions) {
   //         if (def.id) {
@@ -400,16 +400,16 @@ export class StandardController {
   //           });
   //         }
   //       }
-        
+
   //       // Handle definition removal (definitions in existingDefinitionIds not in parameterDefinitions)
   //       const updatedDefinitionIds = parameterDefinitions
   //         .filter((def: { id: any; }) => def.id)
   //         .map((def: { id: any; }) => def.id);
-          
+
   //       const definitionsToRemove = existingDefinitionIds.filter(
   //         defId => !updatedDefinitionIds.includes(defId)
   //       );
-        
+
   //       if (definitionsToRemove.length > 0) {
   //         // Disconnect definitions from this standard
   //         for (const defId of definitionsToRemove) {
@@ -424,7 +424,7 @@ export class StandardController {
   //         }
   //       }
   //     }
-      
+
   //     // Log activity
   //     await prisma.activityLog.create({
   //       data: {
@@ -434,7 +434,7 @@ export class StandardController {
   //         details: `Updated standard ${existingStandard.name}`,
   //       }
   //     });
-      
+
   //     // Get the updated standard with all relations
   //     const updatedStandardWithRelations = await prisma.standard.findUnique({
   //       where: { id },
@@ -465,7 +465,7 @@ export class StandardController {
   //         }
   //       }
   //     });
-      
+
   //     res.status(200).json({
   //       message: 'Standard updated successfully',
   //       standard: updatedStandardWithRelations
@@ -475,7 +475,7 @@ export class StandardController {
   //     res.status(500).json({ message: 'Internal server error' });
   //   }
   // }
-  
+
   // // Delete a standard
   // async deleteStandard(req: Request, res: Response): Promise<void> {
   //   try {
@@ -485,7 +485,7 @@ export class StandardController {
   //       return;
   //     }
   //     const userId = req.user.id;
-      
+
   //     // Check if standard exists
   //     const existingStandard = await prisma.standard.findUnique({
   //       where: { id },
@@ -493,12 +493,12 @@ export class StandardController {
   //         definitions: true
   //       }
   //     });
-      
+
   //     if (!existingStandard) {
   //       res.status(404).json({ message: 'Standard not found' });
   //       return;
   //     }
-      
+
   //     // Check if standard is being used in any batches
   //     const batchUsage = await prisma.batch.findFirst({
   //       where: {
@@ -509,12 +509,12 @@ export class StandardController {
   //         }
   //       }
   //     });
-      
+
   //     if (batchUsage) {
   //       res.status(400).json({ message: 'Cannot delete standard as it is being used in batches' });
   //       return;
   //     }
-      
+
   //     // Disconnect all definitions from this standard
   //     for (const def of existingStandard.definitions) {
   //       await prisma.standardDefinition.update({
@@ -526,12 +526,12 @@ export class StandardController {
   //         }
   //       });
   //     }
-      
+
   //     // Delete standard
   //     await prisma.standard.delete({
   //       where: { id }
   //     });
-      
+
   //     // Log activity
   //     await prisma.activityLog.create({
   //       data: {
@@ -541,16 +541,16 @@ export class StandardController {
   //         details: `Deleted standard ${existingStandard.name}`,
   //       }
   //     });
-      
+
   //     res.status(200).json({ message: 'Standard deleted successfully' });
   //   } catch (error) {
   //     console.error('Delete standard error:', error);
   //     res.status(500).json({ message: 'Internal server error' });
   //   }
   // }
-  
+
   // Standard Categories operations
-  
+
   // Create a new standard category
   async createStandardCategory(req: Request, res: Response): Promise<void> {
     try {
@@ -560,23 +560,23 @@ export class StandardController {
       }
       const userId = req.user.id;
       const { name, description } = req.body;
-      
+
       // Validate required fields
       if (!name) {
         res.status(400).json({ message: 'Name is required' });
         return;
       }
-      
+
       // Check if category with same name already exists
       const existingCategory = await prisma.standardCategory.findUnique({
         where: { name }
       });
-      
+
       if (existingCategory) {
         res.status(400).json({ message: 'Category with this name already exists' });
         return;
       }
-      
+
       // Create new category
       const category = await prisma.standardCategory.create({
         data: {
@@ -586,7 +586,7 @@ export class StandardController {
           updatedAt: new Date()
         }
       });
-      
+
       // Log activity
       await prisma.activityLog.create({
         data: {
@@ -596,7 +596,7 @@ export class StandardController {
           details: `Created standard category ${name}`,
         }
       });
-      
+
       res.status(201).json({
         message: 'Standard category created successfully',
         category
@@ -606,7 +606,7 @@ export class StandardController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-  
+
   // Get all standard categories
   async getStandardCategories(req: Request, res: Response): Promise<void> {
     try {
@@ -615,7 +615,7 @@ export class StandardController {
           name: 'asc'
         }
       });
-      
+
       res.status(200).json({ categories });
     } catch (error) {
       console.error('Get standard categories error:', error);
@@ -627,35 +627,35 @@ export class StandardController {
     try {
       const { id } = req.params;
       const { name, description } = req.body;
-  
+
       if (!req.user) {
         res.status(401).json({ message: 'Unauthorized' });
         return;
       }
       const userId = req.user.id;
-  
+
       // Check if the category exists
       const existingCategory = await prisma.standardCategory.findUnique({
         where: { id },
       });
-  
+
       if (!existingCategory) {
         res.status(404).json({ message: 'Standard category not found' });
         return;
       }
-  
+
       // Check for duplicate name (excluding the current category)
       if (name && name !== existingCategory.name) {
         const duplicateCategory = await prisma.standardCategory.findUnique({
           where: { name },
         });
-  
+
         if (duplicateCategory) {
           res.status(400).json({ message: 'Another category with this name already exists' });
           return;
         }
       }
-  
+
       // Update the category
       const updatedCategory = await prisma.standardCategory.update({
         where: { id },
@@ -665,7 +665,7 @@ export class StandardController {
           updatedAt: new Date(),
         },
       });
-  
+
       // Log activity
       await prisma.activityLog.create({
         data: {
@@ -675,7 +675,7 @@ export class StandardController {
           details: `Updated standard category ${existingCategory.name}`,
         },
       });
-  
+
       res.status(200).json({
         message: 'Standard category updated successfully',
         category: updatedCategory,
@@ -685,9 +685,75 @@ export class StandardController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+  async deleteStandardCategory(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      if (!req.user) {
+        res.status(401).json({ message: 'Unauthorized' });
+        return;
+      }
+      const userId = req.user.id;
+
+      // Check if category exists
+      const existingCategory = await prisma.standardCategory.findUnique({
+        where: { id },
+        include: {
+          parameters: {
+            include: {
+              products: true, // Check for ProductParameter usage
+              batchValues: true, // Check for BatchParameterValue usage
+            },
+          },
+        },
+      });
+
+      if (!existingCategory) {
+        res.status(404).json({ message: 'Standard category not found' });
+        return;
+      }
+
+      // Check if any parameters under this category are in use
+      const parametersInUse = existingCategory.parameters.some(
+        (param) => param.products.length > 0 || param.batchValues.length > 0
+      );
+
+      if (parametersInUse) {
+        res.status(400).json({
+          message: 'Cannot delete category as some parameters are being used in products or batches',
+        });
+        return;
+      }
+
+      // Delete all parameters under this category
+      await prisma.standardParameter.deleteMany({
+        where: { categoryId: id },
+      });
+
+      // Delete the category
+      await prisma.standardCategory.delete({
+        where: { id },
+      });
+
+      // Log activity
+      await prisma.activityLog.create({
+        data: {
+          id: uuidv4(),
+          userId,
+          action: 'DELETE_STANDARD_CATEGORY',
+          details: `Deleted standard category ${existingCategory.name} and all associated parameters`,
+        },
+      });
+
+      res.status(200).json({ message: 'Standard category and associated parameters deleted successfully' });
+    } catch (error) {
+      console.error('Delete standard category error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
   
-  // Unit of Measurement operations
-  
+
   // Create a new unit of measurement
   async createUnit(req: Request, res: Response): Promise<void> {
     try {
@@ -700,25 +766,25 @@ export class StandardController {
         res.status(400).json({ message: 'User ID is missing in the request' });
         return;
       }
-      
+
       const { name, symbol, description } = req.body;
-      
+
       // Validate required fields
       if (!name || !symbol) {
         res.status(400).json({ message: 'Name and symbol are required' });
         return;
       }
-      
+
       // Check if unit with same name already exists
       const existingUnit = await prisma.unitOfMeasurement.findUnique({
         where: { name }
       });
-      
+
       if (existingUnit) {
         res.status(400).json({ message: 'Unit with this name already exists' });
         return;
       }
-      
+
       // Create new unit
       const unit = await prisma.unitOfMeasurement.create({
         data: {
@@ -729,7 +795,7 @@ export class StandardController {
           updatedAt: new Date()
         }
       });
-      
+
       // Log activity
       await prisma.activityLog.create({
         data: {
@@ -739,7 +805,7 @@ export class StandardController {
           details: `Created unit of measurement ${name} (${symbol})`,
         }
       });
-      
+
       res.status(201).json({
         message: 'Unit of measurement created successfully',
         unit
@@ -749,7 +815,7 @@ export class StandardController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-  
+
   // Get all units of measurement
   async getUnits(req: Request, res: Response): Promise<void> {
     try {
@@ -758,14 +824,14 @@ export class StandardController {
           name: 'asc'
         }
       });
-      
+
       res.status(200).json({ units });
     } catch (error) {
       console.error('Get units error:', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-  
+
   // Update a unit of measurement
   async updateUnit(req: Request, res: Response): Promise<void> {
     try {
@@ -776,29 +842,29 @@ export class StandardController {
       }
       const userId = (req.user as unknown as JwtPayload).userId;
       const { name, symbol, description } = req.body;
-      
+
       // Check if unit exists
       const existingUnit = await prisma.unitOfMeasurement.findUnique({
         where: { id }
       });
-      
+
       if (!existingUnit) {
         res.status(404).json({ message: 'Unit of measurement not found' });
         return;
       }
-      
+
       // Check for duplicate name (excluding current record)
       if (name && name !== existingUnit.name) {
         const duplicateCheck = await prisma.unitOfMeasurement.findUnique({
           where: { name }
         });
-        
+
         if (duplicateCheck) {
           res.status(400).json({ message: 'Another unit with this name already exists' });
           return;
         }
       }
-      
+
       // Update unit
       const updatedUnit = await prisma.unitOfMeasurement.update({
         where: { id },
@@ -809,7 +875,7 @@ export class StandardController {
           updatedAt: new Date()
         }
       });
-      
+
       // Log activity
       await prisma.activityLog.create({
         data: {
@@ -819,7 +885,7 @@ export class StandardController {
           details: `Updated unit of measurement ${existingUnit.name}`,
         }
       });
-      
+
       res.status(200).json({
         message: 'Unit of measurement updated successfully',
         unit: updatedUnit
@@ -829,66 +895,64 @@ export class StandardController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-  
   // Delete a unit of measurement
-  // Delete a unit of measurement
- async deleteUnit(req: Request, res: Response): Promise<void> {
-  try {
-    const { id } = req.params;
-    if (!req.user) {
-      res.status(401).json({ message: 'Unauthorized' });
-      return;
-    }
-    const userId = (req.user as unknown as JwtPayload).userId;
-    
-    // Check if unit exists
-    const existingUnit = await prisma.unitOfMeasurement.findUnique({
-      where: { id }
-    });
-    
-    if (!existingUnit) {
-      res.status(404).json({ message: 'Unit of measurement not found' });
-      return;
-    }
-    
-    // Check if unit is being used in definitions or batch values
-    const standardDefinitionUsage = await prisma.standardDefinition.findFirst({
-      where: { unitId: id }
-    });
-    
-    const batchParameterValueUsage = await prisma.batchParameterValue.findFirst({
-      where: { unitId: id }
-    });
-    
-    if (standardDefinitionUsage || batchParameterValueUsage) {
-      res.status(400).json({ message: 'Cannot delete unit as it is being used in standards or batch values' });
-      return;
-    }
-    
-    // Delete unit
-    await prisma.unitOfMeasurement.delete({
-      where: { id }
-    });
-    
-    // Log activity
-    await prisma.activityLog.create({
-      data: {
-        id: uuidv4(),
-        userId,
-        action: 'DELETE_UNIT',
-        details: `Deleted unit of measurement ${existingUnit.name}`,
+  async deleteUnit(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      if (!req.user) {
+        res.status(401).json({ message: 'Unauthorized' });
+        return;
       }
-    });
-    
-    res.status(200).json({ message: 'Unit of measurement deleted successfully' });
-  } catch (error) {
-    console.error('Delete unit error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+      const userId = (req.user as unknown as JwtPayload).userId;
+
+      // Check if unit exists
+      const existingUnit = await prisma.unitOfMeasurement.findUnique({
+        where: { id }
+      });
+
+      if (!existingUnit) {
+        res.status(404).json({ message: 'Unit of measurement not found' });
+        return;
+      }
+
+      // Check if unit is being used in definitions or batch values
+      const standardDefinitionUsage = await prisma.standardDefinition.findFirst({
+        where: { unitId: id }
+      });
+
+      const batchParameterValueUsage = await prisma.batchParameterValue.findFirst({
+        where: { unitId: id }
+      });
+
+      if (standardDefinitionUsage || batchParameterValueUsage) {
+        res.status(400).json({ message: 'Cannot delete unit as it is being used in standards or batch values' });
+        return;
+      }
+
+      // Delete unit
+      await prisma.unitOfMeasurement.delete({
+        where: { id }
+      });
+
+      // Log activity
+      await prisma.activityLog.create({
+        data: {
+          id: uuidv4(),
+          userId,
+          action: 'DELETE_UNIT',
+          details: `Deleted unit of measurement ${existingUnit.name}`,
+        }
+      });
+
+      res.status(200).json({ message: 'Unit of measurement deleted successfully' });
+    } catch (error) {
+      console.error('Delete unit error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
-}
-  
+
   // Methodology operations
-  
+
   // Create a new methodology
   async createMethodology(req: Request, res: Response): Promise<void> {
     try {
@@ -898,23 +962,23 @@ export class StandardController {
       }
       const userId = req.user.id;
       const { name, description, procedure } = req.body;
-      
+
       // Validate required fields
       if (!name || !description || !procedure) {
         res.status(400).json({ message: 'Name, description, and procedure are required' });
         return;
       }
-      
+
       // Check if methodology with same name already exists
       const existingMethodology = await prisma.methodology.findUnique({
         where: { name }
       });
-      
+
       if (existingMethodology) {
         res.status(400).json({ message: 'Methodology with this name already exists' });
         return;
       }
-      
+
       // Create new methodology
       const methodology = await prisma.methodology.create({
         data: {
@@ -925,7 +989,7 @@ export class StandardController {
           updatedAt: new Date()
         }
       });
-      
+
       // Log activity
       await prisma.activityLog.create({
         data: {
@@ -935,7 +999,7 @@ export class StandardController {
           details: `Created methodology ${name}`,
         }
       });
-      
+
       res.status(201).json({
         message: 'Methodology created successfully',
         methodology
@@ -945,57 +1009,57 @@ export class StandardController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-  
+
   // Get all methodologies
   async getMethodologies(req: Request, res: Response): Promise<void> {
     try {
       const { name } = req.query;
-      
+
       // Build where conditions
       const whereConditions: any = {};
-      
+
       if (name) {
         whereConditions.name = {
           contains: name as string,
           mode: 'insensitive'
         };
       }
-      
+
       const methodologies = await prisma.methodology.findMany({
         where: whereConditions,
         orderBy: {
           name: 'asc'
         }
       });
-      
+
       res.status(200).json({ methodologies });
     } catch (error) {
       console.error('Get methodologies error:', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-  
+
   // Get methodology by ID
   async getMethodologyById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      
+
       const methodology = await prisma.methodology.findUnique({
         where: { id }
       });
-      
+
       if (!methodology) {
         res.status(404).json({ message: 'Methodology not found' });
         return;
       }
-      
+
       res.status(200).json({ methodology });
     } catch (error) {
       console.error('Get methodology by ID error:', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-  
+
   // Update a methodology
   async updateMethodology(req: Request, res: Response): Promise<void> {
     try {
@@ -1006,29 +1070,29 @@ export class StandardController {
       }
       const userId = (req.user as unknown as JwtPayload).userId;
       const { name, description, procedure } = req.body;
-      
+
       // Check if methodology exists
       const existingMethodology = await prisma.methodology.findUnique({
         where: { id }
       });
-      
+
       if (!existingMethodology) {
         res.status(404).json({ message: 'Methodology not found' });
         return;
       }
-      
+
       // Check for duplicate name (excluding current record)
       if (name && name !== existingMethodology.name) {
         const duplicateCheck = await prisma.methodology.findUnique({
           where: { name }
         });
-        
+
         if (duplicateCheck) {
           res.status(400).json({ message: 'Another methodology with this name already exists' });
           return;
         }
       }
-      
+
       // Update methodology
       const updatedMethodology = await prisma.methodology.update({
         where: { id },
@@ -1039,7 +1103,7 @@ export class StandardController {
           updatedAt: new Date()
         }
       });
-      
+
       // Log activity
       await prisma.activityLog.create({
         data: {
@@ -1049,7 +1113,7 @@ export class StandardController {
           details: `Updated methodology ${existingMethodology.name}`,
         }
       });
-      
+
       res.status(200).json({
         message: 'Methodology updated successfully',
         methodology: updatedMethodology
@@ -1059,7 +1123,7 @@ export class StandardController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-  
+
   // Delete a methodology
   async deleteMethodology(req: Request, res: Response): Promise<void> {
     try {
@@ -1069,22 +1133,22 @@ export class StandardController {
         return;
       }
       const userId = (req.user as unknown as JwtPayload).userId;
-      
+
       // Check if methodology exists
       const existingMethodology = await prisma.methodology.findUnique({
         where: { id }
       });
-      
+
       if (!existingMethodology) {
         res.status(404).json({ message: 'Methodology not found' });
         return;
       }
-      
+
       // Delete methodology
       await prisma.methodology.delete({
         where: { id }
       });
-      
+
       // Log activity
       await prisma.activityLog.create({
         data: {
@@ -1094,7 +1158,7 @@ export class StandardController {
           details: `Deleted methodology ${existingMethodology.name}`,
         }
       });
-      
+
       res.status(200).json({ message: 'Methodology deleted successfully' });
     } catch (error) {
       console.error('Delete methodology error:', error);
@@ -1102,7 +1166,7 @@ export class StandardController {
     }
   }
 
- 
+
   // Create a new standard parameter
   async createStandardParameter(req: Request, res: Response): Promise<void> {
     try {
@@ -1110,33 +1174,33 @@ export class StandardController {
         res.status(401).json({ message: 'Unauthorized: Invalid user information' });
         return;
       }
-      
+
       const userId = req.user.id;
-      const { 
-        name, 
-        categoryId, 
-        description, 
+      const {
+        name,
+        categoryId,
+        description,
         dataType,
         standardValue, // Expected value
         unitId        // Unit of measurement
       } = req.body;
-      
+
       // Validate required fields
       if (!name || !categoryId || !dataType) {
         res.status(400).json({ message: 'Name, category, and data type are required' });
         return;
       }
-      
+
       // Check if category exists
       const category = await prisma.standardCategory.findUnique({
         where: { id: categoryId }
       });
-      
+
       if (!category) {
         res.status(404).json({ message: 'Standard category not found' });
         return;
       }
-      
+
       // Start a transaction to ensure parameter and definition are created together
       const result = await prisma.$transaction(async (tx) => {
         // Create new parameter
@@ -1153,7 +1217,7 @@ export class StandardController {
             category: true
           }
         });
-        
+
         // If standard definition information is provided, create it 
         // without requiring a standard ID
         let standardDefinition = null;
@@ -1174,13 +1238,13 @@ export class StandardController {
             }
           });
         }
-        
+
         return {
           parameter,
           standardDefinition
         };
       });
-      
+
       // Log activity
       await prisma.activityLog.create({
         data: {
@@ -1190,7 +1254,7 @@ export class StandardController {
           details: `Created standard parameter ${name}${result.standardDefinition ? ' with standard value' : ''}`,
         }
       });
-      
+
       res.status(201).json({
         message: 'Standard parameter created successfully',
         parameter: result.parameter,
@@ -1201,26 +1265,26 @@ export class StandardController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
-  
+
   // Get all standard parameters with optional filtering
   async getStandardParameters(req: Request, res: Response): Promise<void> {
     try {
       const { name, categoryId } = req.query;
-      
+
       // Build where conditions
       const whereConditions: any = {};
-      
+
       if (name) {
         whereConditions.name = {
           contains: name as string,
           mode: 'insensitive'
         };
       }
-      
+
       if (categoryId) {
         whereConditions.categoryId = categoryId as string;
       }
-      
+
       const parameters = await prisma.standardParameter.findMany({
         where: whereConditions,
         include: {
@@ -1230,10 +1294,136 @@ export class StandardController {
           name: 'asc'
         }
       });
-      
+
       res.status(200).json({ parameters });
     } catch (error) {
       console.error('Get standard parameters error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  async updateStandardParameter(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      if (!req.user) {
+        res.status(401).json({ message: 'Unauthorized' });
+        return;
+      }
+      const userId = req.user.id;
+      const { name, categoryId, description, dataType, unitId } = req.body;
+
+      // Check if parameter exists
+      const existingParameter = await prisma.standardParameter.findUnique({
+        where: { id },
+      });
+
+      if (!existingParameter) {
+        res.status(404).json({ message: 'Standard parameter not found' });
+        return;
+      }
+
+      // Check for duplicate name within the same category (excluding current record)
+      if (name && name !== existingParameter.name) {
+        const duplicateCheck = await prisma.standardParameter.findFirst({
+          where: {
+            name,
+            categoryId: categoryId || existingParameter.categoryId,
+            NOT: { id },
+          },
+        });
+
+        if (duplicateCheck) {
+          res.status(400).json({ message: 'Another parameter with this name exists in the category' });
+          return;
+        }
+      }
+
+      // Update parameter
+      const updatedParameter = await prisma.standardParameter.update({
+        where: { id },
+        data: {
+          name: name || undefined,
+          categoryId: categoryId || undefined,
+          description: description || undefined,
+          dataType: dataType as ParameterDataType || undefined,
+          unitId: unitId || undefined,
+          updatedAt: new Date(),
+        },
+        include: {
+          category: true,
+          unit: true,
+        },
+      });
+
+      // Log activity
+      await prisma.activityLog.create({
+        data: {
+          id: uuidv4(),
+          userId,
+          action: 'UPDATE_STANDARD_PARAMETER',
+          details: `Updated standard parameter ${existingParameter.name}`,
+        },
+      });
+
+      res.status(200).json({
+        message: 'Standard parameter updated successfully',
+        parameter: updatedParameter,
+      });
+    } catch (error) {
+      console.error('Update standard parameter error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  async deleteStandardParameter(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      if (!req.user) {
+        res.status(401).json({ message: 'Unauthorized' });
+        return;
+      }
+      const userId = req.user.id;
+
+      // Check if parameter exists
+      const existingParameter = await prisma.standardParameter.findUnique({
+        where: { id },
+        include: {
+          products: true, // Check for ProductParameter usage
+          batchValues: true, // Check for BatchParameterValue usage
+        },
+      });
+
+      if (!existingParameter) {
+        res.status(404).json({ message: 'Standard parameter not found' });
+        return;
+      }
+
+      // Check if parameter is being used
+      if (existingParameter.products.length > 0 || existingParameter.batchValues.length > 0) {
+        res.status(400).json({
+          message: 'Cannot delete parameter as it is being used in products or batches',
+        });
+        return;
+      }
+
+      // Delete parameter
+      await prisma.standardParameter.delete({
+        where: { id },
+      });
+
+      // Log activity
+      await prisma.activityLog.create({
+        data: {
+          id: uuidv4(),
+          userId,
+          action: 'DELETE_STANDARD_PARAMETER',
+          details: `Deleted standard parameter ${existingParameter.name}`,
+        },
+      });
+
+      res.status(200).json({ message: 'Standard parameter deleted successfully' });
+    } catch (error) {
+      console.error('Delete standard parameter error:', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   }

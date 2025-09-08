@@ -3,6 +3,7 @@ import StandardController from '../controllers/Batch/standard.controller'
 import { authenticate } from '../middlewares/authMiddleware';
 import { checkPermission } from '../middlewares/checkPermisssion';
 
+
 const router = express.Router();
 
 // Standard routes
@@ -16,9 +17,12 @@ const router = express.Router();
 router.post('/standards/categories', authenticate,  StandardController.createStandardCategory);
 router.get('/categoriess', authenticate, StandardController.getStandardCategories);
 router.put('/categories/:id', authenticate, StandardController.updateStandardCategory);
+router.delete('/categories/:id', authenticate, StandardController.deleteStandardCategory);
 
 router.post('/parameter', authenticate, StandardController.createStandardParameter);
 router.get('/parameters', authenticate, StandardController.getStandardParameters);
+router.put('/parameters/:id', authenticate, StandardController.updateStandardParameter);
+router.delete('/parameters/:id', authenticate, StandardController.deleteStandardParameter);
 
 // Unit of measurement routes
 router.post('/units', authenticate, StandardController.createUnit);

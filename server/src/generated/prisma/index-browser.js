@@ -222,6 +222,23 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BatchDraftScalarFieldEnum = {
+  id: 'id',
+  batchNumber: 'batchNumber',
+  productId: 'productId',
+  dateOfProduction: 'dateOfProduction',
+  bestBeforeDate: 'bestBeforeDate',
+  sampleAnalysisStarted: 'sampleAnalysisStarted',
+  sampleAnalysisCompleted: 'sampleAnalysisCompleted',
+  sampleAnalysisStatus: 'sampleAnalysisStatus',
+  makerId: 'makerId',
+  status: 'status',
+  newProductName: 'newProductName',
+  parameterValues: 'parameterValues',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.StandardScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -769,6 +786,11 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
 exports.Prisma.QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -777,6 +799,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.SampleAnalysisStatus = exports.$Enums.SampleAnalysisStatus = {
   PENDING: 'PENDING',
@@ -906,6 +934,7 @@ exports.Prisma.ModelName = {
   Role: 'Role',
   UnitOfMeasurement: 'UnitOfMeasurement',
   User: 'User',
+  BatchDraft: 'BatchDraft',
   Standard: 'Standard',
   StandardCategory: 'StandardCategory',
   ProductStandardCategory: 'ProductStandardCategory',

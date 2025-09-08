@@ -69,11 +69,14 @@ export const API_ROUTES = {
     GET_STANDARD_BY_ID: (id: string) => `${BASE_URL}/standard/standards/${id}`,
     UPDATE_STANDARD: (id: string) => `${BASE_URL}/standard/standards/${id}`,
     DELETE_STANDARD: (id: string) => `${BASE_URL}/standard/standards/${id}`,
-    CREATE_STANDARD_CATEGORY: `${BASE_URL}/standard/standards/categories`,
+    CREATE_STANDARD_CATEGORY: `${BASE_URL}/standard/categories`,
     GET_STANDARD_CATEGORIES: `${BASE_URL}/standard/categoriess`,
     UPDATE_STANDARD_CATEGORY: (id: string) => `${BASE_URL}/standard/categories/${id}`,
+    DELETE_STANDARD_CATEGORY: (id: string) => `${BASE_URL}/standard/categories/${id}`, // <-- Add this
     CREATE_STANDARD_PARAMETER: `${BASE_URL}/standard/parameter`, // Added BASE_URL
     GET_STANDARD_PARAMETERS: `${BASE_URL}/standard/parameters`, // Ad
+    UPDATE_STANDARD_PARAMETER: (id: string) => `${BASE_URL}/standard/parameters/${id}`, // <-- Add this
+    DELETE_STANDARD_PARAMETER: (id: string) => `${BASE_URL}/standard/parameters/${id}`, // <-- Add t
   },
 
   UNIT: {
@@ -292,6 +295,12 @@ export const API_ROUTES = {
     GET_PRODUCT_WISE_WASTE: `${BASE_URL}/raw/dashboard/product-wise-waste`,
     GET_STOCK_DISTRIBUTION: `${BASE_URL}/raw/dashboard/stock-distribution`,
     GET_PRODUCT_WISE_CONVERSION: `${BASE_URL}/raw/dashboard/product-wise-conversion`,
+  },
+
+  DRAFT: {
+    SAVE_BATCH: `${BASE_URL}/draft/batch`,
+    GET_BATCH: (id: string) => `${BASE_URL}/draft/batch/${id}`,
+    GET_LATEST_BATCH_DRAFT: `${BASE_URL}/draft/batch-latest`,
   },
 
 };
