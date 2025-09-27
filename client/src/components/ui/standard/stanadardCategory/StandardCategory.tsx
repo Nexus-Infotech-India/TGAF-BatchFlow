@@ -39,7 +39,6 @@ interface StandardCategoryProps {
 }
 
 const StandardCategory: React.FC<StandardCategoryProps> = ({
-  onCategorySelect,
   onAddCategoryClick,
 }) => {
   const [categories, setCategories] = useState<StandardCategory[]>([]);
