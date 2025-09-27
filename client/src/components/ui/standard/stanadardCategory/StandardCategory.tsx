@@ -15,7 +15,6 @@ import {
   Info,
   Tag,
   Type,
-  ChevronRight,
   Folder,
   RefreshCw,
   AlertCircle,
@@ -77,9 +76,6 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
     fetchCategories();
   }, []);
 
-  const handleGoToStandards = (categoryId: string, categoryName: string) => {
-    onCategorySelect(categoryId, categoryName);
-  };
 
   const handleSave = async (id: string, field: string, newValue: string) => {
     try {
