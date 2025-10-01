@@ -36,6 +36,7 @@ import CleaningRawMaterialList from './components/pages/cleanning/allItems';
 import TransactionalLog from './components/pages/Order/TransactionalLog';
 import ProcessingList from './components/pages/processing/processingList';
 import RawDashboard from './components/pages/Dashboard/rawDashboard';
+import RMQualityReport from './components/pages/QualityReport/RMQualityReport';
 
 const App = () => {
   return (
@@ -301,6 +302,23 @@ const App = () => {
                 />
               }
             />
+            <Route
+              path="/raw/quality-report"
+              element={
+                <PermissionedRoute
+                  path="/raw/quality-report"
+                  element={
+                    <SecureRoute
+                      element={<RMQualityReport />}
+                      permissionKey="manage_rm_quality_report"
+                    />
+                  }
+                  name="RM Quality Report"
+                  description="Manage raw material quality reports"
+                  permissionKey="manage_rm_quality_report"
+                />
+              }
+            />
 
             {/* ==================== TRAINING ROUTES ==================== */}
 
@@ -358,23 +376,23 @@ const App = () => {
               }
             />
 
-           <Route
-  path="/trainings/edit/:trainingId"
-  element={
-    <PermissionedRoute
-      path="/trainings/edit/:trainingId"
-      element={
-        <SecureRoute
-          element={<EditTraining />}
-          permissionKey="edit_training"
-        />
-      }
-      name="Edit Training"
-      description="Edit training session details"
-      permissionKey="edit_training"
-    />
-  }
-/>
+            <Route
+              path="/trainings/edit/:trainingId"
+              element={
+                <PermissionedRoute
+                  path="/trainings/edit/:trainingId"
+                  element={
+                    <SecureRoute
+                      element={<EditTraining />}
+                      permissionKey="edit_training"
+                    />
+                  }
+                  name="Edit Training"
+                  description="Edit training session details"
+                  permissionKey="edit_training"
+                />
+              }
+            />
 
             <Route
               path="/training-calender"
@@ -614,24 +632,24 @@ const App = () => {
             />
 
             {/* ==================== RAW MATERIAL ROUTES ==================== */}
-            
-<Route
-  path="/raw/purchase-order"
-  element={
-    <PermissionedRoute
-      path="/raw/purchase-order"
-      element={
-        <SecureRoute
-          element={<PurchaseOrder />}
-          permissionKey="manage_purchase_order" // unified
-        />
-      }
-      name="Purchase order"
-      description="View and manage purchase orders for raw materials"
-      permissionKey="manage_purchase_order" // unified
-    />
-  }
-/>
+
+            <Route
+              path="/raw/purchase-order"
+              element={
+                <PermissionedRoute
+                  path="/raw/purchase-order"
+                  element={
+                    <SecureRoute
+                      element={<PurchaseOrder />}
+                      permissionKey="manage_purchase_order" // unified
+                    />
+                  }
+                  name="Purchase order"
+                  description="View and manage purchase orders for raw materials"
+                  permissionKey="manage_purchase_order" // unified
+                />
+              }
+            />
 
             <Route
               path="/raw/purchase-history"

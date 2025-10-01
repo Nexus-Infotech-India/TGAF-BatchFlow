@@ -15,7 +15,8 @@ import {
   LayoutDashboardIcon,
   FileStack,
   ClipboardEdit,
-  SwitchCamera
+  SwitchCamera,
+  FileText
 } from "lucide-react";
 import { usePermissions } from "../../hooks/permission"; // Import the permissions hook
 
@@ -99,135 +100,141 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
 
 const parentGroups: ParentGroup[] = [
   {
-    key: "raw-material",
-    name: "Raw Material Man...",
+    key: 'raw-material',
+    name: 'Raw Material Man...',
     icon: <PackageOpen size={20} />,
     children: [
-      { 
-        path: "/raw-dashboard", 
-        name: "Dashboard", 
+      {
+        path: '/raw-dashboard',
+        name: 'Dashboard',
         icon: <LayoutDashboardIcon size={18} />,
-        permissionKey: "manage_raw_dashboard" // updated
+        permissionKey: 'manage_raw_dashboard', // updated
       },
-      // { 
-      //   path: "/raw/purchase-order", 
-      //   name: "Order", 
+      // {
+      //   path: "/raw/purchase-order",
+      //   name: "Order",
       //   icon: <FileStack size={18} />,
       //   permissionKey: "manage_purchase_order" // updated (if enabled)
       // },
-      { 
-        path: "/raw/purchase-history", 
-        name: "Order", 
+      {
+        path: '/raw/purchase-history',
+        name: 'Order',
         icon: <FileStack size={18} />,
-        permissionKey: "manage_purchase_order" // updated
+        permissionKey: 'manage_purchase_order', // updated
       },
-      { 
-        path: "/raw/cleaning-raw-materials", 
-        name: "Cleaning", 
+      {
+        path: '/raw/cleaning-raw-materials',
+        name: 'Cleaning',
         icon: <ClipboardEdit size={18} />,
-        permissionKey: "manage_purchase_order" // updated
+        permissionKey: 'manage_purchase_order', // updated
       },
-      { 
-        path: "/raw/processing-list", 
-        name: "Processing", 
+      {
+        path: '/raw/processing-list',
+        name: 'Processing',
         icon: <SwitchCamera size={18} />,
-        permissionKey: "manage_purchase_order"
+        permissionKey: 'manage_purchase_order',
       },
-      { 
-        path: "/stock-distribution", 
-        name: "Stock Distribution", 
+      {
+        path: '/raw/quality-report',
+        name: 'RM Quality Report',
+        icon: <FileText size={18} />,
+        permissionKey: 'manage_rm_quality_report',
+      },
+      {
+        path: '/stock-distribution',
+        name: 'Stock Distribution',
         icon: <SwitchCamera size={18} />,
-        permissionKey: "view_stock_distribution" // updated
+        permissionKey: 'view_stock_distribution', // updated
       },
-    ]
+    ],
   },
   {
-    key: "batch-management",
-    name: "Batch Management",
+    key: 'batch-management',
+    name: 'FG Quality Report',
     icon: <PackageOpen size={20} />,
     children: [
-      { 
-        path: "/operation-dashboard", 
-        name: "Dashboard", 
+      {
+        path: '/operation-dashboard',
+        name: 'Dashboard',
         icon: <LucideLayoutDashboard size={18} />,
-        permissionKey: "view_operation_dashboard" // updated
+        permissionKey: 'view_operation_dashboard', // updated
       },
-      { 
-        path: "/batches", 
-        name: "Batches", 
+      {
+        path: '/batches',
+        name: 'Batches',
         icon: <PackageOpen size={18} />,
-        permissionKey: "view_batches"
+        permissionKey: 'view_batches',
       },
-      { 
-        path: "/standards", 
-        name: "Standards", 
+      {
+        path: '/standards',
+        name: 'Standards',
         icon: <Award size={18} />,
-        permissionKey: "manage_standards"
+        permissionKey: 'manage_standards',
       },
-      // { 
-      //   path: "/compare-batch", 
-      //   name: "Compare Batch", 
+      // {
+      //   path: "/compare-batch",
+      //   name: "Compare Batch",
       //   icon: <Anchor size={18} />,
       //   permissionKey: "review_batches"
       // },
-      { 
-        path: "/batches/verification", 
-        name: "Batch Verification", 
+      {
+        path: '/batches/verification',
+        name: 'Batch Verification',
         icon: <Award size={18} />,
-        permissionKey: "verify_batches"
+        permissionKey: 'verify_batches',
       },
-    ]
+    ],
   },
   {
-    key: "training",
-    name: "Training",
+    key: 'training',
+    name: 'Training',
     icon: <GraduationCap size={20} />,
     children: [
-      { 
-        path: "/trainings-dashboard", 
-        name: "Dashboard", 
+      {
+        path: '/trainings-dashboard',
+        name: 'Dashboard',
         icon: <LucideLayoutDashboard size={18} />,
-        permissionKey: "view_training_dashboard" // updated
-      },
-      { 
-        path: "/trainings", 
-        name: "Training", 
-        icon: <Award size={18} />,
-        permissionKey: "manage_trainings"
-      },
-      { 
-        path: "/training-calender", 
-        name: "Training Calendar", 
-        icon: <Calendar size={18} />,
-        permissionKey: "view_training_calendar" // updated
-      },
-    ]
-  },
-  {
-    key: "audit-management",
-    name: "Audit Management",
-    icon: <Shield size={20} />,
-    children: [
-      { 
-        path: "/audit-dashboard", 
-        name: "Audit Dashboard", 
-        icon: <File size={18} />,
-        permissionKey: "view_audit_dashboard" // updated
-      },
-      { 
-        path: "/audits", 
-        name: "Audit management", 
-        icon: <File size={18} />,
-        permissionKey: "manage_audits" // updated
+        permissionKey: 'view_training_dashboard', // updated
       },
       {
-        path: "/audit/calender",
-        name: "Audit Calendar",
+        path: '/trainings',
+        name: 'Training',
+        icon: <Award size={18} />,
+        permissionKey: 'manage_trainings',
+      },
+      {
+        path: '/training-calender',
+        name: 'Training Calendar',
         icon: <Calendar size={18} />,
-        permissionKey: "view_audit_calendar" // updated
-      }
-    ]
-  }
+        permissionKey: 'view_training_calendar', // updated
+      },
+    ],
+  },
+  {
+    key: 'audit-management',
+    name: 'Audit Management',
+    icon: <Shield size={20} />,
+    children: [
+      {
+        path: '/audit-dashboard',
+        name: 'Audit Dashboard',
+        icon: <File size={18} />,
+        permissionKey: 'view_audit_dashboard', // updated
+      },
+      {
+        path: '/audits',
+        name: 'Audit management',
+        icon: <File size={18} />,
+        permissionKey: 'manage_audits', // updated
+      },
+      {
+        path: '/audit/calender',
+        name: 'Audit Calendar',
+        icon: <Calendar size={18} />,
+        permissionKey: 'view_audit_calendar', // updated
+      },
+    ],
+  },
 ];
 
 

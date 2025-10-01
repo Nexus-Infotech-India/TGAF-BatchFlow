@@ -11,6 +11,7 @@ import { TransactionLogController } from '../controllers/rawmaterial/log.control
 import { authenticate } from '../middlewares/authMiddleware';
 import { getPurchaseOrdersByProduct, getPurchaseOrderTimeline } from '../controllers/rawmaterial/time.controller';
 import { DashboardController } from '../controllers/rawmaterial/Dashboard.controller';
+import { RMQualityController } from '../controllers/rawmaterial/quality.controller';
 
 const router = Router();
 
@@ -89,5 +90,14 @@ router.get('/dashboard/recent-transactions', DashboardController.getRecentTransa
 router.get('/dashboard/product-wise-waste', DashboardController.getProductWiseWasteStock);
 router.get('/dashboard/stock-distribution', DashboardController.getStockDistributionByWarehouse);
 router.get('/dashboard/product-wise-conversion', DashboardController.getProductWiseConversionRatio);
+
+
+// RM Quality Reports
+router.post('/quality-report', RMQualityController.createQualityReport);
+router.get('/quality-report', RMQualityController.getQualityReports);
+router.get('/quality-report/:id', RMQualityController.getQualityReportById);
+router.put('/quality-report/:id', RMQualityController.updateQualityReport);
+router.delete('/quality-report/:id', RMQualityController.deleteQualityReport);
+router.get('/quality-report/:id/export', RMQualityController.exportQualityReport);
 
 export default router;

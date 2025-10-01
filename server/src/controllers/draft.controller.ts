@@ -109,3 +109,40 @@ export const getLatestDraftForUser = async (req: Request, res: Response): Promis
         res.status(500).json({ error: 'Failed to load draft' });
     }
 };
+
+// Add this method at the end of the file
+export const deleteDraftBatch = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+        const makerId = req.user?.id;
+
+        if (!makerId) {
+            res.status(401).json({ error: 'Unauthorized: No user found' });
+            return;
+        }
+
+        // Verify the draft belongs to the user
+        const draft = await prisma.batchDraft.findUnique({
+            where: { id }
+        });
+
+        if (!draft) {
+            res.status(404).json({ error: 'Draft not found' });
+            return;
+        }
+
+        if (draft.makerId !== makerId) {
+            res.status(403).json({ error: 'Forbidden: You can only delete your own drafts' });
+            return;
+        }
+
+        await prisma.batchDraft.delete({
+            where: { id }
+        });
+
+        res.status(200).json({ message: 'Draft deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting draft batch:', error);
+        res.status(500).json({ error: 'Failed to delete draft' });
+    }
+};

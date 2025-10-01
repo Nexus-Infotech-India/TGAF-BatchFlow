@@ -185,6 +185,7 @@ model User {
   uploadedFeedbackForms       FeedbackForm[]
   transactionLogs   TransactionLog[] 
   uploadedSessionPhotos  TrainingSessionPhoto[]  @relation("UploadedSessionPhotos")
+  rmQualityReports   RMQualityReport[]
 }
 
 model BatchDraft {

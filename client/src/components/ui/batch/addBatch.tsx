@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { API_ROUTES } from '../../../utils/api';
@@ -143,44 +143,102 @@ const AddBatch: React.FC = () => {
       enabled: !!selectedProductId,
     });
 
-  // Auto-expand first category when parameters load
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const draftIdFromUrl = searchParams.get('draftId');
+
+  // Update the useEffect for fetching draft (around line 271)
   useEffect(() => {
-    if (productParametersData?.parametersByCategory) {
-      const categories = Object.keys(
-        productParametersData.parametersByCategory
-      );
-      if (categories.length > 0) {
-        setExpandedCategories({ [categories[0]]: true });
+    const fetchDraft = async () => {
+      try {
+        let draftData;
+
+        // If draft ID is provided in URL, fetch that specific draft
+        if (draftIdFromUrl) {
+          const response = await axios.get(
+            API_ROUTES.DRAFT.GET_BATCH(draftIdFromUrl),
+            { headers: { Authorization: `Bearer ${authToken}` } }
+          );
+          draftData = response.data;
+        } else {
+          // Otherwise, fetch the latest draft
+          const response = await axios.get(
+            API_ROUTES.DRAFT.GET_LATEST_BATCH_DRAFT,
+            { headers: { Authorization: `Bearer ${authToken}` } }
+          );
+          draftData = response.data;
+        }
+
+        console.log('draftData', draftData);
+
+        setDraftId(draftData.id);
+        setFormData({
+          batchNumber: draftData.batchNumber || '',
+          productId: draftData.productId || '',
+          dateOfProduction: toDateInputString(draftData.dateOfProduction),
+          bestBeforeDate: toDateInputString(draftData.bestBeforeDate),
+          sampleAnalysisStarted: toDateInputString(
+            draftData.sampleAnalysisStarted
+          ),
+          sampleAnalysisCompleted: toDateInputString(
+            draftData.sampleAnalysisCompleted
+          ),
+          sampleAnalysisStatus: draftData.sampleAnalysisStatus || 'PENDING',
+        });
+        setSelectedProductId(draftData.productId || '');
+        setParameterValues(draftData.parameterValues || []);
+        setNewProductName(draftData.newProductName || '');
+        setDraftFetchedAt(draftData.updatedAt || draftData.createdAt || null);
+      } catch (error) {
+        // No draft found or error, do nothing
+        console.log('No draft found');
       }
+    };
+
+    if (authToken) {
+      fetchDraft();
     }
-  }, [productParametersData]);
+  }, [authToken, draftIdFromUrl]);
+
+ 
+    // Auto-expand first category when parameters load
+    useEffect(() => {
+      if (productParametersData?.parametersByCategory) {
+        const categories = Object.keys(
+          productParametersData.parametersByCategory
+        );
+        if (categories.length > 0) {
+          setExpandedCategories({ [categories[0]]: true });
+        }
+      }
+    }, [productParametersData]);
 
   // Form field handlers
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+    const handleInputChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+      const { name, value } = e.target;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    };
 
   // Product selection handler
-  const handleProductChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
+    const handleProductChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const value = e.target.value;
 
-    if (value === 'new') {
-      setShowNewProductForm(true);
-      setSelectedProductId('');
-      setFormData((prev) => ({ ...prev, productId: '' }));
-    } else {
-      setShowNewProductForm(false);
-      setSelectedProductId(value);
-      setFormData((prev) => ({ ...prev, productId: value }));
-      setNewProductName('');
-    }
-  };
+      if (value === 'new') {
+        setShowNewProductForm(true);
+        setSelectedProductId('');
+        setFormData((prev) => ({ ...prev, productId: '' }));
+      } else {
+        setShowNewProductForm(false);
+        setSelectedProductId(value);
+        setFormData((prev) => ({ ...prev, productId: value }));
+        setNewProductName('');
+      }
+    };
 
   // Check if form is valid
   useEffect(() => {
@@ -198,25 +256,35 @@ const AddBatch: React.FC = () => {
   }, [formData, parameterValues, newProductName]);
 
   // Create batch mutation
-  const createBatchMutation = useMutation({
-    mutationFn: async (batchData: any) => {
-      const response = await axios.post(
-        API_ROUTES.BATCH.CREATE_BATCH,
-        batchData,
-        {
-          headers: { Authorization: `Bearer ${authToken}` },
-        }
-      );
-      return response.data;
-    },
-    onSuccess: () => {
-      navigate('/batches');
-    },
-    onError: (error: any) => {
-      setError(error.response?.data?.message || 'Failed to create batch');
-      setIsSaving(false);
-    },
-  });
+   const createBatchMutation = useMutation({
+     mutationFn: async (batchData: any) => {
+       const response = await axios.post(
+         API_ROUTES.BATCH.CREATE_BATCH,
+         batchData,
+         {
+           headers: { Authorization: `Bearer ${authToken}` },
+         }
+       );
+       return response.data;
+     },
+     onSuccess: async () => {
+       // Delete draft if it exists
+       if (draftId) {
+         try {
+           await axios.delete(API_ROUTES.DRAFT.DELETE_BATCH(draftId), {
+             headers: { Authorization: `Bearer ${authToken}` },
+           });
+         } catch (error) {
+           console.error('Error deleting draft after submission:', error);
+         }
+       }
+       navigate('/batches');
+     },
+     onError: (error: any) => {
+       setError(error.response?.data?.message || 'Failed to create batch');
+       setIsSaving(false);
+     },
+   });
 
   // Handle save/submit
   const handleSave = () => {
@@ -237,6 +305,34 @@ const AddBatch: React.FC = () => {
     };
 
     createBatchMutation.mutate(transformedData);
+  };
+
+  const handleDeleteDraft = async () => {
+    if (!draftId) return;
+
+    try {
+      await axios.delete(API_ROUTES.DRAFT.DELETE_BATCH(draftId), {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+
+      // Clear form
+      setFormData({
+        batchNumber: '',
+        productId: '',
+        dateOfProduction: '',
+        bestBeforeDate: '',
+        sampleAnalysisStarted: '',
+        sampleAnalysisCompleted: '',
+        sampleAnalysisStatus: 'PENDING',
+      });
+      setParameterValues([]);
+      setNewProductName('');
+      setDraftId(null);
+      setDraftFetchedAt(null);
+    } catch (error) {
+      console.error('Error deleting draft:', error);
+      setError('Failed to delete draft');
+    }
   };
 
   const parametersByCategory =
@@ -268,53 +364,53 @@ const AddBatch: React.FC = () => {
     return new Date(dateStr).toISOString().slice(0, 10);
   }
 
-    useEffect(() => {
-      const fetchLatestDraft = async () => {
-        try {
-          const response = await axios.get(
-            API_ROUTES.DRAFT.GET_LATEST_BATCH_DRAFT, // e.g. '/api/draft/batch-latest'
-            { headers: { Authorization: `Bearer ${authToken}` } }
-          );
-          const draftData = response.data;
-          console.log('draftData', draftData);
-          
-          setDraftId(draftData.id);
-         setFormData({
-           batchNumber: draftData.batchNumber || '',
-           productId: draftData.productId || '',
-           dateOfProduction: toDateInputString(draftData.dateOfProduction),
-           bestBeforeDate: toDateInputString(draftData.bestBeforeDate),
-           sampleAnalysisStarted: toDateInputString(
-             draftData.sampleAnalysisStarted
-           ),
-           sampleAnalysisCompleted: toDateInputString(
-             draftData.sampleAnalysisCompleted
-           ),
-           sampleAnalysisStatus: draftData.sampleAnalysisStatus || 'PENDING',
-         });
-         setSelectedProductId(draftData.productId || ''); 
-         setParameterValues(draftData.parameterValues || []);
-         setNewProductName(draftData.newProductName || '');
-         setDraftFetchedAt(draftData.updatedAt || draftData.createdAt || null);
-        } catch (error) {
-          // No draft found or error, do nothing
-        }
-      };
-      fetchLatestDraft();
-    }, [authToken]);
+  useEffect(() => {
+    const fetchLatestDraft = async () => {
+      try {
+        const response = await axios.get(
+          API_ROUTES.DRAFT.GET_LATEST_BATCH_DRAFT, // e.g. '/api/draft/batch-latest'
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        const draftData = response.data;
+        console.log('draftData', draftData);
 
-    function formatDraftDate(dateStr: string | null) {
-      if (!dateStr) return '';
-      const date = new Date(dateStr);
-      // Format as "YYYY-MM-DD, HH:mm"
-      return date.toLocaleString(undefined, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    }
+        setDraftId(draftData.id);
+        setFormData({
+          batchNumber: draftData.batchNumber || '',
+          productId: draftData.productId || '',
+          dateOfProduction: toDateInputString(draftData.dateOfProduction),
+          bestBeforeDate: toDateInputString(draftData.bestBeforeDate),
+          sampleAnalysisStarted: toDateInputString(
+            draftData.sampleAnalysisStarted
+          ),
+          sampleAnalysisCompleted: toDateInputString(
+            draftData.sampleAnalysisCompleted
+          ),
+          sampleAnalysisStatus: draftData.sampleAnalysisStatus || 'PENDING',
+        });
+        setSelectedProductId(draftData.productId || '');
+        setParameterValues(draftData.parameterValues || []);
+        setNewProductName(draftData.newProductName || '');
+        setDraftFetchedAt(draftData.updatedAt || draftData.createdAt || null);
+      } catch (error) {
+        // No draft found or error, do nothing
+      }
+    };
+    fetchLatestDraft();
+  }, [authToken]);
+
+  function formatDraftDate(dateStr: string | null) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    // Format as "YYYY-MM-DD, HH:mm"
+    return date.toLocaleString(undefined, {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
 
   return (
     <motion.div

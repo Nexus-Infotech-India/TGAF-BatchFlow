@@ -1497,6 +1497,249 @@ async completeBatchVerification(req: Request, res: Response): Promise<void> {
   }
 }
 
+async getBatchesWithDrafts(req: Request, res: Response): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ message: 'Unauthorized' });
+        return;
+      }
+
+      const userId = req.user.id;
+      const filters: BatchFilter = req.query as any;
+
+      // Build where conditions for batches
+      const whereConditions: any = {};
+
+      if (filters.status && filters.status !== 'DRAFT') {
+        whereConditions.status = filters.status;
+      }
+
+      if (filters.productId) {
+        whereConditions.productId = filters.productId;
+      }
+
+      if (filters.batchNumber) {
+        whereConditions.batchNumber = {
+          contains: filters.batchNumber,
+          mode: 'insensitive'
+        };
+      }
+
+      if (filters.dateFrom || filters.dateTo) {
+        whereConditions.dateOfProduction = {};
+
+        if (filters.dateFrom) {
+          whereConditions.dateOfProduction.gte = new Date(filters.dateFrom);
+        }
+
+        if (filters.dateTo) {
+          whereConditions.dateOfProduction.lte = new Date(filters.dateTo);
+        }
+      }
+
+      // Get batches with pagination
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const skip = (page - 1) * limit;
+
+      // Fetch both batches and drafts
+      const [batches, drafts] = await Promise.all([
+        prisma.batch.findMany({
+          where: whereConditions,
+          skip,
+          take: limit,
+          orderBy: {
+            createdAt: 'desc'
+          },
+          include: {
+            Product: true,
+            parameterValues: {
+              include: {
+                parameter: {
+                  include: {
+                    category: true
+                  }
+                },
+                unit: true,
+                methodology: true
+              }
+            },
+            User_Batch_makerIdToUser: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            },
+            User_Batch_checkerIdToUser: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            },
+            standards: {
+              select: {
+                id: true,
+                name: true,
+                code: true,
+                Category: {
+                  select: {
+                    name: true
+                  }
+                }
+              }
+            },
+            methodologies: {
+              select: {
+                id: true,
+                name: true
+              }
+            },
+            unitOfMeasurements: {
+              select: {
+                id: true,
+                name: true,
+                symbol: true
+              }
+            },
+            ActivityLog: {
+              take: 5,
+              orderBy: {
+                createdAt: 'desc'
+              },
+              include: {
+                User: {
+                  select: {
+                    name: true
+                  }
+                }
+              }
+            }
+          }
+        }),
+        // Fetch drafts for the current user
+        prisma.batchDraft.findMany({
+          where: {
+            makerId: userId,
+            ...(filters.batchNumber && {
+              batchNumber: {
+                contains: filters.batchNumber,
+                mode: 'insensitive'
+              }
+            })
+          },
+          orderBy: {
+            updatedAt: 'desc'
+          }
+        })
+      ]);
+
+      // Get total count for pagination
+      const totalCount = await prisma.batch.count({
+        where: whereConditions
+      });
+
+      // Format the response data - group parameter values by category
+      const formattedBatches = batches.map(batch => {
+        // Group parameter values by category
+        const parametersByCategory: Record<string, any[]> = {};
+
+        batch.parameterValues.forEach(pv => {
+          const categoryName = pv.parameter.category.name;
+          if (!parametersByCategory[categoryName]) {
+            parametersByCategory[categoryName] = [];
+          }
+
+          parametersByCategory[categoryName].push({
+            id: pv.id,
+            parameter: pv.parameter,
+            value: pv.value,
+            unit: pv.unit,
+            methodology: pv.methodology,
+            verificationResult: pv.verificationResult,
+            verificationRemark: pv.verificationRemark
+          });
+        });
+
+        return {
+          id: batch.id,
+          batchNumber: batch.batchNumber,
+          productId: batch.productId,
+          productName: batch.Product.name,
+          dateOfProduction: batch.dateOfProduction,
+          bestBeforeDate: batch.bestBeforeDate,
+          sampleAnalysisStatus: batch.sampleAnalysisStatus,
+          status: batch.status,
+          maker: batch.User_Batch_makerIdToUser,
+          checker: batch.User_Batch_checkerIdToUser,
+          standards: batch.standards,
+          parameterValuesByCategory: parametersByCategory,
+          methodologies: batch.methodologies,
+          units: batch.unitOfMeasurements,
+          recentActivities: batch.ActivityLog,
+          createdAt: batch.createdAt,
+          updatedAt: batch.updatedAt,
+          isDraft: false
+        };
+      });
+
+      // Format drafts
+      const formattedDrafts = drafts.map(draft => ({
+        id: draft.id,
+        batchNumber: draft.batchNumber || 'Draft (No Batch Number)',
+        productId: draft.productId,
+        productName: draft.newProductName || 'Unknown Product',
+        dateOfProduction: draft.dateOfProduction,
+        bestBeforeDate: draft.bestBeforeDate,
+        sampleAnalysisStatus: draft.sampleAnalysisStatus,
+        status: 'DRAFT',
+        maker: null,
+        checker: null,
+        standards: [],
+        parameterValuesByCategory: {},
+        methodologies: [],
+        units: [],
+        recentActivities: [],
+        createdAt: draft.createdAt,
+        updatedAt: draft.updatedAt,
+        isDraft: true,
+        draftData: {
+          formData: {
+            batchNumber: draft.batchNumber,
+            productId: draft.productId,
+            dateOfProduction: draft.dateOfProduction,
+            bestBeforeDate: draft.bestBeforeDate,
+            sampleAnalysisStarted: draft.sampleAnalysisStarted,
+            sampleAnalysisCompleted: draft.sampleAnalysisCompleted,
+            sampleAnalysisStatus: draft.sampleAnalysisStatus,
+          },
+          parameterValues: draft.parameterValues,
+          newProductName: draft.newProductName
+        }
+      }));
+
+      // Combine and sort by updated date
+      const allItems = [...formattedBatches, ...formattedDrafts].sort((a, b) =>
+        new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+      );
+
+      res.status(200).json({
+        batches: allItems,
+        drafts: formattedDrafts,
+        pagination: {
+          page,
+          limit,
+          totalCount: totalCount + drafts.length,
+          totalPages: Math.ceil((totalCount + drafts.length) / limit)
+        }
+      });
+    } catch (error) {
+      console.error('Get batches with drafts error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
 
  
 

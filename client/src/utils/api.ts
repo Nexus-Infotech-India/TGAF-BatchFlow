@@ -8,8 +8,15 @@ const api = axios.create({
   },
 });
 
-export default api;
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken'); // or sessionStorage, as per your app
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
+export default api;
 // Define the base URL for all APIs
 const BASE_URL = import.meta.env.VITE_API_URL as string;
 
@@ -20,14 +27,14 @@ export const API_ROUTES = {
     CURRENT_USER: `${BASE_URL}/auth/me`,
     CHANGE_PASSWORD: `${BASE_URL}/auth/change-password`,
     GET_ALL_USERS: `${BASE_URL}/auth/users`,
-    
+
     // Role management endpoints
     CREATE_ROLE: `${BASE_URL}/auth/roles`,
     GET_ROLES: `${BASE_URL}/auth/roles`,
     GET_ROLE_BY_ID: (id: string) => `${BASE_URL}/auth/roles/${id}`,
     UPDATE_ROLE: (id: string) => `${BASE_URL}/auth/roles/${id}`,
     DELETE_ROLE: (id: string) => `${BASE_URL}/auth/roles/${id}`,
-    
+
     // Permission management endpoints
     GET_PERMISSIONS: `${BASE_URL}/auth/permissions`,
     GET_PERMISSIONS_BY_ROLE: (roleName: string) => `${BASE_URL}/auth/permissions/${roleName}`,
@@ -46,12 +53,14 @@ export const API_ROUTES = {
     GENERATE_CERTIFICATE: (id: string) => `${BASE_URL}/batch/batches/${id}/certificate`,
 
     GET_BATCHES_FOR_VERIFICATION: `${BASE_URL}/batch/verification/batches`,
-    GET_BATCH_PARAMETERS_FOR_VERIFICATION: (batchId: string) => 
+    GET_BATCH_PARAMETERS_FOR_VERIFICATION: (batchId: string) =>
       `${BASE_URL}/batch/verification/batches/${batchId}/parameters`,
-    UPDATE_PARAMETER_VERIFICATION: (batchId: string) => 
+    UPDATE_PARAMETER_VERIFICATION: (batchId: string) =>
       `${BASE_URL}/batch/verification/batches/${batchId}/parameters`,
-    COMPLETE_BATCH_VERIFICATION: (batchId: string) => 
+    COMPLETE_BATCH_VERIFICATION: (batchId: string) =>
       `${BASE_URL}/batch/verification/batches/${batchId}/complete`,
+    GET_BATCHES_WITH_DRAFTS: `${BASE_URL}/batch/batches-with-drafts`,
+    DELETE_BATCH: (id: string) => `${BASE_URL}/draft/batch/${id}`,
   },
 
   PRODUCT: {
@@ -128,7 +137,7 @@ export const API_ROUTES = {
 
     ADD_TRAINING_SESSION: (trainingId: string) => `${BASE_URL}/training/${trainingId}/sessions`,
     GET_TRAINING_SESSIONS: (trainingId: string) => `${BASE_URL}/training/${trainingId}/sessions`,
-    GET_SESSION_BY_ID: ( sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}`,
+    GET_SESSION_BY_ID: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}`,
     UPDATE_TRAINING_SESSION: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}`,
     DELETE_TRAINING_SESSION: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}`,
     RECORD_ATTENDANCE: (sessionId: string) => `${BASE_URL}/training/sessions/${sessionId}/attendance`,
@@ -139,7 +148,7 @@ export const API_ROUTES = {
     DELETE_SESSION_DOCUMENT: (documentId: string) => `${BASE_URL}/training/documents/${documentId}/session`,
 
     GET_MONTHLY_CALENDAR: `${BASE_URL}/training/calendar/monthly`,
-    GET_DAILY_CALENDAR: (date: string)=>`${BASE_URL}/training/calendar/daily/${date}`,
+    GET_DAILY_CALENDAR: (date: string) => `${BASE_URL}/training/calendar/daily/${date}`,
     UPDATE_CALENDAR_DESCRIPTION: (month: string, year: string) => `${BASE_URL}/training/calender/${month}/${year}/description`,
     GET_CALENDAR_STATISTICS: `${BASE_URL}/training/calendar/statistics`,
 
@@ -156,11 +165,11 @@ export const API_ROUTES = {
     DELETE_SESSION_PHOTO: (photoId: string) => `${BASE_URL}/training/photos/${photoId}`,
     UPDATE_SESSION_PHOTO_CAPTION: (photoId: string) => `${BASE_URL}/training/photos/${photoId}`,
 
-    UPLOAD_FEEDBACK_FORM: (sessionId: string, participantId: string) => 
+    UPLOAD_FEEDBACK_FORM: (sessionId: string, participantId: string) =>
       `${BASE_URL}/training/sessions/${sessionId}/participants/${participantId}/feedback`,
-    GET_SESSION_FEEDBACK_FORMS: (sessionId: string) => 
+    GET_SESSION_FEEDBACK_FORMS: (sessionId: string) =>
       `${BASE_URL}/training/sessions/${sessionId}/feedback-forms`,
-    GET_TRAINING_FEEDBACK_FORMS: (trainingId: string) => 
+    GET_TRAINING_FEEDBACK_FORMS: (trainingId: string) =>
       `${BASE_URL}/training/trainings/${trainingId}/feedback-forms`,
   },
   AUDIT: {
@@ -172,7 +181,7 @@ export const API_ROUTES = {
     UPDATE_AUDIT: (id: string) => `${BASE_URL}/audit/${id}`,
     DELETE_AUDIT: (id: string) => `${BASE_URL}/audit/${id}`,
     CHANGE_AUDIT_STATUS: (id: string) => `${BASE_URL}/audit/${id}/status`,
-    
+
     // ===== Preparation Phase =====
     SEND_NOTIFICATIONS: (auditId: string) => `${BASE_URL}/audit/${auditId}/notifications`,
     UPLOAD_DOCUMENT: (auditId: string) => `${BASE_URL}/audit/${auditId}/documents`,
@@ -181,7 +190,7 @@ export const API_ROUTES = {
     GET_CHECKLIST: (auditId: string) => `${BASE_URL}/audit/${auditId}/checklist`,
     UPDATE_CHECKLIST_ITEM: (id: string) => `${BASE_URL}/audit/checklist/${id}`,
     GET_PREVIOUS_ACTIONS: (auditId: string) => `${BASE_URL}/audit/${auditId}/previous-actions`,
-    
+
     // ===== Execution Phase =====
     START_EXECUTION: (auditId: string) => `${BASE_URL}/audit/${auditId}/execution/start`,
     CREATE_FINDING: (auditId: string) => `${BASE_URL}/audit/${auditId}/findings`,
@@ -193,11 +202,11 @@ export const API_ROUTES = {
     COMPLETE_EXECUTION: (auditId: string) => `${BASE_URL}/audit/${auditId}/execution/complete`,
     GET_INSPECTION_ITEM: (itemId: string) => `${BASE_URL}/audit/inspection-items/${itemId}`,
     UPDATE_INSPECTION_ITEM: (itemId: string) => `${BASE_URL}/audit/inspection-items/${itemId}`,
-    
+
     // ===== Report Generation =====
     GENERATE_REPORT: (auditId: string) => `${BASE_URL}/audit/${auditId}/report`,
     GET_REPORTS: (auditId: string) => `${BASE_URL}/audit/${auditId}/reports`,
-    
+
     // ===== Follow-up Phase =====
     CREATE_CORRECTIVE_ACTION: (auditId: string) => `${BASE_URL}/audit/${auditId}/corrective-actions`,
     GET_CORRECTIVE_ACTIONS: (auditId: string) => `${BASE_URL}/audit/${auditId}/corrective-actions`,
@@ -208,7 +217,7 @@ export const API_ROUTES = {
     GET_ALL_DEPARTMENTS: `${BASE_URL}/audit/departments`,
     CREATE_DEPARTMENT: `${BASE_URL}/audit/departments`,
 
-    DELETE_DOCUMENT: (auditId: string, documentId: string) => 
+    DELETE_DOCUMENT: (auditId: string, documentId: string) =>
       `${BASE_URL}audit/${auditId}/documents/${documentId}`,
   },
   AUDIT_DASHBOARD: {
@@ -295,12 +304,43 @@ export const API_ROUTES = {
     GET_PRODUCT_WISE_WASTE: `${BASE_URL}/raw/dashboard/product-wise-waste`,
     GET_STOCK_DISTRIBUTION: `${BASE_URL}/raw/dashboard/stock-distribution`,
     GET_PRODUCT_WISE_CONVERSION: `${BASE_URL}/raw/dashboard/product-wise-conversion`,
+
+    CREATE_QUALITY_REPORT: `${BASE_URL}/raw/quality-report`,
+    GET_QUALITY_REPORTS: `${BASE_URL}/raw/quality-report`,
+    GET_QUALITY_REPORT_BY_ID: (id: string) => `${BASE_URL}/raw/quality-report/${id}`,
+    UPDATE_QUALITY_REPORT: (id: string) => `${BASE_URL}/raw/quality-report/${id}`,
+    DELETE_QUALITY_REPORT: (id: string) => `${BASE_URL}/raw/quality-report/${id}`,
+    EXPORT_QUALITY_REPORT: (id: string) => `${BASE_URL}/raw/quality-report/${id}/export`,
   },
 
   DRAFT: {
     SAVE_BATCH: `${BASE_URL}/draft/batch`,
     GET_BATCH: (id: string) => `${BASE_URL}/draft/batch/${id}`,
     GET_LATEST_BATCH_DRAFT: `${BASE_URL}/draft/batch-latest`,
+    DELETE_BATCH: (id: string) => `${BASE_URL}/draft/batch/${id}`,
   },
 
+  
+
 };
+
+export const createRMQualityReport = async (data: any) => {
+  return api.post(API_ROUTES.RAW.CREATE_QUALITY_REPORT, data).then(res => res.data);
+};
+
+export const getRMQualityReports = async (params?: any) => {
+  return api.get(API_ROUTES.RAW.GET_QUALITY_REPORTS, { params }).then(res => res.data);
+};
+
+export const updateRMQualityReport = async (id: string, data: any) => {
+  return api.put(API_ROUTES.RAW.UPDATE_QUALITY_REPORT(id), data).then(res => res.data);
+};
+
+export const deleteRMQualityReport = async (id: string) => {
+  return api.delete(API_ROUTES.RAW.DELETE_QUALITY_REPORT(id)).then(res => res.data);
+};
+
+export const exportRMQualityReport = async (id: string) => {
+  return api.get(API_ROUTES.RAW.EXPORT_QUALITY_REPORT(id), { responseType: 'blob' }).then(res => res.data);
+};
+

@@ -781,6 +781,28 @@ exports.Prisma.ReusableStockScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.RMQualityReportScalarFieldEnum = {
+  id: 'id',
+  rawMaterialName: 'rawMaterialName',
+  variety: 'variety',
+  supplier: 'supplier',
+  dateOfReport: 'dateOfReport',
+  grn: 'grn',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RMQualityParameterScalarFieldEnum = {
+  id: 'id',
+  reportId: 'reportId',
+  parameter: 'parameter',
+  standard: 'standard',
+  result: 'result',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -979,7 +1001,9 @@ exports.Prisma.ModelName = {
   ByProduct: 'ByProduct',
   CurrentStock: 'CurrentStock',
   TransactionLog: 'TransactionLog',
-  ReusableStock: 'ReusableStock'
+  ReusableStock: 'ReusableStock',
+  RMQualityReport: 'RMQualityReport',
+  RMQualityParameter: 'RMQualityParameter'
 };
 
 /**
