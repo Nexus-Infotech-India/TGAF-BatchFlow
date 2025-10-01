@@ -1618,7 +1618,7 @@ async getBatchesWithDrafts(req: Request, res: Response): Promise<void> {
             }
           }
         }),
-        // Fetch drafts for the current user
+        // Fetch drafts for the current user with maker information
         prisma.batchDraft.findMany({
           where: {
             makerId: userId,
@@ -1631,9 +1631,41 @@ async getBatchesWithDrafts(req: Request, res: Response): Promise<void> {
           },
           orderBy: {
             updatedAt: 'desc'
+          },
+          include: {
+            maker: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            }
           }
         })
       ]);
+
+      // Get product information for drafts that have productId
+      const draftProductIds = drafts
+        .filter(draft => draft.productId) // This filters out null/undefined values
+        .map(draft => draft.productId!)
+        .filter((id): id is string => id !== null); // Type guard to ensure string[]
+
+      const draftProducts = draftProductIds.length > 0
+        ? await prisma.product.findMany({
+          where: {
+            id: {
+              in: draftProductIds
+            }
+          },
+          select: {
+            id: true,
+            name: true
+          }
+        })
+        : [];
+
+      // Create a map for quick product lookup
+      const productMap = new Map(draftProducts.map(p => [p.id, p.name]));
 
       // Get total count for pagination
       const totalCount = await prisma.batch.count({
@@ -1684,40 +1716,50 @@ async getBatchesWithDrafts(req: Request, res: Response): Promise<void> {
         };
       });
 
-      // Format drafts
-      const formattedDrafts = drafts.map(draft => ({
-        id: draft.id,
-        batchNumber: draft.batchNumber || 'Draft (No Batch Number)',
-        productId: draft.productId,
-        productName: draft.newProductName || 'Unknown Product',
-        dateOfProduction: draft.dateOfProduction,
-        bestBeforeDate: draft.bestBeforeDate,
-        sampleAnalysisStatus: draft.sampleAnalysisStatus,
-        status: 'DRAFT',
-        maker: null,
-        checker: null,
-        standards: [],
-        parameterValuesByCategory: {},
-        methodologies: [],
-        units: [],
-        recentActivities: [],
-        createdAt: draft.createdAt,
-        updatedAt: draft.updatedAt,
-        isDraft: true,
-        draftData: {
-          formData: {
-            batchNumber: draft.batchNumber,
-            productId: draft.productId,
-            dateOfProduction: draft.dateOfProduction,
-            bestBeforeDate: draft.bestBeforeDate,
-            sampleAnalysisStarted: draft.sampleAnalysisStarted,
-            sampleAnalysisCompleted: draft.sampleAnalysisCompleted,
-            sampleAnalysisStatus: draft.sampleAnalysisStatus,
-          },
-          parameterValues: draft.parameterValues,
-          newProductName: draft.newProductName
+      // Format drafts with proper product and maker information
+      const formattedDrafts = drafts.map(draft => {
+        // Get product name - either from the product relation or newProductName
+        let productName = 'Unknown Product';
+        if (draft.productId) {
+          productName = productMap.get(draft.productId) || draft.newProductName || 'Unknown Product';
+        } else if (draft.newProductName) {
+          productName = draft.newProductName;
         }
-      }));
+
+        return {
+          id: draft.id,
+          batchNumber: draft.batchNumber || 'Draft (No Batch Number)',
+          productId: draft.productId,
+          productName: productName,
+          dateOfProduction: draft.dateOfProduction,
+          bestBeforeDate: draft.bestBeforeDate,
+          sampleAnalysisStatus: draft.sampleAnalysisStatus,
+          status: 'DRAFT',
+          maker: draft.maker, // Now includes maker information
+          checker: null,
+          standards: [],
+          parameterValuesByCategory: {},
+          methodologies: [],
+          units: [],
+          recentActivities: [],
+          createdAt: draft.createdAt,
+          updatedAt: draft.updatedAt,
+          isDraft: true,
+          draftData: {
+            formData: {
+              batchNumber: draft.batchNumber,
+              productId: draft.productId,
+              dateOfProduction: draft.dateOfProduction,
+              bestBeforeDate: draft.bestBeforeDate,
+              sampleAnalysisStarted: draft.sampleAnalysisStarted,
+              sampleAnalysisCompleted: draft.sampleAnalysisCompleted,
+              sampleAnalysisStatus: draft.sampleAnalysisStatus,
+            },
+            parameterValues: draft.parameterValues,
+            newProductName: draft.newProductName
+          }
+        };
+      });
 
       // Combine and sort by updated date
       const allItems = [...formattedBatches, ...formattedDrafts].sort((a, b) =>
