@@ -281,18 +281,48 @@ const RMQualityReport: React.FC = () => {
     }
   };
 
-  const handleExport = async (id: string) => {
-    try {
-      const response = await exportRMQualityReport(id);
-      if (response.success) {
-        toast.success('Report exported successfully');
-      } else {
-        toast.error(response.error || 'Failed to export report');
-      }
-    } catch (error) {
-      toast.error('Failed to export report');
-    }
-  };
+ const handleExport = async (id: string, format: 'excel' | 'pdf' = 'excel') => {
+   try {
+     if (format === 'excel') {
+       const authToken = localStorage.getItem('authToken');
+       const url = `${API_ROUTES.RAW.EXPORT_QUALITY_REPORT(id)}?format=excel`;
+
+       // Create a hidden link to set the Authorization header
+       const response = await fetch(url, {
+         headers: {
+           Authorization: `Bearer ${authToken}`,
+         },
+       });
+
+       if (!response.ok) {
+         toast.error('Failed to export report');
+         return;
+       }
+
+       const blob = await response.blob();
+       const downloadUrl = window.URL.createObjectURL(blob);
+       const link = document.createElement('a');
+       link.href = downloadUrl;
+       link.download = `RM_Quality_Report_${id}.xlsx`;
+       document.body.appendChild(link);
+       link.click();
+       link.remove();
+       window.URL.revokeObjectURL(downloadUrl);
+
+       toast.success('Excel export started');
+     } else {
+       // Existing PDF export logic
+       const response = await exportRMQualityReport(id);
+       if (response.success) {
+         toast.success('Report exported successfully');
+       } else {
+         toast.error(response.error || 'Failed to export report');
+       }
+     }
+   } catch (error) {
+     toast.error('Failed to export report');
+   }
+ };
 
   const resetForm = () => {
     setFormData({
@@ -1064,9 +1094,9 @@ const RMQualityReport: React.FC = () => {
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          onClick={() => handleExport(report.id)}
+                          onClick={() => handleExport(report.id, 'excel')}
                           className="text-green-600 hover:text-green-900 p-2 rounded-lg hover:bg-green-50 transition-colors"
-                          title="Export Report"
+                          title="Export as Excel"
                         >
                           <Download size={16} />
                         </motion.button>

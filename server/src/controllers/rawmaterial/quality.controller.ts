@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { PrismaClient, Prisma } from '../../generated/prisma';
+import ExcelJS from 'exceljs';
 
 const prisma = new PrismaClient();
 
@@ -245,20 +246,123 @@ export class RMQualityController {
             });
 
             if (!report) {
-                 res.status(404).json({
+                res.status(404).json({
                     success: false,
                     error: 'RM Quality Report not found',
                 });
                 return;
             }
 
-            // Here you would implement PDF generation logic
-            // For now, we'll return the data for frontend PDF generation
-            res.json({
-                success: true,
-                data: report,
-                message: 'Report data ready for export',
-            });
+            // Format based on requested export type
+            const exportType = req.query.format || 'excel';
+
+            if (exportType === 'excel') {
+                // Create Excel workbook and worksheet
+                const workbook = new ExcelJS.Workbook();
+                const worksheet = workbook.addWorksheet('RM Quality Report');
+
+                // Set column widths
+                worksheet.columns = [
+                    { header: '', key: 'attribute', width: 20 },
+                    { header: '', key: 'value', width: 30 }
+                ];
+
+                // Style for headers
+                const headerStyle = {
+                    font: { bold: true, size: 14, color: { argb: '4472C4' } },
+                    fill: {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'EBF1DE' } // Light yellow like the image
+                    }
+                };
+
+                // Add title
+                const titleRow = worksheet.addRow(['RM Quality Report', '']);
+                titleRow.font = { bold: true, size: 16 };
+                titleRow.getCell(1).fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'EBF1DE' } // Light yellow background
+                };
+                worksheet.mergeCells('A1:B1');
+                titleRow.height = 30;
+                titleRow.alignment = { vertical: 'middle', horizontal: 'center' };
+
+                // Add empty row
+                worksheet.addRow([]);
+
+                // Add basic information
+                worksheet.addRow(['Raw Material', report.rawMaterialName]).font = { bold: true };
+                worksheet.addRow(['Variety', report.variety]);
+                worksheet.addRow(['Supplier', report.supplier]);
+                worksheet.addRow(['GRN', report.grn]);
+                worksheet.addRow(['Date of Receipt', new Date(report.dateOfReport).toLocaleDateString()]);
+                worksheet.addRow(['Created By', report.createdBy?.name || '']);
+
+                // Add empty row
+                worksheet.addRow([]);
+
+                // Add Certificate of Analysis header
+                const certHeader = worksheet.addRow(['Certificate of Analysis', '']);
+                certHeader.font = { bold: true, size: 14 };
+                certHeader.getCell(1).fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'EBF1DE' } // Light yellow
+                };
+                worksheet.mergeCells(`A${certHeader.number}:B${certHeader.number}`);
+
+                // Add parameters table header
+                const paramsHeaderRow = worksheet.addRow(['Parameter', 'Standard', 'Result']);
+                paramsHeaderRow.font = { bold: true };
+                worksheet.getColumn(3).width = 25; // Set width for Result column
+
+                // Add border to parameter headers
+                ['A', 'B', 'C'].forEach(col => {
+                    worksheet.getCell(`${col}${paramsHeaderRow.number}`).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' }
+                    };
+                    worksheet.getCell(`${col}${paramsHeaderRow.number}`).fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'EBF1DE' }
+                    };
+                });
+
+                // Add parameters
+                report.parameters.forEach(param => {
+                    const paramRow = worksheet.addRow([param.parameter, param.standard, param.result]);
+
+                    // Add borders to cells
+                    ['A', 'B', 'C'].forEach(col => {
+                        worksheet.getCell(`${col}${paramRow.number}`).border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' }
+                        };
+                    });
+                });
+
+                // Set content type and attachment header
+                res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                res.setHeader('Content-Disposition', `attachment; filename=RM_Quality_Report_${report.id}.xlsx`);
+
+                // Write to response stream
+                await workbook.xlsx.write(res);
+                res.end();
+            } else {
+                // Default: Return data for frontend PDF generation
+                res.json({
+                    success: true,
+                    data: report,
+                    message: 'Report data ready for export',
+                });
+            }
         } catch (error) {
             console.error('Error exporting RM Quality Report:', error);
             res.status(500).json({
