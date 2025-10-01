@@ -27,7 +27,7 @@ export class PurchaseOrderController {
         },
         include: { items: true },
       });
-        await prisma.transactionLog.create({
+      await prisma.transactionLog.create({
         data: {
           type: 'CREATE',
           entity: 'PurchaseOrder',
@@ -88,7 +88,7 @@ export class PurchaseOrderController {
           expectedDate: expectedDate ? new Date(expectedDate) : undefined,
         },
       });
-       await prisma.transactionLog.create({
+      await prisma.transactionLog.create({
         data: {
           type: 'UPDATE',
           entity: 'PurchaseOrder',
@@ -168,7 +168,7 @@ export class PurchaseOrderController {
         });
       }
 
-       await prisma.transactionLog.create({
+      await prisma.transactionLog.create({
         data: {
           type: 'UPDATE',
           entity: 'PurchaseOrderItem',
@@ -204,12 +204,91 @@ export class PurchaseOrderController {
         warehouseName: stock.warehouse.name,
         currentQuantity: stock.currentQuantity,
         lastUpdated: stock.lastUpdated,
-         unitOfMeasurement: stock.rawMaterial.unitOfMeasurement,
+        unitOfMeasurement: stock.rawMaterial.unitOfMeasurement,
       }));
 
       res.json(result);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch current stock', details: error });
+    }
+  }
+
+  static async getReceivedRawMaterials(req: Request, res: Response) {
+    try {
+      const receivedItems = await prisma.purchaseOrderItem.findMany({
+        where: {
+          status: 'Received',
+        },
+        include: {
+          rawMaterial: true,
+          purchaseOrder: {
+            include: {
+              vendor: true,
+            },
+          },
+        },
+        orderBy: {
+          purchaseOrder: {
+            orderDate: 'desc',
+          },
+        },
+      });
+
+      // Get unique raw materials
+      const uniqueRawMaterials = Array.from(
+        new Map(
+          receivedItems.map(item => [
+            item.rawMaterial.id,
+            {
+              id: item.rawMaterial.id,
+              name: item.rawMaterial.name,
+              skuCode: item.rawMaterial.skuCode,
+              category: item.rawMaterial.category,
+              unitOfMeasurement: item.rawMaterial.unitOfMeasurement,
+            },
+          ])
+        ).values()
+      );
+
+      res.json(uniqueRawMaterials);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch received raw materials', details: error });
+    }
+  }
+
+  // Get vendors from received orders
+  static async getVendorsFromReceivedOrders(req: Request, res: Response) {
+    try {
+      const receivedOrders = await prisma.purchaseOrder.findMany({
+        where: {
+          items: {
+            some: {
+              status: 'Received',
+            },
+          },
+        },
+        include: {
+          vendor: true,
+        },
+        distinct: ['vendorId'],
+      });
+
+      const uniqueVendors = Array.from(
+        new Map(
+          receivedOrders.map(order => [
+            order.vendor.id,
+            {
+              id: order.vendor.id,
+              name: order.vendor.name,
+              vendorCode: order.vendor.vendorCode,
+            },
+          ])
+        ).values()
+      );
+
+      res.json(uniqueVendors);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch vendors from received orders', details: error });
     }
   }
 }

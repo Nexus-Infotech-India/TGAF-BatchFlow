@@ -40,6 +40,7 @@ import {
   RMQualityReport as RMQualityReportType,
   RMQualityParameter,
 } from '../../../Types/qualityTypes';
+import api, { API_ROUTES } from '../../../utils/api';
 
 // Enhanced animations
 const containerVariants = {
@@ -94,6 +95,9 @@ const RMQualityReport: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
 
+   const [receivedRawMaterials, setReceivedRawMaterials] = useState<any[]>([]);
+   const [receivedVendors, setReceivedVendors] = useState<any[]>([]);
+
   // Form state
   const [formData, setFormData] = useState({
     rawMaterialName: '',
@@ -106,9 +110,39 @@ const RMQualityReport: React.FC = () => {
     { parameter: '', standard: '', result: '' },
   ]);
 
-  useEffect(() => {
-    fetchReports();
-  }, []);
+   useEffect(() => {
+     fetchReports();
+     fetchReceivedRawMaterials();
+     fetchReceivedVendors();
+   }, []);
+
+    const fetchReceivedRawMaterials = async () => {
+      try {
+        const authToken = localStorage.getItem('authToken');
+        const response = await api.get(
+          API_ROUTES.RAW.GET_RECEIVED_RAW_MATERIALS,
+          {
+            headers: { Authorization: `Bearer ${authToken}` },
+          }
+        );
+        setReceivedRawMaterials(response.data);
+      } catch (error) {
+        console.error('Failed to fetch received raw materials:', error);
+      }
+    };
+
+    const fetchReceivedVendors = async () => {
+      try {
+        const authToken = localStorage.getItem('authToken');
+        const response = await api.get(API_ROUTES.RAW.GET_RECEIVED_VENDORS, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+        setReceivedVendors(response.data);
+      } catch (error) {
+        console.error('Failed to fetch received vendors:', error);
+      }
+    };
+
 
   // Check if form is valid
   useEffect(() => {
@@ -144,7 +178,9 @@ const RMQualityReport: React.FC = () => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -436,18 +472,27 @@ const RMQualityReport: React.FC = () => {
                       Raw Material Name <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <input
-                        type="text"
+                      <select
                         name="rawMaterialName"
                         value={formData.rawMaterialName}
                         onChange={handleInputChange}
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white pl-12"
-                        placeholder="Enter raw material name"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white pl-12 appearance-none cursor-pointer"
                         required
-                      />
+                      >
+                        <option value="">Select raw material</option>
+                        {receivedRawMaterials.map((material) => (
+                          <option key={material.id} value={material.name}>
+                            {material.name} ({material.skuCode})
+                          </option>
+                        ))}
+                      </select>
                       <Package
                         size={16}
-                        className="absolute left-4 top-3.5 text-gray-400"
+                        className="absolute left-4 top-3.5 text-gray-400 pointer-events-none"
+                      />
+                      <ChevronRight
+                        size={16}
+                        className="absolute right-4 top-3.5 text-gray-400 pointer-events-none rotate-90"
                       />
                     </div>
                   </motion.div>
@@ -486,18 +531,27 @@ const RMQualityReport: React.FC = () => {
                       Supplier <span className="text-red-500">*</span>
                     </label>
                     <div className="relative">
-                      <input
-                        type="text"
+                      <select
                         name="supplier"
                         value={formData.supplier}
                         onChange={handleInputChange}
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white pl-12"
-                        placeholder="Enter supplier name"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white pl-12 appearance-none cursor-pointer"
                         required
-                      />
+                      >
+                        <option value="">Select supplier</option>
+                        {receivedVendors.map((vendor) => (
+                          <option key={vendor.id} value={vendor.name}>
+                            {vendor.name} ({vendor.vendorCode})
+                          </option>
+                        ))}
+                      </select>
                       <Building
                         size={16}
-                        className="absolute left-4 top-3.5 text-gray-400"
+                        className="absolute left-4 top-3.5 text-gray-400 pointer-events-none"
+                      />
+                      <ChevronRight
+                        size={16}
+                        className="absolute right-4 top-3.5 text-gray-400 pointer-events-none rotate-90"
                       />
                     </div>
                   </motion.div>

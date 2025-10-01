@@ -255,6 +255,8 @@ export const API_ROUTES = {
     GET_PURCHASE_ORDERS: `${BASE_URL}/raw/purchase`,
     GET_PURCHASE_ORDER_BY_ID: (id: string) => `${BASE_URL}/raw/purchase/${id}`,
     UPDATE_PURCHASE_ORDER: (id: string) => `${BASE_URL}/raw/purchase/${id}`,
+    GET_RECEIVED_RAW_MATERIALS: `${BASE_URL}/raw/purchase/received/raw-materials`,
+    GET_RECEIVED_VENDORS: `${BASE_URL}/raw/purchase/received/vendors`,
     UPDATE_PURCHASE_ORDER_ITEM: (itemId: string) => `${BASE_URL}/raw/purchase/item/${itemId}`,
 
     // Stock Entries

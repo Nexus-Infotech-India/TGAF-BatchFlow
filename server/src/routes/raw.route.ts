@@ -43,6 +43,8 @@ router.get('/purchase', PurchaseOrderController.getPurchaseOrders);
 router.get('/purchase/:id', PurchaseOrderController.getPurchaseOrderById);
 router.put('/purchase/:id', PurchaseOrderController.updatePurchaseOrder);
 router.put('/purchase/item/:itemId', PurchaseOrderController.updatePurchaseOrderItem);
+router.get('/purchase/received/raw-materials', PurchaseOrderController.getReceivedRawMaterials);
+router.get('/purchase/received/vendors', PurchaseOrderController.getVendorsFromReceivedOrders);
 
 // Stock Entries
 router.post('/stock', StockEntryController.createStockEntry);
