@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Plus,
   Save,
   Download,
   Edit,
   Trash2,
-  Eye,
   ArrowLeft,
   Search,
-  Filter,
   RefreshCw,
   FileText,
   CheckCircle,
   Clock,
-  AlertCircle,
-  X,
   Package,
   Calendar,
-  User,
   Building,
   Hash,
   PlusCircle,
@@ -31,9 +26,6 @@ import {
   FlaskConical,
   Target,
   Award,
-  Zap,
-  Activity,
-  ChevronDown,
   ChevronRight,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
@@ -329,10 +321,10 @@ const RMQualityReport: React.FC = () => {
                   <div className="flex gap-3">
                     <StatusIndicator
                       isValid={
-                        formData.rawMaterialName &&
-                        formData.variety &&
-                        formData.supplier &&
-                        formData.grn
+                        formData.rawMaterialName.trim() !== '' &&
+                        formData.variety.trim() !== '' &&
+                        formData.supplier.trim() !== '' &&
+                        formData.grn.trim() !== ''
                       }
                       label="Basic Info"
                     />
