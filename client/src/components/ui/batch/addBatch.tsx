@@ -307,33 +307,6 @@ const AddBatch: React.FC = () => {
     createBatchMutation.mutate(transformedData);
   };
 
-  const handleDeleteDraft = async () => {
-    if (!draftId) return;
-
-    try {
-      await axios.delete(API_ROUTES.DRAFT.DELETE_BATCH(draftId), {
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
-
-      // Clear form
-      setFormData({
-        batchNumber: '',
-        productId: '',
-        dateOfProduction: '',
-        bestBeforeDate: '',
-        sampleAnalysisStarted: '',
-        sampleAnalysisCompleted: '',
-        sampleAnalysisStatus: 'PENDING',
-      });
-      setParameterValues([]);
-      setNewProductName('');
-      setDraftId(null);
-      setDraftFetchedAt(null);
-    } catch (error) {
-      console.error('Error deleting draft:', error);
-      setError('Failed to delete draft');
-    }
-  };
 
   const parametersByCategory =
     productParametersData?.parametersByCategory || {};
