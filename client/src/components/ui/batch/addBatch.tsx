@@ -26,6 +26,7 @@ import {
   Shield,
   Layers,
   ArrowLeft,
+  Minus,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAutoSave } from '../../../hooks/useAutoSave';
@@ -105,6 +106,9 @@ const AddBatch: React.FC = () => {
 
   const authToken = localStorage.getItem('authToken');
   const [draftId, setDraftId] = useState<string | null>(null);
+  const [removedParameters, setRemovedParameters] = useState<Set<string>>(
+    new Set()
+  );
 
   // API queries with proper error handling
   const { data: productsData = [] } = useQuery({
@@ -147,6 +151,14 @@ const AddBatch: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const draftIdFromUrl = searchParams.get('draftId');
 
+ const handleRemoveParameter = (parameterId: string) => {
+   setRemovedParameters((prev) => new Set([...prev, parameterId]));
+   setParameterValues((prev) =>
+     prev.filter((pv) => pv.parameterId !== parameterId)
+   );
+ };
+
+
   // Update the useEffect for fetching draft (around line 271)
   useEffect(() => {
     const fetchDraft = async () => {
@@ -186,9 +198,28 @@ const AddBatch: React.FC = () => {
           sampleAnalysisStatus: draftData.sampleAnalysisStatus || 'PENDING',
         });
         setSelectedProductId(draftData.productId || '');
-        setParameterValues(draftData.parameterValues || []);
         setNewProductName(draftData.newProductName || '');
         setDraftFetchedAt(draftData.updatedAt || draftData.createdAt || null);
+        if (draftData.parameterValues) {
+          const parsedData =
+            typeof draftData.parameterValues === 'string'
+              ? JSON.parse(draftData.parameterValues)
+              : draftData.parameterValues;
+
+          // Handle both old format (array) and new format (object with values and removedParameters)
+          if (Array.isArray(parsedData)) {
+            // Old format - just parameter values
+            setParameterValues(parsedData);
+          } else if (parsedData && typeof parsedData === 'object') {
+            // New format - object with values and removedParameters
+            setParameterValues(parsedData.values || []);
+            if (parsedData.removedParameters) {
+              setRemovedParameters(new Set(parsedData.removedParameters));
+            }
+          }
+        } else {
+          setParameterValues([]);
+        }
       } catch (error) {
         // No draft found or error, do nothing
         console.log('No draft found');
@@ -200,45 +231,44 @@ const AddBatch: React.FC = () => {
     }
   }, [authToken, draftIdFromUrl]);
 
- 
-    // Auto-expand first category when parameters load
-    useEffect(() => {
-      if (productParametersData?.parametersByCategory) {
-        const categories = Object.keys(
-          productParametersData.parametersByCategory
-        );
-        if (categories.length > 0) {
-          setExpandedCategories({ [categories[0]]: true });
-        }
+  // Auto-expand first category when parameters load
+  useEffect(() => {
+    if (productParametersData?.parametersByCategory) {
+      const categories = Object.keys(
+        productParametersData.parametersByCategory
+      );
+      if (categories.length > 0) {
+        setExpandedCategories({ [categories[0]]: true });
       }
-    }, [productParametersData]);
+    }
+  }, [productParametersData]);
 
   // Form field handlers
-    const handleInputChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
-      const { name, value } = e.target;
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    };
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   // Product selection handler
-    const handleProductChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const value = e.target.value;
+  const handleProductChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
 
-      if (value === 'new') {
-        setShowNewProductForm(true);
-        setSelectedProductId('');
-        setFormData((prev) => ({ ...prev, productId: '' }));
-      } else {
-        setShowNewProductForm(false);
-        setSelectedProductId(value);
-        setFormData((prev) => ({ ...prev, productId: value }));
-        setNewProductName('');
-      }
-    };
+    if (value === 'new') {
+      setShowNewProductForm(true);
+      setSelectedProductId('');
+      setFormData((prev) => ({ ...prev, productId: '' }));
+    } else {
+      setShowNewProductForm(false);
+      setSelectedProductId(value);
+      setFormData((prev) => ({ ...prev, productId: value }));
+      setNewProductName('');
+    }
+  };
 
   // Check if form is valid
   useEffect(() => {
@@ -256,35 +286,35 @@ const AddBatch: React.FC = () => {
   }, [formData, parameterValues, newProductName]);
 
   // Create batch mutation
-   const createBatchMutation = useMutation({
-     mutationFn: async (batchData: any) => {
-       const response = await axios.post(
-         API_ROUTES.BATCH.CREATE_BATCH,
-         batchData,
-         {
-           headers: { Authorization: `Bearer ${authToken}` },
-         }
-       );
-       return response.data;
-     },
-     onSuccess: async () => {
-       // Delete draft if it exists
-       if (draftId) {
-         try {
-           await axios.delete(API_ROUTES.DRAFT.DELETE_BATCH(draftId), {
-             headers: { Authorization: `Bearer ${authToken}` },
-           });
-         } catch (error) {
-           console.error('Error deleting draft after submission:', error);
-         }
-       }
-       navigate('/batches');
-     },
-     onError: (error: any) => {
-       setError(error.response?.data?.message || 'Failed to create batch');
-       setIsSaving(false);
-     },
-   });
+  const createBatchMutation = useMutation({
+    mutationFn: async (batchData: any) => {
+      const response = await axios.post(
+        API_ROUTES.BATCH.CREATE_BATCH,
+        batchData,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
+      return response.data;
+    },
+    onSuccess: async () => {
+      // Delete draft if it exists
+      if (draftId) {
+        try {
+          await axios.delete(API_ROUTES.DRAFT.DELETE_BATCH(draftId), {
+            headers: { Authorization: `Bearer ${authToken}` },
+          });
+        } catch (error) {
+          console.error('Error deleting draft after submission:', error);
+        }
+      }
+      navigate('/batches');
+    },
+    onError: (error: any) => {
+      setError(error.response?.data?.message || 'Failed to create batch');
+      setIsSaving(false);
+    },
+  });
 
   // Handle save/submit
   const handleSave = () => {
@@ -307,7 +337,6 @@ const AddBatch: React.FC = () => {
     createBatchMutation.mutate(transformedData);
   };
 
-
   const parametersByCategory =
     productParametersData?.parametersByCategory || {};
 
@@ -321,15 +350,22 @@ const AddBatch: React.FC = () => {
     parameterValues.length > 0 &&
     parameterValues.every((pv) => pv.value.trim() !== '');
 
-  useAutoSave({
-    saveUrl: API_ROUTES.DRAFT.SAVE_BATCH,
-    getUrl: draftId ? API_ROUTES.DRAFT.GET_BATCH(draftId) : undefined,
-    data: { formData, parameterValues, newProductName },
-    isSuccess: createBatchMutation.isSuccess,
-    authToken: authToken || '',
-    draftId,
-    onDraftIdChange: setDraftId,
-  });
+ useAutoSave({
+   saveUrl: API_ROUTES.DRAFT.SAVE_BATCH,
+   getUrl: draftId ? API_ROUTES.DRAFT.GET_BATCH(draftId) : undefined,
+   data: {
+     formData,
+     parameterValues: {
+       values: parameterValues,
+       removedParameters: Array.from(removedParameters),
+     },
+     newProductName,
+   },
+   isSuccess: createBatchMutation.isSuccess,
+   authToken: authToken || '',
+   draftId,
+   onDraftIdChange: setDraftId,
+ });
 
   function toDateInputString(dateStr: string | null | undefined) {
     if (!dateStr) return '';
@@ -830,21 +866,26 @@ const AddBatch: React.FC = () => {
                           const categoryParams = Array.isArray(parameters)
                             ? parameters
                             : [];
-                          const filledParams = categoryParams.filter(
-                            (p: any) => {
-                              const paramValue = parameterValues.find(
-                                (pv) => pv.parameterId === p.id
-                              );
-                              return (
-                                paramValue && paramValue.value.trim() !== ''
-                              );
-                            }
+                         const filledParams = categoryParams
+                           .filter(
+                             (param: any) => !removedParameters.has(param.id)
+                           )
+                           .filter((p: any) => {
+                             const paramValue = parameterValues.find(
+                               (pv) => pv.parameterId === p.id
+                             );
+                             return (
+                               paramValue && paramValue.value.trim() !== ''
+                             );
+                           });
+                          const availableParams = categoryParams.filter(
+                            (param: any) => !removedParameters.has(param.id)
                           );
                           const categoryProgress =
-                            categoryParams.length > 0
+                            availableParams.length > 0
                               ? Math.round(
                                   (filledParams.length /
-                                    categoryParams.length) *
+                                    availableParams.length) *
                                     100
                                 )
                               : 0;
@@ -883,7 +924,12 @@ const AddBatch: React.FC = () => {
                                             />
                                           </div>
                                           {filledParams.length}/
-                                          {categoryParams.length} completed
+                                          {availableParams.length} completed
+                                          {removedParameters.size > 0 && (
+                                            <span className="text-xs text-red-500 ml-2">
+                                              ({removedParameters.size} removed)
+                                            </span>
+                                          )}
                                         </div>
                                       </div>
                                     </div>
@@ -909,126 +955,156 @@ const AddBatch: React.FC = () => {
                                         <th className="text-center p-4 font-semibold text-gray-700 text-sm w-20">
                                           Status
                                         </th>
+                                        <th className="text-center p-4 font-semibold text-gray-700 text-sm w-16">
+                                          Action
+                                        </th>
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {categoryParams.map(
-                                        (
-                                          parameter: any,
-                                          paramIndex: number
-                                        ) => {
-                                          const paramValue =
-                                            parameterValues.find(
-                                              (pv) =>
-                                                pv.parameterId === parameter.id
-                                            );
-                                          const hasValue =
-                                            paramValue &&
-                                            paramValue.value.trim() !== '';
+                                      {categoryParams
+                                        .filter(
+                                          (parameter: any) =>
+                                            !removedParameters.has(parameter.id)
+                                        )
+                                        .map(
+                                          (
+                                            parameter: any,
+                                            paramIndex: number
+                                          ) => {
+                                            const paramValue =
+                                              parameterValues.find(
+                                                (pv) =>
+                                                  pv.parameterId ===
+                                                  parameter.id
+                                              );
+                                            const hasValue =
+                                              paramValue &&
+                                              paramValue.value.trim() !== '';
 
-                                          return (
-                                            <motion.tr
-                                              key={parameter.id}
-                                              initial={{ opacity: 0 }}
-                                              animate={{ opacity: 1 }}
-                                              transition={{
-                                                delay: paramIndex * 0.05,
-                                              }}
-                                              className={`border-b border-gray-100 hover:bg-blue-50/30 transition-colors ${
-                                                hasValue ? 'bg-green-50/30' : ''
-                                              }`}
-                                            >
-                                              <td className="p-4">
-                                                <div>
-                                                  <div className="font-medium text-gray-800">
-                                                    {parameter.name}
-                                                  </div>
-                                                  {parameter.description && (
-                                                    <div className="text-xs text-gray-500 mt-0.5">
-                                                      {parameter.description}
+                                            return (
+                                              <motion.tr
+                                                key={parameter.id}
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{
+                                                  delay: paramIndex * 0.05,
+                                                }}
+                                                className={`border-b border-gray-100 hover:bg-blue-50/30 transition-colors ${
+                                                  hasValue
+                                                    ? 'bg-green-50/30'
+                                                    : ''
+                                                }`}
+                                              >
+                                                <td className="p-4">
+                                                  <div>
+                                                    <div className="font-medium text-gray-800">
+                                                      {parameter.name}
                                                     </div>
-                                                  )}
-                                                </div>
-                                              </td>
-                                              <td className="p-4">
-                                                <input
-                                                  type="text"
-                                                  value={
-                                                    paramValue?.value || ''
-                                                  }
-                                                  onChange={(e) => {
-                                                    const value =
-                                                      e.target.value;
-                                                    const existingParam =
-                                                      parameterValues.find(
-                                                        (pv) =>
-                                                          pv.parameterId ===
-                                                          parameter.id
-                                                      );
-
-                                                    if (existingParam) {
-                                                      // Update existing parameter
-                                                      setParameterValues(
-                                                        parameterValues.map(
+                                                    {parameter.description && (
+                                                      <div className="text-xs text-gray-500 mt-0.5">
+                                                        {parameter.description}
+                                                      </div>
+                                                    )}
+                                                  </div>
+                                                </td>
+                                                <td className="p-4">
+                                                  <input
+                                                    type="text"
+                                                    value={
+                                                      paramValue?.value || ''
+                                                    }
+                                                    onChange={(e) => {
+                                                      const value =
+                                                        e.target.value;
+                                                      const existingParam =
+                                                        parameterValues.find(
                                                           (pv) =>
                                                             pv.parameterId ===
                                                             parameter.id
-                                                              ? { ...pv, value }
-                                                              : pv
-                                                        )
-                                                      );
-                                                    } else {
-                                                      // Add new parameter with the associated unit ID from parameter
-                                                      setParameterValues([
-                                                        ...parameterValues,
-                                                        {
-                                                          parameterId:
-                                                            parameter.id,
-                                                          value,
-                                                          unitId:
-                                                            parameter.unitId, // Use parameter's unitId directly
-                                                        },
-                                                      ]);
+                                                        );
+
+                                                      if (existingParam) {
+                                                        // Update existing parameter
+                                                        setParameterValues(
+                                                          parameterValues.map(
+                                                            (pv) =>
+                                                              pv.parameterId ===
+                                                              parameter.id
+                                                                ? {
+                                                                    ...pv,
+                                                                    value,
+                                                                  }
+                                                                : pv
+                                                          )
+                                                        );
+                                                      } else {
+                                                        // Add new parameter with the associated unit ID from parameter
+                                                        setParameterValues([
+                                                          ...parameterValues,
+                                                          {
+                                                            parameterId:
+                                                              parameter.id,
+                                                            value,
+                                                            unitId:
+                                                              parameter.unitId, // Use parameter's unitId directly
+                                                          },
+                                                        ]);
+                                                      }
+                                                    }}
+                                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                                    placeholder="Enter value"
+                                                  />
+                                                </td>
+                                                <td className="p-4">
+                                                  <div className="flex items-center">
+                                                    {parameter.unit ? (
+                                                      <span className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg font-medium text-sm">
+                                                        {parameter.unit.symbol}
+                                                      </span>
+                                                    ) : (
+                                                      <span className="text-gray-400 italic text-sm">
+                                                        No unit
+                                                      </span>
+                                                    )}
+                                                  </div>
+                                                </td>
+                                                <td className="p-4 text-center">
+                                                  <motion.div
+                                                    initial={{ scale: 0 }}
+                                                    animate={{ scale: 1 }}
+                                                    className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
+                                                      hasValue
+                                                        ? 'bg-green-100 text-green-600'
+                                                        : 'bg-gray-100 text-gray-400'
+                                                    }`}
+                                                  >
+                                                    {hasValue ? (
+                                                      <Check size={12} />
+                                                    ) : (
+                                                      <Clock size={12} />
+                                                    )}
+                                                  </motion.div>
+                                                </td>
+                                                <td className="p-4 text-center">
+                                                  <motion.button
+                                                    type="button"
+                                                    onClick={() =>
+                                                      handleRemoveParameter(
+                                                        parameter.id
+                                                      )
                                                     }
-                                                  }}
-                                                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                                  placeholder="Enter value"
-                                                />
-                                              </td>
-                                              <td className="p-4">
-                                                <div className="flex items-center">
-                                                  {parameter.unit ? (
-                                                    <span className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg font-medium text-sm">
-                                                      {parameter.unit.symbol}
-                                                    </span>
-                                                  ) : (
-                                                    <span className="text-gray-400 italic text-sm">
-                                                      No unit
-                                                    </span>
-                                                  )}
-                                                </div>
-                                              </td>
-                                              <td className="p-4 text-center">
-                                                <motion.div
-                                                  initial={{ scale: 0 }}
-                                                  animate={{ scale: 1 }}
-                                                  className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${
-                                                    hasValue
-                                                      ? 'bg-green-100 text-green-600'
-                                                      : 'bg-gray-100 text-gray-400'
-                                                  }`}
-                                                >
-                                                  {hasValue ? (
-                                                    <Check size={12} />
-                                                  ) : (
-                                                    <Clock size={12} />
-                                                  )}
-                                                </motion.div>
-                                              </td>
-                                            </motion.tr>
-                                          );
-                                        }
-                                      )}
+                                                    className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-600 transition-all duration-200"
+                                                    whileHover={{ scale: 1.1 }}
+                                                    whileTap={{ scale: 0.9 }}
+                                                    title={`Remove ${parameter.name} parameter`}
+                                                  >
+                                                    <Minus size={14} />
+                                                  </motion.button>
+                                                </td>
+                                              </motion.tr>
+                                            );
+                                          }
+                                        )}
                                     </tbody>
                                   </table>
                                 </div>
