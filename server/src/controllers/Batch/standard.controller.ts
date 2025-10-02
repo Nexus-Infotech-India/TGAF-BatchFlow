@@ -689,6 +689,8 @@ export class StandardController {
   async deleteStandardCategory(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
+      const { force } = req.query; // Add force parameter
+
       if (!req.user) {
         res.status(401).json({ message: 'Unauthorized' });
         return;
@@ -703,6 +705,7 @@ export class StandardController {
             include: {
               products: true, // Check for ProductParameter usage
               batchValues: true, // Check for BatchParameterValue usage
+              standards: true, // Check for StandardDefinition usage
             },
           },
         },
@@ -718,15 +721,60 @@ export class StandardController {
         (param) => param.products.length > 0 || param.batchValues.length > 0
       );
 
-      if (parametersInUse) {
+      if (parametersInUse && force !== 'true') {
+        // Return detailed information about usage
+        const usageDetails = existingCategory.parameters.map(param => ({
+          parameterName: param.name,
+          productsCount: param.products.length,
+          batchValuesCount: param.batchValues.length,
+          products: param.products.map(p => p.productId)
+        })).filter(p => p.productsCount > 0 || p.batchValuesCount > 0);
+
         res.status(400).json({
           message: 'Cannot delete category as some parameters are being used in products or batches',
+          canForceDelete: true,
+          usageDetails,
+          hint: 'Add ?force=true to force delete and clean up all references'
         });
         return;
       }
 
+      // If force delete or no usage, proceed with cleanup
+      if (parametersInUse && force === 'true') {
+        console.log(`Force deleting category ${existingCategory.name} and cleaning up references...`);
+
+        // Get all parameter IDs under this category
+        const parameterIds = existingCategory.parameters.map(p => p.id);
+
+        // Delete all BatchParameterValues that reference these parameters
+        const deletedBatchValues = await prisma.batchParameterValue.deleteMany({
+          where: {
+            parameterId: { in: parameterIds }
+          }
+        });
+
+        // Delete all ProductParameters that reference these parameters
+        const deletedProductParams = await prisma.productParameter.deleteMany({
+          where: {
+            parameterId: { in: parameterIds }
+          }
+        });
+
+        // Delete all StandardDefinitions that reference these parameters
+        const deletedStandardDefs = await prisma.standardDefinition.deleteMany({
+          where: {
+            parameterId: { in: parameterIds }
+          }
+        });
+
+        console.log(`Cleanup completed:
+        - Deleted ${deletedBatchValues.count} batch parameter values
+        - Deleted ${deletedProductParams.count} product parameter links
+        - Deleted ${deletedStandardDefs.count} standard definitions`);
+      }
+
       // Delete all parameters under this category
-      await prisma.standardParameter.deleteMany({
+      const deletedParams = await prisma.standardParameter.deleteMany({
         where: { categoryId: id },
       });
 
@@ -741,18 +789,22 @@ export class StandardController {
           id: uuidv4(),
           userId,
           action: 'DELETE_STANDARD_CATEGORY',
-          details: `Deleted standard category ${existingCategory.name} and all associated parameters`,
+          details: `${force === 'true' ? 'Force deleted' : 'Deleted'} standard category ${existingCategory.name} and ${deletedParams.count} associated parameters`,
         },
       });
 
-      res.status(200).json({ message: 'Standard category and associated parameters deleted successfully' });
+      res.status(200).json({
+        message: 'Standard category and associated parameters deleted successfully',
+        deletedParametersCount: deletedParams.count,
+        forceDeleted: force === 'true'
+      });
     } catch (error) {
       console.error('Delete standard category error:', error);
       res.status(500).json({ message: 'Internal server error' });
     }
   }
 
-  
+
 
   // Create a new unit of measurement
   async createUnit(req: Request, res: Response): Promise<void> {
@@ -1398,13 +1450,7 @@ export class StandardController {
         return;
       }
 
-      // Check if parameter is being used
-      if (existingParameter.products.length > 0 || existingParameter.batchValues.length > 0) {
-        res.status(400).json({
-          message: 'Cannot delete parameter as it is being used in products or batches',
-        });
-        return;
-      }
+
 
       // Delete parameter
       await prisma.standardParameter.delete({

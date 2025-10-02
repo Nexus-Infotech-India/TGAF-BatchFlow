@@ -5,7 +5,7 @@
     "dev": "nodemon src/server.ts",
     "prepare": "husky install",
     "seed": "ts-node prisma/seed.ts",
-    "reset-db": "ts-node /home/rameswar-panda/Nexus/Batchflow/server/src/utils/cleardata.ts",
+    "reset-db": "ts-node src/utils/clear/cleardata.ts",
     "build:schema": "./scripts/build-schema.sh",
     "prisma:generate": "npm run build:schema && npx prisma generate",
     "prisma:migrate:dev": "npm run build:schema && npx prisma migrate dev",

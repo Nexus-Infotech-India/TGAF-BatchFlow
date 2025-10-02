@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   console.log('Starting seed data creation for hot pepper powder categories and parameters...');
-  
+
   // Create units of measurement first, matching exactly what's in the COA
   const units = [
     {
@@ -60,9 +60,9 @@ async function main() {
       description: 'Colony forming units per 25 grams'
     }
   ];
-  
+
   const createdUnits: { [key: string]: any } = {};
-  
+
   for (const unit of units) {
     const createdUnit = await prisma.unitOfMeasurement.upsert({
       where: { name: unit.name },
@@ -76,11 +76,11 @@ async function main() {
         updatedAt: new Date()
       }
     });
-    
+
     console.log(`Created unit: ${createdUnit.name} (${createdUnit.id})`);
     createdUnits[createdUnit.name] = createdUnit;
   }
-  
+
   // Create the hot pepper powder product
   const hotPepperPowder = await prisma.product.upsert({
     where: { name: 'Hot Pepper powder' },
@@ -93,19 +93,12 @@ async function main() {
       updatedAt: new Date()
     }
   });
-  
+
   console.log(`Created product: ${hotPepperPowder.name} (${hotPepperPowder.id})`);
-  
+
   // Create the standard categories matching what's in the COA
   const categories = [
-    {
-      name: 'Organoleptic',
-      description: 'Sensory characteristics'
-    },
-    {
-      name: 'Physical',
-      description: 'Physical properties'
-    },
+    // Removed Organoleptic and Physical
     {
       name: 'Chemical Characteristics',
       description: 'Chemical composition and properties'
@@ -115,9 +108,9 @@ async function main() {
       description: 'Microbiological parameters'
     }
   ];
-  
+
   const createdCategories: { [key: string]: any } = {};
-  
+
   for (const category of categories) {
     const createdCategory = await prisma.standardCategory.upsert({
       where: { name: category.name },
@@ -130,10 +123,10 @@ async function main() {
         updatedAt: new Date()
       }
     });
-    
+
     console.log(`Created standard category: ${createdCategory.name} (${createdCategory.id})`);
     createdCategories[createdCategory.name] = createdCategory;
-    
+
     // Link category with product using ProductStandardCategory
     await prisma.productStandardCategory.upsert({
       where: {
@@ -151,65 +144,21 @@ async function main() {
         updatedAt: new Date()
       }
     });
-    
+
     console.log(`Linked category ${createdCategory.name} with product ${hotPepperPowder.name}`);
   }
-  
+
   // Create parameters for each category - Using names and units from the COA
   const parameters = [
-    // Organoleptic parameters
-    {
-      name: 'Appearance',
-      description: 'Visual appearance of the hot pepper powder',
-      categoryName: 'Organoleptic',
-      dataType: 'TEXT',
-      productType: 'PEPPER',
-      unitName: 'Unitless' // Visual test in COA
-    },
-    {
-      name: 'Color',
-      description: 'Color of the hot pepper powder',
-      categoryName: 'Organoleptic',
-      dataType: 'TEXT',
-      productType: 'PEPPER',
-      unitName: 'Unitless' // Visual test in COA
-    },
-    {
-      name: 'Aroma',
-      description: 'Aroma/smell characteristics of the hot pepper powder',
-      categoryName: 'Organoleptic',
-      dataType: 'TEXT',
-      productType: 'PEPPER',
-      unitName: 'Unitless' // Sensory test in COA
-    },
-    
-    // Physical parameters
-    {
-      name: 'Particle size',
-      description: 'Size of hot pepper powder particles',
-      categoryName: 'Physical',
-      dataType: 'TEXT',
-      productType: 'PEPPER',
-      unitName: 'Unitless' // Descriptive in COA
-    },
+    // --- Chemical Characteristics parameters (including moved sieve parameter) ---
     {
       name: 'Pass through US sieve #40 (min) 420mm',
       description: 'Percentage passing through 420mm sieve',
-      categoryName: 'Physical',
+      categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
       productType: 'PEPPER',
       unitName: 'Percentage' // % in COA
     },
-    {
-      name: 'Extraneous & Foreign Matter (Max)',
-      description: 'Maximum foreign matter content in pepper',
-      categoryName: 'Physical',
-      dataType: 'FLOAT',
-      productType: 'PEPPER',
-      unitName: 'Weight/weight' // %w/w in COA
-    },
-    
-    // Chemical Characteristics parameters
     {
       name: 'Moisture (max)',
       description: 'Maximum moisture content in pepper',
@@ -258,8 +207,7 @@ async function main() {
       productType: 'PEPPER',
       unitName: 'PPB' // ppb in COA
     },
-    
-    // Microbiology parameters
+    // --- Microbiology parameters ---
     {
       name: 'Total plate count',
       description: 'Total microbial plate count in pepper',
@@ -309,26 +257,26 @@ async function main() {
       unitName: 'CFU per gram' // cfu/g in COA
     }
   ];
-  
+
   const createdParameters: any[] = [];
-  
+
   for (const param of parameters) {
     // Find the category
     const category = createdCategories[param.categoryName];
-    
+
     if (!category) {
       console.log(`Category not found for parameter: ${param.name}`);
       continue;
     }
-    
+
     // Find the unit
     const unit = createdUnits[param.unitName];
-    
+
     if (!unit) {
       console.log(`Unit not found for parameter: ${param.name}`);
       continue;
     }
-    
+
     // Create the parameter with productType and unitId
     const parameterId = uuidv4();
     const createdParam = await prisma.standardParameter.upsert({
@@ -357,10 +305,10 @@ async function main() {
         updatedAt: new Date()
       }
     });
-    
+
     console.log(`Created/Updated parameter: ${createdParam.name} (${createdParam.productType}) with unit ${param.unitName}`);
     createdParameters.push(createdParam);
-    
+
     // Link parameter to hot pepper powder product
     await prisma.productParameter.upsert({
       where: {
@@ -382,10 +330,10 @@ async function main() {
         updatedAt: new Date()
       }
     });
-    
+
     console.log(`Linked parameter ${createdParam.name} to product ${hotPepperPowder.name}`);
   }
-  
+
   console.log(`Created ${createdParameters.length} parameters for hot pepper powder`);
   console.log('Hot pepper powder seed data creation completed successfully!');
 }

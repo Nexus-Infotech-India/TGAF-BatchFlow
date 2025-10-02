@@ -69,10 +69,6 @@ async function main() {
   // Create the standard categories exactly from the COA
   const categories = [
     {
-      name: 'Organoleptic',
-      description: 'Sensory characteristics'
-    },
-    {
       name: 'Physical',
       description: 'Physical properties'
     },
@@ -123,32 +119,6 @@ async function main() {
   
   // Create parameters for each category with associated units based on the COA
   const parameters = [
-    // Organoleptic parameters
-    {
-      name: 'Appearance',
-      description: 'Visual appearance of the turmeric powder',
-      categoryName: 'Organoleptic',
-      dataType: 'TEXT',
-      productType: 'TURMERIC',
-      unitName: 'Unitless' // Visual test
-    },
-    {
-      name: 'Texture',
-      description: 'Texture characteristics of the turmeric powder',
-      categoryName: 'Organoleptic',
-      dataType: 'TEXT',
-      productType: 'TURMERIC',
-      unitName: 'Unitless' // Visual test
-    },
-    {
-      name: 'Odour',
-      description: 'Smell characteristics of the turmeric powder',
-      categoryName: 'Organoleptic',
-      dataType: 'TEXT',
-      productType: 'TURMERIC',
-      unitName: 'Unitless' // Sensory test
-    },
-    
     // Physical parameters
     {
       name: 'Particle size',
