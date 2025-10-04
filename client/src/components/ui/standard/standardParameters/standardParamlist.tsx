@@ -18,9 +18,8 @@ import {
   Plus,
   Database,
   FileText,
-  Hash,
-  Trash2, // Added for delete icon
-  X, // Added for modal close
+  Trash2,
+  X,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
@@ -47,10 +46,10 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
-  const [showDeleteModal, setShowDeleteModal] = useState(false); // For modal visibility
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [parameterToDelete, setParameterToDelete] =
-    useState<StandardParameter | null>(null); // Parameter to delete
-  const [isDeleting, setIsDeleting] = useState(false); // Loading state for delete
+    useState<StandardParameter | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fetchParameters = async () => {
     setIsLoading(true);
@@ -130,81 +129,51 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
       .replace(/\b\w/g, (c) => c.toUpperCase());
   };
 
-  // Column definition for TanStack Table
+  // Column definition for TanStack Table (ID column removed)
   const columnHelper = createColumnHelper<StandardParameter>();
   const columns = [
-    columnHelper.accessor('id', {
-      header: ({ column }) => (
-        <motion.button
-          onClick={() => column.toggleSorting()}
-          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
-            <Hash size={14} />
-          </div>
-          ID
-          <ArrowUpDown
-            size={12}
-            className="text-gray-400 group-hover:text-blue-500 transition-colors"
-          />
-        </motion.button>
-      ),
-      cell: ({ row }) => {
-        const id = row.original.id;
-        const shortId = `${id.slice(0, 8)}...`;
-        return (
-          <div className="flex items-center">
-            <span className="font-mono bg-gradient-to-r from-gray-50 to-gray-100 px-3 py-1.5 rounded-lg border border-gray-200 text-xs text-gray-600 shadow-sm">
-              {shortId}
-            </span>
-          </div>
-        );
-      },
-    }),
     columnHelper.accessor('name', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
-          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          className="flex items-center gap-2 font-semibold text-[var(--foreground)] hover:text-[var(--primary)] transition-colors group"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <div className="p-1.5 rounded-lg bg-green-50 text-green-600 group-hover:bg-green-100 transition-colors">
+          <div className="p-1.5 rounded-lg bg-[var(--primary)]/10 text-[var(--primary)] group-hover:bg-[var(--primary)]/20 transition-colors">
             <Tag size={14} />
           </div>
           Name
           <ArrowUpDown
             size={12}
-            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+            className="text-[var(--muted-foreground)] group-hover:text-[var(--primary)] transition-colors"
           />
         </motion.button>
       ),
       cell: ({ getValue }) => (
-        <div className="font-medium text-gray-800">{getValue()}</div>
+        <div className="font-medium text-[var(--foreground)]">{getValue()}</div>
       ),
     }),
     columnHelper.accessor('category.name', {
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
-          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          className="flex items-center gap-2 font-semibold text-[var(--foreground)] hover:text-[var(--primary)] transition-colors group"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <div className="p-1.5 rounded-lg bg-blue-50 text-blue-600 group-hover:bg-blue-100 transition-colors">
+          <div className="p-1.5 rounded-lg bg-[var(--accent)]/10 text-[var(--accent)] group-hover:bg-[var(--accent)]/20 transition-colors">
             <List size={14} />
           </div>
           Category
           <ArrowUpDown
             size={12}
-            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+            className="text-[var(--muted-foreground)] group-hover:text-[var(--primary)] transition-colors"
           />
         </motion.button>
       ),
       cell: ({ getValue }) => (
-        <div className="bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 px-3 py-1.5 rounded-lg inline-block text-sm font-medium border border-blue-200">
+        <div className="bg-[var(--accent)]/10 text-[var(--accent-foreground)] px-3 py-1.5 rounded-lg inline-block text-sm font-medium border border-[var(--accent)]/20">
           {getValue()}
         </div>
       ),
@@ -213,22 +182,22 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
-          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          className="flex items-center gap-2 font-semibold text-[var(--foreground)] hover:text-[var(--primary)] transition-colors group"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <div className="p-1.5 rounded-lg bg-orange-50 text-orange-600 group-hover:bg-orange-100 transition-colors">
+          <div className="p-1.5 rounded-lg bg-[var(--chart-3)]/10 text-[var(--chart-3)] group-hover:bg-[var(--chart-3)]/20 transition-colors">
             <Database size={14} />
           </div>
           Data Type
           <ArrowUpDown
             size={12}
-            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+            className="text-[var(--muted-foreground)] group-hover:text-[var(--primary)] transition-colors"
           />
         </motion.button>
       ),
       cell: ({ getValue }) => (
-        <div className="bg-gradient-to-r from-orange-50 to-orange-100 text-orange-700 px-3 py-1.5 rounded-lg inline-block text-sm font-medium border border-orange-200">
+        <div className="bg-[var(--chart-3)]/10 text-[var(--chart-3)] px-3 py-1.5 rounded-lg inline-block text-sm font-medium border border-[var(--chart-3)]/20">
           {formatDataType(getValue())}
         </div>
       ),
@@ -237,24 +206,24 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
       header: ({ column }) => (
         <motion.button
           onClick={() => column.toggleSorting()}
-          className="flex items-center gap-2 font-semibold text-gray-700 hover:text-blue-600 transition-colors group"
+          className="flex items-center gap-2 font-semibold text-[var(--foreground)] hover:text-[var(--primary)] transition-colors group"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
-          <div className="p-1.5 rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-100 transition-colors">
+          <div className="p-1.5 rounded-lg bg-[var(--chart-4)]/10 text-[var(--chart-4)] group-hover:bg-[var(--chart-4)]/20 transition-colors">
             <FileText size={14} />
           </div>
           Description
           <ArrowUpDown
             size={12}
-            className="text-gray-400 group-hover:text-blue-500 transition-colors"
+            className="text-[var(--muted-foreground)] group-hover:text-[var(--primary)] transition-colors"
           />
         </motion.button>
       ),
       cell: ({ getValue }) => (
-        <div className="text-gray-600 max-w-md">
+        <div className="text-[var(--muted-foreground)] max-w-md">
           {getValue() || (
-            <span className="italic text-gray-400">
+            <span className="italic text-[var(--muted-foreground)]/70">
               No description provided
             </span>
           )}
@@ -264,8 +233,8 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
     columnHelper.display({
       id: 'delete',
       header: () => (
-        <div className="flex items-center gap-2 font-semibold text-gray-700">
-          <div className="p-1.5 rounded-lg bg-red-50 text-red-600">
+        <div className="flex items-center gap-2 font-semibold text-[var(--foreground)]">
+          <div className="p-1.5 rounded-lg bg-[var(--destructive)]/10 text-[var(--destructive)]">
             <Trash2 size={14} />
           </div>
           Delete
@@ -277,7 +246,7 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
             setParameterToDelete(row.original);
             setShowDeleteModal(true);
           }}
-          className="flex items-center gap-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all shadow-sm hover:shadow-md"
+          className="flex items-center gap-2 px-3 py-2 bg-[var(--destructive)] text-[var(--destructive-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-all shadow-sm hover:shadow-md"
           whileHover={{ scale: 1.05, y: -1 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -303,21 +272,21 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
   if (isLoading) {
     return (
       <motion.div
-        className="flex flex-col items-center justify-center py-20 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl"
+        className="flex flex-col items-center justify-center py-20 bg-[var(--muted)] rounded-2xl"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
         <div className="relative h-16 w-16 mb-6">
           <motion.div
-            className="absolute top-0 left-0 w-full h-full rounded-full border-4 border-t-blue-500 border-r-blue-300 border-b-blue-100 border-l-blue-300"
+            className="absolute top-0 left-0 w-full h-full rounded-full border-4 border-t-[var(--primary)] border-r-[var(--muted)] border-b-[var(--background)] border-l-[var(--muted)]"
             animate={{ rotate: 360 }}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
           />
         </div>
-        <p className="text-gray-700 font-medium text-lg">
+        <p className="text-[var(--foreground)] font-medium text-lg">
           Loading parameters...
         </p>
-        <p className="text-gray-500 text-sm mt-2">
+        <p className="text-[var(--muted-foreground)] text-sm mt-2">
           Please wait while we fetch your data
         </p>
       </motion.div>
@@ -328,22 +297,22 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
   if (error) {
     return (
       <motion.div
-        className="bg-gradient-to-br from-red-50 to-red-100 border border-red-200 rounded-2xl p-8 shadow-sm"
+        className="bg-[var(--destructive)]/10 border border-[var(--destructive)]/30 rounded-2xl p-8 shadow-sm"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
         <div className="flex items-start">
-          <div className="mr-4 p-2 bg-red-100 rounded-xl">
-            <AlertCircle className="h-6 w-6 text-red-500" />
+          <div className="mr-4 p-2 bg-[var(--destructive)]/20 rounded-xl">
+            <AlertCircle className="h-6 w-6 text-[var(--destructive)]" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-red-800 mb-2">
+            <h3 className="text-lg font-semibold text-[var(--destructive)] mb-2">
               Unable to load parameters
             </h3>
-            <p className="text-sm text-red-700 mb-4">{error}</p>
+            <p className="text-sm text-[var(--destructive)]/80 mb-4">{error}</p>
             <motion.button
-              className="px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg shadow-sm flex items-center gap-2 hover:bg-red-50 transition-colors"
+              className="px-4 py-2 bg-[var(--background)] border border-[var(--destructive)]/30 text-[var(--destructive)] rounded-lg shadow-sm flex items-center gap-2 hover:bg-[var(--destructive)]/10 transition-colors"
               onClick={() => fetchParameters()}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
@@ -367,13 +336,13 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
     >
       {parameters.length === 0 ? (
         <motion.div
-          className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-12"
+          className="flex flex-col items-center justify-center h-full bg-[var(--muted)] rounded-2xl p-12"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.2 }}
         >
           <motion.div
-            className="h-24 w-24 mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-500 rounded-2xl flex items-center justify-center shadow-lg"
+            className="h-24 w-24 mx-auto mb-6 bg-[var(--primary)]/10 text-[var(--primary)] rounded-2xl flex items-center justify-center shadow-lg"
             animate={{ scale: [0.9, 1.1, 1] }}
             transition={{
               duration: 2,
@@ -384,21 +353,21 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
           >
             <Tag className="h-12 w-12" />
           </motion.div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-3">
+          <h3 className="text-2xl font-bold text-[var(--foreground)] mb-3">
             No Parameters Found
           </h3>
-          <p className="text-gray-600 max-w-md mx-auto text-center mb-8 leading-relaxed">
+          <p className="text-[var(--muted-foreground)] max-w-md mx-auto text-center mb-8 leading-relaxed">
             Create parameters to define what can be measured in your standards.
             Parameters help establish the criteria for quality control.
           </p>
 
           <motion.button
-            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl shadow-lg inline-flex items-center gap-3 font-medium"
+            className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-xl shadow-lg inline-flex items-center gap-3 font-medium"
             onClick={onAddParameterClick}
             whileHover={{
               scale: 1.05,
               boxShadow:
-                '0 20px 25px -5px rgba(59, 130, 246, 0.3), 0 10px 10px -5px rgba(59, 130, 246, 0.15)',
+                '0 20px 25px -5px var(--primary)/0.3, 0 10px 10px -5px var(--primary)/0.15',
             }}
             whileTap={{ scale: 0.95 }}
           >
@@ -407,17 +376,17 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
           </motion.button>
         </motion.div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden h-full flex flex-col">
+        <div className="bg-[var(--background)] rounded-2xl shadow-lg border border-[var(--border)] overflow-hidden h-full flex flex-col">
           <div className="flex-1 overflow-hidden">
             <div className="overflow-x-auto h-full">
               <table className="min-w-full h-full">
-                <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 sticky top-0 z-10">
+                <thead className="bg-[var(--muted)] border-b border-[var(--border)] sticky top-0 z-10">
                   {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
                       {headerGroup.headers.map((header) => (
                         <th
                           key={header.id}
-                          className="px-6 py-4 text-left text-sm font-medium text-gray-700"
+                          className="px-6 py-4 text-left text-base font-bold text-[var(--foreground)]"
                         >
                           {header.isPlaceholder
                             ? null
@@ -430,21 +399,20 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
                     </tr>
                   ))}
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-100">
+                <tbody className="bg-[var(--background)] divide-y divide-[var(--border)]">
                   <AnimatePresence>
                     {table.getRowModel().rows.map((row, i) => (
                       <motion.tr
                         key={row.id}
-                        className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200"
+                        className="hover:bg-[var(--muted)] transition-colors duration-200"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.2, delay: i * 0.05 }}
-                        whileHover={{ scale: 1.01 }}
                       >
                         {row.getVisibleCells().map((cell) => (
                           <td
                             key={cell.id}
-                            className="px-6 py-4 text-sm text-gray-700"
+                            className="px-6 py-4 text-base text-[var(--foreground)]"
                           >
                             {flexRender(
                               cell.column.columnDef.cell,
@@ -461,14 +429,14 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
           </div>
 
           {/* Enhanced Footer */}
-          <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-gray-100 border-t border-gray-200 flex items-center justify-between">
+          <div className="px-6 py-4 bg-[var(--muted)] border-t border-[var(--border)] flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Tag size={14} className="text-blue-600" />
+              <div className="p-2 bg-[var(--primary)]/10 rounded-lg">
+                <Tag size={14} className="text-[var(--primary)]" />
               </div>
-              <p className="text-sm font-medium text-gray-700">
+              <p className="text-base font-semibold text-[var(--foreground)]">
                 Showing{' '}
-                <span className="text-blue-600 font-semibold">
+                <span className="text-[var(--primary)] font-bold">
                   {table.getRowModel().rows.length}
                 </span>{' '}
                 parameters
@@ -477,12 +445,12 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
 
             <motion.button
               onClick={fetchParameters}
-              className="text-sm text-gray-600 flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
+              className="text-base text-[var(--muted-foreground)] flex items-center gap-2 px-4 py-2 bg-[var(--background)] rounded-lg border border-[var(--border)] shadow-sm hover:shadow-md hover:bg-[var(--muted)] transition-all"
               whileHover={{ scale: 1.05, y: -1 }}
               whileTap={{ scale: 0.95 }}
             >
               <RefreshCw size={14} />
-              <span className="font-medium">Refresh</span>
+              <span className="font-semibold">Refresh</span>
             </motion.button>
           </div>
         </div>
@@ -492,32 +460,32 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
       <AnimatePresence>
         {showDeleteModal && parameterToDelete && (
           <motion.div
-            className="fixed inset-0 backdrop-blur-md bg-opacity-50 flex items-center justify-center z-50"
+            className="fixed inset-0 backdrop-blur-sm bg-[var(--background)]/60 flex items-center justify-center z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-white rounded-2xl p-6 shadow-xl max-w-md w-full mx-4"
+              className="bg-[var(--background)] rounded-2xl p-6 shadow-xl max-w-md w-full mx-4 border border-[var(--border)]"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="text-lg font-semibold text-[var(--foreground)]">
                   Confirm Deletion
                 </h3>
                 <motion.button
                   onClick={() => setShowDeleteModal(false)}
-                  className="p-1 hover:bg-gray-100 rounded-full"
+                  className="p-1 hover:bg-[var(--muted)] rounded-full"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <X size={20} className="text-gray-500" />
+                  <X size={20} className="text-[var(--muted-foreground)]" />
                 </motion.button>
               </div>
-              <p className="text-gray-600 mb-4">
+              <p className="text-[var(--muted-foreground)] mb-4">
                 Are you sure you want to delete the parameter{' '}
                 <strong>"{parameterToDelete.name}"</strong>? This action cannot
                 be undone if the parameter is being used in products or batches.
@@ -525,7 +493,7 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
               <div className="flex gap-3">
                 <motion.button
                   onClick={() => setShowDeleteModal(false)}
-                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                  className="flex-1 px-4 py-2 bg-[var(--muted)] text-[var(--foreground)] rounded-lg hover:bg-[var(--muted)]/80 transition-colors"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -534,7 +502,7 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
                 <motion.button
                   onClick={handleDelete}
                   disabled={isDeleting}
-                  className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-[var(--destructive)] text-[var(--destructive-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors disabled:opacity-50"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
