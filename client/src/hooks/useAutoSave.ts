@@ -24,27 +24,30 @@ export const useAutoSave = ({
     const debouncedSave = useCallback(
         debounce(async (data: any) => {
             try {
-                // Prevent autosave when all fields are empty and no draftId yet.
                 const formData = data?.formData ?? null;
-                const parameterValues = data?.parameterValues ?? [];
+                const parameterValuesData = data?.parameterValues ?? {};
                 const newProductName = (data?.newProductName ?? '').toString();
 
-                const noFormFilled =
-                    (!formData ||
-                        (
-                            (formData.batchNumber ?? '').toString().trim() === '' &&
-                            (formData.productId ?? '').toString().trim() === '' &&
-                            (formData.dateOfProduction ?? '').toString().trim() === '' &&
-                            (formData.bestBeforeDate ?? '').toString().trim() === '' &&
-                            (formData.sampleAnalysisStarted ?? '').toString().trim() === '' &&
-                            (formData.sampleAnalysisCompleted ?? '').toString().trim() === ''
-                        )
-                    ) &&
-                    parameterValues.length === 0 &&
-                    newProductName.trim() === '';
+                // Extract actual parameter values from the data structure
+                const parameterValues = parameterValuesData?.values || parameterValuesData || [];
 
-                // If nothing meaningful to save and there's no existing draft id, skip saving.
-                if (noFormFilled && (!draftId || draftId.trim() === '')) {
+                // Check if ALL basic fields are filled
+                const allBasicFieldsFilled = formData && (
+                    (formData.batchNumber ?? '').toString().trim() !== '' &&
+                    ((formData.productId ?? '').toString().trim() !== '' || newProductName.trim() !== '') &&
+                    (formData.dateOfProduction ?? '').toString().trim() !== '' &&
+                    (formData.bestBeforeDate ?? '').toString().trim() !== '' &&
+                    (formData.sampleAnalysisStarted ?? '').toString().trim() !== '' &&
+                    (formData.sampleAnalysisCompleted ?? '').toString().trim() !== ''
+                );
+
+                // Check if there are parameter values with actual content
+                const hasParameterValues = Array.isArray(parameterValues) && parameterValues.length > 0 &&
+                    parameterValues.some((pv: any) => pv.value && pv.value.trim() !== '');
+
+                // Only save if ALL basic fields are filled AND at least one parameter is filled
+                // OR if there's an existing draft (to allow updates/deletions)
+                if (!(allBasicFieldsFilled && hasParameterValues) && (!draftId || draftId.trim() === '')) {
                     return;
                 }
 

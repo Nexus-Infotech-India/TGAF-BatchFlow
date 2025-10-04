@@ -11,9 +11,28 @@ function parseDateField(val: any) {
     return isNaN(d.getTime()) ? null : d;
 }
 
+function hasMinimumRequiredFields(formData: any, parameterValues: any[], newProductName: string): boolean {
+    // Check if ALL basic fields are filled
+    const allBasicFieldsFilled = formData && (
+        (formData.batchNumber ?? '').toString().trim() !== '' &&
+        ((formData.productId ?? '').toString().trim() !== '' || newProductName.trim() !== '') &&
+        (formData.dateOfProduction ?? '').toString().trim() !== '' &&
+        (formData.bestBeforeDate ?? '').toString().trim() !== '' &&
+        (formData.sampleAnalysisStarted ?? '').toString().trim() !== '' &&
+        (formData.sampleAnalysisCompleted ?? '').toString().trim() !== ''
+    );
+
+    // Check if there are parameter values with actual content
+    const hasParameterValues = parameterValues && parameterValues.length > 0 &&
+        parameterValues.some((pv: any) => pv.value && pv.value.trim() !== '');
+
+    // Only save if ALL basic fields are filled AND at least one parameter is filled
+    return allBasicFieldsFilled && hasParameterValues;
+}
+
 /**
  * Save or update a batch draft.
- * Allows partial/incomplete data.
+ * Only allows saving if ALL basic fields are filled AND at least one parameter is filled.
  */
 export const saveDraftBatch = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -26,11 +45,23 @@ export const saveDraftBatch = async (req: Request, res: Response): Promise<void>
 
         const { id, formData = {}, parameterValues = [], newProductName = '', ...rest } = req.body;
 
+        // Extract actual parameter values from the data structure
+        const actualParameterValues = parameterValues?.values || parameterValues || [];
+
+        // Check if this is a new draft (no existing ID) and validate minimum fields
+        const providedId = typeof id === 'string' && id.trim() !== '' ? id : undefined;
+
+        if (!providedId && !hasMinimumRequiredFields(formData, actualParameterValues, newProductName)) {
+            // For new drafts, don't save if not all basic fields are filled AND at least one parameter
+            res.status(400).json({ error: 'Cannot save draft: All basic fields must be filled and at least one parameter must be filled' });
+            return;
+        }
+
         // Prepare draft data, only including fields that are present
         const draftData: any = {
             ...formData,
             makerId,
-            parameterValues: parameterValues && parameterValues.length > 0 ? parameterValues : undefined,
+            parameterValues: actualParameterValues && actualParameterValues.length > 0 ? parameterValues : undefined,
             newProductName: newProductName || undefined,
             status: 'DRAFT',
             updatedAt: new Date(),
@@ -48,7 +79,6 @@ export const saveDraftBatch = async (req: Request, res: Response): Promise<void>
         draftData.sampleAnalysisStarted = parseDateField(draftData.sampleAnalysisStarted);
         draftData.sampleAnalysisCompleted = parseDateField(draftData.sampleAnalysisCompleted);
 
-        const providedId = typeof id === 'string' && id.trim() !== '' ? id : undefined;
         const idToUse = providedId ?? uuidv4();
 
         let draft;

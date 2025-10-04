@@ -200,26 +200,25 @@ const AddBatch: React.FC = () => {
         setSelectedProductId(draftData.productId || '');
         setNewProductName(draftData.newProductName || '');
         setDraftFetchedAt(draftData.updatedAt || draftData.createdAt || null);
-        if (draftData.parameterValues) {
-          const parsedData =
-            typeof draftData.parameterValues === 'string'
-              ? JSON.parse(draftData.parameterValues)
-              : draftData.parameterValues;
+       if (draftData.parameterValues) {
+         const parsedData =
+           typeof draftData.parameterValues === 'string'
+             ? JSON.parse(draftData.parameterValues)
+             : draftData.parameterValues;
 
-          // Handle both old format (array) and new format (object with values and removedParameters)
-          if (Array.isArray(parsedData)) {
-            // Old format - just parameter values
-            setParameterValues(parsedData);
-          } else if (parsedData && typeof parsedData === 'object') {
-            // New format - object with values and removedParameters
-            setParameterValues(parsedData.values || []);
-            if (parsedData.removedParameters) {
-              setRemovedParameters(new Set(parsedData.removedParameters));
-            }
-          }
-        } else {
-          setParameterValues([]);
-        }
+         if (Array.isArray(parsedData)) {
+           setParameterValues(parsedData);
+         } else if (parsedData && typeof parsedData === 'object') {
+           setParameterValues(parsedData.values || []);
+           if (parsedData.removedParameters) {
+             setRemovedParameters(new Set(parsedData.removedParameters));
+           }
+         } else {
+           setParameterValues([]);
+         }
+       } else {
+         setParameterValues([]);
+       }
       } catch (error) {
         // No draft found or error, do nothing
         console.log('No draft found');
@@ -398,7 +397,25 @@ const AddBatch: React.FC = () => {
           sampleAnalysisStatus: draftData.sampleAnalysisStatus || 'PENDING',
         });
         setSelectedProductId(draftData.productId || '');
-        setParameterValues(draftData.parameterValues || []);
+       if (draftData.parameterValues) {
+         const parsedData =
+           typeof draftData.parameterValues === 'string'
+             ? JSON.parse(draftData.parameterValues)
+             : draftData.parameterValues;
+
+         if (Array.isArray(parsedData)) {
+           setParameterValues(parsedData);
+         } else if (parsedData && typeof parsedData === 'object') {
+           setParameterValues(parsedData.values || []);
+           if (parsedData.removedParameters) {
+             setRemovedParameters(new Set(parsedData.removedParameters));
+           }
+         } else {
+           setParameterValues([]);
+         }
+       } else {
+         setParameterValues([]);
+       }
         setNewProductName(draftData.newProductName || '');
         setDraftFetchedAt(draftData.updatedAt || draftData.createdAt || null);
       } catch (error) {
