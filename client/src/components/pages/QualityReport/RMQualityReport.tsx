@@ -16,14 +16,11 @@ import {
   Calendar,
   Building,
   Hash,
-  PlusCircle,
-  MinusCircle,
   Sparkles,
   TrendingUp,
   BarChart3,
   Shield,
   Beaker,
-  FlaskConical,
   Target,
   Award,
   ChevronRight,
@@ -38,7 +35,6 @@ import {
 } from '../../../utils/api';
 import {
   RMQualityReport as RMQualityReportType,
-  RMQualityParameter,
 } from '../../../Types/qualityTypes';
 import api, { API_ROUTES } from '../../../utils/api';
 
@@ -86,6 +82,17 @@ const StatusIndicator = ({
   </motion.div>
 );
 
+// Fixed parameters for Chilli (based on the image)
+const CHILLI_PARAMETERS = [
+  { parameter: 'Moisture', standard: 'max 8%' },
+  { parameter: 'ASTA Color', standard: 'min 40' },
+  { parameter: 'Acid Insoluble Ash', standard: 'max 1.5%' },
+  { parameter: 'Total Ash', standard: 'max 8%' },
+  { parameter: 'Aflatoxin', standard: 'max 20 ppb' },
+  { parameter: 'TPC', standard: 'max 10 million cfu' },
+  { parameter: 'YM', standard: '10,000 cfu' },
+];
+
 const RMQualityReport: React.FC = () => {
   const [reports, setReports] = useState<RMQualityReportType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -95,8 +102,8 @@ const RMQualityReport: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
 
-   const [receivedRawMaterials, setReceivedRawMaterials] = useState<any[]>([]);
-   const [receivedVendors, setReceivedVendors] = useState<any[]>([]);
+  const [receivedRawMaterials, setReceivedRawMaterials] = useState<any[]>([]);
+  const [receivedVendors, setReceivedVendors] = useState<any[]>([]);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -106,43 +113,43 @@ const RMQualityReport: React.FC = () => {
     grn: '',
   });
 
-  const [parameters, setParameters] = useState<RMQualityParameter[]>([
-    { parameter: '', standard: '', result: '' },
-  ]);
+  // Results state for fixed parameters
+  const [results, setResults] = useState<string[]>(
+    Array(CHILLI_PARAMETERS.length).fill('')
+  );
 
-   useEffect(() => {
-     fetchReports();
-     fetchReceivedRawMaterials();
-     fetchReceivedVendors();
-   }, []);
+  useEffect(() => {
+    fetchReports();
+    fetchReceivedRawMaterials();
+    fetchReceivedVendors();
+  }, []);
 
-    const fetchReceivedRawMaterials = async () => {
-      try {
-        const authToken = localStorage.getItem('authToken');
-        const response = await api.get(
-          API_ROUTES.RAW.GET_RECEIVED_RAW_MATERIALS,
-          {
-            headers: { Authorization: `Bearer ${authToken}` },
-          }
-        );
-        setReceivedRawMaterials(response.data);
-      } catch (error) {
-        console.error('Failed to fetch received raw materials:', error);
-      }
-    };
-
-    const fetchReceivedVendors = async () => {
-      try {
-        const authToken = localStorage.getItem('authToken');
-        const response = await api.get(API_ROUTES.RAW.GET_RECEIVED_VENDORS, {
+  const fetchReceivedRawMaterials = async () => {
+    try {
+      const authToken = localStorage.getItem('authToken');
+      const response = await api.get(
+        API_ROUTES.RAW.GET_RECEIVED_RAW_MATERIALS,
+        {
           headers: { Authorization: `Bearer ${authToken}` },
-        });
-        setReceivedVendors(response.data);
-      } catch (error) {
-        console.error('Failed to fetch received vendors:', error);
-      }
-    };
+        }
+      );
+      setReceivedRawMaterials(response.data);
+    } catch (error) {
+      console.error('Failed to fetch received raw materials:', error);
+    }
+  };
 
+  const fetchReceivedVendors = async () => {
+    try {
+      const authToken = localStorage.getItem('authToken');
+      const response = await api.get(API_ROUTES.RAW.GET_RECEIVED_VENDORS, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      setReceivedVendors(response.data);
+    } catch (error) {
+      console.error('Failed to fetch received vendors:', error);
+    }
+  };
 
   // Check if form is valid
   useEffect(() => {
@@ -152,17 +159,10 @@ const RMQualityReport: React.FC = () => {
       formData.supplier.trim() !== '' &&
       formData.grn.trim() !== '';
 
-    const parametersValid =
-      parameters.length > 0 &&
-      parameters.every(
-        (p) =>
-          p.parameter.trim() !== '' &&
-          p.standard.trim() !== '' &&
-          p.result.trim() !== ''
-      );
+    const parametersValid = results.every((r) => r.trim() !== '');
 
     setIsFormValid(basicInfoValid && parametersValid);
-  }, [formData, parameters]);
+  }, [formData, results]);
 
   const fetchReports = async () => {
     try {
@@ -185,24 +185,10 @@ const RMQualityReport: React.FC = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleParameterChange = (
-    index: number,
-    field: keyof RMQualityParameter,
-    value: string
-  ) => {
-    const newParameters = [...parameters];
-    newParameters[index] = { ...newParameters[index], [field]: value };
-    setParameters(newParameters);
-  };
-
-  const addParameter = () => {
-    setParameters([...parameters, { parameter: '', standard: '', result: '' }]);
-  };
-
-  const removeParameter = (index: number) => {
-    if (parameters.length > 1) {
-      setParameters(parameters.filter((_, i) => i !== index));
-    }
+  const handleResultChange = (index: number, value: string) => {
+    const newResults = [...results];
+    newResults[index] = value;
+    setResults(newResults);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -217,9 +203,11 @@ const RMQualityReport: React.FC = () => {
       setLoading(true);
       const data = {
         ...formData,
-        parameters: parameters.filter(
-          (p) => p.parameter && p.standard && p.result
-        ),
+        parameters: CHILLI_PARAMETERS.map((p, i) => ({
+          parameter: p.parameter,
+          standard: p.standard,
+          result: results[i],
+        })),
       };
 
       let response;
@@ -257,11 +245,14 @@ const RMQualityReport: React.FC = () => {
       supplier: report.supplier,
       grn: report.grn,
     });
-    setParameters(
-      report.parameters.length > 0
-        ? report.parameters
-        : [{ parameter: '', standard: '', result: '' }]
-    );
+    // Load results from report parameters
+    const loadedResults = CHILLI_PARAMETERS.map((p) => {
+      const param = report.parameters.find(
+        (rp) => rp.parameter === p.parameter
+      );
+      return param ? param.result : '';
+    });
+    setResults(loadedResults);
     setShowForm(true);
   };
 
@@ -281,48 +272,51 @@ const RMQualityReport: React.FC = () => {
     }
   };
 
- const handleExport = async (id: string, format: 'excel' | 'pdf' = 'excel') => {
-   try {
-     if (format === 'excel') {
-       const authToken = localStorage.getItem('authToken');
-       const url = `${API_ROUTES.RAW.EXPORT_QUALITY_REPORT(id)}?format=excel`;
+  const handleExport = async (
+    id: string,
+    format: 'excel' | 'pdf' = 'excel'
+  ) => {
+    try {
+      if (format === 'excel') {
+        const authToken = localStorage.getItem('authToken');
+        const url = `${API_ROUTES.RAW.EXPORT_QUALITY_REPORT(id)}?format=excel`;
 
-       // Create a hidden link to set the Authorization header
-       const response = await fetch(url, {
-         headers: {
-           Authorization: `Bearer ${authToken}`,
-         },
-       });
+        // Create a hidden link to set the Authorization header
+        const response = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
 
-       if (!response.ok) {
-         toast.error('Failed to export report');
-         return;
-       }
+        if (!response.ok) {
+          toast.error('Failed to export report');
+          return;
+        }
 
-       const blob = await response.blob();
-       const downloadUrl = window.URL.createObjectURL(blob);
-       const link = document.createElement('a');
-       link.href = downloadUrl;
-       link.download = `RM_Quality_Report_${id}.xlsx`;
-       document.body.appendChild(link);
-       link.click();
-       link.remove();
-       window.URL.revokeObjectURL(downloadUrl);
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `RM_Quality_Report_${id}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(downloadUrl);
 
-       toast.success('Excel export started');
-     } else {
-       // Existing PDF export logic
-       const response = await exportRMQualityReport(id);
-       if (response.success) {
-         toast.success('Report exported successfully');
-       } else {
-         toast.error(response.error || 'Failed to export report');
-       }
-     }
-   } catch (error) {
-     toast.error('Failed to export report');
-   }
- };
+        toast.success('Excel export started');
+      } else {
+        // Existing PDF export logic
+        const response = await exportRMQualityReport(id);
+        if (response.success) {
+          toast.success('Report exported successfully');
+        } else {
+          toast.error(response.error || 'Failed to export report');
+        }
+      }
+    } catch (error) {
+      toast.error('Failed to export report');
+    }
+  };
 
   const resetForm = () => {
     setFormData({
@@ -331,7 +325,7 @@ const RMQualityReport: React.FC = () => {
       supplier: '',
       grn: '',
     });
-    setParameters([{ parameter: '', standard: '', result: '' }]);
+    setResults(Array(CHILLI_PARAMETERS.length).fill(''));
   };
 
   const filteredReports = reports.filter(
@@ -395,9 +389,7 @@ const RMQualityReport: React.FC = () => {
                       label="Basic Info"
                     />
                     <StatusIndicator
-                      isValid={parameters.every(
-                        (p) => p.parameter && p.standard && p.result
-                      )}
+                      isValid={results.every((r) => r.trim() !== '')}
                       label="Parameters"
                     />
                   </div>
@@ -434,12 +426,7 @@ const RMQualityReport: React.FC = () => {
                     formData.supplier &&
                     formData.grn
                       ? 50
-                      : 0) +
-                      (parameters.every(
-                        (p) => p.parameter && p.standard && p.result
-                      )
-                        ? 50
-                        : 0)
+                      : 0) + (results.every((r) => r.trim() !== '') ? 50 : 0)
                   )}
                   %
                 </span>
@@ -454,12 +441,7 @@ const RMQualityReport: React.FC = () => {
                       formData.supplier &&
                       formData.grn
                         ? 50
-                        : 0) +
-                      (parameters.every(
-                        (p) => p.parameter && p.standard && p.result
-                      )
-                        ? 50
-                        : 0)
+                        : 0) + (results.every((r) => r.trim() !== '') ? 50 : 0)
                     }%`,
                   }}
                   transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -622,9 +604,7 @@ const RMQualityReport: React.FC = () => {
                     <h2 className="text-xl font-bold text-gray-800 flex items-center">
                       <Beaker size={20} className="mr-3 text-blue-600" />
                       Quality Parameters
-                      {parameters.every(
-                        (p) => p.parameter && p.standard && p.result
-                      ) && (
+                      {results.every((r) => r.trim() !== '') && (
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
@@ -636,29 +616,17 @@ const RMQualityReport: React.FC = () => {
                     </h2>
 
                     <div className="flex items-center gap-3">
-                      {parameters.length > 0 && (
-                        <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full flex items-center gap-1">
-                          <Target size={12} />
-                          {parameters.length} parameters
-                        </span>
-                      )}
-
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={addParameter}
-                        className="bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-1 text-sm font-medium"
-                      >
-                        <PlusCircle size={14} />
-                        Add Parameter
-                      </motion.button>
+                      <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full flex items-center gap-1">
+                        <Target size={12} />
+                        {CHILLI_PARAMETERS.length} parameters
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="p-6">
                   <div className="space-y-4">
-                    {parameters.map((param, index) => (
+                    {CHILLI_PARAMETERS.map((param, index) => (
                       <motion.div
                         key={index}
                         initial={{ opacity: 0, y: 20 }}
@@ -666,61 +634,27 @@ const RMQualityReport: React.FC = () => {
                         transition={{ delay: index * 0.1 }}
                         className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-xl p-4"
                       >
-                        <div className="flex items-center justify-between mb-4">
-                          <h3 className="font-semibold text-gray-800 flex items-center">
-                            <FlaskConical
-                              size={16}
-                              className="mr-2 text-blue-600"
-                            />
-                            Parameter {index + 1}
-                          </h3>
-                          {parameters.length > 1 && (
-                            <button
-                              onClick={() => removeParameter(index)}
-                              className="text-red-500 hover:text-red-700 p-1 rounded-lg hover:bg-red-50 transition-colors"
-                            >
-                              <MinusCircle size={16} />
-                            </button>
-                          )}
-                        </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Parameter <span className="text-red-500">*</span>
+                              Parameter
                             </label>
                             <input
                               type="text"
                               value={param.parameter}
-                              onChange={(e) =>
-                                handleParameterChange(
-                                  index,
-                                  'parameter',
-                                  e.target.value
-                                )
-                              }
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                              placeholder="e.g., Moisture"
-                              required
+                              readOnly
+                              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-gray-100 text-gray-700"
                             />
                           </div>
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Standard <span className="text-red-500">*</span>
+                              Standard
                             </label>
                             <input
                               type="text"
                               value={param.standard}
-                              onChange={(e) =>
-                                handleParameterChange(
-                                  index,
-                                  'standard',
-                                  e.target.value
-                                )
-                              }
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                              placeholder="e.g., max 8%"
-                              required
+                              readOnly
+                              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-gray-100 text-gray-700"
                             />
                           </div>
                           <div>
@@ -729,16 +663,12 @@ const RMQualityReport: React.FC = () => {
                             </label>
                             <input
                               type="text"
-                              value={param.result}
+                              value={results[index]}
                               onChange={(e) =>
-                                handleParameterChange(
-                                  index,
-                                  'result',
-                                  e.target.value
-                                )
+                                handleResultChange(index, e.target.value)
                               }
                               className="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                              placeholder="e.g., 7.5%"
+                              placeholder="Enter result"
                               required
                             />
                           </div>
@@ -778,7 +708,7 @@ const RMQualityReport: React.FC = () => {
                   )}
 
                   <div className="text-sm text-gray-500">
-                    {parameters.length} parameters configured
+                    {CHILLI_PARAMETERS.length} parameters configured
                   </div>
                 </div>
 
