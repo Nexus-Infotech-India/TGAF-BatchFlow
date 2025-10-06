@@ -493,7 +493,8 @@ const AddBatch: React.FC = () => {
           </div>
 
           <div className="p-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {/* First row: Batch Number, Product, Production Date, Best Before Date */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-foreground">
                   Batch Number <span className="text-destructive">*</span>
@@ -543,30 +544,6 @@ const AddBatch: React.FC = () => {
                 </div>
               </div>
 
-              <div className="space-y-2 lg:col-span-1 md:col-span-2">
-                <AnimatePresence>
-                  {showNewProductForm && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -4 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -4 }}
-                    >
-                      <label className="block text-sm font-medium text-foreground">
-                        New Product Name
-                      </label>
-                      <input
-                        type="text"
-                        value={newProductName}
-                        onChange={(e) => setNewProductName(e.target.value)}
-                        className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background"
-                        placeholder="Enter new product name"
-                        required
-                      />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-foreground">
                   Production Date <span className="text-destructive">*</span>
@@ -608,8 +585,27 @@ const AddBatch: React.FC = () => {
                   />
                 </div>
               </div>
+            </div>
 
-              {/* Sample Analysis compact badges */}
+            {/* New Product Name (if needed) */}
+            {showNewProductForm && (
+              <div className="mt-5">
+                <label className="block text-sm font-medium text-foreground">
+                  New Product Name
+                </label>
+                <input
+                  type="text"
+                  value={newProductName}
+                  onChange={(e) => setNewProductName(e.target.value)}
+                  className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background"
+                  placeholder="Enter new product name"
+                  required
+                />
+              </div>
+            )}
+
+            {/* Second row: Sample Analysis Status, Started, Completed */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-foreground">
                   Sample Analysis Status
@@ -621,13 +617,9 @@ const AddBatch: React.FC = () => {
                     onChange={handleInputChange}
                     className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background"
                   >
-                    <option value="PENDING">Pending</option>
                     <option value="IN_PROGRESS">In Progress</option>
                     <option value="COMPLETED">Completed</option>
                   </select>
-                  <span className={statusBadge(formData.sampleAnalysisStatus)}>
-                    {formData.sampleAnalysisStatus.replace('_', ' ')}
-                  </span>
                 </div>
               </div>
 
@@ -648,13 +640,48 @@ const AddBatch: React.FC = () => {
                 <label className="block text-sm text-foreground">
                   Analysis Completed
                 </label>
-                <input
-                  type="date"
-                  name="sampleAnalysisCompleted"
-                  value={formData.sampleAnalysisCompleted}
-                  onChange={handleInputChange}
-                  className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background"
-                />
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="sampleAnalysisCompleted"
+                    value={formData.sampleAnalysisCompleted}
+                    onChange={handleInputChange}
+                    className={`w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pr-10 ${
+                      formData.sampleAnalysisStatus !== 'COMPLETED'
+                        ? 'cursor-not-allowed text-muted-foreground bg-muted'
+                        : ''
+                    }`}
+                    disabled={formData.sampleAnalysisStatus !== 'COMPLETED'}
+                  />
+                  {formData.sampleAnalysisStatus !== 'COMPLETED' && (
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                      {/* Lucide: Circle with a slash (radius line) */}
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                      >
+                        <circle
+                          cx="10"
+                          cy="10"
+                          r="8"
+                          stroke="var(--muted-foreground)"
+                          strokeWidth="2"
+                        />
+                        <line
+                          x1="6"
+                          y1="14"
+                          x2="14"
+                          y2="6"
+                          stroke="var(--muted-foreground)"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -1012,7 +1039,7 @@ const AddBatch: React.FC = () => {
                                                 parameter.id
                                               )
                                             }
-                                            className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-destructive/30 text-destructive hover:bg-destructive/10 transition"
+                                            className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-destructive/30 text-destructive hover:bg-destructive/10 transition cursor-pointer"
                                             title={`Remove ${parameter.name} parameter`}
                                           >
                                             <Minus size={14} />
