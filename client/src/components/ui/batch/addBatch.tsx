@@ -99,6 +99,9 @@ const AddBatch: React.FC = () => {
       unitId?: string;
     }>
   >([]);
+  const [sieveSelections, setSieveSelections] = useState<
+    Record<string, string>
+  >({});
   const [isSaving, setIsSaving] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [, setExpandedCategories] = useState<{ [key: string]: boolean }>({});
@@ -151,13 +154,12 @@ const AddBatch: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const draftIdFromUrl = searchParams.get('draftId');
 
- const handleRemoveParameter = (parameterId: string) => {
-   setRemovedParameters((prev) => new Set([...prev, parameterId]));
-   setParameterValues((prev) =>
-     prev.filter((pv) => pv.parameterId !== parameterId)
-   );
- };
-
+  const handleRemoveParameter = (parameterId: string) => {
+    setRemovedParameters((prev) => new Set([...prev, parameterId]));
+    setParameterValues((prev) =>
+      prev.filter((pv) => pv.parameterId !== parameterId)
+    );
+  };
 
   // Update the useEffect for fetching draft (around line 271)
   useEffect(() => {
@@ -200,25 +202,25 @@ const AddBatch: React.FC = () => {
         setSelectedProductId(draftData.productId || '');
         setNewProductName(draftData.newProductName || '');
         setDraftFetchedAt(draftData.updatedAt || draftData.createdAt || null);
-       if (draftData.parameterValues) {
-         const parsedData =
-           typeof draftData.parameterValues === 'string'
-             ? JSON.parse(draftData.parameterValues)
-             : draftData.parameterValues;
+        if (draftData.parameterValues) {
+          const parsedData =
+            typeof draftData.parameterValues === 'string'
+              ? JSON.parse(draftData.parameterValues)
+              : draftData.parameterValues;
 
-         if (Array.isArray(parsedData)) {
-           setParameterValues(parsedData);
-         } else if (parsedData && typeof parsedData === 'object') {
-           setParameterValues(parsedData.values || []);
-           if (parsedData.removedParameters) {
-             setRemovedParameters(new Set(parsedData.removedParameters));
-           }
-         } else {
-           setParameterValues([]);
-         }
-       } else {
-         setParameterValues([]);
-       }
+          if (Array.isArray(parsedData)) {
+            setParameterValues(parsedData);
+          } else if (parsedData && typeof parsedData === 'object') {
+            setParameterValues(parsedData.values || []);
+            if (parsedData.removedParameters) {
+              setRemovedParameters(new Set(parsedData.removedParameters));
+            }
+          } else {
+            setParameterValues([]);
+          }
+        } else {
+          setParameterValues([]);
+        }
       } catch (error) {
         // No draft found or error, do nothing
         console.log('No draft found');
@@ -339,6 +341,20 @@ const AddBatch: React.FC = () => {
   const parametersByCategory =
     productParametersData?.parametersByCategory || {};
 
+  // Sieve handling
+  const isSieveParam = (name?: string) =>
+    (name || '').toLowerCase().includes('pass through us sieve');
+
+  const SIEVE_OPTIONS = [
+    '400 micron',
+    '500 micron',
+    '600 micron',
+    '710 micron',
+    '850 micron',
+    '2.36 mm',
+    '3.35 mm',
+  ];
+
   // Calculate validation stats
   const basicInfoComplete =
     formData.batchNumber &&
@@ -349,22 +365,22 @@ const AddBatch: React.FC = () => {
     parameterValues.length > 0 &&
     parameterValues.every((pv) => pv.value.trim() !== '');
 
- useAutoSave({
-   saveUrl: API_ROUTES.DRAFT.SAVE_BATCH,
-   getUrl: draftId ? API_ROUTES.DRAFT.GET_BATCH(draftId) : undefined,
-   data: {
-     formData,
-     parameterValues: {
-       values: parameterValues,
-       removedParameters: Array.from(removedParameters),
-     },
-     newProductName,
-   },
-   isSuccess: createBatchMutation.isSuccess,
-   authToken: authToken || '',
-   draftId,
-   onDraftIdChange: setDraftId,
- });
+  useAutoSave({
+    saveUrl: API_ROUTES.DRAFT.SAVE_BATCH,
+    getUrl: draftId ? API_ROUTES.DRAFT.GET_BATCH(draftId) : undefined,
+    data: {
+      formData,
+      parameterValues: {
+        values: parameterValues,
+        removedParameters: Array.from(removedParameters),
+      },
+      newProductName,
+    },
+    isSuccess: createBatchMutation.isSuccess,
+    authToken: authToken || '',
+    draftId,
+    onDraftIdChange: setDraftId,
+  });
 
   function toDateInputString(dateStr: string | null | undefined) {
     if (!dateStr) return '';
@@ -397,25 +413,25 @@ const AddBatch: React.FC = () => {
           sampleAnalysisStatus: draftData.sampleAnalysisStatus || 'PENDING',
         });
         setSelectedProductId(draftData.productId || '');
-       if (draftData.parameterValues) {
-         const parsedData =
-           typeof draftData.parameterValues === 'string'
-             ? JSON.parse(draftData.parameterValues)
-             : draftData.parameterValues;
+        if (draftData.parameterValues) {
+          const parsedData =
+            typeof draftData.parameterValues === 'string'
+              ? JSON.parse(draftData.parameterValues)
+              : draftData.parameterValues;
 
-         if (Array.isArray(parsedData)) {
-           setParameterValues(parsedData);
-         } else if (parsedData && typeof parsedData === 'object') {
-           setParameterValues(parsedData.values || []);
-           if (parsedData.removedParameters) {
-             setRemovedParameters(new Set(parsedData.removedParameters));
-           }
-         } else {
-           setParameterValues([]);
-         }
-       } else {
-         setParameterValues([]);
-       }
+          if (Array.isArray(parsedData)) {
+            setParameterValues(parsedData);
+          } else if (parsedData && typeof parsedData === 'object') {
+            setParameterValues(parsedData.values || []);
+            if (parsedData.removedParameters) {
+              setRemovedParameters(new Set(parsedData.removedParameters));
+            }
+          } else {
+            setParameterValues([]);
+          }
+        } else {
+          setParameterValues([]);
+        }
         setNewProductName(draftData.newProductName || '');
         setDraftFetchedAt(draftData.updatedAt || draftData.createdAt || null);
       } catch (error) {
@@ -883,18 +899,18 @@ const AddBatch: React.FC = () => {
                           const categoryParams = Array.isArray(parameters)
                             ? parameters
                             : [];
-                         const filledParams = categoryParams
-                           .filter(
-                             (param: any) => !removedParameters.has(param.id)
-                           )
-                           .filter((p: any) => {
-                             const paramValue = parameterValues.find(
-                               (pv) => pv.parameterId === p.id
-                             );
-                             return (
-                               paramValue && paramValue.value.trim() !== ''
-                             );
-                           });
+                          const filledParams = categoryParams
+                            .filter(
+                              (param: any) => !removedParameters.has(param.id)
+                            )
+                            .filter((p: any) => {
+                              const paramValue = parameterValues.find(
+                                (pv) => pv.parameterId === p.id
+                              );
+                              return (
+                                paramValue && paramValue.value.trim() !== ''
+                              );
+                            });
                           const availableParams = categoryParams.filter(
                             (param: any) => !removedParameters.has(param.id)
                           );
@@ -1025,52 +1041,145 @@ const AddBatch: React.FC = () => {
                                                   </div>
                                                 </td>
                                                 <td className="p-4">
-                                                  <input
-                                                    type="text"
-                                                    value={
-                                                      paramValue?.value || ''
-                                                    }
-                                                    onChange={(e) => {
-                                                      const value =
-                                                        e.target.value;
-                                                      const existingParam =
-                                                        parameterValues.find(
-                                                          (pv) =>
-                                                            pv.parameterId ===
+                                                  <div className="flex items-center gap-2">
+                                                    {isSieveParam(
+                                                      parameter.name
+                                                    ) && (
+                                                      <select
+                                                        value={
+                                                          sieveSelections[
                                                             parameter.id
-                                                        );
+                                                          ] || ''
+                                                        }
+                                                        onChange={(e) => {
+                                                          const sel =
+                                                            e.target.value;
+                                                          setSieveSelections(
+                                                            (prev) => ({
+                                                              ...prev,
+                                                              [parameter.id]:
+                                                                sel,
+                                                            })
+                                                          );
+                                                          const existing =
+                                                            parameterValues.find(
+                                                              (pv) =>
+                                                                pv.parameterId ===
+                                                                parameter.id
+                                                            );
+                                                          if (existing) {
+                                                            const numericPart =
+                                                              existing.value.includes(
+                                                                '|'
+                                                              )
+                                                                ? existing.value.split(
+                                                                    '|'
+                                                                  )[1] || ''
+                                                                : existing.value ||
+                                                                  '';
+                                                            const combined =
+                                                              sel && numericPart
+                                                                ? `${sel}|${numericPart}`
+                                                                : sel
+                                                                  ? `${sel}|`
+                                                                  : numericPart;
+                                                            setParameterValues(
+                                                              parameterValues.map(
+                                                                (pv) =>
+                                                                  pv.parameterId ===
+                                                                  parameter.id
+                                                                    ? {
+                                                                        ...pv,
+                                                                        value:
+                                                                          combined,
+                                                                      }
+                                                                    : pv
+                                                              )
+                                                            );
+                                                          }
+                                                        }}
+                                                        className="border border-gray-300 rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                                      >
+                                                        <option value="">
+                                                          Select sieve size
+                                                        </option>
+                                                        {SIEVE_OPTIONS.map(
+                                                          (o) => (
+                                                            <option
+                                                              key={o}
+                                                              value={o}
+                                                            >
+                                                              {o}
+                                                            </option>
+                                                          )
+                                                        )}
+                                                      </select>
+                                                    )}
 
-                                                      if (existingParam) {
-                                                        // Update existing parameter
-                                                        setParameterValues(
-                                                          parameterValues.map(
+                                                    <input
+                                                      type="text"
+                                                      value={
+                                                        paramValue?.value?.includes(
+                                                          '|'
+                                                        )
+                                                          ? paramValue.value.split(
+                                                              '|'
+                                                            )[1] || ''
+                                                          : paramValue?.value ||
+                                                            ''
+                                                      }
+                                                      onChange={(e) => {
+                                                        const raw =
+                                                          e.target.value;
+                                                        const selectedSize =
+                                                          sieveSelections[
+                                                            parameter.id
+                                                          ] || '';
+                                                        const combined =
+                                                          isSieveParam(
+                                                            parameter.name
+                                                          ) && selectedSize
+                                                            ? `${selectedSize}|${raw}`
+                                                            : raw;
+
+                                                        const existingParam =
+                                                          parameterValues.find(
                                                             (pv) =>
                                                               pv.parameterId ===
                                                               parameter.id
-                                                                ? {
-                                                                    ...pv,
-                                                                    value,
-                                                                  }
-                                                                : pv
-                                                          )
-                                                        );
-                                                      } else {
-                                                        // Add new parameter with the associated unit ID from parameter
-                                                        setParameterValues([
-                                                          ...parameterValues,
-                                                          {
-                                                            parameterId:
-                                                              parameter.id,
-                                                            value,
-                                                            unitId:
-                                                              parameter.unitId, // Use parameter's unitId directly
-                                                          },
-                                                        ]);
-                                                      }
-                                                    }}
-                                                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                                                    placeholder="Enter value"
-                                                  />
+                                                          );
+
+                                                        if (existingParam) {
+                                                          setParameterValues(
+                                                            parameterValues.map(
+                                                              (pv) =>
+                                                                pv.parameterId ===
+                                                                parameter.id
+                                                                  ? {
+                                                                      ...pv,
+                                                                      value:
+                                                                        combined,
+                                                                    }
+                                                                  : pv
+                                                            )
+                                                          );
+                                                        } else {
+                                                          setParameterValues([
+                                                            ...parameterValues,
+                                                            {
+                                                              parameterId:
+                                                                parameter.id,
+                                                              value: combined,
+                                                              unitId:
+                                                                parameter.unitId,
+                                                            },
+                                                          ]);
+                                                        }
+                                                      }}
+                                                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                                      placeholder="Enter value"
+                                                    />
+                                                  </div>
                                                 </td>
                                                 <td className="p-4">
                                                   <div className="flex items-center">
