@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus,
   Save,
   Download,
-  Edit,
+  Edit2,
   Trash2,
-  ArrowLeft,
+  ChevronRight,
   Search,
   RefreshCw,
   FileText,
@@ -16,14 +16,20 @@ import {
   Calendar,
   Building,
   Hash,
-  Sparkles,
-  TrendingUp,
-  BarChart3,
-  Shield,
   Beaker,
+  SlidersHorizontal,
+  AlertCircle,
+  X,
+  Check,
+  RotateCw,
+  ChevronDown,
+  Filter,
+  Tag,
+  Ruler,
+  Settings,
   Target,
   Award,
-  ChevronRight,
+  Eye,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import {
@@ -33,10 +39,9 @@ import {
   deleteRMQualityReport,
   exportRMQualityReport,
 } from '../../../utils/api';
-import {
-  RMQualityReport as RMQualityReportType,
-} from '../../../Types/qualityTypes';
+import { RMQualityReport as RMQualityReportType } from '../../../Types/qualityTypes';
 import api, { API_ROUTES } from '../../../utils/api';
+import { format } from 'date-fns';
 
 // Enhanced animations
 const containerVariants = {
@@ -44,45 +49,22 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      duration: 0.6,
-      staggerChildren: 0.1,
+      duration: 0.2,
+      staggerChildren: 0.05,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.95 },
+  hidden: { opacity: 0, y: 6 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: { duration: 0.4, ease: 'easeOut' },
+    transition: { duration: 0.2 },
   },
 };
 
-// Status Indicator Component
-const StatusIndicator = ({
-  isValid,
-  label,
-}: {
-  isValid: boolean;
-  label: string;
-}) => (
-  <motion.div
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 1, scale: 1 }}
-    className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-      isValid
-        ? 'bg-green-100 text-green-700 border border-green-200'
-        : 'bg-amber-100 text-amber-700 border border-amber-200'
-    }`}
-  >
-    {isValid ? <CheckCircle size={14} /> : <Clock size={14} />}
-    {label}
-  </motion.div>
-);
-
-// Fixed parameters for Chilli (based on the image)
+// Fixed parameters for Chilli
 const CHILLI_PARAMETERS = [
   { parameter: 'Moisture', standard: 'max 8%' },
   { parameter: 'ASTA Color', standard: 'min 40' },
@@ -93,6 +75,11 @@ const CHILLI_PARAMETERS = [
   { parameter: 'YM', standard: '10,000 cfu' },
 ];
 
+const formatDate = (dateString: string) => {
+  if (!dateString) return 'N/A';
+  return format(new Date(dateString), 'MMM dd, yyyy');
+};
+
 const RMQualityReport: React.FC = () => {
   const [reports, setReports] = useState<RMQualityReportType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -101,6 +88,10 @@ const RMQualityReport: React.FC = () => {
     useState<RMQualityReportType | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isExportingAll, setIsExportingAll] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const [receivedRawMaterials, setReceivedRawMaterials] = useState<any[]>([]);
   const [receivedVendors, setReceivedVendors] = useState<any[]>([]);
@@ -118,6 +109,8 @@ const RMQualityReport: React.FC = () => {
     Array(CHILLI_PARAMETERS.length).fill('')
   );
 
+  const authToken = localStorage.getItem('authToken');
+
   useEffect(() => {
     fetchReports();
     fetchReceivedRawMaterials();
@@ -126,7 +119,6 @@ const RMQualityReport: React.FC = () => {
 
   const fetchReceivedRawMaterials = async () => {
     try {
-      const authToken = localStorage.getItem('authToken');
       const response = await api.get(
         API_ROUTES.RAW.GET_RECEIVED_RAW_MATERIALS,
         {
@@ -141,7 +133,6 @@ const RMQualityReport: React.FC = () => {
 
   const fetchReceivedVendors = async () => {
     try {
-      const authToken = localStorage.getItem('authToken');
       const response = await api.get(API_ROUTES.RAW.GET_RECEIVED_VENDORS, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
@@ -195,12 +186,13 @@ const RMQualityReport: React.FC = () => {
     e.preventDefault();
 
     if (!isFormValid) {
-      toast.error('Please complete all required fields');
+      setError('Please complete all required fields before saving');
       return;
     }
 
     try {
-      setLoading(true);
+      setIsSaving(true);
+      setError(null);
       const data = {
         ...formData,
         parameters: CHILLI_PARAMETERS.map((p, i) => ({
@@ -228,12 +220,12 @@ const RMQualityReport: React.FC = () => {
         resetForm();
         fetchReports();
       } else {
-        toast.error(response.error || 'Failed to save report');
+        setError(response.error || 'Failed to save report');
       }
     } catch (error) {
-      toast.error('Failed to save report');
+      setError('Failed to save report');
     } finally {
-      setLoading(false);
+      setIsSaving(false);
     }
   };
 
@@ -278,10 +270,7 @@ const RMQualityReport: React.FC = () => {
   ) => {
     try {
       if (format === 'excel') {
-        const authToken = localStorage.getItem('authToken');
         const url = `${API_ROUTES.RAW.EXPORT_QUALITY_REPORT(id)}?format=excel`;
-
-        // Create a hidden link to set the Authorization header
         const response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -305,7 +294,6 @@ const RMQualityReport: React.FC = () => {
 
         toast.success('Excel export started');
       } else {
-        // Existing PDF export logic
         const response = await exportRMQualityReport(id);
         if (response.success) {
           toast.success('Report exported successfully');
@@ -318,6 +306,53 @@ const RMQualityReport: React.FC = () => {
     }
   };
 
+  const handleExportAll = async () => {
+    if (reports.length === 0) {
+      toast.error('No reports to export');
+      return;
+    }
+
+    try {
+      setIsExportingAll(true);
+      const exportPromises = reports.map((report) => {
+        const url = `${API_ROUTES.RAW.EXPORT_QUALITY_REPORT(report.id)}?format=excel`;
+        return fetch(url, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }).then((res) => res.blob());
+      });
+
+      const blobs = await Promise.all(exportPromises);
+
+      // Create a zip file or download individually
+      // For now, we'll download them sequentially with a small delay
+      for (let i = 0; i < blobs.length; i++) {
+        const blob = blobs[i];
+        const report = reports[i];
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `RM_Quality_Report_${report.id}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(downloadUrl);
+
+        // Small delay to avoid browser blocking multiple downloads
+        if (i < blobs.length - 1) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+        }
+      }
+
+      toast.success(`Exported ${reports.length} reports successfully`);
+    } catch (error) {
+      toast.error('Failed to export all reports');
+    } finally {
+      setIsExportingAll(false);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       rawMaterialName: '',
@@ -326,6 +361,7 @@ const RMQualityReport: React.FC = () => {
       grn: '',
     });
     setResults(Array(CHILLI_PARAMETERS.length).fill(''));
+    setError(null);
   };
 
   const filteredReports = reports.filter(
@@ -336,413 +372,334 @@ const RMQualityReport: React.FC = () => {
       report.grn.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Calculate stats
-  const totalReports = reports.length;
-  const recentReports = reports.filter((report) => {
-    const reportDate = new Date(report.dateOfReport);
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    return reportDate >= thirtyDaysAgo;
-  }).length;
+  const basicInfoComplete =
+    formData.rawMaterialName &&
+    formData.variety &&
+    formData.supplier &&
+    formData.grn;
+  const parametersComplete =
+    results.length > 0 && results.every((r) => r.trim() !== '');
 
+  // Show form view
   if (showForm) {
     return (
       <motion.div
-        className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50"
+        className="min-h-screen bg-background"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <div className="max-w-7xl mx-auto p-6">
-          {/* Enhanced Header with Progress */}
+        <div className="max-w-7xl mx-auto pt-0 px-4 pb-4 sm:pt-0 sm:px-6 sm:pb-6">
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                className="mb-4 bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg flex items-start"
+              >
+                <AlertCircle className="h-5 w-5 mr-3 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <span className="font-medium">{error}</span>
+                </div>
+                <button
+                  className="ml-3 hover:opacity-80 p-1 rounded"
+                  onClick={() => setError(null)}
+                  aria-label="Close"
+                >
+                  <X size={18} />
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <motion.div
             variants={itemVariants}
-            className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mb-8"
+            className="bg-card rounded-xl mb-3"
           >
-            <div className="relative bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-6 border-b border-gray-100">
-              <div className="absolute top-0 right-0 -mt-2 -mr-2">
-                <Sparkles size={60} className="text-blue-100 opacity-50" />
-              </div>
-
-              <div className="relative">
-                <div className="flex items-center justify-between mb-4">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setShowForm(false)}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-all shadow-sm"
+            <div className="pr-5 pb-5 pt-5 pl-2">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="w-1.5 h-10 bg-primary rounded-full" />
+                <div className="p-2 bg-primary rounded-md">
+                  <FileText className="text-primary-foreground" size={20} />
+                </div>
+                <h1 className="text-3xl font-bold text-foreground">
+                  {editingReport
+                    ? 'Edit Quality Report'
+                    : 'Create Quality Report'}
+                </h1>
+                <div className="ml-auto">
+                  <button
+                    onClick={() => {
+                      setShowForm(false);
+                      setEditingReport(null);
+                      resetForm();
+                    }}
+                    className="inline-flex items-center gap-2 px-3 py-2 border border-input rounded-lg bg-background text-foreground hover:bg-accent transition"
                   >
-                    <ArrowLeft size={16} className="text-gray-600" />
-                    <span className="text-gray-700 font-medium">
-                      Back to Reports
-                    </span>
-                  </motion.button>
-
-                  <div className="flex gap-3">
-                    <StatusIndicator
-                      isValid={
-                        formData.rawMaterialName.trim() !== '' &&
-                        formData.variety.trim() !== '' &&
-                        formData.supplier.trim() !== '' &&
-                        formData.grn.trim() !== ''
-                      }
-                      label="Basic Info"
-                    />
-                    <StatusIndicator
-                      isValid={results.every((r) => r.trim() !== '')}
-                      label="Parameters"
-                    />
-                  </div>
+                    <ChevronRight size={16} className="rotate-180" />
+                    <span className="text-sm font-medium">Back</span>
+                  </button>
                 </div>
-
-                <div className="flex items-center space-x-3">
-                  <div className="p-3 bg-blue-100 rounded-xl">
-                    <FileText className="text-blue-600" size={24} />
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-bold text-gray-900">
-                      {editingReport
-                        ? 'Edit Quality Report'
-                        : 'Create Quality Report'}
-                    </h1>
-                    <p className="text-gray-600 text-sm mt-0.5">
-                      {editingReport
-                        ? 'Update raw material quality parameters'
-                        : 'Define quality parameters for raw material testing'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Progress Bar */}
-            <div className="p-4 bg-gradient-to-r from-gray-50/50 to-blue-50/50">
-              <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-                <span>Form Completion</span>
-                <span>
-                  {Math.round(
-                    (formData.rawMaterialName &&
-                    formData.variety &&
-                    formData.supplier &&
-                    formData.grn
-                      ? 50
-                      : 0) + (results.every((r) => r.trim() !== '') ? 50 : 0)
-                  )}
-                  %
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <motion.div
-                  initial={{ width: '0%' }}
-                  animate={{
-                    width: `${
-                      (formData.rawMaterialName &&
-                      formData.variety &&
-                      formData.supplier &&
-                      formData.grn
-                        ? 50
-                        : 0) + (results.every((r) => r.trim() !== '') ? 50 : 0)
-                    }%`,
-                  }}
-                  transition={{ duration: 0.5, ease: 'easeOut' }}
-                  className="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full"
-                />
               </div>
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-            {/* Enhanced Basic Information */}
-            <motion.div variants={itemVariants} className="xl:col-span-1">
-              <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50/50 to-indigo-50/50">
-                  <h2 className="text-xl font-bold text-gray-800 flex items-center">
-                    <Package size={20} className="mr-3 text-blue-600" />
-                    Basic Information
-                    {formData.rawMaterialName &&
-                      formData.variety &&
-                      formData.supplier &&
-                      formData.grn && (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className="ml-3 p-1 bg-green-100 rounded-full"
-                        >
-                          <CheckCircle size={12} className="text-green-600" />
-                        </motion.div>
-                      )}
-                  </h2>
-                </div>
-
-                <div className="p-6 space-y-6">
-                  {/* Raw Material Name */}
-                  <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    className="space-y-2"
-                  >
-                    <label className="block text-sm font-semibold text-gray-700">
-                      Raw Material Name <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <select
-                        name="rawMaterialName"
-                        value={formData.rawMaterialName}
-                        onChange={handleInputChange}
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white pl-12 appearance-none cursor-pointer"
-                        required
-                      >
-                        <option value="">Select raw material</option>
-                        {receivedRawMaterials.map((material) => (
-                          <option key={material.id} value={material.name}>
-                            {material.name} ({material.skuCode})
-                          </option>
-                        ))}
-                      </select>
-                      <Package
-                        size={16}
-                        className="absolute left-4 top-3.5 text-gray-400 pointer-events-none"
-                      />
-                      <ChevronRight
-                        size={16}
-                        className="absolute right-4 top-3.5 text-gray-400 pointer-events-none rotate-90"
-                      />
-                    </div>
-                  </motion.div>
-
-                  {/* Variety */}
-                  <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    className="space-y-2"
-                  >
-                    <label className="block text-sm font-semibold text-gray-700">
-                      Variety <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        name="variety"
-                        value={formData.variety}
-                        onChange={handleInputChange}
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white pl-12"
-                        placeholder="Enter variety"
-                        required
-                      />
-                      <Award
-                        size={16}
-                        className="absolute left-4 top-3.5 text-gray-400"
-                      />
-                    </div>
-                  </motion.div>
-
-                  {/* Supplier */}
-                  <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    className="space-y-2"
-                  >
-                    <label className="block text-sm font-semibold text-gray-700">
-                      Supplier <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <select
-                        name="supplier"
-                        value={formData.supplier}
-                        onChange={handleInputChange}
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white pl-12 appearance-none cursor-pointer"
-                        required
-                      >
-                        <option value="">Select supplier</option>
-                        {receivedVendors.map((vendor) => (
-                          <option key={vendor.id} value={vendor.name}>
-                            {vendor.name} ({vendor.vendorCode})
-                          </option>
-                        ))}
-                      </select>
-                      <Building
-                        size={16}
-                        className="absolute left-4 top-3.5 text-gray-400 pointer-events-none"
-                      />
-                      <ChevronRight
-                        size={16}
-                        className="absolute right-4 top-3.5 text-gray-400 pointer-events-none rotate-90"
-                      />
-                    </div>
-                  </motion.div>
-
-                  {/* GRN */}
-                  <motion.div
-                    whileHover={{ scale: 1.01 }}
-                    className="space-y-2"
-                  >
-                    <label className="block text-sm font-semibold text-gray-700">
-                      GRN <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        name="grn"
-                        value={formData.grn}
-                        onChange={handleInputChange}
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all bg-white pl-12"
-                        placeholder="Enter GRN number"
-                        required
-                      />
-                      <Hash
-                        size={16}
-                        className="absolute left-4 top-3.5 text-gray-400"
-                      />
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Enhanced Parameters Section */}
-            <motion.div variants={itemVariants} className="xl:col-span-2">
-              <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-blue-50/50 to-indigo-50/50">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-gray-800 flex items-center">
-                      <Beaker size={20} className="mr-3 text-blue-600" />
-                      Quality Parameters
-                      {results.every((r) => r.trim() !== '') && (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className="ml-3 p-1 bg-green-100 rounded-full"
-                        >
-                          <CheckCircle size={12} className="text-green-600" />
-                        </motion.div>
-                      )}
-                    </h2>
-
-                    <div className="flex items-center gap-3">
-                      <span className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full flex items-center gap-1">
-                        <Target size={12} />
-                        {CHILLI_PARAMETERS.length} parameters
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <div className="space-y-4">
-                    {CHILLI_PARAMETERS.map((param, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-xl p-4"
-                      >
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Parameter
-                            </label>
-                            <input
-                              type="text"
-                              value={param.parameter}
-                              readOnly
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-gray-100 text-gray-700"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Standard
-                            </label>
-                            <input
-                              type="text"
-                              value={param.standard}
-                              readOnly
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 bg-gray-100 text-gray-700"
-                            />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
-                              Result <span className="text-red-500">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              value={results[index]}
-                              onChange={(e) =>
-                                handleResultChange(index, e.target.value)
-                              }
-                              className="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
-                              placeholder="Enter result"
-                              required
-                            />
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Enhanced Action Buttons */}
+          {/* Basic Information */}
           <motion.div
             variants={itemVariants}
-            className="mt-8 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
+            className="bg-card rounded-xl border border-border"
           >
-            <div className="p-6 bg-gradient-to-r from-gray-50/50 to-blue-50/50 border-b border-gray-100">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                  {isFormValid ? (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="flex items-center text-green-600 bg-green-50 px-4 py-2 rounded-xl border border-green-200"
+            <div className="p-5 border-b border-border">
+              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <SlidersHorizontal size={18} />
+                Basic Information
+                {basicInfoComplete && (
+                  <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">
+                    <Check size={12} className="mr-1" />
+                    Complete
+                  </span>
+                )}
+              </h2>
+            </div>
+
+            <div className="p-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    Raw Material Name{' '}
+                    <span className="text-destructive">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="rawMaterialName"
+                      value={formData.rawMaterialName}
+                      onChange={handleInputChange}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10 appearance-none cursor-pointer"
+                      required
                     >
-                      <CheckCircle size={18} className="mr-2" />
-                      <span className="font-medium">Ready to save report</span>
-                    </motion.div>
+                      <option value="">Select raw material</option>
+                      {receivedRawMaterials.map((material) => (
+                        <option key={material.id} value={material.name}>
+                          {material.name} ({material.skuCode})
+                        </option>
+                      ))}
+                    </select>
+                    <Package
+                      size={16}
+                      className="absolute left-3.5 top-3 text-muted-foreground pointer-events-none"
+                      style={{ color: 'var(--primary)' }}
+                    />
+                    <ChevronRight
+                      size={16}
+                      className="absolute right-3.5 top-3 text-muted-foreground pointer-events-none rotate-90"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    Variety <span className="text-destructive">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="variety"
+                      value={formData.variety}
+                      onChange={handleInputChange}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
+                      placeholder="Enter variety"
+                      required
+                    />
+                    <Award
+                      size={16}
+                      className="absolute left-3.5 top-3 text-muted-foreground"
+                      style={{ color: 'var(--primary)' }}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    Supplier <span className="text-destructive">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="supplier"
+                      value={formData.supplier}
+                      onChange={handleInputChange}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10 appearance-none cursor-pointer"
+                      required
+                    >
+                      <option value="">Select supplier</option>
+                      {receivedVendors.map((vendor) => (
+                        <option key={vendor.id} value={vendor.name}>
+                          {vendor.name} ({vendor.vendorCode})
+                        </option>
+                      ))}
+                    </select>
+                    <Building
+                      size={16}
+                      className="absolute left-3.5 top-3 text-muted-foreground pointer-events-none"
+                      style={{ color: 'var(--primary)' }}
+                    />
+                    <ChevronRight
+                      size={16}
+                      className="absolute right-3.5 top-3 text-muted-foreground pointer-events-none rotate-90"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    GRN <span className="text-destructive">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="grn"
+                      value={formData.grn}
+                      onChange={handleInputChange}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
+                      placeholder="Enter GRN number"
+                      required
+                    />
+                    <Hash
+                      size={16}
+                      className="absolute left-3.5 top-3 text-muted-foreground"
+                      style={{ color: 'var(--primary)' }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Quality Parameters */}
+          <motion.div
+            variants={itemVariants}
+            className="mt-6 bg-card rounded-xl border border-border shadow-sm"
+          >
+            <div className="p-5 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
+              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <Beaker size={18} className="text-primary" />
+                Quality Parameters
+                {parametersComplete && (
+                  <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+                    <Check size={12} className="mr-1" />
+                    Complete
+                  </span>
+                )}
+              </h2>
+            </div>
+
+            <div className="p-5">
+              <div className="space-y-4">
+                {CHILLI_PARAMETERS.map((param, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="border border-border rounded-lg p-4 bg-card"
+                  >
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Parameter
+                        </label>
+                        <input
+                          type="text"
+                          value={param.parameter}
+                          readOnly
+                          className="w-full border border-input rounded-lg px-3 py-2.5 bg-muted text-foreground"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Standard
+                        </label>
+                        <input
+                          type="text"
+                          value={param.standard}
+                          readOnly
+                          className="w-full border border-input rounded-lg px-3 py-2.5 bg-muted text-foreground"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-foreground mb-2">
+                          Result <span className="text-destructive">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          value={results[index]}
+                          onChange={(e) =>
+                            handleResultChange(index, e.target.value)
+                          }
+                          className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all bg-background"
+                          placeholder="Enter result"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Footer actions */}
+          <motion.div
+            variants={itemVariants}
+            className="mt-6 bg-card rounded-xl border border-border"
+          >
+            <div className="p-5">
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3">
+                  {isFormValid ? (
+                    <div className="inline-flex items-center text-primary bg-primary/10 px-3 py-1.5 rounded border border-primary/20">
+                      <Check size={16} className="mr-2" />
+                      <span className="text-sm font-medium">
+                        Ready to save report
+                      </span>
+                    </div>
                   ) : (
-                    <div className="flex items-center text-amber-600 bg-amber-50 px-4 py-2 rounded-xl border border-amber-200">
-                      <Clock size={18} className="mr-2" />
-                      <span className="font-medium">
-                        Complete required fields to continue
+                    <div className="inline-flex items-center text-foreground bg-muted px-3 py-1.5 rounded border border-border">
+                      <Clock size={16} className="mr-2" />
+                      <span className="text-sm font-medium">
+                        Complete required fields
                       </span>
                     </div>
                   )}
-
-                  <div className="text-sm text-gray-500">
+                  <div className="text-sm text-muted-foreground">
                     {CHILLI_PARAMETERS.length} parameters configured
                   </div>
                 </div>
 
-                <div className="flex gap-4">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
+                <div className="flex gap-3">
+                  <button
                     type="button"
-                    onClick={() => setShowForm(false)}
-                    className="px-6 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium transition-all shadow-sm"
+                    onClick={() => {
+                      setShowForm(false);
+                      setEditingReport(null);
+                      resetForm();
+                    }}
+                    className="px-4 py-2 border border-input text-foreground bg-background hover:bg-accent rounded-lg text-sm transition"
                   >
                     Cancel
-                  </motion.button>
+                  </button>
 
-                  <motion.button
-                    whileHover={
-                      isFormValid && !loading
-                        ? {
-                            scale: 1.02,
-                            boxShadow: '0 8px 25px rgba(59, 130, 246, 0.15)',
-                          }
-                        : {}
-                    }
-                    whileTap={isFormValid && !loading ? { scale: 0.98 } : {}}
+                  <button
                     type="button"
                     onClick={handleSubmit}
-                    disabled={loading || !isFormValid}
-                    className={`px-8 py-3 rounded-xl font-semibold flex items-center gap-3 transition-all shadow-lg ${
-                      loading || !isFormValid
-                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white'
+                    disabled={isSaving || !isFormValid}
+                    className={`px-5 py-2 rounded-lg text-sm font-semibold inline-flex items-center gap-2 transition ${
+                      isSaving || !isFormValid
+                        ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                        : 'bg-primary text-primary-foreground hover:bg-primary/90'
                     }`}
                   >
-                    {loading ? (
+                    {isSaving ? (
                       <>
                         <motion.div
                           animate={{ rotate: 360 }}
@@ -752,18 +709,17 @@ const RMQualityReport: React.FC = () => {
                             repeat: Infinity,
                           }}
                         >
-                          <RefreshCw className="h-5 w-5" />
+                          <RotateCw className="h-4 w-4" />
                         </motion.div>
                         Saving...
                       </>
                     ) : (
                       <>
-                        <Save size={18} />
+                        <Save size={16} />
                         {editingReport ? 'Update Report' : 'Save Report'}
-                        <ChevronRight size={16} />
                       </>
                     )}
-                  </motion.button>
+                  </button>
                 </div>
               </div>
             </div>
@@ -773,306 +729,343 @@ const RMQualityReport: React.FC = () => {
     );
   }
 
+  // Main list view
   return (
     <motion.div
-      className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50"
+      className="min-h-screen bg-background"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <div className="max-w-7xl mx-auto p-6">
-        {/* Enhanced Header */}
+      <div className="max-w-7xl mx-auto shadow-sm rounded-xl py-0">
         <motion.div
           variants={itemVariants}
-          className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mb-8"
+          className="bg-card rounded-xl overflow-hidden"
         >
-          <div className="relative bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-6 border-b border-gray-100">
-            <div className="absolute top-0 right-0 -mt-2 -mr-2">
-              <Sparkles size={60} className="text-blue-100 opacity-50" />
-            </div>
-
-            <div className="relative">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 rounded-xl">
-                    <FileText className="text-blue-600" size={20} />
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-bold text-gray-900">
-                      RM Quality Reports
-                    </h1>
-                    <p className="text-gray-600 text-sm mt-0.5">
-                      Manage raw material quality testing and compliance reports
-                    </p>
-                  </div>
+          {/* Header Section */}
+          <div className="p-6 pb-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-1.5 h-10 bg-primary rounded-full shadow-md" />
+                <div className="p-2 bg-primary rounded-lg shadow-md flex items-center justify-center">
+                  <FileText
+                    className="text-primary-foreground"
+                    size={21}
+                    strokeWidth={2.5}
+                  />
                 </div>
-
+                <h1 className="text-3xl font-extrabold text-foreground tracking-tight drop-shadow-sm">
+                  RM Quality Reports
+                </h1>
+              </div>
+              <div className="flex gap-2">
                 <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleExportAll}
+                  disabled={isExportingAll || reports.length === 0}
+                  className={`px-4 py-2.5 rounded-lg flex items-center font-bold text-sm shadow-md transition-all cursor-pointer ${
+                    isExportingAll || reports.length === 0
+                      ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                      : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                  }`}
+                >
+                  {isExportingAll ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{
+                          duration: 2,
+                          ease: 'linear',
+                          repeat: Infinity,
+                        }}
+                      >
+                        <RotateCw
+                          size={16}
+                          className="mr-2"
+                          strokeWidth={2.5}
+                        />
+                      </motion.div>
+                      Exporting...
+                    </>
+                  ) : (
+                    <>
+                      <Download size={16} className="mr-2" strokeWidth={2.5} />
+                      Export All
+                    </>
+                  )}
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     setShowForm(true);
                     setEditingReport(null);
                     resetForm();
                   }}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg flex items-center gap-2 font-semibold"
+                  className="px-5 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center font-bold text-base shadow-md transition-all cursor-pointer"
                 >
-                  <Plus size={18} />
+                  <Plus
+                    size={18}
+                    className="mr-2 font-bold"
+                    strokeWidth={2.5}
+                  />
                   New Report
                 </motion.button>
               </div>
             </div>
           </div>
 
-          {/* Stats Row */}
-          <div className="p-6 bg-gradient-to-r from-gray-50/50 to-blue-50/50">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-                <p className="text-xs font-medium text-gray-600 mb-1">
-                  Total Reports
-                </p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {totalReports}
-                </p>
-                <div className="flex items-center mt-1">
-                  <TrendingUp size={10} className="text-blue-500 mr-1" />
-                  <span className="text-xs text-blue-600 font-medium">
-                    All time
-                  </span>
+          {/* Search and Filters Section */}
+          <div className="p-6 pt-3 pb-2">
+            <div className="flex flex-col md:flex-row gap-4 mb-3">
+              <div className="relative flex-grow">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-4 w-4 text-muted-foreground" />
                 </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-                <p className="text-xs font-medium text-gray-600 mb-1">
-                  Recent Reports
-                </p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {recentReports}
-                </p>
-                <div className="flex items-center mt-1">
-                  <Clock size={10} className="text-green-500 mr-1" />
-                  <span className="text-xs text-green-600 font-medium">
-                    Last 30 days
-                  </span>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-                <p className="text-xs font-medium text-gray-600 mb-1">
-                  Avg Parameters
-                </p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {reports.length > 0
-                    ? Math.round(
-                        reports.reduce(
-                          (sum, r) => sum + r.parameters.length,
-                          0
-                        ) / reports.length
-                      )
-                    : 0}
-                </p>
-                <div className="flex items-center mt-1">
-                  <BarChart3 size={10} className="text-purple-500 mr-1" />
-                  <span className="text-xs text-purple-600 font-medium">
-                    Per report
-                  </span>
-                </div>
-              </div>
-              <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-                <p className="text-xs font-medium text-gray-600 mb-1">
-                  Compliance
-                </p>
-                <p className="text-2xl font-bold text-gray-900">98%</p>
-                <div className="flex items-center mt-1">
-                  <Shield size={10} className="text-green-500 mr-1" />
-                  <span className="text-xs text-green-600 font-medium">
-                    Success rate
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Search and Filters */}
-        <motion.div
-          variants={itemVariants}
-          className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mb-6"
-        >
-          <div className="p-6">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search
-                  size={20}
-                  className="absolute left-3 top-3 text-gray-400"
-                />
                 <input
                   type="text"
-                  placeholder="Search reports by material, variety, supplier, or GRN..."
+                  placeholder="Search reports..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                  className="pl-10 pr-4 py-2.5 w-full border border-input rounded-xl focus:ring-2 focus:ring-ring focus:border-ring outline-none transition-all duration-200 text-sm bg-background"
                 />
               </div>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={fetchReports}
-                className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-all flex items-center gap-2"
-              >
-                <RefreshCw size={16} />
-                Refresh
-              </motion.button>
+
+              <div className="flex gap-2 shrink-0">
+                <motion.button
+                  onClick={() => setIsFilterOpen(!isFilterOpen)}
+                  className="flex items-center gap-2 px-4 py-2.5 border border-input bg-background rounded-lg hover:bg-accent transition-colors duration-200 text-sm"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Filter className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-foreground">Filter</span>
+                  <motion.div
+                    animate={{ rotate: isFilterOpen ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ChevronDown size={14} className="text-muted-foreground" />
+                  </motion.div>
+                </motion.button>
+
+                <motion.button
+                  onClick={fetchReports}
+                  className="flex items-center gap-2 px-4 py-2.5 border border-input bg-background rounded-lg hover:bg-accent transition-colors duration-200 text-sm"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <RefreshCw className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-foreground">Refresh</span>
+                </motion.button>
+              </div>
             </div>
           </div>
-        </motion.div>
 
-        {/* Reports Table */}
-        <motion.div
-          variants={itemVariants}
-          className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
-        >
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gradient-to-r from-gray-50 to-blue-50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Raw Material
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Variety
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Supplier
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    GRN
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Date
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Parameters
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredReports.map((report, index) => (
-                  <motion.tr
-                    key={report.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="hover:bg-gray-50 transition-colors duration-150"
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="p-2 bg-blue-100 rounded-lg mr-3">
-                          <Package size={16} className="text-blue-600" />
-                        </div>
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">
-                            {report.rawMaterialName}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            ID: {report.id.slice(0, 8)}...
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {report.variety}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      <div className="flex items-center">
-                        <Building size={14} className="text-gray-400 mr-2" />
-                        {report.supplier}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      <div className="flex items-center">
-                        <Hash size={14} className="text-gray-400 mr-2" />
-                        {report.grn}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div className="flex items-center">
-                        <Calendar size={14} className="text-gray-400 mr-2" />
-                        {new Date(report.dateOfReport).toLocaleDateString()}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                        <Target size={12} className="mr-1" />
-                        {report.parameters.length} params
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex space-x-2">
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => handleEdit(report)}
-                          className="text-blue-600 hover:text-blue-900 p-2 rounded-lg hover:bg-blue-50 transition-colors"
-                          title="Edit Report"
-                        >
-                          <Edit size={16} />
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => handleExport(report.id, 'excel')}
-                          className="text-green-600 hover:text-green-900 p-2 rounded-lg hover:bg-green-50 transition-colors"
-                          title="Export as Excel"
-                        >
-                          <Download size={16} />
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={() => handleDelete(report.id)}
-                          className="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-colors"
-                          title="Delete Report"
-                        >
-                          <Trash2 size={16} />
-                        </motion.button>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-
-            {filteredReports.length === 0 && (
-              <div className="text-center py-16">
-                <FileText size={48} className="mx-auto text-gray-400 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-600 mb-2">
+          {/* Table Section */}
+          <div className="pt-0">
+            {loading ? (
+              <div className="flex justify-center items-center py-16">
+                <motion.div
+                  animate={{
+                    rotate: 360,
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    ease: 'linear',
+                    repeat: Infinity,
+                  }}
+                  className="rounded-full h-12 w-12 border-4 border-primary/20 border-t-primary"
+                />
+              </div>
+            ) : filteredReports.length === 0 ? (
+              <div className="p-12 text-center">
+                <div className="p-3 bg-primary/10 rounded-full inline-block mb-4">
+                  <FileText size={36} className="text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">
                   No reports found
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground mb-6 max-w-md mx-auto text-sm">
                   {searchTerm
-                    ? 'Try adjusting your search criteria'
+                    ? 'No reports match your search criteria. Try adjusting your search.'
                     : 'Get started by creating your first quality report'}
                 </p>
                 {!searchTerm && (
                   <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                     onClick={() => {
                       setShowForm(true);
                       setEditingReport(null);
                       resetForm();
                     }}
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg flex items-center gap-2 font-semibold mx-auto"
+                    className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 inline-flex items-center font-medium text-sm"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                   >
-                    <Plus size={18} />
+                    <Plus size={14} className="mr-1" />
                     Create First Report
                   </motion.button>
                 )}
               </div>
+            ) : (
+              <>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-border">
+                    <thead>
+                      <tr className="bg-muted/50">
+                        <th
+                          scope="col"
+                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Package className="w-4 h-4" />
+                            Raw Material
+                          </div>
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Award className="w-4 h-4" />
+                            Variety
+                          </div>
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Building className="w-4 h-4" />
+                            Supplier
+                          </div>
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Hash className="w-4 h-4" />
+                            GRN
+                          </div>
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4" />
+                            Date
+                          </div>
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Target className="w-4 h-4" />
+                            Parameters
+                          </div>
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-6 py-4 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider"
+                        >
+                          <div className="flex items-center gap-2 justify-end">
+                            <Settings className="w-4 h-4" />
+                            Actions
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-card divide-y divide-border">
+                      {filteredReports.map((report, index) => (
+                        <motion.tr
+                          key={report.id}
+                          className="hover:bg-muted/50 transition-colors duration-150"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: index * 0.05 }}
+                        >
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
+                            {report.rawMaterialName}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                              {report.variety}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                            <div className="flex items-center">
+                              <Building
+                                size={14}
+                                className="text-muted-foreground mr-2"
+                              />
+                              {report.supplier}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                            <div className="flex items-center">
+                              <Hash
+                                size={14}
+                                className="text-muted-foreground mr-2"
+                              />
+                              {report.grn}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                            <div className="flex items-center">
+                              <Calendar
+                                size={14}
+                                className="text-muted-foreground mr-2"
+                              />
+                              {formatDate(report.dateOfReport)}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                              <Target size={12} className="mr-1" />
+                              {report.parameters.length} params
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <div className="flex justify-end space-x-2">
+                              <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => handleEdit(report)}
+                                className="group relative flex items-center justify-center w-8 h-8 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all border border-primary/20 cursor-pointer"
+                                title="Edit Report"
+                              >
+                                <Edit2 size={16} />
+                              </motion.button>
+                              <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => handleExport(report.id, 'excel')}
+                                className="group relative flex items-center justify-center w-8 h-8 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all border border-primary/20 cursor-pointer"
+                                title="Export as Excel"
+                              >
+                                <Download size={16} />
+                              </motion.button>
+                              <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => handleDelete(report.id)}
+                                className="group relative flex items-center justify-center w-8 h-8 bg-destructive/10 text-destructive rounded-lg hover:bg-destructive/20 transition-all border border-destructive/20 cursor-pointer"
+                                title="Delete Report"
+                              >
+                                <Trash2 size={16} />
+                              </motion.button>
+                            </div>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
             )}
           </div>
         </motion.div>

@@ -10,6 +10,10 @@ import {
   AlertCircle,
   ChevronRight,
   ChevronUp,
+  Hash,
+  Calendar as CalendarIcon,
+  User2,
+  Boxes,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReceiveModal, {
@@ -52,11 +56,11 @@ type RawMaterial = {
 const ITEM_STATUS_OPTIONS = ['Pending', 'Received', 'Cancelled'];
 
 const statusColors: Record<string, string> = {
-  Created: 'bg-blue-50 text-blue-700 border-blue-200',
-  Approved: 'bg-green-50 text-green-700 border-green-200',
-  Received: 'bg-purple-50 text-purple-700 border-purple-200',
-  Cancelled: 'bg-red-50 text-red-700 border-red-200',
-  Pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+  Created: 'bg-muted text-foreground border-border',
+  Approved: 'bg-primary/10 text-primary border-primary/20',
+  Received: 'bg-accent text-foreground border-border',
+  Cancelled: 'bg-destructive/10 text-destructive border-destructive/30',
+  Pending: 'bg-muted text-foreground border-border',
 };
 
 const statusIcons: Record<string, React.ReactNode> = {
@@ -225,7 +229,6 @@ const PurchaseOrderList: React.FC = () => {
     );
   };
 
-
   const handleEditSave = async ({ expectedDate }: { expectedDate: string }) => {
     if (!selectedOrder) return;
     try {
@@ -248,7 +251,6 @@ const PurchaseOrderList: React.FC = () => {
   };
 
   // Delete handler
-
   const handleDeleteConfirm = async () => {
     if (!selectedOrder) return;
     try {
@@ -266,36 +268,36 @@ const PurchaseOrderList: React.FC = () => {
 
   // Stats for header
   const totalOrders = orders.length;
-const receivedOrders = orders.filter(
-  (o) => o.items.some((item) => item.status === 'Received')
-).length;
+  const receivedOrders = orders.filter((o) =>
+    o.items.some((item) => item.status === 'Received')
+  ).length;
   const cancelledOrders = orders.filter((o) => o.status === 'Cancelled').length;
 
   return (
-    <motion.div className="min-h-screen ">
+    <motion.div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <motion.div
-          className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
-          initial={{ opacity: 0, y: -20 }}
+          className="bg-card rounded-2xl border border-border overflow-hidden"
+          initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
         >
           {/* Header */}
-          <div className="relative bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-6 border-b border-gray-100">
+          <div className="p-6 border-b border-border">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-xl">
-                <Package className="text-blue-600" size={20} />
+              <div className="p-2 bg-primary rounded-xl">
+                <Package className="text-primary-foreground" size={20} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+                <h1 className="text-2xl font-bold text-foreground">
                   Purchase Orders
                 </h1>
-                <p className="text-gray-600 text-sm mt-0.5">
+                <p className="text-muted-foreground text-sm">
                   View and manage all purchase orders with status update options
                 </p>
               </div>
               <div className="ml-auto">
                 <button
-                  className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition"
+                  className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition"
                   onClick={() => navigate('/raw/purchase-order')}
                 >
                   + Create New Order
@@ -305,57 +307,57 @@ const receivedOrders = orders.filter(
           </div>
           {/* Unified Stats + Table */}
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full divide-y divide-border">
               {/* Stats Row */}
               <thead>
-                <tr className="bg-gradient-to-r from-gray-50 to-blue-50">
+                <tr>
                   <th colSpan={6} className="p-0 border-b-0">
-                    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 p-4">
-                      <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-                        <p className="text-xs font-medium text-gray-600 mb-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 p-4 bg-muted/50">
+                      <div className="bg-card rounded-xl p-4 border border-border">
+                        <p className="text-xs font-medium text-muted-foreground mb-1">
                           Total Orders
                         </p>
-                        <p className="text-2xl font-bold text-gray-900">
+                        <p className="text-2xl font-bold text-foreground">
                           {totalOrders}
                         </p>
                         <div className="flex items-center mt-1">
-                          <TrendingUp
-                            size={10}
-                            className="text-blue-500 mr-1"
-                          />
-                          <span className="text-xs text-blue-600 font-medium">
+                          <TrendingUp size={12} className="text-primary mr-1" />
+                          <span className="text-xs text-primary font-medium">
                             All records
                           </span>
                         </div>
                       </div>
 
-                      <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-                        <p className="text-xs font-medium text-gray-600 mb-1">
+                      <div className="bg-card rounded-xl p-4 border border-border">
+                        <p className="text-xs font-medium text-muted-foreground mb-1">
                           Received
                         </p>
-                        <p className="text-2xl font-bold text-gray-900">
+                        <p className="text-2xl font-bold text-foreground">
                           {receivedOrders}
                         </p>
                         <div className="flex items-center mt-1">
                           <FileText
-                            size={10}
-                            className="text-purple-500 mr-1"
+                            size={12}
+                            className="text-foreground mr-1"
                           />
-                          <span className="text-xs text-purple-600 font-medium">
+                          <span className="text-xs text-foreground/80 font-medium">
                             Received
                           </span>
                         </div>
                       </div>
-                      <div className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-                        <p className="text-xs font-medium text-gray-600 mb-1">
+                      <div className="bg-card rounded-xl p-4 border border-border">
+                        <p className="text-xs font-medium text-muted-foreground mb-1">
                           Cancelled
                         </p>
-                        <p className="text-2xl font-bold text-gray-900">
+                        <p className="text-2xl font-bold text-foreground">
                           {cancelledOrders}
                         </p>
                         <div className="flex items-center mt-1">
-                          <XCircle size={10} className="text-red-500 mr-1" />
-                          <span className="text-xs text-red-600 font-medium">
+                          <XCircle
+                            size={12}
+                            className="text-destructive mr-1"
+                          />
+                          <span className="text-xs text-destructive font-medium">
                             Cancelled
                           </span>
                         </div>
@@ -363,30 +365,45 @@ const receivedOrders = orders.filter(
                     </div>
                   </th>
                 </tr>
-                <tr className="bg-gradient-to-r from-gray-50 to-blue-50">
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"></th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    PO Number
+                <tr className="bg-muted/50">
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"></th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2">
+                      <Hash className="w-3.5 h-3.5" />
+                      PO Number
+                    </div>
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Vendor
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2">
+                      <User2 className="w-3.5 h-3.5" />
+                      Vendor
+                    </div>
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Order Date
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2">
+                      <CalendarIcon className="w-3.5 h-3.5" />
+                      Order Date
+                    </div>
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Expected Date
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2">
+                      <CalendarIcon className="w-3.5 h-3.5" />
+                      Expected Date
+                    </div>
                   </th>
-                  <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Items Ordered
+                  <th className="px-6 py-4 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2 justify-center">
+                      <Boxes className="w-3.5 h-3.5" />
+                      Items Ordered
+                    </div>
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-card divide-y divide-border">
                 {orders.map((order, index) => (
                   <React.Fragment key={order.id}>
                     <motion.tr
-                      className="hover:bg-gray-50 transition-colors duration-150"
+                      className="hover:bg-muted/50 transition-colors duration-150"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -402,25 +419,25 @@ const receivedOrders = orders.filter(
                           }
                         >
                           {expandedOrderIds.includes(order.id) ? (
-                            <ChevronUp className="w-5 h-5 text-gray-500 cursor-pointer" />
+                            <ChevronUp className="w-5 h-5 text-muted-foreground cursor-pointer" />
                           ) : (
-                            <ChevronRight className="w-5 h-5 text-gray-500 cursor-pointer" />
+                            <ChevronRight className="w-5 h-5 text-muted-foreground cursor-pointer" />
                           )}
                         </button>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                         {order.poNumber}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/80">
                         {order.vendor?.name || '-'}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/80">
                         {formatDate(order.orderDate)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/80">
                         {formatDate(order.expectedDate)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-semibold text-blue-700">
+                      <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-semibold text-primary">
                         {order.items.length}
                       </td>
                     </motion.tr>
@@ -431,36 +448,36 @@ const receivedOrders = orders.filter(
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
-                          className="bg-gray-50"
+                          className="bg-muted/50"
                         >
                           <td colSpan={6} className="px-10 py-4">
                             <div>
-                              <div className="mb-2 font-semibold text-gray-700 text-lg">
+                              <div className="mb-2 font-semibold text-foreground text-lg">
                                 Order Items
                               </div>
-                              <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm bg-white">
-                                <table className="min-w-full divide-y divide-gray-200">
+                              <div className="overflow-x-auto rounded-lg border border-border bg-card">
+                                <table className="min-w-full divide-y divide-border">
                                   <thead>
-                                    <tr className="bg-gradient-to-r from-blue-50 to-indigo-50">
-                                      <th className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wider text-left">
+                                    <tr className="bg-muted/50">
+                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-left">
                                         SKU Code
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wider text-left">
+                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-left">
                                         Name
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wider text-left">
+                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-left">
                                         Unit
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wider text-right">
+                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-right">
                                         Quantity Ordered
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wider text-right">
+                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-right">
                                         Rate
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wider text-center">
+                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
                                         Status
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-gray-700 uppercase tracking-wider text-center">
+                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
                                         Change Status
                                       </th>
                                     </tr>
@@ -472,49 +489,49 @@ const receivedOrders = orders.filter(
                                       return (
                                         <tr
                                           key={item.id}
-                                          className="hover:bg-blue-50 transition"
+                                          className="hover:bg-accent transition"
                                         >
-                                          <td className="px-4 py-2 text-sm text-gray-900 font-mono">
+                                          <td className="px-4 py-2 text-sm text-foreground font-mono">
                                             {raw ? (
                                               raw.skuCode
                                             ) : (
-                                              <span className="text-gray-400 italic">
+                                              <span className="text-muted-foreground italic">
                                                 Loading...
                                               </span>
                                             )}
                                           </td>
-                                          <td className="px-4 py-2 text-sm text-gray-900">
+                                          <td className="px-4 py-2 text-sm text-foreground">
                                             {raw ? (
                                               raw.name
                                             ) : (
-                                              <span className="text-gray-400 italic">
+                                              <span className="text-muted-foreground italic">
                                                 Loading...
                                               </span>
                                             )}
                                           </td>
-                                          <td className="px-4 py-2 text-sm text-gray-900">
+                                          <td className="px-4 py-2 text-sm text-foreground">
                                             {raw ? (
                                               raw.unitOfMeasurement ||
                                               raw.unit || (
-                                                <span className="text-gray-400 italic">
+                                                <span className="text-muted-foreground italic">
                                                   N/A
                                                 </span>
                                               )
                                             ) : (
-                                              <span className="text-gray-400 italic">
+                                              <span className="text-muted-foreground italic">
                                                 Loading...
                                               </span>
                                             )}
                                           </td>
-                                          <td className="px-4 py-2 text-sm text-gray-900 text-right">
+                                          <td className="px-4 py-2 text-sm text-foreground text-right">
                                             {item.quantityOrdered}
                                           </td>
-                                          <td className="px-4 py-2 text-sm text-gray-900 text-right">
+                                          <td className="px-4 py-2 text-sm text-foreground text-right">
                                             {item.rate}
                                           </td>
                                           <td className="px-4 py-2 text-center">
                                             <span
-                                              className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${statusColors[item.status] || 'bg-gray-50 text-gray-700 border-gray-200'}`}
+                                              className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${statusColors[item.status] || 'bg-muted text-foreground border-border'}`}
                                             >
                                               {statusIcons[item.status] || null}
                                               {item.status}
@@ -523,9 +540,9 @@ const receivedOrders = orders.filter(
                                           <td className="px-4 py-2 text-center">
                                             <div className="relative group inline-block">
                                               <select
-                                                className={`border rounded px-2 py-1 text-xs focus:ring-2 focus:ring-blue-200 ${
+                                                className={`border border-input rounded px-2 py-1 text-xs bg-background focus:ring-2 focus:ring-ring focus:border-ring ${
                                                   item.status === 'Received'
-                                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                    ? 'opacity-60 cursor-not-allowed'
                                                     : 'cursor-pointer'
                                                 }`}
                                                 value={item.status}
@@ -552,7 +569,7 @@ const receivedOrders = orders.filter(
                                                 )}
                                               </select>
                                               {item.status === 'Received' && (
-                                                <div className="absolute left-1/2 -translate-x-1/2 mt-1 w-48 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none z-10 transition-opacity duration-200">
+                                                <div className="absolute left-1/2 -translate-x-1/2 mt-1 w-48 bg-foreground text-background text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none z-10 transition-opacity duration-200">
                                                   After receiving, you can't
                                                   update status.
                                                 </div>

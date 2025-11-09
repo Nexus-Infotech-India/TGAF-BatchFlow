@@ -398,17 +398,6 @@ const AddBatch: React.FC = () => {
     parameterValues.length > 0 &&
     parameterValues.every((pv) => pv.value.trim() !== '');
 
-  const statusBadge = (status: string) => {
-    const base = 'px-2 py-0.5 rounded text-xs font-medium border';
-    switch (status) {
-      case 'COMPLETED':
-        return `${base} bg-primary/10 text-primary border-primary/20`;
-      case 'IN_PROGRESS':
-        return `${base} bg-accent text-foreground border-border`;
-      default:
-        return `${base} bg-muted text-muted-foreground border-border`;
-    }
-  };
 
   return (
     <motion.div
