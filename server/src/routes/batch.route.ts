@@ -15,6 +15,7 @@ router.put('/batches/:id/reject', authenticate, BatchController.rejectBatch);
 router.get('/batches/export', authenticate, BatchController.exportToExcel); 
 router.get('/logs', authenticate, BatchController.getActivityLogs); 
 router.get('/batches-with-drafts', authenticate, BatchController.getBatchesWithDrafts);
+router.get('/grn-numbers', authenticate, BatchController.getAvailableGRNNumbers);
 
 // Add the Certificate of Analysis route
 router.get('/batches/:id/certificate', authenticate, BatchController.generateCertificateOfAnalysis); 

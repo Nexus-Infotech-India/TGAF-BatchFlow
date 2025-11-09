@@ -1,5 +1,5 @@
 // Auto-generated schema - DO NOT EDIT DIRECTLY
-// Generated on: Wed Oct  1 11:17:17 AM IST 2025
+// Generated on: Sun 09 Nov 2025 06:31:35 PM IST
 
 generator client {
   provider      = "prisma-client-js"
@@ -27,7 +27,9 @@ model ActivityLog {
 model Batch {
   id                         String                @id
   batchNumber                String                @unique
+  batchCode                  String?
   productId                  String
+  grnNumber                  String?
   dateOfProduction           DateTime
   bestBeforeDate             DateTime
   sampleAnalysisStarted      DateTime?
@@ -192,7 +194,9 @@ model User {
 model BatchDraft {
   id                      String                @id @default(uuid())
   batchNumber             String?               @unique
+  batchCode               String? // Add this field
   productId               String?
+  grnNumber               String?
   dateOfProduction        DateTime?
   bestBeforeDate          DateTime?
   sampleAnalysisStarted   DateTime?
@@ -282,15 +286,16 @@ enum StandardStatus {
 }
 
 model StandardParameter {
-  id          String            @id
-  name        String // "Appearance", "Texture", "Moisture %Max", etc.
-  categoryId  String
-  unitId      String?
-  productType String?
-  description String?
-  dataType    ParameterDataType // Type of data this parameter stores
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime
+  id            String            @id
+  name          String // "Appearance", "Texture", "Moisture %Max", etc.
+  categoryId    String
+  unitId        String?
+  productType   String?
+  description   String?
+  dataType      ParameterDataType // Type of data this parameter stores
+  standardValue String?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime
 
   // Relations
   category    StandardCategory      @relation(fields: [categoryId], references: [id])
@@ -338,6 +343,7 @@ model BatchParameterValue {
   batchId            String
   parameterId        String
   value              String
+  standardValue      String? // ADD THIS - to store the standard/expected value
   unitId             String?
   methodologyId      String?
   verificationResult String?

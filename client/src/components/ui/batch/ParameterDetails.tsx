@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import {
   Target,
   Star,
-  Activity,
   Zap,
   FileText,
   CheckCircle,
@@ -81,14 +80,8 @@ const ParameterDetailsTable: React.FC<ParameterDetailsTableProps> = ({
               </th>
               <th className="text-left p-4 font-bold text-gray-900 border-r border-gray-200">
                 <div className="flex items-center space-x-2">
-                  <Activity size={16} className="text-gray-600" />
-                  <span>Unit</span>
-                </div>
-              </th>
-              <th className="text-left p-4 font-bold text-gray-900 border-r border-gray-200">
-                <div className="flex items-center space-x-2">
                   <Zap size={16} className="text-gray-600" />
-                  <span>Test Result</span>
+                  <span>Value</span>
                 </div>
               </th>
               <th className="text-left p-4 font-bold text-gray-900">
@@ -101,11 +94,7 @@ const ParameterDetailsTable: React.FC<ParameterDetailsTableProps> = ({
           </thead>
           <tbody>
             {parameters.map((parameter, index) => {
-              // Check if this specific parameter has any value or verification data
               const hasValue = parameter.value && parameter.value.trim() !== '';
-              const hasVerificationResult =
-                parameter.verificationResult &&
-                parameter.verificationResult.trim() !== '';
               const hasVerificationRemark =
                 parameter.verificationRemark &&
                 parameter.verificationRemark.trim() !== '';
@@ -136,36 +125,16 @@ const ParameterDetailsTable: React.FC<ParameterDetailsTableProps> = ({
                   <td className="p-4 border-r border-gray-100">
                     <div className="flex items-center space-x-2">
                       <span className="font-bold text-gray-900 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                        {parameter.standardDefinition?.standardValue ||
-                          parameter.value ||
-                          'N/A'}
+                        {parameter.standardDefinition?.standardValue || 'N/A'}
                       </span>
                     </div>
                   </td>
 
-                  <td className="p-4 border-r border-gray-200">
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-lg">
-                      {parameter.standardDefinition?.unit?.symbol ||
-                        parameter.unit?.symbol ||
-                        '-'}
-                    </span>
-                  </td>
-
-                  <td className="p-4 border-r border-gray-200">
-                    <div
-                      className={`p-3 rounded-xl text-sm font-medium ${
-                        hasVerificationResult
-                          ? 'bg-green-50 border border-green-200 text-green-900'
-                          : hasValue
-                            ? 'bg-yellow-50 border border-yellow-200 text-yellow-900'
-                            : 'bg-gray-50 border border-gray-200 text-gray-500'
-                      }`}
-                    >
-                      {hasVerificationResult
-                        ? parameter.verificationResult
-                        : hasValue
-                          ? 'Awaiting verification'
-                          : 'No test data'}
+                  <td className="p-4 border-r border-gray-100">
+                    <div className="flex items-center space-x-2">
+                      <span className="font-bold text-gray-900">
+                        {parameter.value || 'N/A'}
+                      </span>
                     </div>
                   </td>
 

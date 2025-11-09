@@ -157,7 +157,8 @@ async function main() {
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
       productType: 'PEPPER',
-      unitName: 'Percentage' // % in COA
+      unitName: 'Percentage', // % in COA
+      standardValue: '95' // ADD THIS
     },
     {
       name: 'Moisture (max)',
@@ -165,7 +166,8 @@ async function main() {
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
       productType: 'PEPPER',
-      unitName: 'Volume/weight' // %v/w in COA
+      unitName: 'Volume/weight', // %v/w in COA
+      standardValue: '8' // ADD THIS
     },
     {
       name: 'Total Ash (max)',
@@ -173,7 +175,8 @@ async function main() {
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
       productType: 'PEPPER',
-      unitName: 'Weight/weight' // %w/w in COA
+      unitName: 'Weight/weight', // %w/w in COA
+      standardValue: '8' // ADD THIS
     },
     {
       name: 'Acid Insoluble Ash (max)',
@@ -181,7 +184,8 @@ async function main() {
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
       productType: 'PEPPER',
-      unitName: 'Weight/weight' // %w/w in COA
+      unitName: 'Weight/weight', // %w/w in COA
+      standardValue: '1.5' // ADD THIS
     },
     {
       name: 'Scoville Heat (Capsaicin)',
@@ -189,7 +193,8 @@ async function main() {
       categoryName: 'Chemical Characteristics',
       dataType: 'INTEGER',
       productType: 'PEPPER',
-      unitName: 'SHU' // SHU in COA
+      unitName: 'SHU', // SHU in COA
+      standardValue: '40,000-55,000' // ADD THIS - range value
     },
     {
       name: 'Colour Value',
@@ -197,7 +202,8 @@ async function main() {
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
       productType: 'PEPPER',
-      unitName: 'ASTA' // ASTA in COA
+      unitName: 'ASTA', // ASTA in COA
+      standardValue: '40' // ADD THIS
     },
     {
       name: 'Aflatoxin Total',
@@ -205,7 +211,8 @@ async function main() {
       categoryName: 'Chemical Characteristics',
       dataType: 'FLOAT',
       productType: 'PEPPER',
-      unitName: 'PPB' // ppb in COA
+      unitName: 'PPB', // ppb in COA
+      standardValue: '10' // ADD THIS
     },
     // --- Microbiology parameters ---
     {
@@ -214,7 +221,8 @@ async function main() {
       categoryName: 'Microbiology',
       dataType: 'INTEGER',
       productType: 'PEPPER',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram', // cfu/g in COA
+      standardValue: '10,000,000' // ADD THIS
     },
     {
       name: 'Yeast/mould',
@@ -222,7 +230,8 @@ async function main() {
       categoryName: 'Microbiology',
       dataType: 'INTEGER',
       productType: 'PEPPER',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram', // cfu/g in COA
+      standardValue: '1000' // ADD THIS
     },
     {
       name: 'Salmonella',
@@ -230,7 +239,8 @@ async function main() {
       categoryName: 'Microbiology',
       dataType: 'TEXT',
       productType: 'PEPPER',
-      unitName: 'CFU per 25 gram' // 25g in COA
+      unitName: 'CFU per 25 gram', // 25g in COA
+      standardValue: 'Absent' // ADD THIS
     },
     {
       name: 'Coliforms',
@@ -238,7 +248,8 @@ async function main() {
       categoryName: 'Microbiology',
       dataType: 'INTEGER',
       productType: 'PEPPER',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram', // cfu/g in COA
+      standardValue: '100' // ADD THIS
     },
     {
       name: 'E.coli',
@@ -246,7 +257,8 @@ async function main() {
       categoryName: 'Microbiology',
       dataType: 'INTEGER',
       productType: 'PEPPER',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram', // cfu/g in COA
+      standardValue: '<10' // ADD THIS
     },
     {
       name: 'Staph.aureus',
@@ -254,7 +266,8 @@ async function main() {
       categoryName: 'Microbiology',
       dataType: 'INTEGER',
       productType: 'PEPPER',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram', // cfu/g in COA
+      standardValue: '<10' // ADD THIS
     }
   ];
 
@@ -291,6 +304,7 @@ async function main() {
         description: param.description,
         dataType: param.dataType as ParameterDataType,
         unitId: unit.id,
+        standardValue: param.standardValue,  // ADD THIS
         updatedAt: new Date()
       },
       create: {
@@ -300,7 +314,8 @@ async function main() {
         dataType: param.dataType as ParameterDataType,
         categoryId: category.id,
         productType: param.productType || '',
-        unitId: unit.id, // Associate the unit directly with the parameter
+        unitId: unit.id,
+        standardValue: param.standardValue,  // ADD THIS
         createdAt: new Date(),
         updatedAt: new Date()
       }

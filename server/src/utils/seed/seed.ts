@@ -126,7 +126,8 @@ async function main() {
       categoryName: 'Physical',
       dataType: 'TEXT',
       productType: 'TURMERIC',
-      unitName: 'Unitless' // Visual assessment
+      unitName: 'Unitless',
+      standardValue: null // No standard value in COA
     },
     {
       name: 'Retention on 0.88mm',
@@ -134,7 +135,8 @@ async function main() {
       categoryName: 'Physical',
       dataType: 'FLOAT',
       productType: 'TURMERIC',
-      unitName: 'Percentage' // % in COA
+      unitName: 'Percentage',
+      standardValue: '0'
     },
     {
       name: 'Retention on 0.5mm(max)',
@@ -142,7 +144,8 @@ async function main() {
       categoryName: 'Physical',
       dataType: 'FLOAT',
       productType: 'TURMERIC',
-      unitName: 'Percentage' // % in COA
+      unitName: 'Percentage',
+      standardValue: '1'
     },
     {
       name: 'Foreign matter',
@@ -150,9 +153,10 @@ async function main() {
       categoryName: 'Physical',
       dataType: 'FLOAT',
       productType: 'TURMERIC',
-      unitName: 'Unitless' // Visual inspection
+      unitName: 'Unitless',
+      standardValue: '0'
     },
-    
+
     // Chemical parameters
     {
       name: 'Moisture %Max',
@@ -160,7 +164,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'FLOAT',
       productType: 'TURMERIC',
-      unitName: 'Percentage' // % in COA
+      unitName: 'Percentage',
+      standardValue: '10'
     },
     {
       name: 'Water Activity',
@@ -168,7 +173,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'FLOAT',
       productType: 'TURMERIC',
-      unitName: 'Percentage' // % in COA
+      unitName: 'Percentage',
+      standardValue: '0.5'
     },
     {
       name: 'Total Ash, Max',
@@ -176,7 +182,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'FLOAT',
       productType: 'TURMERIC',
-      unitName: 'Percentage' // % in COA
+      unitName: 'Percentage',
+      standardValue: '9'
     },
     {
       name: 'Insoluble Ash in Acid, max',
@@ -184,7 +191,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'FLOAT',
       productType: 'TURMERIC',
-      unitName: 'Percentage' // % in COA
+      unitName: 'Percentage',
+      standardValue: '1.5'
     },
     {
       name: 'Curcumine',
@@ -192,7 +200,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'FLOAT',
       productType: 'TURMERIC',
-      unitName: 'Percentage' // % in COA
+      unitName: 'Percentage',
+      standardValue: '2.5-3.5'
     },
     {
       name: 'Bacillus cereus',
@@ -200,7 +209,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'INTEGER',
       productType: 'TURMERIC',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram',
+      standardValue: '1000'
     },
     {
       name: 'Listeria Monocytogenes',
@@ -208,7 +218,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'INTEGER',
       productType: 'TURMERIC',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram',
+      standardValue: '0'
     },
     {
       name: 'Clostridium perfringes',
@@ -216,7 +227,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'INTEGER',
       productType: 'TURMERIC',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram',
+      standardValue: '100'
     },
     {
       name: 'Salmonella/25g',
@@ -224,7 +236,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'INTEGER',
       productType: 'TURMERIC',
-      unitName: 'CFU per 25 gram' // cfu/25g in COA
+      unitName: 'CFU per 25 gram',
+      standardValue: '0'
     },
     {
       name: 'Total Plate count',
@@ -232,7 +245,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'INTEGER',
       productType: 'TURMERIC',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram',
+      standardValue: '100000'
     },
     {
       name: 'E.coli',
@@ -240,7 +254,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'INTEGER',
       productType: 'TURMERIC',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram',
+      standardValue: '0'
     },
     {
       name: 'Enterobacteriaceae',
@@ -248,7 +263,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'INTEGER',
       productType: 'TURMERIC',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram',
+      standardValue: '100'
     },
     {
       name: 'Yeast/Moulds',
@@ -256,7 +272,8 @@ async function main() {
       categoryName: 'Chemical',
       dataType: 'INTEGER',
       productType: 'TURMERIC',
-      unitName: 'CFU per gram' // cfu/g in COA
+      unitName: 'CFU per gram',
+      standardValue: '1000'
     }
   ];
   
@@ -293,6 +310,7 @@ const createdParam = await prisma.standardParameter.upsert({
     description: param.description,
     dataType: param.dataType as ParameterDataType,
     unitId: unit.id,
+    standardValue: param.standardValue,  // <-- Add this
     updatedAt: new Date()
   },
   create: {
@@ -303,6 +321,7 @@ const createdParam = await prisma.standardParameter.upsert({
     categoryId: category.id,
     productType: param.productType || '',
     unitId: unit.id,
+    standardValue: param.standardValue,  // <-- Add this
     createdAt: new Date(),
     updatedAt: new Date()
   }

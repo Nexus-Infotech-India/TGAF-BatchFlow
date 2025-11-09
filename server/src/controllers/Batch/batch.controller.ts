@@ -107,6 +107,8 @@ async createBatch(req: Request, res: Response): Promise<void> {
         data: {
           id: batchId,
           batchNumber: batchData.batchNumber,
+          batchCode: batchData.batchCode || null,
+          grnNumber: batchData.grnNumber || null,
           productId: batchData.productId,
           dateOfProduction: new Date(batchData.dateOfProduction),
           bestBeforeDate: new Date(batchData.bestBeforeDate),
@@ -137,6 +139,7 @@ async createBatch(req: Request, res: Response): Promise<void> {
               batchId: batchId,
               parameterId: paramValue.parameterId,
               value: paramValue.value,
+              standardValue: paramValue.standardValue, // ADD THIS
               unitId: paramValue.unitId,
               methodologyId: paramValue.methodologyId,
               updatedAt: new Date(),
@@ -306,7 +309,8 @@ async getBatches(req: Request, res: Response): Promise<void> {
           unit: pv.unit,
           methodology: pv.methodology,
           verificationResult: pv.verificationResult,
-          verificationRemark: pv.verificationRemark
+          verificationRemark: pv.verificationRemark,
+          standardValue: pv.parameter.standardValue || pv.standardValue || null
         });
       });
       
@@ -410,6 +414,7 @@ async updateBatch(req: Request, res: Response): Promise<void> {
               where: { id: existingValue.id },
               data: {
                 value: paramValue.value,
+                standardValue: paramValue.standardValue, // ADD THIS
                 unitId: paramValue.unitId,
                 methodologyId: paramValue.methodologyId,
                 updatedAt: new Date()
@@ -426,6 +431,7 @@ async updateBatch(req: Request, res: Response): Promise<void> {
                 batchId: id,
                 parameterId: paramValue.parameterId,
                 value: paramValue.value,
+                standardValue: paramValue.standardValue, // ADD THIS
                 unitId: paramValue.unitId,
                 methodologyId: paramValue.methodologyId,
                 updatedAt: new Date()
@@ -1013,95 +1019,101 @@ async generateCertificateOfAnalysis(req: Request, res: Response): Promise<void> 
 
 
 async getParametersByProductId(req: Request, res: Response): Promise<void> {
-  try {
-    const { productId } = req.params;
-    
-    if (!productId) {
-      res.status(400).json({ message: 'Product ID is required' });
-      return;
-    }
-    
-    // Check if product exists
-    const product = await prisma.product.findUnique({
-      where: { id: productId }
-    });
-    
-    if (!product) {
-      res.status(404).json({ message: 'Product not found' });
-      return;
-    }
-    
-    // Get parameters specifically linked to this product through ProductParameter
-    const productParameters = await prisma.productParameter.findMany({
-      where: { productId },
-      include: {
-        parameter: {
-          include: {
-            category: true,
-            unit: true,
-            standards: {
-              where: {
-                status: 'ACTIVE'
-              },
-              include: {
-                unit: true,
-                methodology: true
-              },
-              orderBy: {
-                updatedAt: 'desc'
+    try {
+      const { productId } = req.params;
+
+      if (!productId) {
+        res.status(400).json({ message: 'Product ID is required' });
+        return;
+      }
+
+      // Check if product exists
+      const product = await prisma.product.findUnique({
+        where: { id: productId }
+      });
+
+      if (!product) {
+        res.status(404).json({ message: 'Product not found' });
+        return;
+      }
+
+      // Get parameters specifically linked to this product through ProductParameter
+      const productParameters = await prisma.productParameter.findMany({
+        where: { productId },
+        include: {
+          parameter: {
+            include: {
+              category: true,
+              unit: true,
+              standards: {
+                where: {
+                  status: 'ACTIVE'
+                },
+                include: {
+                  unit: true,
+                  methodology: true
+                },
+                orderBy: {
+                  updatedAt: 'desc'
+                },
+                take: 1
               }
             }
           }
-        }
-      },
-      orderBy: {
-        parameter: {
-          category: {
-            name: 'asc'
+        },
+        orderBy: {
+          parameter: {
+            category: {
+              name: 'asc'
+            }
           }
         }
-      }
-    });
-    
-    // Group parameters by category
-    const parametersByCategory: Record<string, any[]> = {};
-    
-    productParameters.forEach(pp => {
-      const categoryName = pp.parameter.category.name;
-      if (!parametersByCategory[categoryName]) {
-        parametersByCategory[categoryName] = [];
-      }
-      
-      // Include productType in the response for better context
-      const parameterWithContext = {
-        ...pp.parameter,
-        isRequired: pp.isRequired,
-        linkedAt: pp.createdAt
-      };
-      
-      parametersByCategory[categoryName].push(parameterWithContext);
-    });
-    
-    // Sort categories for consistent output
-    const sortedCategories: Record<string, any[]> = {};
-    Object.keys(parametersByCategory)
-      .sort()
-      .forEach(key => {
-        sortedCategories[key] = parametersByCategory[key];
       });
-    
-    res.status(200).json({
-      product: product.name,
-      productCode: product.code,
-      parametersByCategory: sortedCategories,
-      totalParameters: productParameters.length,
-      categoriesCount: Object.keys(sortedCategories).length
-    });
-  } catch (error) {
-    console.error('Get product parameters error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+
+      // Group parameters by category and include standard value/unit
+      const parametersByCategory: Record<string, any[]> = {};
+
+      productParameters.forEach(pp => {
+        const categoryName = pp.parameter.category.name;
+        if (!parametersByCategory[categoryName]) {
+          parametersByCategory[categoryName] = [];
+        }
+
+        const standardDef = pp.parameter.standards.length > 0
+          ? pp.parameter.standards[0]
+          : null;
+
+        const parameterWithContext = {
+          ...pp.parameter,
+          isRequired: pp.isRequired,
+          linkedAt: pp.createdAt,
+          standardValue: pp.parameter.standardValue || null,
+          standardUnit: standardDef?.unit?.symbol || null   // ADD THIS
+        };
+
+        parametersByCategory[categoryName].push(parameterWithContext);
+      });
+
+      // Sort categories for consistent output
+      const sortedCategories: Record<string, any[]> = {};
+      Object.keys(parametersByCategory)
+        .sort()
+        .forEach(key => {
+          sortedCategories[key] = parametersByCategory[key];
+        });
+
+      res.status(200).json({
+        product: product.name,
+        productCode: product.code,
+        parametersByCategory: sortedCategories,
+        totalParameters: productParameters.length,
+        categoriesCount: Object.keys(sortedCategories).length
+      });
+    } catch (error) {
+      console.error('Get product parameters error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
-}
 
 async getBatchesForVerification(req: Request, res: Response): Promise<void> {
   try {
@@ -1782,9 +1794,27 @@ async getBatchesWithDrafts(req: Request, res: Response): Promise<void> {
     }
   }
 
+async getAvailableGRNNumbers(req: Request, res: Response): Promise<void> {
+    try {
+      const grnNumbers = await prisma.rMQualityReport.findMany({
+        select: {
+          grn: true,
+          rawMaterialName: true,
+          supplier: true,
+        },
+        distinct: ['grn'],
+        orderBy: { createdAt: 'desc' },
+      });
 
- 
-
+      res.status(200).json({
+        success: true,
+        data: grnNumbers,
+      });
+    } catch (error) {
+      console.error('Get GRN numbers error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
 }
 export default new BatchController();
 

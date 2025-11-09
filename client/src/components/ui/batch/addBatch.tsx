@@ -21,6 +21,7 @@ import {
   Ruler,
   CheckCircle,
   Settings,
+  Search,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAutoSave } from '../../../hooks/useAutoSave';
@@ -41,8 +42,17 @@ const AddBatch: React.FC = () => {
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   const [showNewProductForm, setShowNewProductForm] = useState(false);
   const [newProductName, setNewProductName] = useState<string>('');
+  const [grnNumbers, setGrnNumbers] = useState<any[]>([]);
+  const [isLoadingGRNs, setIsLoadingGRNs] = useState(false);
+  const [grnSearchInput, setGrnSearchInput] = useState('');
+  const [showGrnSuggestions, setShowGrnSuggestions] = useState(false);
+  const [filteredGrnSuggestions, setFilteredGrnSuggestions] = useState<any[]>(
+    []
+  );
   const [formData, setFormData] = useState({
     batchNumber: '',
+    batchCode: '',
+    grnNumber: '',
     productId: '',
     dateOfProduction: '',
     bestBeforeDate: '',
@@ -50,13 +60,14 @@ const AddBatch: React.FC = () => {
     sampleAnalysisCompleted: '',
     sampleAnalysisStatus: 'PENDING',
   });
-  const [parameterValues, setParameterValues] = useState<
-    Array<{
-      parameterId: string;
-      value: string;
-      unitId?: string;
-    }>
-  >([]);
+ const [parameterValues, setParameterValues] = useState<
+   Array<{
+     parameterId: string;
+     value: string;
+     standardValue?: string; // ADD THIS
+     unitId?: string;
+   }>
+ >([]);
   const [sieveSelections, setSieveSelections] = useState<
     Record<string, string>
   >({});
@@ -143,6 +154,8 @@ const AddBatch: React.FC = () => {
         setDraftId(draftData.id);
         setFormData({
           batchNumber: draftData.batchNumber || '',
+          batchCode: draftData.batchCode || '',
+          grnNumber: draftData.grnNumber || '',
           productId: draftData.productId || '',
           dateOfProduction: toDateInputString(draftData.dateOfProduction),
           bestBeforeDate: toDateInputString(draftData.bestBeforeDate),
@@ -197,15 +210,15 @@ const AddBatch: React.FC = () => {
     }
   }, [productParametersData]);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+ const handleInputChange = (
+   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+ ) => {
+   const { name, value } = e.target;
+   setFormData((prev) => ({
+     ...prev,
+     [name]: value,
+   }));
+ };
 
   const handleProductChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -337,6 +350,8 @@ const AddBatch: React.FC = () => {
         setDraftId(draftData.id);
         setFormData({
           batchNumber: draftData.batchNumber || '',
+          batchCode: draftData.batchCode || '',
+          grnNumber: draftData.grnNumber || '',
           productId: draftData.productId || '',
           dateOfProduction: toDateInputString(draftData.dateOfProduction),
           bestBeforeDate: toDateInputString(draftData.bestBeforeDate),
@@ -389,6 +404,64 @@ const AddBatch: React.FC = () => {
     });
   }
 
+  useEffect(() => {
+    const fetchGRNNumbers = async () => {
+      try {
+        setIsLoadingGRNs(true);
+        const response = await axios.get(
+          `${API_ROUTES.RAW.GET_GRN_NUMBERS}`,
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        setGrnNumbers(response.data.data || []);
+      } catch (error) {
+        console.error('Error fetching GRN numbers:', error);
+        setGrnNumbers([]);
+      } finally {
+        setIsLoadingGRNs(false);
+      }
+    };
+
+    if (authToken) {
+      fetchGRNNumbers();
+    }
+  }, [authToken]);
+
+  // Add handler for GRN search input
+  const handleGrnInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setGrnSearchInput(value);
+    setFormData((prev) => ({
+      ...prev,
+      grnNumber: value,
+    }));
+
+    // Filter suggestions based on input
+    if (value.trim() === '') {
+      setFilteredGrnSuggestions([]);
+      setShowGrnSuggestions(false);
+    } else {
+      const filtered = grnNumbers.filter(
+        (item) =>
+          item.grn.toLowerCase().includes(value.toLowerCase()) ||
+          item.rawMaterialName.toLowerCase().includes(value.toLowerCase()) ||
+          item.supplier.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredGrnSuggestions(filtered);
+      setShowGrnSuggestions(filtered.length > 0);
+    }
+  };
+
+  // Add handler to select GRN from suggestions
+  const handleSelectGrn = (grn: string) => {
+    setGrnSearchInput(grn);
+    setFormData((prev) => ({
+      ...prev,
+      grnNumber: grn,
+    }));
+    setShowGrnSuggestions(false);
+  };
+
+
   const basicInfoComplete =
     formData.batchNumber &&
     (formData.productId || newProductName) &&
@@ -413,7 +486,7 @@ const AddBatch: React.FC = () => {
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
-              className="mb-4 bg-destructive/10 border border-destructive/30 text-destructive px-4 py- rounded-lg flex items-start"
+              className="mb-4 bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg flex items-start"
             >
               <AlertCircle className="h-5 w-5 mr-3 mt-0.5 flex-shrink-0" />
               <div className="flex-1">
@@ -430,13 +503,10 @@ const AddBatch: React.FC = () => {
           )}
         </AnimatePresence>
 
-        <motion.div
-          variants={itemVariants}
-          className="bg-card rounded-xl  mb-3"
-        >
+        {/* Header */}
+        <motion.div variants={itemVariants} className="bg-card rounded-xl mb-3">
           <div className="pr-5 pb-5 pt-5 pl-2">
-            {/* Header Row: Icon, Title, Draft Info, Back Button */}
-            <div className=" flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <div className="w-1.5 h-10 bg-primary rounded-full" />
               <div className="p-2 bg-primary rounded-md">
                 <Package className="text-primary-foreground" size={20} />
@@ -463,591 +533,716 @@ const AddBatch: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Basic Information */}
-        <motion.div
-          variants={itemVariants}
-          className="bg-card rounded-xl border border-border"
-        >
-          <div className="p-5 border-b border-border">
-            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-              <SlidersHorizontal size={18} />
-              Basic Information
-              {basicInfoComplete && (
-                <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">
-                  <Check size={12} className="mr-1" />
-                  Complete
-                </span>
-              )}
-            </h2>
-          </div>
-
-          <div className="p-5">
-            {/* First row: Batch Number, Product, Production Date, Best Before Date */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-foreground">
-                  Batch Number <span className="text-destructive">*</span>
-                </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="batchNumber"
-                    value={formData.batchNumber}
-                    onChange={handleInputChange}
-                    className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
-                    placeholder="Enter unique batch identifier"
-                    required
-                  />
-                  <Package
-                    size={16}
-                    className="absolute left-3.5 top-3"
-                    style={{ color: 'var(--primary)' }}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-foreground">
-                  Product <span className="text-destructive">*</span>
-                </label>
-                <div className="relative">
-                  <select
-                    value={showNewProductForm ? 'new' : selectedProductId}
-                    onChange={handleProductChange}
-                    className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background appearance-none cursor-pointer pl-10"
-                    required
-                  >
-                    <option value="">Choose product type</option>
-                    {productsData.map((product: any) => (
-                      <option key={product.id} value={product.id}>
-                        {product.name}
-                      </option>
-                    ))}
-                    <option value="new">Create New Product</option>
-                  </select>
-                  <Tag
-                    size={16}
-                    className="absolute left-3.5 top-3 text-muted-foreground pointer-events-none"
-                    style={{ color: 'var(--primary)' }}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-foreground">
-                  Production Date <span className="text-destructive">*</span>
-                </label>
-                <div className="relative">
-                  <input
-                    type="date"
-                    name="dateOfProduction"
-                    value={formData.dateOfProduction}
-                    onChange={handleInputChange}
-                    className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
-                    required
-                  />
-                  <Calendar
-                    size={16}
-                    className="absolute left-3.5 top-3 text-muted-foreground"
-                    style={{ color: 'var(--primary)' }}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-foreground">
-                  Best Before Date <span className="text-destructive">*</span>
-                </label>
-                <div className="relative">
-                  <input
-                    type="date"
-                    name="bestBeforeDate"
-                    value={formData.bestBeforeDate}
-                    onChange={handleInputChange}
-                    className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
-                    required
-                  />
-                  <Clock
-                    size={16}
-                    className="absolute left-3.5 top-3 text-muted-foreground"
-                    style={{ color: 'var(--primary)' }}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* New Product Name (if needed) */}
-            {showNewProductForm && (
-              <div className="mt-5">
-                <label className="block text-sm font-medium text-foreground">
-                  New Product Name
-                </label>
-                <input
-                  type="text"
-                  value={newProductName}
-                  onChange={(e) => setNewProductName(e.target.value)}
-                  className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background"
-                  placeholder="Enter new product name"
-                  required
-                />
-              </div>
-            )}
-
-            {/* Second row: Sample Analysis Status, Started, Completed */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-5">
-              <div className="space-y-2">
-                <label className="block text-sm font-medium text-foreground">
-                  Sample Analysis Status
-                </label>
-                <div className="flex items-center gap-2">
-                  <select
-                    name="sampleAnalysisStatus"
-                    value={formData.sampleAnalysisStatus}
-                    onChange={handleInputChange}
-                    className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background"
-                  >
-                    <option value="IN_PROGRESS">In Progress</option>
-                    <option value="COMPLETED">Completed</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="block text-sm text-foreground">
-                  Analysis Started
-                </label>
-                <input
-                  type="date"
-                  name="sampleAnalysisStarted"
-                  value={formData.sampleAnalysisStarted}
-                  onChange={handleInputChange}
-                  className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="block text-sm text-foreground">
-                  Analysis Completed
-                </label>
-                <div className="relative">
-                  <input
-                    type="date"
-                    name="sampleAnalysisCompleted"
-                    value={formData.sampleAnalysisCompleted}
-                    onChange={handleInputChange}
-                    className={`w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pr-10 ${
-                      formData.sampleAnalysisStatus !== 'COMPLETED'
-                        ? 'cursor-not-allowed text-muted-foreground bg-muted'
-                        : ''
-                    }`}
-                    disabled={formData.sampleAnalysisStatus !== 'COMPLETED'}
-                  />
-                  {formData.sampleAnalysisStatus !== 'COMPLETED' && (
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                      {/* Lucide: Circle with a slash (radius line) */}
-                      <svg
-                        width="20"
-                        height="20"
-                        viewBox="0 0 20 20"
-                        fill="none"
-                      >
-                        <circle
-                          cx="10"
-                          cy="10"
-                          r="8"
-                          stroke="var(--muted-foreground)"
-                          strokeWidth="2"
-                        />
-                        <line
-                          x1="6"
-                          y1="14"
-                          x2="14"
-                          y2="6"
-                          stroke="var(--muted-foreground)"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
+        {/* Main Content: 30-70 Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Sidebar: Basic Information (30%) */}
+          <motion.div variants={itemVariants} className="lg:col-span-3">
+            <div className="bg-card rounded-xl border border-border sticky top-4">
+              <div className="p-5 border-b border-border">
+                <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                  <SlidersHorizontal size={18} />
+                  Basic Information
+                  {basicInfoComplete && (
+                    <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">
+                      <Check size={12} className="mr-1" />
+                      Complete
                     </span>
                   )}
+                </h2>
+              </div>
+
+              <div className="p-5 space-y-5">
+                {/* Batch Number */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    Batch Number <span className="text-destructive">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="batchNumber"
+                      value={formData.batchNumber}
+                      onChange={handleInputChange}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
+                      placeholder="Enter unique batch identifier"
+                      required
+                    />
+                    <Package
+                      size={16}
+                      className="absolute left-3.5 top-3"
+                      style={{ color: 'var(--primary)' }}
+                    />
+                  </div>
+                </div>
+
+                {/* Product */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    Product <span className="text-destructive">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      value={showNewProductForm ? 'new' : selectedProductId}
+                      onChange={handleProductChange}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background appearance-none cursor-pointer pl-10"
+                      required
+                    >
+                      <option value="">Choose product type</option>
+                      {productsData.map((product: any) => (
+                        <option key={product.id} value={product.id}>
+                          {product.name}
+                        </option>
+                      ))}
+                      <option value="new">Create New Product</option>
+                    </select>
+                    <Tag
+                      size={16}
+                      className="absolute left-3.5 top-3 text-muted-foreground pointer-events-none"
+                      style={{ color: 'var(--primary)' }}
+                    />
+                  </div>
+                </div>
+
+                {/* New Product Name */}
+                {showNewProductForm && (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-foreground">
+                      New Product Name
+                    </label>
+                    <input
+                      type="text"
+                      value={newProductName}
+                      onChange={(e) => setNewProductName(e.target.value)}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background"
+                      placeholder="Enter new product name"
+                      required
+                    />
+                  </div>
+                )}
+
+                {/* Production Date */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    Production Date <span className="text-destructive">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      name="dateOfProduction"
+                      value={formData.dateOfProduction}
+                      onChange={handleInputChange}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
+                      required
+                    />
+                    <Calendar
+                      size={16}
+                      className="absolute left-3.5 top-3 text-muted-foreground"
+                      style={{ color: 'var(--primary)' }}
+                    />
+                  </div>
+                </div>
+
+                {/* Best Before Date */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    Best Before Date <span className="text-destructive">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      name="bestBeforeDate"
+                      value={formData.bestBeforeDate}
+                      onChange={handleInputChange}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
+                      required
+                    />
+                    <Clock
+                      size={16}
+                      className="absolute left-3.5 top-3 text-muted-foreground"
+                      style={{ color: 'var(--primary)' }}
+                    />
+                  </div>
+                </div>
+
+                {/* Sample Analysis Status */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    Sample Analysis Status
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <select
+                      name="sampleAnalysisStatus"
+                      value={formData.sampleAnalysisStatus}
+                      onChange={handleInputChange}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background"
+                    >
+                      <option value="IN_PROGRESS">In Progress</option>
+                      <option value="COMPLETED">Completed</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Analysis Started */}
+                <div className="space-y-2">
+                  <label className="block text-sm text-foreground">
+                    Analysis Started
+                  </label>
+                  <input
+                    type="date"
+                    name="sampleAnalysisStarted"
+                    value={formData.sampleAnalysisStarted}
+                    onChange={handleInputChange}
+                    className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background"
+                  />
+                </div>
+
+                {/* Analysis Completed */}
+                <div className="space-y-2">
+                  <label className="block text-sm text-foreground">
+                    Analysis Completed
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      name="sampleAnalysisCompleted"
+                      value={formData.sampleAnalysisCompleted}
+                      onChange={handleInputChange}
+                      className={`w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pr-10 ${
+                        formData.sampleAnalysisStatus !== 'COMPLETED'
+                          ? 'cursor-not-allowed text-muted-foreground bg-muted'
+                          : ''
+                      }`}
+                      disabled={formData.sampleAnalysisStatus !== 'COMPLETED'}
+                    />
+                    {formData.sampleAnalysisStatus !== 'COMPLETED' && (
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                        >
+                          <circle
+                            cx="10"
+                            cy="10"
+                            r="8"
+                            stroke="var(--muted-foreground)"
+                            strokeWidth="2"
+                          />
+                          <line
+                            x1="6"
+                            y1="14"
+                            x2="14"
+                            y2="6"
+                            stroke="var(--muted-foreground)"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Batch Code */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    Batch Code
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="batchCode"
+                      value={formData.batchCode}
+                      onChange={handleInputChange}
+                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
+                      placeholder="Enter batch code"
+                    />
+                    <Hash
+                      size={16}
+                      className="absolute left-3.5 top-3"
+                      style={{ color: 'var(--primary)' }}
+                    />
+                  </div>
+                </div>
+
+                {/* GRN Number with Suggestions */}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    GRN Number
+                  </label>
+                  <div className="relative">
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={grnSearchInput}
+                        onChange={handleGrnInputChange}
+                        onFocus={() => {
+                          if (
+                            grnSearchInput.trim() !== '' &&
+                            filteredGrnSuggestions.length > 0
+                          ) {
+                            setShowGrnSuggestions(true);
+                          }
+                        }}
+                        onBlur={() => {
+                          // Delay hiding to allow clicking on suggestions
+                          setTimeout(() => setShowGrnSuggestions(false), 200);
+                        }}
+                        className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
+                        placeholder="Type GRN number (optional)"
+                        autoComplete="off"
+                      />
+                      <Search
+                        size={16}
+                        className="absolute left-3.5 top-3 text-muted-foreground pointer-events-none"
+                        style={{ color: 'var(--primary)' }}
+                      />
+                      {isLoadingGRNs && (
+                        <div className="absolute right-3 top-3">
+                          <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{
+                              duration: 1,
+                              ease: 'linear',
+                              repeat: Infinity,
+                            }}
+                          >
+                            <RotateCw size={16} className="text-primary/70" />
+                          </motion.div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* GRN Suggestions Dropdown */}
+                    {showGrnSuggestions &&
+                      filteredGrnSuggestions.length > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -8 }}
+                          className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto"
+                        >
+                          {filteredGrnSuggestions.map((suggestion, idx) => (
+                            <motion.button
+                              key={`${suggestion.grn}-${idx}`}
+                              type="button"
+                              initial={{ opacity: 0, y: -4 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: idx * 0.05 }}
+                              onClick={() => handleSelectGrn(suggestion.grn)}
+                              className={`w-full text-left px-4 py-3 hover:bg-accent transition-colors border-b border-border last:border-b-0 ${
+                                idx % 2 === 0 ? 'bg-card' : 'bg-muted/30'
+                              }`}
+                            >
+                              <div className="flex items-start justify-between gap-2">
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-medium text-foreground text-sm truncate">
+                                    {suggestion.grn}
+                                  </div>
+                                  <div className="text-xs text-muted-foreground mt-1 truncate">
+                                    {suggestion.rawMaterialName}
+                                  </div>
+                                  <div className="text-xs text-muted-foreground truncate">
+                                    {suggestion.supplier}
+                                  </div>
+                                </div>
+                                <div className="flex-shrink-0">
+                                  <Check size={16} className="text-primary" />
+                                </div>
+                              </div>
+                            </motion.button>
+                          ))}
+                        </motion.div>
+                      )}
+
+                    {/* No suggestions message */}
+                    {showGrnSuggestions &&
+                      grnSearchInput.trim() !== '' &&
+                      filteredGrnSuggestions.length === 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg z-50 p-3"
+                        >
+                          <div className="text-sm text-muted-foreground text-center">
+                            No GRN numbers found matching "{grnSearchInput}"
+                          </div>
+                        </motion.div>
+                      )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Quality Parameters */}
-        <motion.div
-          variants={itemVariants}
-          className="mt-6 bg-card rounded-xl border border-border shadow-sm"
-        >
-          <div className="p-5 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
-            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-              <Beaker size={18} className="text-primary" />
-              Quality Parameters
-              {parametersComplete && (
-                <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-md">
-                  <Check size={12} className="mr-1" />
-                  Complete
-                </span>
-              )}
-            </h2>
-          </div>
-
-          <div className="p-5">
-            {isLoadingProductParameters && selectedProductId && (
-              <div className="flex items-center justify-center py-12">
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{
-                    duration: 1.5,
-                    ease: 'linear',
-                    repeat: Infinity,
-                  }}
-                >
-                  <RotateCw size={28} className="text-primary/70" />
-                </motion.div>
+          {/* Right Content: Quality Parameters (70%) */}
+          <motion.div variants={itemVariants} className="lg:col-span-9">
+            <div className="bg-card rounded-xl border border-border shadow-sm">
+              <div className="p-5 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
+                <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                  <Beaker size={18} className="text-primary" />
+                  Quality Parameters
+                  {parametersComplete && (
+                    <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+                      <Check size={12} className="mr-1" />
+                      Complete
+                    </span>
+                  )}
+                </h2>
               </div>
-            )}
 
-            {selectedProductId &&
-              !isLoadingProductParameters &&
-              Object.keys(parametersByCategory).length === 0 && (
-                <div className="text-center py-12 border border-dashed border-border rounded-lg bg-accent/30">
-                  <div className="text-sm text-muted-foreground">
-                    No Parameters Configured for this product.
+              <div className="p-5">
+                {isLoadingProductParameters && selectedProductId && (
+                  <div className="flex items-center justify-center py-12">
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{
+                        duration: 1.5,
+                        ease: 'linear',
+                        repeat: Infinity,
+                      }}
+                    >
+                      <RotateCw size={28} className="text-primary/70" />
+                    </motion.div>
                   </div>
-                </div>
-              )}
+                )}
 
-            {!selectedProductId &&
-              !showNewProductForm &&
-              !isLoadingProductParameters && (
-                <div className="text-center py-12 border border-dashed border-border rounded-lg bg-accent/30">
-                  <div className="text-sm text-muted-foreground">
-                    Select a product to view quality parameters.
-                  </div>
-                </div>
-              )}
+                {selectedProductId &&
+                  !isLoadingProductParameters &&
+                  Object.keys(parametersByCategory).length === 0 && (
+                    <div className="text-center py-12 border border-dashed border-border rounded-lg bg-accent/30">
+                      <div className="text-sm text-muted-foreground">
+                        No Parameters Configured for this product.
+                      </div>
+                    </div>
+                  )}
 
-            {selectedProductId &&
-              !isLoadingProductParameters &&
-              Object.keys(parametersByCategory).length > 0 && (
-                <div className="space-y-6">
-                  {Object.entries(parametersByCategory).map(
-                    ([categoryName, parameters]) => {
-                      const categoryParams = Array.isArray(parameters)
-                        ? parameters
-                        : [];
+                {!selectedProductId &&
+                  !showNewProductForm &&
+                  !isLoadingProductParameters && (
+                    <div className="text-center py-12 border border-dashed border-border rounded-lg bg-accent/30">
+                      <div className="text-sm text-muted-foreground">
+                        Select a product to view quality parameters.
+                      </div>
+                    </div>
+                  )}
 
-                      return (
-                        <div
-                          key={categoryName}
-                          className="border border-border rounded-lg overflow-hidden shadow-sm"
-                        >
-                          <div className="px-4 py-3 bg-primary/5 border-b border-border">
-                            <div className="text-sm font-semibold text-foreground">
-                              {categoryName}
-                            </div>
-                          </div>
+                {selectedProductId &&
+                  !isLoadingProductParameters &&
+                  Object.keys(parametersByCategory).length > 0 && (
+                    <div className="space-y-6">
+                      {Object.entries(parametersByCategory).map(
+                        ([categoryName, parameters]) => {
+                          const categoryParams = Array.isArray(parameters)
+                            ? parameters
+                            : [];
 
-                          <div className="overflow-x-auto">
-                            <table className="w-full">
-                              <thead className="bg-accent/40 border-b border-border">
-                                <tr>
-                                  <th className="text-left p-3 text-xs font-semibold text-foreground uppercase">
-                                    <div className="inline-flex items-center gap-2">
-                                      <Beaker
-                                        size={13}
-                                        className="text-primary"
-                                      />
-                                      Parameter
-                                    </div>
-                                  </th>
-                                  <th className="text-left p-3 text-xs font-semibold text-foreground uppercase w-44">
-                                    <div className="inline-flex items-center gap-2">
-                                      <Hash
-                                        size={13}
-                                        className="text-primary"
-                                      />
-                                      Value
-                                    </div>
-                                  </th>
-                                  <th className="text-left p-3 text-xs font-semibold text-foreground uppercase w-32">
-                                    <div className="inline-flex items-center gap-2">
-                                      <Ruler
-                                        size={13}
-                                        className="text-primary"
-                                      />
-                                      Unit
-                                    </div>
-                                  </th>
-                                  <th className="text-center p-3 text-xs font-semibold text-foreground uppercase w-24">
-                                    <div className="inline-flex items-center gap-2 justify-center">
-                                      <CheckCircle
-                                        size={13}
-                                        className="text-primary"
-                                      />
-                                      Status
-                                    </div>
-                                  </th>
-                                  <th className="text-center p-3 text-xs font-semibold text-foreground uppercase w-20">
-                                    <div className="inline-flex items-center gap-2 justify-center">
-                                      <Settings
-                                        size={13}
-                                        className="text-primary"
-                                      />
-                                      Action
-                                    </div>
-                                  </th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {categoryParams
-                                  .filter(
-                                    (parameter: any) =>
-                                      !removedParameters.has(parameter.id)
-                                  )
-                                  .map((parameter: any, idx: number) => {
-                                    const paramValue = parameterValues.find(
-                                      (pv) => pv.parameterId === parameter.id
-                                    );
-                                    const hasValue =
-                                      paramValue &&
-                                      paramValue.value.trim() !== '';
+                          return (
+                            <div
+                              key={categoryName}
+                              className="border border-border rounded-lg overflow-hidden shadow-sm"
+                            >
+                              <div className="px-4 py-3 bg-primary/5 border-b border-border">
+                                <div className="text-sm font-semibold text-foreground">
+                                  {categoryName}
+                                </div>
+                              </div>
 
-                                    return (
-                                      <tr
-                                        key={parameter.id}
-                                        className={`border-b border-border last:border-b-0 ${
-                                          idx % 2 === 1
-                                            ? 'bg-accent/20'
-                                            : 'bg-card'
-                                        } hover:bg-accent/30 transition-colors duration-150`}
-                                      >
-                                        <td className="p-3 align-top">
-                                          <div className="text-sm font-medium text-foreground">
-                                            {parameter.name}
-                                          </div>
-                                          {parameter.description && (
-                                            <div className="text-xs text-muted-foreground mt-0.5">
-                                              {parameter.description}
-                                            </div>
-                                          )}
-                                        </td>
-                                        <td className="p-3 align-top">
-                                          <div className="flex items-center gap-2">
-                                            {isSieveParam(parameter.name) && (
-                                              <select
-                                                value={
-                                                  sieveSelections[
-                                                    parameter.id
-                                                  ] || ''
-                                                }
-                                                onChange={(e) => {
-                                                  const sel = e.target.value;
-                                                  setSieveSelections(
-                                                    (prev) => ({
-                                                      ...prev,
-                                                      [parameter.id]: sel,
-                                                    })
-                                                  );
-                                                  const existing =
-                                                    parameterValues.find(
-                                                      (pv) =>
-                                                        pv.parameterId ===
+                              <div className="overflow-x-auto">
+                                <table className="w-full">
+                                  <thead className="bg-accent/40 border-b border-border">
+                                    <tr>
+                                      <th className="text-left p-3 text-xs font-semibold text-foreground uppercase">
+                                        <div className="inline-flex items-center gap-2">
+                                          <Beaker
+                                            size={13}
+                                            className="text-primary"
+                                          />
+                                          Parameter
+                                        </div>
+                                      </th>
+                                      <th className="text-left p-3 text-xs font-semibold text-foreground uppercase w-32">
+                                        <div className="inline-flex items-center gap-2">
+                                          <CheckCircle
+                                            size={13}
+                                            className="text-primary"
+                                          />
+                                          Standard
+                                        </div>
+                                      </th>
+                                      <th className="text-left p-3 text-xs font-semibold text-foreground uppercase w-44">
+                                        <div className="inline-flex items-center gap-2">
+                                          <Hash
+                                            size={13}
+                                            className="text-primary"
+                                          />
+                                          Value
+                                        </div>
+                                      </th>
+                                      <th className="text-left p-3 text-xs font-semibold text-foreground uppercase w-32">
+                                        <div className="inline-flex items-center gap-2">
+                                          <Ruler
+                                            size={13}
+                                            className="text-primary"
+                                          />
+                                          Unit
+                                        </div>
+                                      </th>
+                                      <th className="text-center p-3 text-xs font-semibold text-foreground uppercase w-20">
+                                        <div className="inline-flex items-center gap-2 justify-center">
+                                          <Settings
+                                            size={13}
+                                            className="text-primary"
+                                          />
+                                          Action
+                                        </div>
+                                      </th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {categoryParams
+                                      .filter(
+                                        (parameter: any) =>
+                                          !removedParameters.has(parameter.id)
+                                      )
+                                      .map((parameter: any, idx: number) => {
+                                        const paramValue = parameterValues.find(
+                                          (pv) =>
+                                            pv.parameterId === parameter.id
+                                        );
+
+                                        return (
+                                          <tr
+                                            key={parameter.id}
+                                            className={`border-b border-border last:border-b-0 ${
+                                              idx % 2 === 1
+                                                ? 'bg-accent/20'
+                                                : 'bg-card'
+                                            } hover:bg-accent/30 transition-colors duration-150`}
+                                          >
+                                            <td className="p-3 align-top">
+                                              <div className="text-sm font-medium text-foreground">
+                                                {parameter.name}
+                                              </div>
+                                              {parameter.description && (
+                                                <div className="text-xs text-muted-foreground mt-0.5">
+                                                  {parameter.description}
+                                                </div>
+                                              )}
+                                            </td>
+                                            <td className="p-3 align-top">
+                                              <span className="text-sm text-foreground px-2 py-1 rounded border border-border bg-primary/5 font-medium">
+                                                {parameter.standardValue ||
+                                                  'N/A'}
+                                              </span>
+                                            </td>
+                                            <td className="p-3 align-top">
+                                              <div className="flex items-center gap-2">
+                                                {isSieveParam(
+                                                  parameter.name
+                                                ) && (
+                                                  <select
+                                                    value={
+                                                      sieveSelections[
                                                         parameter.id
-                                                    );
-                                                  const valuePart =
-                                                    existing?.value?.includes(
-                                                      '|'
-                                                    )
-                                                      ? existing.value.split(
+                                                      ] || ''
+                                                    }
+                                                    onChange={(e) => {
+                                                      const sel =
+                                                        e.target.value;
+                                                      setSieveSelections(
+                                                        (prev) => ({
+                                                          ...prev,
+                                                          [parameter.id]: sel,
+                                                        })
+                                                      );
+                                                      const existing =
+                                                        parameterValues.find(
+                                                          (pv) =>
+                                                            pv.parameterId ===
+                                                            parameter.id
+                                                        );
+                                                      const valuePart =
+                                                        existing?.value?.includes(
                                                           '|'
-                                                        )[1] || ''
-                                                      : '';
-                                                  const combined =
-                                                    sel && valuePart
-                                                      ? `${sel}|${valuePart}`
-                                                      : sel
-                                                        ? `${sel}|`
-                                                        : valuePart;
-                                                  if (existing) {
-                                                    setParameterValues(
-                                                      parameterValues.map(
+                                                        )
+                                                          ? existing.value.split(
+                                                              '|'
+                                                            )[1] || ''
+                                                          : '';
+                                                      const combined =
+                                                        sel && valuePart
+                                                          ? `${sel}|${valuePart}`
+                                                          : sel
+                                                            ? `${sel}|`
+                                                            : valuePart;
+                                                      if (existing) {
+                                                        setParameterValues(
+                                                          parameterValues.map(
+                                                            (pv) =>
+                                                              pv.parameterId ===
+                                                              parameter.id
+                                                                ? {
+                                                                    ...pv,
+                                                                    value:
+                                                                      combined,
+                                                                  }
+                                                                : pv
+                                                          )
+                                                        );
+                                                      } else {
+                                                        setParameterValues([
+                                                          ...parameterValues,
+                                                          {
+                                                            parameterId:
+                                                              parameter.id,
+                                                            value: combined,
+                                                            unitId:
+                                                              parameter.unitId,
+                                                          },
+                                                        ]);
+                                                      }
+                                                    }}
+                                                    className="border border-input rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary bg-background w-28 min-w-0"
+                                                  >
+                                                    <option value="">
+                                                      sieve size
+                                                    </option>
+                                                    {SIEVE_OPTIONS.map((o) => (
+                                                      <option key={o} value={o}>
+                                                        {o}
+                                                      </option>
+                                                    ))}
+                                                  </select>
+                                                )}
+
+                                                <input
+                                                  type="text"
+                                                  value={
+                                                    isSieveParam(parameter.name)
+                                                      ? (() => {
+                                                          const pv =
+                                                            parameterValues.find(
+                                                              (pvv) =>
+                                                                pvv.parameterId ===
+                                                                parameter.id
+                                                            );
+                                                          return pv?.value?.includes(
+                                                            '|'
+                                                          )
+                                                            ? pv.value.split(
+                                                                '|'
+                                                              )[1] || ''
+                                                            : '';
+                                                        })()
+                                                      : paramValue?.value || ''
+                                                  }
+                                                  onChange={(e) => {
+                                                    const raw = e.target.value;
+                                                    const selectedSize =
+                                                      sieveSelections[
+                                                        parameter.id
+                                                      ] || '';
+
+                                                    const combined =
+                                                      isSieveParam(
+                                                        parameter.name
+                                                      ) && selectedSize
+                                                        ? `${selectedSize}|${raw}`
+                                                        : raw;
+                                                    const existingParam =
+                                                      parameterValues.find(
                                                         (pv) =>
                                                           pv.parameterId ===
                                                           parameter.id
-                                                            ? {
-                                                                ...pv,
-                                                                value: combined,
-                                                              }
-                                                            : pv
-                                                      )
-                                                    );
-                                                  } else {
-                                                    setParameterValues([
-                                                      ...parameterValues,
-                                                      {
-                                                        parameterId:
-                                                          parameter.id,
-                                                        value: combined,
-                                                        unitId:
-                                                          parameter.unitId,
-                                                      },
-                                                    ]);
-                                                  }
-                                                }}
-                                                className="border border-input rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary bg-background w-28 min-w-0"
-                                              >
-                                                <option value="">
-                                                  sieve size
-                                                </option>
-                                                {SIEVE_OPTIONS.map((o) => (
-                                                  <option key={o} value={o}>
-                                                    {o}
-                                                  </option>
-                                                ))}
-                                              </select>
-                                            )}
-
-                                            <input
-                                              type="text"
-                                              value={
-                                                isSieveParam(parameter.name)
-                                                  ? (() => {
-                                                      const pv =
-                                                        parameterValues.find(
-                                                          (pvv) =>
-                                                            pvv.parameterId ===
+                                                      );
+                                                    if (existingParam) {
+                                                      setParameterValues(
+                                                        parameterValues.map(
+                                                          (pv) =>
+                                                            pv.parameterId ===
                                                             parameter.id
-                                                        );
-                                                      return pv?.value?.includes(
-                                                        '|'
-                                                      )
-                                                        ? pv.value.split(
-                                                            '|'
-                                                          )[1] || ''
-                                                        : '';
-                                                    })()
-                                                  : paramValue?.value || ''
-                                              }
-                                              onChange={(e) => {
-                                                const raw = e.target.value;
-                                                const selectedSize =
-                                                  sieveSelections[
+                                                              ? {
+                                                                  ...pv,
+                                                                  value:
+                                                                    combined,
+                                                                }
+                                                              : pv
+                                                        )
+                                                      );
+                                                    } else {
+                                                      setParameterValues([
+                                                        ...parameterValues,
+                                                        {
+                                                          parameterId:
+                                                            parameter.id,
+                                                          value: combined,
+                                                          unitId:
+                                                            parameter.unitId,
+                                                        },
+                                                      ]);
+                                                    }
+                                                  }}
+                                                  className={`border border-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary bg-background flex-1 min-w-0 ${
+                                                    isSieveParam(parameter.name)
+                                                      ? 'w-full'
+                                                      : ''
+                                                  }`}
+                                                  placeholder="Enter value"
+                                                  disabled={
+                                                    isSieveParam(
+                                                      parameter.name
+                                                    ) &&
+                                                    !sieveSelections[
+                                                      parameter.id
+                                                    ]
+                                                  }
+                                                />
+                                              </div>
+                                            </td>
+                                            <td className="p-3 align-top">
+                                              {parameter.unit ? (
+                                                <span className="text-sm text-foreground px-2 py-1 rounded border border-border bg-accent/20">
+                                                  {parameter.unit.symbol}
+                                                </span>
+                                              ) : (
+                                                <span className="text-sm text-muted-foreground italic">
+                                                  No unit
+                                                </span>
+                                              )}
+                                            </td>
+                                           
+                                            <td className="p-3 text-center align-top">
+                                              <button
+                                                type="button"
+                                                onClick={() =>
+                                                  handleRemoveParameter(
                                                     parameter.id
-                                                  ] || '';
-
-                                                const combined =
-                                                  isSieveParam(
-                                                    parameter.name
-                                                  ) && selectedSize
-                                                    ? `${selectedSize}|${raw}`
-                                                    : raw;
-                                                const existingParam =
-                                                  parameterValues.find(
-                                                    (pv) =>
-                                                      pv.parameterId ===
-                                                      parameter.id
-                                                  );
-                                                if (existingParam) {
-                                                  setParameterValues(
-                                                    parameterValues.map((pv) =>
-                                                      pv.parameterId ===
-                                                      parameter.id
-                                                        ? {
-                                                            ...pv,
-                                                            value: combined,
-                                                          }
-                                                        : pv
-                                                    )
-                                                  );
-                                                } else {
-                                                  setParameterValues([
-                                                    ...parameterValues,
-                                                    {
-                                                      parameterId: parameter.id,
-                                                      value: combined,
-                                                      unitId: parameter.unitId,
-                                                    },
-                                                  ]);
+                                                  )
                                                 }
-                                              }}
-                                              className={`border border-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary bg-background flex-1 min-w-0 ${
-                                                isSieveParam(parameter.name)
-                                                  ? 'w-full'
-                                                  : ''
-                                              }`}
-                                              placeholder="Enter value"
-                                              disabled={
-                                                isSieveParam(parameter.name) &&
-                                                !sieveSelections[parameter.id]
-                                              }
-                                            />
-                                          </div>
-                                        </td>
-                                        <td className="p-3 align-top">
-                                          {parameter.unit ? (
-                                            <span className="text-sm text-foreground px-2 py-1 rounded border border-border bg-accent/20">
-                                              {parameter.unit.symbol}
-                                            </span>
-                                          ) : (
-                                            <span className="text-sm text-muted-foreground italic">
-                                              No unit
-                                            </span>
-                                          )}
-                                        </td>
-                                        <td className="p-3 text-center align-top">
-                                          <div
-                                            className={`inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium border ${
-                                              hasValue
-                                                ? 'bg-primary/10 text-primary border-primary/20'
-                                                : 'bg-muted text-muted-foreground border-border'
-                                            }`}
-                                          >
-                                            {hasValue ? (
-                                              <Check
-                                                size={12}
-                                                className="mr-1"
-                                              />
-                                            ) : (
-                                              <Clock
-                                                size={12}
-                                                className="mr-1"
-                                              />
-                                            )}
-                                            {hasValue ? 'Filled' : 'Pending'}
-                                          </div>
-                                        </td>
-                                        <td className="p-3 text-center align-top">
-                                          <button
-                                            type="button"
-                                            onClick={() =>
-                                              handleRemoveParameter(
-                                                parameter.id
-                                              )
-                                            }
-                                            className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-destructive/30 text-destructive hover:bg-destructive/10 transition cursor-pointer"
-                                            title={`Remove ${parameter.name} parameter`}
-                                          >
-                                            <Minus size={14} />
-                                          </button>
-                                        </td>
-                                      </tr>
-                                    );
-                                  })}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      );
-                    }
+                                                className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-destructive/30 text-destructive hover:bg-destructive/10 transition cursor-pointer"
+                                                title={`Remove ${parameter.name} parameter`}
+                                              >
+                                                <Minus size={14} />
+                                              </button>
+                                            </td>
+                                          </tr>
+                                        );
+                                      })}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
                   )}
-                </div>
-              )}
-          </div>
-        </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
 
         {/* Footer actions */}
         <motion.div

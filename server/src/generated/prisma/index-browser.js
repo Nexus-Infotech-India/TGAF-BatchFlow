@@ -129,7 +129,9 @@ exports.Prisma.ActivityLogScalarFieldEnum = {
 exports.Prisma.BatchScalarFieldEnum = {
   id: 'id',
   batchNumber: 'batchNumber',
+  batchCode: 'batchCode',
   productId: 'productId',
+  grnNumber: 'grnNumber',
   dateOfProduction: 'dateOfProduction',
   bestBeforeDate: 'bestBeforeDate',
   sampleAnalysisStarted: 'sampleAnalysisStarted',
@@ -225,7 +227,9 @@ exports.Prisma.UserScalarFieldEnum = {
 exports.Prisma.BatchDraftScalarFieldEnum = {
   id: 'id',
   batchNumber: 'batchNumber',
+  batchCode: 'batchCode',
   productId: 'productId',
+  grnNumber: 'grnNumber',
   dateOfProduction: 'dateOfProduction',
   bestBeforeDate: 'bestBeforeDate',
   sampleAnalysisStarted: 'sampleAnalysisStarted',
@@ -276,6 +280,7 @@ exports.Prisma.StandardParameterScalarFieldEnum = {
   productType: 'productType',
   description: 'description',
   dataType: 'dataType',
+  standardValue: 'standardValue',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -298,6 +303,7 @@ exports.Prisma.BatchParameterValueScalarFieldEnum = {
   batchId: 'batchId',
   parameterId: 'parameterId',
   value: 'value',
+  standardValue: 'standardValue',
   unitId: 'unitId',
   methodologyId: 'methodologyId',
   verificationResult: 'verificationResult',

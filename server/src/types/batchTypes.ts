@@ -8,6 +8,8 @@ export interface JwtPayload {
 
 // BatchCreateRequest type
 export interface BatchCreateRequest {
+  batchCode: null;
+  grnNumber: null;
   batchNumber: string;
   productId: string;
   dateOfProduction: string;
@@ -30,6 +32,7 @@ export interface BatchUpdateRequest extends Partial<BatchCreateRequest> {
 
 // BatchParameterValueInput type for creating/updating parameter values
 export interface BatchParameterValueInput {
+  standardValue: any;
   parameterId: string;
   value: string;
   unitId?: string;

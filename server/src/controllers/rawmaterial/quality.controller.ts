@@ -228,7 +228,7 @@ export class RMQualityController {
         }
     }
 
-    // Export RM Quality Report as PDF
+    // Export RM Quality Report as excel
     static async exportQualityReport(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params;
@@ -368,6 +368,357 @@ export class RMQualityController {
             res.status(500).json({
                 success: false,
                 error: 'Failed to export RM Quality Report',
+            });
+        }
+    }
+
+    // Export all RM Quality Reports as single Excel file
+    static async exportAllQualityReports(req: Request, res: Response): Promise<void> {
+        try {
+            // Fetch all reports with their parameters
+            const reports = await prisma.rMQualityReport.findMany({
+                include: {
+                    parameters: true,
+                    createdBy: {
+                        select: {
+                            name: true,
+                            email: true,
+                        },
+                    },
+                },
+                orderBy: { createdAt: 'desc' },
+            });
+
+            if (reports.length === 0) {
+                res.status(404).json({
+                    success: false,
+                    error: 'No quality reports found to export',
+                });
+                return;
+            }
+
+            // Create Excel workbook with single sheet
+            const workbook = new ExcelJS.Workbook();
+            const sheet = workbook.addWorksheet('All Quality Reports');
+
+            let currentRow = 1;
+
+            // ===== SUMMARY SECTION =====
+            const summaryTitleRow = sheet.addRow(['QUALITY REPORTS SUMMARY', '']);
+            summaryTitleRow.font = { bold: true, size: 16, color: { argb: 'FFFFFF' } };
+            summaryTitleRow.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '4472C4' },
+            };
+            summaryTitleRow.alignment = { horizontal: 'center', vertical: 'middle' };
+            sheet.mergeCells(`A${currentRow}:G${currentRow}`);
+            summaryTitleRow.height = 25;
+            currentRow++;
+
+            // Empty row
+            currentRow++;
+
+            // Summary table header
+            const summaryHeaderRow = sheet.addRow([
+                'S.No',
+                'Raw Material',
+                'Variety',
+                'Supplier',
+                'GRN',
+                'Created By',
+                'Date Created',
+            ]);
+            summaryHeaderRow.font = { bold: true, color: { argb: 'FFFFFF' }, size: 11 };
+            summaryHeaderRow.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '70AD47' },
+            };
+            summaryHeaderRow.alignment = { horizontal: 'center', vertical: 'middle' };
+
+            // Add summary data
+            reports.forEach((report, index) => {
+                const summaryRow = sheet.addRow([
+                    index + 1,
+                    report.rawMaterialName,
+                    report.variety,
+                    report.supplier,
+                    report.grn,
+                    report.createdBy?.name || 'N/A',
+                    new Date(report.createdAt).toLocaleDateString('en-IN'),
+                ]);
+
+                // Alternate row colors
+                if (index % 2 === 0) {
+                    summaryRow.eachCell((cell) => {
+                        cell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'F2F2F2' },
+                        };
+                    });
+                }
+
+                // Add borders
+                summaryRow.eachCell((cell) => {
+                    cell.border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                    cell.alignment = { horizontal: 'left', vertical: 'middle' };
+                });
+
+                currentRow++;
+            });
+
+            // Add borders to summary header
+            for (let col = 1; col <= 7; col++) {
+                const cell = sheet.getCell(currentRow - reports.length - 1, col);
+                cell.border = {
+                    top: { style: 'medium' },
+                    left: { style: 'medium' },
+                    bottom: { style: 'medium' },
+                    right: { style: 'medium' },
+                };
+            }
+
+            // Empty rows for spacing
+            currentRow += 3;
+
+            // ===== DETAILED REPORTS SECTION =====
+            reports.forEach((report, reportIndex) => {
+                // Report Title
+                const reportTitleRow = sheet.addRow([
+                    `RM QUALITY REPORT #${reportIndex + 1} - ${report.rawMaterialName}`,
+                    '',
+                ]);
+                reportTitleRow.font = { bold: true, size: 13, color: { argb: 'FFFFFF' } };
+                reportTitleRow.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '4472C4' },
+                };
+                reportTitleRow.alignment = { horizontal: 'left', vertical: 'middle' };
+                sheet.mergeCells(`A${currentRow}:G${currentRow}`);
+                reportTitleRow.height = 20;
+                currentRow++;
+
+                // Basic Information Section
+                const basicHeaderRow = sheet.addRow(['BASIC INFORMATION', '']);
+                basicHeaderRow.font = { bold: true, size: 11, color: { argb: 'FFFFFF' } };
+                basicHeaderRow.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '70AD47' },
+                };
+                sheet.mergeCells(`A${currentRow}:G${currentRow}`);
+                currentRow++;
+
+                // Basic info data
+                const basicInfo = [
+                    ['Report ID', report.id],
+                    ['Raw Material Name', report.rawMaterialName],
+                    ['Variety', report.variety],
+                    ['Supplier', report.supplier],
+                    ['GRN', report.grn],
+                    ['Date of Report', new Date(report.dateOfReport).toLocaleDateString('en-IN')],
+                    ['Created By', report.createdBy?.name || 'N/A'],
+                    ['Created Email', report.createdBy?.email || 'N/A'],
+                    ['Created At', new Date(report.createdAt).toLocaleString('en-IN')],
+                    ['Updated At', new Date(report.updatedAt).toLocaleString('en-IN')],
+                ];
+
+                basicInfo.forEach(([field, value]) => {
+                    const row = sheet.addRow([field, value]);
+                    row.getCell(1).font = { bold: true };
+                    row.getCell(1).fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'E7E6E6' },
+                    };
+                    row.getCell(1).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                    row.getCell(2).border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                    currentRow++;
+                });
+
+                // Empty row
+                currentRow++;
+
+                // Quality Parameters Section
+                const paramHeaderRow = sheet.addRow(['QUALITY PARAMETERS', '']);
+                paramHeaderRow.font = { bold: true, size: 11, color: { argb: 'FFFFFF' } };
+                paramHeaderRow.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '70AD47' },
+                };
+                sheet.mergeCells(`A${currentRow}:G${currentRow}`);
+                currentRow++;
+
+                // Parameter table header
+                const tableHeaderRow = sheet.addRow([
+                    'Parameter',
+                    'Standard',
+                    'Result',
+                    '',
+                    '',
+                    '',
+                    '',
+                ]);
+                tableHeaderRow.font = { bold: true, color: { argb: 'FFFFFF' }, size: 10 };
+                tableHeaderRow.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '4472C4' },
+                };
+                tableHeaderRow.alignment = { horizontal: 'center', vertical: 'middle' };
+
+                for (let col = 1; col <= 3; col++) {
+                    tableHeaderRow.getCell(col).border = {
+                        top: { style: 'medium' },
+                        left: { style: 'medium' },
+                        bottom: { style: 'medium' },
+                        right: { style: 'medium' },
+                    };
+                }
+
+                currentRow++;
+
+                // Add parameters
+                report.parameters.forEach((param, paramIndex) => {
+                    const paramRow = sheet.addRow([param.parameter, param.standard, param.result]);
+
+                    // Alternate row colors
+                    if (paramIndex % 2 === 0) {
+                        paramRow.eachCell((cell, colNumber) => {
+                            if (colNumber <= 3) {
+                                cell.fill = {
+                                    type: 'pattern',
+                                    pattern: 'solid',
+                                    fgColor: { argb: 'F2F2F2' },
+                                };
+                            }
+                        });
+                    }
+
+                    // Add borders to first 3 columns
+                    for (let col = 1; col <= 3; col++) {
+                        paramRow.getCell(col).border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' },
+                        };
+                        paramRow.getCell(col).alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
+                    }
+
+                    currentRow++;
+                });
+
+                // Empty rows between reports
+                currentRow += 2;
+            });
+
+            // ===== STATISTICS SECTION =====
+            const statsTitleRow = sheet.addRow(['STATISTICS', '']);
+            statsTitleRow.font = { bold: true, size: 14, color: { argb: 'FFFFFF' } };
+            statsTitleRow.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '4472C4' },
+            };
+            statsTitleRow.alignment = { horizontal: 'center', vertical: 'middle' };
+            sheet.mergeCells(`A${currentRow}:B${currentRow}`);
+            statsTitleRow.height = 22;
+            currentRow++;
+
+            // Empty row
+            currentRow++;
+
+            // Calculate statistics
+            const uniqueRawMaterials = new Set(reports.map((r) => r.rawMaterialName)).size;
+            const uniqueSuppliers = new Set(reports.map((r) => r.supplier)).size;
+            const totalParameters = reports.reduce((sum, r) => sum + r.parameters.length, 0);
+            const avgParametersPerReport = (totalParameters / reports.length).toFixed(2);
+
+            const stats = [
+                ['Total Reports', reports.length],
+                ['Unique Raw Materials', uniqueRawMaterials],
+                ['Unique Suppliers', uniqueSuppliers],
+                ['Total Parameters', totalParameters],
+                ['Avg Parameters per Report', avgParametersPerReport],
+                ['Export Date', new Date().toLocaleString('en-IN')],
+            ];
+
+            stats.forEach(([metric, value]) => {
+                const row = sheet.addRow([metric, value]);
+                row.getCell(1).font = { bold: true, color: { argb: 'FFFFFF' } };
+                row.getCell(1).fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: '70AD47' },
+                };
+                row.getCell(2).fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'E7E6E6' },
+                };
+
+                row.eachCell((cell) => {
+                    cell.border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' },
+                    };
+                    cell.alignment = { horizontal: 'left', vertical: 'middle' };
+                });
+
+                currentRow++;
+            });
+
+            // Set column widths
+            sheet.columns = [
+                { width: 25 },
+                { width: 30 },
+                { width: 25 },
+                { width: 15 },
+                { width: 15 },
+                { width: 15 },
+                { width: 15 },
+            ];
+
+            // Set response headers
+            res.setHeader(
+                'Content-Type',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            );
+            res.setHeader(
+                'Content-Disposition',
+                `attachment; filename=RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.xlsx`
+            );
+
+            // Write workbook to response
+            await workbook.xlsx.write(res);
+            res.end();
+        } catch (error) {
+            console.error('Error exporting all RM Quality Reports:', error);
+            res.status(500).json({
+                success: false,
+                error: 'Failed to export RM Quality Reports',
             });
         }
     }

@@ -9062,7 +9062,9 @@ export namespace Prisma {
   export type BatchMinAggregateOutputType = {
     id: string | null
     batchNumber: string | null
+    batchCode: string | null
     productId: string | null
+    grnNumber: string | null
     dateOfProduction: Date | null
     bestBeforeDate: Date | null
     sampleAnalysisStarted: Date | null
@@ -9079,7 +9081,9 @@ export namespace Prisma {
   export type BatchMaxAggregateOutputType = {
     id: string | null
     batchNumber: string | null
+    batchCode: string | null
     productId: string | null
+    grnNumber: string | null
     dateOfProduction: Date | null
     bestBeforeDate: Date | null
     sampleAnalysisStarted: Date | null
@@ -9096,7 +9100,9 @@ export namespace Prisma {
   export type BatchCountAggregateOutputType = {
     id: number
     batchNumber: number
+    batchCode: number
     productId: number
+    grnNumber: number
     dateOfProduction: number
     bestBeforeDate: number
     sampleAnalysisStarted: number
@@ -9115,7 +9121,9 @@ export namespace Prisma {
   export type BatchMinAggregateInputType = {
     id?: true
     batchNumber?: true
+    batchCode?: true
     productId?: true
+    grnNumber?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -9132,7 +9140,9 @@ export namespace Prisma {
   export type BatchMaxAggregateInputType = {
     id?: true
     batchNumber?: true
+    batchCode?: true
     productId?: true
+    grnNumber?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -9149,7 +9159,9 @@ export namespace Prisma {
   export type BatchCountAggregateInputType = {
     id?: true
     batchNumber?: true
+    batchCode?: true
     productId?: true
+    grnNumber?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -9239,7 +9251,9 @@ export namespace Prisma {
   export type BatchGroupByOutputType = {
     id: string
     batchNumber: string
+    batchCode: string | null
     productId: string
+    grnNumber: string | null
     dateOfProduction: Date
     bestBeforeDate: Date
     sampleAnalysisStarted: Date | null
@@ -9273,7 +9287,9 @@ export namespace Prisma {
   export type BatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     batchNumber?: boolean
+    batchCode?: boolean
     productId?: boolean
+    grnNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -9300,7 +9316,9 @@ export namespace Prisma {
   export type BatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     batchNumber?: boolean
+    batchCode?: boolean
     productId?: boolean
+    grnNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -9320,7 +9338,9 @@ export namespace Prisma {
   export type BatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     batchNumber?: boolean
+    batchCode?: boolean
     productId?: boolean
+    grnNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -9340,7 +9360,9 @@ export namespace Prisma {
   export type BatchSelectScalar = {
     id?: boolean
     batchNumber?: boolean
+    batchCode?: boolean
     productId?: boolean
+    grnNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -9354,7 +9376,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "productId" | "dateOfProduction" | "bestBeforeDate" | "sampleAnalysisStarted" | "sampleAnalysisCompleted" | "sampleAnalysisStatus" | "makerId" | "checkerId" | "status" | "rejectionRemarks" | "createdAt" | "updatedAt", ExtArgs["result"]["batch"]>
+  export type BatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "batchCode" | "productId" | "grnNumber" | "dateOfProduction" | "bestBeforeDate" | "sampleAnalysisStarted" | "sampleAnalysisCompleted" | "sampleAnalysisStatus" | "makerId" | "checkerId" | "status" | "rejectionRemarks" | "createdAt" | "updatedAt", ExtArgs["result"]["batch"]>
   export type BatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ActivityLog?: boolean | Batch$ActivityLogArgs<ExtArgs>
     User_Batch_checkerIdToUser?: boolean | Batch$User_Batch_checkerIdToUserArgs<ExtArgs>
@@ -9394,7 +9416,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       batchNumber: string
+      batchCode: string | null
       productId: string
+      grnNumber: string | null
       dateOfProduction: Date
       bestBeforeDate: Date
       sampleAnalysisStarted: Date | null
@@ -9840,7 +9864,9 @@ export namespace Prisma {
   interface BatchFieldRefs {
     readonly id: FieldRef<"Batch", 'String'>
     readonly batchNumber: FieldRef<"Batch", 'String'>
+    readonly batchCode: FieldRef<"Batch", 'String'>
     readonly productId: FieldRef<"Batch", 'String'>
+    readonly grnNumber: FieldRef<"Batch", 'String'>
     readonly dateOfProduction: FieldRef<"Batch", 'DateTime'>
     readonly bestBeforeDate: FieldRef<"Batch", 'DateTime'>
     readonly sampleAnalysisStarted: FieldRef<"Batch", 'DateTime'>
@@ -21288,7 +21314,9 @@ export namespace Prisma {
   export type BatchDraftMinAggregateOutputType = {
     id: string | null
     batchNumber: string | null
+    batchCode: string | null
     productId: string | null
+    grnNumber: string | null
     dateOfProduction: Date | null
     bestBeforeDate: Date | null
     sampleAnalysisStarted: Date | null
@@ -21304,7 +21332,9 @@ export namespace Prisma {
   export type BatchDraftMaxAggregateOutputType = {
     id: string | null
     batchNumber: string | null
+    batchCode: string | null
     productId: string | null
+    grnNumber: string | null
     dateOfProduction: Date | null
     bestBeforeDate: Date | null
     sampleAnalysisStarted: Date | null
@@ -21320,7 +21350,9 @@ export namespace Prisma {
   export type BatchDraftCountAggregateOutputType = {
     id: number
     batchNumber: number
+    batchCode: number
     productId: number
+    grnNumber: number
     dateOfProduction: number
     bestBeforeDate: number
     sampleAnalysisStarted: number
@@ -21339,7 +21371,9 @@ export namespace Prisma {
   export type BatchDraftMinAggregateInputType = {
     id?: true
     batchNumber?: true
+    batchCode?: true
     productId?: true
+    grnNumber?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -21355,7 +21389,9 @@ export namespace Prisma {
   export type BatchDraftMaxAggregateInputType = {
     id?: true
     batchNumber?: true
+    batchCode?: true
     productId?: true
+    grnNumber?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -21371,7 +21407,9 @@ export namespace Prisma {
   export type BatchDraftCountAggregateInputType = {
     id?: true
     batchNumber?: true
+    batchCode?: true
     productId?: true
+    grnNumber?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -21461,7 +21499,9 @@ export namespace Prisma {
   export type BatchDraftGroupByOutputType = {
     id: string
     batchNumber: string | null
+    batchCode: string | null
     productId: string | null
+    grnNumber: string | null
     dateOfProduction: Date | null
     bestBeforeDate: Date | null
     sampleAnalysisStarted: Date | null
@@ -21495,7 +21535,9 @@ export namespace Prisma {
   export type BatchDraftSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     batchNumber?: boolean
+    batchCode?: boolean
     productId?: boolean
+    grnNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -21513,7 +21555,9 @@ export namespace Prisma {
   export type BatchDraftSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     batchNumber?: boolean
+    batchCode?: boolean
     productId?: boolean
+    grnNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -21531,7 +21575,9 @@ export namespace Prisma {
   export type BatchDraftSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     batchNumber?: boolean
+    batchCode?: boolean
     productId?: boolean
+    grnNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -21549,7 +21595,9 @@ export namespace Prisma {
   export type BatchDraftSelectScalar = {
     id?: boolean
     batchNumber?: boolean
+    batchCode?: boolean
     productId?: boolean
+    grnNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -21563,7 +21611,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BatchDraftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "productId" | "dateOfProduction" | "bestBeforeDate" | "sampleAnalysisStarted" | "sampleAnalysisCompleted" | "sampleAnalysisStatus" | "makerId" | "status" | "newProductName" | "parameterValues" | "createdAt" | "updatedAt", ExtArgs["result"]["batchDraft"]>
+  export type BatchDraftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "batchCode" | "productId" | "grnNumber" | "dateOfProduction" | "bestBeforeDate" | "sampleAnalysisStarted" | "sampleAnalysisCompleted" | "sampleAnalysisStatus" | "makerId" | "status" | "newProductName" | "parameterValues" | "createdAt" | "updatedAt", ExtArgs["result"]["batchDraft"]>
   export type BatchDraftInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     maker?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -21582,7 +21630,9 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       batchNumber: string | null
+      batchCode: string | null
       productId: string | null
+      grnNumber: string | null
       dateOfProduction: Date | null
       bestBeforeDate: Date | null
       sampleAnalysisStarted: Date | null
@@ -22020,7 +22070,9 @@ export namespace Prisma {
   interface BatchDraftFieldRefs {
     readonly id: FieldRef<"BatchDraft", 'String'>
     readonly batchNumber: FieldRef<"BatchDraft", 'String'>
+    readonly batchCode: FieldRef<"BatchDraft", 'String'>
     readonly productId: FieldRef<"BatchDraft", 'String'>
+    readonly grnNumber: FieldRef<"BatchDraft", 'String'>
     readonly dateOfProduction: FieldRef<"BatchDraft", 'DateTime'>
     readonly bestBeforeDate: FieldRef<"BatchDraft", 'DateTime'>
     readonly sampleAnalysisStarted: FieldRef<"BatchDraft", 'DateTime'>
@@ -25900,6 +25952,7 @@ export namespace Prisma {
     productType: string | null
     description: string | null
     dataType: $Enums.ParameterDataType | null
+    standardValue: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -25912,6 +25965,7 @@ export namespace Prisma {
     productType: string | null
     description: string | null
     dataType: $Enums.ParameterDataType | null
+    standardValue: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -25924,6 +25978,7 @@ export namespace Prisma {
     productType: number
     description: number
     dataType: number
+    standardValue: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -25938,6 +25993,7 @@ export namespace Prisma {
     productType?: true
     description?: true
     dataType?: true
+    standardValue?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -25950,6 +26006,7 @@ export namespace Prisma {
     productType?: true
     description?: true
     dataType?: true
+    standardValue?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -25962,6 +26019,7 @@ export namespace Prisma {
     productType?: true
     description?: true
     dataType?: true
+    standardValue?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -26047,6 +26105,7 @@ export namespace Prisma {
     productType: string | null
     description: string | null
     dataType: $Enums.ParameterDataType
+    standardValue: string | null
     createdAt: Date
     updatedAt: Date
     _count: StandardParameterCountAggregateOutputType | null
@@ -26076,6 +26135,7 @@ export namespace Prisma {
     productType?: boolean
     description?: boolean
     dataType?: boolean
+    standardValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     category?: boolean | StandardCategoryDefaultArgs<ExtArgs>
@@ -26094,6 +26154,7 @@ export namespace Prisma {
     productType?: boolean
     description?: boolean
     dataType?: boolean
+    standardValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     category?: boolean | StandardCategoryDefaultArgs<ExtArgs>
@@ -26108,6 +26169,7 @@ export namespace Prisma {
     productType?: boolean
     description?: boolean
     dataType?: boolean
+    standardValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     category?: boolean | StandardCategoryDefaultArgs<ExtArgs>
@@ -26122,11 +26184,12 @@ export namespace Prisma {
     productType?: boolean
     description?: boolean
     dataType?: boolean
+    standardValue?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type StandardParameterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "categoryId" | "unitId" | "productType" | "description" | "dataType" | "createdAt" | "updatedAt", ExtArgs["result"]["standardParameter"]>
+  export type StandardParameterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "categoryId" | "unitId" | "productType" | "description" | "dataType" | "standardValue" | "createdAt" | "updatedAt", ExtArgs["result"]["standardParameter"]>
   export type StandardParameterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     category?: boolean | StandardCategoryDefaultArgs<ExtArgs>
     batchValues?: boolean | StandardParameter$batchValuesArgs<ExtArgs>
@@ -26161,6 +26224,7 @@ export namespace Prisma {
       productType: string | null
       description: string | null
       dataType: $Enums.ParameterDataType
+      standardValue: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["standardParameter"]>
@@ -26598,6 +26662,7 @@ export namespace Prisma {
     readonly productType: FieldRef<"StandardParameter", 'String'>
     readonly description: FieldRef<"StandardParameter", 'String'>
     readonly dataType: FieldRef<"StandardParameter", 'ParameterDataType'>
+    readonly standardValue: FieldRef<"StandardParameter", 'String'>
     readonly createdAt: FieldRef<"StandardParameter", 'DateTime'>
     readonly updatedAt: FieldRef<"StandardParameter", 'DateTime'>
   }
@@ -28332,6 +28397,7 @@ export namespace Prisma {
     batchId: string | null
     parameterId: string | null
     value: string | null
+    standardValue: string | null
     unitId: string | null
     methodologyId: string | null
     verificationResult: string | null
@@ -28347,6 +28413,7 @@ export namespace Prisma {
     batchId: string | null
     parameterId: string | null
     value: string | null
+    standardValue: string | null
     unitId: string | null
     methodologyId: string | null
     verificationResult: string | null
@@ -28362,6 +28429,7 @@ export namespace Prisma {
     batchId: number
     parameterId: number
     value: number
+    standardValue: number
     unitId: number
     methodologyId: number
     verificationResult: number
@@ -28379,6 +28447,7 @@ export namespace Prisma {
     batchId?: true
     parameterId?: true
     value?: true
+    standardValue?: true
     unitId?: true
     methodologyId?: true
     verificationResult?: true
@@ -28394,6 +28463,7 @@ export namespace Prisma {
     batchId?: true
     parameterId?: true
     value?: true
+    standardValue?: true
     unitId?: true
     methodologyId?: true
     verificationResult?: true
@@ -28409,6 +28479,7 @@ export namespace Prisma {
     batchId?: true
     parameterId?: true
     value?: true
+    standardValue?: true
     unitId?: true
     methodologyId?: true
     verificationResult?: true
@@ -28497,6 +28568,7 @@ export namespace Prisma {
     batchId: string
     parameterId: string
     value: string
+    standardValue: string | null
     unitId: string | null
     methodologyId: string | null
     verificationResult: string | null
@@ -28529,6 +28601,7 @@ export namespace Prisma {
     batchId?: boolean
     parameterId?: boolean
     value?: boolean
+    standardValue?: boolean
     unitId?: boolean
     methodologyId?: boolean
     verificationResult?: boolean
@@ -28548,6 +28621,7 @@ export namespace Prisma {
     batchId?: boolean
     parameterId?: boolean
     value?: boolean
+    standardValue?: boolean
     unitId?: boolean
     methodologyId?: boolean
     verificationResult?: boolean
@@ -28567,6 +28641,7 @@ export namespace Prisma {
     batchId?: boolean
     parameterId?: boolean
     value?: boolean
+    standardValue?: boolean
     unitId?: boolean
     methodologyId?: boolean
     verificationResult?: boolean
@@ -28586,6 +28661,7 @@ export namespace Prisma {
     batchId?: boolean
     parameterId?: boolean
     value?: boolean
+    standardValue?: boolean
     unitId?: boolean
     methodologyId?: boolean
     verificationResult?: boolean
@@ -28596,7 +28672,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BatchParameterValueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "parameterId" | "value" | "unitId" | "methodologyId" | "verificationResult" | "verificationRemark" | "verifiedById" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["batchParameterValue"]>
+  export type BatchParameterValueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "parameterId" | "value" | "standardValue" | "unitId" | "methodologyId" | "verificationResult" | "verificationRemark" | "verifiedById" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["batchParameterValue"]>
   export type BatchParameterValueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     batch?: boolean | BatchDefaultArgs<ExtArgs>
     parameter?: boolean | StandardParameterDefaultArgs<ExtArgs>
@@ -28629,6 +28705,7 @@ export namespace Prisma {
       batchId: string
       parameterId: string
       value: string
+      standardValue: string | null
       unitId: string | null
       methodologyId: string | null
       verificationResult: string | null
@@ -29068,6 +29145,7 @@ export namespace Prisma {
     readonly batchId: FieldRef<"BatchParameterValue", 'String'>
     readonly parameterId: FieldRef<"BatchParameterValue", 'String'>
     readonly value: FieldRef<"BatchParameterValue", 'String'>
+    readonly standardValue: FieldRef<"BatchParameterValue", 'String'>
     readonly unitId: FieldRef<"BatchParameterValue", 'String'>
     readonly methodologyId: FieldRef<"BatchParameterValue", 'String'>
     readonly verificationResult: FieldRef<"BatchParameterValue", 'String'>
@@ -77480,7 +77558,9 @@ export namespace Prisma {
   export const BatchScalarFieldEnum: {
     id: 'id',
     batchNumber: 'batchNumber',
+    batchCode: 'batchCode',
     productId: 'productId',
+    grnNumber: 'grnNumber',
     dateOfProduction: 'dateOfProduction',
     bestBeforeDate: 'bestBeforeDate',
     sampleAnalysisStarted: 'sampleAnalysisStarted',
@@ -77606,7 +77686,9 @@ export namespace Prisma {
   export const BatchDraftScalarFieldEnum: {
     id: 'id',
     batchNumber: 'batchNumber',
+    batchCode: 'batchCode',
     productId: 'productId',
+    grnNumber: 'grnNumber',
     dateOfProduction: 'dateOfProduction',
     bestBeforeDate: 'bestBeforeDate',
     sampleAnalysisStarted: 'sampleAnalysisStarted',
@@ -77669,6 +77751,7 @@ export namespace Prisma {
     productType: 'productType',
     description: 'description',
     dataType: 'dataType',
+    standardValue: 'standardValue',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -77697,6 +77780,7 @@ export namespace Prisma {
     batchId: 'batchId',
     parameterId: 'parameterId',
     value: 'value',
+    standardValue: 'standardValue',
     unitId: 'unitId',
     methodologyId: 'methodologyId',
     verificationResult: 'verificationResult',
@@ -78733,7 +78817,9 @@ export namespace Prisma {
     NOT?: BatchWhereInput | BatchWhereInput[]
     id?: StringFilter<"Batch"> | string
     batchNumber?: StringFilter<"Batch"> | string
+    batchCode?: StringNullableFilter<"Batch"> | string | null
     productId?: StringFilter<"Batch"> | string
+    grnNumber?: StringNullableFilter<"Batch"> | string | null
     dateOfProduction?: DateTimeFilter<"Batch"> | Date | string
     bestBeforeDate?: DateTimeFilter<"Batch"> | Date | string
     sampleAnalysisStarted?: DateTimeNullableFilter<"Batch"> | Date | string | null
@@ -78759,7 +78845,9 @@ export namespace Prisma {
   export type BatchOrderByWithRelationInput = {
     id?: SortOrder
     batchNumber?: SortOrder
+    batchCode?: SortOrderInput | SortOrder
     productId?: SortOrder
+    grnNumber?: SortOrderInput | SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrderInput | SortOrder
@@ -78788,7 +78876,9 @@ export namespace Prisma {
     AND?: BatchWhereInput | BatchWhereInput[]
     OR?: BatchWhereInput[]
     NOT?: BatchWhereInput | BatchWhereInput[]
+    batchCode?: StringNullableFilter<"Batch"> | string | null
     productId?: StringFilter<"Batch"> | string
+    grnNumber?: StringNullableFilter<"Batch"> | string | null
     dateOfProduction?: DateTimeFilter<"Batch"> | Date | string
     bestBeforeDate?: DateTimeFilter<"Batch"> | Date | string
     sampleAnalysisStarted?: DateTimeNullableFilter<"Batch"> | Date | string | null
@@ -78814,7 +78904,9 @@ export namespace Prisma {
   export type BatchOrderByWithAggregationInput = {
     id?: SortOrder
     batchNumber?: SortOrder
+    batchCode?: SortOrderInput | SortOrder
     productId?: SortOrder
+    grnNumber?: SortOrderInput | SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrderInput | SortOrder
@@ -78837,7 +78929,9 @@ export namespace Prisma {
     NOT?: BatchScalarWhereWithAggregatesInput | BatchScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Batch"> | string
     batchNumber?: StringWithAggregatesFilter<"Batch"> | string
+    batchCode?: StringNullableWithAggregatesFilter<"Batch"> | string | null
     productId?: StringWithAggregatesFilter<"Batch"> | string
+    grnNumber?: StringNullableWithAggregatesFilter<"Batch"> | string | null
     dateOfProduction?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
     bestBeforeDate?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
     sampleAnalysisStarted?: DateTimeNullableWithAggregatesFilter<"Batch"> | Date | string | null
@@ -79521,7 +79615,9 @@ export namespace Prisma {
     NOT?: BatchDraftWhereInput | BatchDraftWhereInput[]
     id?: StringFilter<"BatchDraft"> | string
     batchNumber?: StringNullableFilter<"BatchDraft"> | string | null
+    batchCode?: StringNullableFilter<"BatchDraft"> | string | null
     productId?: StringNullableFilter<"BatchDraft"> | string | null
+    grnNumber?: StringNullableFilter<"BatchDraft"> | string | null
     dateOfProduction?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     bestBeforeDate?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     sampleAnalysisStarted?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
@@ -79539,7 +79635,9 @@ export namespace Prisma {
   export type BatchDraftOrderByWithRelationInput = {
     id?: SortOrder
     batchNumber?: SortOrderInput | SortOrder
+    batchCode?: SortOrderInput | SortOrder
     productId?: SortOrderInput | SortOrder
+    grnNumber?: SortOrderInput | SortOrder
     dateOfProduction?: SortOrderInput | SortOrder
     bestBeforeDate?: SortOrderInput | SortOrder
     sampleAnalysisStarted?: SortOrderInput | SortOrder
@@ -79560,7 +79658,9 @@ export namespace Prisma {
     AND?: BatchDraftWhereInput | BatchDraftWhereInput[]
     OR?: BatchDraftWhereInput[]
     NOT?: BatchDraftWhereInput | BatchDraftWhereInput[]
+    batchCode?: StringNullableFilter<"BatchDraft"> | string | null
     productId?: StringNullableFilter<"BatchDraft"> | string | null
+    grnNumber?: StringNullableFilter<"BatchDraft"> | string | null
     dateOfProduction?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     bestBeforeDate?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     sampleAnalysisStarted?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
@@ -79578,7 +79678,9 @@ export namespace Prisma {
   export type BatchDraftOrderByWithAggregationInput = {
     id?: SortOrder
     batchNumber?: SortOrderInput | SortOrder
+    batchCode?: SortOrderInput | SortOrder
     productId?: SortOrderInput | SortOrder
+    grnNumber?: SortOrderInput | SortOrder
     dateOfProduction?: SortOrderInput | SortOrder
     bestBeforeDate?: SortOrderInput | SortOrder
     sampleAnalysisStarted?: SortOrderInput | SortOrder
@@ -79601,7 +79703,9 @@ export namespace Prisma {
     NOT?: BatchDraftScalarWhereWithAggregatesInput | BatchDraftScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"BatchDraft"> | string
     batchNumber?: StringNullableWithAggregatesFilter<"BatchDraft"> | string | null
+    batchCode?: StringNullableWithAggregatesFilter<"BatchDraft"> | string | null
     productId?: StringNullableWithAggregatesFilter<"BatchDraft"> | string | null
+    grnNumber?: StringNullableWithAggregatesFilter<"BatchDraft"> | string | null
     dateOfProduction?: DateTimeNullableWithAggregatesFilter<"BatchDraft"> | Date | string | null
     bestBeforeDate?: DateTimeNullableWithAggregatesFilter<"BatchDraft"> | Date | string | null
     sampleAnalysisStarted?: DateTimeNullableWithAggregatesFilter<"BatchDraft"> | Date | string | null
@@ -79841,6 +79945,7 @@ export namespace Prisma {
     productType?: StringNullableFilter<"StandardParameter"> | string | null
     description?: StringNullableFilter<"StandardParameter"> | string | null
     dataType?: EnumParameterDataTypeFilter<"StandardParameter"> | $Enums.ParameterDataType
+    standardValue?: StringNullableFilter<"StandardParameter"> | string | null
     createdAt?: DateTimeFilter<"StandardParameter"> | Date | string
     updatedAt?: DateTimeFilter<"StandardParameter"> | Date | string
     category?: XOR<StandardCategoryScalarRelationFilter, StandardCategoryWhereInput>
@@ -79858,6 +79963,7 @@ export namespace Prisma {
     productType?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     dataType?: SortOrder
+    standardValue?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     category?: StandardCategoryOrderByWithRelationInput
@@ -79879,6 +79985,7 @@ export namespace Prisma {
     productType?: StringNullableFilter<"StandardParameter"> | string | null
     description?: StringNullableFilter<"StandardParameter"> | string | null
     dataType?: EnumParameterDataTypeFilter<"StandardParameter"> | $Enums.ParameterDataType
+    standardValue?: StringNullableFilter<"StandardParameter"> | string | null
     createdAt?: DateTimeFilter<"StandardParameter"> | Date | string
     updatedAt?: DateTimeFilter<"StandardParameter"> | Date | string
     category?: XOR<StandardCategoryScalarRelationFilter, StandardCategoryWhereInput>
@@ -79896,6 +80003,7 @@ export namespace Prisma {
     productType?: SortOrderInput | SortOrder
     description?: SortOrderInput | SortOrder
     dataType?: SortOrder
+    standardValue?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: StandardParameterCountOrderByAggregateInput
@@ -79914,6 +80022,7 @@ export namespace Prisma {
     productType?: StringNullableWithAggregatesFilter<"StandardParameter"> | string | null
     description?: StringNullableWithAggregatesFilter<"StandardParameter"> | string | null
     dataType?: EnumParameterDataTypeWithAggregatesFilter<"StandardParameter"> | $Enums.ParameterDataType
+    standardValue?: StringNullableWithAggregatesFilter<"StandardParameter"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"StandardParameter"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"StandardParameter"> | Date | string
   }
@@ -80018,6 +80127,7 @@ export namespace Prisma {
     batchId?: StringFilter<"BatchParameterValue"> | string
     parameterId?: StringFilter<"BatchParameterValue"> | string
     value?: StringFilter<"BatchParameterValue"> | string
+    standardValue?: StringNullableFilter<"BatchParameterValue"> | string | null
     unitId?: StringNullableFilter<"BatchParameterValue"> | string | null
     methodologyId?: StringNullableFilter<"BatchParameterValue"> | string | null
     verificationResult?: StringNullableFilter<"BatchParameterValue"> | string | null
@@ -80037,6 +80147,7 @@ export namespace Prisma {
     batchId?: SortOrder
     parameterId?: SortOrder
     value?: SortOrder
+    standardValue?: SortOrderInput | SortOrder
     unitId?: SortOrderInput | SortOrder
     methodologyId?: SortOrderInput | SortOrder
     verificationResult?: SortOrderInput | SortOrder
@@ -80060,6 +80171,7 @@ export namespace Prisma {
     batchId?: StringFilter<"BatchParameterValue"> | string
     parameterId?: StringFilter<"BatchParameterValue"> | string
     value?: StringFilter<"BatchParameterValue"> | string
+    standardValue?: StringNullableFilter<"BatchParameterValue"> | string | null
     unitId?: StringNullableFilter<"BatchParameterValue"> | string | null
     methodologyId?: StringNullableFilter<"BatchParameterValue"> | string | null
     verificationResult?: StringNullableFilter<"BatchParameterValue"> | string | null
@@ -80079,6 +80191,7 @@ export namespace Prisma {
     batchId?: SortOrder
     parameterId?: SortOrder
     value?: SortOrder
+    standardValue?: SortOrderInput | SortOrder
     unitId?: SortOrderInput | SortOrder
     methodologyId?: SortOrderInput | SortOrder
     verificationResult?: SortOrderInput | SortOrder
@@ -80100,6 +80213,7 @@ export namespace Prisma {
     batchId?: StringWithAggregatesFilter<"BatchParameterValue"> | string
     parameterId?: StringWithAggregatesFilter<"BatchParameterValue"> | string
     value?: StringWithAggregatesFilter<"BatchParameterValue"> | string
+    standardValue?: StringNullableWithAggregatesFilter<"BatchParameterValue"> | string | null
     unitId?: StringNullableWithAggregatesFilter<"BatchParameterValue"> | string | null
     methodologyId?: StringNullableWithAggregatesFilter<"BatchParameterValue"> | string | null
     verificationResult?: StringNullableWithAggregatesFilter<"BatchParameterValue"> | string | null
@@ -83553,6 +83667,8 @@ export namespace Prisma {
   export type BatchCreateInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -83576,7 +83692,9 @@ export namespace Prisma {
   export type BatchUncheckedCreateInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -83599,6 +83717,8 @@ export namespace Prisma {
   export type BatchUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -83622,7 +83742,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -83645,7 +83767,9 @@ export namespace Prisma {
   export type BatchCreateManyInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -83662,6 +83786,8 @@ export namespace Prisma {
   export type BatchUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -83676,7 +83802,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -84433,7 +84561,9 @@ export namespace Prisma {
   export type BatchDraftCreateInput = {
     id?: string
     batchNumber?: string | null
+    batchCode?: string | null
     productId?: string | null
+    grnNumber?: string | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -84450,7 +84580,9 @@ export namespace Prisma {
   export type BatchDraftUncheckedCreateInput = {
     id?: string
     batchNumber?: string | null
+    batchCode?: string | null
     productId?: string | null
+    grnNumber?: string | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -84467,7 +84599,9 @@ export namespace Prisma {
   export type BatchDraftUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -84484,7 +84618,9 @@ export namespace Prisma {
   export type BatchDraftUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -84501,7 +84637,9 @@ export namespace Prisma {
   export type BatchDraftCreateManyInput = {
     id?: string
     batchNumber?: string | null
+    batchCode?: string | null
     productId?: string | null
+    grnNumber?: string | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -84518,7 +84656,9 @@ export namespace Prisma {
   export type BatchDraftUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -84534,7 +84674,9 @@ export namespace Prisma {
   export type BatchDraftUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -84776,6 +84918,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     category: StandardCategoryCreateNestedOneWithoutParametersInput
@@ -84793,6 +84936,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     batchValues?: BatchParameterValueUncheckedCreateNestedManyWithoutParameterInput
@@ -84806,6 +84950,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: StandardCategoryUpdateOneRequiredWithoutParametersNestedInput
@@ -84823,6 +84968,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batchValues?: BatchParameterValueUncheckedUpdateManyWithoutParameterNestedInput
@@ -84838,6 +84984,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
   }
@@ -84848,6 +84995,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -84860,6 +85008,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -84953,6 +85102,7 @@ export namespace Prisma {
   export type BatchParameterValueCreateInput = {
     id: string
     value: string
+    standardValue?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
     verifiedById?: string | null
@@ -84970,6 +85120,7 @@ export namespace Prisma {
     batchId: string
     parameterId: string
     value: string
+    standardValue?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -84983,6 +85134,7 @@ export namespace Prisma {
   export type BatchParameterValueUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -85000,6 +85152,7 @@ export namespace Prisma {
     batchId?: StringFieldUpdateOperationsInput | string
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
@@ -85015,6 +85168,7 @@ export namespace Prisma {
     batchId: string
     parameterId: string
     value: string
+    standardValue?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -85028,6 +85182,7 @@ export namespace Prisma {
   export type BatchParameterValueUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -85041,6 +85196,7 @@ export namespace Prisma {
     batchId?: StringFieldUpdateOperationsInput | string
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
@@ -88876,7 +89032,9 @@ export namespace Prisma {
   export type BatchCountOrderByAggregateInput = {
     id?: SortOrder
     batchNumber?: SortOrder
+    batchCode?: SortOrder
     productId?: SortOrder
+    grnNumber?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -88893,7 +89051,9 @@ export namespace Prisma {
   export type BatchMaxOrderByAggregateInput = {
     id?: SortOrder
     batchNumber?: SortOrder
+    batchCode?: SortOrder
     productId?: SortOrder
+    grnNumber?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -88910,7 +89070,9 @@ export namespace Prisma {
   export type BatchMinOrderByAggregateInput = {
     id?: SortOrder
     batchNumber?: SortOrder
+    batchCode?: SortOrder
     productId?: SortOrder
+    grnNumber?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -89543,7 +89705,9 @@ export namespace Prisma {
   export type BatchDraftCountOrderByAggregateInput = {
     id?: SortOrder
     batchNumber?: SortOrder
+    batchCode?: SortOrder
     productId?: SortOrder
+    grnNumber?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -89560,7 +89724,9 @@ export namespace Prisma {
   export type BatchDraftMaxOrderByAggregateInput = {
     id?: SortOrder
     batchNumber?: SortOrder
+    batchCode?: SortOrder
     productId?: SortOrder
+    grnNumber?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -89576,7 +89742,9 @@ export namespace Prisma {
   export type BatchDraftMinOrderByAggregateInput = {
     id?: SortOrder
     batchNumber?: SortOrder
+    batchCode?: SortOrder
     productId?: SortOrder
+    grnNumber?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -89765,6 +89933,7 @@ export namespace Prisma {
     productType?: SortOrder
     description?: SortOrder
     dataType?: SortOrder
+    standardValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -89777,6 +89946,7 @@ export namespace Prisma {
     productType?: SortOrder
     description?: SortOrder
     dataType?: SortOrder
+    standardValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -89789,6 +89959,7 @@ export namespace Prisma {
     productType?: SortOrder
     description?: SortOrder
     dataType?: SortOrder
+    standardValue?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -89862,6 +90033,7 @@ export namespace Prisma {
     batchId?: SortOrder
     parameterId?: SortOrder
     value?: SortOrder
+    standardValue?: SortOrder
     unitId?: SortOrder
     methodologyId?: SortOrder
     verificationResult?: SortOrder
@@ -89877,6 +90049,7 @@ export namespace Prisma {
     batchId?: SortOrder
     parameterId?: SortOrder
     value?: SortOrder
+    standardValue?: SortOrder
     unitId?: SortOrder
     methodologyId?: SortOrder
     verificationResult?: SortOrder
@@ -89892,6 +90065,7 @@ export namespace Prisma {
     batchId?: SortOrder
     parameterId?: SortOrder
     value?: SortOrder
+    standardValue?: SortOrder
     unitId?: SortOrder
     methodologyId?: SortOrder
     verificationResult?: SortOrder
@@ -98915,6 +99089,8 @@ export namespace Prisma {
   export type BatchCreateWithoutActivityLogInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -98937,7 +99113,9 @@ export namespace Prisma {
   export type BatchUncheckedCreateWithoutActivityLogInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -99064,6 +99242,8 @@ export namespace Prisma {
   export type BatchUpdateWithoutActivityLogInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -99086,7 +99266,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateWithoutActivityLogInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -99555,6 +99737,7 @@ export namespace Prisma {
   export type BatchParameterValueCreateWithoutBatchInput = {
     id: string
     value: string
+    standardValue?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
     verifiedById?: string | null
@@ -99570,6 +99753,7 @@ export namespace Prisma {
     id: string
     parameterId: string
     value: string
+    standardValue?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -99980,6 +100164,7 @@ export namespace Prisma {
     batchId?: StringFilter<"BatchParameterValue"> | string
     parameterId?: StringFilter<"BatchParameterValue"> | string
     value?: StringFilter<"BatchParameterValue"> | string
+    standardValue?: StringNullableFilter<"BatchParameterValue"> | string | null
     unitId?: StringNullableFilter<"BatchParameterValue"> | string | null
     methodologyId?: StringNullableFilter<"BatchParameterValue"> | string | null
     verificationResult?: StringNullableFilter<"BatchParameterValue"> | string | null
@@ -100028,6 +100213,8 @@ export namespace Prisma {
   export type BatchCreateWithoutMethodologiesInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -100050,7 +100237,9 @@ export namespace Prisma {
   export type BatchUncheckedCreateWithoutMethodologiesInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -100077,6 +100266,7 @@ export namespace Prisma {
   export type BatchParameterValueCreateWithoutMethodologyInput = {
     id: string
     value: string
+    standardValue?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
     verifiedById?: string | null
@@ -100093,6 +100283,7 @@ export namespace Prisma {
     batchId: string
     parameterId: string
     value: string
+    standardValue?: string | null
     unitId?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
@@ -100184,7 +100375,9 @@ export namespace Prisma {
     NOT?: BatchScalarWhereInput | BatchScalarWhereInput[]
     id?: StringFilter<"Batch"> | string
     batchNumber?: StringFilter<"Batch"> | string
+    batchCode?: StringNullableFilter<"Batch"> | string | null
     productId?: StringFilter<"Batch"> | string
+    grnNumber?: StringNullableFilter<"Batch"> | string | null
     dateOfProduction?: DateTimeFilter<"Batch"> | Date | string
     bestBeforeDate?: DateTimeFilter<"Batch"> | Date | string
     sampleAnalysisStarted?: DateTimeNullableFilter<"Batch"> | Date | string | null
@@ -100249,6 +100442,8 @@ export namespace Prisma {
   export type BatchCreateWithoutNotificationInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -100271,7 +100466,9 @@ export namespace Prisma {
   export type BatchUncheckedCreateWithoutNotificationInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -100398,6 +100595,8 @@ export namespace Prisma {
   export type BatchUpdateWithoutNotificationInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -100420,7 +100619,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateWithoutNotificationInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -100587,6 +100788,8 @@ export namespace Prisma {
   export type BatchCreateWithoutProductInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -100609,6 +100812,8 @@ export namespace Prisma {
   export type BatchUncheckedCreateWithoutProductInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -100790,6 +100995,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     category: StandardCategoryCreateNestedOneWithoutParametersInput
@@ -100806,6 +101012,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     batchValues?: BatchParameterValueUncheckedCreateNestedManyWithoutParameterInput
@@ -100865,6 +101072,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: StandardCategoryUpdateOneRequiredWithoutParametersNestedInput
@@ -100881,6 +101089,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batchValues?: BatchParameterValueUncheckedUpdateManyWithoutParameterNestedInput
@@ -101096,6 +101305,7 @@ export namespace Prisma {
   export type BatchParameterValueCreateWithoutUnitInput = {
     id: string
     value: string
+    standardValue?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
     verifiedById?: string | null
@@ -101112,6 +101322,7 @@ export namespace Prisma {
     batchId: string
     parameterId: string
     value: string
+    standardValue?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
@@ -101137,6 +101348,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     category: StandardCategoryCreateNestedOneWithoutParametersInput
@@ -101152,6 +101364,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     batchValues?: BatchParameterValueUncheckedCreateNestedManyWithoutParameterInput
@@ -101206,6 +101419,8 @@ export namespace Prisma {
   export type BatchCreateWithoutUnitOfMeasurementsInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -101228,7 +101443,9 @@ export namespace Prisma {
   export type BatchUncheckedCreateWithoutUnitOfMeasurementsInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -101311,6 +101528,7 @@ export namespace Prisma {
     productType?: StringNullableFilter<"StandardParameter"> | string | null
     description?: StringNullableFilter<"StandardParameter"> | string | null
     dataType?: EnumParameterDataTypeFilter<"StandardParameter"> | $Enums.ParameterDataType
+    standardValue?: StringNullableFilter<"StandardParameter"> | string | null
     createdAt?: DateTimeFilter<"StandardParameter"> | Date | string
     updatedAt?: DateTimeFilter<"StandardParameter"> | Date | string
   }
@@ -101376,6 +101594,8 @@ export namespace Prisma {
   export type BatchCreateWithoutUser_Batch_checkerIdToUserInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -101398,7 +101618,9 @@ export namespace Prisma {
   export type BatchUncheckedCreateWithoutUser_Batch_checkerIdToUserInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -101430,6 +101652,8 @@ export namespace Prisma {
   export type BatchCreateWithoutUser_Batch_makerIdToUserInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -101452,7 +101676,9 @@ export namespace Prisma {
   export type BatchUncheckedCreateWithoutUser_Batch_makerIdToUserInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -101484,7 +101710,9 @@ export namespace Prisma {
   export type BatchDraftCreateWithoutMakerInput = {
     id?: string
     batchNumber?: string | null
+    batchCode?: string | null
     productId?: string | null
+    grnNumber?: string | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -101500,7 +101728,9 @@ export namespace Prisma {
   export type BatchDraftUncheckedCreateWithoutMakerInput = {
     id?: string
     batchNumber?: string | null
+    batchCode?: string | null
     productId?: string | null
+    grnNumber?: string | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -102721,7 +102951,9 @@ export namespace Prisma {
     NOT?: BatchDraftScalarWhereInput | BatchDraftScalarWhereInput[]
     id?: StringFilter<"BatchDraft"> | string
     batchNumber?: StringNullableFilter<"BatchDraft"> | string | null
+    batchCode?: StringNullableFilter<"BatchDraft"> | string | null
     productId?: StringNullableFilter<"BatchDraft"> | string | null
+    grnNumber?: StringNullableFilter<"BatchDraft"> | string | null
     dateOfProduction?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     bestBeforeDate?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     sampleAnalysisStarted?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
@@ -103913,6 +104145,8 @@ export namespace Prisma {
   export type BatchCreateWithoutStandardsInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -103935,7 +104169,9 @@ export namespace Prisma {
   export type BatchUncheckedCreateWithoutStandardsInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -104294,6 +104530,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     batchValues?: BatchParameterValueCreateNestedManyWithoutParameterInput
@@ -104309,6 +104546,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     batchValues?: BatchParameterValueUncheckedCreateNestedManyWithoutParameterInput
@@ -104578,6 +104816,7 @@ export namespace Prisma {
   export type BatchParameterValueCreateWithoutParameterInput = {
     id: string
     value: string
+    standardValue?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
     verifiedById?: string | null
@@ -104593,6 +104832,7 @@ export namespace Prisma {
     id: string
     batchId: string
     value: string
+    standardValue?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -104826,6 +105066,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     category: StandardCategoryCreateNestedOneWithoutParametersInput
@@ -104842,6 +105083,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     batchValues?: BatchParameterValueUncheckedCreateNestedManyWithoutParameterInput
@@ -105108,6 +105350,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: StandardCategoryUpdateOneRequiredWithoutParametersNestedInput
@@ -105124,6 +105367,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batchValues?: BatchParameterValueUncheckedUpdateManyWithoutParameterNestedInput
@@ -105395,6 +105639,8 @@ export namespace Prisma {
   export type BatchCreateWithoutParameterValuesInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -105417,7 +105663,9 @@ export namespace Prisma {
   export type BatchUncheckedCreateWithoutParameterValuesInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -105447,6 +105695,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     category: StandardCategoryCreateNestedOneWithoutParametersInput
@@ -105463,6 +105712,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
     standards?: StandardDefinitionUncheckedCreateNestedManyWithoutParameterInput
@@ -105548,6 +105798,8 @@ export namespace Prisma {
   export type BatchUpdateWithoutParameterValuesInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -105570,7 +105822,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateWithoutParameterValuesInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -105606,6 +105860,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: StandardCategoryUpdateOneRequiredWithoutParametersNestedInput
@@ -105622,6 +105877,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     standards?: StandardDefinitionUncheckedUpdateManyWithoutParameterNestedInput
@@ -117528,6 +117784,7 @@ export namespace Prisma {
     id: string
     parameterId: string
     value: string
+    standardValue?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -117703,6 +117960,7 @@ export namespace Prisma {
   export type BatchParameterValueUpdateWithoutBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117718,6 +117976,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117732,6 +117991,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117747,6 +118007,7 @@ export namespace Prisma {
     batchId: string
     parameterId: string
     value: string
+    standardValue?: string | null
     unitId?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
@@ -117814,6 +118075,8 @@ export namespace Prisma {
   export type BatchUpdateWithoutMethodologiesInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -117836,7 +118099,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateWithoutMethodologiesInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -117858,7 +118123,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateManyWithoutMethodologiesInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -117875,6 +118142,7 @@ export namespace Prisma {
   export type BatchParameterValueUpdateWithoutMethodologyInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117891,6 +118159,7 @@ export namespace Prisma {
     batchId?: StringFieldUpdateOperationsInput | string
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117905,6 +118174,7 @@ export namespace Prisma {
     batchId?: StringFieldUpdateOperationsInput | string
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117979,6 +118249,8 @@ export namespace Prisma {
   export type BatchCreateManyProductInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -118010,6 +118282,8 @@ export namespace Prisma {
   export type BatchUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118032,6 +118306,8 @@ export namespace Prisma {
   export type BatchUncheckedUpdateWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118054,6 +118330,8 @@ export namespace Prisma {
   export type BatchUncheckedUpdateManyWithoutProductInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118243,6 +118521,7 @@ export namespace Prisma {
     batchId: string
     parameterId: string
     value: string
+    standardValue?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
@@ -118259,6 +118538,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
   }
@@ -118321,6 +118601,7 @@ export namespace Prisma {
   export type BatchParameterValueUpdateWithoutUnitInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118337,6 +118618,7 @@ export namespace Prisma {
     batchId?: StringFieldUpdateOperationsInput | string
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118351,6 +118633,7 @@ export namespace Prisma {
     batchId?: StringFieldUpdateOperationsInput | string
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118366,6 +118649,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: StandardCategoryUpdateOneRequiredWithoutParametersNestedInput
@@ -118381,6 +118665,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batchValues?: BatchParameterValueUncheckedUpdateManyWithoutParameterNestedInput
@@ -118395,6 +118680,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -118438,6 +118724,8 @@ export namespace Prisma {
   export type BatchUpdateWithoutUnitOfMeasurementsInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118460,7 +118748,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateWithoutUnitOfMeasurementsInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118482,7 +118772,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateManyWithoutUnitOfMeasurementsInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118507,7 +118799,9 @@ export namespace Prisma {
   export type BatchCreateManyUser_Batch_checkerIdToUserInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -118523,7 +118817,9 @@ export namespace Prisma {
   export type BatchCreateManyUser_Batch_makerIdToUserInput = {
     id: string
     batchNumber: string
+    batchCode?: string | null
     productId: string
+    grnNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -118539,7 +118835,9 @@ export namespace Prisma {
   export type BatchDraftCreateManyMakerInput = {
     id?: string
     batchNumber?: string | null
+    batchCode?: string | null
     productId?: string | null
+    grnNumber?: string | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -118936,6 +119234,8 @@ export namespace Prisma {
   export type BatchUpdateWithoutUser_Batch_checkerIdToUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118958,7 +119258,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateWithoutUser_Batch_checkerIdToUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118980,7 +119282,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateManyWithoutUser_Batch_checkerIdToUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118996,6 +119300,8 @@ export namespace Prisma {
   export type BatchUpdateWithoutUser_Batch_makerIdToUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -119018,7 +119324,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateWithoutUser_Batch_makerIdToUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -119040,7 +119348,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateManyWithoutUser_Batch_makerIdToUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -119056,7 +119366,9 @@ export namespace Prisma {
   export type BatchDraftUpdateWithoutMakerInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -119072,7 +119384,9 @@ export namespace Prisma {
   export type BatchDraftUncheckedUpdateWithoutMakerInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -119088,7 +119402,9 @@ export namespace Prisma {
   export type BatchDraftUncheckedUpdateManyWithoutMakerInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -120259,6 +120575,8 @@ export namespace Prisma {
   export type BatchUpdateWithoutStandardsInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -120281,7 +120599,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateWithoutStandardsInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -120303,7 +120623,9 @@ export namespace Prisma {
   export type BatchUncheckedUpdateManyWithoutStandardsInput = {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -120392,6 +120714,7 @@ export namespace Prisma {
     productType?: string | null
     description?: string | null
     dataType: $Enums.ParameterDataType
+    standardValue?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
   }
@@ -120421,6 +120744,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batchValues?: BatchParameterValueUpdateManyWithoutParameterNestedInput
@@ -120436,6 +120760,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     batchValues?: BatchParameterValueUncheckedUpdateManyWithoutParameterNestedInput
@@ -120450,6 +120775,7 @@ export namespace Prisma {
     productType?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
     dataType?: EnumParameterDataTypeFieldUpdateOperationsInput | $Enums.ParameterDataType
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -120521,6 +120847,7 @@ export namespace Prisma {
     id: string
     batchId: string
     value: string
+    standardValue?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -120554,6 +120881,7 @@ export namespace Prisma {
   export type BatchParameterValueUpdateWithoutParameterInput = {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120569,6 +120897,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120583,6 +120912,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
+    standardValue?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null

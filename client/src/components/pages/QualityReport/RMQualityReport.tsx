@@ -10,7 +10,6 @@ import {
   Search,
   RefreshCw,
   FileText,
-  CheckCircle,
   Clock,
   Package,
   Calendar,
@@ -24,12 +23,10 @@ import {
   RotateCw,
   ChevronDown,
   Filter,
-  Tag,
   Ruler,
   Settings,
   Target,
   Award,
-  Eye,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import {
@@ -306,52 +303,44 @@ const RMQualityReport: React.FC = () => {
     }
   };
 
-  const handleExportAll = async () => {
-    if (reports.length === 0) {
-      toast.error('No reports to export');
-      return;
-    }
+ const handleExportAll = async () => {
+   if (reports.length === 0) {
+     setError('No reports available to export');
+     return;
+   }
 
-    try {
-      setIsExportingAll(true);
-      const exportPromises = reports.map((report) => {
-        const url = `${API_ROUTES.RAW.EXPORT_QUALITY_REPORT(report.id)}?format=excel`;
-        return fetch(url, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }).then((res) => res.blob());
-      });
+   try {
+     setIsExportingAll(true);
+     const response = await api.get(
+       `${API_ROUTES.RAW.EXPORT_ALL_QUALITY_REPORTS}`, // Add this route
+       {
+         headers: { Authorization: `Bearer ${authToken}` },
+         responseType: 'blob',
+       }
+     );
 
-      const blobs = await Promise.all(exportPromises);
-
-      // Create a zip file or download individually
-      // For now, we'll download them sequentially with a small delay
-      for (let i = 0; i < blobs.length; i++) {
-        const blob = blobs[i];
-        const report = reports[i];
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = `RM_Quality_Report_${report.id}.xlsx`;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(downloadUrl);
-
-        // Small delay to avoid browser blocking multiple downloads
-        if (i < blobs.length - 1) {
-          await new Promise((resolve) => setTimeout(resolve, 500));
-        }
-      }
-
-      toast.success(`Exported ${reports.length} reports successfully`);
-    } catch (error) {
-      toast.error('Failed to export all reports');
-    } finally {
-      setIsExportingAll(false);
-    }
-  };
+     // Create blob and trigger download
+     const blob = new Blob([response.data], {
+       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+     });
+     const url = window.URL.createObjectURL(blob);
+     const link = document.createElement('a');
+     link.href = url;
+     link.setAttribute(
+       'download',
+       `RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.xlsx`
+     );
+     document.body.appendChild(link);
+     link.click();
+     link.remove();
+     window.URL.revokeObjectURL(url);
+   } catch (error) {
+     console.error('Export failed:', error);
+     setError('Failed to export reports');
+   } finally {
+     setIsExportingAll(false);
+   }
+ };
 
   const resetForm = () => {
     setFormData({
@@ -389,7 +378,7 @@ const RMQualityReport: React.FC = () => {
         initial="hidden"
         animate="visible"
       >
-        <div className="max-w-7xl mx-auto pt-0 px-4 pb-4 sm:pt-0 sm:px-6 sm:pb-6">
+        <div className="max-w-7xl mx-auto pt-0 pb-4 sm:pt-0 sm:px-6 sm:pb-6">
           <AnimatePresence>
             {error && (
               <motion.div
@@ -445,208 +434,226 @@ const RMQualityReport: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Basic Information */}
-          <motion.div
-            variants={itemVariants}
-            className="bg-card rounded-xl border border-border"
-          >
-            <div className="p-5 border-b border-border">
-              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                <SlidersHorizontal size={18} />
-                Basic Information
-                {basicInfoComplete && (
-                  <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">
-                    <Check size={12} className="mr-1" />
-                    Complete
-                  </span>
-                )}
-              </h2>
-            </div>
-
-            <div className="p-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-foreground">
-                    Raw Material Name{' '}
-                    <span className="text-destructive">*</span>
-                  </label>
-                  <div className="relative">
-                    <select
-                      name="rawMaterialName"
-                      value={formData.rawMaterialName}
-                      onChange={handleInputChange}
-                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10 appearance-none cursor-pointer"
-                      required
-                    >
-                      <option value="">Select raw material</option>
-                      {receivedRawMaterials.map((material) => (
-                        <option key={material.id} value={material.name}>
-                          {material.name} ({material.skuCode})
-                        </option>
-                      ))}
-                    </select>
-                    <Package
-                      size={16}
-                      className="absolute left-3.5 top-3 text-muted-foreground pointer-events-none"
-                      style={{ color: 'var(--primary)' }}
-                    />
-                    <ChevronRight
-                      size={16}
-                      className="absolute right-3.5 top-3 text-muted-foreground pointer-events-none rotate-90"
-                    />
-                  </div>
+          {/* Main Content: 30-70 Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Left Sidebar: Basic Information (25%) */}
+            <motion.div variants={itemVariants} className="lg:col-span-3">
+              <div className="bg-card rounded-xl border border-border sticky top-4">
+                <div className="p-5 border-b border-border">
+                  <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                    <SlidersHorizontal size={18} />
+                    Basic Information
+                    {basicInfoComplete && (
+                      <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded">
+                        <Check size={12} className="mr-1" />
+                        Complete
+                      </span>
+                    )}
+                  </h2>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-foreground">
-                    Variety <span className="text-destructive">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      name="variety"
-                      value={formData.variety}
-                      onChange={handleInputChange}
-                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
-                      placeholder="Enter variety"
-                      required
-                    />
-                    <Award
-                      size={16}
-                      className="absolute left-3.5 top-3 text-muted-foreground"
-                      style={{ color: 'var(--primary)' }}
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-foreground">
-                    Supplier <span className="text-destructive">*</span>
-                  </label>
-                  <div className="relative">
-                    <select
-                      name="supplier"
-                      value={formData.supplier}
-                      onChange={handleInputChange}
-                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10 appearance-none cursor-pointer"
-                      required
-                    >
-                      <option value="">Select supplier</option>
-                      {receivedVendors.map((vendor) => (
-                        <option key={vendor.id} value={vendor.name}>
-                          {vendor.name} ({vendor.vendorCode})
-                        </option>
-                      ))}
-                    </select>
-                    <Building
-                      size={16}
-                      className="absolute left-3.5 top-3 text-muted-foreground pointer-events-none"
-                      style={{ color: 'var(--primary)' }}
-                    />
-                    <ChevronRight
-                      size={16}
-                      className="absolute right-3.5 top-3 text-muted-foreground pointer-events-none rotate-90"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-foreground">
-                    GRN <span className="text-destructive">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      name="grn"
-                      value={formData.grn}
-                      onChange={handleInputChange}
-                      className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
-                      placeholder="Enter GRN number"
-                      required
-                    />
-                    <Hash
-                      size={16}
-                      className="absolute left-3.5 top-3 text-muted-foreground"
-                      style={{ color: 'var(--primary)' }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Quality Parameters */}
-          <motion.div
-            variants={itemVariants}
-            className="mt-6 bg-card rounded-xl border border-border shadow-sm"
-          >
-            <div className="p-5 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
-              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                <Beaker size={18} className="text-primary" />
-                Quality Parameters
-                {parametersComplete && (
-                  <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-md">
-                    <Check size={12} className="mr-1" />
-                    Complete
-                  </span>
-                )}
-              </h2>
-            </div>
-
-            <div className="p-5">
-              <div className="space-y-4">
-                {CHILLI_PARAMETERS.map((param, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="border border-border rounded-lg p-4 bg-card"
-                  >
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Parameter
-                        </label>
-                        <input
-                          type="text"
-                          value={param.parameter}
-                          readOnly
-                          className="w-full border border-input rounded-lg px-3 py-2.5 bg-muted text-foreground"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Standard
-                        </label>
-                        <input
-                          type="text"
-                          value={param.standard}
-                          readOnly
-                          className="w-full border border-input rounded-lg px-3 py-2.5 bg-muted text-foreground"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-foreground mb-2">
-                          Result <span className="text-destructive">*</span>
-                        </label>
-                        <input
-                          type="text"
-                          value={results[index]}
-                          onChange={(e) =>
-                            handleResultChange(index, e.target.value)
-                          }
-                          className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all bg-background"
-                          placeholder="Enter result"
-                          required
-                        />
-                      </div>
+                <div className="p-5 space-y-5">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-foreground">
+                      Raw Material Name{' '}
+                      <span className="text-destructive">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        name="rawMaterialName"
+                        value={formData.rawMaterialName}
+                        onChange={handleInputChange}
+                        className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10 appearance-none cursor-pointer"
+                        required
+                      >
+                        <option value="">Select raw material</option>
+                        {receivedRawMaterials.map((material) => (
+                          <option key={material.id} value={material.name}>
+                            {material.name} ({material.skuCode})
+                          </option>
+                        ))}
+                      </select>
+                      <Package
+                        size={16}
+                        className="absolute left-3.5 top-3 text-muted-foreground pointer-events-none"
+                        style={{ color: 'var(--primary)' }}
+                      />
+                      <ChevronRight
+                        size={16}
+                        className="absolute right-3.5 top-3 text-muted-foreground pointer-events-none rotate-90"
+                      />
                     </div>
-                  </motion.div>
-                ))}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-foreground">
+                      Variety <span className="text-destructive">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="variety"
+                        value={formData.variety}
+                        onChange={handleInputChange}
+                        className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
+                        placeholder="Enter variety"
+                        required
+                      />
+                      <Award
+                        size={16}
+                        className="absolute left-3.5 top-3 text-muted-foreground"
+                        style={{ color: 'var(--primary)' }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-foreground">
+                      Supplier <span className="text-destructive">*</span>
+                    </label>
+                    <div className="relative">
+                      <select
+                        name="supplier"
+                        value={formData.supplier}
+                        onChange={handleInputChange}
+                        className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10 appearance-none cursor-pointer"
+                        required
+                      >
+                        <option value="">Select supplier</option>
+                        {receivedVendors.map((vendor) => (
+                          <option key={vendor.id} value={vendor.name}>
+                            {vendor.name} ({vendor.vendorCode})
+                          </option>
+                        ))}
+                      </select>
+                      <Building
+                        size={16}
+                        className="absolute left-3.5 top-3 text-muted-foreground pointer-events-none"
+                        style={{ color: 'var(--primary)' }}
+                      />
+                      <ChevronRight
+                        size={16}
+                        className="absolute right-3.5 top-3 text-muted-foreground pointer-events-none rotate-90"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-foreground">
+                      GRN <span className="text-destructive">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="grn"
+                        value={formData.grn}
+                        onChange={handleInputChange}
+                        className="w-full border border-input rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring bg-background pl-10"
+                        placeholder="Enter GRN number"
+                        required
+                      />
+                      <Hash
+                        size={16}
+                        className="absolute left-3.5 top-3 text-muted-foreground"
+                        style={{ color: 'var(--primary)' }}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+
+            {/* Right Content: Quality Parameters (75%) */}
+            <motion.div variants={itemVariants} className="lg:col-span-9">
+              <div className="bg-card rounded-xl border border-border shadow-sm">
+                <div className="p-5 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
+                  <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                    <Beaker size={18} className="text-primary" />
+                    Quality Parameters
+                    {parametersComplete && (
+                      <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+                        <Check size={12} className="mr-1" />
+                        Complete
+                      </span>
+                    )}
+                  </h2>
+                </div>
+
+                <div className="p-5">
+                  <div className="space-y-4 pr-2">
+                    {CHILLI_PARAMETERS.map((param, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className="border border-border rounded-lg p-4 bg-card hover:border-primary/30 transition-colors"
+                      >
+                        <div className="grid grid-cols-1 gap-4">
+                          <div className="grid grid-cols-3 gap-3">
+                            <div>
+                              <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">
+                                <div className="flex items-center gap-1">
+                                  <Beaker size={12} />
+                                  Parameter
+                                </div>
+                              </label>
+                              <div className="text-sm font-medium text-foreground bg-muted px-3 py-2 rounded-lg">
+                                {param.parameter}
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">
+                                <div className="flex items-center gap-1">
+                                  <Target size={12} />
+                                  Standard
+                                </div>
+                              </label>
+                              <div className="text-sm font-medium text-foreground bg-muted px-3 py-2 rounded-lg">
+                                {param.standard}
+                              </div>
+                            </div>
+                            <div>
+                              <label className="block text-xs font-semibold text-destructive uppercase mb-2">
+                                <div className="flex items-center gap-1">
+                                  <Ruler size={12} />
+                                  Result{' '}
+                                  <span className="text-destructive">*</span>
+                                </div>
+                              </label>
+                              <input
+                                type="text"
+                                value={results[index]}
+                                onChange={(e) =>
+                                  handleResultChange(index, e.target.value)
+                                }
+                                className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all bg-background text-sm"
+                                placeholder="Enter result"
+                                required
+                              />
+                            </div>
+                          </div>
+                          <div className="flex justify-end">
+                            {results[index]?.trim() !== '' ? (
+                              <span className="inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-1 rounded border border-primary/20">
+                                <Check size={12} className="mr-1" />
+                                Filled
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center text-xs text-muted-foreground bg-muted px-2 py-1 rounded border border-border">
+                                <Clock size={12} className="mr-1" />
+                                Pending
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
 
           {/* Footer actions */}
           <motion.div
@@ -737,7 +744,7 @@ const RMQualityReport: React.FC = () => {
       initial="hidden"
       animate="visible"
     >
-      <div className="max-w-7xl mx-auto shadow-sm rounded-xl py-0">
+      <div className="max-w-7xl mx-auto shadow-sm rounded-xl">
         <motion.div
           variants={itemVariants}
           className="bg-card rounded-xl overflow-hidden"

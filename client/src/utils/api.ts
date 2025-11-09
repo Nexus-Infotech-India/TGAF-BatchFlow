@@ -285,6 +285,8 @@ export const API_ROUTES = {
     UPDATE_WAREHOUSE: (id: string) => `${BASE_URL}/raw/warehouse/${id}`,
     DELETE_WAREHOUSE: (id: string) => `${BASE_URL}/raw/warehouse/${id}`,
 
+    GET_GRN_NUMBERS: `${BASE_URL}/batch/grn-numbers`,
+
     // Stock Distribution
     GET_CURRENT_STOCK_DISTRIBUTION: `${BASE_URL}/raw/stock`,
     GET_ALL_PURCHASE_ORDER_ITEMS: `${BASE_URL}/raw/purchase-order-items`,
@@ -313,6 +315,7 @@ export const API_ROUTES = {
     UPDATE_QUALITY_REPORT: (id: string) => `${BASE_URL}/raw/quality-report/${id}`,
     DELETE_QUALITY_REPORT: (id: string) => `${BASE_URL}/raw/quality-report/${id}`,
     EXPORT_QUALITY_REPORT: (id: string) => `${BASE_URL}/raw/quality-report/${id}/export`,
+    EXPORT_ALL_QUALITY_REPORTS: `${BASE_URL}/raw/quality-report/export/all`,
   },
 
   DRAFT: {

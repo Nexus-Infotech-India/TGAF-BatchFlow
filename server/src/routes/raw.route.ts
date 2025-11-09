@@ -101,5 +101,6 @@ router.get('/quality-report/:id', RMQualityController.getQualityReportById);
 router.put('/quality-report/:id', RMQualityController.updateQualityReport);
 router.delete('/quality-report/:id', RMQualityController.deleteQualityReport);
 router.get('/quality-report/:id/export', RMQualityController.exportQualityReport);
+router.get('/quality-report/export/all', RMQualityController.exportAllQualityReports);
 
 export default router;
