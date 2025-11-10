@@ -11,7 +11,6 @@ import {
   Boxes,
   Warehouse,
   Scale,
-  Calendar as CalendarIcon,
 } from 'lucide-react';
 import UnitSelect from '../../ui/Unitselect';
 import { convertToBaseUOM } from '../../../hooks/unit';
