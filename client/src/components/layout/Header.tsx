@@ -43,9 +43,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
   const [showSearchPanel, setShowSearchPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  const [theme, setTheme] = useState<'light' | 'dark'>(
-    document.body.classList.contains('dark') ? 'dark' : 'light'
-  );
+  const [theme, setTheme] = useState<'light' | 'dark'>('light'); 
 
   const { data: user, isLoading } = useQuery({
     queryKey: ['currentUser'],
@@ -108,15 +106,10 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
   };
 
   useEffect(() => {
-    // On mount, set theme from localStorage
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      setTheme('dark');
-    } else {
-      document.body.classList.remove('dark');
-      setTheme('light');
-    }
+    // Always set theme to light on mount
+    document.body.classList.remove('dark');
+    setTheme('light');
+    localStorage.setItem('theme', 'light');
   }, []);
 
   const toggleActivityLogs = (e: React.MouseEvent) => {
