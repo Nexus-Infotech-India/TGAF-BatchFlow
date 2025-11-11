@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient, Prisma } from '../../generated/prisma';
 import ExcelJS from 'exceljs';
+import puppeteer from 'puppeteer';
 
 const prisma = new PrismaClient();
 
@@ -375,7 +376,6 @@ export class RMQualityController {
     // Export all RM Quality Reports as single Excel file
     static async exportAllQualityReports(req: Request, res: Response): Promise<void> {
         try {
-            // Fetch all reports with their parameters
             const reports = await prisma.rMQualityReport.findMany({
                 include: {
                     parameters: true,
@@ -397,323 +397,188 @@ export class RMQualityController {
                 return;
             }
 
-            // Create Excel workbook with single sheet
-            const workbook = new ExcelJS.Workbook();
-            const sheet = workbook.addWorksheet('All Quality Reports');
+            // Get all unique parameters for table columns
+            const allParameters = new Set<string>();
+            reports.forEach(report => {
+                report.parameters.forEach(param => {
+                    allParameters.add(param.parameter);
+                });
+            });
+            const parametersList = Array.from(allParameters);
 
-            let currentRow = 1;
-
-            // ===== SUMMARY SECTION =====
-            const summaryTitleRow = sheet.addRow(['QUALITY REPORTS SUMMARY', '']);
-            summaryTitleRow.font = { bold: true, size: 16, color: { argb: 'FFFFFF' } };
-            summaryTitleRow.fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: '4472C4' },
-            };
-            summaryTitleRow.alignment = { horizontal: 'center', vertical: 'middle' };
-            sheet.mergeCells(`A${currentRow}:G${currentRow}`);
-            summaryTitleRow.height = 25;
-            currentRow++;
-
-            // Empty row
-            currentRow++;
-
-            // Summary table header
-            const summaryHeaderRow = sheet.addRow([
-                'S.No',
-                'Raw Material',
-                'Variety',
-                'Supplier',
-                'GRN',
-                'Created By',
-                'Date Created',
-            ]);
-            summaryHeaderRow.font = { bold: true, color: { argb: 'FFFFFF' }, size: 11 };
-            summaryHeaderRow.fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: '70AD47' },
-            };
-            summaryHeaderRow.alignment = { horizontal: 'center', vertical: 'middle' };
-
-            // Add summary data
-            reports.forEach((report, index) => {
-                const summaryRow = sheet.addRow([
-                    index + 1,
-                    report.rawMaterialName,
-                    report.variety,
-                    report.supplier,
-                    report.grn,
-                    report.createdBy?.name || 'N/A',
-                    new Date(report.createdAt).toLocaleDateString('en-IN'),
-                ]);
-
-                // Alternate row colors
-                if (index % 2 === 0) {
-                    summaryRow.eachCell((cell) => {
-                        cell.fill = {
-                            type: 'pattern',
-                            pattern: 'solid',
-                            fgColor: { argb: 'F2F2F2' },
-                        };
-                    });
+            // Build HTML string for the PDF with hierarchical table
+            const html = `
+        <html>
+        <head>
+            <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body { 
+                    font-family: 'Arial', sans-serif; 
+                    margin: 20px; 
+                    background: #f9f9f9;
                 }
-
-                // Add borders
-                summaryRow.eachCell((cell) => {
-                    cell.border = {
-                        top: { style: 'thin' },
-                        left: { style: 'thin' },
-                        bottom: { style: 'thin' },
-                        right: { style: 'thin' },
-                    };
-                    cell.alignment = { horizontal: 'left', vertical: 'middle' };
-                });
-
-                currentRow++;
-            });
-
-            // Add borders to summary header
-            for (let col = 1; col <= 7; col++) {
-                const cell = sheet.getCell(currentRow - reports.length - 1, col);
-                cell.border = {
-                    top: { style: 'medium' },
-                    left: { style: 'medium' },
-                    bottom: { style: 'medium' },
-                    right: { style: 'medium' },
-                };
-            }
-
-            // Empty rows for spacing
-            currentRow += 3;
-
-            // ===== DETAILED REPORTS SECTION =====
-            reports.forEach((report, reportIndex) => {
-                // Report Title
-                const reportTitleRow = sheet.addRow([
-                    `RM QUALITY REPORT #${reportIndex + 1} - ${report.rawMaterialName}`,
-                    '',
-                ]);
-                reportTitleRow.font = { bold: true, size: 13, color: { argb: 'FFFFFF' } };
-                reportTitleRow.fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: '4472C4' },
-                };
-                reportTitleRow.alignment = { horizontal: 'left', vertical: 'middle' };
-                sheet.mergeCells(`A${currentRow}:G${currentRow}`);
-                reportTitleRow.height = 20;
-                currentRow++;
-
-                // Basic Information Section
-                const basicHeaderRow = sheet.addRow(['BASIC INFORMATION', '']);
-                basicHeaderRow.font = { bold: true, size: 11, color: { argb: 'FFFFFF' } };
-                basicHeaderRow.fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: '70AD47' },
-                };
-                sheet.mergeCells(`A${currentRow}:G${currentRow}`);
-                currentRow++;
-
-                // Basic info data
-                const basicInfo = [
-                    ['Report ID', report.id],
-                    ['Raw Material Name', report.rawMaterialName],
-                    ['Variety', report.variety],
-                    ['Supplier', report.supplier],
-                    ['GRN', report.grn],
-                    ['Date of Report', new Date(report.dateOfReport).toLocaleDateString('en-IN')],
-                    ['Created By', report.createdBy?.name || 'N/A'],
-                    ['Created Email', report.createdBy?.email || 'N/A'],
-                    ['Created At', new Date(report.createdAt).toLocaleString('en-IN')],
-                    ['Updated At', new Date(report.updatedAt).toLocaleString('en-IN')],
-                ];
-
-                basicInfo.forEach(([field, value]) => {
-                    const row = sheet.addRow([field, value]);
-                    row.getCell(1).font = { bold: true };
-                    row.getCell(1).fill = {
-                        type: 'pattern',
-                        pattern: 'solid',
-                        fgColor: { argb: 'E7E6E6' },
-                    };
-                    row.getCell(1).border = {
-                        top: { style: 'thin' },
-                        left: { style: 'thin' },
-                        bottom: { style: 'thin' },
-                        right: { style: 'thin' },
-                    };
-                    row.getCell(2).border = {
-                        top: { style: 'thin' },
-                        left: { style: 'thin' },
-                        bottom: { style: 'thin' },
-                        right: { style: 'thin' },
-                    };
-                    currentRow++;
-                });
-
-                // Empty row
-                currentRow++;
-
-                // Quality Parameters Section
-                const paramHeaderRow = sheet.addRow(['QUALITY PARAMETERS', '']);
-                paramHeaderRow.font = { bold: true, size: 11, color: { argb: 'FFFFFF' } };
-                paramHeaderRow.fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: '70AD47' },
-                };
-                sheet.mergeCells(`A${currentRow}:G${currentRow}`);
-                currentRow++;
-
-                // Parameter table header
-                const tableHeaderRow = sheet.addRow([
-                    'Parameter',
-                    'Standard',
-                    'Result',
-                    '',
-                    '',
-                    '',
-                    '',
-                ]);
-                tableHeaderRow.font = { bold: true, color: { argb: 'FFFFFF' }, size: 10 };
-                tableHeaderRow.fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: '4472C4' },
-                };
-                tableHeaderRow.alignment = { horizontal: 'center', vertical: 'middle' };
-
-                for (let col = 1; col <= 3; col++) {
-                    tableHeaderRow.getCell(col).border = {
-                        top: { style: 'medium' },
-                        left: { style: 'medium' },
-                        bottom: { style: 'medium' },
-                        right: { style: 'medium' },
-                    };
+                .header {
+                    text-align: center;
+                    margin-bottom: 30px;
                 }
+                h1 { 
+                    font-size: 28px; 
+                    color: #1a1a1a;
+                    margin-bottom: 10px;
+                }
+                .date {
+                    font-size: 12px;
+                    color: #666;
+                }
+                table { 
+                    width: 100%; 
+                    border-collapse: collapse; 
+                    margin-top: 20px;
+                    background: white;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }
+                
+                /* Header styling */
+                thead tr:nth-child(1) th {
+                    background: #2c3e50;
+                    color: white;
+                    padding: 12px 6px;
+                    font-weight: bold;
+                    font-size: 13px;
+                    text-align: center;
+                    border: 1px solid #34495e;
+                }
+                
+                thead tr:nth-child(2) th {
+                    background: #34495e;
+                    color: white;
+                    padding: 10px 6px;
+                    font-weight: bold;
+                    font-size: 12px;
+                    text-align: center;
+                    border: 1px solid #445566;
+                }
+                
+                /* Data rows */
+                tbody tr {
+                    border-bottom: 1px solid #ddd;
+                }
+                
+                tbody tr:nth-child(odd) {
+                    background: #f5f5f5;
+                }
+                
+                tbody tr:hover {
+                    background: #e8f4f8;
+                }
+                
+                td {
+                    padding: 10px 6px;
+                    font-size: 11px;
+                    border: 1px solid #ddd;
+                    text-align: center;
+                }
+                
+                /* First column styling */
+                td:first-child,
+                th:first-child {
+                    text-align: left;
+                    padding-left: 10px;
+                }
+                
+                /* Parameter columns */
+                .param-std, .param-res {
+                    background: #ecf0f1;
+                    font-weight: 500;
+                }
+                
+                .param-std {
+                    color: #16a085;
+                }
+                
+                .param-res {
+                    color: #c0392b;
+                }
+                
+                /* Info columns */
+                .info-col {
+                    font-weight: 500;
+                    color: #2c3e50;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>RM Quality Reports</h1>
+                <div class="date">Generated on ${new Date().toLocaleDateString('en-IN')}</div>
+            </div>
+            
+            <table>
+                <thead>
+                    <!-- Row 1: Main column groups -->
+                    <tr>
+                        <th rowspan="2" style="vertical-align: middle;">GRN</th>
+                        <th rowspan="2" style="vertical-align: middle;">Raw Material</th>
+                        <th rowspan="2" style="vertical-align: middle;">Variety</th>
+                        <th rowspan="2" style="vertical-align: middle;">Supplier</th>
+                        <th rowspan="2" style="vertical-align: middle;">Date</th>
+                        ${parametersList.map(param => `
+                            <th colspan="2" style="text-align: center;">${param}</th>
+                        `).join('')}
+                    </tr>
+                    
+                    <!-- Row 2: Standard and Result sub-headers -->
+                    <tr>
+                        ${parametersList.map(param => `
+                            <th class="param-std">Standard</th>
+                            <th class="param-res">Result</th>
+                        `).join('')}
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    ${reports.map(report => `
+                        <tr>
+                            <td class="info-col">${report.grn}</td>
+                            <td class="info-col">${report.rawMaterialName}</td>
+                            <td class="info-col">${report.variety}</td>
+                            <td class="info-col">${report.supplier}</td>
+                            <td class="info-col">${new Date(report.dateOfReport).toLocaleDateString('en-IN')}</td>
+                            ${parametersList.map(param => {
+                const paramData = report.parameters.find(p => p.parameter === param);
+                return `
+                                    <td class="param-std">${paramData?.standard || '-'}</td>
+                                    <td class="param-res">${paramData?.result || '-'}</td>
+                                `;
+            }).join('')}
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </body>
+        </html>
+        `;
 
-                currentRow++;
-
-                // Add parameters
-                report.parameters.forEach((param, paramIndex) => {
-                    const paramRow = sheet.addRow([param.parameter, param.standard, param.result]);
-
-                    // Alternate row colors
-                    if (paramIndex % 2 === 0) {
-                        paramRow.eachCell((cell, colNumber) => {
-                            if (colNumber <= 3) {
-                                cell.fill = {
-                                    type: 'pattern',
-                                    pattern: 'solid',
-                                    fgColor: { argb: 'F2F2F2' },
-                                };
-                            }
-                        });
-                    }
-
-                    // Add borders to first 3 columns
-                    for (let col = 1; col <= 3; col++) {
-                        paramRow.getCell(col).border = {
-                            top: { style: 'thin' },
-                            left: { style: 'thin' },
-                            bottom: { style: 'thin' },
-                            right: { style: 'thin' },
-                        };
-                        paramRow.getCell(col).alignment = { horizontal: 'left', vertical: 'middle', wrapText: true };
-                    }
-
-                    currentRow++;
-                });
-
-                // Empty rows between reports
-                currentRow += 2;
+            // Launch Puppeteer and generate PDF
+            const browser = await puppeteer.launch({
+                args: ['--no-sandbox', '--disable-setuid-sandbox'],
             });
-
-            // ===== STATISTICS SECTION =====
-            const statsTitleRow = sheet.addRow(['STATISTICS', '']);
-            statsTitleRow.font = { bold: true, size: 14, color: { argb: 'FFFFFF' } };
-            statsTitleRow.fill = {
-                type: 'pattern',
-                pattern: 'solid',
-                fgColor: { argb: '4472C4' },
-            };
-            statsTitleRow.alignment = { horizontal: 'center', vertical: 'middle' };
-            sheet.mergeCells(`A${currentRow}:B${currentRow}`);
-            statsTitleRow.height = 22;
-            currentRow++;
-
-            // Empty row
-            currentRow++;
-
-            // Calculate statistics
-            const uniqueRawMaterials = new Set(reports.map((r) => r.rawMaterialName)).size;
-            const uniqueSuppliers = new Set(reports.map((r) => r.supplier)).size;
-            const totalParameters = reports.reduce((sum, r) => sum + r.parameters.length, 0);
-            const avgParametersPerReport = (totalParameters / reports.length).toFixed(2);
-
-            const stats = [
-                ['Total Reports', reports.length],
-                ['Unique Raw Materials', uniqueRawMaterials],
-                ['Unique Suppliers', uniqueSuppliers],
-                ['Total Parameters', totalParameters],
-                ['Avg Parameters per Report', avgParametersPerReport],
-                ['Export Date', new Date().toLocaleString('en-IN')],
-            ];
-
-            stats.forEach(([metric, value]) => {
-                const row = sheet.addRow([metric, value]);
-                row.getCell(1).font = { bold: true, color: { argb: 'FFFFFF' } };
-                row.getCell(1).fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: '70AD47' },
-                };
-                row.getCell(2).fill = {
-                    type: 'pattern',
-                    pattern: 'solid',
-                    fgColor: { argb: 'E7E6E6' },
-                };
-
-                row.eachCell((cell) => {
-                    cell.border = {
-                        top: { style: 'thin' },
-                        left: { style: 'thin' },
-                        bottom: { style: 'thin' },
-                        right: { style: 'thin' },
-                    };
-                    cell.alignment = { horizontal: 'left', vertical: 'middle' };
-                });
-
-                currentRow++;
+            const page = await browser.newPage();
+            await page.setContent(html, { waitUntil: 'networkidle0' });
+            const pdfBuffer = await page.pdf({
+                format: 'A4',
+                printBackground: true,
+                landscape: true, // Use landscape for wide tables
+                margin: { top: '15px', bottom: '15px', left: '15px', right: '15px' },
             });
+            await browser.close();
 
-            // Set column widths
-            sheet.columns = [
-                { width: 25 },
-                { width: 30 },
-                { width: 25 },
-                { width: 15 },
-                { width: 15 },
-                { width: 15 },
-                { width: 15 },
-            ];
-
-            // Set response headers
-            res.setHeader(
-                'Content-Type',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            );
+            res.setHeader('Content-Type', 'application/pdf');
             res.setHeader(
                 'Content-Disposition',
-                `attachment; filename=RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.xlsx`
+                `attachment; filename=RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.pdf`
             );
-
-            // Write workbook to response
-            await workbook.xlsx.write(res);
-            res.end();
+            res.send(pdfBuffer);
         } catch (error) {
             console.error('Error exporting all RM Quality Reports:', error);
             res.status(500).json({
@@ -722,4 +587,5 @@ export class RMQualityController {
             });
         }
     }
+    
 }

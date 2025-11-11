@@ -304,6 +304,7 @@ exports.Prisma.BatchParameterValueScalarFieldEnum = {
   parameterId: 'parameterId',
   value: 'value',
   standardValue: 'standardValue',
+  remark: 'remark',
   unitId: 'unitId',
   methodologyId: 'methodologyId',
   verificationResult: 'verificationResult',

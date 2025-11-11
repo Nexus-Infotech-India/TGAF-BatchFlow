@@ -32,6 +32,7 @@ export interface BatchUpdateRequest extends Partial<BatchCreateRequest> {
 
 // BatchParameterValueInput type for creating/updating parameter values
 export interface BatchParameterValueInput {
+  remark: null;
   standardValue: any;
   parameterId: string;
   value: string;

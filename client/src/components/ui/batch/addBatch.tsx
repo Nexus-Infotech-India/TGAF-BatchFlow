@@ -14,14 +14,13 @@ import {
   Check,
   Tag,
   RotateCw,
-  Minus,
   Beaker,
   SlidersHorizontal,
   Hash,
   Ruler,
   CheckCircle,
-  Settings,
   Search,
+  FileText,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAutoSave } from '../../../hooks/useAutoSave';
@@ -66,6 +65,7 @@ const AddBatch: React.FC = () => {
      value: string;
      standardValue?: string; // ADD THIS
      unitId?: string;
+     remark?: string;
    }>
  >([]);
   const [sieveSelections, setSieveSelections] = useState<
@@ -121,12 +121,6 @@ const AddBatch: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const draftIdFromUrl = searchParams.get('draftId');
 
-  const handleRemoveParameter = (parameterId: string) => {
-    setRemovedParameters((prev) => new Set([...prev, parameterId]));
-    setParameterValues((prev) =>
-      prev.filter((pv) => pv.parameterId !== parameterId)
-    );
-  };
 
   useEffect(() => {
     const fetchDraft = async () => {
@@ -989,13 +983,13 @@ const AddBatch: React.FC = () => {
                                           Unit
                                         </div>
                                       </th>
-                                      <th className="text-center p-3 text-xs font-semibold text-foreground uppercase w-20">
-                                        <div className="inline-flex items-center gap-2 justify-center">
-                                          <Settings
+                                      <th className="text-left p-3 text-xs font-semibold text-foreground uppercase w-44">
+                                        <div className="inline-flex items-center gap-2">
+                                          <FileText
                                             size={13}
                                             className="text-primary"
                                           />
-                                          Action
+                                          Remarks
                                         </div>
                                       </th>
                                     </tr>
@@ -1212,20 +1206,57 @@ const AddBatch: React.FC = () => {
                                                 </span>
                                               )}
                                             </td>
-                                           
-                                            <td className="p-3 text-center align-top">
-                                              <button
-                                                type="button"
-                                                onClick={() =>
-                                                  handleRemoveParameter(
-                                                    parameter.id
-                                                  )
+
+                                            <td className="p-3 align-top">
+                                              <input
+                                                type="text"
+                                                placeholder="Add remarks"
+                                                value={
+                                                  parameterValues.find(
+                                                    (pv) =>
+                                                      pv.parameterId ===
+                                                      parameter.id
+                                                  )?.remark || ''
                                                 }
-                                                className="inline-flex items-center justify-center w-8 h-8 rounded-md border border-destructive/30 text-destructive hover:bg-destructive/10 transition cursor-pointer"
-                                                title={`Remove ${parameter.name} parameter`}
-                                              >
-                                                <Minus size={14} />
-                                              </button>
+                                                onChange={(e) => {
+                                                  const remarkValue =
+                                                    e.target.value;
+                                                  const existingParam =
+                                                    parameterValues.find(
+                                                      (pv) =>
+                                                        pv.parameterId ===
+                                                        parameter.id
+                                                    );
+                                                  if (existingParam) {
+                                                    setParameterValues(
+                                                      parameterValues.map(
+                                                        (pv) =>
+                                                          pv.parameterId ===
+                                                          parameter.id
+                                                            ? {
+                                                                ...pv,
+                                                                remark:
+                                                                  remarkValue,
+                                                              }
+                                                            : pv
+                                                      )
+                                                    );
+                                                  } else {
+                                                    setParameterValues([
+                                                      ...parameterValues,
+                                                      {
+                                                        parameterId:
+                                                          parameter.id,
+                                                        value: '',
+                                                        unitId:
+                                                          parameter.unitId,
+                                                        remark: remarkValue,
+                                                      },
+                                                    ]);
+                                                  }
+                                                }}
+                                                className="border border-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary bg-background w-full"
+                                              />
                                             </td>
                                           </tr>
                                         );

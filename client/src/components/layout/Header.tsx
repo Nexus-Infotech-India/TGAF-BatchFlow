@@ -14,6 +14,8 @@ import {
   Search,
   Zap,
   Activity,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -41,6 +43,9 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
   const [showSearchPanel, setShowSearchPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const [theme, setTheme] = useState<'light' | 'dark'>(
+    document.body.classList.contains('dark') ? 'dark' : 'light'
+  );
 
   const { data: user, isLoading } = useQuery({
     queryKey: ['currentUser'],
@@ -89,6 +94,30 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
     setShowActivityLogs(false);
     setShowSearchPanel(false);
   };
+
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      document.body.classList.add('dark');
+      setTheme('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.body.classList.remove('dark');
+      setTheme('light');
+      localStorage.setItem('theme', 'light');
+    }
+  };
+
+  useEffect(() => {
+    // On mount, set theme from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+      setTheme('dark');
+    } else {
+      document.body.classList.remove('dark');
+      setTheme('light');
+    }
+  }, []);
 
   const toggleActivityLogs = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -264,12 +293,34 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
                   >
                     {pageTitle}
                   </h1>
-                 
                 </motion.div>
               </AnimatePresence>
             </div>
             {/* Action Buttons */}
             <div className="flex items-center gap-1.5">
+              {/* Theme Toggle Button */}
+              <motion.button
+                className="p-2 rounded-lg transition-all duration-300 group"
+                onClick={toggleTheme}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                title={
+                  theme === 'dark'
+                    ? 'Switch to Light Mode'
+                    : 'Switch to Dark Mode'
+                }
+                style={{
+                  color: 'var(--muted-foreground)',
+                  background: 'var(--card)',
+                  border: '1px solid var(--border)',
+                }}
+              >
+                {theme === 'dark' ? (
+                  <Sun size={16} className="transition-colors" />
+                ) : (
+                  <Moon size={16} className="transition-colors" />
+                )}
+              </motion.button>
               {/* Search Button */}
               <div className="relative">
                 <motion.button

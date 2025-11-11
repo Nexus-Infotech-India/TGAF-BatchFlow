@@ -107,9 +107,6 @@ const ParameterDetailsTable: React.FC<ParameterDetailsTableProps> = ({
           <tbody>
             {parameters.map((parameter, index) => {
               const hasValue = parameter.value && parameter.value.trim() !== '';
-              const hasVerificationRemark =
-                parameter.verificationRemark &&
-                parameter.verificationRemark.trim() !== '';
 
               return (
                 <motion.tr
@@ -151,18 +148,24 @@ const ParameterDetailsTable: React.FC<ParameterDetailsTableProps> = ({
                   <td className="p-3">
                     <div
                       className={`p-2 rounded-lg text-xs ${
-                        hasVerificationRemark
+                        parameter.remark && parameter.remark.trim() !== ''
                           ? 'bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 text-[var(--color-primary)]'
-                          : hasValue
-                            ? 'bg-[var(--color-muted)] border border-[var(--color-border)] text-[var(--color-muted-foreground)]'
-                            : 'bg-[var(--color-muted)] border border-[var(--color-border)] text-[var(--color-muted-foreground)]'
+                          : parameter.verificationRemark &&
+                              parameter.verificationRemark.trim() !== ''
+                            ? 'bg-[var(--color-primary)]/10 border border-[var(--color-primary)]/20 text-[var(--color-primary)]'
+                            : hasValue
+                              ? 'bg-[var(--color-muted)] border border-[var(--color-border)] text-[var(--color-muted-foreground)]'
+                              : 'bg-[var(--color-muted)] border border-[var(--color-border)] text-[var(--color-muted-foreground)]'
                       }`}
                     >
-                      {hasVerificationRemark
-                        ? parameter.verificationRemark
-                        : hasValue
-                          ? 'No remarks yet'
-                          : 'No data available'}
+                      {parameter.remark && parameter.remark.trim() !== ''
+                        ? parameter.remark
+                        : parameter.verificationRemark &&
+                            parameter.verificationRemark.trim() !== ''
+                          ? parameter.verificationRemark
+                          : hasValue
+                            ? 'No remarks yet'
+                            : 'No data available'}
                     </div>
                   </td>
                 </motion.tr>

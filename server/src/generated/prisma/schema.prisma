@@ -1,5 +1,5 @@
 // Auto-generated schema - DO NOT EDIT DIRECTLY
-// Generated on: Sun 09 Nov 2025 06:31:35 PM IST
+// Generated on: Tue 11 Nov 2025 12:20:18 PM IST
 
 generator client {
   provider      = "prisma-client-js"
@@ -344,6 +344,7 @@ model BatchParameterValue {
   parameterId        String
   value              String
   standardValue      String? // ADD THIS - to store the standard/expected value
+  remark             String?
   unitId             String?
   methodologyId      String?
   verificationResult String?

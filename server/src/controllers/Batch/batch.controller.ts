@@ -140,6 +140,7 @@ async createBatch(req: Request, res: Response): Promise<void> {
               parameterId: paramValue.parameterId,
               value: paramValue.value,
               standardValue: paramValue.standardValue, // ADD THIS
+              remark: paramValue.remark || null, 
               unitId: paramValue.unitId,
               methodologyId: paramValue.methodologyId,
               updatedAt: new Date(),
@@ -310,6 +311,7 @@ async getBatches(req: Request, res: Response): Promise<void> {
           methodology: pv.methodology,
           verificationResult: pv.verificationResult,
           verificationRemark: pv.verificationRemark,
+          remark: pv.remark || null,
           standardValue: pv.parameter.standardValue || pv.standardValue || null
         });
       });
@@ -414,7 +416,8 @@ async updateBatch(req: Request, res: Response): Promise<void> {
               where: { id: existingValue.id },
               data: {
                 value: paramValue.value,
-                standardValue: paramValue.standardValue, // ADD THIS
+                standardValue: paramValue.standardValue,
+                remark: paramValue.remark || null,  // ADD THIS
                 unitId: paramValue.unitId,
                 methodologyId: paramValue.methodologyId,
                 updatedAt: new Date()

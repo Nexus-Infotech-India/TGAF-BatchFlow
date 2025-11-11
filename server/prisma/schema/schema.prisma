@@ -344,6 +344,7 @@ model BatchParameterValue {
   parameterId     String
   value           String            
   standardValue   String?           // ADD THIS - to store the standard/expected value
+  remark          String?  
   unitId          String?
   methodologyId   String?
   verificationResult    String?           

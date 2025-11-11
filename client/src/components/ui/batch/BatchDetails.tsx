@@ -62,7 +62,6 @@ const categoryIcons: Record<
   default: FlaskConical,
 };
 
-// Reusable components
 
 const SectionCard: React.FC<{
   title: string;

@@ -312,7 +312,7 @@ const RMQualityReport: React.FC = () => {
    try {
      setIsExportingAll(true);
      const response = await api.get(
-       `${API_ROUTES.RAW.EXPORT_ALL_QUALITY_REPORTS}`, // Add this route
+       `${API_ROUTES.RAW.EXPORT_ALL_QUALITY_REPORTS}`,
        {
          headers: { Authorization: `Bearer ${authToken}` },
          responseType: 'blob',
@@ -321,14 +321,14 @@ const RMQualityReport: React.FC = () => {
 
      // Create blob and trigger download
      const blob = new Blob([response.data], {
-       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+       type: 'application/pdf', // <-- changed from excel MIME type
      });
      const url = window.URL.createObjectURL(blob);
      const link = document.createElement('a');
      link.href = url;
      link.setAttribute(
        'download',
-       `RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.xlsx`
+       `RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.pdf` // <-- changed extension to .pdf
      );
      document.body.appendChild(link);
      link.click();

@@ -28398,6 +28398,7 @@ export namespace Prisma {
     parameterId: string | null
     value: string | null
     standardValue: string | null
+    remark: string | null
     unitId: string | null
     methodologyId: string | null
     verificationResult: string | null
@@ -28414,6 +28415,7 @@ export namespace Prisma {
     parameterId: string | null
     value: string | null
     standardValue: string | null
+    remark: string | null
     unitId: string | null
     methodologyId: string | null
     verificationResult: string | null
@@ -28430,6 +28432,7 @@ export namespace Prisma {
     parameterId: number
     value: number
     standardValue: number
+    remark: number
     unitId: number
     methodologyId: number
     verificationResult: number
@@ -28448,6 +28451,7 @@ export namespace Prisma {
     parameterId?: true
     value?: true
     standardValue?: true
+    remark?: true
     unitId?: true
     methodologyId?: true
     verificationResult?: true
@@ -28464,6 +28468,7 @@ export namespace Prisma {
     parameterId?: true
     value?: true
     standardValue?: true
+    remark?: true
     unitId?: true
     methodologyId?: true
     verificationResult?: true
@@ -28480,6 +28485,7 @@ export namespace Prisma {
     parameterId?: true
     value?: true
     standardValue?: true
+    remark?: true
     unitId?: true
     methodologyId?: true
     verificationResult?: true
@@ -28569,6 +28575,7 @@ export namespace Prisma {
     parameterId: string
     value: string
     standardValue: string | null
+    remark: string | null
     unitId: string | null
     methodologyId: string | null
     verificationResult: string | null
@@ -28602,6 +28609,7 @@ export namespace Prisma {
     parameterId?: boolean
     value?: boolean
     standardValue?: boolean
+    remark?: boolean
     unitId?: boolean
     methodologyId?: boolean
     verificationResult?: boolean
@@ -28622,6 +28630,7 @@ export namespace Prisma {
     parameterId?: boolean
     value?: boolean
     standardValue?: boolean
+    remark?: boolean
     unitId?: boolean
     methodologyId?: boolean
     verificationResult?: boolean
@@ -28642,6 +28651,7 @@ export namespace Prisma {
     parameterId?: boolean
     value?: boolean
     standardValue?: boolean
+    remark?: boolean
     unitId?: boolean
     methodologyId?: boolean
     verificationResult?: boolean
@@ -28662,6 +28672,7 @@ export namespace Prisma {
     parameterId?: boolean
     value?: boolean
     standardValue?: boolean
+    remark?: boolean
     unitId?: boolean
     methodologyId?: boolean
     verificationResult?: boolean
@@ -28672,7 +28683,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BatchParameterValueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "parameterId" | "value" | "standardValue" | "unitId" | "methodologyId" | "verificationResult" | "verificationRemark" | "verifiedById" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["batchParameterValue"]>
+  export type BatchParameterValueOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "parameterId" | "value" | "standardValue" | "remark" | "unitId" | "methodologyId" | "verificationResult" | "verificationRemark" | "verifiedById" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["batchParameterValue"]>
   export type BatchParameterValueInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     batch?: boolean | BatchDefaultArgs<ExtArgs>
     parameter?: boolean | StandardParameterDefaultArgs<ExtArgs>
@@ -28706,6 +28717,7 @@ export namespace Prisma {
       parameterId: string
       value: string
       standardValue: string | null
+      remark: string | null
       unitId: string | null
       methodologyId: string | null
       verificationResult: string | null
@@ -29146,6 +29158,7 @@ export namespace Prisma {
     readonly parameterId: FieldRef<"BatchParameterValue", 'String'>
     readonly value: FieldRef<"BatchParameterValue", 'String'>
     readonly standardValue: FieldRef<"BatchParameterValue", 'String'>
+    readonly remark: FieldRef<"BatchParameterValue", 'String'>
     readonly unitId: FieldRef<"BatchParameterValue", 'String'>
     readonly methodologyId: FieldRef<"BatchParameterValue", 'String'>
     readonly verificationResult: FieldRef<"BatchParameterValue", 'String'>
@@ -77781,6 +77794,7 @@ export namespace Prisma {
     parameterId: 'parameterId',
     value: 'value',
     standardValue: 'standardValue',
+    remark: 'remark',
     unitId: 'unitId',
     methodologyId: 'methodologyId',
     verificationResult: 'verificationResult',
@@ -80128,6 +80142,7 @@ export namespace Prisma {
     parameterId?: StringFilter<"BatchParameterValue"> | string
     value?: StringFilter<"BatchParameterValue"> | string
     standardValue?: StringNullableFilter<"BatchParameterValue"> | string | null
+    remark?: StringNullableFilter<"BatchParameterValue"> | string | null
     unitId?: StringNullableFilter<"BatchParameterValue"> | string | null
     methodologyId?: StringNullableFilter<"BatchParameterValue"> | string | null
     verificationResult?: StringNullableFilter<"BatchParameterValue"> | string | null
@@ -80148,6 +80163,7 @@ export namespace Prisma {
     parameterId?: SortOrder
     value?: SortOrder
     standardValue?: SortOrderInput | SortOrder
+    remark?: SortOrderInput | SortOrder
     unitId?: SortOrderInput | SortOrder
     methodologyId?: SortOrderInput | SortOrder
     verificationResult?: SortOrderInput | SortOrder
@@ -80172,6 +80188,7 @@ export namespace Prisma {
     parameterId?: StringFilter<"BatchParameterValue"> | string
     value?: StringFilter<"BatchParameterValue"> | string
     standardValue?: StringNullableFilter<"BatchParameterValue"> | string | null
+    remark?: StringNullableFilter<"BatchParameterValue"> | string | null
     unitId?: StringNullableFilter<"BatchParameterValue"> | string | null
     methodologyId?: StringNullableFilter<"BatchParameterValue"> | string | null
     verificationResult?: StringNullableFilter<"BatchParameterValue"> | string | null
@@ -80192,6 +80209,7 @@ export namespace Prisma {
     parameterId?: SortOrder
     value?: SortOrder
     standardValue?: SortOrderInput | SortOrder
+    remark?: SortOrderInput | SortOrder
     unitId?: SortOrderInput | SortOrder
     methodologyId?: SortOrderInput | SortOrder
     verificationResult?: SortOrderInput | SortOrder
@@ -80214,6 +80232,7 @@ export namespace Prisma {
     parameterId?: StringWithAggregatesFilter<"BatchParameterValue"> | string
     value?: StringWithAggregatesFilter<"BatchParameterValue"> | string
     standardValue?: StringNullableWithAggregatesFilter<"BatchParameterValue"> | string | null
+    remark?: StringNullableWithAggregatesFilter<"BatchParameterValue"> | string | null
     unitId?: StringNullableWithAggregatesFilter<"BatchParameterValue"> | string | null
     methodologyId?: StringNullableWithAggregatesFilter<"BatchParameterValue"> | string | null
     verificationResult?: StringNullableWithAggregatesFilter<"BatchParameterValue"> | string | null
@@ -85103,6 +85122,7 @@ export namespace Prisma {
     id: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
     verifiedById?: string | null
@@ -85121,6 +85141,7 @@ export namespace Prisma {
     parameterId: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -85135,6 +85156,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -85153,6 +85175,7 @@ export namespace Prisma {
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
@@ -85169,6 +85192,7 @@ export namespace Prisma {
     parameterId: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -85183,6 +85207,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -85197,6 +85222,7 @@ export namespace Prisma {
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
@@ -90034,6 +90060,7 @@ export namespace Prisma {
     parameterId?: SortOrder
     value?: SortOrder
     standardValue?: SortOrder
+    remark?: SortOrder
     unitId?: SortOrder
     methodologyId?: SortOrder
     verificationResult?: SortOrder
@@ -90050,6 +90077,7 @@ export namespace Prisma {
     parameterId?: SortOrder
     value?: SortOrder
     standardValue?: SortOrder
+    remark?: SortOrder
     unitId?: SortOrder
     methodologyId?: SortOrder
     verificationResult?: SortOrder
@@ -90066,6 +90094,7 @@ export namespace Prisma {
     parameterId?: SortOrder
     value?: SortOrder
     standardValue?: SortOrder
+    remark?: SortOrder
     unitId?: SortOrder
     methodologyId?: SortOrder
     verificationResult?: SortOrder
@@ -99738,6 +99767,7 @@ export namespace Prisma {
     id: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
     verifiedById?: string | null
@@ -99754,6 +99784,7 @@ export namespace Prisma {
     parameterId: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -100165,6 +100196,7 @@ export namespace Prisma {
     parameterId?: StringFilter<"BatchParameterValue"> | string
     value?: StringFilter<"BatchParameterValue"> | string
     standardValue?: StringNullableFilter<"BatchParameterValue"> | string | null
+    remark?: StringNullableFilter<"BatchParameterValue"> | string | null
     unitId?: StringNullableFilter<"BatchParameterValue"> | string | null
     methodologyId?: StringNullableFilter<"BatchParameterValue"> | string | null
     verificationResult?: StringNullableFilter<"BatchParameterValue"> | string | null
@@ -100267,6 +100299,7 @@ export namespace Prisma {
     id: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
     verifiedById?: string | null
@@ -100284,6 +100317,7 @@ export namespace Prisma {
     parameterId: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     unitId?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
@@ -101306,6 +101340,7 @@ export namespace Prisma {
     id: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
     verifiedById?: string | null
@@ -101323,6 +101358,7 @@ export namespace Prisma {
     parameterId: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
@@ -104817,6 +104853,7 @@ export namespace Prisma {
     id: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
     verifiedById?: string | null
@@ -104833,6 +104870,7 @@ export namespace Prisma {
     batchId: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -117785,6 +117823,7 @@ export namespace Prisma {
     parameterId: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -117961,6 +118000,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117977,6 +118017,7 @@ export namespace Prisma {
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
@@ -117992,6 +118033,7 @@ export namespace Prisma {
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118008,6 +118050,7 @@ export namespace Prisma {
     parameterId: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     unitId?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
@@ -118143,6 +118186,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118160,6 +118204,7 @@ export namespace Prisma {
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118175,6 +118220,7 @@ export namespace Prisma {
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118522,6 +118568,7 @@ export namespace Prisma {
     parameterId: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
     verificationRemark?: string | null
@@ -118602,6 +118649,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118619,6 +118667,7 @@ export namespace Prisma {
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
@@ -118634,6 +118683,7 @@ export namespace Prisma {
     parameterId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120848,6 +120898,7 @@ export namespace Prisma {
     batchId: string
     value: string
     standardValue?: string | null
+    remark?: string | null
     unitId?: string | null
     methodologyId?: string | null
     verificationResult?: string | null
@@ -120882,6 +120933,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
     verificationRemark?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120898,6 +120950,7 @@ export namespace Prisma {
     batchId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
@@ -120913,6 +120966,7 @@ export namespace Prisma {
     batchId?: StringFieldUpdateOperationsInput | string
     value?: StringFieldUpdateOperationsInput | string
     standardValue?: NullableStringFieldUpdateOperationsInput | string | null
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     unitId?: NullableStringFieldUpdateOperationsInput | string | null
     methodologyId?: NullableStringFieldUpdateOperationsInput | string | null
     verificationResult?: NullableStringFieldUpdateOperationsInput | string | null
