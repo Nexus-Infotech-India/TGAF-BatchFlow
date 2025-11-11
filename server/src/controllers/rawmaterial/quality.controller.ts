@@ -560,7 +560,9 @@ export class RMQualityController {
         `;
 
             // Launch Puppeteer and generate PDF
+            // ✅ FIX: Use puppeteer.executablePath() to find bundled Chromium
             const browser = await puppeteer.launch({
+                executablePath: puppeteer.executablePath(), // ✅ Use bundled Chromium
                 args: ['--no-sandbox', '--disable-setuid-sandbox'],
             });
             const page = await browser.newPage();
@@ -568,7 +570,7 @@ export class RMQualityController {
             const pdfBuffer = await page.pdf({
                 format: 'A4',
                 printBackground: true,
-                landscape: true, // Use landscape for wide tables
+                landscape: true,
                 margin: { top: '15px', bottom: '15px', left: '15px', right: '15px' },
             });
             await browser.close();
