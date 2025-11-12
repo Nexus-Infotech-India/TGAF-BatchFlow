@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import { PrismaClient, Prisma } from '../../generated/prisma';
 import ExcelJS from 'exceljs';
-import puppeteer from 'puppeteer';
+import { chromium } from 'playwright';
+
 
 const prisma = new PrismaClient();
 
@@ -559,19 +560,17 @@ export class RMQualityController {
         </html>
         `;
 
-            // Launch Puppeteer and generate PDF
-            // ✅ FIX: Use puppeteer.executablePath() to find bundled Chromium
-            const browser = await puppeteer.launch({
-                // executablePath: puppeteer.executablePath(), // ✅ Use bundled Chromium
+            // Launch Playwright and generate PDF
+            const browser = await chromium.launch({
                 args: ['--no-sandbox', '--disable-setuid-sandbox'],
             });
             const page = await browser.newPage();
-            await page.setContent(html, { waitUntil: 'networkidle0' });
+            await page.setContent(html, { waitUntil: 'networkidle' });
             const pdfBuffer = await page.pdf({
                 format: 'A4',
                 printBackground: true,
                 landscape: true,
-                margin: { top: '15px', bottom: '15px', left: '15px', right: '15px' },
+                margin: { top: 15, bottom: 15, left: 15, right: 15 },
             });
             await browser.close();
 
