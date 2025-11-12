@@ -17,7 +17,10 @@ const app = express();
 const PORT = process.env.PORT;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://tgaf.inventory.nexusinfotech.co', // or use an array for multiple origins
+  credentials: true, // if you need cookies/auth headers
+}));
 app.use(express.json());
 
 // Routes
