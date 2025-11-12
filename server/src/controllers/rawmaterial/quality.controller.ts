@@ -562,7 +562,7 @@ export class RMQualityController {
             // Launch Puppeteer and generate PDF
             // ✅ FIX: Use puppeteer.executablePath() to find bundled Chromium
             const browser = await puppeteer.launch({
-                executablePath: puppeteer.executablePath(), // ✅ Use bundled Chromium
+                // executablePath: puppeteer.executablePath(), // ✅ Use bundled Chromium
                 args: ['--no-sandbox', '--disable-setuid-sandbox'],
             });
             const page = await browser.newPage();
