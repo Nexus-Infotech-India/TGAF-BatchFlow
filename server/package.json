@@ -12,8 +12,7 @@
     "prisma:migrate:deploy": "npm run build:schema && npx prisma migrate deploy",
     "prisma:push": "npm run build:schema && npx prisma db push",
     "prisma:studio": "npm run build:schema && npx prisma studio",
-    "prisma:validate": "npm run build:schema && npx prisma validate",
-    "postinstall": "npx playwright install"
+    "prisma:validate": "npm run build:schema && npx prisma validate"
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
