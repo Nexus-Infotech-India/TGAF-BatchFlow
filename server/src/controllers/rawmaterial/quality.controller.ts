@@ -373,7 +373,7 @@ export class RMQualityController {
             });
         }
     }
-
+    
     // Export all RM Quality Reports as single Excel file
     static async exportAllQualityReports(req: Request, res: Response): Promise<void> {
         try {
@@ -407,179 +407,142 @@ export class RMQualityController {
             });
             const parametersList = Array.from(allParameters);
 
-            // Build HTML string for the PDF with hierarchical table
-            const html = `
-        <html>
-        <head>
-            <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                body { 
-                    font-family: 'Arial', sans-serif; 
-                    margin: 20px; 
-                    background: #f9f9f9;
-                }
-                .header {
-                    text-align: center;
-                    margin-bottom: 30px;
-                }
-                h1 { 
-                    font-size: 28px; 
-                    color: #1a1a1a;
-                    margin-bottom: 10px;
-                }
-                .date {
-                    font-size: 12px;
-                    color: #666;
-                }
-                table { 
-                    width: 100%; 
-                    border-collapse: collapse; 
-                    margin-top: 20px;
-                    background: white;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                }
-                
-                /* Header styling */
-                thead tr:nth-child(1) th {
-                    background: #2c3e50;
-                    color: white;
-                    padding: 12px 6px;
-                    font-weight: bold;
-                    font-size: 13px;
-                    text-align: center;
-                    border: 1px solid #34495e;
-                }
-                
-                thead tr:nth-child(2) th {
-                    background: #34495e;
-                    color: white;
-                    padding: 10px 6px;
-                    font-weight: bold;
-                    font-size: 12px;
-                    text-align: center;
-                    border: 1px solid #445566;
-                }
-                
-                /* Data rows */
-                tbody tr {
-                    border-bottom: 1px solid #ddd;
-                }
-                
-                tbody tr:nth-child(odd) {
-                    background: #f5f5f5;
-                }
-                
-                tbody tr:hover {
-                    background: #e8f4f8;
-                }
-                
-                td {
-                    padding: 10px 6px;
-                    font-size: 11px;
-                    border: 1px solid #ddd;
-                    text-align: center;
-                }
-                
-                /* First column styling */
-                td:first-child,
-                th:first-child {
-                    text-align: left;
-                    padding-left: 10px;
-                }
-                
-                /* Parameter columns */
-                .param-std, .param-res {
-                    background: #ecf0f1;
-                    font-weight: 500;
-                }
-                
-                .param-std {
-                    color: #16a085;
-                }
-                
-                .param-res {
-                    color: #c0392b;
-                }
-                
-                /* Info columns */
-                .info-col {
-                    font-weight: 500;
-                    color: #2c3e50;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h1>RM Quality Reports</h1>
-                <div class="date">Generated on ${new Date().toLocaleDateString('en-IN')}</div>
-            </div>
-            
-            <table>
-                <thead>
-                    <!-- Row 1: Main column groups -->
-                    <tr>
-                        <th rowspan="2" style="vertical-align: middle;">GRN</th>
-                        <th rowspan="2" style="vertical-align: middle;">Raw Material</th>
-                        <th rowspan="2" style="vertical-align: middle;">Variety</th>
-                        <th rowspan="2" style="vertical-align: middle;">Supplier</th>
-                        <th rowspan="2" style="vertical-align: middle;">Date</th>
-                        ${parametersList.map(param => `
-                            <th colspan="2" style="text-align: center;">${param}</th>
-                        `).join('')}
-                    </tr>
-                    
-                    <!-- Row 2: Standard and Result sub-headers -->
-                    <tr>
-                        ${parametersList.map(param => `
-                            <th class="param-std">Standard</th>
-                            <th class="param-res">Result</th>
-                        `).join('')}
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    ${reports.map(report => `
-                        <tr>
-                            <td class="info-col">${report.grn}</td>
-                            <td class="info-col">${report.rawMaterialName}</td>
-                            <td class="info-col">${report.variety}</td>
-                            <td class="info-col">${report.supplier}</td>
-                            <td class="info-col">${new Date(report.dateOfReport).toLocaleDateString('en-IN')}</td>
-                            ${parametersList.map(param => {
-                const paramData = report.parameters.find(p => p.parameter === param);
-                return `
-                                    <td class="param-std">${paramData?.standard || '-'}</td>
-                                    <td class="param-res">${paramData?.result || '-'}</td>
-                                `;
-            }).join('')}
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        </body>
-        </html>
-        `;
+            // Create Excel workbook and worksheet
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('RM Quality Reports');
 
-            // Launch Playwright and generate PDF
-            const browser = await chromium.launch({
-                args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            });
-            const page = await browser.newPage();
-            await page.setContent(html, { waitUntil: 'networkidle' });
-            const pdfBuffer = await page.pdf({
-                format: 'A4',
-                printBackground: true,
-                landscape: true,
-                margin: { top: 15, bottom: 15, left: 15, right: 15 },
-            });
-            await browser.close();
+            // Set column widths
+            worksheet.columns = [
+                { header: 'GRN', key: 'grn', width: 15 },
+                { header: 'Raw Material', key: 'rawMaterial', width: 18 },
+                { header: 'Variety', key: 'variety', width: 15 },
+                { header: 'Supplier', key: 'supplier', width: 18 },
+                { header: 'Date', key: 'date', width: 15 },
+                ...parametersList.flatMap(param => [
+                    { header: `${param} - Std`, key: `${param}-std`, width: 14 },
+                    { header: `${param} - Res`, key: `${param}-res`, width: 14 }
+                ])
+            ];
 
-            res.setHeader('Content-Type', 'application/pdf');
-            res.setHeader(
-                'Content-Disposition',
-                `attachment; filename=RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.pdf`
-            );
-            res.send(pdfBuffer);
+            // Style for title
+            const titleRow = worksheet.addRow({});
+            titleRow.height = 30;
+            worksheet.mergeCells(`A1:${String.fromCharCode(64 + 5 + parametersList.length * 2)}1`);
+            const titleCell = titleRow.getCell(1);
+            titleCell.value = 'RM Quality Reports';
+            titleCell.font = { bold: true, size: 16, color: { argb: 'FFFFFF' } };
+            titleCell.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '2C3E50' } // Dark blue-gray
+            };
+            titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
+
+            // Add date row
+            const dateRow = worksheet.addRow({});
+            worksheet.mergeCells(`A2:${String.fromCharCode(64 + 5 + parametersList.length * 2)}2`);
+            const dateCell = dateRow.getCell(1);
+            dateCell.value = `Generated on ${new Date().toLocaleDateString('en-IN')}`;
+            dateCell.font = { italic: true, size: 11, color: { argb: '666666' } };
+            dateCell.alignment = { vertical: 'middle', horizontal: 'center' };
+
+            // Add empty row
+            worksheet.addRow({});
+
+            // Add header row (Row 4)
+            const headerRow = worksheet.addRow([
+                'GRN',
+                'Raw Material',
+                'Variety',
+                'Supplier',
+                'Date',
+                ...parametersList.flatMap(param => [`${param} - Standard`, `${param} - Result`])
+            ]);
+
+            headerRow.font = { bold: true, color: { argb: 'FFFFFF' }, size: 11 };
+            headerRow.fill = {
+                type: 'pattern',
+                pattern: 'solid',
+                fgColor: { argb: '2C3E50' } // Dark blue-gray header
+            };
+
+            // Add border and center alignment to headers
+            headerRow.eachCell(cell => {
+                cell.border = {
+                    top: { style: 'thin', color: { argb: '34495E' } },
+                    left: { style: 'thin', color: { argb: '34495E' } },
+                    bottom: { style: 'thin', color: { argb: '34495E' } },
+                    right: { style: 'thin', color: { argb: '34495E' } }
+                };
+                cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+            });
+
+            // Add data rows
+            reports.forEach((report, index) => {
+                const rowData = [
+                    report.grn,
+                    report.rawMaterialName,
+                    report.variety,
+                    report.supplier,
+                    new Date(report.dateOfReport).toLocaleDateString('en-IN'),
+                    ...parametersList.flatMap(param => {
+                        const paramData = report.parameters.find(p => p.parameter === param);
+                        return [
+                            paramData?.standard || '-',
+                            paramData?.result || '-'
+                        ];
+                    })
+                ];
+
+                const row = worksheet.addRow(rowData);
+                row.height = 18;
+
+                // Alternate row colors
+                const bgColor = index % 2 === 0 ? 'F5F5F5' : 'FFFFFF';
+                const borderColor = '34495E';
+
+                row.eachCell((cell, colNumber) => {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: bgColor }
+                    };
+
+                    cell.border = {
+                        top: { style: 'thin', color: { argb: borderColor } },
+                        left: { style: 'thin', color: { argb: borderColor } },
+                        bottom: { style: 'thin', color: { argb: borderColor } },
+                        right: { style: 'thin', color: { argb: borderColor } }
+                    };
+
+                    // Color coding for columns
+                    if (colNumber === 1) {
+                        // GRN column
+                        cell.font = { bold: true, color: { argb: '2C3E50' } };
+                        cell.alignment = { horizontal: 'left', vertical: 'middle' };
+                    } else if (colNumber <= 5) {
+                        // Info columns
+                        cell.font = { color: { argb: '2C3E50' } };
+                        cell.alignment = { horizontal: 'left', vertical: 'middle' };
+                    } else if ((colNumber - 5) % 2 === 1) {
+                        // Standard columns
+                        cell.font = { color: { argb: '16A085' } }; // Green
+                        cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    } else {
+                        // Result columns
+                        cell.font = { color: { argb: 'C0392B' } }; // Red
+                        cell.alignment = { horizontal: 'center', vertical: 'middle' };
+                    }
+                });
+            });
+
+            // Set content type and attachment header
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', `attachment; filename=RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.xlsx`);
+
+            // Write to response stream
+            await workbook.xlsx.write(res);
+            res.end();
         } catch (error) {
             console.error('Error exporting all RM Quality Reports:', error);
             res.status(500).json({

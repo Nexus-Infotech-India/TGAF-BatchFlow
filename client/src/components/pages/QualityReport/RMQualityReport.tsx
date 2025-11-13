@@ -321,14 +321,14 @@ const RMQualityReport: React.FC = () => {
 
      // Create blob and trigger download
      const blob = new Blob([response.data], {
-       type: 'application/pdf', // <-- changed from excel MIME type
+       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // <-- Excel MIME type
      });
      const url = window.URL.createObjectURL(blob);
      const link = document.createElement('a');
      link.href = url;
      link.setAttribute(
        'download',
-       `RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.pdf` // <-- changed extension to .pdf
+       `RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.xlsx` // <-- Excel extension
      );
      document.body.appendChild(link);
      link.click();
