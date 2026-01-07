@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Award, 
-  ChevronLeft, 
+import gsap from "gsap";
+import {
+  Award,
+  ChevronLeft,
   PackageOpen,
   Calendar,
   ChevronRight,
+  ChevronDown,
   GraduationCap,
   Shield,
   File,
@@ -17,14 +18,13 @@ import {
   SwitchCamera,
   FileText
 } from "lucide-react";
-import { usePermissions } from "../../hooks/permission"; // Import the permissions hook
+import { usePermissions } from "../../hooks/permission";
 
-// Define props for Sidebar
 interface SidebarProps {
   onToggle: (expanded: boolean) => void;
+  pageTitle?: string;
 }
 
-// Define menu item interface
 interface MenuItem {
   path: string;
   name: string;
@@ -32,7 +32,6 @@ interface MenuItem {
   permissionKey: string;
 }
 
-// Define parent group interface
 interface ParentGroup {
   key: string;
   name: string;
@@ -40,614 +39,452 @@ interface ParentGroup {
   children: MenuItem[];
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ onToggle }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) => {
+
   const [isExpanded, setIsExpanded] = useState(true);
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
+  const [sidebarWidth, setSidebarWidth] = useState(260);
+  const [openPopupGroup, setOpenPopupGroup] = useState<string | null>(null);
+  const [popupPosition, setPopupPosition] = useState({ top: 0, left: 0 });
+
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
+  const popupRef = useRef<HTMLDivElement | null>(null);
+
   const location = useLocation();
   const { hasPermission } = usePermissions();
-  const userRole = localStorage.getItem('userRole');
-  const isAdmin = userRole === 'Admin';
 
-  // Use useEffect to notify parent about initial state
+  const userRole = localStorage.getItem("userRole");
+  const isAdmin = userRole === "Admin";
+
   useEffect(() => {
     onToggle(isExpanded);
-  }, []); // Empty dependency array means this runs once on mount
+  }, []);
 
+  // Handle popup menu for collapsed sidebar
+  const handleGroupClick = (e: React.MouseEvent, groupKey: string) => {
+    if (isExpanded) {
+      // When expanded, toggle the dropdown normally
+      setExpandedGroups(prev =>
+        prev.includes(groupKey)
+          ? prev.filter(k => k !== groupKey)
+          : [...prev, groupKey]
+      );
+    } else {
+      // When collapsed, show popup menu
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      setPopupPosition({
+        top: rect.top,
+        left: rect.right + 10
+      });
+      setOpenPopupGroup(openPopupGroup === groupKey ? null : groupKey);
+    }
+  };
+
+  // Close popup when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        setOpenPopupGroup(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // ---------------- TOGGLE ----------------
   const toggleSidebar = () => {
-    const newState = !isExpanded;
-    setIsExpanded(newState);
-    onToggle(newState); // Notify parent after state is updated
+
+    if (isExpanded) {
+      // When collapsing - simultaneous animations for snappier feel
+      setIsExpanded(false);
+      onToggle(false);
+
+      // Hide text
+      gsap.to(".sidebar-text", {
+        opacity: 0,
+        x: -8,
+        duration: 0.15,
+        ease: "power2.out"
+      });
+
+      // Shrink icons slightly
+      gsap.to(".sidebar-icon", {
+        scale: 0.9,
+        duration: 0.15,
+        ease: "power2.out"
+      });
+
+      // Shrink width (starts immediately with shorter duration)
+      gsap.to(sidebarRef.current, {
+        width: 80,
+        duration: 0.25,
+        ease: "power3.out"
+      });
+
+      setSidebarWidth(80);
+    } else {
+      // When expanding - fast and responsive
+      setIsExpanded(true);
+      onToggle(true);
+
+      // Expand width first
+      gsap.to(sidebarRef.current, {
+        width: 260,
+        duration: 0.25,
+        ease: "power3.out"
+      });
+
+      setSidebarWidth(260);
+
+      // Show text and scale icons simultaneously (no delay)
+      gsap.to(".sidebar-text", {
+        opacity: 1,
+        x: 0,
+        duration: 0.2,
+        ease: "power2.out",
+        delay: 0.05
+      });
+
+      gsap.to(".sidebar-icon", {
+        scale: 1,
+        duration: 0.2,
+        ease: "power2.out",
+        delay: 0.05
+      });
+    }
   };
-
-  const toggleGroup = (groupKey: string) => {
-    setExpandedGroups((prev) =>
-      prev.includes(groupKey)
-        ? prev.filter((key) => key !== groupKey)
-        : [...prev, groupKey]
-    );
-  };
-
-  
-
-  // Independent menu items
-  const independentItems: MenuItem[] = [
-    // {
-    //   path: "/dashboard",
-    //   name: "Dashboard",
-    //   icon: <LayoutDashboard size={20} />,
-    //   permissionKey: "view_dashboard"
-    // },
-    // {
-    //   path: "/access-control",
-    //   name: "User Management",
-    //   icon: <Book size={20} />,
-    //   permissionKey: "manage_users"
-    // },
-    // {
-    //   path: "/activity-logs",
-    //   name: "Activity Logs",
-    //   icon: <Activity size={20} />,
-    //   permissionKey: "view_activity_logs"
-    // },
-    // {
-    //   path: "/settings",
-    //   name: "Settings",
-    //   icon: <Settings size={20} />,
-    //   permissionKey: "manage_settings"
-    // },
-  ];
-
-  // Parent groups with children
+  // ---------------- MENU DATA ----------------
 
   const parentGroups: ParentGroup[] = [
     {
-      key: 'raw-material',
-      name: 'Raw Material Man...',
-      icon: <PackageOpen size={20} />,
+      key: "raw-material",
+      name: "Raw Material Managment",
+      icon: <PackageOpen className="sidebar-icon" size={20} />,
       children: [
         {
-          path: '/raw-dashboard',
-          name: 'Dashboard',
-          icon: <LayoutDashboardIcon size={18} />,
-          permissionKey: 'manage_raw_dashboard', // updated
-        },
-        // {
-        //   path: "/raw/purchase-order",
-        //   name: "Order",
-        //   icon: <FileStack size={18} />,
-        //   permissionKey: "manage_purchase_order" // updated (if enabled)
-        // },
-        {
-          path: '/raw/purchase-history',
-          name: 'Order',
-          icon: <FileStack size={18} />,
-          permissionKey: 'manage_purchase_order', // updated
+          path: "/raw-dashboard",
+          name: "Dashboard",
+          icon: <LayoutDashboardIcon className="sidebar-icon" size={18} />,
+          permissionKey: "manage_raw_dashboard"
         },
         {
-          path: '/raw/cleaning-raw-materials',
-          name: 'Cleaning',
-          icon: <ClipboardEdit size={18} />,
-          permissionKey: 'manage_purchase_order', // updated
+          path: "/raw/purchase-history",
+          name: "Order",
+          icon: <FileStack className="sidebar-icon" size={18} />,
+          permissionKey: "manage_purchase_order"
         },
         {
-          path: '/raw/processing-list',
-          name: 'Processing',
-          icon: <SwitchCamera size={18} />,
-          permissionKey: 'manage_purchase_order',
+          path: "/raw/cleaning-raw-materials",
+          name: "Cleaning",
+          icon: <ClipboardEdit className="sidebar-icon" size={18} />,
+          permissionKey: "manage_purchase_order"
         },
         {
-          path: '/raw/quality-report',
-          name: 'RM Quality Report',
-          icon: <FileText size={18} />,
-          permissionKey: 'manage_rm_quality_report',
+          path: "/raw/processing-list",
+          name: "Processing",
+          icon: <SwitchCamera className="sidebar-icon" size={18} />,
+          permissionKey: "manage_purchase_order"
         },
         {
-          path: '/stock-distribution',
-          name: 'Stock Distribution',
-          icon: <SwitchCamera size={18} />,
-          permissionKey: 'view_stock_distribution', // updated
+          path: "/raw/quality-report",
+          name: "RM Quality Report",
+          icon: <FileText className="sidebar-icon" size={18} />,
+          permissionKey: "manage_rm_quality_report"
         },
-      ],
+        {
+          path: "/stock-distribution",
+          name: "Stock Distribution",
+          icon: <SwitchCamera className="sidebar-icon" size={18} />,
+          permissionKey: "view_stock_distribution"
+        }
+      ]
     },
+
     {
-      key: 'batch-management',
-      name: 'FG Quality Report',
-      icon: <PackageOpen size={20} />,
+      key: "batch-management",
+      name: "FG Quality Report",
+      icon: <PackageOpen className="sidebar-icon" size={20} />,
       children: [
         {
-          path: '/operation-dashboard',
-          name: 'Dashboard',
-          icon: <LucideLayoutDashboard size={18} />,
-          permissionKey: 'view_operation_dashboard', // updated
+          path: "/operation-dashboard",
+          name: "Dashboard",
+          icon: <LucideLayoutDashboard className="sidebar-icon" size={18} />,
+          permissionKey: "view_operation_dashboard"
         },
         {
-          path: '/batches',
-          name: 'Batches',
-          icon: <PackageOpen size={18} />,
-          permissionKey: 'view_batches',
+          path: "/batches",
+          name: "Batches",
+          icon: <PackageOpen className="sidebar-icon" size={18} />,
+          permissionKey: "view_batches"
         },
         {
-          path: '/standards',
-          name: 'Standards',
-          icon: <Award size={18} />,
-          permissionKey: 'manage_standards',
+          path: "/standards",
+          name: "Standards",
+          icon: <Award className="sidebar-icon" size={18} />,
+          permissionKey: "manage_standards"
         },
-        // {
-        //   path: "/compare-batch",
-        //   name: "Compare Batch",
-        //   icon: <Anchor size={18} />,
-        //   permissionKey: "review_batches"
-        // },
         {
-          path: '/batches/verification',
-          name: 'Batch Verification',
-          icon: <Award size={18} />,
-          permissionKey: 'verify_batches',
-        },
-      ],
+          path: "/batches/verification",
+          name: "Batch Verification",
+          icon: <Award className="sidebar-icon" size={18} />,
+          permissionKey: "verify_batches"
+        }
+      ]
     },
+
     {
-      key: 'training',
-      name: 'Training',
-      icon: <GraduationCap size={20} />,
+      key: "training",
+      name: "Training",
+      icon: <GraduationCap className="sidebar-icon" size={20} />,
       children: [
         {
-          path: '/trainings-dashboard',
-          name: 'Dashboard',
-          icon: <LucideLayoutDashboard size={18} />,
-          permissionKey: 'view_training_dashboard', // updated
+          path: "/trainings-dashboard",
+          name: "Dashboard",
+          icon: <LucideLayoutDashboard className="sidebar-icon" size={18} />,
+          permissionKey: "view_training_dashboard"
         },
         {
-          path: '/trainings',
-          name: 'Training',
-          icon: <Award size={18} />,
-          permissionKey: 'manage_trainings',
+          path: "/trainings",
+          name: "Training",
+          icon: <Award className="sidebar-icon" size={18} />,
+          permissionKey: "manage_trainings"
         },
         {
-          path: '/training-calender',
-          name: 'Training Calendar',
-          icon: <Calendar size={18} />,
-          permissionKey: 'view_training_calendar', // updated
-        },
-      ],
+          path: "/training-calender",
+          name: "Training Calendar",
+          icon: <Calendar className="sidebar-icon" size={18} />,
+          permissionKey: "view_training_calendar"
+        }
+      ]
     },
+
     {
-      key: 'audit-management',
-      name: 'Audit Management',
-      icon: <Shield size={20} />,
+      key: "audit-management",
+      name: "Audit Management",
+      icon: <Shield className="sidebar-icon" size={20} />,
       children: [
         {
-          path: '/audit-dashboard',
-          name: 'Audit Dashboard',
-          icon: <File size={18} />,
-          permissionKey: 'view_audit_dashboard', // updated
+          path: "/audit-dashboard",
+          name: "Audit Dashboard",
+          icon: <File className="sidebar-icon" size={18} />,
+          permissionKey: "view_audit_dashboard"
         },
         {
-          path: '/audits',
-          name: 'Audit management',
-          icon: <File size={18} />,
-          permissionKey: 'manage_audits', // updated
+          path: "/audits",
+          name: "Audit management",
+          icon: <File className="sidebar-icon" size={18} />,
+          permissionKey: "manage_audits"
         },
         {
-          path: '/audit/calender',
-          name: 'Audit Calendar',
-          icon: <Calendar size={18} />,
-          permissionKey: 'view_audit_calendar', // updated
-        },
-      ],
-    },
+          path: "/audit/calender",
+          name: "Audit Calendar",
+          icon: <Calendar className="sidebar-icon" size={18} />,
+          permissionKey: "view_audit_calendar"
+        }
+      ]
+    }
   ];
 
-  // Filter independent items based on permissions
-  const authorizedIndependentItems = isAdmin
-    ? independentItems
-    : independentItems.filter((item) => hasPermission(item.permissionKey));
-
-  // Filter parent groups and their children based on permissions
   const authorizedParentGroups = parentGroups
-    .map((group) => ({
+    .map(group => ({
       ...group,
       children: isAdmin
         ? group.children
-        : group.children.filter((child) => hasPermission(child.permissionKey)),
+        : group.children.filter(child => hasPermission(child.permissionKey))
     }))
-    .filter((group) => group.children.length > 0 || isAdmin);
+    .filter(group => group.children.length > 0);
 
-  // Check if any child in a group is active
-  const isGroupActive = (group: ParentGroup) => {
-    return group.children.some((child) => location.pathname === child.path);
-  };
+  const isGroupActive = (group: ParentGroup) =>
+    group.children.some(child => location.pathname === child.path);
 
-  // Auto-expand groups that contain the current active page
   useEffect(() => {
     const activeGroups = authorizedParentGroups
-      .filter((group) => isGroupActive(group))
-      .map((group) => group.key);
+      .filter(group => isGroupActive(group))
+      .map(group => group.key);
 
-    setExpandedGroups((prev) => {
-      const newExpanded = [...new Set([...prev, ...activeGroups])];
-      return newExpanded;
-    });
+    setExpandedGroups(prev => [...new Set([...prev, ...activeGroups])]);
   }, [location.pathname]);
 
-  // ...existing code...
-
+  // ---------------- UI ----------------
   return (
-    <motion.div
-      className="h-screen fixed transition-all z-10 overflow-hidden flex flex-col"
-      style={{
-        background: 'var(--background)',
-        boxShadow: '0 0 8px oklch(from var(--sidebar-primary) l s h / 0.08)',
-        borderRight: '1px solid var(--sidebar-border)',
-      }}
-      animate={{ width: isExpanded ? '260px' : '80px' }}
-      initial={{ width: '220px' }}
-      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-    >
-      <style>{`
-      .menu-item-active {
-        background: var(--sidebar-accent);
-        color: var(--sidebar-accent-foreground) !important;
-        border-left: 4px solid var(--primary);
-        border-radius: 12px;
-      }
-      .menu-item {
-        color: var(--sidebar-foreground);
-        transition: background 0.15s, color 0.15s;
-      }
-      .menu-item:hover {
-        background: var(--sidebar-accent);
-        color: var(--primary);
-      }
-      .menu-group-header {
-        color: var(--sidebar-foreground);
-        transition: background 0.15s, color 0.15s;
-      }
-      .menu-group-header:hover {
-        background: var(--sidebar-accent);
-        color: var(--primary);
-      }
-      .menu-group-active {
-        background: var(--sidebar-accent);
-        color: var(--primary);
-        border-left: 3px solid var(--primary);
-      }
-      .child-item {
-        color: var(--sidebar-foreground);
-        transition: background 0.15s, color 0.15s;
-      }
-      .child-item:hover {
-        background: var(--sidebar-accent);
-        color: var(--primary);
-      }
-      .child-item-active {
-        background: var(--sidebar-accent);
-        color: var(--primary) !important;
-        border-left: 3px solid var(--primary);
-      }
-      .logo-container {
-        color: var(--primary);
-      }
-      .sidebar-button {
-        background: none;
-        color: var(--primary);
-        border: 1px solid var(--sidebar-border);
-        transition: background 0.15s, color 0.15s;
-      }
-      .sidebar-button:hover {
-        background: var(--sidebar-accent);
-        color: var(--primary);
-      }
-      .group-separator {
-        height: 1px;
-        background: var(--sidebar-border);
-        margin: 12px 16px;
-      }
-      .sidebar-bg-primary {
-        background: var(--sidebar-accent);
-      }
-      .sidebar-border {
-        border: 1px solid var(--sidebar-border);
-      }
-      .sidebar-text {
-        color: var(--sidebar-foreground);
-      }
-    `}</style>
 
-      <div
-        className="flex flex-col items-center justify-center pt-3 pb-8 relative"
-        style={{ minHeight: '60px' }}
-      >
-        <div className="flex items-center justify-between w-full px-2">
+    <div
+      ref={sidebarRef}
+      className="h-screen fixed top-0 left-0 flex flex-col z-10 overflow-hidden bg-gradient-to-b from-background to-background/95 pt-20"
+      style={{
+        width: sidebarWidth,
+        background: "var(--background)",
+        borderRight: "1px solid var(--sidebar-border)"
+      }}
+    >
+
+      {/* HEADER */}
+      <div className="flex items-center justify-between px-4 py-5 border-b border-border/30 bg-gradient-to-r from-primary/10 to-transparent dark:from-primary/5">
+
+        {isExpanded && (
+          <div className="flex items-center gap-2 flex-1">
+            <h2 className="text-lg md:text-xl font-bold sidebar-text text-foreground line-clamp-2">
+              {pageTitle}
+            </h2>
+          </div>
+        )}
+
+        <button
+          onClick={toggleSidebar}
+          className="p-2 hover:bg-primary/20 dark:hover:bg-primary/10 rounded-lg transition-all duration-200 group"
+        >
           {isExpanded ? (
-            <div className="flex flex-col items-center w-full">
-              <div className="flex items-center w-full justify-center">
-                <div className="relative flex flex-col items-center">
-                  {/* Use inline-block and after pseudo-element for underline */}
-                  <span className="relative inline-block">
-                    <h2
-                      className="text-4xl font-extrabold tracking-tight text-center"
-                      style={{
-                        letterSpacing: '0.05em',
-                        color: 'var(--primary)',
-                        display: 'inline-block',
-                      }}
-                    >
-                      TGAF
-                    </h2>
-                    <motion.span
-                      layoutId="tgaf-underline"
-                      className="block absolute left-0 right-0 -bottom-2 h-1 rounded-full bg-[var(--primary)]"
-                      style={{
-                        width: '100%',
-                      }}
-                      initial={{ scaleX: 0 }}
-                      animate={{ scaleX: 1 }}
-                      exit={{ scaleX: 0 }}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 300,
-                        damping: 20,
-                      }}
-                    />
-                  </span>
+            <ChevronLeft className="group-hover:scale-110 transition-transform" color="var(--primary)" size={22} />
+          ) : (
+            <ChevronRight className="group-hover:scale-110 transition-transform" color="var(--primary)" size={22} />
+          )}
+        </button>
+      </div>
+
+      {/* MENU */}
+      <div className="flex-1 overflow-y-auto px-2 py-2 space-y-1 scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent">
+
+        {authorizedParentGroups.map(group => {
+
+          const isActive = expandedGroups.includes(group.key);
+
+          return (
+            <div key={group.key} className="mb-3">
+
+              <div
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 group
+                  ${isActive ? "text-primary bg-primary/10 dark:bg-primary/5" : "text-foreground hover:bg-primary/5 dark:hover:bg-primary/10"}`}
+                onClick={(e) => handleGroupClick(e, group.key)}
+              >
+                <div className={`transition-transform duration-200 ${isActive ? "scale-110" : "group-hover:scale-105"}`}>
+                  {group.icon}
                 </div>
-                {/* Arrow button, always visible, aligned right */}
-                <button
-                  onClick={toggleSidebar}
-                  className="ml-3 p-2 rounded-full hover:bg-[var(--primary)]/10 transition-colors"
-                  title={isExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
-                  type="button"
-                  style={{ color: 'var(--primary)' }}
-                >
-                  <ChevronLeft className="h-6 w-6" />
-                </button>
+
+                {isExpanded && (
+                  <>
+                    <span className="sidebar-text font-medium flex-1">
+                      {group.name}
+                    </span>
+                    <div className={`transition-transform duration-300 ${isActive ? "text-primary" : ""}`}>
+                      <ChevronDown
+                        size={18}
+                        className="sidebar-text group-hover:text-primary transition-colors"
+                        style={{
+                          transform: isActive ? "rotate(0deg)" : "rotate(-90deg)"
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
+
+              </div>
+
+              {isExpanded && isActive && (
+                <div className="ml-4 mt-2 space-y-1 border-l-2 border-primary/30 pl-3">
+
+                  {group.children.map((child) => {
+
+                    const active = location.pathname === child.path;
+
+                    return (
+                      <Link
+                        key={child.path}
+                        to={child.path}
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group/child
+                          ${active
+                            ? "bg-primary text-primary-foreground font-semibold shadow-md"
+                            : "text-foreground hover:bg-primary/10 dark:hover:bg-primary/15"
+                          }`}
+                      >
+
+                        <div className={`transition-transform duration-200 ${active ? "scale-110" : "group-hover/child:scale-105"}`}>
+                          {child.icon}
+                        </div>
+
+                        <span className="sidebar-text text-sm">
+                          {child.name}
+                        </span>
+
+                        {active && (
+                          <div className="ml-auto w-2 h-2 bg-primary-foreground rounded-full animate-pulse" />
+                        )}
+
+                      </Link>
+                    );
+                  })}
+
+                </div>
+              )}
+
+            </div>
+          );
+        })}
+
+      </div>      <div className="border-t border-border/30 bg-gradient-to-r from-primary/10 to-transparent dark:from-primary/5 mt-auto">
+        <div className="text-center py-4 text-xs text-muted-foreground hover:text-primary transition-colors duration-200 px-2">
+          {isExpanded ? (
+            <div className="space-y-1">
+              <div className="font-semibold text-foreground">Developed by</div>
+              <div className="bg-gradient-to-r from-primary to-blue-500 bg-clip-text text-transparent font-bold">
+                Nexus InfoTech
               </div>
             </div>
           ) : (
-            // Collapsed: show only arrow, centered
-            <button
-              onClick={toggleSidebar}
-              className="mx-auto p-2 rounded-full hover:bg-[var(--primary)]/10 transition-colors"
-              title="Expand sidebar"
-              type="button"
-              style={{ color: 'var(--primary)' }}
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
+            <div className="font-semibold text-primary text-xs" title="Nexus InfoTech">
+              NI
+            </div>
           )}
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto scrollbar-hide">
-        <ul className="mt-0 px-3 space-y-3">
-          {/* Independent menu items */}
-          {authorizedIndependentItems.map((item) => {
-            const isActive = location.pathname === item.path;
-            return (
-              <motion.li
-                key={item.path}
-                className={`rounded-xl overflow-hidden transition-all menu-item ${
-                  isActive ? 'menu-item-active' : ''
-                }`}
-                whileHover={{ x: 5, scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-              >
-                <Link to={item.path} className="flex items-center py-3 px-4">
-                  <motion.div
-                    style={{
-                      color: isActive
-                        ? 'var(--primary)'
-                        : 'var(--sidebar-foreground)',
-                    }}
-                    whileHover={{ scale: 1.1 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+      {/* POPUP MENU FOR COLLAPSED SIDEBAR */}
+      {openPopupGroup && !isExpanded && (
+        <div
+          ref={popupRef}
+          className="fixed bg-card rounded-2xl shadow-2xl border border-border/50 backdrop-blur-md p-2 animate-in fade-in slide-in-from-left-2 duration-200"
+          style={{
+            top: `${popupPosition.top}px`,
+            left: `${popupPosition.left}px`,
+            minWidth: "260px",
+            zIndex: 9999
+          }}
+        >
+          <div className="mb-2 px-3 py-2 border-b border-border/30">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              {authorizedParentGroups.find(g => g.key === openPopupGroup)?.name}
+            </p>
+          </div>
+          <div className="space-y-1">
+            {authorizedParentGroups
+              .find(g => g.key === openPopupGroup)
+              ?.children.map((child) => {
+                const active = location.pathname === child.path;
+                return (
+                  <Link
+                    key={child.path}
+                    to={child.path}
+                    onClick={() => setOpenPopupGroup(null)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 group
+                      ${active
+                        ? "bg-primary text-primary-foreground font-semibold shadow-md"
+                        : "text-foreground hover:bg-primary/15 dark:hover:bg-primary/20"
+                      }`}
                   >
-                    {item.icon}
-                  </motion.div>
-                  <AnimatePresence>
-                    {isExpanded && (
-                      <motion.span
-                        style={{
-                          color: isActive
-                            ? 'var(--primary)'
-                            : 'var(--sidebar-foreground)',
-                        }}
-                        className="ml-3 font-medium"
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -10 }}
-                        transition={{
-                          type: 'spring',
-                          stiffness: 100,
-                          damping: 10,
-                        }}
-                      >
-                        {item.name}
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </Link>
-              </motion.li>
-            );
-          })}
-
-          {/* Parent groups with children */}
-          {authorizedParentGroups.map((group) => {
-            const isGroupExpanded = expandedGroups.includes(group.key);
-            const groupHasActiveChild = isGroupActive(group);
-
-            return (
-              <motion.li key={group.key} className="space-y-2" layout>
-                {/* Group separator for visual distinction */}
-
-                {/* Parent group header */}
-                <motion.div
-                  className={`menu-group-header rounded-xl overflow-hidden transition-all cursor-pointer ${
-                    groupHasActiveChild ? 'menu-group-active' : ''
-                  }`}
-                  whileHover={{ x: 5, scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                  onClick={() => isExpanded && toggleGroup(group.key)}
-                >
-                  <div className="flex items-center justify-between py-3.5 px-4">
-                    <div className="flex items-center">
-                      <motion.div
-                        style={{
-                          color: groupHasActiveChild
-                            ? 'var(--primary)'
-                            : 'var(--sidebar-foreground)',
-                        }}
-                        whileHover={{ scale: 1.1 }}
-                        transition={{
-                          type: 'spring',
-                          stiffness: 400,
-                          damping: 10,
-                        }}
-                      >
-                        {group.icon}
-                      </motion.div>
-                      <AnimatePresence>
-                        {isExpanded && (
-                          <motion.span
-                            style={{
-                              color: groupHasActiveChild
-                                ? 'var(--primary)'
-                                : 'var(--sidebar-foreground)',
-                            }}
-                            className="ml-3 font-semibold text-sm tracking-wide"
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -10 }}
-                            transition={{
-                              type: 'spring',
-                              stiffness: 100,
-                              damping: 10,
-                            }}
-                          >
-                            {group.name}
-                          </motion.span>
-                        )}
-                      </AnimatePresence>
+                    <div className={`transition-transform duration-200 ${active ? "scale-110" : "group-hover:scale-105"}`}>
+                      {child.icon}
                     </div>
-                    <AnimatePresence>
-                      {isExpanded && group.children.length > 0 && (
-                        <motion.div
-                          style={{
-                            color: groupHasActiveChild
-                              ? 'var(--primary)'
-                              : 'var(--sidebar-foreground)',
-                          }}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{
-                            opacity: 1,
-                            scale: 1,
-                            rotate: isGroupExpanded ? 90 : 0,
-                          }}
-                          exit={{ opacity: 0, scale: 0.8 }}
-                          transition={{
-                            type: 'spring',
-                            stiffness: 300,
-                            damping: 20,
-                          }}
-                        >
-                          <ChevronRight size={16} />
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </motion.div>
-
-                {/* Children items in enhanced dropdown container */}
-                <AnimatePresence>
-                  {isExpanded && isGroupExpanded && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0, y: -10 }}
-                      animate={{ opacity: 1, height: 'auto', y: 0 }}
-                      exit={{ opacity: 0, height: 0, y: -10 }}
-                      transition={{ duration: 0.3, ease: 'easeInOut' }}
-                      className="ml-3 mr-1"
-                    >
-                      <div className="py-2 space-y-1">
-                        {group.children.map((child, childIndex) => {
-                          const isChildActive =
-                            location.pathname === child.path;
-                          return (
-                            <motion.div
-                              key={child.path}
-                              className={`child-item rounded-lg overflow-hidden transition-all ${
-                                isChildActive
-                                  ? 'menu-item-active child-item-active'
-                                  : ''
-                              }`}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{
-                                delay: childIndex * 0.05,
-                                type: 'spring',
-                                stiffness: 400,
-                                damping: 20,
-                              }}
-                            >
-                              <Link
-                                to={child.path}
-                                className="flex items-center py-2.5 px-6 ml-4"
-                              >
-                                <motion.div
-                                  style={{
-                                    color: isChildActive
-                                      ? 'var(--primary)'
-                                      : 'var(--sidebar-foreground)',
-                                  }}
-                                  whileHover={{ scale: 1.1 }}
-                                  transition={{
-                                    type: 'spring',
-                                    stiffness: 400,
-                                    damping: 10,
-                                  }}
-                                >
-                                  {child.icon}
-                                </motion.div>
-                                <motion.span
-                                  style={{
-                                    color: isChildActive
-                                      ? 'var(--primary)'
-                                      : 'var(--sidebar-foreground)',
-                                  }}
-                                  className="ml-3 font-medium text-sm"
-                                  whileHover={{ x: 2 }}
-                                  transition={{
-                                    type: 'spring',
-                                    stiffness: 100,
-                                    damping: 10,
-                                  }}
-                                >
-                                  {child.name}
-                                </motion.span>
-                              </Link>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.li>
-            );
-          })}
-        </ul>
-      </div>
-      <div className="w-full text-center py-3 text-xs text-[var(--muted-foreground)] border-t border-[var(--sidebar-border)] mt-auto">
-        Developed by{' '}
-        <span className="font-semibold text-[var(--primary)]">
-          Nexus InfoTech
-        </span>
-      </div>
-    </motion.div>
+                    <span className="text-sm font-medium">{child.name}</span>
+                    {active && (
+                      <div className="ml-auto w-2 h-2 bg-primary-foreground rounded-full animate-pulse" />
+                    )}
+                  </Link>
+                );
+              })}
+          </div>
+        </div>
+      )}    </div>
   );
-
 };
 
 export default Sidebar;
