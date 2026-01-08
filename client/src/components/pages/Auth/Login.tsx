@@ -153,7 +153,7 @@ const Login = () => {
 
       <div className="flex w-full max-w-6xl rounded-3xl shadow-sm overflow-hidden bg-white border border-slate-100 relative z-10">
         <motion.div
-          className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-50 via-indigo-50 to-white items-center justify-center p-12 relative overflow-hidden"
+          className="hidden lg:flex w-1/2 bg-gradient-to-br from-blue-50 via-indigo-50 to-white items-center justify-center p-6 relative overflow-hidden"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
@@ -186,21 +186,20 @@ const Login = () => {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
-              className="w-full h-full rounded-lg p-8 flex flex-col justify-between text-white"
+              className="w-full h-full rounded-lg p-6 flex flex-col justify-between text-white"
             >
               <div>
-                <div className="flex items-center gap-3">
-                  
+                <div className="flex items-center gap-2">
                 </div>
 
-                <h2 className="mt-8 text-3xl lg:text-4xl font-extrabold leading-tight whitespace-pre-line">
+                <h2 className="mt-6 text-2xl lg:text-3xl font-extrabold leading-tight whitespace-pre-line caveat-brush-regular">
                   {slides[currentSlide].title}
                 </h2>
-                <p className="mt-4 max-w-md text-sm text-white/90">{slides[currentSlide].desc}</p>
+                <p className="mt-2 max-w-md text-sm text-white/90">{slides[currentSlide].desc}</p>
               </div>
 
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() => setCurrentSlide((s) => (s - 1 + slides.length) % slides.length)}
                     className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition"
@@ -237,30 +236,30 @@ const Login = () => {
         </motion.div>
 
         <motion.div
-          className="w-full lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center bg-white"
+          className="w-full lg:w-1/2 p-6 lg:p-8 flex flex-col justify-center bg-white"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <div className="text-center mb-10">
-            <motion.div className="text-center mb-8">
+          <div className="text-center mb-6">
+            <motion.div className="text-center mb-4">
               <div className="flex items-center justify-center mb-1">
-                <img src={logo} alt="logo1" className="w-40 h-40 object-contain mx-auto mb-0" />
+                <img src={logo} alt="logo1" className="w-30 h-30 object-contain mx-auto" />
               </div>
 
-              <motion.h2 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-2xl font-extrabold text-slate-900 mb-0">
+              <motion.h2 initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-4xl font-extrabold text-slate-900 mb-0 caveat-brush-regular">
                 Welcome Back
               </motion.h2>
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="text-slate-600">
+              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="text-slate-600 text-sm">
                 Sign in to your quality management dashboard
               </motion.p>
             </motion.div>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-4">
             {/* Email Field */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-              <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-2">
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+              <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-1">
                 Email Address
               </label>
               <div className="relative group">
@@ -273,7 +272,7 @@ const Login = () => {
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all bg-slate-50 focus:bg-white"
+                  className="w-full pl-10 pr-2 py-2 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all bg-slate-50 focus:bg-white"
                   placeholder="you@example.com"
                   required
                 />
@@ -281,8 +280,8 @@ const Login = () => {
             </motion.div>
 
             {/* Password Field */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
-              <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-2">
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
+              <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-1">
                 Password
               </label>
               <div className="relative group">
@@ -295,7 +294,7 @@ const Login = () => {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all bg-slate-50 focus:bg-white"
+                  className="w-full pl-10 pr-2 py-2 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all bg-slate-50 focus:bg-white"
                   placeholder="••••••••"
                   required
                 />
