@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import {
@@ -21,6 +19,16 @@ import {
 const fadeInScale = {
   hidden: { opacity: 0, scale: 0.9 },
   visible: { opacity: 1, scale: 1 },
+}
+
+const slideInUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 },
+}
+
+const rotateIn = {
+  hidden: { opacity: 0, rotate: -10 },
+  visible: { opacity: 1, rotate: 0 },
 }
 
 const FloatingElement = ({ children, delay = 0 }: any) => (
@@ -54,7 +62,52 @@ const AnimatedSideElement = ({ icon: Icon, delay = 0, side = "left" }: any) => (
   </motion.div>
 )
 
-export function HeroSection() {
+const GlowingBadge = () => (
+  <motion.div
+    initial={{ opacity: 0, y: -20, scale: 0.8 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    transition={{ duration: 0.6 }}
+    className="inline-flex items-center gap-2 bg-white px-5 py-2 rounded-full border border-slate-200 shadow-sm mb-8 hover:shadow-xl hover:scale-110 transition-all group relative"
+  >
+    <motion.div
+      animate={{ rotate: 360 }}
+      transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+      className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 opacity-0 group-hover:opacity-20 blur-lg"
+    />
+    <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}>
+      <Sparkles className="text-yellow-500 w-4 h-4" />
+    </motion.div>
+    <span className="text-sm font-semibold text-slate-700">Welcome to the Future of Quality Management</span>
+    <motion.div
+      animate={{ scale: [1, 1.3, 1] }}
+      transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.2 }}
+    >
+      <Star className="text-yellow-500 w-3 h-3" />
+    </motion.div>
+  </motion.div>
+)
+
+const AnimatedButton = ({ children, variant = "primary", ...props }: any) => (
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.98 }}
+    className={`px-8 py-3 rounded-xl font-bold flex items-center gap-2 justify-center relative overflow-hidden transition-all ${
+      variant === "primary"
+        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg hover:shadow-blue-400/50"
+        : "bg-white border-2 border-slate-200 text-slate-700 hover:border-blue-400 hover:bg-blue-50"
+    }`}
+    {...props}
+  >
+    <motion.span
+      className="absolute inset-0 bg-white opacity-0"
+      whileHover={{ opacity: 0.1 }}
+      transition={{ duration: 0.3 }}
+    />
+    <motion.span className="relative flex items-center gap-2">{children}</motion.span>
+  </motion.button>
+)
+
+function HeroSection() {
   const [mounted, setMounted] = useState(false)
   const { scrollYProgress } = useScroll()
   const opacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
@@ -101,70 +154,76 @@ export function HeroSection() {
 
       <div className="max-w-5xl text-center z-10">
         {/* Welcome Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 bg-white px-5 py-2 rounded-full border border-slate-200 shadow-sm mb-8 hover:shadow-md hover:scale-105 transition-all"
-        >
-          <Sparkles className="text-yellow-500 w-4 h-4" />
-          <span className="text-sm font-semibold text-slate-700">Welcome to the Future of Quality Management</span>
-          <Star className="text-yellow-500 w-3 h-3" />
-        </motion.div>
+        <GlowingBadge />
 
         {/* Main Heading */}
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
           className="text-5xl md:text-7xl font-black mb-6 leading-tight"
         >
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-black ">
+          <motion.span
+            className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-black"
+            animate={{ backgroundPosition: ["0% center", "100% center", "0% center"] }}
+            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY }}
+          >
             TGAF BatchFlow
-          </span>
+          </motion.span>
         </motion.h1>
 
         {/* Description */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           className="text-lg text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed"
         >
-          Enterprise batch management with training and audit workflows designed for quality-first organizations.
+          <motion.span
+            animate={{ opacity: [1, 0.8, 1] }}
+            transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
+          >
+            Enterprise batch management with training and audit workflows designed for quality-first organizations.
+          </motion.span>
         </motion.p>
 
         {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
           className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
         >
-          <button
-            onClick={() => (window.location.href = "/login")}
-            className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold flex items-center gap-2 justify-center hover:shadow-lg hover:scale-105 transition-all"
-          >
-            <Rocket size={18} />
+          <AnimatedButton variant="primary" onClick={() => (window.location.href = "/login")}>
+            <motion.div animate={{ x: [0, 5, 0] }} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}>
+              <Rocket size={18} />
+            </motion.div>
             Get Started
-            <ArrowRight size={18} />
-          </button>
+            <motion.div
+              animate={{ x: [0, 10, 0] }}
+              transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, delay: 0.2 }}
+            >
+              <ArrowRight size={18} />
+            </motion.div>
+          </AnimatedButton>
 
-          <button
+          <AnimatedButton
+            variant="secondary"
             onClick={() => document.getElementById("features")?.scrollIntoView({ behavior: "smooth" })}
-            className="px-8 py-3 bg-white border-2 border-slate-200 text-slate-700 rounded-xl font-bold flex items-center gap-2 justify-center hover:border-blue-400 hover:bg-blue-50 transition-all"
           >
-            <Eye size={18} />
+            <motion.div animate={{ rotate: [0, 15, 0] }} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}>
+              <Eye size={18} />
+            </motion.div>
             Explore Features
             <Globe size={18} />
-          </button>
+          </AnimatedButton>
         </motion.div>
 
         {/* Feature Cards */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
           className="grid md:grid-cols-3 gap-4"
         >
           {[
@@ -178,10 +237,17 @@ export function HeroSection() {
                 initial="hidden"
                 animate="visible"
                 transition={{ delay: 0.5 + i * 0.1 }}
-                className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md hover:scale-105 transition-all cursor-pointer"
+                className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-xl hover:shadow-blue-200/50 hover:scale-110 transition-all cursor-pointer group relative overflow-hidden"
               >
-                <item.icon className="mx-auto mb-3 text-blue-600 w-6 h-6" />
-                <h3 className="font-bold text-slate-900">{item.title}</h3>
+                <motion.div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                  className="mx-auto mb-3 text-blue-600 w-6 h-6"
+                >
+                  <item.icon className="w-full h-full" />
+                </motion.div>
+                <h3 className="font-bold text-slate-900 relative z-10">{item.title}</h3>
               </motion.div>
             </FloatingCard>
           ))}
@@ -194,9 +260,21 @@ export function HeroSection() {
         animate={{ y: [0, 10, 0] }}
         transition={{ repeat: Number.POSITIVE_INFINITY, duration: 2 }}
       >
-        <ChevronDown className="text-blue-600 w-6 h-6" />
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [1, 0.6, 1] }}
+          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
+          className="relative"
+        >
+          <ChevronDown className="text-blue-600 w-6 h-6" />
+          <motion.div
+            animate={{ scale: [1, 1.5], opacity: [1, 0] }}
+            transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
+            className="absolute inset-0 rounded-full border border-blue-600 w-6 h-6"
+          />
+        </motion.div>
       </motion.div>
     </motion.section>
   )
 }
+
 export default HeroSection
