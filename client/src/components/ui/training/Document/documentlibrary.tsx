@@ -84,7 +84,7 @@ const getFileIcon = (fileUrl: string, size = 48) => {
     case 'docx':
       return (
         <div className="relative">
-          <div className="p-3 bg-blue-100 rounded-xl">
+          <div className="p-3 bg-blue-100 ">
             <FileText size={size} className="text-blue-600" />
           </div>
           <div className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold">
@@ -898,7 +898,7 @@ const DocumentLibrary: React.FC = () => {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="inline-block rounded-full h-12 w-12 border-4 border-blue-200 border-t-blue-600"
+                className="inline-block  h-12 w-12 border-4 border-blue-200 border-t-blue-600"
               />
             </div>
           ) : data?.data?.length === 0 ? (
@@ -908,7 +908,7 @@ const DocumentLibrary: React.FC = () => {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", stiffness: 300, delay: 0.2 }}
-                  className="p-6 bg-gray-100 rounded-full inline-block mb-6"
+                  className="p-6 bg-gray-100  inline-block mb-6"
                 >
                   <FolderOpen size={48} className="text-gray-400" />
                 </motion.div>
