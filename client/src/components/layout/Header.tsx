@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
+import logo from "../../assets/logo1.png";
+
 import {
   User,
   ChevronDown,
@@ -16,6 +19,7 @@ import {
   Activity,
   Sun,
   Moon,
+  PackageOpen,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -43,7 +47,8 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
   const [showSearchPanel, setShowSearchPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  const [theme, setTheme] = useState<'light' | 'dark'>('light'); 
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const brandRef = useRef<HTMLDivElement>(null);
 
   const { data: user, isLoading } = useQuery({
     queryKey: ['currentUser'],
@@ -110,6 +115,54 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
     document.body.classList.remove('dark');
     setTheme('light');
     localStorage.setItem('theme', 'light');
+  }, []);
+
+  // GSAP animation for brand name on mount
+  useEffect(() => {
+    if (brandRef.current) {
+      // Initial entrance animation
+      gsap.fromTo(
+        brandRef.current,
+        { opacity: 0, scale: 0.8, rotateY: -90 },
+        {
+          opacity: 1,
+          scale: 1,
+          rotateY: 0,
+          duration: 0.8,
+          ease: 'back.out(1.7)',
+        }
+      );
+
+      // Create a timeline for continuous animations
+      const tl = gsap.timeline({ repeat: -1 });
+
+      // Floating animation with slight rotation
+      tl.to(
+        brandRef.current,
+        {
+          y: -4,
+          rotateZ: 1,
+          duration: 3,
+          ease: 'sine.inOut',
+        },
+        0
+      );
+
+      // Scale pulse effect (very subtle)
+      tl.to(
+        brandRef.current,
+        {
+          scale: 1.02,
+          duration: 2.5,
+          ease: 'sine.inOut',
+        },
+        0
+      );
+
+      return () => {
+        tl.kill();
+      };
+    }
   }, []);
 
   const toggleActivityLogs = (e: React.MouseEvent) => {
@@ -195,30 +248,6 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
     navigate('/login');
   };
 
-  // Enhanced title animations
-  const titleVariants = {
-    hidden: { opacity: 0, y: -30, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: 'easeOut',
-        type: 'spring',
-        stiffness: 200,
-      },
-    },
-    exit: {
-      opacity: 0,
-      y: 30,
-      scale: 0.9,
-      transition: {
-        duration: 0.4,
-      },
-    },
-  };
-
   const getActivityIcon = (action: string) => {
     const iconMap: { [key: string]: React.ReactNode } = {
       BATCH_CREATED: <Zap size={12} style={{ color: 'var(--primary)' }} />,
@@ -242,11 +271,8 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
   };
 
   return (
-    <motion.header
-      className="sticky top-0 z-50 overflow-visible"
-      initial={{ opacity: 0, y: -30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+    <header
+      className="w-full overflow-visible bg-card/80 border-b border-border backdrop-blur-sm sticky top-0 z-50"
       style={{
         background: 'var(--background)',
         borderBottom: '1px solid var(--border)',
@@ -258,37 +284,24 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
         style={{
           background: 'var(--background)',
           borderBottom: '1px solid var(--border)',
-          backdropFilter: 'blur(16px)',
         }}
       >
         <div className="px-4 md:px-8 py-2 relative z-10">
           <div className="flex items-center justify-between">
-            {/* Page Title */}
-            <div className="flex items-center gap-4">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={pageTitle}
-                  variants={titleVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="relative"
-                >
-                  <h1
-                    className="text-lg md:text-xl lg:text-2xl font-bold tracking-tight"
-                    style={{
-                      background:
-                        'linear-gradient(90deg, var(--foreground), var(--primary), var(--sidebar-primary))',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                    }}
-                  >
-                    {pageTitle}
-                  </h1>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+            {/* Brand Logo and Name */}
+           <div
+  ref={brandRef}
+  className="flex items-center gap-4 hover:scale-105 transition-transform duration-300 cursor-pointer"
+  style={{ perspective: "1000px" }}
+>
+
+
+  <img
+    src={logo}
+    alt="NexInventory Logo"
+    className="h-25 md:h-20 object-contain drop-shadow-sm"
+  />
+</div>
             {/* Action Buttons */}
             <div className="flex items-center gap-1.5">
               {/* Theme Toggle Button */}
@@ -892,7 +905,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
           </div>
         </div>
       </div>
-    </motion.header>
+    </header>
   );
 };
 
