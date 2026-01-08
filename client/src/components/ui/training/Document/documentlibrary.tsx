@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  File, FileText, FileArchive as FilePdf, FileImage, Download, Trash2, Search, 
-  Filter, Upload, Edit, Eye, FolderOpen, Calendar, Clock, User, 
-  Sparkles, Target, Award, TrendingUp, RefreshCw, X} from 'lucide-react';
-import { 
-  Card, Input, Button, Select, Tag, Tooltip, Modal, 
-  message, Typography, Popconfirm, 
+import {
+  File, FileText, FileArchive as FilePdf, FileImage, Download, Trash2, Search,
+  Filter, Upload, Edit, Eye, FolderOpen, Calendar, Clock, User,
+  Sparkles, Target, Award, TrendingUp, RefreshCw, X
+} from 'lucide-react';
+import {
+  Card, Input, Button, Select, Tag, Tooltip, Modal,
+  message, Typography, Popconfirm,
   DatePicker, Pagination, Image
 } from 'antd';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -25,9 +26,9 @@ dayjs.extend(relativeTime);
 // Enhanced animation variants
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { 
+  visible: {
     opacity: 1,
-    transition: { 
+    transition: {
       when: "beforeChildren",
       staggerChildren: 0.1,
       duration: 0.6
@@ -37,8 +38,8 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0, scale: 0.95 },
-  visible: { 
-    y: 0, 
+  visible: {
+    y: 0,
     opacity: 1,
     scale: 1,
     transition: { type: 'spring', stiffness: 300, damping: 24 }
@@ -47,13 +48,13 @@ const itemVariants = {
 
 const cardVariants = {
   hidden: { scale: 0.9, opacity: 0, y: 20 },
-  visible: { 
-    scale: 1, 
+  visible: {
+    scale: 1,
     opacity: 1,
     y: 0,
     transition: { duration: 0.4, ease: "easeOut" }
   },
-  hover: { 
+  hover: {
     scale: 1.03,
     y: -4,
     boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
@@ -63,11 +64,11 @@ const cardVariants = {
 
 // Enhanced file type icons mapping with better styling
 const getFileIcon = (fileUrl: string, size = 48) => {
-  if (!fileUrl) return <File size={size} className="text-gray-400" />;
-  
+  if (!fileUrl) return <File size={size} className="text-muted-foreground" />;
+
   const extension = fileUrl.split('.').pop()?.toLowerCase();
-  
-  switch(extension) {
+
+  switch (extension) {
     case 'pdf':
       return (
         <div className="relative">
@@ -133,8 +134,8 @@ const getFileIcon = (fileUrl: string, size = 48) => {
     default:
       return (
         <div className="relative">
-          <div className="p-3 bg-gray-100 rounded-xl">
-            <File size={size} className="text-gray-600" />
+          <div className="p-3 bg-muted rounded-xl">
+            <File size={size} className="text-muted-foreground" />
           </div>
           <div className="absolute -top-1 -right-1 bg-gray-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold">
             FILE
@@ -156,10 +157,10 @@ const getDocumentTypeBadge = (type: string) => {
   };
 
   const config = badgeConfig[type as keyof typeof badgeConfig] || badgeConfig.OTHER;
-  
+
   return (
-    <Tag 
-      color={config.color} 
+    <Tag
+      color={config.color}
       className="flex items-center gap-1 px-2 py-1 rounded-md font-medium"
     >
       <span>{config.icon}</span>
@@ -173,12 +174,12 @@ const getFilePreview = (document: any, _isHover = false) => {
   const fileUrl = document.fileUrl;
   const isPdf = fileUrl?.toLowerCase().endsWith('.pdf');
   const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileUrl || '');
-  
+
   if (isImage) {
     return (
-      <div className="relative w-full h-48 bg-gray-100 rounded-lg overflow-hidden group">
-        <img 
-          src={fileUrl} 
+      <div className="relative w-full h-48 bg-muted rounded-lg overflow-hidden group">
+        <img
+          src={fileUrl}
           alt={document.title}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           onError={(e) => {
@@ -191,14 +192,14 @@ const getFilePreview = (document: any, _isHover = false) => {
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
+          <div className="bg-card/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
             Image
           </div>
         </div>
       </div>
     );
   }
-  
+
   if (isPdf) {
     return (
       <div className="relative w-full h-48 bg-gradient-to-br from-red-50 to-red-100 rounded-lg overflow-hidden group flex items-center justify-center">
@@ -219,7 +220,7 @@ const getFilePreview = (document: any, _isHover = false) => {
       </div>
     );
   }
-  
+
   // Default preview for other file types
   const extension = fileUrl?.split('.').pop()?.toLowerCase();
   const bgColors = {
@@ -230,9 +231,9 @@ const getFilePreview = (document: any, _isHover = false) => {
     'ppt': 'from-orange-50 to-orange-100',
     'pptx': 'from-orange-50 to-orange-100',
   };
-  
+
   const bgColor = bgColors[extension as keyof typeof bgColors] || 'from-gray-50 to-gray-100';
-  
+
   return (
     <div className={`relative w-full h-48 bg-gradient-to-br ${bgColor} rounded-lg overflow-hidden group flex items-center justify-center`}>
       <div className="relative">
@@ -249,18 +250,18 @@ const getFilePreview = (document: any, _isHover = false) => {
 };
 
 // Enhanced Document preview modal component
-const DocumentPreviewModal = ({ 
-  visible, 
-  document, 
-  onClose 
-}: { 
-  visible: boolean, 
-  document: any, 
-  onClose: () => void 
+const DocumentPreviewModal = ({
+  visible,
+  document,
+  onClose
+}: {
+  visible: boolean,
+  document: any,
+  onClose: () => void
 }) => {
   const isPdf = document?.fileUrl?.toLowerCase().endsWith('.pdf');
   const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(document?.fileUrl || '');
-  
+
   return (
     <Modal
       title={
@@ -268,7 +269,7 @@ const DocumentPreviewModal = ({
           {getFileIcon(document?.fileUrl || '', 24)}
           <div>
             <span className="text-lg font-semibold">{document?.title || 'Document Preview'}</span>
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-muted-foreground">
               {document?.fileUrl?.split('.').pop()?.toUpperCase()} • {Math.round(Math.random() * 5) + 0.5} MB
             </div>
           </div>
@@ -280,9 +281,9 @@ const DocumentPreviewModal = ({
         <Button key="close" onClick={onClose} className="mr-2">
           Close
         </Button>,
-        <Button 
-          key="download" 
-          type="primary" 
+        <Button
+          key="download"
+          type="primary"
           icon={<Download size={16} />}
           onClick={() => window.open(document?.fileUrl, '_blank')}
           className="bg-blue-600 hover:bg-blue-700"
@@ -294,15 +295,15 @@ const DocumentPreviewModal = ({
       bodyStyle={{ maxHeight: '85vh', overflow: 'auto' }}
       className="document-preview-modal"
     >
-      <div className="mb-6 p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl border border-gray-100">
+      <div className="mb-6 p-4 bg-card rounded-xl border border-border">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="text-center">
-            <div className="text-xs text-gray-500 mb-1">Document Type</div>
+            <div className="text-xs text-muted-foreground mb-1">Document Type</div>
             <div>{getDocumentTypeBadge(document?.documentType)}</div>
           </div>
-          
+
           <div className="text-center">
-            <div className="text-xs text-gray-500 mb-1">Uploaded By</div>
+            <div className="text-xs text-muted-foreground mb-1">Uploaded By</div>
             <div className="flex items-center justify-center">
               <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-2">
                 <User size={12} className="text-blue-600" />
@@ -310,65 +311,65 @@ const DocumentPreviewModal = ({
               <Text className="font-medium">{document?.uploadedBy?.name || 'Unknown'}</Text>
             </div>
           </div>
-          
+
           <div className="text-center">
-            <div className="text-xs text-gray-500 mb-1">Upload Date</div>
+            <div className="text-xs text-muted-foreground mb-1">Upload Date</div>
             <div className="flex items-center justify-center">
               <Calendar size={12} className="mr-1 text-blue-500" />
               <Text className="font-medium">{document?.createdAt ? dayjs(document.createdAt).format('MMM D, YYYY') : 'Unknown'}</Text>
             </div>
           </div>
-          
+
           <div className="text-center">
-            <div className="text-xs text-gray-500 mb-1">Related Training</div>
+            <div className="text-xs text-muted-foreground mb-1">Related Training</div>
             <div className="flex items-center justify-center">
               <FolderOpen size={12} className="mr-1 text-blue-500" />
               <Text className="font-medium">{document?.training?.title || 'None'}</Text>
             </div>
           </div>
         </div>
-        
+
         {document?.description && (
           <div className="mt-4">
-            <div className="text-xs text-gray-500 mb-2">Description</div>
-            <div className="p-3 bg-white rounded-lg border">
-              <Text>{document.description}</Text>
+            <div className="text-xs text-muted-foreground mb-2">Description</div>
+            <div className="p-3 bg-card rounded-lg border border-border">
+              <Text className="text-foreground">{document.description}</Text>
             </div>
           </div>
         )}
       </div>
-      
+
       <div className="flex justify-center rounded-xl overflow-hidden border-2 border-gray-100 bg-gray-50">
         {isPdf ? (
-          <iframe 
-            src={`${document?.fileUrl}#toolbar=0&navpanes=0&scrollbar=0`} 
-            width="100%" 
-            height="600px" 
+          <iframe
+            src={`${document?.fileUrl}#toolbar=0&navpanes=0&scrollbar=0`}
+            width="100%"
+            height="600px"
             title={document?.title}
             className="border-0 rounded-xl"
           />
         ) : isImage ? (
           <div className="w-full flex justify-center items-center p-4">
-            <Image 
-              src={document?.fileUrl} 
-              alt={document?.title || 'Document preview'} 
+            <Image
+              src={document?.fileUrl}
+              alt={document?.title || 'Document preview'}
               className="max-h-[600px] object-contain rounded-lg"
               preview={false}
             />
           </div>
         ) : (
-          <div className="py-20 px-8 text-center bg-gradient-to-br from-gray-50 to-blue-50 w-full">
+          <div className="py-20 px-8 text-center bg-card w-full">
             <div className="mx-auto mb-6">
               {getFileIcon(document?.fileUrl || '', 80)}
             </div>
-            <Text className="block text-lg font-semibold text-gray-700 mb-2">
+            <Text className="block text-lg font-semibold text-foreground mb-2">
               Preview not available for this file type
             </Text>
-            <Text className="block text-gray-500 mb-6">
+            <Text className="block text-muted-foreground mb-6">
               This file type doesn't support in-browser preview. Please download to view the content.
             </Text>
-            <Button 
-              type="primary" 
+            <Button
+              type="primary"
               size="large"
               icon={<Download size={18} />}
               onClick={() => window.open(document?.fileUrl, '_blank')}
@@ -384,14 +385,14 @@ const DocumentPreviewModal = ({
 };
 
 // Enhanced Edit document metadata modal component
-const EditDocumentModal = ({ 
-  visible, 
-  document, 
+const EditDocumentModal = ({
+  visible,
+  document,
   onClose,
   onSubmit
-}: { 
-  visible: boolean, 
-  document: any, 
+}: {
+  visible: boolean,
+  document: any,
   onClose: () => void,
   onSubmit: (data: any) => void
 }) => {
@@ -400,7 +401,7 @@ const EditDocumentModal = ({
     description: '',
     documentType: ''
   });
-  
+
   useEffect(() => {
     if (document) {
       setForm({
@@ -410,18 +411,18 @@ const EditDocumentModal = ({
       });
     }
   }, [document]);
-  
+
   const handleChange = (field: string, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
-  
+
   const handleSubmit = () => {
     onSubmit({
       documentId: document.id,
       ...form
     });
   };
-  
+
   return (
     <Modal
       title={
@@ -441,25 +442,25 @@ const EditDocumentModal = ({
       <div className="space-y-6 mt-6">
         <div>
           <Text strong className="block mb-2 text-gray-700">Document Title</Text>
-          <Input 
-            value={form.title} 
+          <Input
+            value={form.title}
             onChange={e => handleChange('title', e.target.value)}
             placeholder="Enter document title"
             className="h-10"
           />
         </div>
-        
+
         <div>
           <Text strong className="block mb-2 text-gray-700">Description</Text>
-          <Input.TextArea 
-            value={form.description} 
+          <Input.TextArea
+            value={form.description}
             onChange={e => handleChange('description', e.target.value)}
             placeholder="Enter document description"
             rows={4}
             className="resize-none"
           />
         </div>
-        
+
         <div>
           <Text strong className="block mb-2 text-gray-700">Document Type</Text>
           <Select
@@ -484,7 +485,7 @@ const EditDocumentModal = ({
 const DocumentLibrary: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   // State
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -502,11 +503,11 @@ const DocumentLibrary: React.FC = () => {
     field: 'createdAt',
     order: 'desc'
   });
-  
+
   // Preview and edit modals
   const [previewDocument, setPreviewDocument] = useState<any>(null);
   const [editDocument, setEditDocument] = useState<any>(null);
-  
+
   // Fetch documents
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['documents', pagination, sorting, filters, searchQuery],
@@ -517,7 +518,7 @@ const DocumentLibrary: React.FC = () => {
         sort: sorting.field,
         order: sorting.order
       };
-      
+
       if (searchQuery) params.search = searchQuery;
       if (filters.documentType) params.documentType = filters.documentType;
       if (filters.trainingId) params.trainingId = filters.trainingId;
@@ -526,8 +527,8 @@ const DocumentLibrary: React.FC = () => {
         params.startDate = filters.dateRange[0].format('YYYY-MM-DD');
         params.endDate = filters.dateRange[1].format('YYYY-MM-DD');
       }
-      
-      const response = await api.get(API_ROUTES.TRAINING.GET_ALL_DOCUMENTS, { 
+
+      const response = await api.get(API_ROUTES.TRAINING.GET_ALL_DOCUMENTS, {
         params,
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
@@ -536,7 +537,7 @@ const DocumentLibrary: React.FC = () => {
       return response.data;
     }
   });
-  
+
   // Delete document mutation
   const deleteDocumentMutation = useMutation({
     mutationFn: async (documentId: string) => {
@@ -550,7 +551,7 @@ const DocumentLibrary: React.FC = () => {
       message.error(`Failed to delete document: ${error.response?.data?.message || error.message}`);
     }
   });
-  
+
   // Batch delete documents mutation
   const batchDeleteMutation = useMutation({
     mutationFn: async (documentIds: string[]) => {
@@ -565,7 +566,7 @@ const DocumentLibrary: React.FC = () => {
       message.error(`Failed to delete documents: ${error.response?.data?.message || error.message}`);
     }
   });
-  
+
   // Update document metadata mutation
   const updateDocumentMutation = useMutation({
     mutationFn: async (data: any) => {
@@ -584,7 +585,7 @@ const DocumentLibrary: React.FC = () => {
       message.error(`Failed to update document: ${error.response?.data?.message || error.message}`);
     }
   });
-  
+
   // Handle pagination change
   const handlePageChange = (page: number, pageSize?: number) => {
     setPagination({
@@ -593,7 +594,7 @@ const DocumentLibrary: React.FC = () => {
       pageSize: pageSize || pagination.pageSize
     });
   };
-  
+
   // Handle filter change
   const handleFilterChange = (filter: string, value: any) => {
     setFilters({
@@ -606,7 +607,7 @@ const DocumentLibrary: React.FC = () => {
       current: 1
     });
   };
-  
+
   // Reset all filters
   const resetFilters = () => {
     setFilters({
@@ -621,32 +622,32 @@ const DocumentLibrary: React.FC = () => {
       current: 1
     });
   };
-  
+
   // Handle document deletion
   const handleDeleteDocument = (documentId: string) => {
     deleteDocumentMutation.mutate(documentId);
   };
-  
+
   // Handle batch deletion
   const handleBatchDelete = () => {
     if (selectedRows.length === 0) {
       message.warning('Please select documents to delete');
       return;
     }
-    
+
     batchDeleteMutation.mutate(selectedRows);
   };
-  
+
   // Handle edit submission
   const handleEditSubmit = (data: any) => {
     updateDocumentMutation.mutate(data);
   };
-  
+
   // Handle document preview
   const handlePreviewDocument = (document: any) => {
     setPreviewDocument(document);
   };
-  
+
   // Handle document edit
   const handleEditDocument = (document: any) => {
     setEditDocument(document);
@@ -654,11 +655,11 @@ const DocumentLibrary: React.FC = () => {
 
   // Calculate stats
   const totalDocuments = data?.pagination?.total || 0;
-  const documentsThisMonth = data?.data?.filter((doc: any) => 
+  const documentsThisMonth = data?.data?.filter((doc: any) =>
     dayjs(doc.createdAt).isAfter(dayjs().startOf('month'))
   ).length || 0;
   const avgDocumentsPerDay = totalDocuments > 0 ? Math.round(totalDocuments / 30) : 0;
-  
+
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -670,8 +671,8 @@ const DocumentLibrary: React.FC = () => {
               </div>
               <Text className="text-xl font-semibold text-red-800 mb-2 block">Failed to load documents</Text>
               <Text className="text-red-600 mb-6">There was an error loading the document library. Please try again.</Text>
-              <Button 
-                type="primary" 
+              <Button
+                type="primary"
                 size="large"
                 icon={<RefreshCw size={16} />}
                 onClick={() => refetch()}
@@ -685,9 +686,9 @@ const DocumentLibrary: React.FC = () => {
       </div>
     );
   }
-  
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-background">
       <motion.div
         className="max-w-7xl mx-auto px-4 py-8"
         variants={containerVariants}
@@ -695,12 +696,12 @@ const DocumentLibrary: React.FC = () => {
         animate="visible"
       >
         {/* Enhanced Header */}
-        <motion.div 
-          variants={itemVariants} 
-          className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden mb-6"
+        <motion.div
+          variants={itemVariants}
+          className="bg-card rounded-2xl shadow-xl border border-border overflow-hidden mb-6"
         >
           {/* Header Section */}
-          <div className="relative bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-6 border-b border-gray-100">
+          <div className="relative bg-card p-6 border-b border-border">
             <div className="absolute top-0 right-0 -mt-2 -mr-2">
               <Sparkles size={60} className="text-blue-100 opacity-50" />
             </div>
@@ -713,14 +714,14 @@ const DocumentLibrary: React.FC = () => {
                       <FolderOpen className="text-blue-600" size={20} />
                     </div>
                     <div>
-                      <h1 className="text-2xl font-bold text-gray-900">Document Library</h1>
-                      <p className="text-gray-600 text-sm mt-0.5">
+                      <h1 className="text-2xl font-bold text-foreground">Document Library</h1>
+                      <p className="text-muted-foreground text-sm mt-0.5">
                         Browse, search and manage all your training documents in one place
                       </p>
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="flex flex-wrap items-center gap-2">
                   <motion.button
                     whileHover={{ scale: 1.02, boxShadow: "0 6px 20px rgba(59, 130, 246, 0.15)" }}
@@ -735,71 +736,71 @@ const DocumentLibrary: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Stats Section */}
-          <div className="p-6 bg-gradient-to-r from-gray-50/50 to-blue-50/50">
+          <div className="p-6 bg-card">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <motion.div 
+              <motion.div
                 whileHover={{ y: -2, scale: 1.02 }}
-                className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 relative overflow-hidden"
+                className="bg-card rounded-xl shadow-sm p-4 border border-border relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-3">
                   <FolderOpen size={24} className="text-blue-200" />
                 </div>
                 <div className="relative">
-                  <p className="text-xs font-medium text-gray-600 mb-1">Total Documents</p>
-                  <p className="text-2xl font-bold text-gray-900">{totalDocuments}</p>
+                  <p className="text-xs font-medium text-muted-foreground mb-1">Total Documents</p>
+                  <p className="text-2xl font-bold text-foreground">{totalDocuments}</p>
                   <div className="flex items-center mt-1">
                     <TrendingUp size={12} className="text-blue-500 mr-1" />
                     <span className="text-xs text-blue-600 font-medium">All files</span>
                   </div>
                 </div>
               </motion.div>
-              
-              <motion.div 
+
+              <motion.div
                 whileHover={{ y: -2, scale: 1.02 }}
-                className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 relative overflow-hidden"
+                className="bg-card rounded-xl shadow-sm p-4 border border-border relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-3">
                   <Calendar size={24} className="text-green-200" />
                 </div>
                 <div className="relative">
-                  <p className="text-xs font-medium text-gray-600 mb-1">This Month</p>
-                  <p className="text-2xl font-bold text-gray-900">{documentsThisMonth}</p>
+                  <p className="text-xs font-medium text-muted-foreground mb-1">This Month</p>
+                  <p className="text-2xl font-bold text-foreground">{documentsThisMonth}</p>
                   <div className="flex items-center mt-1">
                     <Award size={12} className="text-green-500 mr-1" />
                     <span className="text-xs text-green-600 font-medium">New uploads</span>
                   </div>
                 </div>
               </motion.div>
-              
-              <motion.div 
+
+              <motion.div
                 whileHover={{ y: -2, scale: 1.02 }}
-                className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 relative overflow-hidden"
+                className="bg-card rounded-xl shadow-sm p-4 border border-border relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-3">
                   <Target size={24} className="text-purple-200" />
                 </div>
                 <div className="relative">
-                  <p className="text-xs font-medium text-gray-600 mb-1">Average/Day</p>
-                  <p className="text-2xl font-bold text-gray-900">{avgDocumentsPerDay}</p>
+                  <p className="text-xs font-medium text-muted-foreground mb-1">Average/Day</p>
+                  <p className="text-2xl font-bold text-foreground">{avgDocumentsPerDay}</p>
                   <div className="flex items-center mt-1">
                     <Clock size={12} className="text-purple-500 mr-1" />
                     <span className="text-xs text-purple-600 font-medium">Upload rate</span>
                   </div>
                 </div>
               </motion.div>
-              
-              <motion.div 
+
+              <motion.div
                 whileHover={{ y: -2, scale: 1.02 }}
-                className="bg-white rounded-xl shadow-sm p-4 border border-gray-100 relative overflow-hidden"
+                className="bg-card rounded-xl shadow-sm p-4 border border-border relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-3">
                   <Award size={24} className="text-amber-200" />
                 </div>
                 <div className="relative">
-                  <p className="text-xs font-medium text-gray-600 mb-1">File Types</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-xs font-medium text-muted-foreground mb-1">File Types</p>
+                  <p className="text-2xl font-bold text-foreground">
                     {data?.data ? new Set(data.data.map((doc: any) => doc.fileUrl?.split('.').pop()?.toLowerCase())).size : 0}
                   </p>
                   <div className="flex items-center mt-1">
@@ -827,7 +828,7 @@ const DocumentLibrary: React.FC = () => {
                   size="large"
                 />
               </div>
-              
+
               <div className="flex flex-wrap gap-2">
                 <Select
                   placeholder="📄 Document Type"
@@ -844,17 +845,17 @@ const DocumentLibrary: React.FC = () => {
                   <Option value="REPORT">📋 Report</Option>
                   <Option value="OTHER">📄 Other</Option>
                 </Select>
-                
-                <RangePicker 
+
+                <RangePicker
                   value={filters.dateRange}
                   onChange={dates => handleFilterChange('dateRange', dates)}
                   className="h-10"
                   placeholder={['Start Date', 'End Date']}
                 />
-                
+
                 <Tooltip title="Reset All Filters">
-                  <Button 
-                    icon={<Filter size={16} />} 
+                  <Button
+                    icon={<Filter size={16} />}
                     onClick={resetFilters}
                     className="h-10 px-4"
                   >
@@ -863,10 +864,10 @@ const DocumentLibrary: React.FC = () => {
                 </Tooltip>
               </div>
             </div>
-            
+
             {/* Selected Actions */}
             {selectedRows.length > 0 && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 className="mt-4 p-3 bg-blue-50 rounded-lg flex items-center justify-between border border-blue-200"
@@ -875,7 +876,7 @@ const DocumentLibrary: React.FC = () => {
                   {selectedRows.length} document{selectedRows.length !== 1 ? 's' : ''} selected
                 </Text>
                 <div className="space-x-2">
-                  <Button 
+                  <Button
                     danger
                     icon={<Trash2 size={16} />}
                     onClick={handleBatchDelete}
@@ -889,7 +890,7 @@ const DocumentLibrary: React.FC = () => {
             )}
           </Card>
         </motion.div>
-        
+
         {/* Enhanced Document Grid */}
         <motion.div variants={itemVariants}>
           {isLoading ? (
@@ -913,11 +914,11 @@ const DocumentLibrary: React.FC = () => {
                 </motion.div>
                 <Text className="text-xl font-semibold text-gray-700 mb-2 block">No documents found</Text>
                 <Text className="text-gray-500 mb-6 block">
-                  {searchQuery || Object.values(filters).some(f => f) 
-                    ? "Try adjusting your search or filters" 
+                  {searchQuery || Object.values(filters).some(f => f)
+                    ? "Try adjusting your search or filters"
                     : "Get started by uploading your first document"}
                 </Text>
-                <Button 
+                <Button
                   type="primary"
                   size="large"
                   icon={<Upload size={18} />}
@@ -949,16 +950,16 @@ const DocumentLibrary: React.FC = () => {
                       >
                         <div className="relative">
                           {/* File Preview */}
-                          <div 
+                          <div
                             className="cursor-pointer"
                             onClick={() => handlePreviewDocument(document)}
                           >
                             {getFilePreview(document)}
                           </div>
-                          
+
                           {/* Selection Checkbox */}
                           <div className="absolute top-2 left-2">
-                            <motion.label 
+                            <motion.label
                               className="relative inline-flex items-center cursor-pointer"
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
@@ -975,11 +976,10 @@ const DocumentLibrary: React.FC = () => {
                                 }}
                                 className="sr-only"
                               />
-                              <div className={`w-5 h-5 border-2 rounded-md ${
-                                selectedRows.includes(document.id) 
-                                  ? 'bg-blue-600 border-blue-600' 
-                                  : 'bg-white/80 border-gray-300 backdrop-blur-sm'
-                              } flex items-center justify-center transition-all`}>
+                              <div className={`w-5 h-5 border-2 rounded-md ${selectedRows.includes(document.id)
+                                ? 'bg-blue-600 border-blue-600'
+                                : 'bg-white/80 border-gray-300 backdrop-blur-sm'
+                                } flex items-center justify-center transition-all`}>
                                 {selectedRows.includes(document.id) && (
                                   <motion.div
                                     initial={{ scale: 0 }}
@@ -994,13 +994,13 @@ const DocumentLibrary: React.FC = () => {
                               </div>
                             </motion.label>
                           </div>
-                          
+
                           {/* Document Type Badge */}
                           <div className="absolute top-2 right-2">
                             {getDocumentTypeBadge(document.documentType)}
                           </div>
                         </div>
-                        
+
                         {/* Content */}
                         <div className="p-4">
                           <div className="mb-3">
@@ -1013,22 +1013,22 @@ const DocumentLibrary: React.FC = () => {
                                 {document.title}
                               </Text>
                             </Tooltip>
-                            
+
                             {document.description && (
                               <Tooltip title={document.description}>
                                 <Text className="text-gray-500 text-xs line-clamp-2">
-                                  {document.description.length > 80 
-                                    ? document.description.substring(0, 80) + '...' 
+                                  {document.description.length > 80
+                                    ? document.description.substring(0, 80) + '...'
                                     : document.description}
                                 </Text>
                               </Tooltip>
                             )}
                           </div>
-                          
+
                           {/* Training Link */}
                           {document.training && (
                             <div className="mb-3 p-2 bg-blue-50 rounded-md border border-blue-100">
-                              <Text 
+                              <Text
                                 className="text-blue-600 hover:text-blue-700 cursor-pointer text-xs font-medium flex items-center"
                                 onClick={() => document.training?.id && navigate(`/trainings/${document.training.id}`)}
                               >
@@ -1037,7 +1037,7 @@ const DocumentLibrary: React.FC = () => {
                               </Text>
                             </div>
                           )}
-                          
+
                           {/* Meta Info */}
                           <div className="text-xs text-gray-500 space-y-1 mb-3">
                             <div className="flex items-center justify-between">
@@ -1056,7 +1056,7 @@ const DocumentLibrary: React.FC = () => {
                               </span>
                             </div>
                           </div>
-                          
+
                           {/* Actions */}
                           <div className="flex justify-between items-center">
                             <div className="flex space-x-1">
@@ -1070,7 +1070,7 @@ const DocumentLibrary: React.FC = () => {
                                   <Eye size={14} />
                                 </motion.button>
                               </Tooltip>
-                              
+
                               <Tooltip title="Edit">
                                 <motion.button
                                   whileHover={{ scale: 1.1 }}
@@ -1081,7 +1081,7 @@ const DocumentLibrary: React.FC = () => {
                                   <Edit size={14} />
                                 </motion.button>
                               </Tooltip>
-                              
+
                               <Tooltip title="Download">
                                 <motion.button
                                   whileHover={{ scale: 1.1 }}
@@ -1093,7 +1093,7 @@ const DocumentLibrary: React.FC = () => {
                                 </motion.button>
                               </Tooltip>
                             </div>
-                            
+
                             <Popconfirm
                               title="Delete this document?"
                               description="This action cannot be undone."
@@ -1119,11 +1119,11 @@ const DocumentLibrary: React.FC = () => {
               </div>
             </div>
           )}
-          
+
           {/* Enhanced Pagination */}
           {data?.pagination && data.pagination.total > 0 && (
-            <motion.div 
-              variants={itemVariants} 
+            <motion.div
+              variants={itemVariants}
               className="flex justify-center mt-8"
             >
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
@@ -1133,7 +1133,7 @@ const DocumentLibrary: React.FC = () => {
                   total={data.pagination.total}
                   onChange={handlePageChange}
                   showSizeChanger
-                  showTotal={(total, range) => 
+                  showTotal={(total, range) =>
                     `Showing ${range[0]}-${range[1]} of ${total} documents`
                   }
                   className="text-center"
@@ -1142,14 +1142,14 @@ const DocumentLibrary: React.FC = () => {
             </motion.div>
           )}
         </motion.div>
-        
+
         {/* Preview Modal */}
         <DocumentPreviewModal
           visible={!!previewDocument}
           document={previewDocument}
           onClose={() => setPreviewDocument(null)}
         />
-        
+
         {/* Edit Modal */}
         <EditDocumentModal
           visible={!!editDocument}
@@ -1157,7 +1157,7 @@ const DocumentLibrary: React.FC = () => {
           onClose={() => setEditDocument(null)}
           onSubmit={handleEditSubmit}
         />
-        
+
         {/* Floating Upload Button */}
         <motion.div
           className="fixed bottom-8 right-8 z-50"

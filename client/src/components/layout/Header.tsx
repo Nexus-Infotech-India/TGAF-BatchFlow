@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
+import logo from "../../assets/logo1.png";
+
 import {
   User,
   ChevronDown,
@@ -287,26 +289,19 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
         <div className="px-4 md:px-8 py-2 relative z-10">
           <div className="flex items-center justify-between">
             {/* Brand Logo and Name */}
-            <div
-              ref={brandRef}
-              className="flex items-center gap-4 hover:scale-105 transition-transform duration-300 cursor-pointer"
-              style={{
-                perspective: '1000px',
-              }}
-            >
-              <div className="p-3 bg-gradient-to-br from-primary via-blue-500 to-blue-600 rounded-xl shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all duration-300">
-                <PackageOpen className="text-white" size={28} />
-              </div>
-              <h1
-                className="text-2xl md:text-3xl font-black tracking-wider bg-gradient-to-r from-primary via-blue-500 to-blue-600 bg-clip-text text-transparent drop-shadow-sm"
-                style={{
-                  letterSpacing: '0.05em',
-                  fontWeight: 900,
-                }}
-              >
-                TGAF
-              </h1>
-            </div>
+           <div
+  ref={brandRef}
+  className="flex items-center gap-4 hover:scale-105 transition-transform duration-300 cursor-pointer"
+  style={{ perspective: "1000px" }}
+>
+
+
+  <img
+    src={logo}
+    alt="NexInventory Logo"
+    className="h-25 md:h-20 object-contain drop-shadow-sm"
+  />
+</div>
             {/* Action Buttons */}
             <div className="flex items-center gap-1.5">
               {/* Theme Toggle Button */}
