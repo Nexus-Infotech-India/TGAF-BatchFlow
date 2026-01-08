@@ -4,7 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import api from "../../../utils/api";
 import { API_ROUTES } from "../../../utils/api";
 import LoginAnimation from "../../material/Animation";
-import logo from "../../../assets/logo1.png"
+import logo from "../../../assets/logo12.png"
 import { Lock, Mail, Check, Rocket, Star, Sparkles, ArrowRight, Zap, Shield, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface LoginResponse {
