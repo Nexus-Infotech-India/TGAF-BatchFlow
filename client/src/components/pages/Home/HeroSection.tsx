@@ -21,21 +21,7 @@ const fadeInScale = {
   visible: { opacity: 1, scale: 1 },
 }
 
-const slideInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 },
-}
-
-const rotateIn = {
-  hidden: { opacity: 0, rotate: -10 },
-  visible: { opacity: 1, rotate: 0 },
-}
-
-const FloatingElement = ({ children, delay = 0 }: any) => (
-  <motion.div animate={{ y: [0, -10, 0] }} transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, delay }}>
-    {children}
-  </motion.div>
-)
+// ...existing code...
 
 const FloatingCard = ({ children, delay = 0 }: any) => (
   <motion.div
