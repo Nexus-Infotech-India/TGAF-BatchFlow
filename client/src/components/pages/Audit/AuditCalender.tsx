@@ -450,7 +450,7 @@ const AuditCalendar: React.FC = () => {
                       transition={{ delay: 0.1 }}
                       className="space-y-2"
                     >
-                      <label className="block text-sm font-semibold text-gray-700 flex items-center">
+                      <label className="block text-sm font-semibold text-gray-700 items-center">
                         <Layers size={16} className="mr-2 text-blue-600" />
                         Audit Type
                       </label>

@@ -162,7 +162,7 @@ const AppLayout = () => {
 
       {/* Fixed position header - static, no animations */}
       <header className="fixed top-0 right-0 left-0 z-40">
-        <HeaderBar pageTitle={pageTitle} activeNavStack={navStack} />
+        <HeaderBar activeNavStack={navStack} />
       </header>
 
       {/* Main Content */}
