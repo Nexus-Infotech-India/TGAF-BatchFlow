@@ -3,9 +3,8 @@ import { motion } from "framer-motion";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../../utils/api";
 import { API_ROUTES } from "../../../utils/api";
-import LoginAnimation from "../../material/Animation";
 import logo from "../../../assets/logo12.png"
-import { Lock, Mail, Check, Rocket, Star, Sparkles, ArrowRight, Zap, Shield, ChevronLeft, ChevronRight } from "lucide-react"
+import { Lock, Mail, Check, Rocket, ArrowRight, Zap, Shield, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface LoginResponse {
   token?: string
@@ -25,40 +24,40 @@ interface LoginError {
   }
 }
 
-const fadeInScale = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: { opacity: 1, scale: 1 },
-}
+// const fadeInScale = {
+//   hidden: { opacity: 0, scale: 0.9 },
+//   visible: { opacity: 1, scale: 1 },
+// }
 
-const slideInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 },
-}
+// const slideInUp = {
+//   hidden: { opacity: 0, y: 30 },
+//   visible: { opacity: 1, y: 0 },
+// }
 
-const FloatingCard = ({ children, delay = 0 }: any) => (
-  <motion.div
-    animate={{
-      y: [0, -10, 0],
-      transition: { duration: 3.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay },
-    }}
-  >
-    {children}
-  </motion.div>
-)
+// const FloatingCard = ({ children, delay = 0 }: any) => (
+//   <motion.div
+//     animate={{
+//       y: [0, -10, 0],
+//       transition: { duration: 3.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut", delay },
+//     }}
+//   >
+//     {children}
+//   </motion.div>
+// )
 
-const GlowingBadge = () => (
-  <motion.div
-    initial={{ opacity: 0, y: -20, scale: 0.9 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    transition={{ duration: 0.45 }}
-    className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm mb-6 hover:shadow-md hover:scale-105 transition-all group relative"
-  >
-    <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}>
-      <Sparkles className="text-yellow-400 w-4 h-4" />
-    </motion.div>
-    <span className="text-sm font-semibold text-slate-700">Quality Management System</span>
-  </motion.div>
-)
+// const GlowingBadge = () => (
+//   <motion.div
+//     initial={{ opacity: 0, y: -20, scale: 0.9 }}
+//     animate={{ opacity: 1, y: 0, scale: 1 }}
+//     transition={{ duration: 0.45 }}
+//     className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm mb-6 hover:shadow-md hover:scale-105 transition-all group relative"
+//   >
+//     <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}>
+//       <Sparkles className="text-yellow-400 w-4 h-4" />
+//     </motion.div>
+//     <span className="text-sm font-semibold text-slate-700">Quality Management System</span>
+//   </motion.div>
+// )
 
 const Login = () => {
   const slides = [
@@ -124,7 +123,7 @@ const Login = () => {
           localStorage.removeItem("rememberMe")
         }
 
-        window.location.href = "/dashboard"
+        window.location.href = "/raw-dashboard"
       }
     },
     onError: (err: LoginError) => {
