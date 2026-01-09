@@ -19,14 +19,13 @@ import {
   Activity,
   Sun,
   Moon,
-  PackageOpen,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import api, { API_ROUTES } from '../../utils/api';
 
 interface HeaderBarProps {
-  pageTitle: string;
+  // ...existing code...
   activeNavStack?: Array<{ title: string; path: string }>;
 }
 
@@ -39,7 +38,7 @@ type ActivityLogType = {
 };
 
 const HeaderBar: React.FC<HeaderBarProps> = ({
-  pageTitle,
+  // ...existing code...
   // activeNavStack = [],
 }) => {
   const [showUserMenu, setShowUserMenu] = useState(false);

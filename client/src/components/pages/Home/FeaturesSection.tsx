@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll } from "framer-motion"
 import { Clipboard, Calendar, FileCheck, CheckCircle2, ArrowRight, Sparkles } from "lucide-react"
 
 const fadeInUp = {
@@ -7,8 +7,7 @@ const fadeInUp = {
 }
 
 export default function FeaturesSection() {
-  const { scrollYProgress } = useScroll()
-  const opacity = useTransform(scrollYProgress, [0.15, 0.45], [0, 1])
+  useScroll()
 
   return (
     <motion.section
