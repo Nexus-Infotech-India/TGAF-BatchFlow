@@ -47,6 +47,40 @@ ChartJS.register(
 );
 
 const Dashboard: React.FC = () => {
+  // Helpers to resolve CSS variables to concrete colors for canvas rendering
+  const getCssVar = (name: string, fallback: string) => {
+    try {
+      if (typeof window === 'undefined') return fallback;
+      const val = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      return val || fallback;
+    } catch (e) {
+      return fallback;
+    }
+  };
+
+  const parseColorToRgba = (color: string, alpha: number) => {
+    if (!color) return `rgba(0,0,0,${alpha})`;
+    color = color.trim();
+    // already rgba
+    if (color.startsWith('rgba')) return color.replace(/rgba\(([^)]+)\)/, (_, vals) => `rgba(${vals.split(',').slice(0, 3).join(',')},${alpha})`);
+    // rgb -> rgba
+    if (color.startsWith('rgb(')) return color.replace('rgb(', 'rgba(').replace(')', `,${alpha})`);
+    // hex -> rgba
+    if (color.startsWith('#')) {
+      const hex = color.replace('#', '');
+      const bigint = parseInt(hex.length === 3 ? hex.split('').map(c => c + c).join('') : hex, 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
+    // fallback: return color as-is (may be a named color) without alpha
+    return color;
+  };
+
+  const successColor = getCssVar('--success', '#16a34a');
+  const secondaryColor = getCssVar('--secondary', '#3b82f6');
+  const destructiveColor = getCssVar('--destructive', '#ef4444');
   // Fetch overview statistics
   const {
     data: overviewData,
@@ -110,15 +144,15 @@ const Dashboard: React.FC = () => {
         {
           label: 'Approved',
           data: trendData.trends.slice(-6).map((item: any) => item.approved),
-          borderColor: 'rgb(34, 197, 94)',
-          backgroundColor: 'rgba(34, 197, 94, 0.1)',
+          borderColor: successColor,
+          backgroundColor: parseColorToRgba(successColor, 0.12),
           tension: 0.3,
         },
         {
           label: 'Pending',
           data: trendData.trends.slice(-6).map((item: any) => item.submitted + item.draft),
-          borderColor: 'rgb(59, 130, 246)',
-          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          borderColor: secondaryColor,
+          backgroundColor: parseColorToRgba(secondaryColor, 0.12),
           tension: 0.3,
         }
       ]
@@ -138,15 +172,11 @@ const Dashboard: React.FC = () => {
             overviewData.batches.rejected
           ],
           backgroundColor: [
-            'rgba(34, 197, 94, 0.8)',
-            'rgba(59, 130, 246, 0.8)',
-            'rgba(239, 68, 68, 0.8)'
+            parseColorToRgba(successColor, 0.85),
+            parseColorToRgba(secondaryColor, 0.85),
+            parseColorToRgba(destructiveColor, 0.85),
           ],
-          borderColor: [
-            'rgba(34, 197, 94, 1)',
-            'rgba(59, 130, 246, 1)',
-            'rgba(239, 68, 68, 1)'
-          ],
+          borderColor: [successColor, secondaryColor, destructiveColor],
           borderWidth: 1,
         }
       ]
@@ -177,8 +207,8 @@ const Dashboard: React.FC = () => {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          <p className="mt-2 text-gray-600">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-8 w-8" style={{ border: '2px solid transparent', borderBottom: '2px solid var(--primary)' }} />
+          <p className="mt-2" style={{ color: 'var(--muted-foreground)' }}>Loading dashboard...</p>
         </div>
       </div>
     );
@@ -200,43 +230,37 @@ const Dashboard: React.FC = () => {
       title: 'Total Batches',
       value: overviewData?.batches?.total || 0,
       icon: BarChart3,
-      color: 'text-primary',
-      bg: 'bg-primary/10',
+      iconColorVar: 'var(--primary)',
     },
     {
       title: 'Approved',
       value: overviewData?.batches?.approved || 0,
       icon: CheckCircle2,
-      color: 'text-green-600',
-      bg: 'bg-green-50',
+      iconColorVar: 'var(--success, #16a34a)',
     },
     {
       title: 'Pending',
       value: overviewData?.batches?.pending || 0,
       icon: Clock,
-      color: 'text-secondary',
-      bg: 'bg-secondary/10',
+      iconColorVar: 'var(--secondary)',
     },
     {
       title: 'Products',
       value: overviewData?.products || 0,
       icon: FileBox,
-      color: 'text-primary',
-      bg: 'bg-primary/10',
+      iconColorVar: 'var(--primary)',
     },
     {
       title: 'Users',
       value: overviewData?.users || 0,
       icon: Users,
-      color: 'text-secondary',
-      bg: 'bg-secondary/10',
+      iconColorVar: 'var(--secondary)',
     },
     {
       title: 'Standards',
       value: overviewData?.standards || 0,
       icon: Clipboard,
-      color: 'text-primary',
-      bg: 'bg-primary/10',
+      iconColorVar: 'var(--primary)',
     },
   ];
 
@@ -254,7 +278,7 @@ const Dashboard: React.FC = () => {
           {stats.map((stat, index) => (
             <div
               key={index}
-              style={{ background: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--secondary)' }}
+              style={{ background: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--border)' }}
               className="border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="flex items-center justify-between">
@@ -264,7 +288,7 @@ const Dashboard: React.FC = () => {
                     {stat.value.toLocaleString()}
                   </p>
                 </div>
-                <div className="p-3 rounded-lg" style={{ background: 'var(--secondary)', color: 'var(--secondary-foreground)' }}>
+                <div className="p-3 rounded-lg" style={{ background: 'var(--card)', border: '1px solid var(--border)', color: stat.iconColorVar || 'var(--primary)' }}>
                   <stat.icon className="w-6 h-6" />
                 </div>
               </div>
@@ -305,7 +329,7 @@ const Dashboard: React.FC = () => {
                 />
               </div>
             ) : (
-              <div className="h-64 flex items-center justify-center text-gray-500">
+              <div className="h-64 flex items-center justify-center" style={{ color: 'var(--muted-foreground)' }}>
                 No trend data available
               </div>
             )}
@@ -337,7 +361,7 @@ const Dashboard: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="h-64 flex items-center justify-center text-gray-500">
+              <div className="h-64 flex items-center justify-center" style={{ color: 'var(--muted-foreground)' }}>
                 No status data available
               </div>
             )}
@@ -375,7 +399,7 @@ const Dashboard: React.FC = () => {
               />
             </div>
           ) : (
-            <div className="h-64 flex items-center justify-center text-gray-500">
+            <div className="h-64 flex items-center justify-center" style={{ color: 'var(--muted-foreground)' }}>
               No product data available
             </div>
           )}
