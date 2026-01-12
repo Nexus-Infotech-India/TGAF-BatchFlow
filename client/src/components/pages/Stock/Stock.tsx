@@ -56,10 +56,10 @@ const Stock: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-blue-50 to-white">
+      <div style={{ background: 'var(--background)' }} className="flex items-center justify-center h-screen">
         <div className="text-center">
           <Spin size="large" />
-          <p className="mt-4 text-blue-600 font-medium">
+          <p style={{ color: 'var(--primary)' }} className="mt-4 font-medium">
             Loading stock distribution...
           </p>
         </div>
@@ -69,7 +69,7 @@ const Stock: React.FC = () => {
 
   if (error) {
     return (
-      <div className="h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-6">
+      <div style={{ background: 'var(--background)' }} className="h-screen flex items-center justify-center p-6">
         <Alert
           type="error"
           message="Stock Distribution Error"
@@ -83,7 +83,7 @@ const Stock: React.FC = () => {
 
   if (stock.length === 0) {
     return (
-      <div className="h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center p-6">
+      <div style={{ background: 'var(--background)' }} className="h-screen flex items-center justify-center p-6">
         <Card className="max-w-md">
           <Empty
             description="No stock data available"
@@ -122,18 +122,18 @@ const Stock: React.FC = () => {
           rawMaterialName={selectedProduct.name}
         />
       ) : (
-        <div className="h-screen bg-white overflow-hidden p-6">
+        <div style={{ background: 'var(--background)' }} className="h-screen overflow-hidden p-6">
           {/* Header Section */}
           <div className="mb-6">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-secondary rounded">
-                <Boxes className="w-6 h-6 text-secondary-foreground" />
+              <div style={{ background: 'var(--secondary)' }} className="p-2 rounded">
+                <Boxes style={{ color: 'var(--secondary-foreground)' }} className="w-6 h-6" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">
+                <h1 style={{ color: 'var(--foreground)' }} className="text-2xl font-bold">
                   Stock Distribution
                 </h1>
-                <p className="text-gray-600">
+                <p style={{ color: 'var(--muted-foreground)' }}>
                   {products.length} products across {warehouses.length} warehouses
                 </p>
               </div>
@@ -163,9 +163,10 @@ const Stock: React.FC = () => {
               </thead>
               <tbody>
                 {products.map((prod, index) => (
-                  <tr key={prod} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                  <tr key={prod} style={{ background: index % 2 === 0 ? 'var(--card)' : 'var(--background)' }}>
                     <td
-                      className="border border-secondary px-4 py-2 font-semibold cursor-pointer hover:bg-secondary/10"
+                      style={{ borderColor: 'var(--secondary)', color: 'var(--foreground)' }}
+                      className="border px-4 py-2 font-semibold cursor-pointer hover:bg-secondary/10"
                       onClick={() => {
                         const item = stock.find((s) => s.rawMaterial.name === prod);
                         if (item) {
@@ -183,13 +184,15 @@ const Stock: React.FC = () => {
                       const item = matrix[prod][wh];
                       const q = item?.currentQuantity ?? 0;
                       return (
-                        <td key={`${prod}-${wh}`} className="border border-secondary px-4 py-2 text-center">
+                        <td key={`${prod}-${wh}`} style={{ borderColor: 'var(--secondary)' }} className="border px-4 py-2 text-center">
                           {q > 0 ? (
-                            <span className="font-mono">
+                            <span style={{ color: 'var(--foreground)' }} className="font-mono">
                               {q.toLocaleString()} {item?.rawMaterial.unitOfMeasurement || 'units'}
                             </span>
                           ) : (
-                            <span className="text-gray-400">—</span>
+                            <span style={{ color: 'var(--muted-foreground)' }}>
+                              —
+                            </span>
                           )}
                         </td>
                       );

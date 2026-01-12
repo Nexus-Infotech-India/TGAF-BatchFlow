@@ -300,7 +300,7 @@ const StandardParameterList: React.FC<StandardParameterListProps> = ({
 
   // Render data table
   return (
-    <div className="h-full">
+    <div style={{ background: 'var(--card)', color: 'var(--foreground)' }} className="rounded-lg p-4">
       {parameters.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-full bg-gray-50 rounded-2xl p-12">
           <div className="h-24 w-24 mx-auto mb-6 bg-[#5317AA]/10 text-[#5317AA] rounded-2xl flex items-center justify-center shadow-lg">

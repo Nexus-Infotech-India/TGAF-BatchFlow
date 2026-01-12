@@ -93,56 +93,56 @@ const formatDate = (dateString: string) => {
 };
 
 const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
-  const getStatusConfig = (status: string) => {
-    switch (status.toLowerCase()) {
+  const getStatusConfig = (s: string) => {
+    switch (s.toLowerCase()) {
       case 'pending':
         return {
-          bg: 'bg-yellow-100',
-          text: 'text-yellow-800',
+          bgColor: 'var(--warning-50, #fef3c7)',
+          textColor: 'var(--warning, #b45309)',
+          borderColor: 'var(--warning-200, #fef08a)',
           icon: Clock,
-          border: 'border-yellow-200',
         };
       case 'in_progress':
         return {
-          bg: 'bg-blue-100',
-          text: 'text-blue-800',
+          bgColor: 'var(--blue-50, #eff6ff)',
+          textColor: 'var(--blue, #2563eb)',
+          borderColor: 'var(--blue-200, #bfdbfe)',
           icon: RefreshCw,
-          border: 'border-blue-200',
         };
       case 'completed':
         return {
-          bg: 'bg-green-100',
-          text: 'text-green-800',
+          bgColor: 'var(--success-50, #ecfdf5)',
+          textColor: 'var(--success, #16a34a)',
+          borderColor: 'var(--success-200, #bbf7d0)',
           icon: CheckCircle,
-          border: 'border-green-200',
         };
       case 'submitted':
         return {
-          bg: 'bg-purple-100',
-          text: 'text-purple-800',
+          bgColor: 'var(--purple-50, #f5f3ff)',
+          textColor: 'var(--purple, #7c3aed)',
+          borderColor: 'var(--purple-200, #e9d5ff)',
           icon: Clock,
-          border: 'border-purple-200',
         };
       case 'approved':
         return {
-          bg: 'bg-[#5317AA]',
-          text: 'text-white',
+          bgColor: 'var(--primary)',
+          textColor: 'var(--primary-foreground)',
+          borderColor: 'var(--primary)',
           icon: CheckCircle,
-          border: 'border-[#5317AA]',
         };
       case 'rejected':
         return {
-          bg: 'bg-red-100',
-          text: 'text-red-800',
+          bgColor: 'var(--destructive-50, #fee2e2)',
+          textColor: 'var(--destructive, #dc2626)',
+          borderColor: 'var(--destructive-200, #fecaca)',
           icon: XCircle,
-          border: 'border-red-200',
         };
       default:
         return {
-          bg: 'bg-gray-100',
-          text: 'text-gray-800',
+          bgColor: 'var(--card)',
+          textColor: 'var(--foreground)',
+          borderColor: 'var(--border)',
           icon: Clock,
-          border: 'border-gray-200',
         };
     }
   };
@@ -151,8 +151,8 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   const IconComponent = config.icon;
 
   return (
-    <div className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold border ${config.bg} ${config.text} ${config.border}`}>
-      <IconComponent size={12} className="mr-1.5" />
+    <div style={{ display: 'inline-flex', alignItems: 'center', padding: '0.375rem 0.75rem', borderRadius: 9999, fontSize: '0.75rem', fontWeight: 700, border: `1px solid ${config.borderColor}`, background: config.bgColor, color: config.textColor }}>
+      <IconComponent size={12} style={{ marginRight: 6, color: config.textColor }} />
       {status.replace('_', ' ').toUpperCase()}
     </div>
   );
@@ -213,36 +213,36 @@ const ParameterVerificationTable: React.FC<{
     };
 
     return (
-      <div className="overflow-hidden rounded-lg border border-gray-200">
+      <div className="overflow-hidden rounded-lg border" style={{ borderColor: 'var(--border)' }}>
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse bg-white">
+          <table className="w-full border-collapse" style={{ background: 'var(--card)', color: 'var(--card-foreground)' }}>
             <thead>
-              <tr className="bg-[#5317AA] border-b border-gray-200">
-                <th className="text-left p-4 font-bold text-white border-r border-gray-200">
+              <tr style={{ background: 'var(--primary)', color: 'var(--primary-foreground)', borderBottom: '1px solid var(--border)' }}>
+                <th className="text-left p-4 font-bold" style={{ color: 'var(--primary-foreground)', borderRight: '1px solid var(--border)' }}>
                   <div className="flex items-center space-x-2">
                     <Target size={16} className="text-white" />
                     <span>Parameter</span>
                   </div>
                 </th>
-                <th className="text-left p-4 font-bold text-white border-r border-gray-200">
+                <th className="text-left p-4 font-bold" style={{ color: 'var(--primary-foreground)', borderRight: '1px solid var(--border)' }}>
                   <div className="flex items-center space-x-2">
                     <Star size={16} className="text-white" />
                     <span>Standard Value</span>
                   </div>
                 </th>
-                <th className="text-left p-4 font-bold text-white border-r border-gray-200">
+                <th className="text-left p-4 font-bold" style={{ color: 'var(--primary-foreground)', borderRight: '1px solid var(--border)' }}>
                   <div className="flex items-center space-x-2">
                     <Activity size={16} className="text-white" />
                     <span>Unit</span>
                   </div>
                 </th>
-                <th className="text-left p-4 font-bold text-white border-r border-gray-200">
+                <th className="text-left p-4 font-bold" style={{ color: 'var(--primary-foreground)', borderRight: '1px solid var(--border)' }}>
                   <div className="flex items-center space-x-2">
                     <FileText size={16} className="text-white" />
                     <span>Test Result</span>
                   </div>
                 </th>
-                <th className="text-left p-4 font-bold text-white">
+                <th className="text-left p-4 font-bold" style={{ color: 'var(--primary-foreground)' }}>
                   <div className="flex items-center space-x-2">
                     <FileText size={16} className="text-white" />
                     <span>Remarks</span>
@@ -254,40 +254,39 @@ const ParameterVerificationTable: React.FC<{
               {parameters.map((parameter, index) => (
                 <tr
                   key={parameter.id}
-                  className={`border-b border-gray-100 hover:bg-gray-50 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                    }`}
+                  style={{ borderBottom: '1px solid var(--border)', background: index % 2 === 0 ? 'var(--card)' : 'var(--muted)' }}
                 >
-                  <td className="p-4 border-r border-gray-100">
+                  <td className="p-4" style={{ borderRight: '1px solid var(--border)' }}>
                     <div>
-                      <p className="font-semibold text-gray-900 mb-1">
+                      <p className="font-semibold mb-1" style={{ color: 'var(--foreground)' }}>
                         {parameter.parameterName}
                       </p>
                       {parameter.parameterDescription && (
-                        <p className="text-xs text-gray-500 leading-relaxed">
+                        <p className="text-xs leading-relaxed" style={{ color: 'var(--muted-foreground)' }}>
                           {parameter.parameterDescription}
                         </p>
                       )}
                     </div>
                   </td>
 
-                  <td className="p-4 border-r border-gray-100">
+                  <td className="p-4" style={{ borderRight: '1px solid var(--border)' }}>
                     <div className="flex items-center space-x-2">
-                      <span className="font-bold text-gray-900">
+                      <span className="font-bold" style={{ color: 'var(--foreground)' }}>
                         {parameter.standardDefinition?.standardValue ||
                           parameter.currentValue}
                       </span>
                     </div>
                   </td>
 
-                  <td className="p-4 border-r border-gray-100">
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded">
+                  <td className="p-4" style={{ borderRight: '1px solid var(--border)' }}>
+                    <span className="px-2 py-1 text-sm font-medium rounded" style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}>
                       {parameter.standardDefinition?.unit?.symbol ||
                         parameter.currentUnit?.symbol ||
                         '-'}
                     </span>
                   </td>
 
-                  <td className="p-4 border-r border-gray-100">
+                  <td className="p-4" style={{ borderRight: '1px solid var(--border)' }}>
                     <input
                       type="text"
                       placeholder={
@@ -299,9 +298,10 @@ const ParameterVerificationTable: React.FC<{
                       }
                       disabled={isDisabled}
                       className={`w-full p-2 border rounded text-sm ${isDisabled
-                        ? 'bg-gray-100 border-gray-200 text-gray-600 cursor-not-allowed'
-                        : 'border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5317AA] focus:border-[#5317AA] bg-white'
+                        ? 'cursor-not-allowed'
+                        : 'focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-[var(--primary)]'
                         }`}
+                      style={{ background: isDisabled ? 'var(--muted)' : 'var(--card)', color: isDisabled ? 'var(--muted-foreground)' : 'var(--foreground)', borderColor: 'var(--border)' }}
                     />
                   </td>
 
@@ -315,9 +315,10 @@ const ParameterVerificationTable: React.FC<{
                       }
                       disabled={isDisabled}
                       className={`w-full p-2 border rounded text-sm ${isDisabled
-                        ? 'bg-gray-100 border-gray-200 text-gray-600 cursor-not-allowed'
-                        : 'border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#5317AA] focus:border-[#5317AA] bg-white'
+                        ? 'cursor-not-allowed'
+                        : 'focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-[var(--primary)]'
                         }`}
+                      style={{ background: isDisabled ? 'var(--muted)' : 'var(--card)', color: isDisabled ? 'var(--muted-foreground)' : 'var(--foreground)', borderColor: 'var(--border)' }}
                     />
                   </td>
                 </tr>
@@ -578,18 +579,19 @@ const BatchVerification: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg border border-red-200 max-w-md text-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--background)' }}>
+        <div style={{ background: 'var(--card)', color: 'var(--card-foreground)', borderColor: 'var(--destructive)' }} className="p-8 rounded-lg border max-w-md text-center">
           <AlertTriangle size={48} className="mx-auto mb-4 text-red-500" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)' }}>
             Error Loading Batches
           </h3>
-          <p className="text-gray-600 mb-4">
+          <p className="mb-4" style={{ color: 'var(--muted-foreground)' }}>
             Failed to load batches for verification
           </p>
           <button
             onClick={() => refetch()}
-            className="px-6 py-3 bg-[#5317AA] text-white rounded hover:bg-[#178EC8] transition-colors font-medium"
+            className="px-6 py-3 rounded transition-colors font-medium"
+            style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
           >
             Try Again
           </button>
@@ -599,7 +601,7 @@ const BatchVerification: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{ background: 'var(--background)' }}>
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Show details view if selected */}
         {selectedBatchId ? (
@@ -607,14 +609,11 @@ const BatchVerification: React.FC = () => {
             {parametersLoading ? (
               <div className="space-y-6">
                 {[...Array(3)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="bg-white rounded-lg p-8 animate-pulse"
-                  >
-                    <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
+                  <div key={i} className="rounded-lg p-8 animate-pulse" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                    <div className="h-8 rounded w-1/3 mb-4" style={{ background: 'var(--muted)' }}></div>
                     <div className="space-y-4">
                       {[...Array(4)].map((_, j) => (
-                        <div key={j} className="h-16 bg-gray-200 rounded"></div>
+                        <div key={j} className="h-16 rounded" style={{ background: 'var(--muted)' }}></div>
                       ))}
                     </div>
                   </div>
@@ -623,36 +622,37 @@ const BatchVerification: React.FC = () => {
             ) : parametersData ? (
               <div className="space-y-6">
                 {/* Enhanced Batch Info */}
-                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                  <div className="p-4 bg-[#5317AA] border-b border-gray-200">
+                <div className="rounded-lg border overflow-hidden" style={{ background: 'var(--card)', color: 'var(--card-foreground)', borderColor: 'var(--border)' }}>
+                  <div className="p-4" style={{ background: 'var(--primary)', color: 'var(--primary-foreground)', borderBottom: '1px solid var(--border)' }}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
                         <button
                           onClick={handleBackToList}
-                          className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded hover:bg-gray-50 transition-colors text-sm"
+                          className="flex items-center gap-2 px-3 py-1.5 rounded text-sm"
+                          style={{ border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--foreground)' }}
                         >
-                          <ArrowLeft size={14} className="text-gray-600" />
-                          <span className="text-gray-700 font-medium">
+                          <ArrowLeft size={14} style={{ color: 'var(--muted-foreground)' }} />
+                          <span style={{ color: 'var(--foreground)', fontWeight: 500 }}>
                             Back
                           </span>
                         </button>
-                        <div className="p-2 bg-white rounded">
-                          <Package className="text-[#5317AA]" size={18} />
+                        <div className="p-2 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                          <Package size={18} style={{ color: 'var(--primary)' }} />
                         </div>
                         <div>
-                          <h2 className="text-xl font-bold text-white">
+                          <h2 className="text-xl font-bold" style={{ color: 'var(--primary-foreground)' }}>
                             {parametersData.batch.batchNumber}
                           </h2>
-                          <p className="text-gray-200 text-sm font-medium">
+                          <p className="text-sm font-medium" style={{ color: 'var(--card-foreground)' }}>
                             {parametersData.batch.product.name}
                           </p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs text-gray-200 font-medium">
+                        <p className="text-xs font-medium" style={{ color: 'var(--muted-foreground)' }}>
                           Total Parameters
                         </p>
-                        <p className="text-2xl font-bold text-white">
+                        <p className="text-2xl font-bold" style={{ color: 'var(--primary-foreground)' }}>
                           {parametersData.totalParameters}
                         </p>
                       </div>
@@ -661,13 +661,13 @@ const BatchVerification: React.FC = () => {
 
                   <div className="p-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                      <div className="flex items-center space-x-2 p-3 bg-green-50 rounded border border-green-200">
-                        <Calendar className="text-green-600" size={16} />
+                      <div className="flex items-center space-x-2 p-3 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                        <Calendar size={16} style={{ color: 'var(--success, #16a34a)' }} />
                         <div>
-                          <span className="text-gray-500 text-xs font-medium">
+                          <span className="text-xs font-medium" style={{ color: 'var(--muted-foreground)' }}>
                             Production Date
                           </span>
-                          <p className="font-semibold text-gray-900 text-sm">
+                          <p className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>
                             {new Date(
                               parametersData.batch.dateOfProduction
                             ).toLocaleDateString()}
@@ -675,13 +675,13 @@ const BatchVerification: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-2 p-3 bg-orange-50 rounded border border-orange-200">
-                        <Calendar className="text-orange-600" size={16} />
+                      <div className="flex items-center space-x-2 p-3 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                        <Calendar size={16} style={{ color: 'var(--warning, #f97316)' }} />
                         <div>
-                          <span className="text-gray-500 text-xs font-medium">
+                          <span className="text-xs font-medium" style={{ color: 'var(--muted-foreground)' }}>
                             Best Before Date
                           </span>
-                          <p className="font-semibold text-gray-900 text-sm">
+                          <p className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>
                             {parametersData.batch.bestBeforeDate
                               ? new Date(
                                 parametersData.batch.bestBeforeDate
@@ -691,25 +691,25 @@ const BatchVerification: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-2 p-3 bg-purple-50 rounded border border-purple-200">
-                        <User className="text-purple-600" size={16} />
+                      <div className="flex items-center space-x-2 p-3 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                        <User size={16} style={{ color: 'var(--primary)' }} />
                         <div>
-                          <span className="text-gray-500 text-xs font-medium">
+                          <span className="text-xs font-medium" style={{ color: 'var(--muted-foreground)' }}>
                             Maker
                           </span>
-                          <p className="font-semibold text-gray-900 text-sm">
+                          <p className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>
                             {parametersData.batch.maker.name}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-2 p-3 bg-cyan-50 rounded border border-cyan-200">
-                        <Clock className="text-cyan-600" size={16} />
+                      <div className="flex items-center space-x-2 p-3 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                        <Clock size={16} style={{ color: 'var(--primary)' }} />
                         <div>
-                          <span className="text-gray-500 text-xs font-medium">
+                          <span className="text-xs font-medium" style={{ color: 'var(--muted-foreground)' }}>
                             Sample Analysis Started
                           </span>
-                          <p className="font-semibold text-gray-900 text-sm">
+                          <p className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>
                             {parametersData.batch.sampleAnalysisStarted
                               ? new Date(
                                 parametersData.batch.sampleAnalysisStarted
@@ -719,13 +719,13 @@ const BatchVerification: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-2 p-3 bg-indigo-50 rounded border border-indigo-200">
-                        <CheckCircle className="text-indigo-600" size={16} />
+                      <div className="flex items-center space-x-2 p-3 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                        <CheckCircle size={16} style={{ color: 'var(--primary)' }} />
                         <div>
-                          <span className="text-gray-500 text-xs font-medium">
+                          <span className="text-xs font-medium" style={{ color: 'var(--muted-foreground)' }}>
                             Sample Analysis Completed
                           </span>
-                          <p className="font-semibold text-gray-900 text-sm">
+                          <p className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>
                             {parametersData.batch.sampleAnalysisCompleted
                               ? new Date(
                                 parametersData.batch.sampleAnalysisCompleted
@@ -735,10 +735,10 @@ const BatchVerification: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-2 p-3 bg-blue-50 rounded border border-blue-200">
-                        <Activity className="text-blue-600" size={16} />
+                      <div className="flex items-center space-x-2 p-3 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                        <Activity size={16} style={{ color: 'var(--primary)' }} />
                         <div>
-                          <span className="text-gray-500 text-xs font-medium">
+                          <span className="text-xs font-medium" style={{ color: 'var(--muted-foreground)' }}>
                             Status
                           </span>
                           <div className="mt-0.5">
@@ -761,7 +761,8 @@ const BatchVerification: React.FC = () => {
                           <div className="mt-4 flex justify-end">
                             <button
                               onClick={handleExportCOA}
-                              className="flex items-center gap-2 px-4 py-2 bg-[#178EC8] text-white rounded hover:bg-[#5317AA] transition-colors"
+                              className="flex items-center gap-2 px-4 py-2 rounded transition-colors"
+                              style={{ background: 'var(--secondary)', color: 'var(--secondary-foreground)' }}
                             >
                               <Download size={16} />
                               <span>Export Certificate of Analysis</span>
@@ -784,38 +785,19 @@ const BatchVerification: React.FC = () => {
 
                   if (isVerified) {
                     return (
-                      <div className={`rounded border overflow-hidden ${selectedBatch?.status === 'APPROVED'
-                        ? 'bg-green-50 border-green-200'
-                        : 'bg-red-50 border-red-200'
-                        }`}>
+                      <div className="rounded border overflow-hidden" style={{ background: 'var(--card)', borderColor: 'var(--border)' }}>
                         <div className="p-4">
                           <div className="flex items-center space-x-3">
-                            <div
-                              className={`p-2 rounded ${selectedBatch?.status === 'APPROVED'
-                                ? 'bg-green-100'
-                                : 'bg-red-100'
-                                }`}
-                            >
+                            <div className="p-2 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
                               {selectedBatch?.status === 'APPROVED' ? (
-                                <CheckCircle
-                                  className="text-green-600"
-                                  size={20}
-                                />
+                                <CheckCircle size={20} style={{ color: 'var(--success, #16a34a)' }} />
                               ) : (
-                                <XCircle className="text-red-600" size={20} />
+                                <XCircle size={20} style={{ color: 'var(--destructive, #dc2626)' }} />
                               )}
                             </div>
                             <div>
-                              <h3
-                                className={`text-lg font-bold ${selectedBatch?.status === 'APPROVED'
-                                  ? 'text-green-900'
-                                  : 'text-red-900'
-                                  }`}
-                              >
-                                Batch{' '}
-                                {selectedBatch?.status === 'APPROVED'
-                                  ? 'Approved'
-                                  : 'Rejected'}
+                              <h3 className="text-lg font-bold" style={{ color: selectedBatch?.status === 'APPROVED' ? 'var(--success, #065f46)' : 'var(--destructive, #7f1d1d)' }}>
+                                Batch {selectedBatch?.status === 'APPROVED' ? 'Approved' : 'Rejected'}
                               </h3>
                               <p
                                 className={`text-sm ${selectedBatch?.status === 'APPROVED'
@@ -851,30 +833,24 @@ const BatchVerification: React.FC = () => {
                       selectedBatch && isBatchVerified(selectedBatch);
 
                     return (
-                      <div
-                        key={category}
-                        className="bg-white rounded border border-gray-200 overflow-hidden"
-                      >
-                        <div className="p-6 bg-[#5317AA] border-b border-gray-200">
+                      <div key={category} className="rounded border overflow-hidden" style={{ background: 'var(--card)', color: 'var(--card-foreground)', borderColor: 'var(--border)' }}>
+                        <div className="p-6" style={{ background: 'var(--primary)', color: 'var(--primary-foreground)', borderBottom: '1px solid var(--border)' }}>
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
-                              <div className="p-3 bg-white rounded">
-                                <Beaker className="text-[#5317AA]" size={20} />
+                              <div className="p-3 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                                <Beaker size={20} style={{ color: 'var(--primary)' }} />
                               </div>
                               <div>
-                                <h3 className="text-xl font-bold text-white">
+                                <h3 className="text-xl font-bold" style={{ color: 'var(--primary-foreground)' }}>
                                   {category}
                                 </h3>
-                                <p className="text-gray-200">
+                                <p style={{ color: 'var(--card-foreground)' }}>
                                   {(parameters as any[]).length} parameters
                                   {isVerified ? ' (verified)' : ' to verify'}
                                 </p>
                               </div>
                             </div>
-                            <div className={`px-4 py-2 rounded border font-bold ${isVerified
-                              ? 'bg-white text-gray-800 border-gray-300'
-                              : 'bg-[#178EC8] text-white border-[#178EC8]'
-                              }`}>
+                            <div className="px-4 py-2 rounded border font-bold" style={isVerified ? { background: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--border)' } : { background: 'var(--secondary)', color: 'var(--secondary-foreground)', borderColor: 'var(--secondary)' }}>
                               <span className="font-bold">
                                 {(parameters as any[]).length}
                               </span>
@@ -907,17 +883,17 @@ const BatchVerification: React.FC = () => {
 
                   if (!isVerified) {
                     return (
-                      <div className="bg-white rounded border border-gray-200 overflow-hidden">
-                        <div className="p-6 bg-[#5317AA] border-b border-gray-200">
+                      <div className="rounded border overflow-hidden" style={{ background: 'var(--card)', color: 'var(--card-foreground)', borderColor: 'var(--border)' }}>
+                        <div className="p-6" style={{ background: 'var(--primary)', color: 'var(--primary-foreground)', borderBottom: '1px solid var(--border)' }}>
                           <div className="flex items-center space-x-3">
-                            <div className="p-3 bg-white rounded">
-                              <Award className="text-[#5317AA]" size={20} />
+                            <div className="p-3 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                              <Award size={20} style={{ color: 'var(--primary)' }} />
                             </div>
                             <div>
-                              <h3 className="text-xl font-bold text-white">
+                              <h3 className="text-xl font-bold" style={{ color: 'var(--primary-foreground)' }}>
                                 Complete Verification
                               </h3>
-                              <p className="text-gray-200">
+                              <p style={{ color: 'var(--card-foreground)' }}>
                                 Save test results and make final decision
                               </p>
                             </div>
@@ -929,7 +905,8 @@ const BatchVerification: React.FC = () => {
                             <button
                               onClick={handleSaveVerifications}
                               disabled={updateParametersMutation.isPending}
-                              className="px-8 py-4 bg-[#178EC8] text-white rounded hover:bg-[#5317AA] disabled:opacity-50 transition-colors flex items-center gap-3 font-semibold text-lg"
+                              className="px-8 py-4 rounded disabled:opacity-50 transition-colors flex items-center gap-3 font-semibold text-lg"
+                              style={{ background: 'var(--secondary)', color: 'var(--secondary-foreground)' }}
                             >
                               <Save size={20} />
                               Save Progress
@@ -937,14 +914,12 @@ const BatchVerification: React.FC = () => {
 
                             <button
                               onClick={() => {
-                                const remarks = prompt(
-                                  'Enter rejection remarks:'
-                                );
-                                if (remarks)
-                                  handleCompleteBatch('REJECT', remarks);
+                                const remarks = prompt('Enter rejection remarks:');
+                                if (remarks) handleCompleteBatch('REJECT', remarks);
                               }}
                               disabled={completeBatchMutation.isPending}
-                              className="px-8 py-4 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 transition-colors flex items-center gap-3 font-semibold text-lg"
+                              className="px-8 py-4 rounded disabled:opacity-50 transition-colors flex items-center gap-3 font-semibold text-lg"
+                              style={{ background: 'var(--destructive)', color: 'var(--destructive-foreground)' }}
                             >
                               <X size={20} />
                               Reject Batch
@@ -953,7 +928,8 @@ const BatchVerification: React.FC = () => {
                             <button
                               onClick={() => handleCompleteBatch('APPROVE')}
                               disabled={completeBatchMutation.isPending}
-                              className="px-8 py-4 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50 transition-colors flex items-center gap-3 font-semibold text-lg"
+                              className="px-8 py-4 rounded disabled:opacity-50 transition-colors flex items-center gap-3 font-semibold text-lg"
+                              style={{ background: 'var(--success, #16a34a)', color: '#fff' }}
                             >
                               <Check size={20} />
                               Approve Batch
@@ -970,20 +946,20 @@ const BatchVerification: React.FC = () => {
           </div>
         ) : (
           /* Main Container */
-          <div className="bg-white rounded border border-gray-200 overflow-hidden">
+          <div className="rounded border overflow-hidden" style={{ background: 'var(--card)', color: 'var(--card-foreground)', borderColor: 'var(--border)' }}>
             {/* Header Section */}
-            <div className="bg-[#5317AA] p-6 border-b border-gray-200">
+            <div className="p-6" style={{ background: 'var(--primary)', color: 'var(--primary-foreground)', borderBottom: '1px solid var(--border)' }}>
               <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-3 lg:space-y-0">
                 <div>
                   <div className="flex items-center space-x-3 mb-1">
-                    <div className="p-2 bg-white rounded">
-                      <Shield className="text-[#5317AA]" size={20} />
+                    <div className="p-2 rounded" style={{ background: 'var(--card)', border: '1px solid var(--border)' }}>
+                      <Shield size={20} style={{ color: 'var(--primary)' }} />
                     </div>
                     <div>
-                      <h1 className="text-2xl font-bold text-white">
+                      <h1 className="text-2xl font-bold" style={{ color: 'var(--primary-foreground)' }}>
                         Batch Verification
                       </h1>
-                      <p className="text-gray-200 text-sm mt-0.5">
+                      <p className="text-sm mt-0.5" style={{ color: 'var(--card-foreground)' }}>
                         Review and verify quality parameters for submitted
                         batches
                       </p>
@@ -994,7 +970,7 @@ const BatchVerification: React.FC = () => {
             </div>
 
             {/* Search and Filters Section */}
-            <div className="p-6 border-b border-gray-100 bg-gray-50">
+            <div className="p-6" style={{ borderBottom: '1px solid var(--border)', background: 'var(--card)' }}>
               <div className="flex flex-col md:flex-row gap-4 mb-4">
                 <div className="relative flex-grow">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -1005,42 +981,46 @@ const BatchVerification: React.FC = () => {
                     placeholder="Search by batch number or product..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 pr-4 py-2.5 w-full border border-gray-200 rounded focus:ring-2 focus:ring-[#5317AA] focus:border-[#5317AA] outline-none transition-colors shadow-sm text-sm"
+                    className="pl-10 pr-4 py-2.5 w-full rounded focus:outline-none transition-colors shadow-sm text-sm"
+                    style={{ border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--foreground)' }}
                   />
                 </div>
 
                 <div className="flex gap-2 shrink-0">
                   <button
                     onClick={() => setIsFilterOpen(!isFilterOpen)}
-                    className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 bg-white rounded hover:bg-gray-50 transition-colors text-sm"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded transition-colors text-sm"
+                    style={{ border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--foreground)' }}
                   >
-                    <Filter className="h-4 w-4 text-gray-600" />
-                    <span className="text-gray-700">Filters</span>
-                    <ChevronDown size={14} className="text-gray-600" />
+                    <Filter className="h-4 w-4" style={{ color: 'var(--muted-foreground)' }} />
+                    <span style={{ color: 'var(--foreground)' }}>Filters</span>
+                    <ChevronDown size={14} style={{ color: 'var(--muted-foreground)' }} />
                   </button>
 
                   <button
                     onClick={() => refetch()}
-                    className="flex items-center gap-2 px-4 py-2.5 border border-gray-200 bg-white rounded hover:bg-gray-50 transition-colors text-sm"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded transition-colors text-sm"
+                    style={{ border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--foreground)' }}
                   >
-                    <RefreshCw className="h-4 w-4 text-gray-600" />
-                    <span className="text-gray-700">Refresh</span>
+                    <RefreshCw className="h-4 w-4" style={{ color: 'var(--muted-foreground)' }} />
+                    <span style={{ color: 'var(--foreground)' }}>Refresh</span>
                   </button>
                 </div>
               </div>
 
               {/* Updated Filter Section */}
               {isFilterOpen && (
-                <div className="p-4 border border-gray-200 rounded bg-white">
+                <div className="p-4 rounded" style={{ border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--card-foreground)' }}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                      <label className="block text-xs font-medium mb-1" style={{ color: 'var(--muted-foreground)' }}>
                         Verification Status
                       </label>
                       <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value)}
-                        className="w-full p-2 border border-gray-200 rounded focus:ring-2 focus:ring-[#5317AA] focus:border-[#5317AA] outline-none text-sm"
+                        className="w-full p-2 rounded text-sm"
+                        style={{ border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--foreground)' }}
                       >
                         <option value="all">
                           All Batches ({statusCounts.all})
@@ -1061,19 +1041,21 @@ const BatchVerification: React.FC = () => {
                         setSearchTerm('');
                         setFilterStatus('all');
                       }}
-                      className="px-4 py-2 border border-gray-200 text-gray-700 rounded hover:bg-gray-50 transition-colors text-sm"
+                      className="px-4 py-2 rounded text-sm"
+                      style={{ border: '1px solid var(--border)', color: 'var(--muted-foreground)', background: 'var(--card)' }}
                     >
                       <div className="flex items-center gap-2">
-                        <RefreshCw size={14} />
+                        <RefreshCw size={14} style={{ color: 'var(--muted-foreground)' }} />
                         <span>Clear</span>
                       </div>
                     </button>
                     <button
                       onClick={() => setIsFilterOpen(false)}
-                      className="px-4 py-2 bg-[#5317AA] text-white rounded hover:bg-[#178EC8] transition-colors text-sm"
+                      className="px-4 py-2 rounded text-sm"
+                      style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
                     >
                       <div className="flex items-center gap-2">
-                        <Filter size={14} />
+                        <Filter size={14} style={{ color: 'var(--primary-foreground)' }} />
                         <span>Apply</span>
                       </div>
                     </button>
@@ -1086,26 +1068,26 @@ const BatchVerification: React.FC = () => {
             <div>
               {isLoading ? (
                 <div className="flex justify-center items-center py-16">
-                  <div className="rounded-full h-12 w-12 border-4 border-gray-200 border-t-[#5317AA] animate-spin" />
+                  <div className="rounded-full h-12 w-12 animate-spin" style={{ borderWidth: 4, borderStyle: 'solid', borderColor: 'var(--border)', borderTopColor: 'var(--primary)' }} />
                 </div>
               ) : filteredBatches.length === 0 ? (
-                <div className="p-12 text-center">
-                  <div className="p-3 bg-[#5317AA] rounded inline-block mb-4">
+                <div className="p-12 text-center" style={{ color: 'var(--foreground)' }}>
+                  <div className="p-3 rounded inline-block mb-4" style={{ background: 'var(--primary)' }}>
                     <Shield size={36} className="text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)' }}>
                     No batches found
                   </h3>
-                  <p className="text-gray-600 mb-6 max-w-md mx-auto text-sm">
+                  <p className="mb-6 max-w-md mx-auto text-sm" style={{ color: 'var(--muted-foreground)' }}>
                     No batches are currently available for verification or match
                     your search criteria.
                   </p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
+                  <table className="min-w-full" style={{ background: 'var(--card)', color: 'var(--card-foreground)', borderCollapse: 'separate', width: '100%' }}>
                     <thead>
-                      <tr className="bg-[#5317AA]">
+                      <tr style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}>
                         <th
                           scope="col"
                           className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider"
@@ -1114,104 +1096,101 @@ const BatchVerification: React.FC = () => {
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider"
+                          className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider"
+                          style={{ color: 'var(--primary-foreground)' }}
                         >
                           Product
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider"
+                          className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider"
+                          style={{ color: 'var(--primary-foreground)' }}
                         >
                           Production Date
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider"
+                          className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider"
+                          style={{ color: 'var(--primary-foreground)' }}
                         >
                           Maker
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider"
+                          className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider"
+                          style={{ color: 'var(--primary-foreground)' }}
                         >
                           Verification Status
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider"
+                          className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider"
+                          style={{ color: 'var(--primary-foreground)' }}
                         >
                           Parameters
                         </th>
                         <th
                           scope="col"
-                          className="px-6 py-4 text-right text-xs font-semibold text-white uppercase tracking-wider"
+                          className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider"
+                          style={{ color: 'var(--primary-foreground)' }}
                         >
                           Actions
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody style={{ background: 'var(--card)', color: 'var(--card-foreground)' }}>
                       {filteredBatches.map(
                         (batch: BatchForVerification) => (
-                          <tr
-                            key={batch.id}
-                            className="hover:bg-gray-50 transition-colors"
-                          >
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          <tr key={batch.id} className="transition-colors" style={{ borderBottom: '1px solid var(--border)' }}>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium" style={{ color: 'var(--foreground)' }}>
                               {batch.batchNumber}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--foreground)' }}>
                               <div>
-                                <div className="font-medium">
+                                <div className="font-medium" style={{ color: 'var(--foreground)' }}>
                                   {batch.product.name}
                                 </div>
-                                <div className="text-xs text-gray-500">
+                                <div className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
                                   {batch.product.code}
                                 </div>
                               </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--foreground)' }}>
                               {formatDate(batch.dateOfProduction)}
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--foreground)' }}>
                               {batch.maker.name}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                               <StatusBadge status={batch.status} />
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td className="px-6 py-4 whitespace-nowrap text-sm" style={{ color: 'var(--muted-foreground)' }}>
                               <div className="flex items-center">
-                                <BarChart3
-                                  size={14}
-                                  className="mr-1 text-gray-400"
-                                />
+                                <BarChart3 size={14} className="mr-1" style={{ color: 'var(--muted-foreground)' }} />
                                 {batch.totalParameters} parameters
                               </div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                               <button
                                 onClick={() => setSelectedBatchId(batch.id)}
-                                className={`px-3 py-2 rounded transition-colors flex items-center gap-1 ml-auto ${isBatchVerified(batch)
-                                  ? 'text-gray-600 hover:text-gray-800 bg-gray-50 hover:bg-gray-100'
-                                  : 'text-[#5317AA] hover:text-[#178EC8] bg-[#5317AA]/10 hover:bg-[#178EC8]/10'
-                                  }`}
-                                title={
-                                  isBatchVerified(batch)
-                                    ? 'View Details'
-                                    : 'Start Verification'
+                                className="px-3 py-2 rounded transition-colors flex items-center gap-1 ml-auto"
+                                style={isBatchVerified(batch)
+                                  ? { color: 'var(--muted-foreground)', background: 'var(--muted)' }
+                                  : { color: 'var(--primary)', background: 'rgba(83,23,170,0.06)' }
                                 }
+                                title={isBatchVerified(batch) ? 'View Details' : 'Start Verification'}
                               >
                                 {isBatchVerified(batch) ? (
                                   <>
                                     <Eye className="h-4 w-4" />
-                                    <span className="text-xs font-medium">
+                                    <span className="text-xs font-medium" style={{ color: 'inherit' }}>
                                       View
                                     </span>
                                   </>
                                 ) : (
                                   <>
                                     <Shield className="h-4 w-4" />
-                                    <span className="text-xs font-medium">
+                                    <span className="text-xs font-medium" style={{ color: 'inherit' }}>
                                       Verify
                                     </span>
                                   </>

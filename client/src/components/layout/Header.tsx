@@ -110,10 +110,38 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
   };
 
   useEffect(() => {
-    // Always set theme to light on mount
-    document.body.classList.remove('dark');
-    setTheme('light');
-    localStorage.setItem('theme', 'light');
+    // Check for saved theme preference, default to light
+    const savedTheme = localStorage.getItem('theme');
+
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+      setTheme('dark');
+    } else {
+      document.body.classList.remove('dark');
+      setTheme('light');
+      // Set default if not already set
+      if (!savedTheme) {
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    // Listen for system theme changes if no manual preference is set
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      const currentSavedTheme = localStorage.getItem('theme');
+      if (!currentSavedTheme) {
+        if (e.matches) {
+          document.body.classList.add('dark');
+          setTheme('dark');
+        } else {
+          document.body.classList.remove('dark');
+          setTheme('light');
+        }
+      }
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   // GSAP animation for brand name on mount

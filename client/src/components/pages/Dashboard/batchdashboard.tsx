@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import {
   BarChart3,
   Users,
-  
+
   Clipboard,
   FileBox,
   CheckCircle2,
@@ -241,12 +241,12 @@ const Dashboard: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div style={{ background: 'var(--background)', color: 'var(--foreground)' }} className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">Batch processing overview</p>
+          <h1 className="text-3xl font-bold" style={{ color: 'var(--foreground)' }}>Dashboard</h1>
+          <p className="mt-1" style={{ color: 'var(--muted-foreground)' }}>Batch processing overview</p>
         </div>
 
         {/* Stats Grid */}
@@ -254,17 +254,18 @@ const Dashboard: React.FC = () => {
           {stats.map((stat, index) => (
             <div
               key={index}
-              className="bg-white border border-secondary/20 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
+              style={{ background: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--secondary)' }}
+              className="border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                  <p className="text-3xl font-bold text-gray-900 mt-1">
+                  <p className="text-sm font-medium" style={{ color: 'var(--muted-foreground)' }}>{stat.title}</p>
+                  <p className="text-3xl font-bold" style={{ color: 'var(--foreground)' }}>
                     {stat.value.toLocaleString()}
                   </p>
                 </div>
-                <div className={`p-3 rounded-lg ${stat.bg}`}>
-                  <stat.icon className={`w-6 h-6 ${stat.color}`} />
+                <div className="p-3 rounded-lg" style={{ background: 'var(--secondary)', color: 'var(--secondary-foreground)' }}>
+                  <stat.icon className="w-6 h-6" />
                 </div>
               </div>
             </div>
@@ -274,10 +275,10 @@ const Dashboard: React.FC = () => {
         {/* Charts Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Batch Trends */}
-          <div className="bg-white border border-secondary/20 rounded-lg p-6 shadow-sm">
+          <div style={{ background: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--secondary)' }} className="border rounded-lg p-6 shadow-sm">
             <div className="flex items-center mb-4">
-              <TrendingUp className="w-5 h-5 text-primary mr-2" />
-              <h2 className="text-lg font-semibold text-gray-900">Batch Trends</h2>
+              <TrendingUp className="w-5 h-5" style={{ color: 'var(--primary)' }} />
+              <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>Batch Trends</h2>
             </div>
             {trendLoading ? (
               <div className="h-64 flex items-center justify-center">
@@ -311,10 +312,10 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Status Distribution */}
-          <div className="bg-white border border-secondary/20 rounded-lg p-6 shadow-sm">
+          <div style={{ background: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--secondary)' }} className="border rounded-lg p-6 shadow-sm">
             <div className="flex items-center mb-4">
-              <PieChart className="w-5 h-5 text-secondary mr-2" />
-              <h2 className="text-lg font-semibold text-gray-900">Status Distribution</h2>
+              <PieChart className="w-5 h-5" style={{ color: 'var(--secondary)' }} />
+              <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>Status Distribution</h2>
             </div>
             {statusDistributionChartData ? (
               <div className="h-64 flex items-center justify-center">
@@ -344,10 +345,10 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Product Performance */}
-        <div className="bg-white border border-secondary/20 rounded-lg p-6 shadow-sm mb-8">
+        <div style={{ background: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--secondary)' }} className="border rounded-lg p-6 shadow-sm mb-8">
           <div className="flex items-center mb-4">
-            <FileBox className="w-5 h-5 text-primary mr-2" />
-            <h2 className="text-lg font-semibold text-gray-900">Top Products Performance</h2>
+            <FileBox className="w-5 h-5" style={{ color: 'var(--primary)' }} />
+            <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>Top Products Performance</h2>
           </div>
           {productLoading ? (
             <div className="h-64 flex items-center justify-center">
@@ -381,23 +382,23 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Summary Section */}
-        <div className="bg-gray-50 border border-secondary/20 rounded-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Quick Summary</h2>
+        <div style={{ background: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--secondary)' }} className="border rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--foreground)' }}>Quick Summary</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div>
-              <span className="font-medium text-gray-700">Approval Rate: </span>
-              <span className="text-primary font-semibold">
+              <span className="font-medium" style={{ color: 'var(--muted-foreground)' }}>Approval Rate: </span>
+              <span style={{ color: 'var(--primary)' }} className="font-semibold">
                 {overviewData?.batches?.total ?
                   Math.round((overviewData.batches.approved / overviewData.batches.total) * 100) : 0}%
               </span>
             </div>
             <div>
-              <span className="font-medium text-gray-700">Active Products: </span>
-              <span className="text-secondary font-semibold">{overviewData?.products || 0}</span>
+              <span className="font-medium" style={{ color: 'var(--muted-foreground)' }}>Active Products: </span>
+              <span style={{ color: 'var(--secondary)' }} className="font-semibold">{overviewData?.products || 0}</span>
             </div>
             <div>
-              <span className="font-medium text-gray-700">Total Standards: </span>
-              <span className="text-primary font-semibold">{overviewData?.standards || 0}</span>
+              <span className="font-medium" style={{ color: 'var(--muted-foreground)' }}>Total Standards: </span>
+              <span style={{ color: 'var(--primary)' }} className="font-semibold">{overviewData?.standards || 0}</span>
             </div>
           </div>
         </div>
