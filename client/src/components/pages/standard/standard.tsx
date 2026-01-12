@@ -7,7 +7,6 @@ import StandardCategory from '../../ui/standard/stanadardCategory/StandardCatego
 import AddStandardCategory from '../../ui/standard/stanadardCategory/AddCategory';
 import StandardParameterList from '../../ui/standard/standardParameters/standardParamlist';
 import AddStandardParameter from '../../ui/standard/standardParameters/AddStandardParameter';
-import { motion } from 'framer-motion';
 import { Folder, Package, Tag } from 'lucide-react';
 
 interface TabConfig {
@@ -16,8 +15,6 @@ interface TabConfig {
   addComponent: React.ReactNode;
   icon: React.ReactNode;
   description: string;
-  gradient: string;
-  shadow: string;
 }
 
 // Minimalistic, bold, slightly larger Tabs with border
@@ -30,17 +27,16 @@ const SimpleTabs: React.FC<{
   activeTab: number;
   onTabChange: (index: number) => void;
 }> = ({ tabs, activeTab, onTabChange }) => (
-  <div className="w-full bg-[var(--background)]">
+  <div className="w-full bg-white">
     <div className="flex space-x-3 px-0 pb-2">
       {tabs.map((tab, idx) => (
         <button
           key={tab.title}
           onClick={() => onTabChange(idx)}
           className={`flex items-center gap-2 px-5 py-3 text-base font-extrabold rounded-t-lg transition-all duration-150 relative
-            ${
-              activeTab === idx
-                ? 'text-[var(--primary)]'
-                : 'text-[var(--muted-foreground)] hover:text-[var(--primary)]'
+            ${activeTab === idx
+              ? 'text-[#5317AA]'
+              : 'text-gray-600 hover:text-[#5317AA]'
             }
           `}
         >
@@ -48,8 +44,7 @@ const SimpleTabs: React.FC<{
           {tab.title}
           {activeTab === idx && (
             <span
-              className="absolute left-0 right-0 -bottom-1 h-1 rounded-full bg-[var(--primary)]"
-              style={{}}
+              className="absolute left-0 right-0 -bottom-1 h-1 rounded-full bg-[#5317AA]"
             />
           )}
         </button>
@@ -99,8 +94,6 @@ export default function Standard() {
         />
       ),
       icon: tabIcons.category,
-      gradient: '',
-      shadow: '',
     },
     {
       title: 'Parameters',
@@ -113,8 +106,6 @@ export default function Standard() {
         />
       ),
       icon: tabIcons.parameters,
-      gradient: '',
-      shadow: '',
     },
     {
       title: 'Units',
@@ -124,28 +115,21 @@ export default function Standard() {
         <AddUnit onSuccess={handleBackToList} onCancel={handleBackToList} />
       ),
       icon: tabIcons.unit,
-      gradient: '',
-      shadow: '',
     },
   ];
 
   const tabContent = showAddComponent ? (
-    <motion.div
-      className="h-full bg-[var(--background)]"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className="border-b border-[var(--border)] p-6 pb-4 flex items-center justify-between">
+    <div className="h-full bg-white">
+      <div className="border-b border-gray-200 p-6 pb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-lg bg-[var(--primary)]/10">
+          <div className="p-3 rounded-lg bg-[#5317AA]/10">
             {tabs[activeTab].icon}
           </div>
           <div>
-            <h2 className="text-2xl font-extrabold text-[var(--foreground)]">
+            <h2 className="text-2xl font-extrabold text-gray-900">
               Add {tabs[activeTab].title.slice(0, -1)}
             </h2>
-            <p className="text-sm text-[var(--muted-foreground)] mt-1">
+            <p className="text-sm text-gray-600 mt-1">
               Create a new {tabs[activeTab].title.toLowerCase().slice(0, -1)}{' '}
               entry
             </p>
@@ -153,35 +137,27 @@ export default function Standard() {
         </div>
         <button
           onClick={handleBackToList}
-          className="py-2 px-5 bg-[var(--background)] border border-[var(--border)] text-[var(--foreground)] text-base font-semibold rounded-lg flex items-center gap-2 hover:bg-[var(--muted)] transition-all"
+          className="py-2 px-5 bg-white border border-gray-200 text-gray-900 text-base font-semibold rounded-lg flex items-center gap-2 hover:bg-gray-50 transition-colors"
         >
           <ArrowLeft size={18} />
           Back to List
         </button>
       </div>
       <div className="p-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          {tabs[activeTab].addComponent}
-        </motion.div>
+        {tabs[activeTab].addComponent}
       </div>
-    </motion.div>
+    </div>
   ) : (
     <div className="relative h-full">
-      <div className="h-full bg-[var(--background)]">
+      <div className="h-full bg-white">
         {tabs[activeTab].content}
       </div>
-      <motion.button
+      <button
         onClick={handleAddClick}
-        className="fixed bottom-8 right-8 z-50 h-14 w-14 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-xl flex items-center justify-center shadow-lg hover:bg-[var(--primary)]/90 transition-all text-2xl"
-        whileHover={{ scale: 1.07 }}
-        whileTap={{ scale: 0.96 }}
+        className="fixed bottom-8 right-8 z-50 h-14 w-14 bg-[#5317AA] text-white rounded-xl flex items-center justify-center shadow-lg hover:bg-[#178EC8] transition-colors text-2xl"
       >
         <Plus size={28} />
-      </motion.button>
+      </button>
     </div>
   );
 
@@ -191,21 +167,21 @@ export default function Standard() {
     icon: tab.icon,
   }));
 
- return (
-   <div className="flex flex-col h-full bg-[var(--background)]">
-     <SimpleTabs
-       tabs={tabsData}
-       activeTab={activeTab}
-       onTabChange={(index) => {
-         setActiveTab(index);
-         setShowAddComponent(false);
-       }}
-     />
-     <div className="flex-1 flex justify-start">
-       {' '}
-       {/* <-- justify-start to align left */}
-       <div className="w-full max-w-6xl">{tabContent}</div>
-     </div>
-   </div>
- );
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <SimpleTabs
+        tabs={tabsData}
+        activeTab={activeTab}
+        onTabChange={(index) => {
+          setActiveTab(index);
+          setShowAddComponent(false);
+        }}
+      />
+      <div className="flex-1 flex justify-start">
+        {' '}
+        {/* <-- justify-start to align left */}
+        <div className="w-full max-w-6xl">{tabContent}</div>
+      </div>
+    </div>
+  );
 }
