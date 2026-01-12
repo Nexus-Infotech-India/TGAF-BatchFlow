@@ -137,6 +137,7 @@ const RawDashboard: React.FC = () => {
         setProductWiseWaste(
           productWiseWasteRes.data.productWiseWasteStock || []
         );
+        console.log(productWiseWasteRes.data)
         // ...existing code...
         //setProductWiseWaste(productWiseWasteRes.data || []);
         //setProductWiseWaste(productWiseWasteRes.data.productWiseWaste || { afterCleaning: [], afterProcessing: [] })
@@ -167,6 +168,95 @@ const RawDashboard: React.FC = () => {
         duration: 0.5,
       },
     },
+  };
+
+  // Normalize and aggregate product wise waste data
+  const normalizedProductWiseWaste = productWiseWaste.reduce((acc: any, item: any) => {
+    const normalizedName = item.productName?.toUpperCase() || 'UNKNOWN';
+    if (!acc[normalizedName]) {
+      acc[normalizedName] = {
+        productName: normalizedName,
+        rawMaterial: (item.rawMaterial || 0),
+        cleaning: (item.cleaning || 0),
+        wasteAfterCleaning: (item.wasteAfterCleaning || 0),
+        cleaned: (item.cleaned || 0),
+        processing: (item.processing || 0),
+        wasteAfterProcessing: (item.wasteAfterProcessing || 0),
+        processed: (item.processed || 0),
+      };
+    } else {
+      acc[normalizedName].rawMaterial += (item.rawMaterial || 0);
+      acc[normalizedName].cleaning += (item.cleaning || 0);
+      acc[normalizedName].wasteAfterCleaning += (item.wasteAfterCleaning || 0);
+      acc[normalizedName].cleaned += (item.cleaned || 0);
+      acc[normalizedName].processing += (item.processing || 0);
+      acc[normalizedName].wasteAfterProcessing += (item.wasteAfterProcessing || 0);
+      acc[normalizedName].processed += (item.processed || 0);
+    }
+    return acc;
+  }, {});
+
+  const normalizedProductList = Object.values(normalizedProductWiseWaste);
+
+  // Normalize Total Raw Material Stock details
+  const normalizedTotalStockDetails = totalStockDetails.reduce((acc: any, item: any) => {
+    const normalizedName = item.rawMaterial?.name?.toUpperCase() || 'UNKNOWN';
+    const key = `${normalizedName}-${item.warehouse?.name || 'UNKNOWN'}`;
+
+    if (!acc[key]) {
+      acc[key] = {
+        rawMaterial: {
+          name: normalizedName,
+          skuCode: item.rawMaterial?.skuCode || '',
+        },
+        warehouse: item.warehouse,
+        currentQuantity: (item.currentQuantity || 0),
+      };
+    } else {
+      acc[key].currentQuantity += (item.currentQuantity || 0);
+    }
+    return acc;
+  }, {});
+
+  const normalizedTotalStockDetailsList = Object.values(normalizedTotalStockDetails);
+
+  // Create product-wise aggregation for pie chart
+  const productQuantityMap = normalizedTotalStockDetailsList.reduce((acc: Record<string, number>, item: any) => {
+    const productName = item.rawMaterial?.name || 'UNKNOWN';
+    if (!acc[productName]) {
+      acc[productName] = 0;
+    }
+    acc[productName] += item.currentQuantity;
+    return acc;
+  }, {});
+
+  const productLabels = Object.keys(productQuantityMap);
+  const productQuantities = Object.values(productQuantityMap);
+
+  const productPieData = {
+    labels: productLabels,
+    datasets: [
+      {
+        label: 'Quantity by Product',
+        data: productQuantities,
+        backgroundColor: [
+          '#3B82F6',
+          '#10B981',
+          '#F59E0B',
+          '#EF4444',
+          '#8B5CF6',
+          '#06B6D4',
+          '#84CC16',
+          '#F97316',
+          '#EC4899',
+          '#14B8A6',
+          '#F43F5E',
+          '#6366F1',
+        ],
+        borderWidth: 2,
+        borderColor: '#ffffff',
+      },
+    ],
   };
 
   const warehouseLabels = stockDistribution.map(
@@ -219,21 +309,21 @@ const RawDashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-background to-primary/5 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col items-center gap-6 bg-white p-8 rounded-2xl shadow-lg"
+          className="flex flex-col items-center gap-6 bg-card p-8 rounded-2xl shadow-lg border border-border"
         >
           <div className="relative">
-            <Loader2 className="h-12 w-12 animate-spin text-blue-600" />
-            <div className="absolute inset-0 h-12 w-12 animate-ping rounded-full bg-blue-200 opacity-20"></div>
+            <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            <div className="absolute inset-0 h-12 w-12 animate-ping rounded-full bg-primary/20 opacity-20"></div>
           </div>
           <div className="text-center">
-            <p className="text-gray-800 font-semibold text-lg">
+            <p className="text-foreground font-semibold text-lg">
               Loading Dashboard
             </p>
-            <p className="text-gray-500 text-sm">Fetching real-time data...</p>
+            <p className="text-muted-foreground text-sm">Fetching real-time data...</p>
           </div>
         </motion.div>
       </div>
@@ -241,31 +331,31 @@ const RawDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-background dark:bg-background relative">
       {/* Enhanced Header */}
       <motion.header
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-white/80 backdrop-blur-sm shadow-sm border-b border-gray-200/50 sticky top-0 z-10"
+        className="bg-card/80 dark:bg-card/60 backdrop-blur-sm shadow-sm border-b border-border sticky top-0 z-0"
       >
-        <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg">
-                <Factory className="h-7 w-7 text-white" />
+              <div className="p-3 bg-gradient-to-r from-primary to-blue-600 rounded-xl shadow-lg">
+                <Factory className="h-7 w-2 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-gray-900">
+                <h1 className="text-3xl font-bold text-foreground">
                   Raw Material Dashboard
                 </h1>
-                <p className="text-gray-600 mt-1">
+                <p className="text-muted-foreground mt-1">
                   Real-time inventory monitoring and analytics
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3 bg-green-50 px-4 py-2 rounded-full">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-green-700 font-medium text-sm">
+            <div className="flex items-center gap-3 bg-primary/15 dark:bg-primary/10 px-4 py-2 rounded-full">
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+              <span className="text-primary font-medium text-sm">
                 Live Data
               </span>
             </div>
@@ -273,7 +363,7 @@ const RawDashboard: React.FC = () => {
         </div>
       </motion.header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="mx-auto px-6 py-8 relative z-0">
         {/* Enhanced Stats Grid - Better 4-column layout */}
         <motion.div
           variants={containerVariants}
@@ -288,16 +378,59 @@ const RawDashboard: React.FC = () => {
               value={totalStock}
               unit="kg/litre"
               color="blue"
-              details={totalStockDetails}
+              details={normalizedTotalStockDetailsList}
               detailsFormatter={(details) =>
                 details.map(
-                  (s) =>
+                  (s: any) =>
                     `${s.rawMaterial?.name || ''} (${s.rawMaterial?.skuCode || ''}): ${s.currentQuantity} in ${s.warehouse?.name || ''}`
                 )
               }
               large={true}
             />
           </div>
+
+          {/* Product-wise Quantity Pie Chart */}
+          <motion.div
+            variants={{
+              hidden: { y: 20, opacity: 0 },
+              visible: { y: 0, opacity: 1 },
+            }}
+            whileHover={{ y: -4, boxShadow: '0 20px 25px -5px rgba(59, 130, 246, 0.15)' }}
+            className="lg:col-span-2 bg-card rounded-2xl p-6 shadow-lg border border-border/50 transition-all duration-300"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 bg-gradient-to-br from-primary/20 to-blue-500/20 dark:from-primary/15 dark:to-blue-500/10 rounded-lg">
+                <Package className="h-5 w-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-foreground">
+                  Product-wise Stock Distribution
+                </h3>
+                <p className="text-muted-foreground text-sm">By product quantity</p>
+              </div>
+            </div>
+            <div className="h-80 flex items-center justify-center">
+              <Doughnut
+                data={productPieData}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  plugins: {
+                    legend: {
+                      position: 'bottom',
+                      labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: { size: 11 },
+                      },
+                    },
+                  },
+                  cutout: '60%',
+                }}
+              />
+            </div>
+          </motion.div>
+
           <StatCard
             icon={<Truck className="h-6 w-6" />}
             label="POs Pending Delivery"
@@ -371,32 +504,32 @@ const RawDashboard: React.FC = () => {
             variants={itemVariants}
             initial="hidden"
             animate="visible"
-            className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200/50 p-6"
+            className="lg:col-span-2 bg-card rounded-2xl shadow-sm border border-border p-6"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-blue-50 rounded-lg">
-                <Recycle className="h-5 w-5 text-blue-600" />
+              <div className="p-2 bg-primary/15 dark:bg-primary/10 rounded-lg">
+                <Recycle className="h-5 w-5 text-primary" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">
+                <h3 className="text-xl font-semibold text-foreground">
                   Product-wise Waste Table
                 </h3>
-                <p className="text-gray-500 text-sm">
+                <p className="text-muted-foreground text-sm">
                   Summary of raw material, cleaning, waste, and processing
                 </p>
               </div>
             </div>
             <div className="overflow-x-auto">
-              <table className="min-w-full text-xs md:text-sm border">
+              <table className="min-w-full text-xs md:text-sm border border-border">
                 <thead>
-                  <tr className="bg-gradient-to-r from-gray-50 to-blue-50">
-                    <th className="border px-2 py-2 text-left font-semibold">
+                  <tr className="bg-gradient-to-r from-primary/10 to-primary/5 dark:from-primary/15 dark:to-primary/10">
+                    <th className="border px-2 py-2 text-left font-semibold text-foreground">
                       Metric
                     </th>
-                    {productWiseWaste?.map((p: any) => (
+                    {normalizedProductList.map((p: any) => (
                       <th
-                        key={p.productId}
-                        className="border px-2 py-2 font-semibold text-center"
+                        key={p.productName}
+                        className="border px-2 py-2 font-semibold text-center text-foreground"
                       >
                         {p.productName}
                       </th>
@@ -419,14 +552,14 @@ const RawDashboard: React.FC = () => {
                     },
                     { label: 'Processed', key: 'processed' },
                   ].map((row) => (
-                    <tr key={row.key} className="even:bg-blue-50/30">
-                      <td className="border px-2 py-2 font-medium">
+                    <tr key={row.key} className="even:bg-primary/5 dark:even:bg-primary/10 border-b border-border hover:bg-primary/8 dark:hover:bg-primary/15 transition-colors">
+                      <td className="border px-2 py-2 font-medium text-foreground">
                         {row.label}
                       </td>
-                      {productWiseWaste?.map((p: any) => (
+                      {normalizedProductList.map((p: any) => (
                         <td
-                          key={p.productId + row.key}
-                          className="border px-2 py-2 text-center"
+                          key={p.productName + row.key}
+                          className="border px-2 py-2 text-center text-foreground"
                         >
                           {p[row.key]}
                         </td>
@@ -443,17 +576,18 @@ const RawDashboard: React.FC = () => {
             variants={itemVariants}
             initial="hidden"
             animate="visible"
-            className="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-6"
+            whileHover={{ y: -4, boxShadow: '0 20px 25px -5px rgba(10, 184, 129, 0.15)' }}
+            className="bg-card rounded-2xl shadow-lg border border-border/50 p-6 transition-all duration-300"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-green-50 rounded-lg">
-                <Warehouse className="h-5 w-5 text-green-600" />
+              <div className="p-3 bg-gradient-to-br from-green-500/20 to-emerald-500/20 dark:from-green-500/15 dark:to-emerald-500/10 rounded-lg">
+                <Warehouse className="h-5 w-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-foreground">
                   Stock Distribution
                 </h3>
-                <p className="text-gray-500 text-sm">By warehouse</p>
+                <p className="text-muted-foreground text-sm">By warehouse</p>
               </div>
             </div>
             <div className="h-80 flex items-center justify-center">
@@ -484,17 +618,18 @@ const RawDashboard: React.FC = () => {
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="bg-white rounded-2xl shadow-sm border border-gray-200/50 p-6 mb-8"
+          whileHover={{ y: -4, boxShadow: '0 20px 25px -5px rgba(239, 68, 68, 0.15)' }}
+          className="bg-card rounded-2xl shadow-lg border border-border/50 p-6 transition-all duration-300"
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 bg-yellow-50 rounded-lg">
-              <TrendingUp className="h-5 w-5 text-yellow-600" />
+            <div className="p-3 bg-gradient-to-br from-red-500/20 to-orange-500/20 dark:from-red-500/15 dark:to-orange-500/10 rounded-lg">
+              <TrendingUp className="h-5 w-5 text-red-600 dark:text-red-400" />
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-900">
+              <h3 className="text-xl font-semibold text-foreground">
                 Product-wise Conversion Efficiency
               </h3>
-              <p className="text-gray-500 text-sm">
+              <p className="text-muted-foreground text-sm">
                 Conversion percentage by product SKU
               </p>
             </div>
@@ -534,25 +669,26 @@ const RawDashboard: React.FC = () => {
             variants={itemVariants}
             initial="hidden"
             animate="visible"
-            className="bg-white rounded-2xl shadow-sm border border-gray-200/50 overflow-hidden"
+            whileHover={{ y: -4, boxShadow: '0 20px 25px -5px rgba(239, 68, 68, 0.15)' }}
+            className="bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden transition-all duration-300"
           >
-            <div className="px-6 py-4 bg-gradient-to-r from-red-50 to-orange-50 border-b border-gray-200/50">
+            <div className="px-6 py-4 bg-gradient-to-r from-destructive/20 to-destructive/15 dark:from-destructive/25 dark:to-destructive/20 border-b border-destructive/20">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-red-100 rounded-lg">
-                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                  <div className="p-3 bg-destructive/25 dark:bg-destructive/35 rounded-lg">
+                    <AlertTriangle className="h-5 w-5 text-destructive" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-foreground">
                       Low Stock Alerts
                     </h3>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-muted-foreground text-sm">
                       Items below minimum reorder level
                     </p>
                   </div>
                 </div>
                 {lowStockAlerts.length > 0 && (
-                  <span className="px-3 py-1 bg-red-100 text-red-800 text-sm font-medium rounded-full">
+                  <span className="px-3 py-1 bg-destructive/30 text-destructive dark:bg-destructive/40 text-sm font-semibold rounded-full">
                     {lowStockAlerts.length} alerts
                   </span>
                 )}
@@ -561,13 +697,13 @@ const RawDashboard: React.FC = () => {
             <div className="p-6 max-h-96 overflow-y-auto">
               {lowStockAlerts.length === 0 ? (
                 <div className="text-center py-8">
-                  <div className="p-4 bg-green-50 rounded-full w-fit mx-auto mb-4">
-                    <Package className="h-8 w-8 text-green-600" />
+                  <div className="p-4 bg-primary/20 dark:bg-primary/30 rounded-full w-fit mx-auto mb-4">
+                    <Package className="h-8 w-8 text-primary" />
                   </div>
-                  <p className="text-gray-600 font-medium">
+                  <p className="text-foreground font-medium">
                     All stock levels are healthy!
                   </p>
-                  <p className="text-gray-400 text-sm mt-1">
+                  <p className="text-muted-foreground text-sm mt-1">
                     No items below minimum reorder levels
                   </p>
                 </div>
@@ -579,29 +715,29 @@ const RawDashboard: React.FC = () => {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="p-4 bg-red-50 rounded-xl border border-red-100"
+                      className="p-4 bg-destructive/15 dark:bg-destructive/10 rounded-xl border border-destructive/30 dark:border-destructive/40"
                     >
                       <div className="flex items-center justify-between mb-2">
                         <div>
-                          <p className="font-semibold text-gray-900">
+                          <p className="font-semibold text-foreground">
                             {alert.name}
                           </p>
-                          <p className="text-sm text-gray-500 font-mono">
+                          <p className="text-sm text-muted-foreground font-mono">
                             {alert.skuCode}
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="text-sm text-gray-500">Available</p>
-                          <p className="text-lg font-bold text-red-600">
+                          <p className="text-sm text-muted-foreground">Available</p>
+                          <p className="text-lg font-bold text-destructive">
                             {alert.available}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">
+                        <span className="text-muted-foreground">
                           Min Level: {alert.minReorderLevel}
                         </span>
-                        <span className="text-red-600 font-medium">
+                        <span className="text-destructive font-medium">
                           {alert.minReorderLevel - alert.available} units short
                         </span>
                       </div>
@@ -617,18 +753,18 @@ const RawDashboard: React.FC = () => {
             variants={itemVariants}
             initial="hidden"
             animate="visible"
-            className="bg-white rounded-2xl shadow-sm border border-gray-200/50 overflow-hidden"
+            className="bg-card rounded-2xl shadow-sm border border-border overflow-hidden"
           >
-            <div className="px-6 py-4 bg-gradient-to-r from-orange-50 to-red-50 border-b border-gray-200/50">
+            <div className="px-6 py-4 bg-gradient-to-r from-orange-50/50 dark:from-orange-950/20 to-red-50/50 dark:to-red-950/20 border-b border-border">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-orange-100 rounded-lg">
-                  <Recycle className="h-5 w-5 text-orange-600" />
+                <div className="p-2 bg-orange-100/50 dark:bg-orange-900/30 rounded-lg">
+                  <Recycle className="h-5 w-5 text-orange-600 dark:text-orange-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-foreground">
                     Waste Stock Breakdown
                   </h3>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     Detailed waste analysis
                   </p>
                 </div>
@@ -636,17 +772,17 @@ const RawDashboard: React.FC = () => {
             </div>
             <div className="p-6">
               <div className="grid grid-cols-2 gap-6 mb-6">
-                <div className="text-center p-4 bg-blue-50 rounded-xl">
-                  <Search className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600 mb-1">After Cleaning</p>
-                  <p className="text-2xl font-bold text-blue-600">
+                <div className="text-center p-4 bg-primary/15 dark:bg-primary/10 rounded-xl">
+                  <Search className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground mb-1">After Cleaning</p>
+                  <p className="text-2xl font-bold text-primary">
                     {wasteStock.afterCleaning.total}
                   </p>
                 </div>
-                <div className="text-center p-4 bg-green-50 rounded-xl">
-                  <Settings className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600 mb-1">After Processing</p>
-                  <p className="text-2xl font-bold text-green-600">
+                <div className="text-center p-4 bg-primary/15 dark:bg-primary/10 rounded-xl">
+                  <Settings className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <p className="text-sm text-muted-foreground mb-1">After Processing</p>
+                  <p className="text-2xl font-bold text-primary">
                     {wasteStock.afterProcessing.total}
                   </p>
                 </div>
@@ -655,8 +791,8 @@ const RawDashboard: React.FC = () => {
               <div className="space-y-4 max-h-48 overflow-y-auto">
                 {wasteStock.afterCleaning.details.length > 0 && (
                   <div>
-                    <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
-                      <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                    <h4 className="font-medium text-foreground mb-2 flex items-center gap-2">
+                      <div className="w-3 h-3 bg-primary rounded-full"></div>
                       Cleaning Waste Details
                     </h4>
                     <div className="space-y-2">
@@ -665,9 +801,9 @@ const RawDashboard: React.FC = () => {
                         .map((w, idx) => (
                           <div
                             key={idx}
-                            className="flex items-center justify-between p-2 bg-blue-50 rounded-lg text-sm"
+                            className="flex items-center justify-between p-2 bg-primary/10 dark:bg-primary/15 rounded-lg text-sm"
                           >
-                            <span className="text-gray-700">
+                            <span className="text-foreground">
                               {w.warehouse?.name || 'N/A'}
                             </span>
                             <span className="font-medium text-blue-700">
@@ -681,8 +817,8 @@ const RawDashboard: React.FC = () => {
 
                 {wasteStock.afterProcessing.details.length > 0 && (
                   <div>
-                    <h4 className="font-medium text-gray-900 mb-2 flex items-center gap-2">
-                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <h4 className="font-medium text-foreground mb-2 flex items-center gap-2">
+                      <div className="w-3 h-3 bg-primary rounded-full"></div>
                       Processing Waste Details
                     </h4>
                     <div className="space-y-2">
@@ -691,12 +827,12 @@ const RawDashboard: React.FC = () => {
                         .map((w, idx) => (
                           <div
                             key={idx}
-                            className="flex items-center justify-between p-2 bg-green-50 rounded-lg text-sm"
+                            className="flex items-center justify-between p-2 bg-primary/10 dark:bg-primary/15 rounded-lg text-sm"
                           >
-                            <span className="text-gray-700">
+                            <span className="text-foreground">
                               {w.warehouse?.name || 'N/A'}
                             </span>
-                            <span className="font-medium text-green-700">
+                            <span className="font-medium text-primary">
                               {w.quantity}
                             </span>
                           </div>
@@ -802,9 +938,8 @@ const StatCard: React.FC<StatCardProps> = ({
       className="relative group"
     >
       <div
-        className={`bg-white rounded-2xl p-6 shadow-sm border border-gray-200/50 hover:shadow-lg transition-all duration-300 cursor-pointer h-full ${
-          large ? 'lg:p-8' : ''
-        }`}
+        className={`bg-card rounded-2xl p-6 shadow-sm border border-border hover:shadow-lg transition-all duration-300 cursor-pointer h-full ${large ? 'lg:p-8' : ''
+          }`}
         title={tooltip}
         onClick={() => details && setShowDetails(!showDetails)}
       >
@@ -815,11 +950,11 @@ const StatCard: React.FC<StatCardProps> = ({
             <div className="text-white">{icon}</div>
           </div>
           {details && details.length > 0 && (
-            <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+            <button className="p-2 hover:bg-primary/10 dark:hover:bg-primary/15 rounded-lg transition-colors">
               {showDetails ? (
-                <ChevronUp className="h-4 w-4 text-gray-400" />
+                <ChevronUp className="h-4 w-4 text-muted-foreground" />
               ) : (
-                <ChevronDown className="h-4 w-4 text-gray-400" />
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
               )}
             </button>
           )}
@@ -827,7 +962,7 @@ const StatCard: React.FC<StatCardProps> = ({
 
         <div className="space-y-2">
           <h3
-            className={`text-sm font-medium text-gray-600 ${large ? 'lg:text-base' : ''}`}
+            className={`text-sm font-medium text-muted-foreground ${large ? 'lg:text-base' : ''}`}
           >
             {label}
           </h3>
@@ -839,7 +974,7 @@ const StatCard: React.FC<StatCardProps> = ({
             </span>
             {unit && (
               <span
-                className={`text-gray-500 ${large ? 'text-base' : 'text-sm'}`}
+                className={`text-muted-foreground ${large ? 'text-base' : 'text-sm'}`}
               >
                 {unit}
               </span>
@@ -852,7 +987,7 @@ const StatCard: React.FC<StatCardProps> = ({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="mt-4 pt-4 border-t border-gray-200"
+            className="mt-4 pt-4 border-t border-border"
           >
             <div className="space-y-2 max-h-32 overflow-y-auto">
               {detailsFormatter(details)
@@ -860,13 +995,13 @@ const StatCard: React.FC<StatCardProps> = ({
                 .map((detail, idx) => (
                   <div
                     key={idx}
-                    className="text-xs text-gray-600 p-2 bg-gray-50 rounded-lg"
+                    className="text-xs text-foreground p-2 bg-primary/10 dark:bg-primary/15 rounded-lg"
                   >
                     {detail}
                   </div>
                 ))}
               {detailsFormatter(details).length > 3 && (
-                <div className="text-xs text-gray-500 italic text-center">
+                <div className="text-xs text-muted-foreground italic text-center">
                   +{detailsFormatter(details).length - 3} more items
                 </div>
               )}

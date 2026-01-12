@@ -1,8 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Login from './components/pages/Auth/Login';
-import Home from './components/pages/Home';
+
 import StandardPage from './components/pages/standard/standard';
 import AppLayout from './components/layout/AppLayout';
 import ActivityLog from './components/pages/ActivityLog/ActivityLog';
@@ -57,7 +57,7 @@ const App = () => {
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/training/respond" element={<TrainingRespond />} />
 

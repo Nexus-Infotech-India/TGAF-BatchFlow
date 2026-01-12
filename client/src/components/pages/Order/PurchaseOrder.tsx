@@ -76,6 +76,23 @@ const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString();
 };
 
+const calculateDaysToDeliver = (orderDate: string, expectedDate: string) => {
+  if (!orderDate || !expectedDate) return 'N/A';
+  try {
+    const order = new Date(orderDate);
+    const expected = new Date(expectedDate);
+
+    // Check if dates are valid
+    if (isNaN(order.getTime()) || isNaN(expected.getTime())) return 'N/A';
+
+    const diffTime = Math.abs(expected.getTime() - order.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return `${diffDays} days`;
+  } catch (error) {
+    return 'N/A';
+  }
+};
+
 const PurchaseOrderList: React.FC = () => {
   const [orders, setOrders] = useState<PurchaseOrder[]>([]);
   const [, setLoading] = useState(false);
@@ -391,6 +408,12 @@ const PurchaseOrderList: React.FC = () => {
                       Expected Date
                     </div>
                   </th>
+                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2">
+                      <Clock className="w-3.5 h-3.5" />
+                      Days to Deliver
+                    </div>
+                  </th>
                   <th className="px-6 py-4 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     <div className="inline-flex items-center gap-2 justify-center">
                       <Boxes className="w-3.5 h-3.5" />
@@ -409,9 +432,11 @@ const PurchaseOrderList: React.FC = () => {
                       transition={{ duration: 0.3, delay: index * 0.05 }}
                     >
                       <td className="px-2 py-4 whitespace-nowrap text-center">
-                        <button
-                          className="focus:outline-none"
+                        <motion.button
+                          className="p-2 rounded-lg hover:bg-primary/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/50 active:scale-95"
                           onClick={() => toggleExpand(order.id)}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
                           aria-label={
                             expandedOrderIds.includes(order.id)
                               ? 'Collapse'
@@ -419,11 +444,11 @@ const PurchaseOrderList: React.FC = () => {
                           }
                         >
                           {expandedOrderIds.includes(order.id) ? (
-                            <ChevronUp className="w-5 h-5 text-muted-foreground cursor-pointer" />
+                            <ChevronUp className="w-5 h-5 text-primary transition-colors duration-200" />
                           ) : (
-                            <ChevronRight className="w-5 h-5 text-muted-foreground cursor-pointer" />
+                            <ChevronRight className="w-5 h-5 text-primary transition-colors duration-200" />
                           )}
-                        </button>
+                        </motion.button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                         {order.poNumber}
@@ -437,6 +462,9 @@ const PurchaseOrderList: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/80">
                         {formatDate(order.expectedDate)}
                       </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/80 font-medium">
+                        {calculateDaysToDeliver(order.orderDate, order.expectedDate)}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-semibold text-primary">
                         {order.items.length}
                       </td>
@@ -448,68 +476,80 @@ const PurchaseOrderList: React.FC = () => {
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
-                          className="bg-muted/50"
+                          className="bg-gradient-to-b from-primary/5 to-transparent border-t-2 border-primary/20"
                         >
-                          <td colSpan={6} className="px-10 py-4">
-                            <div>
-                              <div className="mb-2 font-semibold text-foreground text-lg">
-                                Order Items
+                          <td colSpan={7} className="px-6 py-6">
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 0.1 }}
+                            >
+                              <div className="mb-4">
+                                <h3 className="font-bold text-lg text-foreground flex items-center gap-2">
+                                  <Package className="w-5 h-5 text-primary" />
+                                  Order Items ({order.items.length})
+                                </h3>
                               </div>
-                              <div className="overflow-x-auto rounded-lg border border-border bg-card">
-                                <table className="min-w-full divide-y divide-border">
+                              <div className="rounded-lg border border-primary/20 bg-card overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                                <table className="w-full">
                                   <thead>
-                                    <tr className="bg-muted/50">
-                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-left">
+                                    <tr className="bg-gradient-to-r from-primary/10 to-primary/5 border-b border-primary/20">
+                                      <th className="px-6 py-4 text-xs font-bold text-primary uppercase tracking-wider text-left">
                                         SKU Code
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-left">
-                                        Name
+                                      <th className="px-6 py-4 text-xs font-bold text-primary uppercase tracking-wider text-left">
+                                        Product Name
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-left">
+                                      <th className="px-6 py-4 text-xs font-bold text-primary uppercase tracking-wider text-left">
                                         Unit
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-right">
-                                        Quantity Ordered
+                                      <th className="px-6 py-4 text-xs font-bold text-primary uppercase tracking-wider text-right">
+                                        Quantity
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-right">
+                                      <th className="px-6 py-4 text-xs font-bold text-primary uppercase tracking-wider text-right">
                                         Rate
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
+                                      <th className="px-6 py-4 text-xs font-bold text-primary uppercase tracking-wider text-center">
                                         Status
                                       </th>
-                                      <th className="px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
-                                        Change Status
+                                      <th className="px-6 py-4 text-xs font-bold text-primary uppercase tracking-wider text-center">
+                                        Update
                                       </th>
                                     </tr>
                                   </thead>
-                                  <tbody>
-                                    {order.items.map((item) => {
+                                  <tbody className="divide-y divide-border/50">
+                                    {order.items.map((item, itemIndex) => {
                                       const raw =
                                         rawMaterialCache[item.rawMaterialId];
                                       return (
-                                        <tr
+                                        <motion.tr
                                           key={item.id}
-                                          className="hover:bg-accent transition"
+                                          initial={{ opacity: 0, x: -20 }}
+                                          animate={{ opacity: 1, x: 0 }}
+                                          transition={{ delay: itemIndex * 0.05 }}
+                                          className="hover:bg-primary/5 transition-colors duration-200"
                                         >
-                                          <td className="px-4 py-2 text-sm text-foreground font-mono">
+                                          <td className="px-6 py-4 text-sm font-mono text-foreground font-medium">
                                             {raw ? (
-                                              raw.skuCode
+                                              <span className="bg-primary/10 text-primary px-3 py-1 rounded-md">
+                                                {raw.skuCode}
+                                              </span>
                                             ) : (
                                               <span className="text-muted-foreground italic">
                                                 Loading...
                                               </span>
                                             )}
                                           </td>
-                                          <td className="px-4 py-2 text-sm text-foreground">
+                                          <td className="px-6 py-4 text-sm text-foreground">
                                             {raw ? (
-                                              raw.name
+                                              <span className="font-medium">{raw.name}</span>
                                             ) : (
                                               <span className="text-muted-foreground italic">
                                                 Loading...
                                               </span>
                                             )}
                                           </td>
-                                          <td className="px-4 py-2 text-sm text-foreground">
+                                          <td className="px-6 py-4 text-sm text-foreground/80">
                                             {raw ? (
                                               raw.unitOfMeasurement ||
                                               raw.unit || (
@@ -523,28 +563,27 @@ const PurchaseOrderList: React.FC = () => {
                                               </span>
                                             )}
                                           </td>
-                                          <td className="px-4 py-2 text-sm text-foreground text-right">
+                                          <td className="px-6 py-4 text-sm text-foreground text-right font-semibold">
                                             {item.quantityOrdered}
                                           </td>
-                                          <td className="px-4 py-2 text-sm text-foreground text-right">
+                                          <td className="px-6 py-4 text-sm text-right font-semibold text-primary">
                                             {item.rate}
                                           </td>
-                                          <td className="px-4 py-2 text-center">
+                                          <td className="px-6 py-4 text-center">
                                             <span
-                                              className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${statusColors[item.status] || 'bg-muted text-foreground border-border'}`}
+                                              className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${statusColors[item.status] || 'bg-muted text-foreground border-border'}`}
                                             >
                                               {statusIcons[item.status] || null}
                                               {item.status}
                                             </span>
                                           </td>
-                                          <td className="px-4 py-2 text-center">
+                                          <td className="px-6 py-4 text-center">
                                             <div className="relative group inline-block">
                                               <select
-                                                className={`border border-input rounded px-2 py-1 text-xs bg-background focus:ring-2 focus:ring-ring focus:border-ring ${
-                                                  item.status === 'Received'
-                                                    ? 'opacity-60 cursor-not-allowed'
-                                                    : 'cursor-pointer'
-                                                }`}
+                                                className={`border-2 border-primary/30 rounded-lg px-3 py-2 text-xs bg-background focus:border-primary focus:ring-2 focus:ring-primary/30 font-medium transition-all hover:border-primary/50 ${item.status === 'Received'
+                                                  ? 'opacity-50 cursor-not-allowed'
+                                                  : 'cursor-pointer'
+                                                  }`}
                                                 value={item.status}
                                                 disabled={
                                                   itemUpdatingId === item.id ||
@@ -569,20 +608,20 @@ const PurchaseOrderList: React.FC = () => {
                                                 )}
                                               </select>
                                               {item.status === 'Received' && (
-                                                <div className="absolute left-1/2 -translate-x-1/2 mt-1 w-48 bg-foreground text-background text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none z-10 transition-opacity duration-200">
+                                                <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-56 bg-foreground text-background text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 pointer-events-none z-10 transition-opacity duration-200 font-medium shadow-lg">
                                                   After receiving, you can't
-                                                  update status.
+                                                  update status
                                                 </div>
                                               )}
                                             </div>
                                           </td>
-                                        </tr>
+                                        </motion.tr>
                                       );
                                     })}
                                   </tbody>
                                 </table>
                               </div>
-                            </div>
+                            </motion.div>
                           </td>
                         </motion.tr>
                       )}

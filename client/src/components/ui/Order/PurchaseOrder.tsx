@@ -297,7 +297,7 @@ const PurchaseOrder = () => {
             <div className="ml-auto">
               <button
                 type="button"
-                className="inline-flex items-center px-4 py-2 border border-input bg-background text-foreground rounded-lg hover:bg-accent transition"
+                className="inline-flex items-center px-4 py-2 border border-input bg-background text-foreground  hover:bg-accent transition"
                 onClick={() => navigate('/raw/purchase-history')}
               >
                 Back to List
@@ -374,18 +374,18 @@ const PurchaseOrder = () => {
                     <div className="relative">
                       <select
                         id="vendor"
-                        className="w-full bg-background border border-input rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring appearance-none"
+                        className="w-full text-foreground bg-background border border-input rounded-xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring appearance-none"
                         value={vendorId}
                         onChange={(e) => setVendorId(e.target.value)}
                         required
                       >
-                        <option value="">Select Vendor</option>
+                        <option className='text-foreground' value="">Select Vendor</option>
                         {vendors.map((v) => (
-                          <option key={v.id} value={v.id}>
+                          <option key={v.id} value={v.id} className="text-foreground">
                             {v.name}
                           </option>
                         ))}
-                        <option value="new">+ New Vendor</option>
+                        <option value="new" className='text-foreground'>+ New Vendor</option>
                       </select>
                       <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
                     </div>
@@ -395,10 +395,10 @@ const PurchaseOrder = () => {
                     <input
                       type="date"
                       id="orderDate"
-                      className="w-full bg-background border border-input rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
+                      className="w-full bg-card/100 text-foreground  border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                       value={orderDate}
-                      disabled
-                      readOnly
+                      onChange={(e) => setOrderDate(e.target.value)}
+                      required
                     />
                   </FormField>
 
@@ -410,7 +410,7 @@ const PurchaseOrder = () => {
                     <input
                       type="date"
                       id="expectedDate"
-                      className="w-full bg-background border border-input rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
+                      className="w-full bg-card/100 text-foreground  border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                       value={expectedDate}
                       onChange={(e) => setExpectedDate(e.target.value)}
                       required
@@ -453,7 +453,7 @@ const PurchaseOrder = () => {
                           </label>
                           <div className="relative">
                             <select
-                              className="w-full bg-background border border-input rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring appearance-none"
+                              className="w-full bg-card border border-border rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary appearance-none text-foreground"
                               value={
                                 showRawMaterialBoxIdx === idx
                                   ? 'new'
@@ -468,13 +468,13 @@ const PurchaseOrder = () => {
                               }
                               required
                             >
-                              <option value="">Select Raw Material</option>
+                              <option value="" className="text-muted-foreground">Select Raw Material</option>
                               {rawMaterials.map((rm) => (
-                                <option key={rm.id} value={rm.id}>
+                                <option key={rm.id} value={rm.id} className="text-foreground">
                                   {rm.name}
                                 </option>
                               ))}
-                              <option value="new">+ New Raw Material</option>
+                              <option value="new" className="text-primary">+ New Raw Material</option>
                             </select>
                             <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                           </div>
@@ -487,7 +487,7 @@ const PurchaseOrder = () => {
                           <input
                             type="number"
                             min={1}
-                            className="w-full bg-background border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
+                            className="w-full bg-card border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-foreground"
                             value={
                               item.quantityOrdered === 0
                                 ? ''
@@ -513,7 +513,7 @@ const PurchaseOrder = () => {
                               type="number"
                               min={0}
                               step="0.01"
-                              className="w-full bg-background border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
+                              className="w-full bg-card border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-foreground"
                               value={item.rate === 0 ? '' : item.rate}
                               onChange={(e) =>
                                 handleItemChange(
