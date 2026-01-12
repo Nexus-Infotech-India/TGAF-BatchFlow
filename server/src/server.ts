@@ -18,8 +18,12 @@ const PORT = process.env.PORT;
 
 // Middleware
 app.use(cors({
-  origin: ['https://tgaf.inventory.nexusinfotech.co', 'http://localhost:5173'],
-  credentials: true, // if you need cookies/auth headers
+  origin: [
+    'https://tgaf.inventory.nexusinfotech.co',
+    'http://localhost:5173',
+    'https://batch-flow-one.vercel.app' // <-- Add this line
+  ],
+  credentials: true,
 }));
 app.use(express.json());
 
