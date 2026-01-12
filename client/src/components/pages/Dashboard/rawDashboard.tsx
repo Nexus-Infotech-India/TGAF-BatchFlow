@@ -341,11 +341,12 @@ const RawDashboard: React.FC = () => {
         <div className="mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-r from-primary to-blue-600 rounded-xl shadow-lg">
-                <Factory className="h-7 w-2 text-white" />
+              <div className="p-4 bg-gradient-to-br from-primary to-blue-600 rounded-2xl shadow-lg ring-1 ring-white/30">
+                <Factory className="h-7 w-7 text-white" />
               </div>
+
               <div>
-                <h1 className="text-3xl font-bold text-foreground">
+                <h1 className="text-3xl font-bold caveat-brush-bold text-secondary">
                   Raw Material Dashboard
                 </h1>
                 <p className="text-muted-foreground mt-1">

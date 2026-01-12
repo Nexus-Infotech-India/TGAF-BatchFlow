@@ -177,23 +177,38 @@ const Login = () => {
           <div className="relative z-10 w-full h-full">
             <motion.div
               key={currentSlide}
-              initial={{ opacity: 0, scale: 1.02 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
+              initial={{
+                opacity: 0,
+                scale: 1.03,
+                backgroundPosition: "0% center",
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                backgroundPosition: "100% center",
+              }}
+              transition={{
+                opacity: { duration: 0.8 },
+                scale: { duration: 1 },
+                backgroundPosition: {
+                  duration: 9,       // 👈 slow movement
+                  ease: "linear",
+                },
+              }}
               style={{
                 backgroundImage: `linear-gradient(rgba(6,8,19,0.45), rgba(6,8,19,0.35)), url(${slides[currentSlide].image})`,
                 backgroundSize: "cover",
-                backgroundPosition: "center",
               }}
               className="w-full h-full rounded-lg p-6 flex flex-col justify-between text-white"
             >
+
               <div>
                 <div className="flex items-center gap-2">
                 </div>
 
-                <h2 className="mt-6 text-2xl lg:text-3xl font-extrabold leading-tight whitespace-pre-line caveat-brush-regular">
+                <h1 className="mt-6 text-4xl lg:text-4xl font-extrabold leading-tight whitespace-pre-line caveat-brush-bold">
                   {slides[currentSlide].title}
-                </h2>
+                </h1>
                 <p className="mt-2 max-w-md text-sm text-white/90">{slides[currentSlide].desc}</p>
               </div>
 
@@ -212,9 +227,8 @@ const Login = () => {
                       <button
                         key={i}
                         onClick={() => setCurrentSlide(i)}
-                        className={`w-2 h-2 rounded-full transition-all ${
-                          i === currentSlide ? "bg-white" : "bg-white/40"
-                        }`}
+                        className={`w-2 h-2 rounded-full transition-all ${i === currentSlide ? "bg-white" : "bg-white/40"
+                          }`}
                         aria-label={`go to slide ${i + 1}`}
                       />
                     ))}
@@ -246,7 +260,7 @@ const Login = () => {
                 <img src={logo} alt="logo1" className="w-30 h-30 object-contain mx-auto" />
               </div>
 
-              <motion.h2 initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-4xl font-extrabold text-slate-900 mb-0 caveat-brush-regular">
+              <motion.h2 initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="text-4xl font-extrabold text-slate-900 mb-0 caveat-brush-regular ">
                 Welcome Back
               </motion.h2>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} className="text-slate-600 text-sm">
@@ -258,7 +272,7 @@ const Login = () => {
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email Field */}
             <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-              <label htmlFor="email" className="block text-sm font-semibold text-slate-700 mb-1">
+              <label htmlFor="email" className="block text-lg font-semibold text-slate-700 mb-1 caveat-brush-regular">
                 Email Address
               </label>
               <div className="relative group">
@@ -280,7 +294,7 @@ const Login = () => {
 
             {/* Password Field */}
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-              <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-1">
+              <label htmlFor="password" className="block text-lg font-semibold text-slate-700 mb-1 caveat-brush-regular">
                 Password
               </label>
               <div className="relative group">
@@ -317,11 +331,10 @@ const Login = () => {
                   />
                   <motion.div
                     animate={{ scale: rememberMe ? 1 : 0.8 }}
-                    className={`w-5 h-5 rounded border-2 transition-all ${
-                      rememberMe
+                    className={`w-5 h-5 rounded border-2 transition-all ${rememberMe
                         ? "bg-gradient-to-r from-blue-500 to-purple-600 border-purple-600"
                         : "border-slate-300 group-hover:border-blue-400"
-                    }`}
+                      }`}
                   >
                     {rememberMe && <Check size={14} className="text-white m-auto" />}
                   </motion.div>
@@ -344,7 +357,7 @@ const Login = () => {
             {/* Submit Button */}
             <motion.button
               type="submit"
-              className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden relative group"
+              className="w-full py-2 px-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden relative group"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               disabled={loginMutation.isPending}
@@ -378,7 +391,7 @@ const Login = () => {
               </div>
             </motion.button>
 
-            
+
           </form>
         </motion.div>
       </div>
