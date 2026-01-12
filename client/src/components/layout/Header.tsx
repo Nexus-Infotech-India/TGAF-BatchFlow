@@ -288,59 +288,68 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
         <div className="px-4 md:px-8 py-2 relative z-10">
           <div className="flex items-center justify-between">
             {/* Brand Logo and Name */}
-           <div
-  ref={brandRef}
-  className="flex items-center gap-4 hover:scale-105 transition-transform duration-300 cursor-pointer"
-  style={{ perspective: "1000px" }}
->
-
-
-  <img
-    src={logo}
-    alt="NexInventory Logo"
-    className="h-25 md:h-20 object-contain drop-shadow-sm"
-  />
-</div>
+            <div
+              ref={brandRef}
+              className="flex items-center gap-3 md:gap-4 hover:scale-105 transition-transform duration-300 cursor-pointer"
+              style={{ perspective: "1000px" }}
+              tabIndex={0}
+              aria-label="Home"
+            >
+              <img
+                src={logo}
+                alt="NexInventory Logo"
+                className="h-12 md:h-14 object-contain drop-shadow-sm"
+                style={{ marginRight: 0 }}
+              />
+            </div>
             {/* Action Buttons */}
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2 md:gap-2.5">
               {/* Theme Toggle Button */}
               <motion.button
-                className="p-2 rounded-lg transition-all duration-300 group"
+                className="p-2 md:p-2.5 rounded-lg transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-primary"
                 onClick={toggleTheme}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                title={
-                  theme === 'dark'
-                    ? 'Switch to Light Mode'
-                    : 'Switch to Dark Mode'
-                }
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.96 }}
+                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                aria-label="Toggle theme"
                 style={{
                   color: 'var(--muted-foreground)',
                   background: 'var(--card)',
                   border: '1px solid var(--border)',
+                  minWidth: 40,
+                  minHeight: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
                 {theme === 'dark' ? (
-                  <Sun size={16} className="transition-colors" />
+                  <Sun size={20} className="transition-colors" style={{ color: 'var(--primary)' }} />
                 ) : (
-                  <Moon size={16} className="transition-colors" />
+                  <Moon size={20} className="transition-colors" style={{ color: 'var(--primary)' }} />
                 )}
               </motion.button>
               {/* Search Button */}
               <div className="relative">
                 <motion.button
-                  className="p-2 rounded-lg transition-all duration-300 group"
+                  className="p-2 md:p-2.5 rounded-lg transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-primary"
                   onClick={toggleSearchPanel}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.96 }}
                   title="Quick Search"
+                  aria-label="Quick Search"
                   style={{
                     color: 'var(--muted-foreground)',
                     background: 'var(--card)',
                     border: '1px solid var(--border)',
+                    minWidth: 40,
+                    minHeight: 40,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <Search size={16} className="transition-colors" />
+                  <Search size={20} className="transition-colors" style={{ color: 'var(--primary)' }} />
                 </motion.button>
                 {/* Search Panel */}
                 <AnimatePresence>
@@ -356,6 +365,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
                         backdropFilter: 'blur(20px)',
                         background: 'var(--popover)',
                         border: '1px solid var(--border)',
+                        
                       }}
                     >
                       <div
@@ -369,7 +379,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
                           <Search
                             size={16}
                             className="absolute left-2.5 top-1/2 transform -translate-y-1/2"
-                            style={{ color: 'var(--muted-foreground)' }}
+                            style={{ color: 'var(--sidebar-primary)' }}
                           />
                           <input
                             type="text"
@@ -441,34 +451,46 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
               </div>
               {/* Media Library */}
               <motion.button
-                className="p-2 rounded-lg transition-all duration-300 group"
+                className="p-2 md:p-2.5 rounded-lg transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-primary"
                 onClick={navigateToMediaLibrary}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.06 }}
+                whileTap={{ scale: 0.96 }}
                 title="Media Library"
+                aria-label="Media Library"
                 style={{
-                  color: 'var(--accent-foreground)',
+                  color: 'var(--sidebar-primary)',
                   background: 'var(--card)',
                   border: '1px solid var(--border)',
+                  minWidth: 40,
+                  minHeight: 40,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                <Library size={16} className="transition-colors" />
+                <Library size={20} className="transition-colors" style={{ color: 'var(--primary)' }} />
               </motion.button>
               {/* Activity Logs */}
               <div className="relative">
                 <motion.button
-                  className="p-2 rounded-lg transition-all duration-300 group relative"
+                  className="p-2 md:p-2.5 rounded-lg transition-all duration-200 group relative focus:outline-none focus:ring-2 focus:ring-primary"
                   onClick={toggleActivityLogs}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.06 }}
+                  whileTap={{ scale: 0.96 }}
                   title="Recent Activity"
+                  aria-label="Recent Activity"
                   style={{
                     color: 'var(--sidebar-primary)',
                     background: 'var(--card)',
                     border: '1px solid var(--border)',
+                    minWidth: 40,
+                    minHeight: 40,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <History size={16} className="transition-colors" />
+                  <History size={20} className="transition-colors" style={{ color: 'var(--primary)' }} />
                   <motion.div
                     className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full"
                     animate={{ scale: [1, 1.2, 1], opacity: [0.7, 1, 0.7] }}
@@ -728,7 +750,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
                       boxShadow: '0 2px 8px 0 var(--sidebar-primary)',
                     }}
                   >
-                    <User size={14} />
+                    <User size={18} style={{ color: 'white' }} />
                     <motion.div
                       className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 border rounded-full"
                       animate={{ scale: [1, 1.2, 1] }}
