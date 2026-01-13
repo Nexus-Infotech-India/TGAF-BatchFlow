@@ -476,7 +476,7 @@ const AuditCalendar: React.FC = () => {
                       transition={{ delay: 0.2 }}
                       className="space-y-2"
                     >
-                      <label className="block text-sm font-semibold text-foreground flex items-center">
+                      <label className=" text-sm font-semibold text-foreground flex items-center">
                         <AlertCircle size={16} className="mr-2 text-emerald-600 dark:text-emerald-400" />
                         Status
                       </label>
@@ -501,7 +501,7 @@ const AuditCalendar: React.FC = () => {
                       transition={{ delay: 0.3 }}
                       className="space-y-2"
                     >
-                      <label className="block text-sm font-semibold text-foreground flex items-center">
+                      <label className=" text-sm font-semibold text-foreground flex items-center">
                         <Building size={16} className="mr-2 text-secondary" />
                         Department
                       </label>
