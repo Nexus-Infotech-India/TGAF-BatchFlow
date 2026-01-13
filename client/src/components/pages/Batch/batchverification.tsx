@@ -121,7 +121,8 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
           bgColor: 'var(--purple-50, #f5f3ff)',
           textColor: 'var(--purple, #7c3aed)',
           borderColor: 'var(--purple-200, #e9d5ff)',
-          icon: Clock,
+          // hide icon for submitted to avoid alignment issues
+          icon: undefined,
         };
       case 'approved':
         return {
@@ -148,12 +149,28 @@ const StatusBadge: React.FC<{ status: string }> = ({ status }) => {
   };
 
   const config = getStatusConfig(status);
-  const IconComponent = config.icon;
+  const IconComponent = config.icon as any | undefined;
 
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', padding: '0.375rem 0.75rem', borderRadius: 9999, fontSize: '0.75rem', fontWeight: 700, border: `1px solid ${config.borderColor}`, background: config.bgColor, color: config.textColor }}>
-      <IconComponent size={12} style={{ marginRight: 6, color: config.textColor }} />
-      {status.replace('_', ' ').toUpperCase()}
+    <div
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        padding: '0.375rem 0.75rem',
+        borderRadius: 9999,
+        fontSize: '0.75rem',
+        fontWeight: 700,
+        border: `1px solid ${config.borderColor}`,
+        background: config.bgColor,
+        color: config.textColor,
+      }}
+    >
+      {IconComponent && (
+        <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 16, height: 16, marginRight: 6, color: config.textColor }}>
+          <IconComponent size={12} />
+        </span>
+      )}
+      <span style={{ display: 'inline-block', lineHeight: 1 }}>{status.replace('_', ' ').toUpperCase()}</span>
     </div>
   );
 };

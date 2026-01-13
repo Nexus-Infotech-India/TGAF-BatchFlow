@@ -231,22 +231,22 @@ export default function ViewBatches() {
 
       const uniqueMethodologies = batch.parameterValuesByCategory
         ? Array.from(
-            new Set(
-              Object.values(batch.parameterValuesByCategory)
-                .flat()
-                .filter((param: any) => param.methodology)
-                .map((param: any) => param.methodology.name)
-            )
+          new Set(
+            Object.values(batch.parameterValuesByCategory)
+              .flat()
+              .filter((param: any) => param.methodology)
+              .map((param: any) => param.methodology.name)
           )
+        )
         : [];
 
       const activities =
         batch.recentActivities && batch.recentActivities.length > 0
           ? batch.recentActivities.map((activity: any) => ({
-              details: activity.details,
-              by: activity.User?.name || 'System',
-              date: formatDate(activity.createdAt),
-            }))
+            details: activity.details,
+            by: activity.User?.name || 'System',
+            date: formatDate(activity.createdAt),
+          }))
           : [];
 
       return {
@@ -530,55 +530,55 @@ export default function ViewBatches() {
               filters.productId ||
               filters.dateFrom ||
               filters.dateTo) && (
-              <div className="flex flex-wrap gap-2 mt-4">
-                {filters.status && (
-                  <div className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-xs border border-primary/20">
-                    Status: {filters.status}
-                    <button
-                      onClick={() => handleFilterChange('status', '')}
-                      className="ml-2 hover:text-primary/80"
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                )}
-                {filters.productId && (
-                  <div className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-xs border border-primary/20">
-                    Product:{' '}
-                    {products.find((p) => p.id === filters.productId)?.name ||
-                      filters.productId}
-                    <button
-                      onClick={() => handleFilterChange('productId', '')}
-                      className="ml-2 hover:text-primary/80"
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                )}
-                {filters.dateFrom && (
-                  <div className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-xs border border-primary/20">
-                    From: {filters.dateFrom}
-                    <button
-                      onClick={() => handleFilterChange('dateFrom', '')}
-                      className="ml-2 hover:text-primary/80"
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                )}
-                {filters.dateTo && (
-                  <div className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-xs border border-primary/20">
-                    To: {filters.dateTo}
-                    <button
-                      onClick={() => handleFilterChange('dateTo', '')}
-                      className="ml-2 hover:text-primary/80"
-                    >
-                      <X size={12} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {filters.status && (
+                    <div className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-xs border border-primary/20">
+                      Status: {filters.status}
+                      <button
+                        onClick={() => handleFilterChange('status', '')}
+                        className="ml-2 hover:text-primary/80"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  )}
+                  {filters.productId && (
+                    <div className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-xs border border-primary/20">
+                      Product:{' '}
+                      {products.find((p) => p.id === filters.productId)?.name ||
+                        filters.productId}
+                      <button
+                        onClick={() => handleFilterChange('productId', '')}
+                        className="ml-2 hover:text-primary/80"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  )}
+                  {filters.dateFrom && (
+                    <div className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-xs border border-primary/20">
+                      From: {filters.dateFrom}
+                      <button
+                        onClick={() => handleFilterChange('dateFrom', '')}
+                        className="ml-2 hover:text-primary/80"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  )}
+                  {filters.dateTo && (
+                    <div className="flex items-center bg-primary/10 text-primary px-3 py-1 rounded-full text-xs border border-primary/20">
+                      To: {filters.dateTo}
+                      <button
+                        onClick={() => handleFilterChange('dateTo', '')}
+                        className="ml-2 hover:text-primary/80"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
           </div>
 
           {/* Table Section */}
@@ -728,18 +728,17 @@ export default function ViewBatches() {
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center space-x-2">
                               <span
-                                className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${
-                                  statusColors[
-                                    batch.status as keyof typeof statusColors
+                                className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border ${statusColors[
+                                  batch.status as keyof typeof statusColors
                                   ]
-                                }`}
+                                  }`}
                               >
                                 {
                                   statusIcons[
-                                    batch.status as keyof typeof statusIcons
+                                  batch.status as keyof typeof statusIcons
                                   ]
                                 }
-                                {batch.status}
+                                <span className="leading-none">{batch.status}</span>
                               </span>
                             </div>
                           </td>
@@ -807,7 +806,7 @@ export default function ViewBatches() {
                         <span className="font-medium text-foreground">
                           {Math.min(
                             batchesData.pagination.page *
-                              batchesData.pagination.limit,
+                            batchesData.pagination.limit,
                             batchesData.pagination.totalCount
                           )}
                         </span>{' '}
@@ -823,11 +822,10 @@ export default function ViewBatches() {
                             handlePageChange(Math.max(1, filters.page! - 1))
                           }
                           disabled={filters.page === 1}
-                          className={`p-2 rounded-md ${
-                            filters.page === 1
+                          className={`p-2 rounded-md ${filters.page === 1
                               ? 'text-muted-foreground cursor-not-allowed'
                               : 'text-foreground hover:bg-muted'
-                          }`}
+                            }`}
                           whileHover={filters.page !== 1 ? { scale: 1.1 } : {}}
                           whileTap={filters.page !== 1 ? { scale: 0.9 } : {}}
                         >
@@ -864,11 +862,10 @@ export default function ViewBatches() {
                               <motion.button
                                 key={page}
                                 onClick={() => handlePageChange(page)}
-                                className={`px-3 py-1 rounded-md ${
-                                  currentPage === page
+                                className={`px-3 py-1 rounded-md ${currentPage === page
                                     ? 'bg-primary text-primary-foreground'
                                     : 'text-foreground hover:bg-muted'
-                                }`}
+                                  }`}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
                                 transition={{
@@ -894,11 +891,10 @@ export default function ViewBatches() {
                           disabled={
                             filters.page === batchesData.pagination.totalPages
                           }
-                          className={`p-2 rounded-md ${
-                            filters.page === batchesData.pagination.totalPages
+                          className={`p-2 rounded-md ${filters.page === batchesData.pagination.totalPages
                               ? 'text-muted-foreground cursor-not-allowed'
                               : 'text-foreground hover:bg-muted'
-                          }`}
+                            }`}
                           whileHover={
                             filters.page !== batchesData.pagination.totalPages
                               ? { scale: 1.1 }

@@ -149,24 +149,23 @@ export default function Standard() {
         <div className="w-full max-w-6xl" style={{ background: 'var(--card)', color: 'var(--foreground)', borderRadius: '16px' }}>
           {showAddComponent ? (
             <div>
-              <div className="border-b border-gray-200 p-6 pb-4 flex items-center justify-between" style={{ background: 'var(--card)', color: 'var(--foreground)' }}>
+              <div className="border-b border-border p-6 pb-4 flex items-center justify-between bg-card">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 rounded-lg" style={{ background: 'rgba(83,23,170,0.08)' }}>
+                  <div className="p-3 rounded-lg bg-primary/10 text-primary">
                     {tabs[activeTab].icon}
                   </div>
                   <div>
-                    <h2 className="text-2xl font-extrabold" style={{ color: 'var(--foreground)' }}>
+                    <h2 className="text-2xl font-extrabold text-foreground">
                       Add {tabs[activeTab].title.slice(0, -1)}
                     </h2>
-                    <p className="text-sm mt-1" style={{ color: 'var(--muted-foreground)' }}>
+                    <p className="text-sm mt-1 text-muted-foreground">
                       Create a new {tabs[activeTab].title.toLowerCase().slice(0, -1)} entry
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={handleBackToList}
-                  className="py-2 px-5 border border-gray-200 text-base font-semibold rounded-lg flex items-center gap-2 hover:bg-gray-50 transition-colors"
-                  style={{ background: 'var(--card)', color: 'var(--foreground)' }}
+                  className="py-2 px-5 border border-border text-base font-semibold rounded-lg flex items-center gap-2 bg-card text-foreground hover:bg-muted transition-colors"
                 >
                   <ArrowLeft size={18} />
                   Back to List

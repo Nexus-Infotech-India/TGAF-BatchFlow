@@ -167,15 +167,15 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
       header: ({ column }) => (
         <button
           onClick={() => column.toggleSorting()}
-          className="flex items-center gap-2 font-semibold text-gray-900 hover:text-[#5317AA] transition-colors group"
+          className="flex items-center gap-2 font-semibold text-foreground hover:text-primary transition-colors group"
         >
-          <div className="p-1.5 rounded-lg bg-[#5317AA]/10 text-[#5317AA] group-hover:bg-[#5317AA]/20 transition-colors">
+          <div className="p-1.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
             <Type size={14} />
           </div>
           Name
           <ArrowUpDown
             size={12}
-            className="text-gray-500 group-hover:text-[#5317AA] transition-colors"
+            className="text-muted-foreground group-hover:text-primary transition-colors"
           />
         </button>
       ),
@@ -184,7 +184,7 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
           <EditableCell
             value={row.original.name}
             onSave={(newValue) => handleSave(row.original.id, 'name', newValue)}
-            className="border-2 border-transparent hover:border-[#5317AA]/30 focus:border-[#5317AA] focus:ring-2 focus:ring-[#5317AA]/10 rounded-lg px-3 py-2 bg-white transition-all"
+            className="border-2 border-transparent hover:border-primary/30 focus:border-primary focus:ring-2 focus:ring-primary/10 rounded-lg px-3 py-2 bg-card text-foreground transition-all"
           />
         </div>
       ),
@@ -193,15 +193,15 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
       header: ({ column }) => (
         <button
           onClick={() => column.toggleSorting()}
-          className="flex items-center gap-2 font-semibold text-gray-900 hover:text-[#5317AA] transition-colors group"
+          className="flex items-center gap-2 font-semibold text-foreground hover:text-primary transition-colors group"
         >
-          <div className="p-1.5 rounded-lg bg-[#178EC8]/10 text-[#178EC8] group-hover:bg-[#178EC8]/20 transition-colors">
+          <div className="p-1.5 rounded-lg bg-secondary/10 text-secondary group-hover:bg-secondary/20 transition-colors">
             <Info size={14} />
           </div>
           Description
           <ArrowUpDown
             size={12}
-            className="text-gray-500 group-hover:text-[#5317AA] transition-colors"
+            className="text-muted-foreground group-hover:text-primary transition-colors"
           />
         </button>
       ),
@@ -212,7 +212,7 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
             onSave={(newValue) =>
               handleSave(row.original.id, 'description', newValue)
             }
-            className="border-2 border-transparent hover:border-[#5317AA]/30 focus:border-[#5317AA] focus:ring-2 focus:ring-[#5317AA]/10 rounded-lg px-3 py-2 bg-white transition-all"
+            className="border-2 border-transparent hover:border-primary/30 focus:border-primary focus:ring-2 focus:ring-primary/10 rounded-lg px-3 py-2 bg-card text-foreground transition-all"
           />
         </div>
       ),
@@ -221,15 +221,15 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
       header: ({ column }) => (
         <button
           onClick={() => column.toggleSorting()}
-          className="flex items-center gap-2 font-semibold text-gray-900 hover:text-[#5317AA] transition-colors group"
+          className="flex items-center gap-2 font-semibold text-foreground hover:text-primary transition-colors group"
         >
-          <div className="p-1.5 rounded-lg bg-gray-100 text-gray-600 group-hover:bg-gray-200 transition-colors">
+          <div className="p-1.5 rounded-lg bg-muted text-muted-foreground group-hover:bg-muted/80 transition-colors">
             <Calendar size={14} />
           </div>
           Last Updated
           <ArrowUpDown
             size={12}
-            className="text-gray-500 group-hover:text-[#5317AA] transition-colors"
+            className="text-muted-foreground group-hover:text-primary transition-colors"
           />
         </button>
       ),
@@ -237,10 +237,10 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
         const date = new Date(row.original.updatedAt);
         return (
           <div className="flex items-center gap-2">
-            <div className="p-1 bg-gray-100 rounded-full">
-              <Calendar size={12} className="text-gray-600" />
+            <div className="p-1 bg-muted rounded-full">
+              <Calendar size={12} className="text-muted-foreground" />
             </div>
-            <span className="text-gray-600 text-sm font-medium">
+            <span className="text-muted-foreground text-sm font-medium">
               {date.toLocaleDateString(undefined, {
                 year: 'numeric',
                 month: 'short',
@@ -254,11 +254,11 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
     columnHelper.display({
       id: 'delete',
       header: () => (
-        <div className="flex items-center gap-2 font-semibold text-gray-900">
-          <div className="p-1.5 rounded-lg bg-red-100 text-red-600">
+        <div className="flex items-center gap-2 font-semibold text-foreground">
+          <div className="p-1.5 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
             <Trash2 size={14} />
           </div>
-          Delete
+          DELETE
         </div>
       ),
       cell: ({ row }) => (
@@ -267,7 +267,8 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
             setCategoryToDelete(row.original);
             setShowDeleteModal(true);
           }}
-          className="flex items-center gap-2 px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all shadow-sm hover:shadow-md"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-md hover:bg-red-700 dark:hover:bg-red-600 transition-all text-sm font-semibold shadow-sm"
+          title={`Delete ${row.original.name}`}
         >
           <Trash2 size={14} />
           Delete
@@ -290,12 +291,12 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
   // Render loading state
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 bg-gray-50 rounded-2xl">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[#5317AA] mb-6"></div>
-        <p className="text-gray-900 font-medium text-lg">
+      <div className="flex flex-col items-center justify-center py-20 bg-muted/50 rounded-2xl">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mb-6"></div>
+        <p className="text-foreground font-medium text-lg">
           Loading categories...
         </p>
-        <p className="text-gray-600 text-sm mt-2">
+        <p className="text-muted-foreground text-sm mt-2">
           Please wait while we fetch your data
         </p>
       </div>
@@ -305,18 +306,18 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
   // Render error state
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-2xl p-8 shadow-sm">
+      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-8 shadow-sm">
         <div className="flex items-start">
-          <div className="mr-4 p-2 bg-red-100 rounded-xl">
-            <AlertCircle className="h-6 w-6 text-red-600" />
+          <div className="mr-4 p-2 bg-red-100 dark:bg-red-900/40 rounded-xl">
+            <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-red-800 mb-2">
+            <h3 className="text-lg font-semibold text-red-800 dark:text-red-300 mb-2">
               Unable to load categories
             </h3>
-            <p className="text-sm text-red-600 mb-4">{error}</p>
+            <p className="text-sm text-red-600 dark:text-red-400 mb-4">{error}</p>
             <button
-              className="px-4 py-2 bg-white border border-red-200 text-red-600 rounded-lg shadow-sm flex items-center gap-2 hover:bg-red-50 transition-colors"
+              className="px-4 py-2 bg-card border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg shadow-sm flex items-center gap-2 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
               onClick={() => fetchCategories()}
             >
               <RefreshCw size={16} />
@@ -332,20 +333,20 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
   return (
     <div className="h-full">
       {categories.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-full bg-gray-50 rounded-2xl p-12">
-          <div className="h-24 w-24 mx-auto mb-6 bg-[#5317AA]/10 text-[#5317AA] rounded-2xl flex items-center justify-center shadow-lg">
+        <div className="flex flex-col items-center justify-center h-full bg-muted/50 rounded-2xl p-12">
+          <div className="h-24 w-24 mx-auto mb-6 bg-primary/10 text-primary rounded-2xl flex items-center justify-center shadow-lg">
             <Folder className="h-12 w-12" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-3">
+          <h3 className="text-2xl font-bold text-foreground mb-3">
             No Categories Found
           </h3>
-          <p className="text-gray-600 max-w-md mx-auto text-center mb-8 leading-relaxed">
+          <p className="text-muted-foreground max-w-md mx-auto text-center mb-8 leading-relaxed">
             Start organizing your standards by creating your first category.
             Categories help you group related standards for better management.
           </p>
 
           <button
-            className="px-6 py-3 bg-[#5317AA] text-white rounded-xl shadow-lg inline-flex items-center gap-3 font-medium hover:bg-[#178EC8] transition-colors"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-xl shadow-lg inline-flex items-center gap-3 font-medium hover:bg-secondary transition-colors"
             onClick={onAddCategoryClick}
           >
             <Plus size={18} />
@@ -353,17 +354,17 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
           </button>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden h-full flex flex-col">
+        <div className="bg-card rounded-2xl shadow-lg border border-border overflow-hidden h-full flex flex-col">
           <div className="flex-1 overflow-hidden">
             <div className="overflow-x-auto h-full">
               <table className="min-w-full h-full">
-                <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+                <thead className="bg-muted border-b border-border sticky top-0 z-10">
                   {table.getHeaderGroups().map((headerGroup) => (
                     <tr key={headerGroup.id}>
                       {headerGroup.headers.map((header) => (
                         <th
                           key={header.id}
-                          className="px-6 py-4 text-left text-base font-bold text-gray-900"
+                          className="px-4 py-3 text-left text-sm font-semibold uppercase tracking-wider text-foreground"
                         >
                           {header.isPlaceholder
                             ? null
@@ -376,16 +377,16 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
                     </tr>
                   ))}
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody className="bg-card divide-y divide-border">
                   {table.getRowModel().rows.map((row) => (
                     <tr
                       key={row.id}
-                      className="hover:bg-gray-50 transition-all duration-200"
+                      className="hover:bg-muted/50 transition-all duration-200"
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={cell.id}
-                          className="px-6 py-4 text-base text-gray-900"
+                          className="px-4 py-3 text-sm text-foreground"
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
@@ -401,14 +402,14 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
           </div>
 
           {/* Enhanced Footer */}
-          <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
+          <div className="px-6 py-4 bg-muted/50 border-t border-border flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-[#5317AA]/10 rounded-lg">
-                <Tag size={14} className="text-[#5317AA]" />
+              <div className="p-2 bg-primary/10 rounded-lg">
+                <Tag size={14} className="text-primary" />
               </div>
-              <p className="text-base font-semibold text-gray-900">
+              <p className="text-base font-semibold text-foreground">
                 Showing{' '}
-                <span className="text-[#5317AA] font-bold">
+                <span className="text-primary font-bold">
                   {table.getRowModel().rows.length}
                 </span>{' '}
                 categories
@@ -417,7 +418,7 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
 
             <button
               onClick={fetchCategories}
-              className="text-base text-gray-600 flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all"
+              className="text-base text-muted-foreground flex items-center gap-2 px-4 py-2 bg-card rounded-lg border border-border shadow-sm hover:shadow-md hover:bg-muted/50 transition-all"
             >
               <RefreshCw size={14} />
               <span className="font-semibold">Refresh</span>
@@ -428,35 +429,35 @@ const StandardCategory: React.FC<StandardCategoryProps> = ({
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && categoryToDelete && (
-        <div className="fixed inset-0 backdrop-blur-sm bg-black/20 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-6 shadow-xl max-w-md w-full mx-4 border border-gray-200">
+        <div className="fixed inset-0 backdrop-blur-sm bg-black/20 dark:bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-card rounded-2xl p-6 shadow-xl max-w-md w-full mx-4 border border-border">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-foreground">
                 Confirm Deletion
               </h3>
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="p-1 hover:bg-gray-100 rounded-full"
+                className="p-1 hover:bg-muted rounded-full transition-colors"
               >
-                <X size={20} className="text-gray-600" />
+                <X size={20} className="text-muted-foreground" />
               </button>
             </div>
-            <p className="text-gray-600 mb-4">
+            <p className="text-muted-foreground mb-4">
               Are you sure you want to delete the category{' '}
-              <strong>"{categoryToDelete.name}"</strong>? This will also
+              <strong className="text-foreground">"{categoryToDelete.name}"</strong>? This will also
               delete all associated parameters under this category.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowDeleteModal(false)}
-                className="flex-1 px-4 py-2 bg-gray-100 text-gray-900 rounded-lg hover:bg-gray-200 transition-colors"
+                className="flex-1 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted/80 transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-red-600 dark:bg-red-700 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-600 transition-colors disabled:opacity-50"
               >
                 {isDeleting ? 'Deleting...' : 'Delete'}
               </button>
