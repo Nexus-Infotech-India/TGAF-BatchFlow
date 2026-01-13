@@ -564,95 +564,83 @@ const RMQualityReport: React.FC = () => {
             </motion.div>
 
             {/* Right Content: Quality Parameters (75%) */}
-            <motion.div variants={itemVariants} className="lg:col-span-9">
-              <div className="bg-card rounded-xl border border-border shadow-sm">
-                <div className="p-5 border-b border-border bg-gradient-to-r from-primary/5 to-transparent">
-                  <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                    <Beaker size={18} className="text-primary" />
-                    Quality Parameters
-                    {parametersComplete && (
-                      <span className="ml-2 inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-md">
-                        <Check size={12} className="mr-1" />
-                        Complete
-                      </span>
-                    )}
-                  </h2>
-                </div>
+           <motion.div variants={itemVariants} className="lg:col-span-9">
+  <div className="bg-card border border-border">
+    {/* Header */}
+    <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+      <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
+        <Beaker size={16} className="text-primary" />
+        Quality Parameters
+      </h2>
 
-                <div className="p-5">
-                  <div className="space-y-4 pr-2">
-                    {CHILLI_PARAMETERS.map((param, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="border border-border rounded-lg p-4 bg-card hover:border-primary/30 transition-colors"
-                      >
-                        <div className="grid grid-cols-1 gap-4">
-                          <div className="grid grid-cols-3 gap-3">
-                            <div>
-                              <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">
-                                <div className="flex items-center gap-1">
-                                  <Beaker size={12} />
-                                  Parameter
-                                </div>
-                              </label>
-                              <div className="text-sm font-medium text-foreground bg-muted px-3 py-2 rounded-lg">
-                                {param.parameter}
-                              </div>
-                            </div>
-                            <div>
-                              <label className="block text-xs font-semibold text-muted-foreground uppercase mb-2">
-                                <div className="flex items-center gap-1">
-                                  <Target size={12} />
-                                  Standard
-                                </div>
-                              </label>
-                              <div className="text-sm font-medium text-foreground bg-muted px-3 py-2 rounded-lg">
-                                {param.standard}
-                              </div>
-                            </div>
-                            <div>
-                              <label className="block text-xs font-semibold text-destructive uppercase mb-2">
-                                <div className="flex items-center gap-1">
-                                  <Ruler size={12} />
-                                  Result{' '}
-                                  <span className="text-destructive">*</span>
-                                </div>
-                              </label>
-                              <input
-                                type="text"
-                                value={results[index]}
-                                onChange={(e) =>
-                                  handleResultChange(index, e.target.value)
-                                }
-                                className="w-full border border-input rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all bg-background text-sm"
-                                placeholder="Enter result"
-                                required
-                              />
-                            </div>
-                          </div>
-                          <div className="flex justify-end">
-                            {results[index]?.trim() !== '' ? (
-                              <span className="inline-flex items-center text-xs text-primary bg-primary/10 px-2 py-1 rounded border border-primary/20">
-                                <Check size={12} className="mr-1" />
-                                Filled
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center text-xs text-muted-foreground bg-muted px-2 py-1 rounded border border-border">
-                                <Clock size={12} className="mr-1" />
-                                Pending
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
+      {parametersComplete && (
+        <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 border border-primary/20">
+          <Check size={12} className="inline mr-1" />
+          Complete
+        </span>
+      )}
+    </div>
+
+    {/* Body */}
+    <div className="divide-y divide-border">
+      {CHILLI_PARAMETERS.map((param, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.05 }}
+          className="px-4 py-3 hover:bg-muted/40 transition-colors"
+        >
+          <div className="grid grid-cols-12 gap-3 items-center">
+            {/* Parameter */}
+            <div className="col-span-4">
+              <div className="text-xs text-muted-foreground mb-0.5 flex items-center gap-1">
+                <Beaker size={11} /> Parameter
               </div>
-            </motion.div>
+              <div className="text-sm font-medium text-foreground">
+                {param.parameter}
+              </div>
+            </div>
+
+            {/* Standard */}
+            <div className="col-span-4">
+              <div className="text-xs text-muted-foreground mb-0.5 flex items-center gap-1">
+                <Target size={11} /> Standard
+              </div>
+              <div className="text-sm text-foreground">
+                {param.standard}
+              </div>
+            </div>
+
+            {/* Result */}
+            <div className="col-span-3">
+              <input
+                type="text"
+                value={results[index]}
+                onChange={(e) =>
+                  handleResultChange(index, e.target.value)
+                }
+                className="w-full text-sm px-2 py-1 border border-input bg-background focus:outline-none focus:ring-1 focus:ring-primary/40"
+                placeholder="Result *"
+                required
+              />
+            </div>
+
+            {/* Status */}
+            <div className="col-span-1 flex justify-end">
+              {results[index]?.trim() ? (
+                <Check size={14} className="text-primary" />
+              ) : (
+                <Clock size={14} className="text-muted-foreground" />
+              )}
+            </div>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</motion.div>
+
           </div>
 
           {/* Footer actions */}
@@ -917,162 +905,91 @@ const RMQualityReport: React.FC = () => {
               </div>
             ) : (
               <>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-border">
-                    <thead>
-                      <tr className="bg-muted/50">
-                        <th
-                          scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
-                        >
-                          <div className="flex items-center gap-2">
-                            <Package className="w-4 h-4" />
-                            Raw Material
-                          </div>
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
-                        >
-                          <div className="flex items-center gap-2">
-                            <Award className="w-4 h-4" />
-                            Variety
-                          </div>
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
-                        >
-                          <div className="flex items-center gap-2">
-                            <Building className="w-4 h-4" />
-                            Supplier
-                          </div>
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
-                        >
-                          <div className="flex items-center gap-2">
-                            <Hash className="w-4 h-4" />
-                            GRN
-                          </div>
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
-                        >
-                          <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4" />
-                            Date
-                          </div>
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider"
-                        >
-                          <div className="flex items-center gap-2">
-                            <Target className="w-4 h-4" />
-                            Parameters
-                          </div>
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-6 py-4 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider"
-                        >
-                          <div className="flex items-center gap-2 justify-end">
-                            <Settings className="w-4 h-4" />
-                            Actions
-                          </div>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-card divide-y divide-border">
-                      {filteredReports.map((report, index) => (
-                        <motion.tr
-                          key={report.id}
-                          className="hover:bg-muted/50 transition-colors duration-150"
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: index * 0.05 }}
-                        >
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
-                            {report.rawMaterialName}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-                              {report.variety}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                            <div className="flex items-center">
-                              <Building
-                                size={14}
-                                className="text-muted-foreground mr-2"
-                              />
-                              {report.supplier}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                            <div className="flex items-center">
-                              <Hash
-                                size={14}
-                                className="text-muted-foreground mr-2"
-                              />
-                              {report.grn}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                            <div className="flex items-center">
-                              <Calendar
-                                size={14}
-                                className="text-muted-foreground mr-2"
-                              />
-                              {formatDate(report.dateOfReport)}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-                              <Target size={12} className="mr-1" />
-                              {report.parameters.length} params
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <div className="flex justify-end space-x-2">
-                              <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => handleEdit(report)}
-                                className="group relative flex items-center justify-center w-8 h-8 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all border border-primary/20 cursor-pointer"
-                                title="Edit Report"
-                              >
-                                <Edit2 size={16} />
-                              </motion.button>
-                              <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => handleExport(report.id, 'excel')}
-                                className="group relative flex items-center justify-center w-8 h-8 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all border border-primary/20 cursor-pointer"
-                                title="Export as Excel"
-                              >
-                                <Download size={16} />
-                              </motion.button>
-                              <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => handleDelete(report.id)}
-                                className="group relative flex items-center justify-center w-8 h-8 bg-destructive/10 text-destructive rounded-lg hover:bg-destructive/20 transition-all border border-destructive/20 cursor-pointer"
-                                title="Delete Report"
-                              >
-                                <Trash2 size={16} />
-                              </motion.button>
-                            </div>
-                          </td>
-                        </motion.tr>
-                      ))}
-                    </tbody>
-                  </table>
+  <div className="overflow-x-auto">
+    <table className="min-w-full border border-border text-sm">
+      <thead className="bg-muted/40 border-b border-border">
+        <tr className="text-xs text-muted-foreground uppercase">
+          <th className="px-3 py-2 text-left">Raw Material</th>
+          <th className="px-3 py-2 text-left">Variety</th>
+          <th className="px-3 py-2 text-left">Supplier</th>
+          <th className="px-3 py-2 text-left">GRN</th>
+          <th className="px-3 py-2 text-left">Date</th>
+          <th className="px-3 py-2 text-left">Params</th>
+          <th className="px-3 py-2 text-right">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody className="divide-y divide-border bg-card">
+        {filteredReports.map((report, index) => (
+          <motion.tr
+            key={report.id}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.04 }}
+            className="hover:bg-muted/30"
+          >
+            <td className="px-3 py-2 font-medium text-foreground">
+              {report.rawMaterialName}
+            </td>
+
+            <td className="px-3 py-2 text-muted-foreground">
+              {report.variety}
+            </td>
+
+            <td className="px-3 py-2 text-muted-foreground">
+              {report.supplier}
+            </td>
+
+            <td className="px-3 py-2 font-mono text-xs text-muted-foreground">
+              {report.grn}
+            </td>
+
+            <td className="px-3 py-2 text-muted-foreground">
+              {formatDate(report.dateOfReport)}
+            </td>
+
+            <td className="px-3 py-2 text-muted-foreground">
+              {report.parameters.length}
+            </td>
+
+            {/* ✅ Proper actions */}
+            <td className="px-3 py-2 text-right">
+              <details className="relative inline-block">
+                <summary className="cursor-pointer list-none px-2 py-1 text-muted-foreground hover:text-foreground">
+                  ⋮
+                </summary>
+
+                <div className="absolute right-0 mt-1 w-32 border border-border bg-card shadow-sm z-20 text-left">
+                  <button
+                    onClick={() => handleEdit(report)}
+                    className="block w-full px-3 py-2 text-sm hover:bg-muted"
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleExport(report.id, 'excel')}
+                    className="block w-full px-3 py-2 text-sm hover:bg-muted"
+                  >
+                    Export
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(report.id)}
+                    className="block w-full px-3 py-2 text-sm hover:bg-muted text-destructive"
+                  >
+                    Delete
+                  </button>
                 </div>
-              </>
+              </details>
+            </td>
+          </motion.tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</>
+
             )}
           </div>
         </motion.div>
