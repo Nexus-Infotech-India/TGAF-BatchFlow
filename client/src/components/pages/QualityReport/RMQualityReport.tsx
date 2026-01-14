@@ -564,82 +564,92 @@ const RMQualityReport: React.FC = () => {
             </motion.div>
 
             {/* Right Content: Quality Parameters (75%) */}
-           <motion.div variants={itemVariants} className="lg:col-span-9">
-  <div className="bg-card border border-border">
-    {/* Header */}
-    <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-      <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
-        <Beaker size={16} className="text-primary" />
-        Quality Parameters
-      </h2>
+            <motion.div variants={itemVariants} className="lg:col-span-9">
+              <div className="bg-card border border-border">
+                {/* Header */}
+                <div className="px-4 py-3 border-b border-border flex items-center justify-between">
+                  <h2 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                    <Beaker size={16} className="text-primary" />
+                    Quality Parameters
+                  </h2>
 
-      {parametersComplete && (
-        <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 border border-primary/20">
-          <Check size={12} className="inline mr-1" />
-          Complete
-        </span>
-      )}
-    </div>
+                  {parametersComplete && (
+                    <span className="text-xs text-primary bg-primary/10 px-2 py-0.5 border border-primary/20">
+                      <Check size={12} className="inline mr-1" />
+                      Complete
+                    </span>
+                  )}
+                </div>
 
-    {/* Body */}
-    <div className="divide-y divide-border">
-      {CHILLI_PARAMETERS.map((param, index) => (
-        <motion.div
-          key={index}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.05 }}
-          className="px-4 py-3 hover:bg-muted/40 transition-colors"
-        >
-          <div className="grid grid-cols-12 gap-3 items-center">
-            {/* Parameter */}
-            <div className="col-span-4">
-              <div className="text-xs text-muted-foreground mb-0.5 flex items-center gap-1">
-                <Beaker size={11} /> Parameter
+                {/* Body */}
+                {formData.rawMaterialName ? (
+                  <div className="divide-y divide-border">
+                    {CHILLI_PARAMETERS.map((param, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className="px-4 py-3 hover:bg-muted/40 transition-colors"
+                      >
+                        <div className="grid grid-cols-12 gap-3 items-center">
+                          {/* Parameter */}
+                          <div className="col-span-4">
+                            <div className="text-xs text-muted-foreground mb-0.5 flex items-center gap-1">
+                              <Beaker size={11} /> Parameter
+                            </div>
+                            <div className="text-sm font-medium text-foreground">
+                              {param.parameter}
+                            </div>
+                          </div>
+
+                          {/* Standard */}
+                          <div className="col-span-4">
+                            <div className="text-xs text-muted-foreground mb-0.5 flex items-center gap-1">
+                              <Target size={11} /> Standard
+                            </div>
+                            <div className="text-sm text-foreground">
+                              {param.standard}
+                            </div>
+                          </div>
+
+                          {/* Result */}
+                          <div className="col-span-3">
+                            <input
+                              type="text"
+                              value={results[index]}
+                              onChange={(e) =>
+                                handleResultChange(index, e.target.value)
+                              }
+                              className="w-full text-sm px-2 py-1 border border-input bg-background focus:outline-none focus:ring-1 focus:ring-primary/40"
+                              placeholder="Result *"
+                              required
+                            />
+                          </div>
+
+                          {/* Status */}
+                          <div className="col-span-1 flex justify-end">
+                            {results[index]?.trim() ? (
+                              <Check size={14} className="text-primary" />
+                            ) : (
+                              <Clock size={14} className="text-muted-foreground" />
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-6">
+                    <div className="bg-primary/10 border border-primary/20 rounded-lg p-8 text-center">
+                      <p className="text-sm text-muted-foreground">
+                        Select a product to view quality parameters.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="text-sm font-medium text-foreground">
-                {param.parameter}
-              </div>
-            </div>
-
-            {/* Standard */}
-            <div className="col-span-4">
-              <div className="text-xs text-muted-foreground mb-0.5 flex items-center gap-1">
-                <Target size={11} /> Standard
-              </div>
-              <div className="text-sm text-foreground">
-                {param.standard}
-              </div>
-            </div>
-
-            {/* Result */}
-            <div className="col-span-3">
-              <input
-                type="text"
-                value={results[index]}
-                onChange={(e) =>
-                  handleResultChange(index, e.target.value)
-                }
-                className="w-full text-sm px-2 py-1 border border-input bg-background focus:outline-none focus:ring-1 focus:ring-primary/40"
-                placeholder="Result *"
-                required
-              />
-            </div>
-
-            {/* Status */}
-            <div className="col-span-1 flex justify-end">
-              {results[index]?.trim() ? (
-                <Check size={14} className="text-primary" />
-              ) : (
-                <Clock size={14} className="text-muted-foreground" />
-              )}
-            </div>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  </div>
-</motion.div>
+            </motion.div>
 
           </div>
 
