@@ -4,6 +4,9 @@ import { useMutation } from "@tanstack/react-query";
 import api from "../../../utils/api";
 import { API_ROUTES } from "../../../utils/api";
 import logo from "../../../assets/logo12.png"
+import batchImg from "../../../assets/batch.png"
+import qualityImg from "../../../assets/quality.png"
+import trainingImg from "../../../assets/training.png"
 import { Lock, Mail, Check, Rocket, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 
 interface LoginResponse {
@@ -64,20 +67,17 @@ const Login = () => {
     {
       title: "Batch\nManagement",
       desc: "Simplify batch creation, tracking, and documentation with our intuitive interface.",
-      image:
-        "https://videos.openai.com/az/vg-assets/task_01keehkt24e13b4fgcjb1k4k5x%2F1767867313_img_1.webp?se=2026-01-13T00%3A00%3A00Z&sp=r&sv=2024-08-04&sr=b&skoid=aa5ddad1-c91a-4f0a-9aca-e20682cc8969&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-01-08T03%3A55%3A27Z&ske=2026-01-15T04%3A00%3A27Z&sks=b&skv=2024-08-04&sig=uga4yHvWpuKOVfnO0Trv%2BaOekYZobIJ2GsHSv8ggtDE%3D&ac=oaivgprodscus2",
+      image: batchImg ,
     },
     {
       title: "Streamline Quality\nControl",
       desc: "End-to-end batch workflows with traceability and audit-ready reports.",
-      image:
-        "https://videos.openai.com/az/vg-assets/task_01keehyt2dexdtpjgv52rmcm25%2F1767867669_img_2.webp?se=2026-01-13T00%3A00%3A00Z&sp=r&sv=2024-08-04&sr=b&skoid=aa5ddad1-c91a-4f0a-9aca-e20682cc8969&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-01-08T03%3A51%3A56Z&ske=2026-01-15T03%3A56%3A56Z&sks=b&skv=2024-08-04&sig=Or2SgUr1xJZmnF16bty4DLcxJafmHppQfRV%2BSM9X/vI%3D&ac=oaivgprodscus2",
+      image: qualityImg,
     },
     {
       title: "Training & Compliance",
       desc: "Centralized training modules and attendance tracking for consistent operations.",
-      image:
-        "https://videos.openai.com/az/vg-assets/task_01keej1m2pfe9vtkkb4tg9gp3x%2F1767867760_img_1.webp?se=2026-01-13T00%3A00%3A00Z&sp=r&sv=2024-08-04&sr=b&skoid=aa5ddad1-c91a-4f0a-9aca-e20682cc8969&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-01-08T03%3A55%3A09Z&ske=2026-01-15T04%3A00%3A09Z&sks=b&skv=2024-08-04&sig=e7SQ8SxWUbbgFg4YNdW6NL9SiETplcDsUwyOnl4Pr/I%3D&ac=oaivgprodscus2",
+      image: trainingImg,
     },
   ]
   const [currentSlide, setCurrentSlide] = useState(0)
