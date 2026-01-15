@@ -299,44 +299,44 @@ const RMQualityReport: React.FC = () => {
     }
   };
 
- const handleExportAll = async () => {
-   if (reports.length === 0) {
-     setError('No reports available to export');
-     return;
-   }
+  const handleExportAll = async () => {
+    if (reports.length === 0) {
+      setError('No reports available to export');
+      return;
+    }
 
-   try {
-     setIsExportingAll(true);
-     const response = await api.get(
-       `${API_ROUTES.RAW.EXPORT_ALL_QUALITY_REPORTS}`,
-       {
-         headers: { Authorization: `Bearer ${authToken}` },
-         responseType: 'blob',
-       }
-     );
+    try {
+      setIsExportingAll(true);
+      const response = await api.get(
+        `${API_ROUTES.RAW.EXPORT_ALL_QUALITY_REPORTS}`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+          responseType: 'blob',
+        }
+      );
 
-     // Create blob and trigger download
-     const blob = new Blob([response.data], {
-       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // <-- Excel MIME type
-     });
-     const url = window.URL.createObjectURL(blob);
-     const link = document.createElement('a');
-     link.href = url;
-     link.setAttribute(
-       'download',
-       `RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.xlsx` // <-- Excel extension
-     );
-     document.body.appendChild(link);
-     link.click();
-     link.remove();
-     window.URL.revokeObjectURL(url);
-   } catch (error) {
-     console.error('Export failed:', error);
-     setError('Failed to export reports');
-   } finally {
-     setIsExportingAll(false);
-   }
- };
+      // Create blob and trigger download
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // <-- Excel MIME type
+      });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute(
+        'download',
+        `RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.xlsx` // <-- Excel extension
+      );
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Export failed:', error);
+      setError('Failed to export reports');
+    } finally {
+      setIsExportingAll(false);
+    }
+  };
 
   const resetForm = () => {
     setFormData({
@@ -694,11 +694,10 @@ const RMQualityReport: React.FC = () => {
                     type="button"
                     onClick={handleSubmit}
                     disabled={isSaving || !isFormValid}
-                    className={`px-5 py-2 rounded-lg text-sm font-semibold inline-flex items-center gap-2 transition ${
-                      isSaving || !isFormValid
+                    className={`px-5 py-2 rounded-lg text-sm font-semibold inline-flex items-center gap-2 transition ${isSaving || !isFormValid
                         ? 'bg-muted text-muted-foreground cursor-not-allowed'
                         : 'bg-primary text-primary-foreground hover:bg-primary/90'
-                    }`}
+                      }`}
                   >
                     {isSaving ? (
                       <>
@@ -765,11 +764,10 @@ const RMQualityReport: React.FC = () => {
                   whileTap={{ scale: 0.98 }}
                   onClick={handleExportAll}
                   disabled={isExportingAll || reports.length === 0}
-                  className={`px-4 py-2.5 rounded-lg flex items-center font-bold text-sm shadow-md transition-all cursor-pointer ${
-                    isExportingAll || reports.length === 0
+                  className={`px-4 py-2.5 rounded-lg flex items-center font-bold text-sm shadow-md transition-all cursor-pointer ${isExportingAll || reports.length === 0
                       ? 'bg-muted text-muted-foreground cursor-not-allowed'
                       : 'bg-primary text-primary-foreground hover:bg-primary/90'
-                  }`}
+                    }`}
                 >
                   {isExportingAll ? (
                     <>
@@ -911,90 +909,90 @@ const RMQualityReport: React.FC = () => {
               </div>
             ) : (
               <>
-  <div className="overflow-x-auto">
-    <table className="min-w-full border border-border text-sm">
-      <thead className="bg-muted/40 border-b border-border">
-        <tr className="text-xs text-muted-foreground uppercase">
-          <th className="px-3 py-2 text-left">Raw Material</th>
-          <th className="px-3 py-2 text-left">Variety</th>
-          <th className="px-3 py-2 text-left">Supplier</th>
-          <th className="px-3 py-2 text-left">GRN</th>
-          <th className="px-3 py-2 text-left">Date</th>
-          <th className="px-3 py-2 text-left">Params</th>
-          <th className="px-3 py-2 text-right">Actions</th>
-        </tr>
-      </thead>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full border border-border text-sm">
+                    <thead className="bg-muted/40 border-b border-border">
+                      <tr className="text-xs text-muted-foreground uppercase">
+                        <th className="px-3 py-2 text-left">Raw Material</th>
+                        <th className="px-3 py-2 text-left">Variety</th>
+                        <th className="px-3 py-2 text-left">Supplier</th>
+                        <th className="px-3 py-2 text-left">GRN</th>
+                        <th className="px-3 py-2 text-left">Date</th>
+                        <th className="px-3 py-2 text-left">Params</th>
+                        <th className="px-3 py-2 text-right">Actions</th>
+                      </tr>
+                    </thead>
 
-      <tbody className="divide-y divide-border bg-card">
-        {filteredReports.map((report, index) => (
-          <motion.tr
-            key={report.id}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.04 }}
-            className="hover:bg-muted/30"
-          >
-            <td className="px-3 py-2 font-medium text-foreground">
-              {report.rawMaterialName}
-            </td>
+                    <tbody className="divide-y divide-border bg-card">
+                      {filteredReports.map((report, index) => (
+                        <motion.tr
+                          key={report.id}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.04 }}
+                          className="hover:bg-muted/30"
+                        >
+                          <td className="px-3 py-2 font-medium text-foreground">
+                            {report.rawMaterialName}
+                          </td>
 
-            <td className="px-3 py-2 text-muted-foreground">
-              {report.variety}
-            </td>
+                          <td className="px-3 py-2 text-muted-foreground">
+                            {report.variety}
+                          </td>
 
-            <td className="px-3 py-2 text-muted-foreground">
-              {report.supplier}
-            </td>
+                          <td className="px-3 py-2 text-muted-foreground">
+                            {report.supplier}
+                          </td>
 
-            <td className="px-3 py-2 font-mono text-xs text-muted-foreground">
-              {report.grn}
-            </td>
+                          <td className="px-3 py-2 font-mono text-xs text-muted-foreground">
+                            {report.grn}
+                          </td>
 
-            <td className="px-3 py-2 text-muted-foreground">
-              {formatDate(report.dateOfReport)}
-            </td>
+                          <td className="px-3 py-2 text-muted-foreground">
+                            {formatDate(report.dateOfReport)}
+                          </td>
 
-            <td className="px-3 py-2 text-muted-foreground">
-              {report.parameters.length}
-            </td>
+                          <td className="px-3 py-2 text-muted-foreground">
+                            {report.parameters.length}
+                          </td>
 
-            {/* ✅ Proper actions */}
-            <td className="px-3 py-2 text-right">
-              <details className="relative inline-block">
-                <summary className="cursor-pointer list-none px-2 py-1 text-muted-foreground hover:text-foreground">
-                  ⋮
-                </summary>
+                          {/* ✅ Proper actions */}
+                          <td className="px-3 py-2 text-right">
+                            <details className="relative inline-block">
+                              <summary className="cursor-pointer list-none px-2 py-1 text-muted-foreground hover:text-foreground">
+                                ⋮
+                              </summary>
 
-                <div className="absolute right-0 mt-1 w-32 border border-border bg-card shadow-sm z-20 text-left">
-                  <button
-                    onClick={() => handleEdit(report)}
-                    className="block w-full px-3 py-2 text-sm hover:bg-muted"
-                  >
-                    Edit
-                  </button>
+                              <div className="absolute right-0 mt-1 w-32 border border-border bg-card shadow-md z-20 text-left rounded-lg overflow-hidden">
+                                <button
+                                  onClick={() => handleEdit(report)}
+                                  className="block w-full px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors"
+                                >
+                                  Edit
+                                </button>
 
-                  <button
-                    onClick={() => handleExport(report.id, 'excel')}
-                    className="block w-full px-3 py-2 text-sm hover:bg-muted"
-                  >
-                    Export
-                  </button>
+                                <button
+                                  onClick={() => handleExport(report.id, 'excel')}
+                                  className="block w-full px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors"
+                                >
+                                  Export
+                                </button>
 
-                  <button
-                    onClick={() => handleDelete(report.id)}
-                    className="block w-full px-3 py-2 text-sm hover:bg-muted text-destructive"
-                  >
-                    Delete
-                  </button>
+                                <button
+                                  onClick={() => handleDelete(report.id)}
+                                  className="block w-full px-3 py-2 text-sm text-destructive hover:bg-muted transition-colors"
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            </details>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              </details>
-            </td>
-          </motion.tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
-</>
+              </>
 
             )}
           </div>
