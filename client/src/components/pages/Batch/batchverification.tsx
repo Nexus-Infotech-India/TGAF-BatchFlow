@@ -1,4 +1,29 @@
 import React, { useState } from 'react';
+// Add glowing effect for Verify button
+const verifyBtnGlowStyle = `
+  .verify-glow-btn {
+    color: var(--primary);
+    background: rgba(83,23,170,0.06);
+    border: none;
+    cursor: pointer;
+    transition: box-shadow 0.2s, color 0.2s, background 0.2s;
+  }
+  .verify-glow-btn:hover {
+    color: var(--secondary);
+    background: rgba(83,23,170,0.15);
+    box-shadow: 0 0 8px 2px var(--secondary);
+  }
+`;
+
+if (typeof document !== 'undefined') {
+  const styleId = 'verify-glow-btn-style';
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.innerHTML = verifyBtnGlowStyle;
+    document.head.appendChild(style);
+  }
+}
 import {
   CheckCircle,
   XCircle,
@@ -1190,11 +1215,11 @@ const BatchVerification: React.FC = () => {
                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                               <button
                                 onClick={() => setSelectedBatchId(batch.id)}
-                                className="px-3 py-2 rounded transition-colors flex items-center gap-1 ml-auto"
                                 style={isBatchVerified(batch)
                                   ? { color: 'var(--muted-foreground)', background: 'var(--muted)' }
-                                  : { color: 'var(--primary)', background: 'rgba(83,23,170,0.06)' }
+                                  : undefined
                                 }
+                                className={`px-3 py-2 rounded transition-colors flex items-center gap-1 ml-auto ${!isBatchVerified(batch) ? 'verify-glow-btn' : ''}`}
                                 title={isBatchVerified(batch) ? 'View Details' : 'Start Verification'}
                               >
                                 {isBatchVerified(batch) ? (
@@ -1206,8 +1231,8 @@ const BatchVerification: React.FC = () => {
                                   </>
                                 ) : (
                                   <>
-                                    <Shield className="h-4 w-4" />
-                                    <span className="text-xs font-medium" style={{ color: 'inherit' }}>
+                                    <Shield className="h-4 w-4 " />
+                                    <span className="text-xs font-medium " style={{ color: 'inherit' }}>
                                       Verify
                                     </span>
                                   </>

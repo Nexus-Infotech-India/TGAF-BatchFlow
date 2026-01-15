@@ -698,7 +698,7 @@ export default function ViewBatches() {
                           className="px-6 py-4 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider"
                         >
                           <div className="flex items-center gap-2 justify-end">
-                            <Eye className="w-4 h-4" />
+                            <Eye className="w-4 h-4 hover:h-10" />
                             Actions
                           </div>
                         </th>
@@ -708,7 +708,7 @@ export default function ViewBatches() {
                       {batchesData.batches.map((batch: any, index: number) => (
                         <motion.tr
                           key={batch.id}
-                          className="hover:bg-muted/50 transition-colors duration-150"
+                          className="hover:bg-secondary/10 transition-colors duration-150"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -777,7 +777,7 @@ export default function ViewBatches() {
                                   whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
                                   onClick={() => handleViewDetails(batch)}
-                                  className="group relative flex items-center justify-center w-8 h-8 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all"
+                                  className="group relative flex items-center justify-center w-8 h-8 bg-primary text-primary-foreground rounded-lg hover:bg-secondary/90 transition-all"
                                   title="View Details"
                                 >
                                   <Eye size={16} />
