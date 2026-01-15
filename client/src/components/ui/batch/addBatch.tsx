@@ -7,19 +7,16 @@ import {
   AlertCircle,
   X,
   Save,
-  Calendar,
   Package,
   ChevronRight,
   Clock,
   Check,
-  Tag,
   RotateCw,
   Beaker,
   SlidersHorizontal,
   Hash,
   Ruler,
   CheckCircle,
-  Search,
   FileText,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -446,14 +443,14 @@ const AddBatch: React.FC = () => {
   };
 
   // Add handler to select GRN from suggestions
-  const handleSelectGrn = (grn: string) => {
-    setGrnSearchInput(grn);
-    setFormData((prev) => ({
-      ...prev,
-      grnNumber: grn,
-    }));
-    setShowGrnSuggestions(false);
-  };
+  // const handleSelectGrn = (grn: string) => {
+  //   setGrnSearchInput(grn);
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     grnNumber: grn,
+  //   }));
+  //   setShowGrnSuggestions(false);
+  // };
 
 
   const basicInfoComplete =
@@ -473,6 +470,8 @@ const AddBatch: React.FC = () => {
       initial="hidden"
       animate="visible"
     >
+      <div style={{display:'none'}}>{isLoadingGRNs}{filteredGrnSuggestions}{showGrnSuggestions}</div>
+      
       <div className="max-w-7xl mx-auto pt-0 px-4 pb-4 sm:pt-0 sm:px-6 sm:pb-6">
         <AnimatePresence>
           {error && (
