@@ -534,7 +534,7 @@ const AddBatch: React.FC = () => {
             <div className="bg-card border border-border sticky top-4">
               {/* Header */}
               <div className="px-4 py-3 border-b border-border flex items-center justify-between">
-                <h2 className="text-sm font-semibold flex items-center gap-2">
+                <h2 className="text-sm font-semibold flex items-center gap-2 text-primary">
                   <SlidersHorizontal size={14} />
                   Basic Info
                 </h2>
@@ -549,14 +549,14 @@ const AddBatch: React.FC = () => {
                 {/* Batch Number */}
                 <div>
                   <label className="text-xs text-muted-foreground">
-                    Batch Number *
+                    Batch Number
                   </label>
                   <input
                     type="text"
                     name="batchNumber"
                     value={formData.batchNumber}
                     onChange={handleInputChange}
-                    className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring"
+                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                     required
                   />
                 </div>
@@ -564,12 +564,12 @@ const AddBatch: React.FC = () => {
                 {/* Product */}
                 <div>
                   <label className="text-xs text-muted-foreground">
-                    Product *
+                    Product
                   </label>
                   <select
                     value={showNewProductForm ? 'new' : selectedProductId}
                     onChange={handleProductChange}
-                    className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring"
+                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                     required
                   >
                     <option value="">Select</option>
@@ -589,33 +589,32 @@ const AddBatch: React.FC = () => {
                       type="text"
                       value={newProductName}
                       onChange={(e) => setNewProductName(e.target.value)}
-                      className="w-full border border-input px-2 py-1.5 bg-background"
+                        className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                       required
                     />
                   </div>
                 )}
 
                 {/* Dates */}
-                <div className="grid grid-cols-2 gap-2">
+                <div className="flex flex-col gap-2">
                   <div>
-                    <label className="text-xs text-muted-foreground">Production *</label>
+                    <label className="text-xs text-muted-foreground">Production</label>
                     <input
                       type="date"
                       name="dateOfProduction"
                       value={formData.dateOfProduction}
                       onChange={handleInputChange}
-                      className="w-full border border-input px-2 py-1.5 bg-background"
+                      className="w-full min-w-[140px] border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                     />
                   </div>
-
                   <div>
-                    <label className="text-xs text-muted-foreground">Best Before *</label>
+                    <label className="text-xs text-muted-foreground">Best Before</label>
                     <input
                       type="date"
                       name="bestBeforeDate"
                       value={formData.bestBeforeDate}
                       onChange={handleInputChange}
-                      className="w-full border border-input px-2 py-1.5 bg-background"
+                      className="w-full min-w-[140px] border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                     />
                   </div>
                 </div>
@@ -627,7 +626,7 @@ const AddBatch: React.FC = () => {
                     name="sampleAnalysisStatus"
                     value={formData.sampleAnalysisStatus}
                     onChange={handleInputChange}
-                    className="w-full border border-input px-2 py-1.5 bg-background"
+                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                   >
                     <option value="IN_PROGRESS">In Progress</option>
                     <option value="COMPLETED">Completed</option>
@@ -642,7 +641,7 @@ const AddBatch: React.FC = () => {
                     name="batchCode"
                     value={formData.batchCode}
                     onChange={handleInputChange}
-                    className="w-full border border-input px-2 py-1.5 bg-background"
+                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                   />
                 </div>
 
@@ -653,7 +652,7 @@ const AddBatch: React.FC = () => {
                     type="text"
                     value={grnSearchInput}
                     onChange={handleGrnInputChange}
-                    className="w-full border border-input px-2 py-1.5 bg-background"
+                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                     placeholder="Optional"
                   />
                 </div>
@@ -790,7 +789,7 @@ const AddBatch: React.FC = () => {
                                           ];
                                         });
                                       }}
-                                      className="w-full text-sm px-3 py-1.5 border border-input bg-background rounded focus:outline-none focus:ring-2 focus:ring-primary/40"
+                                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                                     >
                                       <option value="">Select sieve</option>
                                       {SIEVE_OPTIONS.map((opt) => (
@@ -828,7 +827,7 @@ const AddBatch: React.FC = () => {
                                           ];
                                         });
                                       }}
-                                      className="w-full text-sm px-3 py-1.5 border border-input bg-background rounded focus:outline-none focus:ring-2 focus:ring-primary/40"
+                                        className="w-full text-sm px-3 py-1.5 border border-input bg-background rounded focus:outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-gray-400"
                                       placeholder="Enter value"
                                     />
                                   )}
@@ -871,7 +870,7 @@ const AddBatch: React.FC = () => {
                                         ];
                                       });
                                     }}
-                                    className="w-full text-sm px-3 py-1.5 border border-input bg-background rounded focus:outline-none focus:ring-2 focus:ring-primary/40"
+                                      className="w-full text-sm px-3 py-1.5 border border-input bg-background rounded focus:outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-gray-400"
                                     placeholder="Add remark"
                                   />
                                 </div>
