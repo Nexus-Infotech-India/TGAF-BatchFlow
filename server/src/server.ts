@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import cron from 'node-cron';
@@ -5,7 +6,7 @@ import cron from 'node-cron';
 import authRoutes from './routes/auth.route';
 import batchRoutes from './routes/batch.route';
 import standardRoutes from './routes/standard.route';
-import productRoutes from './routes/product.route'; 
+import productRoutes from './routes/product.route';
 import dashboardRoutes from './routes/dashboard.route';
 import trainingRoutes from './routes/training.route';
 import auditRoutes from './routes/audit.route';
