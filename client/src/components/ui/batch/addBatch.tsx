@@ -555,7 +555,7 @@ const AddBatch: React.FC = () => {
                     name="batchNumber"
                     value={formData.batchNumber}
                     onChange={handleInputChange}
-                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
+                      className="w-full border border-input px-2 py-1.5 bg-    background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                     required
                   />
                 </div>
