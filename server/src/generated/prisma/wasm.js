@@ -1004,7 +1004,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/home/rameswar-panda/Desktop/Nexus/Batchflow/server/src/generated/prisma",
+      "value": "/media/subham/6d31ea1b-4b0d-4960-8417-fa5b9cab18f2/nexusInfo_TGAF/TGAF-BatchFlow/server/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -1022,12 +1022,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/rameswar-panda/Desktop/Nexus/Batchflow/server/prisma/schema.prisma",
+    "sourceFilePath": "/media/subham/6d31ea1b-4b0d-4960-8417-fa5b9cab18f2/nexusInfo_TGAF/TGAF-BatchFlow/server/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../../prisma",
   "clientVersion": "6.19.0",
