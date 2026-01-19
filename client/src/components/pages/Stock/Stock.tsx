@@ -182,12 +182,28 @@ const Stock: React.FC = () => {
                     </td>
                     {warehouses.map((wh) => {
                       const item = matrix[prod][wh];
-                      const q = item?.currentQuantity ?? 0;
+                      let rawQ: unknown = item?.currentQuantity ?? 0;
+                      let q: number;
+                      // Fix: If rawQ is a string (from backend bug), try to parse as float, else fallback to 0
+                      if (typeof rawQ === 'string') {
+                        // Remove commas and try to parse
+                        const parsed = parseFloat(rawQ.replace(/,/g, ''));
+                        q = isNaN(parsed) ? 0 : parsed;
+                      } else if (typeof rawQ === 'number' && isFinite(rawQ)) {
+                        q = rawQ;
+                      } else {
+                        q = 0;
+                      }
+                      // Get unit of measurement, but ignore it if it looks like a number
+                      let unit = item?.rawMaterial.unitOfMeasurement || 'units';
+                      if (!isNaN(parseFloat(unit))) {
+                        unit = 'kG'; // fallback if unit is actually a number
+                      }
                       return (
                         <td key={`${prod}-${wh}`} style={{ borderColor: 'var(--secondary)' }} className="border px-4 py-2 text-center">
                           {q > 0 ? (
                             <span style={{ color: 'var(--foreground)' }} className="font-mono">
-                              {q.toLocaleString()} {item?.rawMaterial.unitOfMeasurement || 'units'}
+                              {q.toLocaleString(undefined, { maximumFractionDigits: 2 })} {unit}
                             </span>
                           ) : (
                             <span style={{ color: 'var(--muted-foreground)' }}>

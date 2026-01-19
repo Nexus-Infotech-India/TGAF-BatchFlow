@@ -16,6 +16,16 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// ...existing code...
+
+export const mailFilteredRMQualityReports = async (filters: any) => {
+  return api.post('/raw/quality-report/mail/filtered', filters);
+};
+
+export const exportFilteredRMQualityReports = async (filters: any) => {
+  return api.post('/raw/quality-report/export/filtered', filters, { responseType: 'blob' });
+};
+
 export default api;
 // Define the base URL for all APIs
 const BASE_URL = import.meta.env.VITE_API_URL as string;
@@ -49,6 +59,8 @@ export const API_ROUTES = {
     APPROVE_BATCH: (id: string) => `${BASE_URL}/batch/batches/${id}/approve`,
     REJECT_BATCH: (id: string) => `${BASE_URL}/batch/batches/${id}/reject`,
     EXPORT_BATCHES: `${BASE_URL}/batch/batches/export`,
+    MAIL_ALL_BATCHES: `${BASE_URL}/batch/batches/mail/all`,
+    MAIL_FILTERED_BATCHES: `${BASE_URL}/batch/batches/mail/filtered`,
     GET_ACTIVITY_LOGS: `${BASE_URL}/batch/logs`,
     GENERATE_CERTIFICATE: (id: string) => `${BASE_URL}/batch/batches/${id}/certificate`,
 

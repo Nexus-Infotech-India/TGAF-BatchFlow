@@ -34,6 +34,8 @@ import {
 } from '../../../utils/api';
 import { RMQualityReport as RMQualityReportType } from '../../../Types/qualityTypes';
 import api, { API_ROUTES } from '../../../utils/api';
+import { mailFilteredRMQualityReports } from '../../../utils/api';
+import { exportFilteredRMQualityReports } from '../../../utils/api';
 import { format } from 'date-fns';
 
 // Enhanced animations
@@ -74,6 +76,48 @@ const formatDate = (dateString: string) => {
 };
 
 const RMQualityReport: React.FC = () => {
+  const [isExportingFiltered, setIsExportingFiltered] = useState(false);
+  // Handler for exporting filtered reports
+  const handleExportFiltered = async () => {
+    if (filteredReports.length === 0) {
+      setError('No filtered reports available to export');
+      return;
+    }
+    try {
+      setIsExportingFiltered(true);
+      setError(null);
+      const filtersToSend = {
+        supplier: appliedFilters.supplier,
+        grn: appliedFilters.grn,
+        fromDate: appliedFilters.fromDate,
+        toDate: appliedFilters.toDate,
+      };
+      const response = await exportFilteredRMQualityReports(filtersToSend);
+      if (response && response.data) {
+        const blob = new Blob([response.data], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute(
+          'download',
+          `Filtered_RM_Quality_Reports_${new Date().toISOString().split('T')[0]}.xlsx`
+        );
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+        toast.success('Filtered Excel export started');
+      } else {
+        setError('Failed to export filtered reports');
+      }
+    } catch (error) {
+      setError('Failed to export filtered reports');
+    } finally {
+      setIsExportingFiltered(false);
+    }
+  };
   const [reports, setReports] = useState<RMQualityReportType[]>([]);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -84,6 +128,34 @@ const RMQualityReport: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isExportingAll, setIsExportingAll] = useState(false);
   const [isMailingAll, setIsMailingAll] = useState(false);
+  const [isMailingFiltered, setIsMailingFiltered] = useState(false);
+  // Handler for mailing filtered reports
+  const handleMailFiltered = async () => {
+    if (filteredReports.length === 0) {
+      setError('No filtered reports available to mail');
+      return;
+    }
+    try {
+      setIsMailingFiltered(true);
+      setError(null);
+      const filtersToSend = {
+        supplier: appliedFilters.supplier,
+        grn: appliedFilters.grn,
+        fromDate: appliedFilters.fromDate,
+        toDate: appliedFilters.toDate,
+      };
+      const response = await mailFilteredRMQualityReports(filtersToSend);
+      if (response.data.success) {
+        toast.success(response.data.message || 'Filtered reports mailed successfully');
+      } else {
+        setError(response.data.error || 'Failed to mail filtered reports');
+      }
+    } catch (error) {
+      setError('Failed to mail filtered reports');
+    } finally {
+      setIsMailingFiltered(false);
+    }
+  };
   const [error, setError] = useState<string | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
@@ -829,6 +901,44 @@ const RMQualityReport: React.FC = () => {
                 </h1>
               </div>
               <div className="flex gap-2">
+                {/* Export Filtered */}
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleExportFiltered}
+                  disabled={isExportingFiltered || filteredReports.length === 0}
+                  className={`px-4 py-2.5 rounded-lg flex items-center font-bold text-sm shadow-md transition-all cursor-pointer ${isExportingFiltered || filteredReports.length === 0
+                    ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                    : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    }`}
+                  title="Export only filtered reports"
+                >
+                  {isExportingFiltered ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{
+                          duration: 2,
+                          ease: 'linear',
+                          repeat: Infinity,
+                        }}
+                      >
+                        <RotateCw
+                          size={16}
+                          className="mr-2"
+                          strokeWidth={2.5}
+                        />
+                      </motion.div>
+                      Exporting...
+                    </>
+                  ) : (
+                    <>
+                      <Download size={16} className="mr-2" strokeWidth={2.5} />
+                      Export Filtered
+                    </>
+                  )}
+                </motion.button>
+                {/* Export All */}
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.98 }}
@@ -836,7 +946,7 @@ const RMQualityReport: React.FC = () => {
                   disabled={isExportingAll || reports.length === 0}
                   className={`px-4 py-2.5 rounded-lg flex items-center font-bold text-sm shadow-md transition-all cursor-pointer ${isExportingAll || reports.length === 0
                     ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                    : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
                     }`}
                 >
                   {isExportingAll ? (
@@ -864,6 +974,7 @@ const RMQualityReport: React.FC = () => {
                     </>
                   )}
                 </motion.button>
+                {/* Mail All */}
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.98 }}
@@ -871,7 +982,7 @@ const RMQualityReport: React.FC = () => {
                   disabled={isMailingAll || reports.length === 0}
                   className={`px-4 py-2.5 rounded-lg flex items-center font-bold text-sm shadow-md transition-all cursor-pointer ${isMailingAll || reports.length === 0
                     ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                    : 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-primary text-primary-foreground hover:bg-primary/90'
                     }`}
                 >
                   {isMailingAll ? (
@@ -896,6 +1007,43 @@ const RMQualityReport: React.FC = () => {
                     <>
                       <Mail size={16} className="mr-2" strokeWidth={2.5} />
                       Mail All
+                    </>
+                  )}
+                </motion.button>
+                {/* Mail Filtered */}
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleMailFiltered}
+                  disabled={isMailingFiltered || filteredReports.length === 0}
+                  className={`px-4 py-2.5 rounded-lg flex items-center font-bold text-sm shadow-md transition-all cursor-pointer ${isMailingFiltered || filteredReports.length === 0
+                    ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
+                    }`}
+                  title="Mail only filtered reports"
+                >
+                  {isMailingFiltered ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{
+                          duration: 2,
+                          ease: 'linear',
+                          repeat: Infinity,
+                        }}
+                      >
+                        <RotateCw
+                          size={16}
+                          className="mr-2"
+                          strokeWidth={2.5}
+                        />
+                      </motion.div>
+                      Mailing...
+                    </>
+                  ) : (
+                    <>
+                      <Mail size={16} className="mr-2" strokeWidth={2.5} />
+                      Mail Filtered
                     </>
                   )}
                 </motion.button>

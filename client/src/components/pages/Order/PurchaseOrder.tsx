@@ -431,7 +431,7 @@ const PurchaseOrderList: React.FC = () => {
                         {item.quantityOrdered}
                       </td>
                       <td className="px-4 py-3 text-center font-semibold text-foreground whitespace-nowrap">
-                        ₹{item.rate.toLocaleString()}
+                        ₦{item.rate.toLocaleString()}
                       </td>
                       <td className="px-4 py-3 text-center whitespace-nowrap">
                         <span className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full border ${item.status === 'Received'

@@ -23,7 +23,10 @@ import {
   X,
   Edit2,
   Trash2,
+  Mail,
+  RotateCw,
 } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import { generatePDF } from '../../../utils/exportPdf';
 import BatchDetails from './BatchDetails';
@@ -89,6 +92,8 @@ export default function ViewBatches() {
   const [selectedBatch, setSelectedBatch] = useState<any>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
+  const [isMailingAll, setIsMailingAll] = useState(false);
+  const [isMailingFiltered, setIsMailingFiltered] = useState(false);
 
   const authToken = localStorage.getItem('authToken');
 
@@ -305,6 +310,74 @@ export default function ViewBatches() {
     });
   };
 
+  // Handle mail all batches
+  const handleMailAll = async () => {
+    if (!batchesData || !batchesData.batches || batchesData.batches.length === 0) {
+      toast.error('No batches available to mail');
+      return;
+    }
+
+    try {
+      setIsMailingAll(true);
+      const response = await axios.get(API_ROUTES.BATCH.MAIL_ALL_BATCHES, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+
+      if (response.data.success) {
+        toast.success(response.data.message || 'Batches report mailed successfully');
+      } else {
+        toast.error(response.data.error || 'Failed to mail batches');
+      }
+    } catch (error) {
+      console.error('Mail failed:', error);
+      toast.error('Failed to mail batches report');
+    } finally {
+      setIsMailingAll(false);
+    }
+  };
+
+  // Handle mail filtered batches
+  const handleMailFiltered = async () => {
+    const hasFilters = filters.status || filters.productId || filters.dateFrom || filters.dateTo || filters.batchNumber;
+    if (!hasFilters) {
+      toast.error('Please apply at least one filter before mailing');
+      return;
+    }
+
+    if (!batchesData || !batchesData.batches || batchesData.batches.length === 0) {
+      toast.error('No batches match the current filters');
+      return;
+    }
+
+    try {
+      setIsMailingFiltered(true);
+      const response = await axios.post(
+        API_ROUTES.BATCH.MAIL_FILTERED_BATCHES,
+        {
+          batchNumber: filters.batchNumber,
+          status: filters.status,
+          productId: filters.productId,
+          dateFrom: filters.dateFrom,
+          dateTo: filters.dateTo,
+        },
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message || 'Filtered batches report mailed successfully');
+      } else {
+        toast.error(response.data.error || 'Failed to mail filtered batches');
+      }
+    } catch (error) {
+      console.error('Mail filtered failed:', error);
+      toast.error('Failed to mail filtered batches report');
+    } finally {
+      setIsMailingFiltered(false);
+    }
+  };
+
   // Show details view if selected
   if (showDetails && selectedBatch) {
     return (
@@ -409,6 +482,62 @@ export default function ViewBatches() {
                 >
                   <Download className="h-4 w-4 text-muted-foreground" />
                   <span className="text-foreground">Export</span>
+                </motion.button>
+
+                <motion.button
+                  onClick={handleMailAll}
+                  disabled={isMailingAll || !batchesData?.batches?.length}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors duration-200 text-sm ${isMailingAll || !batchesData?.batches?.length
+                      ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                      : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    }`}
+                  whileHover={{ scale: isMailingAll ? 1 : 1.02 }}
+                  whileTap={{ scale: isMailingAll ? 1 : 0.98 }}
+                >
+                  {isMailingAll ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 2, ease: 'linear', repeat: Infinity }}
+                      >
+                        <RotateCw className="h-4 w-4" />
+                      </motion.div>
+                      <span>Mailing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Mail className="h-4 w-4" />
+                      <span>Mail All</span>
+                    </>
+                  )}
+                </motion.button>
+
+                <motion.button
+                  onClick={handleMailFiltered}
+                  disabled={isMailingFiltered || !batchesData?.batches?.length || !(filters.status || filters.productId || filters.dateFrom || filters.dateTo || filters.batchNumber)}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors duration-200 text-sm ${isMailingFiltered || !batchesData?.batches?.length || !(filters.status || filters.productId || filters.dateFrom || filters.dateTo || filters.batchNumber)
+                      ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
+                    }`}
+                  whileHover={{ scale: isMailingFiltered ? 1 : 1.02 }}
+                  whileTap={{ scale: isMailingFiltered ? 1 : 0.98 }}
+                >
+                  {isMailingFiltered ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 2, ease: 'linear', repeat: Infinity }}
+                      >
+                        <RotateCw className="h-4 w-4" />
+                      </motion.div>
+                      <span>Mailing...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Filter className="h-4 w-4" />
+                      <span>Mail Filtered</span>
+                    </>
+                  )}
                 </motion.button>
               </div>
             </div>
@@ -730,7 +859,7 @@ export default function ViewBatches() {
                               <span
                                 className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border ${statusColors[
                                   batch.status as keyof typeof statusColors
-                                  ]
+                                ]
                                   }`}
                               >
                                 {
@@ -823,8 +952,8 @@ export default function ViewBatches() {
                           }
                           disabled={filters.page === 1}
                           className={`p-2 rounded-md ${filters.page === 1
-                              ? 'text-muted-foreground cursor-not-allowed'
-                              : 'text-foreground hover:bg-muted'
+                            ? 'text-muted-foreground cursor-not-allowed'
+                            : 'text-foreground hover:bg-muted'
                             }`}
                           whileHover={filters.page !== 1 ? { scale: 1.1 } : {}}
                           whileTap={filters.page !== 1 ? { scale: 0.9 } : {}}
@@ -863,8 +992,8 @@ export default function ViewBatches() {
                                 key={page}
                                 onClick={() => handlePageChange(page)}
                                 className={`px-3 py-1 rounded-md ${currentPage === page
-                                    ? 'bg-primary text-primary-foreground'
-                                    : 'text-foreground hover:bg-muted'
+                                  ? 'bg-primary text-primary-foreground'
+                                  : 'text-foreground hover:bg-muted'
                                   }`}
                                 whileHover={{ scale: 1.1 }}
                                 whileTap={{ scale: 0.9 }}
@@ -892,8 +1021,8 @@ export default function ViewBatches() {
                             filters.page === batchesData.pagination.totalPages
                           }
                           className={`p-2 rounded-md ${filters.page === batchesData.pagination.totalPages
-                              ? 'text-muted-foreground cursor-not-allowed'
-                              : 'text-foreground hover:bg-muted'
+                            ? 'text-muted-foreground cursor-not-allowed'
+                            : 'text-foreground hover:bg-muted'
                             }`}
                           whileHover={
                             filters.page !== batchesData.pagination.totalPages

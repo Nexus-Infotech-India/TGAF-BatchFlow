@@ -48,7 +48,7 @@ export async function sendPurchaseOrderMail(req: Request, res: Response): Promis
                     <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">${new Date(item.purchaseOrder.orderDate).toLocaleDateString('en-IN')}</td>
                     <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">${item.quantityOrdered}</td>
                     <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">${item.quantityReceived}</td>
-                    <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">₹${item.rate}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">₦${item.rate}</td>
                     <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">
                         <span style="background-color: ${item.status === 'Received' ? '#27ae60' : '#f39c12'}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: bold;">
                             ${item.status}

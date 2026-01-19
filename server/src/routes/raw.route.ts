@@ -13,6 +13,8 @@ import { getPurchaseOrdersByProduct, getPurchaseOrderTimeline } from '../control
 import { DashboardController } from '../controllers/rawmaterial/Dashboard.controller';
 import { RMQualityController } from '../controllers/rawmaterial/quality.controller';
 import { RMQualityMailController } from '../controllers/rawmaterial/qualityMail.controller';
+import { RMQualityMailFilteredController } from '../controllers/rawmaterial/qualityMailFiltered.controller';
+import { RMQualityExportFilteredController } from '../controllers/rawmaterial/qualityExportFiltered.controller';
 import { sendPurchaseOrderMail } from '../controllers/rawmaterial/sendPurchaseOrderMail.controller';
 
 const router = Router();
@@ -102,6 +104,8 @@ router.post('/quality-report', RMQualityController.createQualityReport);
 router.get('/quality-report', RMQualityController.getQualityReports);
 router.get('/quality-report/export/all', RMQualityController.exportAllQualityReports);
 router.get('/quality-report/mail/all', RMQualityMailController.mailAllQualityReports);
+router.post('/quality-report/mail/filtered', RMQualityMailFilteredController.mailFilteredQualityReports);
+router.post('/quality-report/export/filtered', RMQualityExportFilteredController.exportFilteredQualityReports);
 router.get('/quality-report/:id', RMQualityController.getQualityReportById);
 router.put('/quality-report/:id', RMQualityController.updateQualityReport);
 router.delete('/quality-report/:id', RMQualityController.deleteQualityReport);
