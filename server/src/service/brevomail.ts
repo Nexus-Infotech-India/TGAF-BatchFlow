@@ -12,6 +12,7 @@ interface EmailOptions {
     subject: string;
     htmlContent: string;
     sender?: { name: string; email: string };
+    attachment?: { content: string; name: string }[];
 }
 
 export const sendTransactionalEmail = async (options: EmailOptions): Promise<any> => {
@@ -26,6 +27,9 @@ export const sendTransactionalEmail = async (options: EmailOptions): Promise<any
             email: process.env.EMAIL_FROM || "subhamswain8456@gmail.com"
         };
         sendSmtpEmail.to = options.to;
+        if (options.attachment) {
+            sendSmtpEmail.attachment = options.attachment;
+        }
 
         const data = await apiInstance.sendTransacEmail(sendSmtpEmail);
         console.log('Email sent successfully:', data);

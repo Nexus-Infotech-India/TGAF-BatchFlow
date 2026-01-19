@@ -253,6 +253,7 @@ export const API_ROUTES = {
     // Purchase Orders
     CREATE_PURCHASE_ORDER: `${BASE_URL}/raw/purchase`,
     GET_PURCHASE_ORDERS: `${BASE_URL}/raw/purchase`,
+    SEND_PRODUCT_MAIL: `${BASE_URL}/raw/purchase/send-mail`,
     GET_PURCHASE_ORDER_BY_ID: (id: string) => `${BASE_URL}/raw/purchase/${id}`,
     UPDATE_PURCHASE_ORDER: (id: string) => `${BASE_URL}/raw/purchase/${id}`,
     GET_RECEIVED_RAW_MATERIALS: `${BASE_URL}/raw/purchase/received/raw-materials`,
@@ -316,6 +317,7 @@ export const API_ROUTES = {
     DELETE_QUALITY_REPORT: (id: string) => `${BASE_URL}/raw/quality-report/${id}`,
     EXPORT_QUALITY_REPORT: (id: string) => `${BASE_URL}/raw/quality-report/${id}/export`,
     EXPORT_ALL_QUALITY_REPORTS: `${BASE_URL}/raw/quality-report/export/all`,
+    MAIL_ALL_QUALITY_REPORTS: `${BASE_URL}/raw/quality-report/mail/all`,
   },
 
   DRAFT: {
@@ -325,7 +327,7 @@ export const API_ROUTES = {
     DELETE_BATCH: (id: string) => `${BASE_URL}/draft/batch/${id}`,
   },
 
-  
+
 
 };
 

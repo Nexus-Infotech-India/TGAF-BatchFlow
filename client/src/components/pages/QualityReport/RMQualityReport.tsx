@@ -10,7 +10,7 @@ import {
   FileText,
   Clock,
   Package,
-
+  Mail,
   Building,
   Hash,
   Beaker,
@@ -83,8 +83,37 @@ const RMQualityReport: React.FC = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isExportingAll, setIsExportingAll] = useState(false);
+  const [isMailingAll, setIsMailingAll] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  // Filters
+  const [filters, setFilters] = useState({
+    supplier: '',
+    grn: '',
+    fromDate: '',
+    toDate: '',
+  });
+  const [appliedFilters, setAppliedFilters] = useState({
+    supplier: '',
+    grn: '',
+    fromDate: '',
+    toDate: '',
+  });
+
+  const applyFilters = () => {
+    setAppliedFilters(filters);
+  };
+
+  const clearFilters = () => {
+    const empty = { supplier: '', grn: '', fromDate: '', toDate: '' };
+    setFilters(empty);
+    setAppliedFilters(empty);
+  };
+
+  const handleFilterChange = (name: string, value: string) => {
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
 
   const [receivedRawMaterials, setReceivedRawMaterials] = useState<any[]>([]);
   const [receivedVendors, setReceivedVendors] = useState<any[]>([]);
@@ -338,6 +367,34 @@ const RMQualityReport: React.FC = () => {
     }
   };
 
+  const handleMailAll = async () => {
+    if (reports.length === 0) {
+      setError('No reports available to mail');
+      return;
+    }
+
+    try {
+      setIsMailingAll(true);
+      const response = await api.get(
+        `${API_ROUTES.RAW.MAIL_ALL_QUALITY_REPORTS}`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message || 'Reports mailed successfully');
+      } else {
+        setError(response.data.error || 'Failed to mail reports');
+      }
+    } catch (error) {
+      console.error('Mail failed:', error);
+      setError('Failed to mail reports');
+    } finally {
+      setIsMailingAll(false);
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       rawMaterialName: '',
@@ -349,13 +406,26 @@ const RMQualityReport: React.FC = () => {
     setError(null);
   };
 
-  const filteredReports = reports.filter(
-    (report) =>
-      report.rawMaterialName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      report.variety.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      report.supplier.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      report.grn.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredReports = reports.filter((report) => {
+    // Search match
+    const q = searchTerm.trim().toLowerCase();
+    const matchesSearch =
+      !q ||
+      [report.rawMaterialName, report.variety, report.supplier, report.grn].some((f) =>
+        String(f || '').toLowerCase().includes(q)
+      );
+
+    // Applied filters
+    const { supplier, grn, fromDate, toDate } = appliedFilters;
+    if (supplier && supplier !== report.supplier) return false;
+    if (grn && !report.grn.toLowerCase().includes(grn.toLowerCase())) return false;
+
+    const reportDate = report.dateOfReport ? new Date(report.dateOfReport) : null;
+    if (fromDate && reportDate && new Date(fromDate) > reportDate) return false;
+    if (toDate && reportDate && new Date(toDate) < reportDate) return false;
+
+    return matchesSearch;
+  });
 
   const basicInfoComplete =
     formData.rawMaterialName &&
@@ -695,8 +765,8 @@ const RMQualityReport: React.FC = () => {
                     onClick={handleSubmit}
                     disabled={isSaving || !isFormValid}
                     className={`px-5 py-2 rounded-lg text-sm font-semibold inline-flex items-center gap-2 transition ${isSaving || !isFormValid
-                        ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                        : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                      ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                      : 'bg-primary text-primary-foreground hover:bg-primary/90'
                       }`}
                   >
                     {isSaving ? (
@@ -765,8 +835,8 @@ const RMQualityReport: React.FC = () => {
                   onClick={handleExportAll}
                   disabled={isExportingAll || reports.length === 0}
                   className={`px-4 py-2.5 rounded-lg flex items-center font-bold text-sm shadow-md transition-all cursor-pointer ${isExportingAll || reports.length === 0
-                      ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                      : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                    : 'bg-primary text-primary-foreground hover:bg-primary/90'
                     }`}
                 >
                   {isExportingAll ? (
@@ -797,6 +867,41 @@ const RMQualityReport: React.FC = () => {
                 <motion.button
                   whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.98 }}
+                  onClick={handleMailAll}
+                  disabled={isMailingAll || reports.length === 0}
+                  className={`px-4 py-2.5 rounded-lg flex items-center font-bold text-sm shadow-md transition-all cursor-pointer ${isMailingAll || reports.length === 0
+                    ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                    }`}
+                >
+                  {isMailingAll ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{
+                          duration: 2,
+                          ease: 'linear',
+                          repeat: Infinity,
+                        }}
+                      >
+                        <RotateCw
+                          size={16}
+                          className="mr-2"
+                          strokeWidth={2.5}
+                        />
+                      </motion.div>
+                      Mailing...
+                    </>
+                  ) : (
+                    <>
+                      <Mail size={16} className="mr-2" strokeWidth={2.5} />
+                      Mail All
+                    </>
+                  )}
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => {
                     setShowForm(true);
                     setEditingReport(null);
@@ -818,28 +923,35 @@ const RMQualityReport: React.FC = () => {
           {/* Search and Filters Section */}
           <div className="p-6 pt-3 pb-2">
             <div className="flex flex-col md:flex-row gap-4 mb-3">
-              <div className="relative flex-grow">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-4 w-4 text-muted-foreground" />
+              {!isFilterOpen && (
+                <div className="relative flex-grow">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search reports..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 pr-4 py-2.5 w-full border border-input rounded-xl focus:ring-2 focus:ring-ring focus:border-ring outline-none transition-all duration-200 text-sm bg-background"
+                  />
                 </div>
-                <input
-                  type="text"
-                  placeholder="Search reports..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2.5 w-full border border-input rounded-xl focus:ring-2 focus:ring-ring focus:border-ring outline-none transition-all duration-200 text-sm bg-background"
-                />
-              </div>
+              )}
 
-              <div className="flex gap-2 shrink-0">
+              <div className="flex gap-2 shrink-0 items-center">
                 <motion.button
                   onClick={() => setIsFilterOpen(!isFilterOpen)}
-                  className="flex items-center gap-2 px-4 py-2.5 border border-input bg-background rounded-lg hover:bg-accent transition-colors duration-200 text-sm"
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors duration-200 text-sm ${isFilterOpen ? 'bg-accent/10 border border-primary/20' : 'bg-background border border-input hover:bg-accent'}`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <Filter className="h-4 w-4 text-muted-foreground" />
                   <span className="text-foreground">Filter</span>
+                  {Object.values(appliedFilters).some((v) => v) && (
+                    <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs bg-primary text-primary-foreground">
+                      Applied
+                    </span>
+                  )}
                   <motion.div
                     animate={{ rotate: isFilterOpen ? 180 : 0 }}
                     transition={{ duration: 0.2 }}
@@ -858,6 +970,69 @@ const RMQualityReport: React.FC = () => {
                   <span className="text-foreground">Refresh</span>
                 </motion.button>
               </div>
+
+              {isFilterOpen && (
+                <div className="mt-2 p-2 bg-card border border-border rounded-lg grid grid-cols-1 md:grid-cols-6 gap-2 items-end">
+                  <div className="md:col-span-2 flex flex-col">
+                    <label className="block text-xs text-muted-foreground mb-0.5">Supplier</label>
+                    <select
+                      value={filters.supplier}
+                      onChange={(e) => handleFilterChange('supplier', e.target.value)}
+                      className="w-full border border-input rounded px-2 py-1 bg-background text-xs focus:ring-1 focus:ring-primary/30 h-8"
+                    >
+                      <option value="">All Suppliers</option>
+                      {receivedVendors.map((v) => (
+                        <option key={v.id} value={v.name}>{v.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="md:col-span-2 flex flex-col">
+                    <label className="block text-xs text-muted-foreground mb-0.5">GRN</label>
+                    <input
+                      value={filters.grn}
+                      onChange={(e) => handleFilterChange('grn', e.target.value)}
+                      className="w-full border border-input rounded px-2 py-1 bg-background text-xs focus:ring-1 focus:ring-primary/30 h-8"
+                      placeholder="Contains GRN"
+                    />
+                  </div>
+
+                  <div className="md:col-span-1 flex flex-col">
+                    <label className="block text-xs text-muted-foreground mb-0.5">From Date</label>
+                    <input
+                      type="date"
+                      value={filters.fromDate}
+                      onChange={(e) => handleFilterChange('fromDate', e.target.value)}
+                      className="w-full border border-input rounded px-2 py-1 bg-background text-xs focus:ring-1 focus:ring-primary/30 h-8"
+                    />
+                  </div>
+
+                  <div className="md:col-span-1 flex flex-col">
+                    <label className="block text-xs text-muted-foreground mb-0.5">To Date</label>
+                    <input
+                      type="date"
+                      value={filters.toDate}
+                      onChange={(e) => handleFilterChange('toDate', e.target.value)}
+                      className="w-full border border-input rounded px-2 py-1 bg-background text-xs focus:ring-1 focus:ring-primary/30 h-8"
+                    />
+                  </div>
+
+                  <div className="md:col-span-6 flex gap-2 justify-end pt-1">
+                    <button
+                      onClick={clearFilters}
+                      className="px-3 py-1 border rounded bg-background text-xs hover:bg-accent h-8"
+                    >
+                      Clear
+                    </button>
+                    <button
+                      onClick={applyFilters}
+                      className="px-3 py-1 bg-primary text-primary-foreground rounded text-xs hover:bg-primary/90 h-8"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

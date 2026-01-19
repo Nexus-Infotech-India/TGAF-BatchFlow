@@ -7,13 +7,14 @@ import {
   FileText,
   TrendingUp,
   Package,
-  AlertCircle,
   Hash,
   Calendar as CalendarIcon,
   User2,
   Boxes,
+  Mail,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import ReceiveModal, {
   DeleteOrderModal,
   EditOrderModal,
@@ -62,6 +63,7 @@ const PurchaseOrderList: React.FC = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
+  const [sendingMailForOrder, setSendingMailForOrder] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const fetchOrders = async () => {
@@ -175,6 +177,31 @@ const PurchaseOrderList: React.FC = () => {
     setReceiveItemId(null);
   };
 
+  const handleSendMail = async () => {
+    try {
+      setSendingMailForOrder('all');
+      const authToken = localStorage.getItem('authToken');
+      console.log('=== Sending mail request ===');
+      console.log('URL:', API_ROUTES.RAW.SEND_PRODUCT_MAIL);
+      console.log('Token exists:', !!authToken);
+
+      const response = await api.get(API_ROUTES.RAW.SEND_PRODUCT_MAIL, {
+        headers: { Authorization: `Bearer ${authToken}` }
+      });
+
+      console.log('Response:', response.data);
+      toast.success('Complete purchase order history sent successfully!');
+    } catch (error: any) {
+      console.error('=== Error sending mail ===');
+      console.error('Error:', error);
+      console.error('Response data:', error.response?.data);
+      console.error('Response status:', error.response?.status);
+      toast.error(error.response?.data?.error || error.response?.data?.details || 'Failed to send email');
+    } finally {
+      setSendingMailForOrder(null);
+    }
+  };
+
   const totalOrders = orders.length;
   const receivedOrders = orders.filter((o) =>
     o.items.some((item) => item.status === 'Received')
@@ -214,6 +241,23 @@ const PurchaseOrderList: React.FC = () => {
               <p className="text-xs text-muted-foreground">Real-time order tracking and management</p>
             </div>
           </div>
+          <button
+            className="inline-flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/90 transition text-sm"
+            onClick={handleSendMail}
+            disabled={sendingMailForOrder === 'all'}
+          >
+            {sendingMailForOrder === 'all' ? (
+              <>
+                <Clock className="h-4 w-4 animate-spin" />
+                Sending...
+              </>
+            ) : (
+              <>
+                <Mail className="h-4 w-4" />
+                Send All Orders via Email
+              </>
+            )}
+          </button>
           <button
             className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition text-sm"
             onClick={() => navigate('/raw/purchase-order')}
@@ -391,30 +435,32 @@ const PurchaseOrderList: React.FC = () => {
                       </td>
                       <td className="px-4 py-3 text-center whitespace-nowrap">
                         <span className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full border ${item.status === 'Received'
-                            ? 'bg-accent text-foreground border-border'
-                            : 'bg-muted text-foreground border-border'
+                          ? 'bg-accent text-foreground border-border'
+                          : 'bg-muted text-foreground border-border'
                           }`}>
                           {item.status === 'Received' ? <CheckCircle className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
                           {item.status}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-center whitespace-nowrap">
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => {
-                            setReceiveItemId(item.id);
-                            setReceiveDefaultQty(item.quantityOrdered);
-                            setShowReceiveModal(true);
-                          }}
-                          disabled={item.status === 'Received'}
-                          className={`px-3 py-1 text-xs font-medium rounded transition ${item.status === 'Received'
+                        <div className="flex items-center justify-center gap-2">
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => {
+                              setReceiveItemId(item.id);
+                              setReceiveDefaultQty(item.quantityOrdered);
+                              setShowReceiveModal(true);
+                            }}
+                            disabled={item.status === 'Received'}
+                            className={`px-3 py-1 text-xs font-medium rounded transition ${item.status === 'Received'
                               ? 'bg-muted text-muted-foreground cursor-not-allowed'
                               : 'bg-primary text-primary-foreground hover:bg-primary/90'
-                            }`}
-                        >
-                          {item.status === 'Received' ? 'Received' : 'Receive'}
-                        </motion.button>
+                              }`}
+                          >
+                            {item.status === 'Received' ? 'Received' : 'Receive'}
+                          </motion.button>
+                        </div>
                       </td>
                     </motion.tr>
                   ))
