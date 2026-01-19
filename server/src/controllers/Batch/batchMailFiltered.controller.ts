@@ -126,7 +126,7 @@ export class BatchMailFilteredController {
             const filtersRow = worksheet.addRow({});
             worksheet.mergeCells('A2:H2');
             const filtersCell = filtersRow.getCell(1);
-            filtersCell.value = filtersApplied.length > 0 
+            filtersCell.value = filtersApplied.length > 0
                 ? `Filters: ${filtersApplied.join(' | ')}`
                 : 'No filters applied';
             filtersCell.font = { italic: true, size: 10, color: { argb: '666666' } };
@@ -258,7 +258,7 @@ export class BatchMailFilteredController {
             }).join('');
 
             // Filters HTML for email
-            const filtersHtml = filtersApplied.length > 0 
+            const filtersHtml = filtersApplied.length > 0
                 ? `<p><strong>Applied Filters:</strong> ${filtersApplied.join(', ')}</p>`
                 : '<p><strong>Applied Filters:</strong> None</p>';
 

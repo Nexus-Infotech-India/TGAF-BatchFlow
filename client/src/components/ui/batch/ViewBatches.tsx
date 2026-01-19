@@ -488,8 +488,8 @@ export default function ViewBatches() {
                   onClick={handleMailAll}
                   disabled={isMailingAll || !batchesData?.batches?.length}
                   className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors duration-200 text-sm ${isMailingAll || !batchesData?.batches?.length
-                      ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                      : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                    ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                    : 'bg-primary text-primary-foreground hover:bg-primary/90'
                     }`}
                   whileHover={{ scale: isMailingAll ? 1 : 1.02 }}
                   whileTap={{ scale: isMailingAll ? 1 : 0.98 }}
@@ -516,8 +516,8 @@ export default function ViewBatches() {
                   onClick={handleMailFiltered}
                   disabled={isMailingFiltered || !batchesData?.batches?.length || !(filters.status || filters.productId || filters.dateFrom || filters.dateTo || filters.batchNumber)}
                   className={`flex items-center gap-2 px-4 py-2.5 rounded-lg transition-colors duration-200 text-sm ${isMailingFiltered || !batchesData?.batches?.length || !(filters.status || filters.productId || filters.dateFrom || filters.dateTo || filters.batchNumber)
-                      ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                      : 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
+                    ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                    : 'bg-secondary text-secondary-foreground hover:bg-secondary/90'
                     }`}
                   whileHover={{ scale: isMailingFiltered ? 1 : 1.02 }}
                   whileTap={{ scale: isMailingFiltered ? 1 : 0.98 }}
