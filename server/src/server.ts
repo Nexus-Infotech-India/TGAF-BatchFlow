@@ -13,6 +13,7 @@ import auditRoutes from './routes/audit.route';
 import rawRoutes from './routes/raw.route';
 import draftRoutes from './routes/draft.route';
 import { updateAuditStatuses } from './jobs/updateauditstatus';
+import { runScheduledMailJob } from './jobs/scheduledMailJob';
 
 const app = express();
 const PORT = process.env.PORT;
@@ -62,6 +63,18 @@ app.use('/draft', draftRoutes);
     console.error('Failed to run initial audit status update job:', err);
   }
 })();
+
+// Schedule mail job - Runs every 1 minute (FOR TESTING)
+// TODO: Change back to '0 9 * * 1' for production (Monday at 9 AM)
+// cron.schedule('*/1 * * * *', async () => {
+//   console.log('Running scheduled mail job...');
+//   try {
+//     const result = await runScheduledMailJob();
+//     console.log('Scheduled mail job result:', result);
+//   } catch (err) {
+//     console.error('Failed to run scheduled mail job:', err);
+//   }
+// });
 
 // Start the server
 app.listen(PORT, () => {
