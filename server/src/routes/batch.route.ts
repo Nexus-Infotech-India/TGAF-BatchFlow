@@ -15,7 +15,13 @@ router.put('/batches/:id/submit', authenticate, BatchController.submitBatch);
 router.put('/batches/:id/approve', authenticate, BatchController.approveBatch);
 router.put('/batches/:id/reject', authenticate, BatchController.rejectBatch);
 router.get('/batches/export', authenticate, BatchController.exportToExcel);
-router.get('/batches/mail/all', authenticate, BatchMailController.mailAllBatches);
+// Allow internal calls without auth for scheduled jobs
+router.get('/batches/mail/all', (req, res, next) => {
+    if (req.headers['x-internal-call'] === 'true') {
+        return BatchMailController.mailAllBatches(req, res);
+    }
+    return authenticate(req, res, next);
+}, BatchMailController.mailAllBatches);
 router.post('/batches/mail/filtered', authenticate, BatchMailFilteredController.mailFilteredBatches);
 router.get('/logs', authenticate, BatchController.getActivityLogs);
 router.get('/batches-with-drafts', authenticate, BatchController.getBatchesWithDrafts);
