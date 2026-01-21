@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node dist/server.js",
-    "build": "tsc",
+    "build": "tsc && copyfiles -u 1 src/generated/**/* dist/generated",
     "dev": "nodemon src/server.ts",
     "prepare": "husky install",
     "seed": "ts-node prisma/seed.ts",
@@ -52,6 +52,7 @@
     "@types/nodemailer": "^6.4.17",
     "@types/pdfkit": "^0.13.9",
     "@types/xlsx": "^0.0.36",
+    "copyfiles": "^2.4.1",
     "eslint": "^9.24.0",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.0.0",
