@@ -1,0 +1,280 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PurchaseOrderController = void 0;
+const prisma_1 = require("../../generated/prisma");
+const prisma = new prisma_1.PrismaClient();
+class PurchaseOrderController {
+    // Create a new purchase order with items
+    static async createPurchaseOrder(req, res) {
+        try {
+            const { vendorId, orderDate, expectedDate, items } = req.body;
+            // items: [{ rawMaterialId, quantityOrdered, rate }]
+            const poNumber = `PO-${Date.now()}`;
+            const purchaseOrder = await prisma.purchaseOrder.create({
+                data: {
+                    poNumber,
+                    vendorId,
+                    orderDate: new Date(orderDate),
+                    expectedDate: new Date(expectedDate),
+                    status: 'Created',
+                    items: {
+                        create: items.map((item) => ({
+                            rawMaterialId: item.rawMaterialId,
+                            quantityOrdered: item.quantityOrdered,
+                            rate: item.rate,
+                            status: 'Pending',
+                        })),
+                    },
+                },
+                include: { items: true },
+            });
+            await prisma.transactionLog.create({
+                data: {
+                    type: 'CREATE',
+                    entity: 'PurchaseOrder',
+                    entityId: purchaseOrder.id,
+                    userId: req.user?.id || 'system',
+                    description: `Created purchase order: ${poNumber}\nDetails: ${JSON.stringify(purchaseOrder, null, 2)}`,
+                },
+            });
+            res.status(201).json(purchaseOrder);
+        }
+        catch (error) {
+            res.status(500).json({ error: 'Failed to create purchase order', details: error });
+        }
+    }
+    // Get all purchase orders (with optional filter by vendor or status)
+    static async getPurchaseOrders(req, res) {
+        try {
+            const { vendorId, status } = req.query;
+            const where = {};
+            if (vendorId)
+                where.vendorId = vendorId;
+            if (status)
+                where.status = status;
+            const purchaseOrders = await prisma.purchaseOrder.findMany({
+                where,
+                include: { vendor: true, items: true },
+            });
+            res.json(purchaseOrders);
+        }
+        catch (error) {
+            res.status(500).json({ error: 'Failed to fetch purchase orders', details: error });
+        }
+    }
+    // Get a single purchase order by ID
+    static async getPurchaseOrderById(req, res) {
+        try {
+            const { id } = req.params;
+            const purchaseOrder = await prisma.purchaseOrder.findUnique({
+                where: { id },
+                include: { vendor: true, items: true },
+            });
+            if (!purchaseOrder) {
+                res.status(404).json({ error: 'Purchase order not found' });
+            }
+            res.json(purchaseOrder);
+        }
+        catch (error) {
+            res.status(500).json({ error: 'Failed to fetch purchase order', details: error });
+        }
+    }
+    // Update purchase order status or details
+    static async updatePurchaseOrder(req, res) {
+        try {
+            const { id } = req.params;
+            const { status, expectedDate } = req.body;
+            const purchaseOrder = await prisma.purchaseOrder.update({
+                where: { id },
+                data: {
+                    status,
+                    expectedDate: expectedDate ? new Date(expectedDate) : undefined,
+                },
+            });
+            await prisma.transactionLog.create({
+                data: {
+                    type: 'UPDATE',
+                    entity: 'PurchaseOrder',
+                    entityId: purchaseOrder.id,
+                    userId: req.user?.id || 'system',
+                    description: `Updated purchase order: ${purchaseOrder.poNumber}\nDetails: ${JSON.stringify(purchaseOrder, null, 2)}`,
+                },
+            });
+            res.json(purchaseOrder);
+        }
+        catch (error) {
+            res.status(500).json({ error: 'Failed to update purchase order', details: error });
+        }
+    }
+    // Update purchase order item (e.g., mark as received)
+    static async updatePurchaseOrderItem(req, res) {
+        try {
+            const { itemId } = req.params;
+            const { quantityReceived, status, warehouseId } = req.body;
+            // 1. Update the PO item
+            const item = await prisma.purchaseOrderItem.update({
+                where: { id: itemId },
+                data: {
+                    quantityReceived,
+                    status,
+                },
+                include: { rawMaterial: true, purchaseOrder: true },
+            });
+            // 2. Only update stock if item is marked as 'Received'
+            if (status === 'Received' && quantityReceived > 0 && warehouseId) {
+                // Find if a CurrentStock record exists
+                const currentStock = await prisma.currentStock.findUnique({
+                    where: {
+                        rawMaterialId_warehouseId: {
+                            rawMaterialId: item.rawMaterialId,
+                            warehouseId: warehouseId,
+                        },
+                    },
+                });
+                if (currentStock) {
+                    // Update existing stock
+                    await prisma.currentStock.update({
+                        where: {
+                            rawMaterialId_warehouseId: {
+                                rawMaterialId: item.rawMaterialId,
+                                warehouseId: warehouseId,
+                            },
+                        },
+                        data: {
+                            currentQuantity: { increment: quantityReceived },
+                        },
+                    });
+                }
+                else {
+                    // Create new stock record
+                    await prisma.currentStock.create({
+                        data: {
+                            rawMaterialId: item.rawMaterialId,
+                            warehouseId: warehouseId,
+                            currentQuantity: quantityReceived,
+                        },
+                    });
+                }
+                // Optionally, create a StockEntry record for traceability
+                await prisma.stockEntry.create({
+                    data: {
+                        rawMaterialId: item.rawMaterialId,
+                        warehouseId: warehouseId,
+                        quantity: quantityReceived,
+                        entryType: 'IN',
+                        referenceId: itemId,
+                        status: 'Received',
+                    },
+                });
+            }
+            await prisma.transactionLog.create({
+                data: {
+                    type: 'UPDATE',
+                    entity: 'PurchaseOrderItem',
+                    entityId: item.id,
+                    userId: req.user?.id || 'system',
+                    description: `Updated purchase order item for PO: ${item.purchaseOrder.poNumber}\nItem Details: ${JSON.stringify(item, null, 2)}`,
+                },
+            });
+            res.json(item);
+        }
+        catch (error) {
+            res.status(500).json({ error: 'Failed to update purchase order item', details: error });
+        }
+    }
+    // Get all current stock items (renamed logic, same endpoint name)
+    static async getAllPurchaseOrderItems(req, res) {
+        try {
+            // Fetch all current stock entries, join with material and warehouse
+            const stocks = await prisma.currentStock.findMany({
+                include: {
+                    rawMaterial: true,
+                    warehouse: true,
+                },
+                orderBy: { lastUpdated: 'desc' },
+            });
+            // Format response for frontend
+            const result = stocks.map(stock => ({
+                rawMaterialId: stock.rawMaterialId,
+                materialName: stock.rawMaterial.name,
+                warehouseId: stock.warehouseId,
+                warehouseName: stock.warehouse.name,
+                currentQuantity: stock.currentQuantity,
+                lastUpdated: stock.lastUpdated,
+                unitOfMeasurement: stock.rawMaterial.unitOfMeasurement,
+            }));
+            res.json(result);
+        }
+        catch (error) {
+            res.status(500).json({ error: 'Failed to fetch current stock', details: error });
+        }
+    }
+    static async getReceivedRawMaterials(req, res) {
+        try {
+            const receivedItems = await prisma.purchaseOrderItem.findMany({
+                where: {
+                    status: 'Received',
+                },
+                include: {
+                    rawMaterial: true,
+                    purchaseOrder: {
+                        include: {
+                            vendor: true,
+                        },
+                    },
+                },
+                orderBy: {
+                    purchaseOrder: {
+                        orderDate: 'desc',
+                    },
+                },
+            });
+            // Get unique raw materials
+            const uniqueRawMaterials = Array.from(new Map(receivedItems.map(item => [
+                item.rawMaterial.id,
+                {
+                    id: item.rawMaterial.id,
+                    name: item.rawMaterial.name,
+                    skuCode: item.rawMaterial.skuCode,
+                    category: item.rawMaterial.category,
+                    unitOfMeasurement: item.rawMaterial.unitOfMeasurement,
+                },
+            ])).values());
+            res.json(uniqueRawMaterials);
+        }
+        catch (error) {
+            res.status(500).json({ error: 'Failed to fetch received raw materials', details: error });
+        }
+    }
+    // Get vendors from received orders
+    static async getVendorsFromReceivedOrders(req, res) {
+        try {
+            const receivedOrders = await prisma.purchaseOrder.findMany({
+                where: {
+                    items: {
+                        some: {
+                            status: 'Received',
+                        },
+                    },
+                },
+                include: {
+                    vendor: true,
+                },
+                distinct: ['vendorId'],
+            });
+            const uniqueVendors = Array.from(new Map(receivedOrders.map(order => [
+                order.vendor.id,
+                {
+                    id: order.vendor.id,
+                    name: order.vendor.name,
+                    vendorCode: order.vendor.vendorCode,
+                },
+            ])).values());
+            res.json(uniqueVendors);
+        }
+        catch (error) {
+            res.status(500).json({ error: 'Failed to fetch vendors from received orders', details: error });
+        }
+    }
+}
+exports.PurchaseOrderController = PurchaseOrderController;
