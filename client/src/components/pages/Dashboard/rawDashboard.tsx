@@ -283,7 +283,7 @@ const RawDashboard: React.FC = () => {
                 <td className="px-4 py-3">
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-bold text-primary">{totalStock.toLocaleString()}</span>
-                    <span className="text-xs text-muted-foreground">kg/litre</span>
+                    <span className="text-xs text-muted-foreground">kg</span>
                   </div>
                 </td>
               </tr>
@@ -306,7 +306,7 @@ const RawDashboard: React.FC = () => {
                 <td className="px-4 py-3">
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-bold text-blue-600">{stockUnderCleaning.toLocaleString()}</span>
-                    <span className="text-xs text-muted-foreground">kg/litre</span>
+                    <span className="text-xs text-muted-foreground">kg</span>
                   </div>
                 </td>
                 <td className="px-4 py-3 text-right text-xs text-muted-foreground">{cleaningDetails.length} items</td>
@@ -318,7 +318,7 @@ const RawDashboard: React.FC = () => {
                 <td className="px-4 py-3">
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-bold text-purple-600">{stockInProcessing.toLocaleString()}</span>
-                    <span className="text-xs text-muted-foreground">kg/litre</span>
+                    <span className="text-xs text-muted-foreground">kg</span>
                   </div>
                 </td>
                 <td className="px-4 py-3 text-right text-xs text-muted-foreground">{processingDetails.length} items</td>
@@ -330,7 +330,7 @@ const RawDashboard: React.FC = () => {
                 <td className="px-4 py-3">
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-bold text-red-600">{wasteStock.total.toLocaleString()}</span>
-                    <span className="text-xs text-muted-foreground">kg/litre</span>
+                    <span className="text-xs text-muted-foreground">kg</span>
                   </div>
                 </td>
                 <td className="px-4 py-3 text-right text-xs text-muted-foreground">

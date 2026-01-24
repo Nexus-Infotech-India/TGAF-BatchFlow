@@ -61,7 +61,7 @@ const itemVariants = {
 
 // Fixed parameters for Chilli
 const CHILLI_PARAMETERS = [
-  { parameter: 'Moisture', standard: 'max 8%' },
+  { parameter: 'Moisture', standard: 'max 10%' },
   { parameter: 'ASTA Color', standard: 'min 40' },
   { parameter: 'Acid Insoluble Ash', standard: 'max 1.5%' },
   { parameter: 'Total Ash', standard: 'max 8%' },
@@ -129,6 +129,9 @@ const RMQualityReport: React.FC = () => {
   const [isExportingAll, setIsExportingAll] = useState(false);
   const [isMailingAll, setIsMailingAll] = useState(false);
   const [isMailingFiltered, setIsMailingFiltered] = useState(false);
+  const [selectedReportIds, setSelectedReportIds] = useState<string[]>([]);
+  const [isDeletingMultiple, setIsDeletingMultiple] = useState(false);
+
   // Handler for mailing filtered reports
   const handleMailFiltered = async () => {
     if (filteredReports.length === 0) {
@@ -354,6 +357,52 @@ const RMQualityReport: React.FC = () => {
         }
       } catch (error) {
         toast.error('Failed to delete report');
+      }
+    }
+  };
+
+  const handleToggleSelect = (id: string) => {
+    setSelectedReportIds(prev => 
+      prev.includes(id) ? prev.filter(reportId => reportId !== id) : [...prev, id]
+    );
+  };
+
+  const handleToggleSelectAll = () => {
+    if (selectedReportIds.length === filteredReports.length) {
+      setSelectedReportIds([]);
+    } else {
+      setSelectedReportIds(filteredReports.map(r => r.id));
+    }
+  };
+
+  const handleDeleteMultiple = async () => {
+    if (selectedReportIds.length === 0) {
+      toast.error('No reports selected');
+      return;
+    }
+
+    if (window.confirm(`Are you sure you want to delete ${selectedReportIds.length} selected report(s)?`)) {
+      try {
+        setIsDeletingMultiple(true);
+        const deletePromises = selectedReportIds.map(id => deleteRMQualityReport(id));
+        const results = await Promise.all(deletePromises);
+        
+        const successCount = results.filter(r => r.success).length;
+        const failCount = results.length - successCount;
+        
+        if (successCount > 0) {
+          toast.success(`${successCount} report(s) deleted successfully`);
+        }
+        if (failCount > 0) {
+          toast.error(`Failed to delete ${failCount} report(s)`);
+        }
+        
+        setSelectedReportIds([]);
+        fetchReports();
+      } catch (error) {
+        toast.error('Failed to delete reports');
+      } finally {
+        setIsDeletingMultiple(false);
       }
     }
   };
@@ -901,6 +950,43 @@ const RMQualityReport: React.FC = () => {
                 </h1>
               </div>
               <div className="flex gap-2">
+                {/* Bulk Delete Button - shown when items are selected */}
+                {selectedReportIds.length > 0 && (
+                  <motion.button
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={handleDeleteMultiple}
+                    disabled={isDeletingMultiple}
+                    className={`px-4 py-2.5 rounded-lg flex items-center font-bold text-sm shadow-md transition-all cursor-pointer ${
+                      isDeletingMultiple
+                        ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                        : 'bg-destructive text-destructive-foreground hover:bg-destructive/90'
+                    }`}
+                  >
+                    {isDeletingMultiple ? (
+                      <>
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{
+                            duration: 2,
+                            ease: 'linear',
+                            repeat: Infinity,
+                          }}
+                        >
+                          <RotateCw size={16} className="mr-2" strokeWidth={2.5} />
+                        </motion.div>
+                        Deleting...
+                      </>
+                    ) : (
+                      <>
+                        <X size={16} className="mr-2" strokeWidth={2.5} />
+                        Delete ({selectedReportIds.length})
+                      </>
+                    )}
+                  </motion.button>
+                )}
                 {/* Export Filtered */}
                 <motion.button
                   whileHover={{ scale: 1.04 }}
@@ -1236,6 +1322,15 @@ const RMQualityReport: React.FC = () => {
                   <table className="min-w-full border border-border text-sm">
                     <thead className="bg-muted/40 border-b border-border">
                       <tr className="text-xs text-muted-foreground uppercase">
+                        <th className="px-3 py-2 text-center w-12">
+                          <input
+                            type="checkbox"
+                            checked={filteredReports.length > 0 && selectedReportIds.length === filteredReports.length}
+                            onChange={handleToggleSelectAll}
+                            className="w-4 h-4 cursor-pointer accent-primary"
+                            title="Select all"
+                          />
+                        </th>
                         <th className="px-3 py-2 text-left">Raw Material</th>
                         <th className="px-3 py-2 text-left">Variety</th>
                         <th className="px-3 py-2 text-left">Supplier</th>
@@ -1255,6 +1350,16 @@ const RMQualityReport: React.FC = () => {
                           transition={{ delay: index * 0.04 }}
                           className="hover:bg-muted/30"
                         >
+                          <td className="px-3 py-2 text-center">
+                            <input
+                              type="checkbox"
+                              checked={selectedReportIds.includes(report.id)}
+                              onChange={() => handleToggleSelect(report.id)}
+                              className="w-4 h-4 cursor-pointer accent-primary"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          </td>
+
                           <td className="px-3 py-2 font-medium text-foreground">
                             {report.rawMaterialName}
                           </td>
