@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node dist/server.js",
-     "build": "tsc && copyfiles -u 1 \"src/generated/**/*\" dist/",
+    "build": "tsc && copyfiles -u 1 \"src/generated/**/*\" dist/",
     "dev": "nodemon src/server.ts",
     "prepare": "husky install",
     "seed": "ts-node prisma/seed.ts",

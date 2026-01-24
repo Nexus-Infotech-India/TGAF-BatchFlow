@@ -4,7 +4,7 @@ exports.DashboardController = void 0;
 const prisma_1 = require("../../generated/prisma");
 const prisma = new prisma_1.PrismaClient();
 class DashboardController {
-    // 📦 Total Raw Material Stock (kg/litre) - Return all stock details
+    // 📦 Total Raw Material Stock (kg) - Return all stock details
     static async getTotalRawMaterialStock(req, res) {
         try {
             const stocks = await prisma.currentStock.findMany({
