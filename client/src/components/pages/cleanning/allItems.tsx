@@ -452,7 +452,7 @@ const AllItems: React.FC = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-foreground">
-                  `Current Stock`
+                  Current Stock
                 </h1>
                 <p className="text-muted-foreground text-sm">
                   View and manage all raw material stock and cleaning jobs

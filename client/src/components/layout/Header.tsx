@@ -17,8 +17,6 @@ import {
   Search,
   Zap,
   Activity,
-  Sun,
-  Moon,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -46,7 +44,6 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
   const [showSearchPanel, setShowSearchPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const brandRef = useRef<HTMLDivElement>(null);
 
   const { data: user, isLoading } = useQuery({
@@ -97,52 +94,54 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
     setShowSearchPanel(false);
   };
 
-  const toggleTheme = () => {
-    if (theme === 'light') {
-      document.body.classList.add('dark');
-      setTheme('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.body.classList.remove('dark');
-      setTheme('light');
-      localStorage.setItem('theme', 'light');
-    }
-  };
+  // Theme toggle disabled
+  // const toggleTheme = () => {
+  //   if (theme === 'light') {
+  //     document.body.classList.add('dark');
+  //     setTheme('dark');
+  //     localStorage.setItem('theme', 'dark');
+  //   } else {
+  //     document.body.classList.remove('dark');
+  //     setTheme('light');
+  //     localStorage.setItem('theme', 'light');
+  //   }
+  // };
 
-  useEffect(() => {
-    // Check for saved theme preference, default to light
-    const savedTheme = localStorage.getItem('theme');
-
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      setTheme('dark');
-    } else {
-      document.body.classList.remove('dark');
-      setTheme('light');
-      // Set default if not already set
-      if (!savedTheme) {
-        localStorage.setItem('theme', 'light');
-      }
-    }
-
-    // Listen for system theme changes if no manual preference is set
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e: MediaQueryListEvent) => {
-      const currentSavedTheme = localStorage.getItem('theme');
-      if (!currentSavedTheme) {
-        if (e.matches) {
-          document.body.classList.add('dark');
-          setTheme('dark');
-        } else {
-          document.body.classList.remove('dark');
-          setTheme('light');
-        }
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  // Theme initialization and system preference listener disabled
+  // useEffect(() => {
+  //   // Check for saved theme preference, default to light
+  //   const savedTheme = localStorage.getItem('theme');
+  //
+  //   if (savedTheme === 'dark') {
+  //     document.body.classList.add('dark');
+  //     setTheme('dark');
+  //   } else {
+  //     document.body.classList.remove('dark');
+  //     setTheme('light');
+  //     // Set default if not already set
+  //     if (!savedTheme) {
+  //       localStorage.setItem('theme', 'light');
+  //     }
+  //   }
+  //
+  //   // Listen for system theme changes if no manual preference is set
+  //   const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  //   const handleChange = (e: MediaQueryListEvent) => {
+  //     const currentSavedTheme = localStorage.getItem('theme');
+  //     if (!currentSavedTheme) {
+  //       if (e.matches) {
+  //         document.body.classList.add('dark');
+  //         setTheme('dark');
+  //       } else {
+  //         document.body.classList.remove('dark');
+  //         setTheme('light');
+  //       }
+  //     }
+  //   };
+  //
+  //   mediaQuery.addEventListener('change', handleChange);
+  //   return () => mediaQuery.removeEventListener('change', handleChange);
+  // }, []);
 
   // GSAP animation for brand name on mount
   useEffect(() => {
@@ -331,8 +330,8 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
           </div>
           {/* Action Buttons */}
           <div className="flex items-center gap-2 md:gap-2.5">
-            {/* Theme Toggle Button */}
-            <motion.button
+            {/* Theme toggle hidden (disabled) */}
+            {/* <motion.button
               className="p-2 md:p-2.5 rounded-lg transition-all duration-200 group focus:outline-none focus:ring-2 focus:ring-primary"
               onClick={toggleTheme}
               whileHover={{ scale: 1.06 }}
@@ -355,7 +354,7 @@ const HeaderBar: React.FC<HeaderBarProps> = ({
               ) : (
                 <Moon size={20} className="transition-colors" style={{ color: 'var(--primary)' }} />
               )}
-            </motion.button>
+            </motion.button> */}
             {/* Search Button */}
             <div className="relative">
               <motion.button
