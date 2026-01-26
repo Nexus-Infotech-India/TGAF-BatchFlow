@@ -31,6 +31,7 @@ import {
 } from 'antd';
 import type { MenuProps } from 'antd';
 import { BookOpen, Calendar as CalendarIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Status configuration
 const statusConfig: Record<string, { icon: React.ReactNode; label: string }> = {
@@ -60,6 +61,7 @@ const getStatusClasses = (status: string) => {
 };
 
 const TrainingList: React.FC = () => {
+  const navigate = useNavigate();
   const [trainings, setTrainings] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedTraining, setSelectedTraining] = useState<any>(null);
@@ -334,7 +336,9 @@ const TrainingList: React.FC = () => {
                         <p className="text-sm text-muted-foreground">Manage and track training programs</p>
                       </div>
                     </div>
-                    <button className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium">
+                    <button
+                    onClick={()=>navigate('/trainings/create')}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium">
                       <FiPlus size={16} />
                       New Training
                     </button>

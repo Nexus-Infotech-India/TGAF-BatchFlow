@@ -262,7 +262,7 @@ const CreateTraining: React.FC = () => {
         <div className="hidden md:flex items-center bg-primary/5 rounded-lg px-4 py-2 border border-primary/20">
           <FiInfo className="text-primary mr-2" />
           <span className="text-primary text-sm">
-            <span className="font-medium">Fields marked with * are required</span>
+            <span className="font-medium">Fields marked with <span className='text-red-500' >*</span>  are required</span>
           </span>
         </div>
       </motion.div>
