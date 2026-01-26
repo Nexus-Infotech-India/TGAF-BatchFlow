@@ -11,6 +11,9 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+generator erd {
+  provider = "prisma-erd-generator"
+}
 
 // Models and enums from schema.prisma
 model ActivityLog {
