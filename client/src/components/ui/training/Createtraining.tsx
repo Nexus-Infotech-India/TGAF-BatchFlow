@@ -177,7 +177,43 @@ const CreateTraining: React.FC = () => {
       setIsSubmitting(true);
 
       // Format the data according to the API requirements
+      const values = form.getFieldsValue();
+      const payload = {
+        title: values.title,
+        description: values.description,
+        trainingType: values.trainingType,
+        startDate: values.startDate,
+        endDate: values.endDate,
+        location: values.location,
+        maxParticipants: values.maxParticipants ?? null,
+        trainerId: values.trainerId,
+        month: values.month ?? currentMonth,
+        year: values.year ?? currentYear,
+        calendarDescription: values.calendarDescription,
+        participants: selectedParticipants,
+        session: {
+          title: values.session?.title,
+          description: values.session?.description,
+          startTime: values.session?.startTime ? values.session.startTime.toISOString() : null,
+          endTime: values.session?.endTime ? values.session.endTime.toISOString() : null,
+          venue: values.session?.venue
+        }
+      };
 
+      // Send to server (only if API exists)
+      try {
+        await api.post(API_ROUTES.TRAINING.CREATE_TRAINING, payload, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
+        });
+      } catch (err: any) {
+        console.error('Create training API error:', err);
+        message.error(err?.response?.data?.message || 'Failed to create training on server');
+        setLoading(false);
+        setTimeout(() => {
+          setIsSubmitting(false);
+        }, 500);
+        return; // abort success flow
+      }
 
       setSuccess(true);
       message.success('Training created successfully');
@@ -185,7 +221,7 @@ const CreateTraining: React.FC = () => {
       // Show success state for a moment before redirecting
       setTimeout(() => {
         navigate('/trainings'); // Redirect to training list
-      }, 1500);
+      }, 3000);
     } catch (error) {
       console.error('Error creating training:', error);
       message.error('Failed to create training. Please check your inputs and try again.');
