@@ -54,7 +54,8 @@ app.use('/draft', draftRoutes);
 // });
 
 // Also run once at server startup to ensure statuses are updated immediately
-(async () => {
+// Delay execution to allow database to wake up (Neon databases auto-pause)
+setTimeout(async () => {
   console.log('Running initial audit status update job at server startup...');
   try {
     const result = await updateAuditStatuses();
@@ -62,7 +63,7 @@ app.use('/draft', draftRoutes);
   } catch (err) {
     console.error('Failed to run initial audit status update job:', err);
   }
-})();
+}, 5000); // Wait 5 seconds before running
 
 // Schedule mail job - Runs every 1 minute (FOR TESTING)
 // TODO: Change back to '0 9 * * 1' for production (Monday at 9 AM)

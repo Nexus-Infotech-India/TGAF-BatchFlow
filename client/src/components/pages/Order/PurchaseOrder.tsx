@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
 import {
   CheckCircle,
@@ -18,6 +18,10 @@ import { toast } from 'react-toastify';
 import ReceiveModal, {
   DeleteOrderModal,
   EditOrderModal,
+  GRNBagWeightModal,
+  GRNSummaryModal,
+  BagWeight,
+  GRNData,
 } from '../../ui/Order/statusModal';
 import { useNavigate } from 'react-router-dom';
 
@@ -64,6 +68,17 @@ const PurchaseOrderList: React.FC = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
   const [sendingMailForOrder, setSendingMailForOrder] = useState<string | null>(null);
+  
+  // GRN Modal States
+  const [showGRNBagWeightModal, setShowGRNBagWeightModal] = useState(false);
+  const [showGRNSummaryModal, setShowGRNSummaryModal] = useState(false);
+  const [grnData, setGrnData] = useState<GRNData | null>(null);
+  const grnDataRef = useRef<GRNData | null>(null);
+  const [currentItemForGRN, setCurrentItemForGRN] = useState<{
+    item: PurchaseOrderItem;
+    order: PurchaseOrder;
+  } | null>(null);
+  
   const navigate = useNavigate();
 
   const fetchOrders = async () => {
@@ -149,15 +164,21 @@ const PurchaseOrderList: React.FC = () => {
 
   const handleReceiveConfirm = async (warehouseId: string, quantity: number) => {
     if (!receiveItemId) return;
+    // Use ref to get the latest grnData reliably
+    const currentGrnData = grnDataRef.current;
+    console.log('handleReceiveConfirm - grnDataRef.current:', currentGrnData);
     try {
       const authToken = localStorage.getItem('authToken');
+      const requestBody = {
+        status: 'Received',
+        warehouseId,
+        quantityReceived: quantity,
+        grnData: currentGrnData,
+      };
+      console.log('Sending request body:', JSON.stringify(requestBody, null, 2));
       await api.put(
         API_ROUTES.RAW.UPDATE_PURCHASE_ORDER_ITEM(receiveItemId),
-        {
-          status: 'Received',
-          warehouseId,
-          quantityReceived: quantity,
-        },
+        requestBody,
         { headers: { Authorization: `Bearer ${authToken}` } }
       );
       setOrders((prev) =>
@@ -175,6 +196,70 @@ const PurchaseOrderList: React.FC = () => {
     }
     setShowReceiveModal(false);
     setReceiveItemId(null);
+    setGrnData(null);
+    grnDataRef.current = null;
+    setCurrentItemForGRN(null);
+  };
+
+  // Generate GRN Number
+  const generateGRNNumber = () => {
+    const date = new Date();
+    const dateStr = date.toISOString().split('T')[0].replace(/-/g, '');
+    const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    return `GRN-${dateStr}-${random}`;
+  };
+
+  // Handle opening GRN flow
+  const handleStartReceive = (item: PurchaseOrderItem, order: PurchaseOrder) => {
+    setCurrentItemForGRN({ item, order });
+    setShowGRNBagWeightModal(true);
+  };
+
+  // Handle bag weights submission
+  const handleBagWeightsSubmit = (bagWeights: BagWeight[]) => {
+    if (!currentItemForGRN) return;
+
+    const { item, order } = currentItemForGRN;
+    const totalConfirmedWeight = bagWeights.reduce((sum, b) => sum + b.weight, 0);
+    
+    // PO quantityOrdered is in KG (invoice weight)
+    const invoiceWeight = item.quantityOrdered;
+    // User provides number of bags, so we don't have invoice bags from PO
+    // We'll use 0 or calculate based on some standard if needed
+    const invoiceQtyBags = 0; // PO doesn't specify bags, only total weight in KG
+
+    const newGrnData: GRNData = {
+      date: new Date().toLocaleDateString(),
+      itemName: item.rawMaterial?.name || 'Unknown',
+      supplierName: order.vendor?.name || 'Unknown',
+      invoiceQtyBags: invoiceQtyBags, // Will be 0 since PO is in KG not bags
+      invoiceWeight: invoiceWeight, // From PO quantityOrdered
+      confirmedQtyBags: bagWeights.length, // Number of bags user entered
+      confirmedWeight: totalConfirmedWeight, // Calculated from bags × weight per bag
+      weightDifference: totalConfirmedWeight - invoiceWeight,
+      grnNumber: generateGRNNumber(),
+      bagWeights: bagWeights,
+    };
+
+    setGrnData(newGrnData);
+    grnDataRef.current = newGrnData;
+    setShowGRNBagWeightModal(false);
+    setShowGRNSummaryModal(true);
+  };
+
+  // Handle GRN Summary confirmation
+  const handleGRNConfirm = (confirmedGrnData: GRNData) => {
+    if (!currentItemForGRN) return;
+
+    setGrnData(confirmedGrnData);
+    grnDataRef.current = confirmedGrnData;
+    console.log('handleGRNConfirm - stored grnData in ref:', confirmedGrnData);
+    setShowGRNSummaryModal(false);
+    
+    // Now open the existing Receive Modal
+    setReceiveItemId(currentItemForGRN.item.id);
+    setReceiveDefaultQty(confirmedGrnData.confirmedQtyBags);
+    setShowReceiveModal(true);
   };
 
   const handleSendMail = async () => {
@@ -447,11 +532,7 @@ const PurchaseOrderList: React.FC = () => {
                           <motion.button
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => {
-                              setReceiveItemId(item.id);
-                              setReceiveDefaultQty(item.quantityOrdered);
-                              setShowReceiveModal(true);
-                            }}
+                            onClick={() => handleStartReceive(item, order)}
                             disabled={item.status === 'Received'}
                             className={`px-3 py-1 text-xs font-medium rounded transition ${item.status === 'Received'
                               ? 'bg-muted text-muted-foreground cursor-not-allowed'
@@ -472,9 +553,33 @@ const PurchaseOrderList: React.FC = () => {
       </motion.div>
 
       {/* Modals */}
+      <GRNBagWeightModal
+        open={showGRNBagWeightModal}
+        onClose={() => {
+          setShowGRNBagWeightModal(false);
+          setCurrentItemForGRN(null);
+        }}
+        onSubmit={handleBagWeightsSubmit}
+        invoiceQtyBags={currentItemForGRN?.item.quantityOrdered || 0}
+        itemName={currentItemForGRN?.item.rawMaterial?.name || 'Unknown'}
+      />
+      <GRNSummaryModal
+        open={showGRNSummaryModal}
+        onClose={() => {
+          setShowGRNSummaryModal(false);
+          setShowGRNBagWeightModal(true); // Go back to bag weight entry
+        }}
+        onConfirm={handleGRNConfirm}
+        grnData={grnData}
+      />
       <ReceiveModal
         open={showReceiveModal}
-        onClose={() => setShowReceiveModal(false)}
+        onClose={() => {
+          setShowReceiveModal(false);
+          setGrnData(null);
+          grnDataRef.current = null;
+          setCurrentItemForGRN(null);
+        }}
         onConfirm={handleReceiveConfirm}
         defaultQuantity={receiveDefaultQty}
       />
