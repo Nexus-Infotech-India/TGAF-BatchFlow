@@ -536,7 +536,7 @@ const AuditDashboard: React.FC = () => {
                               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(audit.status)}`}>
                                 {audit.status.replace('_', ' ')}
                               </span>
-                              <ExternalLink size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                              {/* <ExternalLink size={16} className="text-muted-foreground group-hover:text-primary transition-colors" /> */}
                             </div>
                           </motion.div>
                         ))}
