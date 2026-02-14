@@ -270,6 +270,9 @@ const PurchaseOrderList: React.FC = () => {
                                     const pct = item.quantityOrdered > 0 ? Math.min(100, (item.totalReceived / item.quantityOrdered) * 100) : 0;
                                     const isExpanded = expandedRows.has(item.id);
 
+                                    // determine if order is editable/deletable: only when all items are pending (no receivals yet)
+                                    const orderEditable = order.items.every((it) => it.status === 'PENDING');
+
                                     return (
                                         <React.Fragment key={item.id}>
                                             <motion.tr
@@ -283,28 +286,32 @@ const PurchaseOrderList: React.FC = () => {
                                                         <td className="px-4 py-3 font-medium text-foreground" rowSpan={order.items.length}>
                                                             <div className="flex flex-col gap-1">
                                                                 <span>{order.poNumber}</span>
-                                                                <div className="flex gap-1">
-                                                                    <button
-                                                                        onClick={() => {
-                                                                            setSelectedOrder(order);
-                                                                            setEditModalOpen(true);
-                                                                        }}
-                                                                        className="p-1 text-muted-foreground hover:text-primary rounded transition"
-                                                                        title="Edit"
-                                                                    >
-                                                                        <Pencil className="w-3.5 h-3.5" />
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() => {
-                                                                            setSelectedOrder(order);
-                                                                            setDeleteModalOpen(true);
-                                                                        }}
-                                                                        className="p-1 text-muted-foreground hover:text-destructive rounded transition"
-                                                                        title="Delete"
-                                                                    >
-                                                                        <Trash2 className="w-3.5 h-3.5" />
-                                                                    </button>
-                                                                </div>
+                                                                {orderEditable ? (
+                                                                    <div className="flex gap-1">
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                setSelectedOrder(order);
+                                                                                setEditModalOpen(true);
+                                                                            }}
+                                                                            className="p-1 text-muted-foreground hover:text-primary rounded transition"
+                                                                            title="Edit"
+                                                                        >
+                                                                            <Pencil className="w-3.5 h-3.5" />
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() => {
+                                                                                setSelectedOrder(order);
+                                                                                setDeleteModalOpen(true);
+                                                                            }}
+                                                                            className="p-1 text-muted-foreground hover:text-destructive rounded transition"
+                                                                            title="Delete"
+                                                                        >
+                                                                            <Trash2 className="w-3.5 h-3.5" />
+                                                                        </button>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className="text-xs text-muted-foreground">No actions</div>
+                                                                )}
                                                             </div>
                                                         </td>
                                                         <td className="px-4 py-3 text-foreground/80" rowSpan={order.items.length}>
@@ -328,16 +335,18 @@ const PurchaseOrderList: React.FC = () => {
                                                     {item.quantityOrdered}
                                                 </td>
                                                 <td className="px-4 py-3">
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="flex-1 h-1.5 bg-muted/30 rounded-full overflow-hidden max-w-[80px]">
-                                                            <div
-                                                                className={`h-full rounded-full transition-all ${pct >= 100 ? 'bg-green-500' : 'bg-amber-500'}`}
-                                                                style={{ width: `${pct}%` }}
-                                                            />
-                                                        </div>
+                                                    <div className="flex flex-col items-center gap-2">
                                                         <span className="text-xs text-foreground font-medium">
                                                             {item.totalReceived}/{item.quantityOrdered}
                                                         </span>
+                                                        <div className="w-full max-w-[80px]">
+                                                            <div className="h-1.5 bg-muted/30 rounded-full overflow-hidden">
+                                                                <div
+                                                                    className={`h-full rounded-full transition-all ${pct >= 100 ? 'bg-green-500' : 'bg-amber-500'}`}
+                                                                    style={{ width: `${pct}%` }}
+                                                                />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </td>
                                                 <td className="px-4 py-3 text-foreground/80">
