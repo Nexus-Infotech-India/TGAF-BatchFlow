@@ -23,7 +23,7 @@ export const getPurchaseOrdersByProduct = async (req: Request, res: Response): P
 
     // Group by PO
     const poMap: Record<string, any> = {};
-    poItems.forEach((item: { purchaseOrder: any; quantityOrdered: any; quantityReceived: any; }) => {
+    poItems.forEach((item: { purchaseOrder: any; quantityOrdered: any; totalReceived: any; }) => {
       const po = item.purchaseOrder;
       if (!poMap[po.id]) {
         poMap[po.id] = {
@@ -37,9 +37,9 @@ export const getPurchaseOrdersByProduct = async (req: Request, res: Response): P
         };
       }
       poMap[po.id].totalQuantity += item.quantityOrdered;
-      poMap[po.id].receivedQuantity += item.quantityReceived;
+      poMap[po.id].receivedQuantity += item.totalReceived;
     });
-    
+
     res.json(Object.values(poMap));
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch purchase orders' });
@@ -182,10 +182,10 @@ export const getPurchaseOrderTimeline = async (req: Request, res: Response): Pro
           orderNumber: po.poNumber,
           orderDate: po.orderDate,
           vendor: { id: po.vendor.id, name: po.vendor.name },
-          items: po.items.map((item: { rawMaterial: { id: any; name: any; }; quantityOrdered: any; quantityReceived: any; }) => ({
+          items: po.items.map((item: { rawMaterial: { id: any; name: any; }; quantityOrdered: any; totalReceived: any; }) => ({
             rawMaterial: { id: item.rawMaterial.id, name: item.rawMaterial.name },
             orderedQuantity: item.quantityOrdered,
-            receivedQuantity: item.quantityReceived,
+            receivedQuantity: item.totalReceived,
             warehouse: null // You can fetch warehouse if needed
           }))
         },

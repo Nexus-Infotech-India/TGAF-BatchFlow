@@ -7,7 +7,6 @@ export class PurchaseOrderController {
   static async createPurchaseOrder(req: Request, res: Response) {
     try {
       const { vendorId, orderDate, expectedDate, items } = req.body;
-      // items: [{ rawMaterialId, quantityOrdered, rate }]
       const poNumber = `PO-${Date.now()}`;
       const purchaseOrder = await prisma.purchaseOrder.create({
         data: {
@@ -21,7 +20,8 @@ export class PurchaseOrderController {
               rawMaterialId: item.rawMaterialId,
               quantityOrdered: item.quantityOrdered,
               rate: item.rate,
-              status: 'Pending',
+              status: 'PENDING',
+              totalReceived: 0,
             })),
           },
         },
@@ -33,7 +33,7 @@ export class PurchaseOrderController {
           entity: 'PurchaseOrder',
           entityId: purchaseOrder.id,
           userId: req.user?.id || 'system',
-          description: `Created purchase order: ${poNumber}\nDetails: ${JSON.stringify(purchaseOrder, null, 2)}`,
+          description: `Created purchase order: ${poNumber}`,
         },
       });
       res.status(201).json(purchaseOrder);
@@ -51,8 +51,49 @@ export class PurchaseOrderController {
       if (status) where.status = status;
       const purchaseOrders = await prisma.purchaseOrder.findMany({
         where,
-        include: { vendor: true, items: true },
+        include: {
+          vendor: true,
+          items: {
+            include: {
+              rawMaterial: true,
+              receivals: {
+                include: {
+                  bags: true,
+                  warehouse: true,
+                },
+                orderBy: { receivedDate: 'desc' as const },
+              },
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' as const },
       });
+
+      // Auto-correct stale statuses
+      const corrections: Promise<any>[] = [];
+      for (const po of purchaseOrders) {
+        for (const item of po.items) {
+          let correctStatus: string | null = null;
+          if (item.totalReceived >= item.quantityOrdered && item.status !== 'RECEIVED') {
+            correctStatus = 'RECEIVED';
+          } else if (item.totalReceived > 0 && item.totalReceived < item.quantityOrdered && item.status === 'PENDING') {
+            correctStatus = 'PARTIALLY_RECEIVED';
+          }
+          if (correctStatus) {
+            (item as any).status = correctStatus;
+            corrections.push(
+              prisma.purchaseOrderItem.update({
+                where: { id: item.id },
+                data: { status: correctStatus as any },
+              })
+            );
+          }
+        }
+      }
+      if (corrections.length > 0) {
+        await Promise.all(corrections).catch(() => { });
+      }
+
       res.json(purchaseOrders);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch purchase orders', details: error });
@@ -65,10 +106,25 @@ export class PurchaseOrderController {
       const { id } = req.params;
       const purchaseOrder = await prisma.purchaseOrder.findUnique({
         where: { id },
-        include: { vendor: true, items: true },
+        include: {
+          vendor: true,
+          items: {
+            include: {
+              rawMaterial: true,
+              receivals: {
+                include: {
+                  bags: true,
+                  warehouse: true,
+                },
+                orderBy: { receivedDate: 'desc' as const },
+              },
+            },
+          },
+        },
       });
       if (!purchaseOrder) {
         res.status(404).json({ error: 'Purchase order not found' });
+        return;
       }
       res.json(purchaseOrder);
     } catch (error) {
@@ -94,7 +150,7 @@ export class PurchaseOrderController {
           entity: 'PurchaseOrder',
           entityId: purchaseOrder.id,
           userId: req.user?.id || 'system',
-          description: `Updated purchase order: ${purchaseOrder.poNumber}\nDetails: ${JSON.stringify(purchaseOrder, null, 2)}`,
+          description: `Updated purchase order: ${purchaseOrder.poNumber}`,
         },
       });
       res.json(purchaseOrder);
@@ -103,101 +159,223 @@ export class PurchaseOrderController {
     }
   }
 
-  // Update purchase order item (e.g., mark as received)
-  static async updatePurchaseOrderItem(req: Request, res: Response) {
+  // Receive items for a purchase order item (partial or full)
+  static async updatePurchaseOrderItem(req: Request, res: Response): Promise<void> {
     try {
       const { itemId } = req.params;
-      const { quantityReceived, status, warehouseId } = req.body;
+      const {
+        warehouseId,
+        weightMode,
+        bags,
+        totalWeight,
+        numberOfBags,
+        notes,
+      } = req.body;
 
-      // 1. Update the PO item
-      const item = await prisma.purchaseOrderItem.update({
+      // 1. Fetch the current item with its receivals
+      const item = await prisma.purchaseOrderItem.findUnique({
         where: { id: itemId },
-        data: {
-          quantityReceived,
-          status,
+        include: {
+          receivals: true,
+          rawMaterial: true,
+          purchaseOrder: true,
         },
-        include: { rawMaterial: true, purchaseOrder: true },
       });
 
-      // 2. Only update stock if item is marked as 'Received'
-      if (status === 'Received' && quantityReceived > 0 && warehouseId) {
-        // Find if a CurrentStock record exists
-        const currentStock = await prisma.currentStock.findUnique({
+      if (!item) {
+        res.status(404).json({ error: 'Purchase order item not found' });
+        return;
+      }
+
+      // 2. If already RECEIVED, block further receiving
+      if (item.status === 'RECEIVED') {
+        res.status(400).json({
+          error: 'This item has already been fully received. No further receiving is allowed.',
+        });
+        return;
+      }
+
+      if (!warehouseId) {
+        res.status(400).json({ error: 'warehouseId is required' });
+        return;
+      }
+
+      // 3. Calculate weight for this receival
+      let receivalWeight = 0;
+      let bagData: { bagNo: number; bagWeight: number }[] = [];
+
+      if (weightMode === 'INDIVIDUAL') {
+        if (!bags || !Array.isArray(bags) || bags.length === 0) {
+          res.status(400).json({ error: 'bags array is required for INDIVIDUAL weight mode' });
+          return;
+        }
+        receivalWeight = bags.reduce((sum: number, b: any) => sum + (b.bagWeight || 0), 0);
+        bagData = bags.map((b: any, idx: number) => ({
+          bagNo: b.bagNo || idx + 1,
+          bagWeight: b.bagWeight,
+        }));
+      } else {
+        if (!totalWeight || totalWeight <= 0) {
+          res.status(400).json({ error: 'totalWeight is required for TOTAL weight mode' });
+          return;
+        }
+        receivalWeight = totalWeight;
+        if (numberOfBags && numberOfBags > 0) {
+          const weightPerBag = totalWeight / numberOfBags;
+          bagData = Array.from({ length: numberOfBags }, (_, i) => ({
+            bagNo: i + 1,
+            bagWeight: parseFloat(weightPerBag.toFixed(2)),
+          }));
+        }
+      }
+
+      const newTotalReceived = item.totalReceived + receivalWeight;
+
+      // 4. Determine the final status based on quantity comparison
+      let finalStatus: string;
+      if (newTotalReceived >= item.quantityOrdered) {
+        finalStatus = 'RECEIVED';
+      } else if (newTotalReceived > 0) {
+        finalStatus = 'PARTIALLY_RECEIVED';
+      } else {
+        finalStatus = 'PENDING';
+      }
+
+      // 5. Create the receival entry in a transaction (30s timeout for remote DB)
+      const result = await prisma.$transaction(async (tx) => {
+        const receivalEntry = await tx.receivalEntry.create({
+          data: {
+            purchaseOrderItemId: itemId,
+            warehouseId,
+            weightMode: weightMode === 'INDIVIDUAL' ? 'INDIVIDUAL' : 'TOTAL',
+            totalWeight: receivalWeight,
+            notes,
+            bags: bagData.length > 0
+              ? { create: bagData }
+              : undefined,
+          },
+          include: { bags: true, warehouse: true },
+        });
+
+        const updatedItem = await tx.purchaseOrderItem.update({
+          where: { id: itemId },
+          data: {
+            totalReceived: newTotalReceived,
+            status: finalStatus as any,
+          },
+          include: {
+            rawMaterial: true,
+            purchaseOrder: true,
+            receivals: {
+              include: { bags: true, warehouse: true },
+              orderBy: { receivedDate: 'desc' as const },
+            },
+          },
+        });
+
+        const currentStock = await tx.currentStock.findUnique({
           where: {
             rawMaterialId_warehouseId: {
               rawMaterialId: item.rawMaterialId,
-              warehouseId: warehouseId,
+              warehouseId,
             },
           },
         });
 
         if (currentStock) {
-          // Update existing stock
-          await prisma.currentStock.update({
+          await tx.currentStock.update({
             where: {
               rawMaterialId_warehouseId: {
                 rawMaterialId: item.rawMaterialId,
-                warehouseId: warehouseId,
+                warehouseId,
               },
             },
             data: {
-              currentQuantity: { increment: quantityReceived },
+              currentQuantity: { increment: receivalWeight },
             },
           });
         } else {
-          // Create new stock record
-          await prisma.currentStock.create({
+          await tx.currentStock.create({
             data: {
               rawMaterialId: item.rawMaterialId,
-              warehouseId: warehouseId,
-              currentQuantity: quantityReceived,
+              warehouseId,
+              currentQuantity: receivalWeight,
             },
           });
         }
 
-        // Optionally, create a StockEntry record for traceability
-        await prisma.stockEntry.create({
+        await tx.stockEntry.create({
           data: {
             rawMaterialId: item.rawMaterialId,
-            warehouseId: warehouseId,
-            quantity: quantityReceived,
+            warehouseId,
+            quantity: receivalWeight,
             entryType: 'IN',
-            referenceId: itemId,
+            referenceId: receivalEntry.id,
             status: 'Received',
           },
         });
-      }
 
-      await prisma.transactionLog.create({
-        data: {
-          type: 'UPDATE',
-          entity: 'PurchaseOrderItem',
-          entityId: item.id,
-          userId: req.user?.id || 'system',
-          description: `Updated purchase order item for PO: ${item.purchaseOrder.poNumber}\nItem Details: ${JSON.stringify(item, null, 2)}`,
-        },
+        // Transaction log (non-blocking)
+        if (req.user?.id) {
+          try {
+            await tx.transactionLog.create({
+              data: {
+                type: 'RECEIVE',
+                entity: 'PurchaseOrderItem',
+                entityId: item.id,
+                userId: req.user.id,
+                description: `Received ${receivalWeight} for PO: ${item.purchaseOrder.poNumber}, Material: ${item.rawMaterial.name}. Status: ${finalStatus}. Mode: ${weightMode}`,
+              },
+            });
+          } catch (logError) {
+            console.warn('Failed to create transaction log:', logError);
+          }
+        }
+
+        return updatedItem;
+      }, { timeout: 30000, maxWait: 10000 });
+
+      res.json(result);
+    } catch (error: any) {
+      console.error('Error receiving purchase order item:', error);
+      res.status(500).json({
+        error: 'Failed to receive purchase order item',
+        message: error?.message || 'Unknown error',
+        code: error?.code,
       });
-
-      res.json(item);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to update purchase order item', details: error });
     }
   }
 
-  // Get all current stock items (renamed logic, same endpoint name)
+  // Get receival history for a specific item
+  static async getReceivalHistory(req: Request, res: Response): Promise<void> {
+    try {
+      const { itemId } = req.params;
+      const receivals = await prisma.receivalEntry.findMany({
+        where: { purchaseOrderItemId: itemId },
+        include: {
+          bags: true,
+          warehouse: true,
+        },
+        orderBy: { receivedDate: 'desc' as const },
+      });
+      res.json(receivals);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch receival history', details: error });
+    }
+  }
+
+  // Get all current stock items
   static async getAllPurchaseOrderItems(req: Request, res: Response) {
     try {
-      // Fetch all current stock entries, join with material and warehouse
       const stocks = await prisma.currentStock.findMany({
         include: {
           rawMaterial: true,
           warehouse: true,
         },
-        orderBy: { lastUpdated: 'desc' },
+        orderBy: { lastUpdated: 'desc' as const },
       });
 
-      // Format response for frontend
-      const result = stocks.map(stock => ({
+      const result = stocks.map((stock: any) => ({
         rawMaterialId: stock.rawMaterialId,
         materialName: stock.rawMaterial.name,
         warehouseId: stock.warehouseId,
@@ -217,7 +395,7 @@ export class PurchaseOrderController {
     try {
       const receivedItems = await prisma.purchaseOrderItem.findMany({
         where: {
-          status: 'Received',
+          status: { in: ['RECEIVED', 'PARTIALLY_RECEIVED'] },
         },
         include: {
           rawMaterial: true,
@@ -229,15 +407,14 @@ export class PurchaseOrderController {
         },
         orderBy: {
           purchaseOrder: {
-            orderDate: 'desc',
+            orderDate: 'desc' as const,
           },
         },
       });
 
-      // Get unique raw materials
       const uniqueRawMaterials = Array.from(
         new Map(
-          receivedItems.map(item => [
+          receivedItems.map((item: any) => [
             item.rawMaterial.id,
             {
               id: item.rawMaterial.id,
@@ -263,7 +440,7 @@ export class PurchaseOrderController {
         where: {
           items: {
             some: {
-              status: 'Received',
+              status: { in: ['RECEIVED', 'PARTIALLY_RECEIVED'] },
             },
           },
         },
@@ -275,7 +452,7 @@ export class PurchaseOrderController {
 
       const uniqueVendors = Array.from(
         new Map(
-          receivedOrders.map(order => [
+          receivedOrders.map((order: any) => [
             order.vendor.id,
             {
               id: order.vendor.id,
@@ -289,6 +466,46 @@ export class PurchaseOrderController {
       res.json(uniqueVendors);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch vendors from received orders', details: error });
+    }
+  }
+
+  // Delete a purchase order
+  static async deletePurchaseOrder(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const po = await prisma.purchaseOrder.findUnique({
+        where: { id },
+        include: { items: { include: { receivals: true } } },
+      });
+
+      if (!po) {
+        res.status(404).json({ error: 'Purchase order not found' });
+        return;
+      }
+
+      const hasReceivals = po.items.some((item: any) => item.receivals.length > 0);
+      if (hasReceivals) {
+        res.status(400).json({ error: 'Cannot delete a purchase order that has received items' });
+        return;
+      }
+
+      await prisma.$transaction(async (tx) => {
+        await tx.purchaseOrderItem.deleteMany({ where: { purchaseOrderId: id } });
+        await tx.purchaseOrder.delete({ where: { id } });
+        await tx.transactionLog.create({
+          data: {
+            type: 'DELETE',
+            entity: 'PurchaseOrder',
+            entityId: id,
+            userId: req.user?.id || 'system',
+            description: `Deleted purchase order: ${po.poNumber}`,
+          },
+        });
+      });
+
+      res.json({ message: 'Purchase order deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to delete purchase order', details: error });
     }
   }
 }

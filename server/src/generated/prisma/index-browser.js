@@ -671,8 +671,25 @@ exports.Prisma.PurchaseOrderItemScalarFieldEnum = {
   rawMaterialId: 'rawMaterialId',
   quantityOrdered: 'quantityOrdered',
   rate: 'rate',
-  quantityReceived: 'quantityReceived',
+  totalReceived: 'totalReceived',
   status: 'status'
+};
+
+exports.Prisma.ReceivalEntryScalarFieldEnum = {
+  id: 'id',
+  purchaseOrderItemId: 'purchaseOrderItemId',
+  warehouseId: 'warehouseId',
+  weightMode: 'weightMode',
+  totalWeight: 'totalWeight',
+  notes: 'notes',
+  receivedDate: 'receivedDate'
+};
+
+exports.Prisma.ReceivalBagScalarFieldEnum = {
+  id: 'id',
+  receivalEntryId: 'receivalEntryId',
+  bagNo: 'bagNo',
+  bagWeight: 'bagWeight'
 };
 
 exports.Prisma.StockEntryScalarFieldEnum = {
@@ -955,6 +972,17 @@ exports.AuditDocumentType = exports.$Enums.AuditDocumentType = {
   OTHER: 'OTHER'
 };
 
+exports.PurchaseOrderItemStatus = exports.$Enums.PurchaseOrderItemStatus = {
+  PENDING: 'PENDING',
+  PARTIALLY_RECEIVED: 'PARTIALLY_RECEIVED',
+  RECEIVED: 'RECEIVED'
+};
+
+exports.WeightMode = exports.$Enums.WeightMode = {
+  INDIVIDUAL: 'INDIVIDUAL',
+  TOTAL: 'TOTAL'
+};
+
 exports.Prisma.ModelName = {
   ActivityLog: 'ActivityLog',
   Batch: 'Batch',
@@ -1002,6 +1030,8 @@ exports.Prisma.ModelName = {
   RawMaterialProduct: 'RawMaterialProduct',
   PurchaseOrder: 'PurchaseOrder',
   PurchaseOrderItem: 'PurchaseOrderItem',
+  ReceivalEntry: 'ReceivalEntry',
+  ReceivalBag: 'ReceivalBag',
   StockEntry: 'StockEntry',
   Warehouse: 'Warehouse',
   CleaningJob: 'CleaningJob',

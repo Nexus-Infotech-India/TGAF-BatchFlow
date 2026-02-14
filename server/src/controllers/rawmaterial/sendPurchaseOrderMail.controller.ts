@@ -40,6 +40,7 @@ export async function sendPurchaseOrderMail(req: Request, res: Response): Promis
         // Build table rows
         const tableRows = poItems.map((item, index) => {
             const bgColor = index % 2 === 0 ? '#F5F5F5' : '#FFFFFF';
+            const statusColor = item.status === 'RECEIVED' ? '#27ae60' : item.status === 'PARTIALLY_RECEIVED' ? '#f39c12' : '#95a5a6';
             return `
                 <tr>
                     <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; font-weight: bold;">${item.purchaseOrder.poNumber}</td>
@@ -47,10 +48,10 @@ export async function sendPurchaseOrderMail(req: Request, res: Response): Promis
                     <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor};">${item.rawMaterial.name}</td>
                     <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">${new Date(item.purchaseOrder.orderDate).toLocaleDateString('en-IN')}</td>
                     <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">${item.quantityOrdered}</td>
-                    <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">${item.quantityReceived}</td>
+                    <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">${item.totalReceived}</td>
                     <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">₦${item.rate}</td>
                     <td style="padding: 12px; border: 1px solid #ddd; background-color: ${bgColor}; text-align: center;">
-                        <span style="background-color: ${item.status === 'Received' ? '#27ae60' : '#f39c12'}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: bold;">
+                        <span style="background-color: ${statusColor}; color: white; padding: 4px 12px; border-radius: 12px; font-size: 11px; font-weight: bold;">
                             ${item.status}
                         </span>
                     </td>

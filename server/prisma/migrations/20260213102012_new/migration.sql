@@ -1,0 +1,2 @@
+-- This migration was applied directly to the database and baseline'd locally.
+-- The schema already exists in the database.

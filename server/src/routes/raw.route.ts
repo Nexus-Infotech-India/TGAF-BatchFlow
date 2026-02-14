@@ -45,11 +45,13 @@ router.delete('/product/:id', RawMaterialProductController.deleteRawMaterialProd
 router.post('/purchase', PurchaseOrderController.createPurchaseOrder);
 router.get('/purchase', PurchaseOrderController.getPurchaseOrders);
 router.get('/purchase/send-mail', sendPurchaseOrderMail);
-router.get('/purchase/:id', PurchaseOrderController.getPurchaseOrderById);
-router.put('/purchase/:id', PurchaseOrderController.updatePurchaseOrder);
-router.put('/purchase/item/:itemId', PurchaseOrderController.updatePurchaseOrderItem);
 router.get('/purchase/received/raw-materials', PurchaseOrderController.getReceivedRawMaterials);
 router.get('/purchase/received/vendors', PurchaseOrderController.getVendorsFromReceivedOrders);
+router.put('/purchase/item/:itemId', PurchaseOrderController.updatePurchaseOrderItem);
+router.get('/purchase/item/:itemId/receivals', PurchaseOrderController.getReceivalHistory);
+router.get('/purchase/:id', PurchaseOrderController.getPurchaseOrderById);
+router.put('/purchase/:id', PurchaseOrderController.updatePurchaseOrder);
+router.delete('/purchase/:id', PurchaseOrderController.deletePurchaseOrder);
 
 // Stock Entries
 router.post('/stock', StockEntryController.createStockEntry);

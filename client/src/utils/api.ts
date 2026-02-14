@@ -271,6 +271,8 @@ export const API_ROUTES = {
     GET_RECEIVED_RAW_MATERIALS: `${BASE_URL}/raw/purchase/received/raw-materials`,
     GET_RECEIVED_VENDORS: `${BASE_URL}/raw/purchase/received/vendors`,
     UPDATE_PURCHASE_ORDER_ITEM: (itemId: string) => `${BASE_URL}/raw/purchase/item/${itemId}`,
+    GET_RECEIVAL_HISTORY: (itemId: string) => `${BASE_URL}/raw/purchase/item/${itemId}/receivals`,
+    DELETE_PURCHASE_ORDER: (id: string) => `${BASE_URL}/raw/purchase/${id}`,
 
     // Stock Entries
     CREATE_STOCK_ENTRY: `${BASE_URL}/raw/stock`,
