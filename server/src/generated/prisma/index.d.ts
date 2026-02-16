@@ -59291,6 +59291,7 @@ export namespace Prisma {
     skuCode: string | null
     name: string | null
     category: string | null
+    variety: string | null
     unitOfMeasurement: string | null
     minReorderLevel: number | null
     createdAt: Date | null
@@ -59303,6 +59304,7 @@ export namespace Prisma {
     skuCode: string | null
     name: string | null
     category: string | null
+    variety: string | null
     unitOfMeasurement: string | null
     minReorderLevel: number | null
     createdAt: Date | null
@@ -59315,6 +59317,7 @@ export namespace Prisma {
     skuCode: number
     name: number
     category: number
+    variety: number
     unitOfMeasurement: number
     minReorderLevel: number
     createdAt: number
@@ -59337,6 +59340,7 @@ export namespace Prisma {
     skuCode?: true
     name?: true
     category?: true
+    variety?: true
     unitOfMeasurement?: true
     minReorderLevel?: true
     createdAt?: true
@@ -59349,6 +59353,7 @@ export namespace Prisma {
     skuCode?: true
     name?: true
     category?: true
+    variety?: true
     unitOfMeasurement?: true
     minReorderLevel?: true
     createdAt?: true
@@ -59361,6 +59366,7 @@ export namespace Prisma {
     skuCode?: true
     name?: true
     category?: true
+    variety?: true
     unitOfMeasurement?: true
     minReorderLevel?: true
     createdAt?: true
@@ -59460,6 +59466,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt: Date
@@ -59491,6 +59498,7 @@ export namespace Prisma {
     skuCode?: boolean
     name?: boolean
     category?: boolean
+    variety?: boolean
     unitOfMeasurement?: boolean
     minReorderLevel?: boolean
     createdAt?: boolean
@@ -59510,6 +59518,7 @@ export namespace Prisma {
     skuCode?: boolean
     name?: boolean
     category?: boolean
+    variety?: boolean
     unitOfMeasurement?: boolean
     minReorderLevel?: boolean
     createdAt?: boolean
@@ -59523,6 +59532,7 @@ export namespace Prisma {
     skuCode?: boolean
     name?: boolean
     category?: boolean
+    variety?: boolean
     unitOfMeasurement?: boolean
     minReorderLevel?: boolean
     createdAt?: boolean
@@ -59536,6 +59546,7 @@ export namespace Prisma {
     skuCode?: boolean
     name?: boolean
     category?: boolean
+    variety?: boolean
     unitOfMeasurement?: boolean
     minReorderLevel?: boolean
     createdAt?: boolean
@@ -59543,7 +59554,7 @@ export namespace Prisma {
     vendorId?: boolean
   }
 
-  export type RawMaterialProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "skuCode" | "name" | "category" | "unitOfMeasurement" | "minReorderLevel" | "createdAt" | "updatedAt" | "vendorId", ExtArgs["result"]["rawMaterialProduct"]>
+  export type RawMaterialProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "skuCode" | "name" | "category" | "variety" | "unitOfMeasurement" | "minReorderLevel" | "createdAt" | "updatedAt" | "vendorId", ExtArgs["result"]["rawMaterialProduct"]>
   export type RawMaterialProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cleaningJobs?: boolean | RawMaterialProduct$cleaningJobsArgs<ExtArgs>
     currentStocks?: boolean | RawMaterialProduct$currentStocksArgs<ExtArgs>
@@ -59575,6 +59586,7 @@ export namespace Prisma {
       skuCode: string
       name: string
       category: string
+      variety: string | null
       unitOfMeasurement: string
       minReorderLevel: number
       createdAt: Date
@@ -60013,6 +60025,7 @@ export namespace Prisma {
     readonly skuCode: FieldRef<"RawMaterialProduct", 'String'>
     readonly name: FieldRef<"RawMaterialProduct", 'String'>
     readonly category: FieldRef<"RawMaterialProduct", 'String'>
+    readonly variety: FieldRef<"RawMaterialProduct", 'String'>
     readonly unitOfMeasurement: FieldRef<"RawMaterialProduct", 'String'>
     readonly minReorderLevel: FieldRef<"RawMaterialProduct", 'Int'>
     readonly createdAt: FieldRef<"RawMaterialProduct", 'DateTime'>
@@ -80778,6 +80791,7 @@ export namespace Prisma {
     skuCode: 'skuCode',
     name: 'name',
     category: 'category',
+    variety: 'variety',
     unitOfMeasurement: 'unitOfMeasurement',
     minReorderLevel: 'minReorderLevel',
     createdAt: 'createdAt',
@@ -85041,6 +85055,7 @@ export namespace Prisma {
     skuCode?: StringFilter<"RawMaterialProduct"> | string
     name?: StringFilter<"RawMaterialProduct"> | string
     category?: StringFilter<"RawMaterialProduct"> | string
+    variety?: StringNullableFilter<"RawMaterialProduct"> | string | null
     unitOfMeasurement?: StringFilter<"RawMaterialProduct"> | string
     minReorderLevel?: IntFilter<"RawMaterialProduct"> | number
     createdAt?: DateTimeFilter<"RawMaterialProduct"> | Date | string
@@ -85059,6 +85074,7 @@ export namespace Prisma {
     skuCode?: SortOrder
     name?: SortOrder
     category?: SortOrder
+    variety?: SortOrderInput | SortOrder
     unitOfMeasurement?: SortOrder
     minReorderLevel?: SortOrder
     createdAt?: SortOrder
@@ -85080,6 +85096,7 @@ export namespace Prisma {
     NOT?: RawMaterialProductWhereInput | RawMaterialProductWhereInput[]
     name?: StringFilter<"RawMaterialProduct"> | string
     category?: StringFilter<"RawMaterialProduct"> | string
+    variety?: StringNullableFilter<"RawMaterialProduct"> | string | null
     unitOfMeasurement?: StringFilter<"RawMaterialProduct"> | string
     minReorderLevel?: IntFilter<"RawMaterialProduct"> | number
     createdAt?: DateTimeFilter<"RawMaterialProduct"> | Date | string
@@ -85098,6 +85115,7 @@ export namespace Prisma {
     skuCode?: SortOrder
     name?: SortOrder
     category?: SortOrder
+    variety?: SortOrderInput | SortOrder
     unitOfMeasurement?: SortOrder
     minReorderLevel?: SortOrder
     createdAt?: SortOrder
@@ -85118,6 +85136,7 @@ export namespace Prisma {
     skuCode?: StringWithAggregatesFilter<"RawMaterialProduct"> | string
     name?: StringWithAggregatesFilter<"RawMaterialProduct"> | string
     category?: StringWithAggregatesFilter<"RawMaterialProduct"> | string
+    variety?: StringNullableWithAggregatesFilter<"RawMaterialProduct"> | string | null
     unitOfMeasurement?: StringWithAggregatesFilter<"RawMaterialProduct"> | string
     minReorderLevel?: IntWithAggregatesFilter<"RawMaterialProduct"> | number
     createdAt?: DateTimeWithAggregatesFilter<"RawMaterialProduct"> | Date | string
@@ -90321,6 +90340,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -90338,6 +90358,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -90355,6 +90376,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -90372,6 +90394,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -90389,6 +90412,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -90401,6 +90425,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -90412,6 +90437,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -94422,6 +94448,7 @@ export namespace Prisma {
     skuCode?: SortOrder
     name?: SortOrder
     category?: SortOrder
+    variety?: SortOrder
     unitOfMeasurement?: SortOrder
     minReorderLevel?: SortOrder
     createdAt?: SortOrder
@@ -94438,6 +94465,7 @@ export namespace Prisma {
     skuCode?: SortOrder
     name?: SortOrder
     category?: SortOrder
+    variety?: SortOrder
     unitOfMeasurement?: SortOrder
     minReorderLevel?: SortOrder
     createdAt?: SortOrder
@@ -94450,6 +94478,7 @@ export namespace Prisma {
     skuCode?: SortOrder
     name?: SortOrder
     category?: SortOrder
+    variety?: SortOrder
     unitOfMeasurement?: SortOrder
     minReorderLevel?: SortOrder
     createdAt?: SortOrder
@@ -117767,6 +117796,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -117783,6 +117813,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -117858,6 +117889,7 @@ export namespace Prisma {
     skuCode?: StringFilter<"RawMaterialProduct"> | string
     name?: StringFilter<"RawMaterialProduct"> | string
     category?: StringFilter<"RawMaterialProduct"> | string
+    variety?: StringNullableFilter<"RawMaterialProduct"> | string | null
     unitOfMeasurement?: StringFilter<"RawMaterialProduct"> | string
     minReorderLevel?: IntFilter<"RawMaterialProduct"> | number
     createdAt?: DateTimeFilter<"RawMaterialProduct"> | Date | string
@@ -118410,6 +118442,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -118426,6 +118459,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -118521,6 +118555,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -118537,6 +118572,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -118830,6 +118866,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -118846,6 +118883,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -118919,6 +118957,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -118935,6 +118974,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119627,6 +119667,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -119643,6 +119684,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -119795,6 +119837,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -119811,6 +119854,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -120278,6 +120322,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -120294,6 +120339,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -120358,6 +120404,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -120374,6 +120421,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -120678,6 +120726,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -120694,6 +120743,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -120767,6 +120817,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -120783,6 +120834,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126165,6 +126217,7 @@ export namespace Prisma {
     skuCode: string
     name: string
     category: string
+    variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
     createdAt?: Date | string
@@ -126208,6 +126261,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126224,6 +126278,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -126240,6 +126295,7 @@ export namespace Prisma {
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

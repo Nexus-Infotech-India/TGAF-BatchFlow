@@ -6,6 +6,7 @@ type RawMaterial = {
   skuCode: string;
   name: string;
   category?: string;
+  variety?: string;
   unitOfMeasurement?: string;
   minReorderLevel?: number;
 };
@@ -39,7 +40,7 @@ const IconChevronRight = () => (
 const CreateRawMaterialPage: React.FC = () => {
   const [materials, setMaterials] = useState<RawMaterial[]>([]);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<any>({ skuCode: '', name: '', category: '', unitOfMeasurement: '', minReorderLevel: 0 });
+  const [form, setForm] = useState<any>({ skuCode: '', name: '', category: '', variety: '', unitOfMeasurement: '', minReorderLevel: 0 });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -84,7 +85,7 @@ const CreateRawMaterialPage: React.FC = () => {
   };
 
   const resetForm = () => {
-    setForm({ skuCode: '', name: '', category: '', unitOfMeasurement: '', minReorderLevel: 0 });
+    setForm({ skuCode: '', name: '', category: '', variety: '', unitOfMeasurement: '', minReorderLevel: 0 });
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -100,6 +101,7 @@ const CreateRawMaterialPage: React.FC = () => {
       skuCode: m.skuCode,
       name: m.name,
       category: m.category || '',
+      variety: m.variety || '',
       unitOfMeasurement: m.unitOfMeasurement || '',
       minReorderLevel: m.minReorderLevel || 0,
     });
@@ -298,6 +300,33 @@ const CreateRawMaterialPage: React.FC = () => {
               />
             </div>
 
+            {/* Variety */}
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>
+                Variety
+              </label>
+              <input
+                name="variety"
+                value={form.variety}
+                onChange={handleChange}
+                placeholder="e.g. Grade A"
+                className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200"
+                style={{
+                  background: 'color-mix(in srgb, var(--card) 96%, var(--primary) 4%)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--foreground)',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--primary)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              />
+            </div>
+
             {/* Unit of Measurement */}
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>
@@ -452,7 +481,7 @@ const CreateRawMaterialPage: React.FC = () => {
                     borderBottom: '1px solid var(--border)',
                   }}
                 >
-                  {['SKU Code', 'Name', 'Category', 'Unit', 'Reorder Lvl', 'Actions'].map((h) => (
+                  {['SKU Code', 'Name', 'Category', 'Variety', 'Unit', 'Reorder Lvl', 'Actions'].map((h) => (
                     <th
                       key={h}
                       className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider"
@@ -466,7 +495,7 @@ const CreateRawMaterialPage: React.FC = () => {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={6} className="px-5 py-12 text-center">
+                    <td colSpan={7} className="px-5 py-12 text-center">
                       <div className="flex flex-col items-center gap-3">
                         <span
                           className="inline-block w-8 h-8 border-[3px] rounded-full animate-spin"
@@ -478,7 +507,7 @@ const CreateRawMaterialPage: React.FC = () => {
                   </tr>
                 ) : materials.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-5 py-12 text-center">
+                    <td colSpan={7} className="px-5 py-12 text-center">
                       <div className="flex flex-col items-center gap-2">
                         <div style={{ color: 'var(--muted-foreground)', opacity: 0.5 }}>
                           <IconPackage />
@@ -519,6 +548,7 @@ const CreateRawMaterialPage: React.FC = () => {
                       </td>
                       <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{m.name}</td>
                       <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.category || '—'}</td>
+                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.variety || '—'}</td>
                       <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.unitOfMeasurement || '—'}</td>
                       <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{m.minReorderLevel ?? '—'}</td>
                       <td className="px-5 py-3.5">

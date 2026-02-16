@@ -647,6 +647,7 @@ exports.Prisma.RawMaterialProductScalarFieldEnum = {
   skuCode: 'skuCode',
   name: 'name',
   category: 'category',
+  variety: 'variety',
   unitOfMeasurement: 'unitOfMeasurement',
   minReorderLevel: 'minReorderLevel',
   createdAt: 'createdAt',

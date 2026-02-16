@@ -729,6 +729,7 @@ model RawMaterialProduct {
   skuCode            String              @unique
   name               String
   category           String
+  variety            String?
   unitOfMeasurement  String
   minReorderLevel    Int
   createdAt          DateTime            @default(now())
