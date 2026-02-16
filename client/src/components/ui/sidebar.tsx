@@ -5,6 +5,7 @@ import {
   Award,
   ChevronLeft,
   PackageOpen,
+  Building2,
   Calendar,
   ChevronRight,
   ChevronDown,
@@ -158,8 +159,28 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
 
   const parentGroups: ParentGroup[] = [
     {
+      key: "masters",
+      name: "Masters",
+      icon: <Building2 className="sidebar-icon" size={20} />,
+      children: [
+        {
+          path: "/masters/vendors/create",
+          name: "Vendor Master",
+          icon: <Building2 className="sidebar-icon" size={18} />,
+          permissionKey: "manage_vendors"
+        },
+        {
+          path: "/masters/raw-materials/create",
+          name: "Raw Material Master",
+          icon: <PackageOpen className="sidebar-icon" size={18} />,
+          permissionKey: "manage_raw_materials"
+        }
+      ]
+    },
+    
+    {
       key: "raw-material",
-      name: "Raw Material Managment",
+      name: "Material Management",
       icon: <PackageOpen className="sidebar-icon" size={20} />,
       children: [
         {
@@ -201,6 +222,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
         }
       ]
     },
+
+    
 
     {
       key: "batch-management",

@@ -31,6 +31,8 @@ import AuditDashboard from './components/pages/Dashboard/auditdashboard';
 import BatchVerification from './components/pages/Batch/batchverification';
 import PurchaseOrder from './components/ui/Order/PurchaseOrder';
 import PurchaseOrderList from './components/pages/Order/PurchaseOrder';
+import CreateVendorPage from './components/pages/Masters/CreateVendor';
+import CreateRawMaterialPage from './components/pages/Masters/CreateRawMaterial';
 import Stock from './components/pages/Stock/Stock';
 import CleaningRawMaterialList from './components/pages/cleanning/allItems';
 import TransactionalLog from './components/pages/Order/TransactionalLog';
@@ -665,6 +667,42 @@ const App = () => {
                   name="Purchase History"
                   description="View and manage all purchase history"
                   permissionKey="manage_purchase_history"
+                />
+              }
+            />
+
+            <Route
+              path="/masters/vendors/create"
+              element={
+                <PermissionedRoute
+                  path="/masters/vendors/create"
+                  element={
+                    <SecureRoute
+                      element={<CreateVendorPage />}
+                      permissionKey="manage_vendors"
+                    />
+                  }
+                  name="Create Vendor"
+                  description="Create new vendors (master data)"
+                  permissionKey="manage_vendors"
+                />
+              }
+            />
+
+            <Route
+              path="/masters/raw-materials/create"
+              element={
+                <PermissionedRoute
+                  path="/masters/raw-materials/create"
+                  element={
+                    <SecureRoute
+                      element={<CreateRawMaterialPage />}
+                      permissionKey="manage_raw_materials"
+                    />
+                  }
+                  name="Create Raw Material"
+                  description="Create raw material master data"
+                  permissionKey="manage_raw_materials"
                 />
               }
             />
