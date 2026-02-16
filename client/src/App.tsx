@@ -14,6 +14,7 @@ import Settings from './components/pages/Settings/Settings';
 import UserManagement from './components/pages/User/User-Management';
 import BatchComplianceReview from './components/pages/Review/BatchList';
 import PermissionedRoute from './hooks/Route/permissionedroute';
+import { registerRoute } from './hooks/Route/routeregistery';
 import SecureRoute from './components/layout/secureroute';
 import { RouteProvider } from './context/RouteProvider';
 import Unauthorized from './components/material/Unauthorized';
@@ -41,6 +42,54 @@ import RawDashboard from './components/pages/Dashboard/rawDashboard';
 import RMQualityReport from './components/pages/QualityReport/RMQualityReport';
 
 const App = () => {
+  // Pre-register permissioned routes so they appear in the permission selector
+  // even when those routes haven't been visited/mounted yet.
+  // registerRoute is idempotent (it updates existing entries), so calling
+  // here is safe and ensures the backend sync sees all pages.
+  const staticRoutes = [
+    { path: '/operation-dashboard', name: 'Operation Dashboard', description: 'View operation metrics and batch statistics', permissionKey: 'view_operation_dashboard' },
+    { path: '/training-dashboard', name: 'Training Dashboard', description: 'View training statistics and metrics', permissionKey: 'view_training_dashboard' },
+    { path: '/audit-dashboard', name: 'Audit Dashboard', description: 'View audit statistics and metrics', permissionKey: 'view_audit_dashboard' },
+    { path: '/standards', name: 'Standards Management', description: 'View and manage product standards and specifications', permissionKey: 'manage_standards' },
+    { path: '/document-library', name: 'Document Library', description: 'View and manage training documents and resources', permissionKey: 'manage_documents' },
+    { path: '/activity-logs', name: 'Activity Logs', description: 'View system activity logs and user actions', permissionKey: 'view_activity_logs' },
+    { path: '/profile', name: 'User Profile', description: 'View and manage personal profile information', permissionKey: 'view_profile' },
+    { path: '/settings', name: 'System Settings', description: 'Configure system settings and preferences', permissionKey: 'manage_settings' },
+    { path: '/access-control', name: 'Access Control', description: 'Manage users, roles and system permissions', permissionKey: 'manage_users' },
+    { path: '/batches', name: 'Batch Management', description: 'View and manage product batches', permissionKey: 'view_batches' },
+    { path: '/create-batch', name: 'Create Batch', description: 'Create new product batches', permissionKey: 'create_batch' },
+    { path: '/batches/verification', name: 'Batch Verification', description: 'Verify and validate batch compliance', permissionKey: 'verify_batches' },
+    { path: '/compare-batch', name: 'Batch Compliance Review', description: 'Review and approve batch compliance standards', permissionKey: 'review_batches' },
+    { path: '/raw/quality-report', name: 'RM Quality Report', description: 'Manage raw material quality reports', permissionKey: 'manage_rm_quality_report' },
+    { path: '/trainings', name: 'Training Management', description: 'Manage training sessions and participants', permissionKey: 'manage_trainings' },
+    { path: '/trainings/create', name: 'Create Training', description: 'Create new training sessions', permissionKey: 'create_training' },
+    { path: '/trainings/:id', name: 'Training Details', description: 'View training session details and progress', permissionKey: 'view_training_details' },
+    { path: '/trainings/edit/:trainingId', name: 'Edit Training', description: 'Edit training session details', permissionKey: 'edit_training' },
+    { path: '/training-calender', name: 'Training Calendar', description: 'View training schedule and calendar', permissionKey: 'view_training_calendar' },
+    { path: '/audits', name: 'Audit Management', description: 'View and manage audit processes', permissionKey: 'manage_audits' },
+    { path: '/audits/new', name: 'Create Audit', description: 'Create a new audit process', permissionKey: 'create_audit' },
+    { path: '/audits/:id', name: 'Audit Details', description: 'View audit details and progress', permissionKey: 'view_audit_details' },
+    { path: '/audits/edit/:id', name: 'Edit Audit', description: 'Edit audit details and settings', permissionKey: 'edit_audit' },
+    { path: '/audits/statistics', name: 'Audit Statistics', description: 'View audit statistics and analytics', permissionKey: 'view_audit_statistics' },
+    { path: '/audits/checklist', name: 'Pre-Audit Checklist', description: 'Create and manage pre-audit checklists', permissionKey: 'manage_audit_checklist' },
+    { path: '/audits/checklist/:auditId', name: 'Audit Checklist', description: 'View and manage audit-specific checklist', permissionKey: 'view_audit_checklist' },
+    { path: '/audits/findings', name: 'Audit Findings', description: 'Create and manage audit findings', permissionKey: 'manage_audit_findings' },
+    { path: '/audit/calender', name: 'Audit Calendar', description: 'View audit schedule and calendar', permissionKey: 'view_audit_calendar' },
+    { path: '/audits/inspection-checklist', name: 'Inspection Checklists', description: 'View and manage inspection checklists', permissionKey: 'manage_inspection_checklist' },
+    { path: '/audits/inspection-checklist/create', name: 'Create Inspection Checklist', description: 'Create new inspection checklist', permissionKey: 'create_inspection_checklist' },
+    { path: '/audits/:auditId/inspection-checklist/create', name: 'Create Audit Inspection Checklist', description: 'Create inspection checklist for specific audit', permissionKey: 'create_audit_inspection_checklist' },
+    { path: '/raw/purchase-order', name: 'Purchase order', description: 'View and manage purchase orders for raw materials', permissionKey: 'manage_purchase_order' },
+    { path: '/raw/purchase-history', name: 'Purchase History', description: 'View and manage all purchase history', permissionKey: 'manage_purchase_history' },
+    { path: '/masters/vendors/create', name: 'Create Vendor', description: 'Create new vendors (master data)', permissionKey: 'manage_vendors' },
+    { path: '/masters/raw-materials/create', name: 'Create Raw Material', description: 'Create raw material master data', permissionKey: 'manage_raw_materials' },
+    { path: '/stock-distribution', name: 'Stock Distribution', description: 'Visualize current stock distribution across warehouses', permissionKey: 'view_stock_distribution' },
+    { path: '/raw/cleaning-raw-materials', name: 'Cleaning Raw Materials', description: 'View all received raw materials for cleaning', permissionKey: 'manage_cleaning_rawmaterials' },
+    { path: '/raw/transaction-logs', name: 'Transactional Logs', description: 'View all transactional logs in the system', permissionKey: 'view_activity_logs' },
+    { path: '/raw-dashboard', name: 'Raw Dashboard', description: 'View all cleaned raw materials ready for processing', permissionKey: 'manage_raw_dashboard' },
+    { path: '/raw/processing-list', name: 'Processing List', description: 'View all processing raw materials ready for processing', permissionKey: 'process_raw_materials' },
+  ];
+
+  staticRoutes.forEach(r => registerRoute({ ...r, element: <></>, resource: 'page' }));
   return (
     <RouteProvider>
       <Router>
