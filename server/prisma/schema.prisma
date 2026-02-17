@@ -168,6 +168,7 @@ model User {
   createdChecklistItems        PreAuditChecklistItem[] @relation("CreatedChecklistItems")
   responsibleForChecklistItems PreAuditChecklistItem[] @relation("ResponsibleForChecklistItems")
   rmQualityReports             RMQualityReport[]
+  createdGRNs                  GRNbyPo[]               @relation("GRNCreatedBy")
   StandardsCreated             Standard[]              @relation("StandardCreatedBy")
   StandardsModified            Standard[]              @relation("StandardModifiedBy")
   standardDefinitionsCreated   StandardDefinition[]    @relation("StandardDefinitionsCreated")
@@ -754,6 +755,7 @@ model PurchaseOrder {
   updatedAt    DateTime            @updatedAt
   vendor       Vendor              @relation(fields: [vendorId], references: [id])
   items        PurchaseOrderItem[]
+  grns         GRNbyPo[]
 }
 
 model PurchaseOrderItem {
@@ -767,6 +769,7 @@ model PurchaseOrderItem {
   purchaseOrder   PurchaseOrder           @relation(fields: [purchaseOrderId], references: [id])
   rawMaterial     RawMaterialProduct      @relation(fields: [rawMaterialId], references: [id])
   receivals       ReceivalEntry[]
+  grns            GRNbyPo[]
 }
 
 model ReceivalEntry {
@@ -953,6 +956,7 @@ model RMQualityReport {
   updatedAt       DateTime             @updatedAt
   parameters      RMQualityParameter[]
   createdBy       User                 @relation(fields: [createdById], references: [id])
+  grn_entry       GRNbyPo?
 }
 
 model RMQualityParameter {
@@ -1096,4 +1100,23 @@ enum PurchaseOrderItemStatus {
 enum WeightMode {
   INDIVIDUAL
   TOTAL
+}
+
+model GRNbyPo {
+  id                  String            @id @default(uuid())
+  grnNumber           String            @unique
+  purchaseOrderId     String
+  purchaseOrderItemId String
+  rawMaterialName     String
+  variety             String
+  supplier            String
+  qualityReportId     String?           @unique
+  createdById         String
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  purchaseOrder       PurchaseOrder     @relation(fields: [purchaseOrderId], references: [id])
+  purchaseOrderItem   PurchaseOrderItem @relation(fields: [purchaseOrderItemId], references: [id])
+  qualityReport       RMQualityReport?  @relation(fields: [qualityReportId], references: [id])
+  createdBy           User              @relation("GRNCreatedBy", fields: [createdById], references: [id])
 }

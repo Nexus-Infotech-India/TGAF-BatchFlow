@@ -332,6 +332,14 @@ export const API_ROUTES = {
     EXPORT_QUALITY_REPORT: (id: string) => `${BASE_URL}/raw/quality-report/${id}/export`,
     EXPORT_ALL_QUALITY_REPORTS: `${BASE_URL}/raw/quality-report/export/all`,
     MAIL_ALL_QUALITY_REPORTS: `${BASE_URL}/raw/quality-report/mail/all`,
+
+    // GRN by PO
+    CREATE_GRN: `${BASE_URL}/raw/grn`,
+    GET_GRNS: `${BASE_URL}/raw/grn`,
+    GET_RECEIVED_POS: `${BASE_URL}/raw/grn/received-pos`,
+    GET_GRNS_BY_PO: (poId: string) => `${BASE_URL}/raw/grn/po/${poId}`,
+    GET_GRN_BY_ID: (id: string) => `${BASE_URL}/raw/grn/${id}`,
+    DELETE_GRN: (id: string) => `${BASE_URL}/raw/grn/${id}`,
   },
 
   DRAFT: {

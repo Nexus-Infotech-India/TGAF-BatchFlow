@@ -16,6 +16,7 @@ import { RMQualityMailController } from '../controllers/rawmaterial/qualityMail.
 import { RMQualityMailFilteredController } from '../controllers/rawmaterial/qualityMailFiltered.controller';
 import { RMQualityExportFilteredController } from '../controllers/rawmaterial/qualityExportFiltered.controller';
 import { sendPurchaseOrderMail } from '../controllers/rawmaterial/sendPurchaseOrderMail.controller';
+import { GRNController } from '../controllers/rawmaterial/grn.controller';
 
 const router = Router();
 
@@ -112,5 +113,13 @@ router.get('/quality-report/:id', RMQualityController.getQualityReportById);
 router.put('/quality-report/:id', RMQualityController.updateQualityReport);
 router.delete('/quality-report/:id', RMQualityController.deleteQualityReport);
 router.get('/quality-report/:id/export', RMQualityController.exportQualityReport);
+
+// GRN by PO
+router.post('/grn', GRNController.createGRN);
+router.get('/grn', GRNController.getGRNs);
+router.get('/grn/received-pos', GRNController.getReceivedPOs);
+router.get('/grn/po/:poId', GRNController.getGRNsByPO);
+router.get('/grn/:id', GRNController.getGRNById);
+router.delete('/grn/:id', GRNController.deleteGRN);
 
 export default router;

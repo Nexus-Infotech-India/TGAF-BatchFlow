@@ -832,6 +832,20 @@ exports.Prisma.RMQualityParameterScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.GRNbyPoScalarFieldEnum = {
+  id: 'id',
+  grnNumber: 'grnNumber',
+  purchaseOrderId: 'purchaseOrderId',
+  purchaseOrderItemId: 'purchaseOrderItemId',
+  rawMaterialName: 'rawMaterialName',
+  variety: 'variety',
+  supplier: 'supplier',
+  qualityReportId: 'qualityReportId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1045,7 +1059,8 @@ exports.Prisma.ModelName = {
   TransactionLog: 'TransactionLog',
   ReusableStock: 'ReusableStock',
   RMQualityReport: 'RMQualityReport',
-  RMQualityParameter: 'RMQualityParameter'
+  RMQualityParameter: 'RMQualityParameter',
+  GRNbyPo: 'GRNbyPo'
 };
 
 /**

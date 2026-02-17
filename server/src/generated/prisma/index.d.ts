@@ -318,6 +318,11 @@ export type RMQualityReport = $Result.DefaultSelection<Prisma.$RMQualityReportPa
  * 
  */
 export type RMQualityParameter = $Result.DefaultSelection<Prisma.$RMQualityParameterPayload>
+/**
+ * Model GRNbyPo
+ * 
+ */
+export type GRNbyPo = $Result.DefaultSelection<Prisma.$GRNbyPoPayload>
 
 /**
  * Enums
@@ -1309,6 +1314,16 @@ export class PrismaClient<
     * ```
     */
   get rMQualityParameter(): Prisma.RMQualityParameterDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.gRNbyPo`: Exposes CRUD operations for the **GRNbyPo** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GRNbyPos
+    * const gRNbyPos = await prisma.gRNbyPo.findMany()
+    * ```
+    */
+  get gRNbyPo(): Prisma.GRNbyPoDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1810,7 +1825,8 @@ export namespace Prisma {
     TransactionLog: 'TransactionLog',
     ReusableStock: 'ReusableStock',
     RMQualityReport: 'RMQualityReport',
-    RMQualityParameter: 'RMQualityParameter'
+    RMQualityParameter: 'RMQualityParameter',
+    GRNbyPo: 'GRNbyPo'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1829,7 +1845,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6347,6 +6363,80 @@ export namespace Prisma {
           }
         }
       }
+      GRNbyPo: {
+        payload: Prisma.$GRNbyPoPayload<ExtArgs>
+        fields: Prisma.GRNbyPoFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GRNbyPoFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GRNbyPoFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload>
+          }
+          findFirst: {
+            args: Prisma.GRNbyPoFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GRNbyPoFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload>
+          }
+          findMany: {
+            args: Prisma.GRNbyPoFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload>[]
+          }
+          create: {
+            args: Prisma.GRNbyPoCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload>
+          }
+          createMany: {
+            args: Prisma.GRNbyPoCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GRNbyPoCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload>[]
+          }
+          delete: {
+            args: Prisma.GRNbyPoDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload>
+          }
+          update: {
+            args: Prisma.GRNbyPoUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload>
+          }
+          deleteMany: {
+            args: Prisma.GRNbyPoDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GRNbyPoUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GRNbyPoUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload>[]
+          }
+          upsert: {
+            args: Prisma.GRNbyPoUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GRNbyPoPayload>
+          }
+          aggregate: {
+            args: Prisma.GRNbyPoAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGRNbyPo>
+          }
+          groupBy: {
+            args: Prisma.GRNbyPoGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GRNbyPoGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GRNbyPoCountArgs<ExtArgs>
+            result: $Utils.Optional<GRNbyPoCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -6504,6 +6594,7 @@ export namespace Prisma {
     reusableStock?: ReusableStockOmit
     rMQualityReport?: RMQualityReportOmit
     rMQualityParameter?: RMQualityParameterOmit
+    gRNbyPo?: GRNbyPoOmit
   }
 
   /* Types for Logging */
@@ -6924,6 +7015,7 @@ export namespace Prisma {
     createdChecklistItems: number
     responsibleForChecklistItems: number
     rmQualityReports: number
+    createdGRNs: number
     StandardsCreated: number
     StandardsModified: number
     standardDefinitionsCreated: number
@@ -6959,6 +7051,7 @@ export namespace Prisma {
     createdChecklistItems?: boolean | UserCountOutputTypeCountCreatedChecklistItemsArgs
     responsibleForChecklistItems?: boolean | UserCountOutputTypeCountResponsibleForChecklistItemsArgs
     rmQualityReports?: boolean | UserCountOutputTypeCountRmQualityReportsArgs
+    createdGRNs?: boolean | UserCountOutputTypeCountCreatedGRNsArgs
     StandardsCreated?: boolean | UserCountOutputTypeCountStandardsCreatedArgs
     StandardsModified?: boolean | UserCountOutputTypeCountStandardsModifiedArgs
     standardDefinitionsCreated?: boolean | UserCountOutputTypeCountStandardDefinitionsCreatedArgs
@@ -7116,6 +7209,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountRmQualityReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RMQualityReportWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountCreatedGRNsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GRNbyPoWhereInput
   }
 
   /**
@@ -7907,10 +8007,12 @@ export namespace Prisma {
 
   export type PurchaseOrderCountOutputType = {
     items: number
+    grns: number
   }
 
   export type PurchaseOrderCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     items?: boolean | PurchaseOrderCountOutputTypeCountItemsArgs
+    grns?: boolean | PurchaseOrderCountOutputTypeCountGrnsArgs
   }
 
   // Custom InputTypes
@@ -7931,6 +8033,13 @@ export namespace Prisma {
     where?: PurchaseOrderItemWhereInput
   }
 
+  /**
+   * PurchaseOrderCountOutputType without action
+   */
+  export type PurchaseOrderCountOutputTypeCountGrnsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GRNbyPoWhereInput
+  }
+
 
   /**
    * Count Type PurchaseOrderItemCountOutputType
@@ -7938,10 +8047,12 @@ export namespace Prisma {
 
   export type PurchaseOrderItemCountOutputType = {
     receivals: number
+    grns: number
   }
 
   export type PurchaseOrderItemCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     receivals?: boolean | PurchaseOrderItemCountOutputTypeCountReceivalsArgs
+    grns?: boolean | PurchaseOrderItemCountOutputTypeCountGrnsArgs
   }
 
   // Custom InputTypes
@@ -7960,6 +8071,13 @@ export namespace Prisma {
    */
   export type PurchaseOrderItemCountOutputTypeCountReceivalsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ReceivalEntryWhereInput
+  }
+
+  /**
+   * PurchaseOrderItemCountOutputType without action
+   */
+  export type PurchaseOrderItemCountOutputTypeCountGrnsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GRNbyPoWhereInput
   }
 
 
@@ -19766,6 +19884,7 @@ export namespace Prisma {
     createdChecklistItems?: boolean | User$createdChecklistItemsArgs<ExtArgs>
     responsibleForChecklistItems?: boolean | User$responsibleForChecklistItemsArgs<ExtArgs>
     rmQualityReports?: boolean | User$rmQualityReportsArgs<ExtArgs>
+    createdGRNs?: boolean | User$createdGRNsArgs<ExtArgs>
     StandardsCreated?: boolean | User$StandardsCreatedArgs<ExtArgs>
     StandardsModified?: boolean | User$StandardsModifiedArgs<ExtArgs>
     standardDefinitionsCreated?: boolean | User$standardDefinitionsCreatedArgs<ExtArgs>
@@ -19837,6 +19956,7 @@ export namespace Prisma {
     createdChecklistItems?: boolean | User$createdChecklistItemsArgs<ExtArgs>
     responsibleForChecklistItems?: boolean | User$responsibleForChecklistItemsArgs<ExtArgs>
     rmQualityReports?: boolean | User$rmQualityReportsArgs<ExtArgs>
+    createdGRNs?: boolean | User$createdGRNsArgs<ExtArgs>
     StandardsCreated?: boolean | User$StandardsCreatedArgs<ExtArgs>
     StandardsModified?: boolean | User$StandardsModifiedArgs<ExtArgs>
     standardDefinitionsCreated?: boolean | User$standardDefinitionsCreatedArgs<ExtArgs>
@@ -19883,6 +20003,7 @@ export namespace Prisma {
       createdChecklistItems: Prisma.$PreAuditChecklistItemPayload<ExtArgs>[]
       responsibleForChecklistItems: Prisma.$PreAuditChecklistItemPayload<ExtArgs>[]
       rmQualityReports: Prisma.$RMQualityReportPayload<ExtArgs>[]
+      createdGRNs: Prisma.$GRNbyPoPayload<ExtArgs>[]
       StandardsCreated: Prisma.$StandardPayload<ExtArgs>[]
       StandardsModified: Prisma.$StandardPayload<ExtArgs>[]
       standardDefinitionsCreated: Prisma.$StandardDefinitionPayload<ExtArgs>[]
@@ -20320,6 +20441,7 @@ export namespace Prisma {
     createdChecklistItems<T extends User$createdChecklistItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdChecklistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreAuditChecklistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     responsibleForChecklistItems<T extends User$responsibleForChecklistItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$responsibleForChecklistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreAuditChecklistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     rmQualityReports<T extends User$rmQualityReportsArgs<ExtArgs> = {}>(args?: Subset<T, User$rmQualityReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RMQualityReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    createdGRNs<T extends User$createdGRNsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdGRNsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     StandardsCreated<T extends User$StandardsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$StandardsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     StandardsModified<T extends User$StandardsModifiedArgs<ExtArgs> = {}>(args?: Subset<T, User$StandardsModifiedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     standardDefinitionsCreated<T extends User$standardDefinitionsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$standardDefinitionsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardDefinitionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -21238,6 +21360,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RMQualityReportScalarFieldEnum | RMQualityReportScalarFieldEnum[]
+  }
+
+  /**
+   * User.createdGRNs
+   */
+  export type User$createdGRNsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    where?: GRNbyPoWhereInput
+    orderBy?: GRNbyPoOrderByWithRelationInput | GRNbyPoOrderByWithRelationInput[]
+    cursor?: GRNbyPoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GRNbyPoScalarFieldEnum | GRNbyPoScalarFieldEnum[]
   }
 
   /**
@@ -60774,6 +60920,7 @@ export namespace Prisma {
     updatedAt?: boolean
     vendor?: boolean | VendorDefaultArgs<ExtArgs>
     items?: boolean | PurchaseOrder$itemsArgs<ExtArgs>
+    grns?: boolean | PurchaseOrder$grnsArgs<ExtArgs>
     _count?: boolean | PurchaseOrderCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["purchaseOrder"]>
 
@@ -60816,6 +60963,7 @@ export namespace Prisma {
   export type PurchaseOrderInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     vendor?: boolean | VendorDefaultArgs<ExtArgs>
     items?: boolean | PurchaseOrder$itemsArgs<ExtArgs>
+    grns?: boolean | PurchaseOrder$grnsArgs<ExtArgs>
     _count?: boolean | PurchaseOrderCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PurchaseOrderIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -60830,6 +60978,7 @@ export namespace Prisma {
     objects: {
       vendor: Prisma.$VendorPayload<ExtArgs>
       items: Prisma.$PurchaseOrderItemPayload<ExtArgs>[]
+      grns: Prisma.$GRNbyPoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -61236,6 +61385,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     vendor<T extends VendorDefaultArgs<ExtArgs> = {}>(args?: Subset<T, VendorDefaultArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     items<T extends PurchaseOrder$itemsArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrder$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    grns<T extends PurchaseOrder$grnsArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrder$grnsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -61693,6 +61843,30 @@ export namespace Prisma {
   }
 
   /**
+   * PurchaseOrder.grns
+   */
+  export type PurchaseOrder$grnsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    where?: GRNbyPoWhereInput
+    orderBy?: GRNbyPoOrderByWithRelationInput | GRNbyPoOrderByWithRelationInput[]
+    cursor?: GRNbyPoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GRNbyPoScalarFieldEnum | GRNbyPoScalarFieldEnum[]
+  }
+
+  /**
    * PurchaseOrder without action
    */
   export type PurchaseOrderDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -61936,6 +62110,7 @@ export namespace Prisma {
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     receivals?: boolean | PurchaseOrderItem$receivalsArgs<ExtArgs>
+    grns?: boolean | PurchaseOrderItem$grnsArgs<ExtArgs>
     _count?: boolean | PurchaseOrderItemCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["purchaseOrderItem"]>
 
@@ -61978,6 +62153,7 @@ export namespace Prisma {
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     receivals?: boolean | PurchaseOrderItem$receivalsArgs<ExtArgs>
+    grns?: boolean | PurchaseOrderItem$grnsArgs<ExtArgs>
     _count?: boolean | PurchaseOrderItemCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type PurchaseOrderItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -61995,6 +62171,7 @@ export namespace Prisma {
       purchaseOrder: Prisma.$PurchaseOrderPayload<ExtArgs>
       rawMaterial: Prisma.$RawMaterialProductPayload<ExtArgs>
       receivals: Prisma.$ReceivalEntryPayload<ExtArgs>[]
+      grns: Prisma.$GRNbyPoPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -62401,6 +62578,7 @@ export namespace Prisma {
     purchaseOrder<T extends PurchaseOrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrderDefaultArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     rawMaterial<T extends RawMaterialProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProductDefaultArgs<ExtArgs>>): Prisma__RawMaterialProductClient<$Result.GetResult<Prisma.$RawMaterialProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     receivals<T extends PurchaseOrderItem$receivalsArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrderItem$receivalsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivalEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    grns<T extends PurchaseOrderItem$grnsArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrderItem$grnsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -62854,6 +63032,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ReceivalEntryScalarFieldEnum | ReceivalEntryScalarFieldEnum[]
+  }
+
+  /**
+   * PurchaseOrderItem.grns
+   */
+  export type PurchaseOrderItem$grnsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    where?: GRNbyPoWhereInput
+    orderBy?: GRNbyPoOrderByWithRelationInput | GRNbyPoOrderByWithRelationInput[]
+    cursor?: GRNbyPoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GRNbyPoScalarFieldEnum | GRNbyPoScalarFieldEnum[]
   }
 
   /**
@@ -78096,6 +78298,7 @@ export namespace Prisma {
     updatedAt?: boolean
     parameters?: boolean | RMQualityReport$parametersArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    grn_entry?: boolean | RMQualityReport$grn_entryArgs<ExtArgs>
     _count?: boolean | RMQualityReportCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["rMQualityReport"]>
 
@@ -78141,6 +78344,7 @@ export namespace Prisma {
   export type RMQualityReportInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parameters?: boolean | RMQualityReport$parametersArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    grn_entry?: boolean | RMQualityReport$grn_entryArgs<ExtArgs>
     _count?: boolean | RMQualityReportCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RMQualityReportIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -78155,6 +78359,7 @@ export namespace Prisma {
     objects: {
       parameters: Prisma.$RMQualityParameterPayload<ExtArgs>[]
       createdBy: Prisma.$UserPayload<ExtArgs>
+      grn_entry: Prisma.$GRNbyPoPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -78562,6 +78767,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     parameters<T extends RMQualityReport$parametersArgs<ExtArgs> = {}>(args?: Subset<T, RMQualityReport$parametersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RMQualityParameterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    grn_entry<T extends RMQualityReport$grn_entryArgs<ExtArgs> = {}>(args?: Subset<T, RMQualityReport$grn_entryArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -79017,6 +79223,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RMQualityParameterScalarFieldEnum | RMQualityParameterScalarFieldEnum[]
+  }
+
+  /**
+   * RMQualityReport.grn_entry
+   */
+  export type RMQualityReport$grn_entryArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    where?: GRNbyPoWhereInput
   }
 
   /**
@@ -80123,6 +80348,1185 @@ export namespace Prisma {
 
 
   /**
+   * Model GRNbyPo
+   */
+
+  export type AggregateGRNbyPo = {
+    _count: GRNbyPoCountAggregateOutputType | null
+    _min: GRNbyPoMinAggregateOutputType | null
+    _max: GRNbyPoMaxAggregateOutputType | null
+  }
+
+  export type GRNbyPoMinAggregateOutputType = {
+    id: string | null
+    grnNumber: string | null
+    purchaseOrderId: string | null
+    purchaseOrderItemId: string | null
+    rawMaterialName: string | null
+    variety: string | null
+    supplier: string | null
+    qualityReportId: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GRNbyPoMaxAggregateOutputType = {
+    id: string | null
+    grnNumber: string | null
+    purchaseOrderId: string | null
+    purchaseOrderItemId: string | null
+    rawMaterialName: string | null
+    variety: string | null
+    supplier: string | null
+    qualityReportId: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GRNbyPoCountAggregateOutputType = {
+    id: number
+    grnNumber: number
+    purchaseOrderId: number
+    purchaseOrderItemId: number
+    rawMaterialName: number
+    variety: number
+    supplier: number
+    qualityReportId: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GRNbyPoMinAggregateInputType = {
+    id?: true
+    grnNumber?: true
+    purchaseOrderId?: true
+    purchaseOrderItemId?: true
+    rawMaterialName?: true
+    variety?: true
+    supplier?: true
+    qualityReportId?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GRNbyPoMaxAggregateInputType = {
+    id?: true
+    grnNumber?: true
+    purchaseOrderId?: true
+    purchaseOrderItemId?: true
+    rawMaterialName?: true
+    variety?: true
+    supplier?: true
+    qualityReportId?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GRNbyPoCountAggregateInputType = {
+    id?: true
+    grnNumber?: true
+    purchaseOrderId?: true
+    purchaseOrderItemId?: true
+    rawMaterialName?: true
+    variety?: true
+    supplier?: true
+    qualityReportId?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GRNbyPoAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GRNbyPo to aggregate.
+     */
+    where?: GRNbyPoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GRNbyPos to fetch.
+     */
+    orderBy?: GRNbyPoOrderByWithRelationInput | GRNbyPoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GRNbyPoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GRNbyPos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GRNbyPos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GRNbyPos
+    **/
+    _count?: true | GRNbyPoCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GRNbyPoMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GRNbyPoMaxAggregateInputType
+  }
+
+  export type GetGRNbyPoAggregateType<T extends GRNbyPoAggregateArgs> = {
+        [P in keyof T & keyof AggregateGRNbyPo]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGRNbyPo[P]>
+      : GetScalarType<T[P], AggregateGRNbyPo[P]>
+  }
+
+
+
+
+  export type GRNbyPoGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GRNbyPoWhereInput
+    orderBy?: GRNbyPoOrderByWithAggregationInput | GRNbyPoOrderByWithAggregationInput[]
+    by: GRNbyPoScalarFieldEnum[] | GRNbyPoScalarFieldEnum
+    having?: GRNbyPoScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GRNbyPoCountAggregateInputType | true
+    _min?: GRNbyPoMinAggregateInputType
+    _max?: GRNbyPoMaxAggregateInputType
+  }
+
+  export type GRNbyPoGroupByOutputType = {
+    id: string
+    grnNumber: string
+    purchaseOrderId: string
+    purchaseOrderItemId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId: string | null
+    createdById: string
+    createdAt: Date
+    updatedAt: Date
+    _count: GRNbyPoCountAggregateOutputType | null
+    _min: GRNbyPoMinAggregateOutputType | null
+    _max: GRNbyPoMaxAggregateOutputType | null
+  }
+
+  type GetGRNbyPoGroupByPayload<T extends GRNbyPoGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GRNbyPoGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GRNbyPoGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GRNbyPoGroupByOutputType[P]>
+            : GetScalarType<T[P], GRNbyPoGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GRNbyPoSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    grnNumber?: boolean
+    purchaseOrderId?: boolean
+    purchaseOrderItemId?: boolean
+    rawMaterialName?: boolean
+    variety?: boolean
+    supplier?: boolean
+    qualityReportId?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
+    qualityReport?: boolean | GRNbyPo$qualityReportArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["gRNbyPo"]>
+
+  export type GRNbyPoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    grnNumber?: boolean
+    purchaseOrderId?: boolean
+    purchaseOrderItemId?: boolean
+    rawMaterialName?: boolean
+    variety?: boolean
+    supplier?: boolean
+    qualityReportId?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
+    qualityReport?: boolean | GRNbyPo$qualityReportArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["gRNbyPo"]>
+
+  export type GRNbyPoSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    grnNumber?: boolean
+    purchaseOrderId?: boolean
+    purchaseOrderItemId?: boolean
+    rawMaterialName?: boolean
+    variety?: boolean
+    supplier?: boolean
+    qualityReportId?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
+    qualityReport?: boolean | GRNbyPo$qualityReportArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["gRNbyPo"]>
+
+  export type GRNbyPoSelectScalar = {
+    id?: boolean
+    grnNumber?: boolean
+    purchaseOrderId?: boolean
+    purchaseOrderItemId?: boolean
+    rawMaterialName?: boolean
+    variety?: boolean
+    supplier?: boolean
+    qualityReportId?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type GRNbyPoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "grnNumber" | "purchaseOrderId" | "purchaseOrderItemId" | "rawMaterialName" | "variety" | "supplier" | "qualityReportId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["gRNbyPo"]>
+  export type GRNbyPoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
+    qualityReport?: boolean | GRNbyPo$qualityReportArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type GRNbyPoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
+    qualityReport?: boolean | GRNbyPo$qualityReportArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type GRNbyPoIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
+    purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
+    qualityReport?: boolean | GRNbyPo$qualityReportArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $GRNbyPoPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GRNbyPo"
+    objects: {
+      purchaseOrder: Prisma.$PurchaseOrderPayload<ExtArgs>
+      purchaseOrderItem: Prisma.$PurchaseOrderItemPayload<ExtArgs>
+      qualityReport: Prisma.$RMQualityReportPayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      grnNumber: string
+      purchaseOrderId: string
+      purchaseOrderItemId: string
+      rawMaterialName: string
+      variety: string
+      supplier: string
+      qualityReportId: string | null
+      createdById: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["gRNbyPo"]>
+    composites: {}
+  }
+
+  type GRNbyPoGetPayload<S extends boolean | null | undefined | GRNbyPoDefaultArgs> = $Result.GetResult<Prisma.$GRNbyPoPayload, S>
+
+  type GRNbyPoCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GRNbyPoFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GRNbyPoCountAggregateInputType | true
+    }
+
+  export interface GRNbyPoDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GRNbyPo'], meta: { name: 'GRNbyPo' } }
+    /**
+     * Find zero or one GRNbyPo that matches the filter.
+     * @param {GRNbyPoFindUniqueArgs} args - Arguments to find a GRNbyPo
+     * @example
+     * // Get one GRNbyPo
+     * const gRNbyPo = await prisma.gRNbyPo.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GRNbyPoFindUniqueArgs>(args: SelectSubset<T, GRNbyPoFindUniqueArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GRNbyPo that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GRNbyPoFindUniqueOrThrowArgs} args - Arguments to find a GRNbyPo
+     * @example
+     * // Get one GRNbyPo
+     * const gRNbyPo = await prisma.gRNbyPo.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GRNbyPoFindUniqueOrThrowArgs>(args: SelectSubset<T, GRNbyPoFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GRNbyPo that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GRNbyPoFindFirstArgs} args - Arguments to find a GRNbyPo
+     * @example
+     * // Get one GRNbyPo
+     * const gRNbyPo = await prisma.gRNbyPo.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GRNbyPoFindFirstArgs>(args?: SelectSubset<T, GRNbyPoFindFirstArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GRNbyPo that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GRNbyPoFindFirstOrThrowArgs} args - Arguments to find a GRNbyPo
+     * @example
+     * // Get one GRNbyPo
+     * const gRNbyPo = await prisma.gRNbyPo.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GRNbyPoFindFirstOrThrowArgs>(args?: SelectSubset<T, GRNbyPoFindFirstOrThrowArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GRNbyPos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GRNbyPoFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GRNbyPos
+     * const gRNbyPos = await prisma.gRNbyPo.findMany()
+     * 
+     * // Get first 10 GRNbyPos
+     * const gRNbyPos = await prisma.gRNbyPo.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const gRNbyPoWithIdOnly = await prisma.gRNbyPo.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GRNbyPoFindManyArgs>(args?: SelectSubset<T, GRNbyPoFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GRNbyPo.
+     * @param {GRNbyPoCreateArgs} args - Arguments to create a GRNbyPo.
+     * @example
+     * // Create one GRNbyPo
+     * const GRNbyPo = await prisma.gRNbyPo.create({
+     *   data: {
+     *     // ... data to create a GRNbyPo
+     *   }
+     * })
+     * 
+     */
+    create<T extends GRNbyPoCreateArgs>(args: SelectSubset<T, GRNbyPoCreateArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GRNbyPos.
+     * @param {GRNbyPoCreateManyArgs} args - Arguments to create many GRNbyPos.
+     * @example
+     * // Create many GRNbyPos
+     * const gRNbyPo = await prisma.gRNbyPo.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GRNbyPoCreateManyArgs>(args?: SelectSubset<T, GRNbyPoCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GRNbyPos and returns the data saved in the database.
+     * @param {GRNbyPoCreateManyAndReturnArgs} args - Arguments to create many GRNbyPos.
+     * @example
+     * // Create many GRNbyPos
+     * const gRNbyPo = await prisma.gRNbyPo.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GRNbyPos and only return the `id`
+     * const gRNbyPoWithIdOnly = await prisma.gRNbyPo.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GRNbyPoCreateManyAndReturnArgs>(args?: SelectSubset<T, GRNbyPoCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GRNbyPo.
+     * @param {GRNbyPoDeleteArgs} args - Arguments to delete one GRNbyPo.
+     * @example
+     * // Delete one GRNbyPo
+     * const GRNbyPo = await prisma.gRNbyPo.delete({
+     *   where: {
+     *     // ... filter to delete one GRNbyPo
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GRNbyPoDeleteArgs>(args: SelectSubset<T, GRNbyPoDeleteArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GRNbyPo.
+     * @param {GRNbyPoUpdateArgs} args - Arguments to update one GRNbyPo.
+     * @example
+     * // Update one GRNbyPo
+     * const gRNbyPo = await prisma.gRNbyPo.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GRNbyPoUpdateArgs>(args: SelectSubset<T, GRNbyPoUpdateArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GRNbyPos.
+     * @param {GRNbyPoDeleteManyArgs} args - Arguments to filter GRNbyPos to delete.
+     * @example
+     * // Delete a few GRNbyPos
+     * const { count } = await prisma.gRNbyPo.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GRNbyPoDeleteManyArgs>(args?: SelectSubset<T, GRNbyPoDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GRNbyPos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GRNbyPoUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GRNbyPos
+     * const gRNbyPo = await prisma.gRNbyPo.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GRNbyPoUpdateManyArgs>(args: SelectSubset<T, GRNbyPoUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GRNbyPos and returns the data updated in the database.
+     * @param {GRNbyPoUpdateManyAndReturnArgs} args - Arguments to update many GRNbyPos.
+     * @example
+     * // Update many GRNbyPos
+     * const gRNbyPo = await prisma.gRNbyPo.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GRNbyPos and only return the `id`
+     * const gRNbyPoWithIdOnly = await prisma.gRNbyPo.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GRNbyPoUpdateManyAndReturnArgs>(args: SelectSubset<T, GRNbyPoUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GRNbyPo.
+     * @param {GRNbyPoUpsertArgs} args - Arguments to update or create a GRNbyPo.
+     * @example
+     * // Update or create a GRNbyPo
+     * const gRNbyPo = await prisma.gRNbyPo.upsert({
+     *   create: {
+     *     // ... data to create a GRNbyPo
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GRNbyPo we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GRNbyPoUpsertArgs>(args: SelectSubset<T, GRNbyPoUpsertArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GRNbyPos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GRNbyPoCountArgs} args - Arguments to filter GRNbyPos to count.
+     * @example
+     * // Count the number of GRNbyPos
+     * const count = await prisma.gRNbyPo.count({
+     *   where: {
+     *     // ... the filter for the GRNbyPos we want to count
+     *   }
+     * })
+    **/
+    count<T extends GRNbyPoCountArgs>(
+      args?: Subset<T, GRNbyPoCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GRNbyPoCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GRNbyPo.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GRNbyPoAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GRNbyPoAggregateArgs>(args: Subset<T, GRNbyPoAggregateArgs>): Prisma.PrismaPromise<GetGRNbyPoAggregateType<T>>
+
+    /**
+     * Group by GRNbyPo.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GRNbyPoGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GRNbyPoGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GRNbyPoGroupByArgs['orderBy'] }
+        : { orderBy?: GRNbyPoGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GRNbyPoGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGRNbyPoGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GRNbyPo model
+   */
+  readonly fields: GRNbyPoFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GRNbyPo.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GRNbyPoClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    purchaseOrder<T extends PurchaseOrderDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrderDefaultArgs<ExtArgs>>): Prisma__PurchaseOrderClient<$Result.GetResult<Prisma.$PurchaseOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    purchaseOrderItem<T extends PurchaseOrderItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrderItemDefaultArgs<ExtArgs>>): Prisma__PurchaseOrderItemClient<$Result.GetResult<Prisma.$PurchaseOrderItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    qualityReport<T extends GRNbyPo$qualityReportArgs<ExtArgs> = {}>(args?: Subset<T, GRNbyPo$qualityReportArgs<ExtArgs>>): Prisma__RMQualityReportClient<$Result.GetResult<Prisma.$RMQualityReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GRNbyPo model
+   */
+  interface GRNbyPoFieldRefs {
+    readonly id: FieldRef<"GRNbyPo", 'String'>
+    readonly grnNumber: FieldRef<"GRNbyPo", 'String'>
+    readonly purchaseOrderId: FieldRef<"GRNbyPo", 'String'>
+    readonly purchaseOrderItemId: FieldRef<"GRNbyPo", 'String'>
+    readonly rawMaterialName: FieldRef<"GRNbyPo", 'String'>
+    readonly variety: FieldRef<"GRNbyPo", 'String'>
+    readonly supplier: FieldRef<"GRNbyPo", 'String'>
+    readonly qualityReportId: FieldRef<"GRNbyPo", 'String'>
+    readonly createdById: FieldRef<"GRNbyPo", 'String'>
+    readonly createdAt: FieldRef<"GRNbyPo", 'DateTime'>
+    readonly updatedAt: FieldRef<"GRNbyPo", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GRNbyPo findUnique
+   */
+  export type GRNbyPoFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    /**
+     * Filter, which GRNbyPo to fetch.
+     */
+    where: GRNbyPoWhereUniqueInput
+  }
+
+  /**
+   * GRNbyPo findUniqueOrThrow
+   */
+  export type GRNbyPoFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    /**
+     * Filter, which GRNbyPo to fetch.
+     */
+    where: GRNbyPoWhereUniqueInput
+  }
+
+  /**
+   * GRNbyPo findFirst
+   */
+  export type GRNbyPoFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    /**
+     * Filter, which GRNbyPo to fetch.
+     */
+    where?: GRNbyPoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GRNbyPos to fetch.
+     */
+    orderBy?: GRNbyPoOrderByWithRelationInput | GRNbyPoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GRNbyPos.
+     */
+    cursor?: GRNbyPoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GRNbyPos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GRNbyPos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GRNbyPos.
+     */
+    distinct?: GRNbyPoScalarFieldEnum | GRNbyPoScalarFieldEnum[]
+  }
+
+  /**
+   * GRNbyPo findFirstOrThrow
+   */
+  export type GRNbyPoFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    /**
+     * Filter, which GRNbyPo to fetch.
+     */
+    where?: GRNbyPoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GRNbyPos to fetch.
+     */
+    orderBy?: GRNbyPoOrderByWithRelationInput | GRNbyPoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GRNbyPos.
+     */
+    cursor?: GRNbyPoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GRNbyPos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GRNbyPos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GRNbyPos.
+     */
+    distinct?: GRNbyPoScalarFieldEnum | GRNbyPoScalarFieldEnum[]
+  }
+
+  /**
+   * GRNbyPo findMany
+   */
+  export type GRNbyPoFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    /**
+     * Filter, which GRNbyPos to fetch.
+     */
+    where?: GRNbyPoWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GRNbyPos to fetch.
+     */
+    orderBy?: GRNbyPoOrderByWithRelationInput | GRNbyPoOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GRNbyPos.
+     */
+    cursor?: GRNbyPoWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GRNbyPos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GRNbyPos.
+     */
+    skip?: number
+    distinct?: GRNbyPoScalarFieldEnum | GRNbyPoScalarFieldEnum[]
+  }
+
+  /**
+   * GRNbyPo create
+   */
+  export type GRNbyPoCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GRNbyPo.
+     */
+    data: XOR<GRNbyPoCreateInput, GRNbyPoUncheckedCreateInput>
+  }
+
+  /**
+   * GRNbyPo createMany
+   */
+  export type GRNbyPoCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GRNbyPos.
+     */
+    data: GRNbyPoCreateManyInput | GRNbyPoCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GRNbyPo createManyAndReturn
+   */
+  export type GRNbyPoCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * The data used to create many GRNbyPos.
+     */
+    data: GRNbyPoCreateManyInput | GRNbyPoCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GRNbyPo update
+   */
+  export type GRNbyPoUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GRNbyPo.
+     */
+    data: XOR<GRNbyPoUpdateInput, GRNbyPoUncheckedUpdateInput>
+    /**
+     * Choose, which GRNbyPo to update.
+     */
+    where: GRNbyPoWhereUniqueInput
+  }
+
+  /**
+   * GRNbyPo updateMany
+   */
+  export type GRNbyPoUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GRNbyPos.
+     */
+    data: XOR<GRNbyPoUpdateManyMutationInput, GRNbyPoUncheckedUpdateManyInput>
+    /**
+     * Filter which GRNbyPos to update
+     */
+    where?: GRNbyPoWhereInput
+    /**
+     * Limit how many GRNbyPos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GRNbyPo updateManyAndReturn
+   */
+  export type GRNbyPoUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * The data used to update GRNbyPos.
+     */
+    data: XOR<GRNbyPoUpdateManyMutationInput, GRNbyPoUncheckedUpdateManyInput>
+    /**
+     * Filter which GRNbyPos to update
+     */
+    where?: GRNbyPoWhereInput
+    /**
+     * Limit how many GRNbyPos to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GRNbyPo upsert
+   */
+  export type GRNbyPoUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GRNbyPo to update in case it exists.
+     */
+    where: GRNbyPoWhereUniqueInput
+    /**
+     * In case the GRNbyPo found by the `where` argument doesn't exist, create a new GRNbyPo with this data.
+     */
+    create: XOR<GRNbyPoCreateInput, GRNbyPoUncheckedCreateInput>
+    /**
+     * In case the GRNbyPo was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GRNbyPoUpdateInput, GRNbyPoUncheckedUpdateInput>
+  }
+
+  /**
+   * GRNbyPo delete
+   */
+  export type GRNbyPoDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    /**
+     * Filter which GRNbyPo to delete.
+     */
+    where: GRNbyPoWhereUniqueInput
+  }
+
+  /**
+   * GRNbyPo deleteMany
+   */
+  export type GRNbyPoDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GRNbyPos to delete
+     */
+    where?: GRNbyPoWhereInput
+    /**
+     * Limit how many GRNbyPos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GRNbyPo.qualityReport
+   */
+  export type GRNbyPo$qualityReportArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RMQualityReport
+     */
+    select?: RMQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RMQualityReport
+     */
+    omit?: RMQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RMQualityReportInclude<ExtArgs> | null
+    where?: RMQualityReportWhereInput
+  }
+
+  /**
+   * GRNbyPo without action
+   */
+  export type GRNbyPoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -81028,6 +82432,23 @@ export namespace Prisma {
   };
 
   export type RMQualityParameterScalarFieldEnum = (typeof RMQualityParameterScalarFieldEnum)[keyof typeof RMQualityParameterScalarFieldEnum]
+
+
+  export const GRNbyPoScalarFieldEnum: {
+    id: 'id',
+    grnNumber: 'grnNumber',
+    purchaseOrderId: 'purchaseOrderId',
+    purchaseOrderItemId: 'purchaseOrderItemId',
+    rawMaterialName: 'rawMaterialName',
+    variety: 'variety',
+    supplier: 'supplier',
+    qualityReportId: 'qualityReportId',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GRNbyPoScalarFieldEnum = (typeof GRNbyPoScalarFieldEnum)[keyof typeof GRNbyPoScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -82122,6 +83543,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemListRelationFilter
     responsibleForChecklistItems?: PreAuditChecklistItemListRelationFilter
     rmQualityReports?: RMQualityReportListRelationFilter
+    createdGRNs?: GRNbyPoListRelationFilter
     StandardsCreated?: StandardListRelationFilter
     StandardsModified?: StandardListRelationFilter
     standardDefinitionsCreated?: StandardDefinitionListRelationFilter
@@ -82166,6 +83588,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemOrderByRelationAggregateInput
     responsibleForChecklistItems?: PreAuditChecklistItemOrderByRelationAggregateInput
     rmQualityReports?: RMQualityReportOrderByRelationAggregateInput
+    createdGRNs?: GRNbyPoOrderByRelationAggregateInput
     StandardsCreated?: StandardOrderByRelationAggregateInput
     StandardsModified?: StandardOrderByRelationAggregateInput
     standardDefinitionsCreated?: StandardDefinitionOrderByRelationAggregateInput
@@ -82213,6 +83636,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemListRelationFilter
     responsibleForChecklistItems?: PreAuditChecklistItemListRelationFilter
     rmQualityReports?: RMQualityReportListRelationFilter
+    createdGRNs?: GRNbyPoListRelationFilter
     StandardsCreated?: StandardListRelationFilter
     StandardsModified?: StandardListRelationFilter
     standardDefinitionsCreated?: StandardDefinitionListRelationFilter
@@ -85158,6 +86582,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
     vendor?: XOR<VendorScalarRelationFilter, VendorWhereInput>
     items?: PurchaseOrderItemListRelationFilter
+    grns?: GRNbyPoListRelationFilter
   }
 
   export type PurchaseOrderOrderByWithRelationInput = {
@@ -85171,6 +86596,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     vendor?: VendorOrderByWithRelationInput
     items?: PurchaseOrderItemOrderByRelationAggregateInput
+    grns?: GRNbyPoOrderByRelationAggregateInput
   }
 
   export type PurchaseOrderWhereUniqueInput = Prisma.AtLeast<{
@@ -85187,6 +86613,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"PurchaseOrder"> | Date | string
     vendor?: XOR<VendorScalarRelationFilter, VendorWhereInput>
     items?: PurchaseOrderItemListRelationFilter
+    grns?: GRNbyPoListRelationFilter
   }, "id" | "poNumber">
 
   export type PurchaseOrderOrderByWithAggregationInput = {
@@ -85231,6 +86658,7 @@ export namespace Prisma {
     purchaseOrder?: XOR<PurchaseOrderScalarRelationFilter, PurchaseOrderWhereInput>
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     receivals?: ReceivalEntryListRelationFilter
+    grns?: GRNbyPoListRelationFilter
   }
 
   export type PurchaseOrderItemOrderByWithRelationInput = {
@@ -85244,6 +86672,7 @@ export namespace Prisma {
     purchaseOrder?: PurchaseOrderOrderByWithRelationInput
     rawMaterial?: RawMaterialProductOrderByWithRelationInput
     receivals?: ReceivalEntryOrderByRelationAggregateInput
+    grns?: GRNbyPoOrderByRelationAggregateInput
   }
 
   export type PurchaseOrderItemWhereUniqueInput = Prisma.AtLeast<{
@@ -85260,6 +86689,7 @@ export namespace Prisma {
     purchaseOrder?: XOR<PurchaseOrderScalarRelationFilter, PurchaseOrderWhereInput>
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     receivals?: ReceivalEntryListRelationFilter
+    grns?: GRNbyPoListRelationFilter
   }, "id">
 
   export type PurchaseOrderItemOrderByWithAggregationInput = {
@@ -86262,6 +87692,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"RMQualityReport"> | Date | string
     parameters?: RMQualityParameterListRelationFilter
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    grn_entry?: XOR<GRNbyPoNullableScalarRelationFilter, GRNbyPoWhereInput> | null
   }
 
   export type RMQualityReportOrderByWithRelationInput = {
@@ -86276,6 +87707,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     parameters?: RMQualityParameterOrderByRelationAggregateInput
     createdBy?: UserOrderByWithRelationInput
+    grn_entry?: GRNbyPoOrderByWithRelationInput
   }
 
   export type RMQualityReportWhereUniqueInput = Prisma.AtLeast<{
@@ -86293,6 +87725,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"RMQualityReport"> | Date | string
     parameters?: RMQualityParameterListRelationFilter
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    grn_entry?: XOR<GRNbyPoNullableScalarRelationFilter, GRNbyPoWhereInput> | null
   }, "id">
 
   export type RMQualityReportOrderByWithAggregationInput = {
@@ -86388,6 +87821,100 @@ export namespace Prisma {
     result?: StringWithAggregatesFilter<"RMQualityParameter"> | string
     createdAt?: DateTimeWithAggregatesFilter<"RMQualityParameter"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"RMQualityParameter"> | Date | string
+  }
+
+  export type GRNbyPoWhereInput = {
+    AND?: GRNbyPoWhereInput | GRNbyPoWhereInput[]
+    OR?: GRNbyPoWhereInput[]
+    NOT?: GRNbyPoWhereInput | GRNbyPoWhereInput[]
+    id?: StringFilter<"GRNbyPo"> | string
+    grnNumber?: StringFilter<"GRNbyPo"> | string
+    purchaseOrderId?: StringFilter<"GRNbyPo"> | string
+    purchaseOrderItemId?: StringFilter<"GRNbyPo"> | string
+    rawMaterialName?: StringFilter<"GRNbyPo"> | string
+    variety?: StringFilter<"GRNbyPo"> | string
+    supplier?: StringFilter<"GRNbyPo"> | string
+    qualityReportId?: StringNullableFilter<"GRNbyPo"> | string | null
+    createdById?: StringFilter<"GRNbyPo"> | string
+    createdAt?: DateTimeFilter<"GRNbyPo"> | Date | string
+    updatedAt?: DateTimeFilter<"GRNbyPo"> | Date | string
+    purchaseOrder?: XOR<PurchaseOrderScalarRelationFilter, PurchaseOrderWhereInput>
+    purchaseOrderItem?: XOR<PurchaseOrderItemScalarRelationFilter, PurchaseOrderItemWhereInput>
+    qualityReport?: XOR<RMQualityReportNullableScalarRelationFilter, RMQualityReportWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type GRNbyPoOrderByWithRelationInput = {
+    id?: SortOrder
+    grnNumber?: SortOrder
+    purchaseOrderId?: SortOrder
+    purchaseOrderItemId?: SortOrder
+    rawMaterialName?: SortOrder
+    variety?: SortOrder
+    supplier?: SortOrder
+    qualityReportId?: SortOrderInput | SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    purchaseOrder?: PurchaseOrderOrderByWithRelationInput
+    purchaseOrderItem?: PurchaseOrderItemOrderByWithRelationInput
+    qualityReport?: RMQualityReportOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+  }
+
+  export type GRNbyPoWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    grnNumber?: string
+    qualityReportId?: string
+    AND?: GRNbyPoWhereInput | GRNbyPoWhereInput[]
+    OR?: GRNbyPoWhereInput[]
+    NOT?: GRNbyPoWhereInput | GRNbyPoWhereInput[]
+    purchaseOrderId?: StringFilter<"GRNbyPo"> | string
+    purchaseOrderItemId?: StringFilter<"GRNbyPo"> | string
+    rawMaterialName?: StringFilter<"GRNbyPo"> | string
+    variety?: StringFilter<"GRNbyPo"> | string
+    supplier?: StringFilter<"GRNbyPo"> | string
+    createdById?: StringFilter<"GRNbyPo"> | string
+    createdAt?: DateTimeFilter<"GRNbyPo"> | Date | string
+    updatedAt?: DateTimeFilter<"GRNbyPo"> | Date | string
+    purchaseOrder?: XOR<PurchaseOrderScalarRelationFilter, PurchaseOrderWhereInput>
+    purchaseOrderItem?: XOR<PurchaseOrderItemScalarRelationFilter, PurchaseOrderItemWhereInput>
+    qualityReport?: XOR<RMQualityReportNullableScalarRelationFilter, RMQualityReportWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "grnNumber" | "qualityReportId">
+
+  export type GRNbyPoOrderByWithAggregationInput = {
+    id?: SortOrder
+    grnNumber?: SortOrder
+    purchaseOrderId?: SortOrder
+    purchaseOrderItemId?: SortOrder
+    rawMaterialName?: SortOrder
+    variety?: SortOrder
+    supplier?: SortOrder
+    qualityReportId?: SortOrderInput | SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GRNbyPoCountOrderByAggregateInput
+    _max?: GRNbyPoMaxOrderByAggregateInput
+    _min?: GRNbyPoMinOrderByAggregateInput
+  }
+
+  export type GRNbyPoScalarWhereWithAggregatesInput = {
+    AND?: GRNbyPoScalarWhereWithAggregatesInput | GRNbyPoScalarWhereWithAggregatesInput[]
+    OR?: GRNbyPoScalarWhereWithAggregatesInput[]
+    NOT?: GRNbyPoScalarWhereWithAggregatesInput | GRNbyPoScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GRNbyPo"> | string
+    grnNumber?: StringWithAggregatesFilter<"GRNbyPo"> | string
+    purchaseOrderId?: StringWithAggregatesFilter<"GRNbyPo"> | string
+    purchaseOrderItemId?: StringWithAggregatesFilter<"GRNbyPo"> | string
+    rawMaterialName?: StringWithAggregatesFilter<"GRNbyPo"> | string
+    variety?: StringWithAggregatesFilter<"GRNbyPo"> | string
+    supplier?: StringWithAggregatesFilter<"GRNbyPo"> | string
+    qualityReportId?: StringNullableWithAggregatesFilter<"GRNbyPo"> | string | null
+    createdById?: StringWithAggregatesFilter<"GRNbyPo"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"GRNbyPo"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GRNbyPo"> | Date | string
   }
 
   export type ActivityLogCreateInput = {
@@ -87171,6 +88698,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -87215,6 +88743,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -87257,6 +88786,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -87301,6 +88831,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -90455,6 +91986,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     vendor: VendorCreateNestedOneWithoutPurchaseOrdersInput
     items?: PurchaseOrderItemCreateNestedManyWithoutPurchaseOrderInput
+    grns?: GRNbyPoCreateNestedManyWithoutPurchaseOrderInput
   }
 
   export type PurchaseOrderUncheckedCreateInput = {
@@ -90467,6 +91999,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: PurchaseOrderItemUncheckedCreateNestedManyWithoutPurchaseOrderInput
+    grns?: GRNbyPoUncheckedCreateNestedManyWithoutPurchaseOrderInput
   }
 
   export type PurchaseOrderUpdateInput = {
@@ -90479,6 +92012,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vendor?: VendorUpdateOneRequiredWithoutPurchaseOrdersNestedInput
     items?: PurchaseOrderItemUpdateManyWithoutPurchaseOrderNestedInput
+    grns?: GRNbyPoUpdateManyWithoutPurchaseOrderNestedInput
   }
 
   export type PurchaseOrderUncheckedUpdateInput = {
@@ -90491,6 +92025,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: PurchaseOrderItemUncheckedUpdateManyWithoutPurchaseOrderNestedInput
+    grns?: GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderNestedInput
   }
 
   export type PurchaseOrderCreateManyInput = {
@@ -90534,6 +92069,7 @@ export namespace Prisma {
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutItemsInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutPurchaseOrderItemsInput
     receivals?: ReceivalEntryCreateNestedManyWithoutPurchaseOrderItemInput
+    grns?: GRNbyPoCreateNestedManyWithoutPurchaseOrderItemInput
   }
 
   export type PurchaseOrderItemUncheckedCreateInput = {
@@ -90545,6 +92081,7 @@ export namespace Prisma {
     totalReceived?: number
     status?: $Enums.PurchaseOrderItemStatus
     receivals?: ReceivalEntryUncheckedCreateNestedManyWithoutPurchaseOrderItemInput
+    grns?: GRNbyPoUncheckedCreateNestedManyWithoutPurchaseOrderItemInput
   }
 
   export type PurchaseOrderItemUpdateInput = {
@@ -90556,6 +92093,7 @@ export namespace Prisma {
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutItemsNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutPurchaseOrderItemsNestedInput
     receivals?: ReceivalEntryUpdateManyWithoutPurchaseOrderItemNestedInput
+    grns?: GRNbyPoUpdateManyWithoutPurchaseOrderItemNestedInput
   }
 
   export type PurchaseOrderItemUncheckedUpdateInput = {
@@ -90567,6 +92105,7 @@ export namespace Prisma {
     totalReceived?: FloatFieldUpdateOperationsInput | number
     status?: EnumPurchaseOrderItemStatusFieldUpdateOperationsInput | $Enums.PurchaseOrderItemStatus
     receivals?: ReceivalEntryUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput
+    grns?: GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput
   }
 
   export type PurchaseOrderItemCreateManyInput = {
@@ -91585,6 +93124,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     parameters?: RMQualityParameterCreateNestedManyWithoutReportInput
     createdBy: UserCreateNestedOneWithoutRmQualityReportsInput
+    grn_entry?: GRNbyPoCreateNestedOneWithoutQualityReportInput
   }
 
   export type RMQualityReportUncheckedCreateInput = {
@@ -91598,6 +93138,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: RMQualityParameterUncheckedCreateNestedManyWithoutReportInput
+    grn_entry?: GRNbyPoUncheckedCreateNestedOneWithoutQualityReportInput
   }
 
   export type RMQualityReportUpdateInput = {
@@ -91611,6 +93152,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: RMQualityParameterUpdateManyWithoutReportNestedInput
     createdBy?: UserUpdateOneRequiredWithoutRmQualityReportsNestedInput
+    grn_entry?: GRNbyPoUpdateOneWithoutQualityReportNestedInput
   }
 
   export type RMQualityReportUncheckedUpdateInput = {
@@ -91624,6 +93166,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: RMQualityParameterUncheckedUpdateManyWithoutReportNestedInput
+    grn_entry?: GRNbyPoUncheckedUpdateOneWithoutQualityReportNestedInput
   }
 
   export type RMQualityReportCreateManyInput = {
@@ -91726,6 +93269,100 @@ export namespace Prisma {
     parameter?: StringFieldUpdateOperationsInput | string
     standard?: StringFieldUpdateOperationsInput | string
     result?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GRNbyPoCreateInput = {
+    id?: string
+    grnNumber: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
+    purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
+    qualityReport?: RMQualityReportCreateNestedOneWithoutGrn_entryInput
+    createdBy: UserCreateNestedOneWithoutCreatedGRNsInput
+  }
+
+  export type GRNbyPoUncheckedCreateInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderId: string
+    purchaseOrderItemId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GRNbyPoUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
+    purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
+    qualityReport?: RMQualityReportUpdateOneWithoutGrn_entryNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedGRNsNestedInput
+  }
+
+  export type GRNbyPoUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GRNbyPoCreateManyInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderId: string
+    purchaseOrderItemId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GRNbyPoUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GRNbyPoUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -92452,6 +94089,12 @@ export namespace Prisma {
     none?: RMQualityReportWhereInput
   }
 
+  export type GRNbyPoListRelationFilter = {
+    every?: GRNbyPoWhereInput
+    some?: GRNbyPoWhereInput
+    none?: GRNbyPoWhereInput
+  }
+
   export type TrainingListRelationFilter = {
     every?: TrainingWhereInput
     some?: TrainingWhereInput
@@ -92540,6 +94183,10 @@ export namespace Prisma {
   }
 
   export type RMQualityReportOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GRNbyPoOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -95244,6 +96891,11 @@ export namespace Prisma {
     none?: RMQualityParameterWhereInput
   }
 
+  export type GRNbyPoNullableScalarRelationFilter = {
+    is?: GRNbyPoWhereInput | null
+    isNot?: GRNbyPoWhereInput | null
+  }
+
   export type RMQualityParameterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -95315,6 +96967,53 @@ export namespace Prisma {
     parameter?: SortOrder
     standard?: SortOrder
     result?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type RMQualityReportNullableScalarRelationFilter = {
+    is?: RMQualityReportWhereInput | null
+    isNot?: RMQualityReportWhereInput | null
+  }
+
+  export type GRNbyPoCountOrderByAggregateInput = {
+    id?: SortOrder
+    grnNumber?: SortOrder
+    purchaseOrderId?: SortOrder
+    purchaseOrderItemId?: SortOrder
+    rawMaterialName?: SortOrder
+    variety?: SortOrder
+    supplier?: SortOrder
+    qualityReportId?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GRNbyPoMaxOrderByAggregateInput = {
+    id?: SortOrder
+    grnNumber?: SortOrder
+    purchaseOrderId?: SortOrder
+    purchaseOrderItemId?: SortOrder
+    rawMaterialName?: SortOrder
+    variety?: SortOrder
+    supplier?: SortOrder
+    qualityReportId?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GRNbyPoMinOrderByAggregateInput = {
+    id?: SortOrder
+    grnNumber?: SortOrder
+    purchaseOrderId?: SortOrder
+    purchaseOrderItemId?: SortOrder
+    rawMaterialName?: SortOrder
+    variety?: SortOrder
+    supplier?: SortOrder
+    qualityReportId?: SortOrder
+    createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -96468,6 +98167,13 @@ export namespace Prisma {
     connect?: RMQualityReportWhereUniqueInput | RMQualityReportWhereUniqueInput[]
   }
 
+  export type GRNbyPoCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<GRNbyPoCreateWithoutCreatedByInput, GRNbyPoUncheckedCreateWithoutCreatedByInput> | GRNbyPoCreateWithoutCreatedByInput[] | GRNbyPoUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutCreatedByInput | GRNbyPoCreateOrConnectWithoutCreatedByInput[]
+    createMany?: GRNbyPoCreateManyCreatedByInputEnvelope
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+  }
+
   export type StandardCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<StandardCreateWithoutCreatedByInput, StandardUncheckedCreateWithoutCreatedByInput> | StandardCreateWithoutCreatedByInput[] | StandardUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: StandardCreateOrConnectWithoutCreatedByInput | StandardCreateOrConnectWithoutCreatedByInput[]
@@ -96702,6 +98408,13 @@ export namespace Prisma {
     connectOrCreate?: RMQualityReportCreateOrConnectWithoutCreatedByInput | RMQualityReportCreateOrConnectWithoutCreatedByInput[]
     createMany?: RMQualityReportCreateManyCreatedByInputEnvelope
     connect?: RMQualityReportWhereUniqueInput | RMQualityReportWhereUniqueInput[]
+  }
+
+  export type GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<GRNbyPoCreateWithoutCreatedByInput, GRNbyPoUncheckedCreateWithoutCreatedByInput> | GRNbyPoCreateWithoutCreatedByInput[] | GRNbyPoUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutCreatedByInput | GRNbyPoCreateOrConnectWithoutCreatedByInput[]
+    createMany?: GRNbyPoCreateManyCreatedByInputEnvelope
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
   }
 
   export type StandardUncheckedCreateNestedManyWithoutCreatedByInput = {
@@ -97069,6 +98782,20 @@ export namespace Prisma {
     update?: RMQualityReportUpdateWithWhereUniqueWithoutCreatedByInput | RMQualityReportUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: RMQualityReportUpdateManyWithWhereWithoutCreatedByInput | RMQualityReportUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: RMQualityReportScalarWhereInput | RMQualityReportScalarWhereInput[]
+  }
+
+  export type GRNbyPoUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<GRNbyPoCreateWithoutCreatedByInput, GRNbyPoUncheckedCreateWithoutCreatedByInput> | GRNbyPoCreateWithoutCreatedByInput[] | GRNbyPoUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutCreatedByInput | GRNbyPoCreateOrConnectWithoutCreatedByInput[]
+    upsert?: GRNbyPoUpsertWithWhereUniqueWithoutCreatedByInput | GRNbyPoUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: GRNbyPoCreateManyCreatedByInputEnvelope
+    set?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    disconnect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    delete?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    update?: GRNbyPoUpdateWithWhereUniqueWithoutCreatedByInput | GRNbyPoUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: GRNbyPoUpdateManyWithWhereWithoutCreatedByInput | GRNbyPoUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: GRNbyPoScalarWhereInput | GRNbyPoScalarWhereInput[]
   }
 
   export type StandardUpdateManyWithoutCreatedByNestedInput = {
@@ -97535,6 +99262,20 @@ export namespace Prisma {
     update?: RMQualityReportUpdateWithWhereUniqueWithoutCreatedByInput | RMQualityReportUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: RMQualityReportUpdateManyWithWhereWithoutCreatedByInput | RMQualityReportUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: RMQualityReportScalarWhereInput | RMQualityReportScalarWhereInput[]
+  }
+
+  export type GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<GRNbyPoCreateWithoutCreatedByInput, GRNbyPoUncheckedCreateWithoutCreatedByInput> | GRNbyPoCreateWithoutCreatedByInput[] | GRNbyPoUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutCreatedByInput | GRNbyPoCreateOrConnectWithoutCreatedByInput[]
+    upsert?: GRNbyPoUpsertWithWhereUniqueWithoutCreatedByInput | GRNbyPoUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: GRNbyPoCreateManyCreatedByInputEnvelope
+    set?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    disconnect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    delete?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    update?: GRNbyPoUpdateWithWhereUniqueWithoutCreatedByInput | GRNbyPoUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: GRNbyPoUpdateManyWithWhereWithoutCreatedByInput | GRNbyPoUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: GRNbyPoScalarWhereInput | GRNbyPoScalarWhereInput[]
   }
 
   export type StandardUncheckedUpdateManyWithoutCreatedByNestedInput = {
@@ -100680,11 +102421,25 @@ export namespace Prisma {
     connect?: PurchaseOrderItemWhereUniqueInput | PurchaseOrderItemWhereUniqueInput[]
   }
 
+  export type GRNbyPoCreateNestedManyWithoutPurchaseOrderInput = {
+    create?: XOR<GRNbyPoCreateWithoutPurchaseOrderInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderInput> | GRNbyPoCreateWithoutPurchaseOrderInput[] | GRNbyPoUncheckedCreateWithoutPurchaseOrderInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutPurchaseOrderInput | GRNbyPoCreateOrConnectWithoutPurchaseOrderInput[]
+    createMany?: GRNbyPoCreateManyPurchaseOrderInputEnvelope
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+  }
+
   export type PurchaseOrderItemUncheckedCreateNestedManyWithoutPurchaseOrderInput = {
     create?: XOR<PurchaseOrderItemCreateWithoutPurchaseOrderInput, PurchaseOrderItemUncheckedCreateWithoutPurchaseOrderInput> | PurchaseOrderItemCreateWithoutPurchaseOrderInput[] | PurchaseOrderItemUncheckedCreateWithoutPurchaseOrderInput[]
     connectOrCreate?: PurchaseOrderItemCreateOrConnectWithoutPurchaseOrderInput | PurchaseOrderItemCreateOrConnectWithoutPurchaseOrderInput[]
     createMany?: PurchaseOrderItemCreateManyPurchaseOrderInputEnvelope
     connect?: PurchaseOrderItemWhereUniqueInput | PurchaseOrderItemWhereUniqueInput[]
+  }
+
+  export type GRNbyPoUncheckedCreateNestedManyWithoutPurchaseOrderInput = {
+    create?: XOR<GRNbyPoCreateWithoutPurchaseOrderInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderInput> | GRNbyPoCreateWithoutPurchaseOrderInput[] | GRNbyPoUncheckedCreateWithoutPurchaseOrderInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutPurchaseOrderInput | GRNbyPoCreateOrConnectWithoutPurchaseOrderInput[]
+    createMany?: GRNbyPoCreateManyPurchaseOrderInputEnvelope
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
   }
 
   export type VendorUpdateOneRequiredWithoutPurchaseOrdersNestedInput = {
@@ -100709,6 +102464,20 @@ export namespace Prisma {
     deleteMany?: PurchaseOrderItemScalarWhereInput | PurchaseOrderItemScalarWhereInput[]
   }
 
+  export type GRNbyPoUpdateManyWithoutPurchaseOrderNestedInput = {
+    create?: XOR<GRNbyPoCreateWithoutPurchaseOrderInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderInput> | GRNbyPoCreateWithoutPurchaseOrderInput[] | GRNbyPoUncheckedCreateWithoutPurchaseOrderInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutPurchaseOrderInput | GRNbyPoCreateOrConnectWithoutPurchaseOrderInput[]
+    upsert?: GRNbyPoUpsertWithWhereUniqueWithoutPurchaseOrderInput | GRNbyPoUpsertWithWhereUniqueWithoutPurchaseOrderInput[]
+    createMany?: GRNbyPoCreateManyPurchaseOrderInputEnvelope
+    set?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    disconnect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    delete?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    update?: GRNbyPoUpdateWithWhereUniqueWithoutPurchaseOrderInput | GRNbyPoUpdateWithWhereUniqueWithoutPurchaseOrderInput[]
+    updateMany?: GRNbyPoUpdateManyWithWhereWithoutPurchaseOrderInput | GRNbyPoUpdateManyWithWhereWithoutPurchaseOrderInput[]
+    deleteMany?: GRNbyPoScalarWhereInput | GRNbyPoScalarWhereInput[]
+  }
+
   export type PurchaseOrderItemUncheckedUpdateManyWithoutPurchaseOrderNestedInput = {
     create?: XOR<PurchaseOrderItemCreateWithoutPurchaseOrderInput, PurchaseOrderItemUncheckedCreateWithoutPurchaseOrderInput> | PurchaseOrderItemCreateWithoutPurchaseOrderInput[] | PurchaseOrderItemUncheckedCreateWithoutPurchaseOrderInput[]
     connectOrCreate?: PurchaseOrderItemCreateOrConnectWithoutPurchaseOrderInput | PurchaseOrderItemCreateOrConnectWithoutPurchaseOrderInput[]
@@ -100721,6 +102490,20 @@ export namespace Prisma {
     update?: PurchaseOrderItemUpdateWithWhereUniqueWithoutPurchaseOrderInput | PurchaseOrderItemUpdateWithWhereUniqueWithoutPurchaseOrderInput[]
     updateMany?: PurchaseOrderItemUpdateManyWithWhereWithoutPurchaseOrderInput | PurchaseOrderItemUpdateManyWithWhereWithoutPurchaseOrderInput[]
     deleteMany?: PurchaseOrderItemScalarWhereInput | PurchaseOrderItemScalarWhereInput[]
+  }
+
+  export type GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderNestedInput = {
+    create?: XOR<GRNbyPoCreateWithoutPurchaseOrderInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderInput> | GRNbyPoCreateWithoutPurchaseOrderInput[] | GRNbyPoUncheckedCreateWithoutPurchaseOrderInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutPurchaseOrderInput | GRNbyPoCreateOrConnectWithoutPurchaseOrderInput[]
+    upsert?: GRNbyPoUpsertWithWhereUniqueWithoutPurchaseOrderInput | GRNbyPoUpsertWithWhereUniqueWithoutPurchaseOrderInput[]
+    createMany?: GRNbyPoCreateManyPurchaseOrderInputEnvelope
+    set?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    disconnect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    delete?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    update?: GRNbyPoUpdateWithWhereUniqueWithoutPurchaseOrderInput | GRNbyPoUpdateWithWhereUniqueWithoutPurchaseOrderInput[]
+    updateMany?: GRNbyPoUpdateManyWithWhereWithoutPurchaseOrderInput | GRNbyPoUpdateManyWithWhereWithoutPurchaseOrderInput[]
+    deleteMany?: GRNbyPoScalarWhereInput | GRNbyPoScalarWhereInput[]
   }
 
   export type PurchaseOrderCreateNestedOneWithoutItemsInput = {
@@ -100742,11 +102525,25 @@ export namespace Prisma {
     connect?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
   }
 
+  export type GRNbyPoCreateNestedManyWithoutPurchaseOrderItemInput = {
+    create?: XOR<GRNbyPoCreateWithoutPurchaseOrderItemInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput> | GRNbyPoCreateWithoutPurchaseOrderItemInput[] | GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput | GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput[]
+    createMany?: GRNbyPoCreateManyPurchaseOrderItemInputEnvelope
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+  }
+
   export type ReceivalEntryUncheckedCreateNestedManyWithoutPurchaseOrderItemInput = {
     create?: XOR<ReceivalEntryCreateWithoutPurchaseOrderItemInput, ReceivalEntryUncheckedCreateWithoutPurchaseOrderItemInput> | ReceivalEntryCreateWithoutPurchaseOrderItemInput[] | ReceivalEntryUncheckedCreateWithoutPurchaseOrderItemInput[]
     connectOrCreate?: ReceivalEntryCreateOrConnectWithoutPurchaseOrderItemInput | ReceivalEntryCreateOrConnectWithoutPurchaseOrderItemInput[]
     createMany?: ReceivalEntryCreateManyPurchaseOrderItemInputEnvelope
     connect?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+  }
+
+  export type GRNbyPoUncheckedCreateNestedManyWithoutPurchaseOrderItemInput = {
+    create?: XOR<GRNbyPoCreateWithoutPurchaseOrderItemInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput> | GRNbyPoCreateWithoutPurchaseOrderItemInput[] | GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput | GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput[]
+    createMany?: GRNbyPoCreateManyPurchaseOrderItemInputEnvelope
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
   }
 
   export type FloatFieldUpdateOperationsInput = {
@@ -100791,6 +102588,20 @@ export namespace Prisma {
     deleteMany?: ReceivalEntryScalarWhereInput | ReceivalEntryScalarWhereInput[]
   }
 
+  export type GRNbyPoUpdateManyWithoutPurchaseOrderItemNestedInput = {
+    create?: XOR<GRNbyPoCreateWithoutPurchaseOrderItemInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput> | GRNbyPoCreateWithoutPurchaseOrderItemInput[] | GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput | GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput[]
+    upsert?: GRNbyPoUpsertWithWhereUniqueWithoutPurchaseOrderItemInput | GRNbyPoUpsertWithWhereUniqueWithoutPurchaseOrderItemInput[]
+    createMany?: GRNbyPoCreateManyPurchaseOrderItemInputEnvelope
+    set?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    disconnect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    delete?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    update?: GRNbyPoUpdateWithWhereUniqueWithoutPurchaseOrderItemInput | GRNbyPoUpdateWithWhereUniqueWithoutPurchaseOrderItemInput[]
+    updateMany?: GRNbyPoUpdateManyWithWhereWithoutPurchaseOrderItemInput | GRNbyPoUpdateManyWithWhereWithoutPurchaseOrderItemInput[]
+    deleteMany?: GRNbyPoScalarWhereInput | GRNbyPoScalarWhereInput[]
+  }
+
   export type ReceivalEntryUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput = {
     create?: XOR<ReceivalEntryCreateWithoutPurchaseOrderItemInput, ReceivalEntryUncheckedCreateWithoutPurchaseOrderItemInput> | ReceivalEntryCreateWithoutPurchaseOrderItemInput[] | ReceivalEntryUncheckedCreateWithoutPurchaseOrderItemInput[]
     connectOrCreate?: ReceivalEntryCreateOrConnectWithoutPurchaseOrderItemInput | ReceivalEntryCreateOrConnectWithoutPurchaseOrderItemInput[]
@@ -100803,6 +102614,20 @@ export namespace Prisma {
     update?: ReceivalEntryUpdateWithWhereUniqueWithoutPurchaseOrderItemInput | ReceivalEntryUpdateWithWhereUniqueWithoutPurchaseOrderItemInput[]
     updateMany?: ReceivalEntryUpdateManyWithWhereWithoutPurchaseOrderItemInput | ReceivalEntryUpdateManyWithWhereWithoutPurchaseOrderItemInput[]
     deleteMany?: ReceivalEntryScalarWhereInput | ReceivalEntryScalarWhereInput[]
+  }
+
+  export type GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput = {
+    create?: XOR<GRNbyPoCreateWithoutPurchaseOrderItemInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput> | GRNbyPoCreateWithoutPurchaseOrderItemInput[] | GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput[]
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput | GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput[]
+    upsert?: GRNbyPoUpsertWithWhereUniqueWithoutPurchaseOrderItemInput | GRNbyPoUpsertWithWhereUniqueWithoutPurchaseOrderItemInput[]
+    createMany?: GRNbyPoCreateManyPurchaseOrderItemInputEnvelope
+    set?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    disconnect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    delete?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
+    update?: GRNbyPoUpdateWithWhereUniqueWithoutPurchaseOrderItemInput | GRNbyPoUpdateWithWhereUniqueWithoutPurchaseOrderItemInput[]
+    updateMany?: GRNbyPoUpdateManyWithWhereWithoutPurchaseOrderItemInput | GRNbyPoUpdateManyWithWhereWithoutPurchaseOrderItemInput[]
+    deleteMany?: GRNbyPoScalarWhereInput | GRNbyPoScalarWhereInput[]
   }
 
   export type ReceivalBagCreateNestedManyWithoutReceivalEntryInput = {
@@ -101748,11 +103573,23 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type GRNbyPoCreateNestedOneWithoutQualityReportInput = {
+    create?: XOR<GRNbyPoCreateWithoutQualityReportInput, GRNbyPoUncheckedCreateWithoutQualityReportInput>
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutQualityReportInput
+    connect?: GRNbyPoWhereUniqueInput
+  }
+
   export type RMQualityParameterUncheckedCreateNestedManyWithoutReportInput = {
     create?: XOR<RMQualityParameterCreateWithoutReportInput, RMQualityParameterUncheckedCreateWithoutReportInput> | RMQualityParameterCreateWithoutReportInput[] | RMQualityParameterUncheckedCreateWithoutReportInput[]
     connectOrCreate?: RMQualityParameterCreateOrConnectWithoutReportInput | RMQualityParameterCreateOrConnectWithoutReportInput[]
     createMany?: RMQualityParameterCreateManyReportInputEnvelope
     connect?: RMQualityParameterWhereUniqueInput | RMQualityParameterWhereUniqueInput[]
+  }
+
+  export type GRNbyPoUncheckedCreateNestedOneWithoutQualityReportInput = {
+    create?: XOR<GRNbyPoCreateWithoutQualityReportInput, GRNbyPoUncheckedCreateWithoutQualityReportInput>
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutQualityReportInput
+    connect?: GRNbyPoWhereUniqueInput
   }
 
   export type RMQualityParameterUpdateManyWithoutReportNestedInput = {
@@ -101777,6 +103614,16 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutRmQualityReportsInput, UserUpdateWithoutRmQualityReportsInput>, UserUncheckedUpdateWithoutRmQualityReportsInput>
   }
 
+  export type GRNbyPoUpdateOneWithoutQualityReportNestedInput = {
+    create?: XOR<GRNbyPoCreateWithoutQualityReportInput, GRNbyPoUncheckedCreateWithoutQualityReportInput>
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutQualityReportInput
+    upsert?: GRNbyPoUpsertWithoutQualityReportInput
+    disconnect?: GRNbyPoWhereInput | boolean
+    delete?: GRNbyPoWhereInput | boolean
+    connect?: GRNbyPoWhereUniqueInput
+    update?: XOR<XOR<GRNbyPoUpdateToOneWithWhereWithoutQualityReportInput, GRNbyPoUpdateWithoutQualityReportInput>, GRNbyPoUncheckedUpdateWithoutQualityReportInput>
+  }
+
   export type RMQualityParameterUncheckedUpdateManyWithoutReportNestedInput = {
     create?: XOR<RMQualityParameterCreateWithoutReportInput, RMQualityParameterUncheckedCreateWithoutReportInput> | RMQualityParameterCreateWithoutReportInput[] | RMQualityParameterUncheckedCreateWithoutReportInput[]
     connectOrCreate?: RMQualityParameterCreateOrConnectWithoutReportInput | RMQualityParameterCreateOrConnectWithoutReportInput[]
@@ -101791,6 +103638,16 @@ export namespace Prisma {
     deleteMany?: RMQualityParameterScalarWhereInput | RMQualityParameterScalarWhereInput[]
   }
 
+  export type GRNbyPoUncheckedUpdateOneWithoutQualityReportNestedInput = {
+    create?: XOR<GRNbyPoCreateWithoutQualityReportInput, GRNbyPoUncheckedCreateWithoutQualityReportInput>
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutQualityReportInput
+    upsert?: GRNbyPoUpsertWithoutQualityReportInput
+    disconnect?: GRNbyPoWhereInput | boolean
+    delete?: GRNbyPoWhereInput | boolean
+    connect?: GRNbyPoWhereUniqueInput
+    update?: XOR<XOR<GRNbyPoUpdateToOneWithWhereWithoutQualityReportInput, GRNbyPoUpdateWithoutQualityReportInput>, GRNbyPoUncheckedUpdateWithoutQualityReportInput>
+  }
+
   export type RMQualityReportCreateNestedOneWithoutParametersInput = {
     create?: XOR<RMQualityReportCreateWithoutParametersInput, RMQualityReportUncheckedCreateWithoutParametersInput>
     connectOrCreate?: RMQualityReportCreateOrConnectWithoutParametersInput
@@ -101803,6 +103660,64 @@ export namespace Prisma {
     upsert?: RMQualityReportUpsertWithoutParametersInput
     connect?: RMQualityReportWhereUniqueInput
     update?: XOR<XOR<RMQualityReportUpdateToOneWithWhereWithoutParametersInput, RMQualityReportUpdateWithoutParametersInput>, RMQualityReportUncheckedUpdateWithoutParametersInput>
+  }
+
+  export type PurchaseOrderCreateNestedOneWithoutGrnsInput = {
+    create?: XOR<PurchaseOrderCreateWithoutGrnsInput, PurchaseOrderUncheckedCreateWithoutGrnsInput>
+    connectOrCreate?: PurchaseOrderCreateOrConnectWithoutGrnsInput
+    connect?: PurchaseOrderWhereUniqueInput
+  }
+
+  export type PurchaseOrderItemCreateNestedOneWithoutGrnsInput = {
+    create?: XOR<PurchaseOrderItemCreateWithoutGrnsInput, PurchaseOrderItemUncheckedCreateWithoutGrnsInput>
+    connectOrCreate?: PurchaseOrderItemCreateOrConnectWithoutGrnsInput
+    connect?: PurchaseOrderItemWhereUniqueInput
+  }
+
+  export type RMQualityReportCreateNestedOneWithoutGrn_entryInput = {
+    create?: XOR<RMQualityReportCreateWithoutGrn_entryInput, RMQualityReportUncheckedCreateWithoutGrn_entryInput>
+    connectOrCreate?: RMQualityReportCreateOrConnectWithoutGrn_entryInput
+    connect?: RMQualityReportWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutCreatedGRNsInput = {
+    create?: XOR<UserCreateWithoutCreatedGRNsInput, UserUncheckedCreateWithoutCreatedGRNsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedGRNsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput = {
+    create?: XOR<PurchaseOrderCreateWithoutGrnsInput, PurchaseOrderUncheckedCreateWithoutGrnsInput>
+    connectOrCreate?: PurchaseOrderCreateOrConnectWithoutGrnsInput
+    upsert?: PurchaseOrderUpsertWithoutGrnsInput
+    connect?: PurchaseOrderWhereUniqueInput
+    update?: XOR<XOR<PurchaseOrderUpdateToOneWithWhereWithoutGrnsInput, PurchaseOrderUpdateWithoutGrnsInput>, PurchaseOrderUncheckedUpdateWithoutGrnsInput>
+  }
+
+  export type PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput = {
+    create?: XOR<PurchaseOrderItemCreateWithoutGrnsInput, PurchaseOrderItemUncheckedCreateWithoutGrnsInput>
+    connectOrCreate?: PurchaseOrderItemCreateOrConnectWithoutGrnsInput
+    upsert?: PurchaseOrderItemUpsertWithoutGrnsInput
+    connect?: PurchaseOrderItemWhereUniqueInput
+    update?: XOR<XOR<PurchaseOrderItemUpdateToOneWithWhereWithoutGrnsInput, PurchaseOrderItemUpdateWithoutGrnsInput>, PurchaseOrderItemUncheckedUpdateWithoutGrnsInput>
+  }
+
+  export type RMQualityReportUpdateOneWithoutGrn_entryNestedInput = {
+    create?: XOR<RMQualityReportCreateWithoutGrn_entryInput, RMQualityReportUncheckedCreateWithoutGrn_entryInput>
+    connectOrCreate?: RMQualityReportCreateOrConnectWithoutGrn_entryInput
+    upsert?: RMQualityReportUpsertWithoutGrn_entryInput
+    disconnect?: RMQualityReportWhereInput | boolean
+    delete?: RMQualityReportWhereInput | boolean
+    connect?: RMQualityReportWhereUniqueInput
+    update?: XOR<XOR<RMQualityReportUpdateToOneWithWhereWithoutGrn_entryInput, RMQualityReportUpdateWithoutGrn_entryInput>, RMQualityReportUncheckedUpdateWithoutGrn_entryInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutCreatedGRNsNestedInput = {
+    create?: XOR<UserCreateWithoutCreatedGRNsInput, UserUncheckedCreateWithoutCreatedGRNsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutCreatedGRNsInput
+    upsert?: UserUpsertWithoutCreatedGRNsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedGRNsInput, UserUpdateWithoutCreatedGRNsInput>, UserUncheckedUpdateWithoutCreatedGRNsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -102443,6 +104358,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -102486,6 +104402,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -102602,6 +104519,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -102645,6 +104563,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -102712,6 +104631,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -102755,6 +104675,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -102801,6 +104722,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -102844,6 +104766,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -103119,6 +105042,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -103162,6 +105086,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -103214,6 +105139,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -103257,6 +105183,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -103801,6 +105728,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -103844,6 +105772,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -103960,6 +105889,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -104003,6 +105933,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -104406,6 +106337,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -104448,6 +106380,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -105629,6 +107562,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: RMQualityParameterCreateNestedManyWithoutReportInput
+    grn_entry?: GRNbyPoCreateNestedOneWithoutQualityReportInput
   }
 
   export type RMQualityReportUncheckedCreateWithoutCreatedByInput = {
@@ -105641,6 +107575,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: RMQualityParameterUncheckedCreateNestedManyWithoutReportInput
+    grn_entry?: GRNbyPoUncheckedCreateNestedOneWithoutQualityReportInput
   }
 
   export type RMQualityReportCreateOrConnectWithoutCreatedByInput = {
@@ -105650,6 +107585,42 @@ export namespace Prisma {
 
   export type RMQualityReportCreateManyCreatedByInputEnvelope = {
     data: RMQualityReportCreateManyCreatedByInput | RMQualityReportCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GRNbyPoCreateWithoutCreatedByInput = {
+    id?: string
+    grnNumber: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
+    purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
+    qualityReport?: RMQualityReportCreateNestedOneWithoutGrn_entryInput
+  }
+
+  export type GRNbyPoUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderId: string
+    purchaseOrderItemId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GRNbyPoCreateOrConnectWithoutCreatedByInput = {
+    where: GRNbyPoWhereUniqueInput
+    create: XOR<GRNbyPoCreateWithoutCreatedByInput, GRNbyPoUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type GRNbyPoCreateManyCreatedByInputEnvelope = {
+    data: GRNbyPoCreateManyCreatedByInput | GRNbyPoCreateManyCreatedByInput[]
     skipDuplicates?: boolean
   }
 
@@ -106698,6 +108669,39 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"RMQualityReport"> | Date | string
   }
 
+  export type GRNbyPoUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: GRNbyPoWhereUniqueInput
+    update: XOR<GRNbyPoUpdateWithoutCreatedByInput, GRNbyPoUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<GRNbyPoCreateWithoutCreatedByInput, GRNbyPoUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type GRNbyPoUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: GRNbyPoWhereUniqueInput
+    data: XOR<GRNbyPoUpdateWithoutCreatedByInput, GRNbyPoUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type GRNbyPoUpdateManyWithWhereWithoutCreatedByInput = {
+    where: GRNbyPoScalarWhereInput
+    data: XOR<GRNbyPoUpdateManyMutationInput, GRNbyPoUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type GRNbyPoScalarWhereInput = {
+    AND?: GRNbyPoScalarWhereInput | GRNbyPoScalarWhereInput[]
+    OR?: GRNbyPoScalarWhereInput[]
+    NOT?: GRNbyPoScalarWhereInput | GRNbyPoScalarWhereInput[]
+    id?: StringFilter<"GRNbyPo"> | string
+    grnNumber?: StringFilter<"GRNbyPo"> | string
+    purchaseOrderId?: StringFilter<"GRNbyPo"> | string
+    purchaseOrderItemId?: StringFilter<"GRNbyPo"> | string
+    rawMaterialName?: StringFilter<"GRNbyPo"> | string
+    variety?: StringFilter<"GRNbyPo"> | string
+    supplier?: StringFilter<"GRNbyPo"> | string
+    qualityReportId?: StringNullableFilter<"GRNbyPo"> | string | null
+    createdById?: StringFilter<"GRNbyPo"> | string
+    createdAt?: DateTimeFilter<"GRNbyPo"> | Date | string
+    updatedAt?: DateTimeFilter<"GRNbyPo"> | Date | string
+  }
+
   export type StandardUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: StandardWhereUniqueInput
     update: XOR<StandardUpdateWithoutCreatedByInput, StandardUncheckedUpdateWithoutCreatedByInput>
@@ -107066,6 +109070,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -107109,6 +109114,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -107166,6 +109172,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -107209,6 +109216,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -107276,6 +109284,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
     standardDefinitionsModified?: StandardDefinitionCreateNestedManyWithoutModifiedByInput
@@ -107319,6 +109328,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
     standardDefinitionsModified?: StandardDefinitionUncheckedCreateNestedManyWithoutModifiedByInput
@@ -107365,6 +109375,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
     standardDefinitionsModified?: StandardDefinitionCreateNestedManyWithoutModifiedByInput
@@ -107408,6 +109419,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
     standardDefinitionsModified?: StandardDefinitionUncheckedCreateNestedManyWithoutModifiedByInput
@@ -107609,6 +109621,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
     standardDefinitionsModified?: StandardDefinitionUpdateManyWithoutModifiedByNestedInput
@@ -107652,6 +109665,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
     standardDefinitionsModified?: StandardDefinitionUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -107704,6 +109718,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
     standardDefinitionsModified?: StandardDefinitionUpdateManyWithoutModifiedByNestedInput
@@ -107747,6 +109762,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
     standardDefinitionsModified?: StandardDefinitionUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -108374,6 +110390,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsModified?: StandardDefinitionCreateNestedManyWithoutModifiedByInput
@@ -108417,6 +110434,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsModified?: StandardDefinitionUncheckedCreateNestedManyWithoutModifiedByInput
@@ -108492,6 +110510,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -108535,6 +110554,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -108658,6 +110678,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsModified?: StandardDefinitionUpdateManyWithoutModifiedByNestedInput
@@ -108701,6 +110722,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsModified?: StandardDefinitionUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -108788,6 +110810,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -108831,6 +110854,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -109433,6 +111457,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -109476,6 +111501,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -109522,6 +111548,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -109565,6 +111592,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -109966,6 +111994,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -110009,6 +112038,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -110061,6 +112091,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -110104,6 +112135,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -110649,6 +112681,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -110692,6 +112725,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -110812,6 +112846,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -110855,6 +112890,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -111663,6 +113699,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -111706,6 +113743,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -111826,6 +113864,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -111869,6 +113908,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -112232,6 +114272,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -112275,6 +114316,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -112477,6 +114519,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -112520,6 +114563,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -112562,6 +114606,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -112605,6 +114650,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -112651,6 +114697,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -112694,6 +114741,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -112808,6 +114856,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -112851,6 +114900,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -112903,6 +114953,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -112946,6 +114997,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -113107,6 +115159,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -113150,6 +115203,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -113270,6 +115324,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -113313,6 +115368,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -113585,6 +115641,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -113628,6 +115685,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -113726,6 +115784,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -113769,6 +115828,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -113869,6 +115929,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -113912,6 +115973,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -113985,6 +116047,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -114028,6 +116091,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -114069,6 +116133,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -114112,6 +116177,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -114185,6 +116251,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -114228,6 +116295,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -114566,6 +116634,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -114609,6 +116678,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -114694,6 +116764,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -114737,6 +116808,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -114972,6 +117044,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -115015,6 +117088,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -115133,6 +117207,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -115176,6 +117251,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -115337,6 +117413,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -115380,6 +117457,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -115508,6 +117586,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -115551,6 +117630,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -115653,6 +117733,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -115696,6 +117777,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -115834,6 +117916,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -115877,6 +117960,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -115934,6 +118018,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -115977,6 +118062,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -116133,6 +118219,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -116176,6 +118263,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -116272,6 +118360,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -116315,6 +118404,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -116433,6 +118523,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -116476,6 +118567,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -116572,6 +118664,7 @@ export namespace Prisma {
     Notification?: NotificationCreateNestedManyWithoutUserInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -116615,6 +118708,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -116661,6 +118755,7 @@ export namespace Prisma {
     Notification?: NotificationCreateNestedManyWithoutUserInput
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -116704,6 +118799,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -116822,6 +118918,7 @@ export namespace Prisma {
     Notification?: NotificationUpdateManyWithoutUserNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -116865,6 +118962,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -116917,6 +119015,7 @@ export namespace Prisma {
     Notification?: NotificationUpdateManyWithoutUserNestedInput
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -116960,6 +119059,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -117056,6 +119156,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -117099,6 +119200,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -117145,6 +119247,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -117188,6 +119291,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -117306,6 +119410,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -117349,6 +119454,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -117401,6 +119507,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -117444,6 +119551,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -117540,6 +119648,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -117583,6 +119692,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -117701,6 +119811,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -117744,6 +119855,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -117768,6 +119880,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: PurchaseOrderItemCreateNestedManyWithoutPurchaseOrderInput
+    grns?: GRNbyPoCreateNestedManyWithoutPurchaseOrderInput
   }
 
   export type PurchaseOrderUncheckedCreateWithoutVendorInput = {
@@ -117779,6 +119892,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: PurchaseOrderItemUncheckedCreateNestedManyWithoutPurchaseOrderInput
+    grns?: GRNbyPoUncheckedCreateNestedManyWithoutPurchaseOrderInput
   }
 
   export type PurchaseOrderCreateOrConnectWithoutVendorInput = {
@@ -117991,6 +120105,7 @@ export namespace Prisma {
     status?: $Enums.PurchaseOrderItemStatus
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutItemsInput
     receivals?: ReceivalEntryCreateNestedManyWithoutPurchaseOrderItemInput
+    grns?: GRNbyPoCreateNestedManyWithoutPurchaseOrderItemInput
   }
 
   export type PurchaseOrderItemUncheckedCreateWithoutRawMaterialInput = {
@@ -118001,6 +120116,7 @@ export namespace Prisma {
     totalReceived?: number
     status?: $Enums.PurchaseOrderItemStatus
     receivals?: ReceivalEntryUncheckedCreateNestedManyWithoutPurchaseOrderItemInput
+    grns?: GRNbyPoUncheckedCreateNestedManyWithoutPurchaseOrderItemInput
   }
 
   export type PurchaseOrderItemCreateOrConnectWithoutRawMaterialInput = {
@@ -118327,6 +120443,7 @@ export namespace Prisma {
     status?: $Enums.PurchaseOrderItemStatus
     rawMaterial: RawMaterialProductCreateNestedOneWithoutPurchaseOrderItemsInput
     receivals?: ReceivalEntryCreateNestedManyWithoutPurchaseOrderItemInput
+    grns?: GRNbyPoCreateNestedManyWithoutPurchaseOrderItemInput
   }
 
   export type PurchaseOrderItemUncheckedCreateWithoutPurchaseOrderInput = {
@@ -118337,6 +120454,7 @@ export namespace Prisma {
     totalReceived?: number
     status?: $Enums.PurchaseOrderItemStatus
     receivals?: ReceivalEntryUncheckedCreateNestedManyWithoutPurchaseOrderItemInput
+    grns?: GRNbyPoUncheckedCreateNestedManyWithoutPurchaseOrderItemInput
   }
 
   export type PurchaseOrderItemCreateOrConnectWithoutPurchaseOrderInput = {
@@ -118346,6 +120464,42 @@ export namespace Prisma {
 
   export type PurchaseOrderItemCreateManyPurchaseOrderInputEnvelope = {
     data: PurchaseOrderItemCreateManyPurchaseOrderInput | PurchaseOrderItemCreateManyPurchaseOrderInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GRNbyPoCreateWithoutPurchaseOrderInput = {
+    id?: string
+    grnNumber: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
+    qualityReport?: RMQualityReportCreateNestedOneWithoutGrn_entryInput
+    createdBy: UserCreateNestedOneWithoutCreatedGRNsInput
+  }
+
+  export type GRNbyPoUncheckedCreateWithoutPurchaseOrderInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderItemId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GRNbyPoCreateOrConnectWithoutPurchaseOrderInput = {
+    where: GRNbyPoWhereUniqueInput
+    create: XOR<GRNbyPoCreateWithoutPurchaseOrderInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderInput>
+  }
+
+  export type GRNbyPoCreateManyPurchaseOrderInputEnvelope = {
+    data: GRNbyPoCreateManyPurchaseOrderInput | GRNbyPoCreateManyPurchaseOrderInput[]
     skipDuplicates?: boolean
   }
 
@@ -118410,6 +120564,22 @@ export namespace Prisma {
     data: XOR<PurchaseOrderItemUpdateManyMutationInput, PurchaseOrderItemUncheckedUpdateManyWithoutPurchaseOrderInput>
   }
 
+  export type GRNbyPoUpsertWithWhereUniqueWithoutPurchaseOrderInput = {
+    where: GRNbyPoWhereUniqueInput
+    update: XOR<GRNbyPoUpdateWithoutPurchaseOrderInput, GRNbyPoUncheckedUpdateWithoutPurchaseOrderInput>
+    create: XOR<GRNbyPoCreateWithoutPurchaseOrderInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderInput>
+  }
+
+  export type GRNbyPoUpdateWithWhereUniqueWithoutPurchaseOrderInput = {
+    where: GRNbyPoWhereUniqueInput
+    data: XOR<GRNbyPoUpdateWithoutPurchaseOrderInput, GRNbyPoUncheckedUpdateWithoutPurchaseOrderInput>
+  }
+
+  export type GRNbyPoUpdateManyWithWhereWithoutPurchaseOrderInput = {
+    where: GRNbyPoScalarWhereInput
+    data: XOR<GRNbyPoUpdateManyMutationInput, GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderInput>
+  }
+
   export type PurchaseOrderCreateWithoutItemsInput = {
     id?: string
     poNumber: string
@@ -118419,6 +120589,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     vendor: VendorCreateNestedOneWithoutPurchaseOrdersInput
+    grns?: GRNbyPoCreateNestedManyWithoutPurchaseOrderInput
   }
 
   export type PurchaseOrderUncheckedCreateWithoutItemsInput = {
@@ -118430,6 +120601,7 @@ export namespace Prisma {
     status: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    grns?: GRNbyPoUncheckedCreateNestedManyWithoutPurchaseOrderInput
   }
 
   export type PurchaseOrderCreateOrConnectWithoutItemsInput = {
@@ -118506,6 +120678,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GRNbyPoCreateWithoutPurchaseOrderItemInput = {
+    id?: string
+    grnNumber: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
+    qualityReport?: RMQualityReportCreateNestedOneWithoutGrn_entryInput
+    createdBy: UserCreateNestedOneWithoutCreatedGRNsInput
+  }
+
+  export type GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput = {
+    where: GRNbyPoWhereUniqueInput
+    create: XOR<GRNbyPoCreateWithoutPurchaseOrderItemInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput>
+  }
+
+  export type GRNbyPoCreateManyPurchaseOrderItemInputEnvelope = {
+    data: GRNbyPoCreateManyPurchaseOrderItemInput | GRNbyPoCreateManyPurchaseOrderItemInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PurchaseOrderUpsertWithoutItemsInput = {
     update: XOR<PurchaseOrderUpdateWithoutItemsInput, PurchaseOrderUncheckedUpdateWithoutItemsInput>
     create: XOR<PurchaseOrderCreateWithoutItemsInput, PurchaseOrderUncheckedCreateWithoutItemsInput>
@@ -118526,6 +120734,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vendor?: VendorUpdateOneRequiredWithoutPurchaseOrdersNestedInput
+    grns?: GRNbyPoUpdateManyWithoutPurchaseOrderNestedInput
   }
 
   export type PurchaseOrderUncheckedUpdateWithoutItemsInput = {
@@ -118537,6 +120746,7 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    grns?: GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderNestedInput
   }
 
   export type RawMaterialProductUpsertWithoutPurchaseOrderItemsInput = {
@@ -118613,6 +120823,22 @@ export namespace Prisma {
     receivedDate?: DateTimeFilter<"ReceivalEntry"> | Date | string
   }
 
+  export type GRNbyPoUpsertWithWhereUniqueWithoutPurchaseOrderItemInput = {
+    where: GRNbyPoWhereUniqueInput
+    update: XOR<GRNbyPoUpdateWithoutPurchaseOrderItemInput, GRNbyPoUncheckedUpdateWithoutPurchaseOrderItemInput>
+    create: XOR<GRNbyPoCreateWithoutPurchaseOrderItemInput, GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput>
+  }
+
+  export type GRNbyPoUpdateWithWhereUniqueWithoutPurchaseOrderItemInput = {
+    where: GRNbyPoWhereUniqueInput
+    data: XOR<GRNbyPoUpdateWithoutPurchaseOrderItemInput, GRNbyPoUncheckedUpdateWithoutPurchaseOrderItemInput>
+  }
+
+  export type GRNbyPoUpdateManyWithWhereWithoutPurchaseOrderItemInput = {
+    where: GRNbyPoScalarWhereInput
+    data: XOR<GRNbyPoUpdateManyMutationInput, GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderItemInput>
+  }
+
   export type ReceivalBagCreateWithoutReceivalEntryInput = {
     id?: string
     bagNo: number
@@ -118643,6 +120869,7 @@ export namespace Prisma {
     status?: $Enums.PurchaseOrderItemStatus
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutItemsInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutPurchaseOrderItemsInput
+    grns?: GRNbyPoCreateNestedManyWithoutPurchaseOrderItemInput
   }
 
   export type PurchaseOrderItemUncheckedCreateWithoutReceivalsInput = {
@@ -118653,6 +120880,7 @@ export namespace Prisma {
     rate: number
     totalReceived?: number
     status?: $Enums.PurchaseOrderItemStatus
+    grns?: GRNbyPoUncheckedCreateNestedManyWithoutPurchaseOrderItemInput
   }
 
   export type PurchaseOrderItemCreateOrConnectWithoutReceivalsInput = {
@@ -118746,6 +120974,7 @@ export namespace Prisma {
     status?: EnumPurchaseOrderItemStatusFieldUpdateOperationsInput | $Enums.PurchaseOrderItemStatus
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutItemsNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutPurchaseOrderItemsNestedInput
+    grns?: GRNbyPoUpdateManyWithoutPurchaseOrderItemNestedInput
   }
 
   export type PurchaseOrderItemUncheckedUpdateWithoutReceivalsInput = {
@@ -118756,6 +120985,7 @@ export namespace Prisma {
     rate?: FloatFieldUpdateOperationsInput | number
     totalReceived?: FloatFieldUpdateOperationsInput | number
     status?: EnumPurchaseOrderItemStatusFieldUpdateOperationsInput | $Enums.PurchaseOrderItemStatus
+    grns?: GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput
   }
 
   export type WarehouseUpsertWithoutReceivalEntriesInput = {
@@ -120920,6 +123150,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -120963,6 +123194,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -121020,6 +123252,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -121063,6 +123296,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -121219,6 +123453,7 @@ export namespace Prisma {
     Notification?: NotificationCreateNestedManyWithoutUserInput
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -121262,6 +123497,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -121280,6 +123516,37 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutRmQualityReportsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutRmQualityReportsInput, UserUncheckedCreateWithoutRmQualityReportsInput>
+  }
+
+  export type GRNbyPoCreateWithoutQualityReportInput = {
+    id?: string
+    grnNumber: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
+    purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
+    createdBy: UserCreateNestedOneWithoutCreatedGRNsInput
+  }
+
+  export type GRNbyPoUncheckedCreateWithoutQualityReportInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderId: string
+    purchaseOrderItemId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GRNbyPoCreateOrConnectWithoutQualityReportInput = {
+    where: GRNbyPoWhereUniqueInput
+    create: XOR<GRNbyPoCreateWithoutQualityReportInput, GRNbyPoUncheckedCreateWithoutQualityReportInput>
   }
 
   export type RMQualityParameterUpsertWithWhereUniqueWithoutReportInput = {
@@ -121348,6 +123615,7 @@ export namespace Prisma {
     Notification?: NotificationUpdateManyWithoutUserNestedInput
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -121391,6 +123659,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -121406,6 +123675,43 @@ export namespace Prisma {
     transactionLogs?: TransactionLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type GRNbyPoUpsertWithoutQualityReportInput = {
+    update: XOR<GRNbyPoUpdateWithoutQualityReportInput, GRNbyPoUncheckedUpdateWithoutQualityReportInput>
+    create: XOR<GRNbyPoCreateWithoutQualityReportInput, GRNbyPoUncheckedCreateWithoutQualityReportInput>
+    where?: GRNbyPoWhereInput
+  }
+
+  export type GRNbyPoUpdateToOneWithWhereWithoutQualityReportInput = {
+    where?: GRNbyPoWhereInput
+    data: XOR<GRNbyPoUpdateWithoutQualityReportInput, GRNbyPoUncheckedUpdateWithoutQualityReportInput>
+  }
+
+  export type GRNbyPoUpdateWithoutQualityReportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
+    purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedGRNsNestedInput
+  }
+
+  export type GRNbyPoUncheckedUpdateWithoutQualityReportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type RMQualityReportCreateWithoutParametersInput = {
     id?: string
     rawMaterialName: string
@@ -121416,6 +123722,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutRmQualityReportsInput
+    grn_entry?: GRNbyPoCreateNestedOneWithoutQualityReportInput
   }
 
   export type RMQualityReportUncheckedCreateWithoutParametersInput = {
@@ -121428,6 +123735,7 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    grn_entry?: GRNbyPoUncheckedCreateNestedOneWithoutQualityReportInput
   }
 
   export type RMQualityReportCreateOrConnectWithoutParametersInput = {
@@ -121456,6 +123764,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutRmQualityReportsNestedInput
+    grn_entry?: GRNbyPoUpdateOneWithoutQualityReportNestedInput
   }
 
   export type RMQualityReportUncheckedUpdateWithoutParametersInput = {
@@ -121468,6 +123777,387 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    grn_entry?: GRNbyPoUncheckedUpdateOneWithoutQualityReportNestedInput
+  }
+
+  export type PurchaseOrderCreateWithoutGrnsInput = {
+    id?: string
+    poNumber: string
+    orderDate: Date | string
+    expectedDate: Date | string
+    status: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    vendor: VendorCreateNestedOneWithoutPurchaseOrdersInput
+    items?: PurchaseOrderItemCreateNestedManyWithoutPurchaseOrderInput
+  }
+
+  export type PurchaseOrderUncheckedCreateWithoutGrnsInput = {
+    id?: string
+    poNumber: string
+    vendorId: string
+    orderDate: Date | string
+    expectedDate: Date | string
+    status: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: PurchaseOrderItemUncheckedCreateNestedManyWithoutPurchaseOrderInput
+  }
+
+  export type PurchaseOrderCreateOrConnectWithoutGrnsInput = {
+    where: PurchaseOrderWhereUniqueInput
+    create: XOR<PurchaseOrderCreateWithoutGrnsInput, PurchaseOrderUncheckedCreateWithoutGrnsInput>
+  }
+
+  export type PurchaseOrderItemCreateWithoutGrnsInput = {
+    id?: string
+    quantityOrdered: number
+    rate: number
+    totalReceived?: number
+    status?: $Enums.PurchaseOrderItemStatus
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutItemsInput
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutPurchaseOrderItemsInput
+    receivals?: ReceivalEntryCreateNestedManyWithoutPurchaseOrderItemInput
+  }
+
+  export type PurchaseOrderItemUncheckedCreateWithoutGrnsInput = {
+    id?: string
+    purchaseOrderId: string
+    rawMaterialId: string
+    quantityOrdered: number
+    rate: number
+    totalReceived?: number
+    status?: $Enums.PurchaseOrderItemStatus
+    receivals?: ReceivalEntryUncheckedCreateNestedManyWithoutPurchaseOrderItemInput
+  }
+
+  export type PurchaseOrderItemCreateOrConnectWithoutGrnsInput = {
+    where: PurchaseOrderItemWhereUniqueInput
+    create: XOR<PurchaseOrderItemCreateWithoutGrnsInput, PurchaseOrderItemUncheckedCreateWithoutGrnsInput>
+  }
+
+  export type RMQualityReportCreateWithoutGrn_entryInput = {
+    id?: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    dateOfReport?: Date | string
+    grn: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: RMQualityParameterCreateNestedManyWithoutReportInput
+    createdBy: UserCreateNestedOneWithoutRmQualityReportsInput
+  }
+
+  export type RMQualityReportUncheckedCreateWithoutGrn_entryInput = {
+    id?: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    dateOfReport?: Date | string
+    grn: string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: RMQualityParameterUncheckedCreateNestedManyWithoutReportInput
+  }
+
+  export type RMQualityReportCreateOrConnectWithoutGrn_entryInput = {
+    where: RMQualityReportWhereUniqueInput
+    create: XOR<RMQualityReportCreateWithoutGrn_entryInput, RMQualityReportUncheckedCreateWithoutGrn_entryInput>
+  }
+
+  export type UserCreateWithoutCreatedGRNsInput = {
+    id: string
+    email: string
+    name: string
+    password: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    ActivityLog?: ActivityLogCreateNestedManyWithoutUserInput
+    auditeeAudits?: AuditCreateNestedManyWithoutAuditeeInput
+    createdAudits?: AuditCreateNestedManyWithoutCreatedByInput
+    uploadedAuditDocuments?: AuditDocumentCreateNestedManyWithoutUploadedByInput
+    inspectedItems?: AuditInspectionItemCreateNestedManyWithoutInspectedByInput
+    auditNotifications?: AuditNotificationCreateNestedManyWithoutUserInput
+    createdReminders?: AuditReminderCreateNestedManyWithoutCreatedByInput
+    receivedReminders?: AuditReminderCreateNestedManyWithoutRecipientInput
+    auditorProfile?: AuditorCreateNestedOneWithoutUserInput
+    Batch_Batch_checkerIdToUser?: BatchCreateNestedManyWithoutUser_Batch_checkerIdToUserInput
+    Batch_Batch_makerIdToUser?: BatchCreateNestedManyWithoutUser_Batch_makerIdToUserInput
+    BatchDrafts?: BatchDraftCreateNestedManyWithoutMakerInput
+    assignedActions?: CorrectiveActionCreateNestedManyWithoutAssignedToInput
+    verifiedActions?: CorrectiveActionCreateNestedManyWithoutVerifiedByInput
+    uploadedFeedbackForms?: FeedbackFormCreateNestedManyWithoutUploadedByInput
+    assignedFindings?: FindingCreateNestedManyWithoutAssignedToInput
+    Notification?: NotificationCreateNestedManyWithoutUserInput
+    createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
+    responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
+    rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
+    StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
+    standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
+    standardDefinitionsModified?: StandardDefinitionCreateNestedManyWithoutModifiedByInput
+    createdTrainings?: TrainingCreateNestedManyWithoutCreatedByInput
+    trainerTrainings?: TrainingCreateNestedManyWithoutTrainerInput
+    uploadedDocuments?: TrainingDocumentCreateNestedManyWithoutUploadedByInput
+    assignedFollowups?: TrainingFollowupCreateNestedManyWithoutAssignedToInput
+    createdFollowups?: TrainingFollowupCreateNestedManyWithoutCreatedByInput
+    trainingNotifications?: TrainingNotificationCreateNestedManyWithoutUserInput
+    uploadedPhotos?: TrainingPhotoCreateNestedManyWithoutUploadedByInput
+    uploadedSessionPhotos?: TrainingSessionPhotoCreateNestedManyWithoutUploadedByInput
+    transactionLogs?: TransactionLogCreateNestedManyWithoutUserInput
+    Role: RoleCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutCreatedGRNsInput = {
+    id: string
+    email: string
+    name: string
+    password: string
+    roleId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
+    auditeeAudits?: AuditUncheckedCreateNestedManyWithoutAuditeeInput
+    createdAudits?: AuditUncheckedCreateNestedManyWithoutCreatedByInput
+    uploadedAuditDocuments?: AuditDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    inspectedItems?: AuditInspectionItemUncheckedCreateNestedManyWithoutInspectedByInput
+    auditNotifications?: AuditNotificationUncheckedCreateNestedManyWithoutUserInput
+    createdReminders?: AuditReminderUncheckedCreateNestedManyWithoutCreatedByInput
+    receivedReminders?: AuditReminderUncheckedCreateNestedManyWithoutRecipientInput
+    auditorProfile?: AuditorUncheckedCreateNestedOneWithoutUserInput
+    Batch_Batch_checkerIdToUser?: BatchUncheckedCreateNestedManyWithoutUser_Batch_checkerIdToUserInput
+    Batch_Batch_makerIdToUser?: BatchUncheckedCreateNestedManyWithoutUser_Batch_makerIdToUserInput
+    BatchDrafts?: BatchDraftUncheckedCreateNestedManyWithoutMakerInput
+    assignedActions?: CorrectiveActionUncheckedCreateNestedManyWithoutAssignedToInput
+    verifiedActions?: CorrectiveActionUncheckedCreateNestedManyWithoutVerifiedByInput
+    uploadedFeedbackForms?: FeedbackFormUncheckedCreateNestedManyWithoutUploadedByInput
+    assignedFindings?: FindingUncheckedCreateNestedManyWithoutAssignedToInput
+    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
+    rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
+    StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
+    standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
+    standardDefinitionsModified?: StandardDefinitionUncheckedCreateNestedManyWithoutModifiedByInput
+    createdTrainings?: TrainingUncheckedCreateNestedManyWithoutCreatedByInput
+    trainerTrainings?: TrainingUncheckedCreateNestedManyWithoutTrainerInput
+    uploadedDocuments?: TrainingDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    assignedFollowups?: TrainingFollowupUncheckedCreateNestedManyWithoutAssignedToInput
+    createdFollowups?: TrainingFollowupUncheckedCreateNestedManyWithoutCreatedByInput
+    trainingNotifications?: TrainingNotificationUncheckedCreateNestedManyWithoutUserInput
+    uploadedPhotos?: TrainingPhotoUncheckedCreateNestedManyWithoutUploadedByInput
+    uploadedSessionPhotos?: TrainingSessionPhotoUncheckedCreateNestedManyWithoutUploadedByInput
+    transactionLogs?: TransactionLogUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutCreatedGRNsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutCreatedGRNsInput, UserUncheckedCreateWithoutCreatedGRNsInput>
+  }
+
+  export type PurchaseOrderUpsertWithoutGrnsInput = {
+    update: XOR<PurchaseOrderUpdateWithoutGrnsInput, PurchaseOrderUncheckedUpdateWithoutGrnsInput>
+    create: XOR<PurchaseOrderCreateWithoutGrnsInput, PurchaseOrderUncheckedCreateWithoutGrnsInput>
+    where?: PurchaseOrderWhereInput
+  }
+
+  export type PurchaseOrderUpdateToOneWithWhereWithoutGrnsInput = {
+    where?: PurchaseOrderWhereInput
+    data: XOR<PurchaseOrderUpdateWithoutGrnsInput, PurchaseOrderUncheckedUpdateWithoutGrnsInput>
+  }
+
+  export type PurchaseOrderUpdateWithoutGrnsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expectedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vendor?: VendorUpdateOneRequiredWithoutPurchaseOrdersNestedInput
+    items?: PurchaseOrderItemUpdateManyWithoutPurchaseOrderNestedInput
+  }
+
+  export type PurchaseOrderUncheckedUpdateWithoutGrnsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    poNumber?: StringFieldUpdateOperationsInput | string
+    vendorId?: StringFieldUpdateOperationsInput | string
+    orderDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    expectedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: PurchaseOrderItemUncheckedUpdateManyWithoutPurchaseOrderNestedInput
+  }
+
+  export type PurchaseOrderItemUpsertWithoutGrnsInput = {
+    update: XOR<PurchaseOrderItemUpdateWithoutGrnsInput, PurchaseOrderItemUncheckedUpdateWithoutGrnsInput>
+    create: XOR<PurchaseOrderItemCreateWithoutGrnsInput, PurchaseOrderItemUncheckedCreateWithoutGrnsInput>
+    where?: PurchaseOrderItemWhereInput
+  }
+
+  export type PurchaseOrderItemUpdateToOneWithWhereWithoutGrnsInput = {
+    where?: PurchaseOrderItemWhereInput
+    data: XOR<PurchaseOrderItemUpdateWithoutGrnsInput, PurchaseOrderItemUncheckedUpdateWithoutGrnsInput>
+  }
+
+  export type PurchaseOrderItemUpdateWithoutGrnsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantityOrdered?: FloatFieldUpdateOperationsInput | number
+    rate?: FloatFieldUpdateOperationsInput | number
+    totalReceived?: FloatFieldUpdateOperationsInput | number
+    status?: EnumPurchaseOrderItemStatusFieldUpdateOperationsInput | $Enums.PurchaseOrderItemStatus
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutItemsNestedInput
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutPurchaseOrderItemsNestedInput
+    receivals?: ReceivalEntryUpdateManyWithoutPurchaseOrderItemNestedInput
+  }
+
+  export type PurchaseOrderItemUncheckedUpdateWithoutGrnsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    quantityOrdered?: FloatFieldUpdateOperationsInput | number
+    rate?: FloatFieldUpdateOperationsInput | number
+    totalReceived?: FloatFieldUpdateOperationsInput | number
+    status?: EnumPurchaseOrderItemStatusFieldUpdateOperationsInput | $Enums.PurchaseOrderItemStatus
+    receivals?: ReceivalEntryUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput
+  }
+
+  export type RMQualityReportUpsertWithoutGrn_entryInput = {
+    update: XOR<RMQualityReportUpdateWithoutGrn_entryInput, RMQualityReportUncheckedUpdateWithoutGrn_entryInput>
+    create: XOR<RMQualityReportCreateWithoutGrn_entryInput, RMQualityReportUncheckedCreateWithoutGrn_entryInput>
+    where?: RMQualityReportWhereInput
+  }
+
+  export type RMQualityReportUpdateToOneWithWhereWithoutGrn_entryInput = {
+    where?: RMQualityReportWhereInput
+    data: XOR<RMQualityReportUpdateWithoutGrn_entryInput, RMQualityReportUncheckedUpdateWithoutGrn_entryInput>
+  }
+
+  export type RMQualityReportUpdateWithoutGrn_entryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    grn?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: RMQualityParameterUpdateManyWithoutReportNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutRmQualityReportsNestedInput
+  }
+
+  export type RMQualityReportUncheckedUpdateWithoutGrn_entryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    grn?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: RMQualityParameterUncheckedUpdateManyWithoutReportNestedInput
+  }
+
+  export type UserUpsertWithoutCreatedGRNsInput = {
+    update: XOR<UserUpdateWithoutCreatedGRNsInput, UserUncheckedUpdateWithoutCreatedGRNsInput>
+    create: XOR<UserCreateWithoutCreatedGRNsInput, UserUncheckedCreateWithoutCreatedGRNsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutCreatedGRNsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutCreatedGRNsInput, UserUncheckedUpdateWithoutCreatedGRNsInput>
+  }
+
+  export type UserUpdateWithoutCreatedGRNsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ActivityLog?: ActivityLogUpdateManyWithoutUserNestedInput
+    auditeeAudits?: AuditUpdateManyWithoutAuditeeNestedInput
+    createdAudits?: AuditUpdateManyWithoutCreatedByNestedInput
+    uploadedAuditDocuments?: AuditDocumentUpdateManyWithoutUploadedByNestedInput
+    inspectedItems?: AuditInspectionItemUpdateManyWithoutInspectedByNestedInput
+    auditNotifications?: AuditNotificationUpdateManyWithoutUserNestedInput
+    createdReminders?: AuditReminderUpdateManyWithoutCreatedByNestedInput
+    receivedReminders?: AuditReminderUpdateManyWithoutRecipientNestedInput
+    auditorProfile?: AuditorUpdateOneWithoutUserNestedInput
+    Batch_Batch_checkerIdToUser?: BatchUpdateManyWithoutUser_Batch_checkerIdToUserNestedInput
+    Batch_Batch_makerIdToUser?: BatchUpdateManyWithoutUser_Batch_makerIdToUserNestedInput
+    BatchDrafts?: BatchDraftUpdateManyWithoutMakerNestedInput
+    assignedActions?: CorrectiveActionUpdateManyWithoutAssignedToNestedInput
+    verifiedActions?: CorrectiveActionUpdateManyWithoutVerifiedByNestedInput
+    uploadedFeedbackForms?: FeedbackFormUpdateManyWithoutUploadedByNestedInput
+    assignedFindings?: FindingUpdateManyWithoutAssignedToNestedInput
+    Notification?: NotificationUpdateManyWithoutUserNestedInput
+    createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
+    responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
+    rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
+    StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
+    standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
+    standardDefinitionsModified?: StandardDefinitionUpdateManyWithoutModifiedByNestedInput
+    createdTrainings?: TrainingUpdateManyWithoutCreatedByNestedInput
+    trainerTrainings?: TrainingUpdateManyWithoutTrainerNestedInput
+    uploadedDocuments?: TrainingDocumentUpdateManyWithoutUploadedByNestedInput
+    assignedFollowups?: TrainingFollowupUpdateManyWithoutAssignedToNestedInput
+    createdFollowups?: TrainingFollowupUpdateManyWithoutCreatedByNestedInput
+    trainingNotifications?: TrainingNotificationUpdateManyWithoutUserNestedInput
+    uploadedPhotos?: TrainingPhotoUpdateManyWithoutUploadedByNestedInput
+    uploadedSessionPhotos?: TrainingSessionPhotoUpdateManyWithoutUploadedByNestedInput
+    transactionLogs?: TransactionLogUpdateManyWithoutUserNestedInput
+    Role?: RoleUpdateOneRequiredWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutCreatedGRNsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ActivityLog?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    auditeeAudits?: AuditUncheckedUpdateManyWithoutAuditeeNestedInput
+    createdAudits?: AuditUncheckedUpdateManyWithoutCreatedByNestedInput
+    uploadedAuditDocuments?: AuditDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    inspectedItems?: AuditInspectionItemUncheckedUpdateManyWithoutInspectedByNestedInput
+    auditNotifications?: AuditNotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdReminders?: AuditReminderUncheckedUpdateManyWithoutCreatedByNestedInput
+    receivedReminders?: AuditReminderUncheckedUpdateManyWithoutRecipientNestedInput
+    auditorProfile?: AuditorUncheckedUpdateOneWithoutUserNestedInput
+    Batch_Batch_checkerIdToUser?: BatchUncheckedUpdateManyWithoutUser_Batch_checkerIdToUserNestedInput
+    Batch_Batch_makerIdToUser?: BatchUncheckedUpdateManyWithoutUser_Batch_makerIdToUserNestedInput
+    BatchDrafts?: BatchDraftUncheckedUpdateManyWithoutMakerNestedInput
+    assignedActions?: CorrectiveActionUncheckedUpdateManyWithoutAssignedToNestedInput
+    verifiedActions?: CorrectiveActionUncheckedUpdateManyWithoutVerifiedByNestedInput
+    uploadedFeedbackForms?: FeedbackFormUncheckedUpdateManyWithoutUploadedByNestedInput
+    assignedFindings?: FindingUncheckedUpdateManyWithoutAssignedToNestedInput
+    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
+    rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
+    StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
+    standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
+    standardDefinitionsModified?: StandardDefinitionUncheckedUpdateManyWithoutModifiedByNestedInput
+    createdTrainings?: TrainingUncheckedUpdateManyWithoutCreatedByNestedInput
+    trainerTrainings?: TrainingUncheckedUpdateManyWithoutTrainerNestedInput
+    uploadedDocuments?: TrainingDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    assignedFollowups?: TrainingFollowupUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdFollowups?: TrainingFollowupUncheckedUpdateManyWithoutCreatedByNestedInput
+    trainingNotifications?: TrainingNotificationUncheckedUpdateManyWithoutUserNestedInput
+    uploadedPhotos?: TrainingPhotoUncheckedUpdateManyWithoutUploadedByNestedInput
+    uploadedSessionPhotos?: TrainingSessionPhotoUncheckedUpdateManyWithoutUploadedByNestedInput
+    transactionLogs?: TransactionLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ActivityLogCreateManyBatchInput = {
@@ -122141,6 +124831,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -122183,6 +124874,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -122768,6 +125460,19 @@ export namespace Prisma {
     supplier: string
     dateOfReport?: Date | string
     grn: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GRNbyPoCreateManyCreatedByInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderId: string
+    purchaseOrderItemId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -123752,6 +126457,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: RMQualityParameterUpdateManyWithoutReportNestedInput
+    grn_entry?: GRNbyPoUpdateOneWithoutQualityReportNestedInput
   }
 
   export type RMQualityReportUncheckedUpdateWithoutCreatedByInput = {
@@ -123764,6 +126470,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: RMQualityParameterUncheckedUpdateManyWithoutReportNestedInput
+    grn_entry?: GRNbyPoUncheckedUpdateOneWithoutQualityReportNestedInput
   }
 
   export type RMQualityReportUncheckedUpdateManyWithoutCreatedByInput = {
@@ -123773,6 +126480,45 @@ export namespace Prisma {
     supplier?: StringFieldUpdateOperationsInput | string
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
     grn?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GRNbyPoUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
+    purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
+    qualityReport?: RMQualityReportUpdateOneWithoutGrn_entryNestedInput
+  }
+
+  export type GRNbyPoUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GRNbyPoUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -126233,6 +128979,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: PurchaseOrderItemUpdateManyWithoutPurchaseOrderNestedInput
+    grns?: GRNbyPoUpdateManyWithoutPurchaseOrderNestedInput
   }
 
   export type PurchaseOrderUncheckedUpdateWithoutVendorInput = {
@@ -126244,6 +128991,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: PurchaseOrderItemUncheckedUpdateManyWithoutPurchaseOrderNestedInput
+    grns?: GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderNestedInput
   }
 
   export type PurchaseOrderUncheckedUpdateManyWithoutVendorInput = {
@@ -126438,6 +129186,7 @@ export namespace Prisma {
     status?: EnumPurchaseOrderItemStatusFieldUpdateOperationsInput | $Enums.PurchaseOrderItemStatus
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutItemsNestedInput
     receivals?: ReceivalEntryUpdateManyWithoutPurchaseOrderItemNestedInput
+    grns?: GRNbyPoUpdateManyWithoutPurchaseOrderItemNestedInput
   }
 
   export type PurchaseOrderItemUncheckedUpdateWithoutRawMaterialInput = {
@@ -126448,6 +129197,7 @@ export namespace Prisma {
     totalReceived?: FloatFieldUpdateOperationsInput | number
     status?: EnumPurchaseOrderItemStatusFieldUpdateOperationsInput | $Enums.PurchaseOrderItemStatus
     receivals?: ReceivalEntryUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput
+    grns?: GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput
   }
 
   export type PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialInput = {
@@ -126507,6 +129257,19 @@ export namespace Prisma {
     status?: $Enums.PurchaseOrderItemStatus
   }
 
+  export type GRNbyPoCreateManyPurchaseOrderInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderItemId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type PurchaseOrderItemUpdateWithoutPurchaseOrderInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantityOrdered?: FloatFieldUpdateOperationsInput | number
@@ -126515,6 +129278,7 @@ export namespace Prisma {
     status?: EnumPurchaseOrderItemStatusFieldUpdateOperationsInput | $Enums.PurchaseOrderItemStatus
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutPurchaseOrderItemsNestedInput
     receivals?: ReceivalEntryUpdateManyWithoutPurchaseOrderItemNestedInput
+    grns?: GRNbyPoUpdateManyWithoutPurchaseOrderItemNestedInput
   }
 
   export type PurchaseOrderItemUncheckedUpdateWithoutPurchaseOrderInput = {
@@ -126525,6 +129289,7 @@ export namespace Prisma {
     totalReceived?: FloatFieldUpdateOperationsInput | number
     status?: EnumPurchaseOrderItemStatusFieldUpdateOperationsInput | $Enums.PurchaseOrderItemStatus
     receivals?: ReceivalEntryUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput
+    grns?: GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput
   }
 
   export type PurchaseOrderItemUncheckedUpdateManyWithoutPurchaseOrderInput = {
@@ -126536,6 +129301,45 @@ export namespace Prisma {
     status?: EnumPurchaseOrderItemStatusFieldUpdateOperationsInput | $Enums.PurchaseOrderItemStatus
   }
 
+  export type GRNbyPoUpdateWithoutPurchaseOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
+    qualityReport?: RMQualityReportUpdateOneWithoutGrn_entryNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedGRNsNestedInput
+  }
+
+  export type GRNbyPoUncheckedUpdateWithoutPurchaseOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ReceivalEntryCreateManyPurchaseOrderItemInput = {
     id?: string
     warehouseId: string
@@ -126543,6 +129347,19 @@ export namespace Prisma {
     totalWeight: number
     notes?: string | null
     receivedDate?: Date | string
+  }
+
+  export type GRNbyPoCreateManyPurchaseOrderItemInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type ReceivalEntryUpdateWithoutPurchaseOrderItemInput = {
@@ -126572,6 +129389,45 @@ export namespace Prisma {
     totalWeight?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GRNbyPoUpdateWithoutPurchaseOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
+    qualityReport?: RMQualityReportUpdateOneWithoutGrn_entryNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedGRNsNestedInput
+  }
+
+  export type GRNbyPoUncheckedUpdateWithoutPurchaseOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderItemInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ReceivalBagCreateManyReceivalEntryInput = {

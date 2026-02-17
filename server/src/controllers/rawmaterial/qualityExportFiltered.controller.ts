@@ -8,10 +8,16 @@ export class RMQualityExportFilteredController {
     // Export filtered RM Quality Reports as Excel
     static async exportFilteredQualityReports(req: Request, res: Response): Promise<void> {
         try {
-            const { supplier, grn, fromDate, toDate } = req.body;
+            const { supplier, grn, fromDate, toDate, ids } = req.body;
 
             // Build filter object
             const where: any = {};
+
+            // If specific ids provided, export only those
+            if (Array.isArray(ids) && ids.length > 0) {
+                where.id = { in: ids };
+            }
+
             if (supplier) where.supplier = supplier;
             if (grn) where.grn = { contains: grn, mode: 'insensitive' };
             if (fromDate || toDate) {
