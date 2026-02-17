@@ -170,6 +170,7 @@ export class PurchaseOrderController {
         totalWeight,
         numberOfBags,
         notes,
+        finalizeWithoutReceival,
       } = req.body;
 
       // 1. Fetch the current item with its receivals
@@ -195,10 +196,43 @@ export class PurchaseOrderController {
         return;
       }
 
-      if (!warehouseId) {
-        res.status(400).json({ error: 'warehouseId is required' });
-        return;
-      }
+        // If client requests to finalize without creating a receival entry
+        if (finalizeWithoutReceival) {
+          const updatedItem = await prisma.purchaseOrderItem.update({
+            where: { id: itemId },
+            data: { status: 'RECEIVED' },
+            include: {
+              rawMaterial: true,
+              purchaseOrder: true,
+              receivals: { include: { bags: true, warehouse: true }, orderBy: { receivedDate: 'desc' as const } },
+            },
+          });
+
+          // Transaction log (non-blocking)
+          if (req.user?.id) {
+            try {
+              await prisma.transactionLog.create({
+                data: {
+                  type: 'RECEIVE',
+                  entity: 'PurchaseOrderItem',
+                  entityId: item.id,
+                  userId: req.user.id,
+                  description: `Marked as RECEIVED without additional receival for PO: ${item.purchaseOrder.poNumber}, Material: ${item.rawMaterial.name}.`,
+                },
+              });
+            } catch (logError) {
+              console.warn('Failed to create transaction log:', logError);
+            }
+          }
+
+          res.json(updatedItem);
+          return;
+        }
+
+        if (!warehouseId) {
+          res.status(400).json({ error: 'warehouseId is required' });
+          return;
+        }
 
       // 3. Calculate weight for this receival
       let receivalWeight = 0;

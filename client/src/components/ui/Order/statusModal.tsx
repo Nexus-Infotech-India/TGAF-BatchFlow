@@ -28,13 +28,14 @@ type Props = {
     open: boolean;
     onClose: () => void;
     onConfirm: (data: {
-        status: string;
-        warehouseId: string;
-        weightMode: string;
+        status?: string;
+        warehouseId?: string;
+        weightMode?: string;
         bags?: BagEntry[];
         totalWeight?: number;
         numberOfBags?: number;
         notes?: string;
+        finalizeWithoutReceival?: boolean;
     }) => Promise<void>;
     defaultQuantity?: number;
     currentReceived?: number;
@@ -63,6 +64,7 @@ const ReceiveModal: React.FC<Props> = ({
     const [bags, setBags] = useState<BagEntry[]>([{ bagNo: 1, bagWeight: 0 }]);
     const [notes, setNotes] = useState("");
     const [showHistory, setShowHistory] = useState(false);
+    const [confirmFinishPrompt, setConfirmFinishPrompt] = useState(true);
 
     const remaining = defaultQuantity - currentReceived;
 
@@ -78,6 +80,7 @@ const ReceiveModal: React.FC<Props> = ({
             setStatus("PARTIALLY_RECEIVED");
             setWeightMode("TOTAL");
             setShowHistory(false);
+            setConfirmFinishPrompt(true);
         }
     }, [open, defaultQuantity]);
 
@@ -200,6 +203,37 @@ const ReceiveModal: React.FC<Props> = ({
                     </div>
                 ) : !showForm ? (
                     <div className="p-5 space-y-4">
+                        {/* If there's some already received amount and remaining > 0, show choice prompt */}
+                        {currentReceived > 0 && remaining > 0 && confirmFinishPrompt && (
+                            <div className="bg-muted/10 border border-border/20 rounded-lg p-3">
+                                <p className="text-sm text-foreground font-medium mb-2">This item has partial receivals.</p>
+                                <p className="text-xs text-muted-foreground mb-3">Do you want to finish receiving with the previously received quantity, or continue to add more?</p>
+                                <div className="flex gap-2">
+                                    <button
+                                        className="px-3 py-2 rounded-lg bg-muted/30 text-muted-foreground hover:bg-muted/50 transition text-sm"
+                                        onClick={async () => {
+                                            setLoading(true);
+                                            try {
+                                                await onConfirm({ finalizeWithoutReceival: true });
+                                            } catch (err) {
+                                                // let parent handle error toast
+                                            } finally {
+                                                setLoading(false);
+                                            }
+                                        }}
+                                        disabled={loading}
+                                    >
+                                        Finish with previous quantity
+                                    </button>
+                                    <button
+                                        className="px-3 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition text-sm"
+                                        onClick={() => setConfirmFinishPrompt(false)}
+                                    >
+                                        Continue to add more
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                         {/* Receival History Toggle */}
                         {receivals.length > 0 && (
                             <div>

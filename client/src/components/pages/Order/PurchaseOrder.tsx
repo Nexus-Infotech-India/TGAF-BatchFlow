@@ -407,32 +407,46 @@ const PurchaseOrderList: React.FC = () => {
                                                                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
                                                                     Receival History
                                                                 </p>
-                                                                <div className="space-y-2">
-                                                                    {item.receivals.map((r, ri) => (
-                                                                        <div
-                                                                            key={r.id || ri}
-                                                                            className="bg-muted/15 border border-border/20 rounded-lg p-3 text-xs"
-                                                                        >
-                                                                            <div className="flex items-center justify-between mb-1">
-                                                                                <span className="font-medium text-foreground">
-                                                                                    {r.totalWeight} received
-                                                                                </span>
-                                                                                <span className="text-muted-foreground">
-                                                                                    {formatDate(r.receivedDate)}
-                                                                                </span>
-                                                                            </div>
-                                                                            <div className="text-muted-foreground">
-                                                                                Warehouse: <span className="text-foreground/80">{r.warehouse?.name || '-'}</span>
-                                                                                {' · '}Mode: <span className="text-foreground/80">{r.weightMode}</span>
-                                                                                {r.bags && r.bags.length > 0 && (
-                                                                                    <span> · {r.bags.length} bag(s): [{r.bags.map((b) => b.bagWeight).join(', ')}]</span>
-                                                                                )}
-                                                                            </div>
-                                                                            {r.notes && (
-                                                                                <p className="text-muted-foreground mt-1">Note: {r.notes}</p>
-                                                                            )}
-                                                                        </div>
-                                                                    ))}
+                                                                <div className="overflow-x-auto">
+                                                                    <table className="w-full text-sm">
+                                                                        <thead>
+                                                                            <tr className="text-left text-xs text-muted-foreground border-b border-border/20">
+                                                                                <th className="px-3 py-2">Received</th>
+                                                                                <th className="px-3 py-2">Warehouse</th>
+                                                                                <th className="px-3 py-2">Mode</th>
+                                                                                <th className="px-3 py-2">Bags/Weight(No./KG)</th>
+                                                                                <th className="px-3 py-2">Notes</th>
+                                                                                <th className="px-3 py-2">Date</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody className="divide-y divide-border">
+                                                                            {item.receivals.map((r, ri) => (
+                                                                                <tr key={r.id || ri} className="bg-muted/15">
+                                                                                    <td className="px-3 py-3 text-sm font-medium">{r.totalWeight}</td>
+                                                                                    <td className="px-3 py-3 text-sm text-foreground/80">{r.warehouse?.name || '-'}</td>
+                                                                                    <td className="px-3 py-3 text-sm text-muted-foreground">{r.weightMode}</td>
+                                                                                    <td className="px-3 py-3 text-sm text-muted-foreground">
+                                                                                        {r.bags && r.bags.length > 0 ? (
+                                                                                            <div className="flex flex-col gap-1">
+                                                                                                <div className="text-xs font-medium">{r.bags.length} bag(s)</div>
+                                                                                                <div className="flex gap-2 flex-wrap">
+                                                                                                    {r.bags.map((b, bi) => (
+                                                                                                        <span key={bi} className="px-2 py-0.5 bg-muted/20 rounded-full text-xs">
+                                                                                                            {`${b.bagNo}: ${b.bagWeight}`}
+                                                                                                        </span>
+                                                                                                    ))}
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        ) : (
+                                                                                            '-'
+                                                                                        )}
+                                                                                    </td>
+                                                                                    <td className="px-3 py-3 text-sm text-muted-foreground">{r.notes || '-'}</td>
+                                                                                    <td className="px-3 py-3 text-sm text-muted-foreground">{formatDate(r.receivedDate)}</td>
+                                                                                </tr>
+                                                                            ))}
+                                                                        </tbody>
+                                                                    </table>
                                                                 </div>
                                                             </div>
                                                         </td>
