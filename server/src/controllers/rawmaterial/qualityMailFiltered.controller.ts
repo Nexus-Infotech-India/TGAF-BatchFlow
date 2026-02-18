@@ -9,7 +9,7 @@ export class RMQualityMailFilteredController {
     // Mail filtered RM Quality Reports with Excel attachment
     static async mailFilteredQualityReports(req: Request, res: Response): Promise<void> {
         try {
-            const { email, supplier, grn, fromDate, toDate } = req.body;
+            const { email, supplier, grn, fromDate, toDate, ids } = req.body;
             const recipientEmail = email as string || process.env.CLIENT_EMAIL;
 
             if (!recipientEmail) {
@@ -22,6 +22,10 @@ export class RMQualityMailFilteredController {
 
             // Build filter object
             const where: any = {};
+            // If specific report IDs are provided (user selected rows), filter by those
+            if (ids && Array.isArray(ids) && ids.length > 0) {
+                where.id = { in: ids };
+            }
             if (supplier) where.supplier = supplier;
             if (grn) where.grn = { contains: grn, mode: 'insensitive' };
             if (fromDate || toDate) {
