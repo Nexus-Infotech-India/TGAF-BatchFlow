@@ -723,7 +723,11 @@ exports.Prisma.CleaningJobScalarFieldEnum = {
   quantity: 'quantity',
   status: 'status',
   startedAt: 'startedAt',
-  finishedAt: 'finishedAt'
+  finishedAt: 'finishedAt',
+  grnId: 'grnId',
+  leftoverQuantity: 'leftoverQuantity',
+  reasonCode: 'reasonCode',
+  isReusable: 'isReusable'
 };
 
 exports.Prisma.CleaningLogScalarFieldEnum = {
@@ -842,6 +846,22 @@ exports.Prisma.GRNbyPoScalarFieldEnum = {
   supplier: 'supplier',
   qualityReportId: 'qualityReportId',
   createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CleaningLotScalarFieldEnum = {
+  id: 'id',
+  lotNumber: 'lotNumber',
+  cleaningJobId: 'cleaningJobId',
+  grnId: 'grnId',
+  rawMaterialId: 'rawMaterialId',
+  warehouseId: 'warehouseId',
+  quantity: 'quantity',
+  status: 'status',
+  leftoverQuantity: 'leftoverQuantity',
+  reasonCode: 'reasonCode',
+  isReusable: 'isReusable',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -1060,7 +1080,8 @@ exports.Prisma.ModelName = {
   ReusableStock: 'ReusableStock',
   RMQualityReport: 'RMQualityReport',
   RMQualityParameter: 'RMQualityParameter',
-  GRNbyPo: 'GRNbyPo'
+  GRNbyPo: 'GRNbyPo',
+  CleaningLot: 'CleaningLot'
 };
 
 /**

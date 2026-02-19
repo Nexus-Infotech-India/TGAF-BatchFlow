@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { CleaningJobController } from '../controllers/rawmaterial/cleaning.controller';
+import { CleaningGrnController } from '../controllers/rawmaterial/cleaningGrn.controller';
 import { ProcessingJobController } from '../controllers/rawmaterial/processing.controller';
 import { RawMaterialProductController } from '../controllers/rawmaterial/product.controller';
 import { PurchaseOrderController } from '../controllers/rawmaterial/purchase.controller';
@@ -121,5 +122,12 @@ router.get('/grn/received-pos', GRNController.getReceivedPOs);
 router.get('/grn/po/:poId', GRNController.getGRNsByPO);
 router.get('/grn/:id', GRNController.getGRNById);
 router.delete('/grn/:id', GRNController.deleteGRN);
+
+// GRN-wise Cleaning
+router.get('/cleaning-grn', CleaningGrnController.getGRNsForCleaning);
+router.get('/cleaning-grn/lots', CleaningGrnController.getCleaningLots);
+router.get('/cleaning-grn/:grnNumber', CleaningGrnController.getGRNMaterialsByGrnNumber);
+router.post('/cleaning-grn/transfer', CleaningGrnController.createGRNCleaningTransfer);
+router.put('/cleaning-grn/finish/:id', CleaningGrnController.finishCleaning);
 
 export default router;

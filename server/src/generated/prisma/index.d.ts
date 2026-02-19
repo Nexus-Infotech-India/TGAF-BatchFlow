@@ -323,6 +323,11 @@ export type RMQualityParameter = $Result.DefaultSelection<Prisma.$RMQualityParam
  * 
  */
 export type GRNbyPo = $Result.DefaultSelection<Prisma.$GRNbyPoPayload>
+/**
+ * Model CleaningLot
+ * 
+ */
+export type CleaningLot = $Result.DefaultSelection<Prisma.$CleaningLotPayload>
 
 /**
  * Enums
@@ -1324,6 +1329,16 @@ export class PrismaClient<
     * ```
     */
   get gRNbyPo(): Prisma.GRNbyPoDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.cleaningLot`: Exposes CRUD operations for the **CleaningLot** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CleaningLots
+    * const cleaningLots = await prisma.cleaningLot.findMany()
+    * ```
+    */
+  get cleaningLot(): Prisma.CleaningLotDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1826,7 +1841,8 @@ export namespace Prisma {
     ReusableStock: 'ReusableStock',
     RMQualityReport: 'RMQualityReport',
     RMQualityParameter: 'RMQualityParameter',
-    GRNbyPo: 'GRNbyPo'
+    GRNbyPo: 'GRNbyPo',
+    CleaningLot: 'CleaningLot'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1845,7 +1861,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6437,6 +6453,80 @@ export namespace Prisma {
           }
         }
       }
+      CleaningLot: {
+        payload: Prisma.$CleaningLotPayload<ExtArgs>
+        fields: Prisma.CleaningLotFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CleaningLotFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CleaningLotFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload>
+          }
+          findFirst: {
+            args: Prisma.CleaningLotFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CleaningLotFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload>
+          }
+          findMany: {
+            args: Prisma.CleaningLotFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload>[]
+          }
+          create: {
+            args: Prisma.CleaningLotCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload>
+          }
+          createMany: {
+            args: Prisma.CleaningLotCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CleaningLotCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload>[]
+          }
+          delete: {
+            args: Prisma.CleaningLotDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload>
+          }
+          update: {
+            args: Prisma.CleaningLotUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload>
+          }
+          deleteMany: {
+            args: Prisma.CleaningLotDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CleaningLotUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.CleaningLotUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload>[]
+          }
+          upsert: {
+            args: Prisma.CleaningLotUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CleaningLotPayload>
+          }
+          aggregate: {
+            args: Prisma.CleaningLotAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCleaningLot>
+          }
+          groupBy: {
+            args: Prisma.CleaningLotGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CleaningLotGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CleaningLotCountArgs<ExtArgs>
+            result: $Utils.Optional<CleaningLotCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -6595,6 +6685,7 @@ export namespace Prisma {
     rMQualityReport?: RMQualityReportOmit
     rMQualityParameter?: RMQualityParameterOmit
     gRNbyPo?: GRNbyPoOmit
+    cleaningLot?: CleaningLotOmit
   }
 
   /* Types for Logging */
@@ -7940,6 +8031,7 @@ export namespace Prisma {
 
   export type RawMaterialProductCountOutputType = {
     cleaningJobs: number
+    cleaningLots: number
     currentStocks: number
     processingJobs: number
     purchaseOrderItems: number
@@ -7948,6 +8040,7 @@ export namespace Prisma {
 
   export type RawMaterialProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cleaningJobs?: boolean | RawMaterialProductCountOutputTypeCountCleaningJobsArgs
+    cleaningLots?: boolean | RawMaterialProductCountOutputTypeCountCleaningLotsArgs
     currentStocks?: boolean | RawMaterialProductCountOutputTypeCountCurrentStocksArgs
     processingJobs?: boolean | RawMaterialProductCountOutputTypeCountProcessingJobsArgs
     purchaseOrderItems?: boolean | RawMaterialProductCountOutputTypeCountPurchaseOrderItemsArgs
@@ -7970,6 +8063,13 @@ export namespace Prisma {
    */
   export type RawMaterialProductCountOutputTypeCountCleaningJobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CleaningJobWhereInput
+  }
+
+  /**
+   * RawMaterialProductCountOutputType without action
+   */
+  export type RawMaterialProductCountOutputTypeCountCleaningLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CleaningLotWhereInput
   }
 
   /**
@@ -8122,6 +8222,7 @@ export namespace Prisma {
     cleaningJobsTo: number
     cleaningLogsFrom: number
     cleaningLogsTo: number
+    cleaningLots: number
     currentStocks: number
     finishedGoods: number
     receivalEntries: number
@@ -8136,6 +8237,7 @@ export namespace Prisma {
     cleaningJobsTo?: boolean | WarehouseCountOutputTypeCountCleaningJobsToArgs
     cleaningLogsFrom?: boolean | WarehouseCountOutputTypeCountCleaningLogsFromArgs
     cleaningLogsTo?: boolean | WarehouseCountOutputTypeCountCleaningLogsToArgs
+    cleaningLots?: boolean | WarehouseCountOutputTypeCountCleaningLotsArgs
     currentStocks?: boolean | WarehouseCountOutputTypeCountCurrentStocksArgs
     finishedGoods?: boolean | WarehouseCountOutputTypeCountFinishedGoodsArgs
     receivalEntries?: boolean | WarehouseCountOutputTypeCountReceivalEntriesArgs
@@ -8193,6 +8295,13 @@ export namespace Prisma {
   /**
    * WarehouseCountOutputType without action
    */
+  export type WarehouseCountOutputTypeCountCleaningLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CleaningLotWhereInput
+  }
+
+  /**
+   * WarehouseCountOutputType without action
+   */
   export type WarehouseCountOutputTypeCountCurrentStocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CurrentStockWhereInput
   }
@@ -8239,10 +8348,12 @@ export namespace Prisma {
 
   export type CleaningJobCountOutputType = {
     cleaningLogs: number
+    cleaningLots: number
   }
 
   export type CleaningJobCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cleaningLogs?: boolean | CleaningJobCountOutputTypeCountCleaningLogsArgs
+    cleaningLots?: boolean | CleaningJobCountOutputTypeCountCleaningLotsArgs
   }
 
   // Custom InputTypes
@@ -8261,6 +8372,13 @@ export namespace Prisma {
    */
   export type CleaningJobCountOutputTypeCountCleaningLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CleaningLogWhereInput
+  }
+
+  /**
+   * CleaningJobCountOutputType without action
+   */
+  export type CleaningJobCountOutputTypeCountCleaningLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CleaningLotWhereInput
   }
 
 
@@ -8332,6 +8450,46 @@ export namespace Prisma {
    */
   export type RMQualityReportCountOutputTypeCountParametersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RMQualityParameterWhereInput
+  }
+
+
+  /**
+   * Count Type GRNbyPoCountOutputType
+   */
+
+  export type GRNbyPoCountOutputType = {
+    cleaningJobs: number
+    cleaningLots: number
+  }
+
+  export type GRNbyPoCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cleaningJobs?: boolean | GRNbyPoCountOutputTypeCountCleaningJobsArgs
+    cleaningLots?: boolean | GRNbyPoCountOutputTypeCountCleaningLotsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * GRNbyPoCountOutputType without action
+   */
+  export type GRNbyPoCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPoCountOutputType
+     */
+    select?: GRNbyPoCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * GRNbyPoCountOutputType without action
+   */
+  export type GRNbyPoCountOutputTypeCountCleaningJobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CleaningJobWhereInput
+  }
+
+  /**
+   * GRNbyPoCountOutputType without action
+   */
+  export type GRNbyPoCountOutputTypeCountCleaningLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CleaningLotWhereInput
   }
 
 
@@ -59651,6 +59809,7 @@ export namespace Prisma {
     updatedAt?: boolean
     vendorId?: boolean
     cleaningJobs?: boolean | RawMaterialProduct$cleaningJobsArgs<ExtArgs>
+    cleaningLots?: boolean | RawMaterialProduct$cleaningLotsArgs<ExtArgs>
     currentStocks?: boolean | RawMaterialProduct$currentStocksArgs<ExtArgs>
     processingJobs?: boolean | RawMaterialProduct$processingJobsArgs<ExtArgs>
     purchaseOrderItems?: boolean | RawMaterialProduct$purchaseOrderItemsArgs<ExtArgs>
@@ -59703,6 +59862,7 @@ export namespace Prisma {
   export type RawMaterialProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "skuCode" | "name" | "category" | "variety" | "unitOfMeasurement" | "minReorderLevel" | "createdAt" | "updatedAt" | "vendorId", ExtArgs["result"]["rawMaterialProduct"]>
   export type RawMaterialProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cleaningJobs?: boolean | RawMaterialProduct$cleaningJobsArgs<ExtArgs>
+    cleaningLots?: boolean | RawMaterialProduct$cleaningLotsArgs<ExtArgs>
     currentStocks?: boolean | RawMaterialProduct$currentStocksArgs<ExtArgs>
     processingJobs?: boolean | RawMaterialProduct$processingJobsArgs<ExtArgs>
     purchaseOrderItems?: boolean | RawMaterialProduct$purchaseOrderItemsArgs<ExtArgs>
@@ -59721,6 +59881,7 @@ export namespace Prisma {
     name: "RawMaterialProduct"
     objects: {
       cleaningJobs: Prisma.$CleaningJobPayload<ExtArgs>[]
+      cleaningLots: Prisma.$CleaningLotPayload<ExtArgs>[]
       currentStocks: Prisma.$CurrentStockPayload<ExtArgs>[]
       processingJobs: Prisma.$ProcessingJobPayload<ExtArgs>[]
       purchaseOrderItems: Prisma.$PurchaseOrderItemPayload<ExtArgs>[]
@@ -60133,6 +60294,7 @@ export namespace Prisma {
   export interface Prisma__RawMaterialProductClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     cleaningJobs<T extends RawMaterialProduct$cleaningJobsArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$cleaningJobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cleaningLots<T extends RawMaterialProduct$cleaningLotsArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$cleaningLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     currentStocks<T extends RawMaterialProduct$currentStocksArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$currentStocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurrentStockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     processingJobs<T extends RawMaterialProduct$processingJobsArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$processingJobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcessingJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     purchaseOrderItems<T extends RawMaterialProduct$purchaseOrderItemsArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$purchaseOrderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -60594,6 +60756,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CleaningJobScalarFieldEnum | CleaningJobScalarFieldEnum[]
+  }
+
+  /**
+   * RawMaterialProduct.cleaningLots
+   */
+  export type RawMaterialProduct$cleaningLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    where?: CleaningLotWhereInput
+    orderBy?: CleaningLotOrderByWithRelationInput | CleaningLotOrderByWithRelationInput[]
+    cursor?: CleaningLotWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CleaningLotScalarFieldEnum | CleaningLotScalarFieldEnum[]
   }
 
   /**
@@ -66663,6 +66849,7 @@ export namespace Prisma {
     cleaningJobsTo?: boolean | Warehouse$cleaningJobsToArgs<ExtArgs>
     cleaningLogsFrom?: boolean | Warehouse$cleaningLogsFromArgs<ExtArgs>
     cleaningLogsTo?: boolean | Warehouse$cleaningLogsToArgs<ExtArgs>
+    cleaningLots?: boolean | Warehouse$cleaningLotsArgs<ExtArgs>
     currentStocks?: boolean | Warehouse$currentStocksArgs<ExtArgs>
     finishedGoods?: boolean | Warehouse$finishedGoodsArgs<ExtArgs>
     receivalEntries?: boolean | Warehouse$receivalEntriesArgs<ExtArgs>
@@ -66703,6 +66890,7 @@ export namespace Prisma {
     cleaningJobsTo?: boolean | Warehouse$cleaningJobsToArgs<ExtArgs>
     cleaningLogsFrom?: boolean | Warehouse$cleaningLogsFromArgs<ExtArgs>
     cleaningLogsTo?: boolean | Warehouse$cleaningLogsToArgs<ExtArgs>
+    cleaningLots?: boolean | Warehouse$cleaningLotsArgs<ExtArgs>
     currentStocks?: boolean | Warehouse$currentStocksArgs<ExtArgs>
     finishedGoods?: boolean | Warehouse$finishedGoodsArgs<ExtArgs>
     receivalEntries?: boolean | Warehouse$receivalEntriesArgs<ExtArgs>
@@ -66722,6 +66910,7 @@ export namespace Prisma {
       cleaningJobsTo: Prisma.$CleaningJobPayload<ExtArgs>[]
       cleaningLogsFrom: Prisma.$CleaningLogPayload<ExtArgs>[]
       cleaningLogsTo: Prisma.$CleaningLogPayload<ExtArgs>[]
+      cleaningLots: Prisma.$CleaningLotPayload<ExtArgs>[]
       currentStocks: Prisma.$CurrentStockPayload<ExtArgs>[]
       finishedGoods: Prisma.$FinishedGoodPayload<ExtArgs>[]
       receivalEntries: Prisma.$ReceivalEntryPayload<ExtArgs>[]
@@ -67134,6 +67323,7 @@ export namespace Prisma {
     cleaningJobsTo<T extends Warehouse$cleaningJobsToArgs<ExtArgs> = {}>(args?: Subset<T, Warehouse$cleaningJobsToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cleaningLogsFrom<T extends Warehouse$cleaningLogsFromArgs<ExtArgs> = {}>(args?: Subset<T, Warehouse$cleaningLogsFromArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     cleaningLogsTo<T extends Warehouse$cleaningLogsToArgs<ExtArgs> = {}>(args?: Subset<T, Warehouse$cleaningLogsToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cleaningLots<T extends Warehouse$cleaningLotsArgs<ExtArgs> = {}>(args?: Subset<T, Warehouse$cleaningLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     currentStocks<T extends Warehouse$currentStocksArgs<ExtArgs> = {}>(args?: Subset<T, Warehouse$currentStocksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CurrentStockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     finishedGoods<T extends Warehouse$finishedGoodsArgs<ExtArgs> = {}>(args?: Subset<T, Warehouse$finishedGoodsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinishedGoodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     receivalEntries<T extends Warehouse$receivalEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Warehouse$receivalEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivalEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -67682,6 +67872,30 @@ export namespace Prisma {
   }
 
   /**
+   * Warehouse.cleaningLots
+   */
+  export type Warehouse$cleaningLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    where?: CleaningLotWhereInput
+    orderBy?: CleaningLotOrderByWithRelationInput | CleaningLotOrderByWithRelationInput[]
+    cursor?: CleaningLotWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CleaningLotScalarFieldEnum | CleaningLotScalarFieldEnum[]
+  }
+
+  /**
    * Warehouse.currentStocks
    */
   export type Warehouse$currentStocksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -67858,10 +68072,12 @@ export namespace Prisma {
 
   export type CleaningJobAvgAggregateOutputType = {
     quantity: number | null
+    leftoverQuantity: number | null
   }
 
   export type CleaningJobSumAggregateOutputType = {
     quantity: number | null
+    leftoverQuantity: number | null
   }
 
   export type CleaningJobMinAggregateOutputType = {
@@ -67873,6 +68089,10 @@ export namespace Prisma {
     status: string | null
     startedAt: Date | null
     finishedAt: Date | null
+    grnId: string | null
+    leftoverQuantity: number | null
+    reasonCode: string | null
+    isReusable: boolean | null
   }
 
   export type CleaningJobMaxAggregateOutputType = {
@@ -67884,6 +68104,10 @@ export namespace Prisma {
     status: string | null
     startedAt: Date | null
     finishedAt: Date | null
+    grnId: string | null
+    leftoverQuantity: number | null
+    reasonCode: string | null
+    isReusable: boolean | null
   }
 
   export type CleaningJobCountAggregateOutputType = {
@@ -67895,16 +68119,22 @@ export namespace Prisma {
     status: number
     startedAt: number
     finishedAt: number
+    grnId: number
+    leftoverQuantity: number
+    reasonCode: number
+    isReusable: number
     _all: number
   }
 
 
   export type CleaningJobAvgAggregateInputType = {
     quantity?: true
+    leftoverQuantity?: true
   }
 
   export type CleaningJobSumAggregateInputType = {
     quantity?: true
+    leftoverQuantity?: true
   }
 
   export type CleaningJobMinAggregateInputType = {
@@ -67916,6 +68146,10 @@ export namespace Prisma {
     status?: true
     startedAt?: true
     finishedAt?: true
+    grnId?: true
+    leftoverQuantity?: true
+    reasonCode?: true
+    isReusable?: true
   }
 
   export type CleaningJobMaxAggregateInputType = {
@@ -67927,6 +68161,10 @@ export namespace Prisma {
     status?: true
     startedAt?: true
     finishedAt?: true
+    grnId?: true
+    leftoverQuantity?: true
+    reasonCode?: true
+    isReusable?: true
   }
 
   export type CleaningJobCountAggregateInputType = {
@@ -67938,6 +68176,10 @@ export namespace Prisma {
     status?: true
     startedAt?: true
     finishedAt?: true
+    grnId?: true
+    leftoverQuantity?: true
+    reasonCode?: true
+    isReusable?: true
     _all?: true
   }
 
@@ -68036,6 +68278,10 @@ export namespace Prisma {
     status: string
     startedAt: Date
     finishedAt: Date | null
+    grnId: string | null
+    leftoverQuantity: number | null
+    reasonCode: string | null
+    isReusable: boolean
     _count: CleaningJobCountAggregateOutputType | null
     _avg: CleaningJobAvgAggregateOutputType | null
     _sum: CleaningJobSumAggregateOutputType | null
@@ -68066,10 +68312,16 @@ export namespace Prisma {
     status?: boolean
     startedAt?: boolean
     finishedAt?: boolean
+    grnId?: boolean
+    leftoverQuantity?: boolean
+    reasonCode?: boolean
+    isReusable?: boolean
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    grn?: boolean | CleaningJob$grnArgs<ExtArgs>
     cleaningLogs?: boolean | CleaningJob$cleaningLogsArgs<ExtArgs>
+    cleaningLots?: boolean | CleaningJob$cleaningLotsArgs<ExtArgs>
     _count?: boolean | CleaningJobCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cleaningJob"]>
 
@@ -68082,9 +68334,14 @@ export namespace Prisma {
     status?: boolean
     startedAt?: boolean
     finishedAt?: boolean
+    grnId?: boolean
+    leftoverQuantity?: boolean
+    reasonCode?: boolean
+    isReusable?: boolean
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    grn?: boolean | CleaningJob$grnArgs<ExtArgs>
   }, ExtArgs["result"]["cleaningJob"]>
 
   export type CleaningJobSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -68096,9 +68353,14 @@ export namespace Prisma {
     status?: boolean
     startedAt?: boolean
     finishedAt?: boolean
+    grnId?: boolean
+    leftoverQuantity?: boolean
+    reasonCode?: boolean
+    isReusable?: boolean
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    grn?: boolean | CleaningJob$grnArgs<ExtArgs>
   }, ExtArgs["result"]["cleaningJob"]>
 
   export type CleaningJobSelectScalar = {
@@ -68110,25 +68372,33 @@ export namespace Prisma {
     status?: boolean
     startedAt?: boolean
     finishedAt?: boolean
+    grnId?: boolean
+    leftoverQuantity?: boolean
+    reasonCode?: boolean
+    isReusable?: boolean
   }
 
-  export type CleaningJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rawMaterialId" | "fromWarehouseId" | "toWarehouseId" | "quantity" | "status" | "startedAt" | "finishedAt", ExtArgs["result"]["cleaningJob"]>
+  export type CleaningJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rawMaterialId" | "fromWarehouseId" | "toWarehouseId" | "quantity" | "status" | "startedAt" | "finishedAt" | "grnId" | "leftoverQuantity" | "reasonCode" | "isReusable", ExtArgs["result"]["cleaningJob"]>
   export type CleaningJobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    grn?: boolean | CleaningJob$grnArgs<ExtArgs>
     cleaningLogs?: boolean | CleaningJob$cleaningLogsArgs<ExtArgs>
+    cleaningLots?: boolean | CleaningJob$cleaningLotsArgs<ExtArgs>
     _count?: boolean | CleaningJobCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CleaningJobIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    grn?: boolean | CleaningJob$grnArgs<ExtArgs>
   }
   export type CleaningJobIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    grn?: boolean | CleaningJob$grnArgs<ExtArgs>
   }
 
   export type $CleaningJobPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -68137,7 +68407,9 @@ export namespace Prisma {
       fromWarehouse: Prisma.$WarehousePayload<ExtArgs>
       rawMaterial: Prisma.$RawMaterialProductPayload<ExtArgs>
       toWarehouse: Prisma.$WarehousePayload<ExtArgs>
+      grn: Prisma.$GRNbyPoPayload<ExtArgs> | null
       cleaningLogs: Prisma.$CleaningLogPayload<ExtArgs>[]
+      cleaningLots: Prisma.$CleaningLotPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -68148,6 +68420,10 @@ export namespace Prisma {
       status: string
       startedAt: Date
       finishedAt: Date | null
+      grnId: string | null
+      leftoverQuantity: number | null
+      reasonCode: string | null
+      isReusable: boolean
     }, ExtArgs["result"]["cleaningJob"]>
     composites: {}
   }
@@ -68545,7 +68821,9 @@ export namespace Prisma {
     fromWarehouse<T extends WarehouseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WarehouseDefaultArgs<ExtArgs>>): Prisma__WarehouseClient<$Result.GetResult<Prisma.$WarehousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     rawMaterial<T extends RawMaterialProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProductDefaultArgs<ExtArgs>>): Prisma__RawMaterialProductClient<$Result.GetResult<Prisma.$RawMaterialProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     toWarehouse<T extends WarehouseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WarehouseDefaultArgs<ExtArgs>>): Prisma__WarehouseClient<$Result.GetResult<Prisma.$WarehousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    grn<T extends CleaningJob$grnArgs<ExtArgs> = {}>(args?: Subset<T, CleaningJob$grnArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     cleaningLogs<T extends CleaningJob$cleaningLogsArgs<ExtArgs> = {}>(args?: Subset<T, CleaningJob$cleaningLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cleaningLots<T extends CleaningJob$cleaningLotsArgs<ExtArgs> = {}>(args?: Subset<T, CleaningJob$cleaningLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -68583,6 +68861,10 @@ export namespace Prisma {
     readonly status: FieldRef<"CleaningJob", 'String'>
     readonly startedAt: FieldRef<"CleaningJob", 'DateTime'>
     readonly finishedAt: FieldRef<"CleaningJob", 'DateTime'>
+    readonly grnId: FieldRef<"CleaningJob", 'String'>
+    readonly leftoverQuantity: FieldRef<"CleaningJob", 'Float'>
+    readonly reasonCode: FieldRef<"CleaningJob", 'String'>
+    readonly isReusable: FieldRef<"CleaningJob", 'Boolean'>
   }
     
 
@@ -68979,6 +69261,25 @@ export namespace Prisma {
   }
 
   /**
+   * CleaningJob.grn
+   */
+  export type CleaningJob$grnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GRNbyPo
+     */
+    select?: GRNbyPoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GRNbyPo
+     */
+    omit?: GRNbyPoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GRNbyPoInclude<ExtArgs> | null
+    where?: GRNbyPoWhereInput
+  }
+
+  /**
    * CleaningJob.cleaningLogs
    */
   export type CleaningJob$cleaningLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -69000,6 +69301,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: CleaningLogScalarFieldEnum | CleaningLogScalarFieldEnum[]
+  }
+
+  /**
+   * CleaningJob.cleaningLots
+   */
+  export type CleaningJob$cleaningLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    where?: CleaningLotWhereInput
+    orderBy?: CleaningLotOrderByWithRelationInput | CleaningLotOrderByWithRelationInput[]
+    cursor?: CleaningLotWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CleaningLotScalarFieldEnum | CleaningLotScalarFieldEnum[]
   }
 
   /**
@@ -80563,6 +80888,9 @@ export namespace Prisma {
     purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
     qualityReport?: boolean | GRNbyPo$qualityReportArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    cleaningJobs?: boolean | GRNbyPo$cleaningJobsArgs<ExtArgs>
+    cleaningLots?: boolean | GRNbyPo$cleaningLotsArgs<ExtArgs>
+    _count?: boolean | GRNbyPoCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["gRNbyPo"]>
 
   export type GRNbyPoSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -80621,6 +80949,9 @@ export namespace Prisma {
     purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
     qualityReport?: boolean | GRNbyPo$qualityReportArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    cleaningJobs?: boolean | GRNbyPo$cleaningJobsArgs<ExtArgs>
+    cleaningLots?: boolean | GRNbyPo$cleaningLotsArgs<ExtArgs>
+    _count?: boolean | GRNbyPoCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type GRNbyPoIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
@@ -80642,6 +80973,8 @@ export namespace Prisma {
       purchaseOrderItem: Prisma.$PurchaseOrderItemPayload<ExtArgs>
       qualityReport: Prisma.$RMQualityReportPayload<ExtArgs> | null
       createdBy: Prisma.$UserPayload<ExtArgs>
+      cleaningJobs: Prisma.$CleaningJobPayload<ExtArgs>[]
+      cleaningLots: Prisma.$CleaningLotPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -81053,6 +81386,8 @@ export namespace Prisma {
     purchaseOrderItem<T extends PurchaseOrderItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrderItemDefaultArgs<ExtArgs>>): Prisma__PurchaseOrderItemClient<$Result.GetResult<Prisma.$PurchaseOrderItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     qualityReport<T extends GRNbyPo$qualityReportArgs<ExtArgs> = {}>(args?: Subset<T, GRNbyPo$qualityReportArgs<ExtArgs>>): Prisma__RMQualityReportClient<$Result.GetResult<Prisma.$RMQualityReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    cleaningJobs<T extends GRNbyPo$cleaningJobsArgs<ExtArgs> = {}>(args?: Subset<T, GRNbyPo$cleaningJobsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningJobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    cleaningLots<T extends GRNbyPo$cleaningLotsArgs<ExtArgs> = {}>(args?: Subset<T, GRNbyPo$cleaningLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -81508,6 +81843,54 @@ export namespace Prisma {
   }
 
   /**
+   * GRNbyPo.cleaningJobs
+   */
+  export type GRNbyPo$cleaningJobsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningJob
+     */
+    select?: CleaningJobSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningJob
+     */
+    omit?: CleaningJobOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningJobInclude<ExtArgs> | null
+    where?: CleaningJobWhereInput
+    orderBy?: CleaningJobOrderByWithRelationInput | CleaningJobOrderByWithRelationInput[]
+    cursor?: CleaningJobWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CleaningJobScalarFieldEnum | CleaningJobScalarFieldEnum[]
+  }
+
+  /**
+   * GRNbyPo.cleaningLots
+   */
+  export type GRNbyPo$cleaningLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    where?: CleaningLotWhereInput
+    orderBy?: CleaningLotOrderByWithRelationInput | CleaningLotOrderByWithRelationInput[]
+    cursor?: CleaningLotWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CleaningLotScalarFieldEnum | CleaningLotScalarFieldEnum[]
+  }
+
+  /**
    * GRNbyPo without action
    */
   export type GRNbyPoDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -81523,6 +81906,1230 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: GRNbyPoInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CleaningLot
+   */
+
+  export type AggregateCleaningLot = {
+    _count: CleaningLotCountAggregateOutputType | null
+    _avg: CleaningLotAvgAggregateOutputType | null
+    _sum: CleaningLotSumAggregateOutputType | null
+    _min: CleaningLotMinAggregateOutputType | null
+    _max: CleaningLotMaxAggregateOutputType | null
+  }
+
+  export type CleaningLotAvgAggregateOutputType = {
+    quantity: number | null
+    leftoverQuantity: number | null
+  }
+
+  export type CleaningLotSumAggregateOutputType = {
+    quantity: number | null
+    leftoverQuantity: number | null
+  }
+
+  export type CleaningLotMinAggregateOutputType = {
+    id: string | null
+    lotNumber: string | null
+    cleaningJobId: string | null
+    grnId: string | null
+    rawMaterialId: string | null
+    warehouseId: string | null
+    quantity: number | null
+    status: string | null
+    leftoverQuantity: number | null
+    reasonCode: string | null
+    isReusable: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CleaningLotMaxAggregateOutputType = {
+    id: string | null
+    lotNumber: string | null
+    cleaningJobId: string | null
+    grnId: string | null
+    rawMaterialId: string | null
+    warehouseId: string | null
+    quantity: number | null
+    status: string | null
+    leftoverQuantity: number | null
+    reasonCode: string | null
+    isReusable: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type CleaningLotCountAggregateOutputType = {
+    id: number
+    lotNumber: number
+    cleaningJobId: number
+    grnId: number
+    rawMaterialId: number
+    warehouseId: number
+    quantity: number
+    status: number
+    leftoverQuantity: number
+    reasonCode: number
+    isReusable: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type CleaningLotAvgAggregateInputType = {
+    quantity?: true
+    leftoverQuantity?: true
+  }
+
+  export type CleaningLotSumAggregateInputType = {
+    quantity?: true
+    leftoverQuantity?: true
+  }
+
+  export type CleaningLotMinAggregateInputType = {
+    id?: true
+    lotNumber?: true
+    cleaningJobId?: true
+    grnId?: true
+    rawMaterialId?: true
+    warehouseId?: true
+    quantity?: true
+    status?: true
+    leftoverQuantity?: true
+    reasonCode?: true
+    isReusable?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CleaningLotMaxAggregateInputType = {
+    id?: true
+    lotNumber?: true
+    cleaningJobId?: true
+    grnId?: true
+    rawMaterialId?: true
+    warehouseId?: true
+    quantity?: true
+    status?: true
+    leftoverQuantity?: true
+    reasonCode?: true
+    isReusable?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type CleaningLotCountAggregateInputType = {
+    id?: true
+    lotNumber?: true
+    cleaningJobId?: true
+    grnId?: true
+    rawMaterialId?: true
+    warehouseId?: true
+    quantity?: true
+    status?: true
+    leftoverQuantity?: true
+    reasonCode?: true
+    isReusable?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type CleaningLotAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CleaningLot to aggregate.
+     */
+    where?: CleaningLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CleaningLots to fetch.
+     */
+    orderBy?: CleaningLotOrderByWithRelationInput | CleaningLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CleaningLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CleaningLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CleaningLots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CleaningLots
+    **/
+    _count?: true | CleaningLotCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CleaningLotAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CleaningLotSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CleaningLotMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CleaningLotMaxAggregateInputType
+  }
+
+  export type GetCleaningLotAggregateType<T extends CleaningLotAggregateArgs> = {
+        [P in keyof T & keyof AggregateCleaningLot]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCleaningLot[P]>
+      : GetScalarType<T[P], AggregateCleaningLot[P]>
+  }
+
+
+
+
+  export type CleaningLotGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CleaningLotWhereInput
+    orderBy?: CleaningLotOrderByWithAggregationInput | CleaningLotOrderByWithAggregationInput[]
+    by: CleaningLotScalarFieldEnum[] | CleaningLotScalarFieldEnum
+    having?: CleaningLotScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CleaningLotCountAggregateInputType | true
+    _avg?: CleaningLotAvgAggregateInputType
+    _sum?: CleaningLotSumAggregateInputType
+    _min?: CleaningLotMinAggregateInputType
+    _max?: CleaningLotMaxAggregateInputType
+  }
+
+  export type CleaningLotGroupByOutputType = {
+    id: string
+    lotNumber: string
+    cleaningJobId: string
+    grnId: string
+    rawMaterialId: string
+    warehouseId: string
+    quantity: number
+    status: string
+    leftoverQuantity: number | null
+    reasonCode: string | null
+    isReusable: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: CleaningLotCountAggregateOutputType | null
+    _avg: CleaningLotAvgAggregateOutputType | null
+    _sum: CleaningLotSumAggregateOutputType | null
+    _min: CleaningLotMinAggregateOutputType | null
+    _max: CleaningLotMaxAggregateOutputType | null
+  }
+
+  type GetCleaningLotGroupByPayload<T extends CleaningLotGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CleaningLotGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CleaningLotGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CleaningLotGroupByOutputType[P]>
+            : GetScalarType<T[P], CleaningLotGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CleaningLotSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    lotNumber?: boolean
+    cleaningJobId?: boolean
+    grnId?: boolean
+    rawMaterialId?: boolean
+    warehouseId?: boolean
+    quantity?: boolean
+    status?: boolean
+    leftoverQuantity?: boolean
+    reasonCode?: boolean
+    isReusable?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
+    grn?: boolean | GRNbyPoDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cleaningLot"]>
+
+  export type CleaningLotSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    lotNumber?: boolean
+    cleaningJobId?: boolean
+    grnId?: boolean
+    rawMaterialId?: boolean
+    warehouseId?: boolean
+    quantity?: boolean
+    status?: boolean
+    leftoverQuantity?: boolean
+    reasonCode?: boolean
+    isReusable?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
+    grn?: boolean | GRNbyPoDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cleaningLot"]>
+
+  export type CleaningLotSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    lotNumber?: boolean
+    cleaningJobId?: boolean
+    grnId?: boolean
+    rawMaterialId?: boolean
+    warehouseId?: boolean
+    quantity?: boolean
+    status?: boolean
+    leftoverQuantity?: boolean
+    reasonCode?: boolean
+    isReusable?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
+    grn?: boolean | GRNbyPoDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["cleaningLot"]>
+
+  export type CleaningLotSelectScalar = {
+    id?: boolean
+    lotNumber?: boolean
+    cleaningJobId?: boolean
+    grnId?: boolean
+    rawMaterialId?: boolean
+    warehouseId?: boolean
+    quantity?: boolean
+    status?: boolean
+    leftoverQuantity?: boolean
+    reasonCode?: boolean
+    isReusable?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type CleaningLotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lotNumber" | "cleaningJobId" | "grnId" | "rawMaterialId" | "warehouseId" | "quantity" | "status" | "leftoverQuantity" | "reasonCode" | "isReusable" | "createdAt" | "updatedAt", ExtArgs["result"]["cleaningLot"]>
+  export type CleaningLotInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
+    grn?: boolean | GRNbyPoDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+  }
+  export type CleaningLotIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
+    grn?: boolean | GRNbyPoDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+  }
+  export type CleaningLotIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
+    grn?: boolean | GRNbyPoDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+  }
+
+  export type $CleaningLotPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CleaningLot"
+    objects: {
+      cleaningJob: Prisma.$CleaningJobPayload<ExtArgs>
+      grn: Prisma.$GRNbyPoPayload<ExtArgs>
+      rawMaterial: Prisma.$RawMaterialProductPayload<ExtArgs>
+      warehouse: Prisma.$WarehousePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      lotNumber: string
+      cleaningJobId: string
+      grnId: string
+      rawMaterialId: string
+      warehouseId: string
+      quantity: number
+      status: string
+      leftoverQuantity: number | null
+      reasonCode: string | null
+      isReusable: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["cleaningLot"]>
+    composites: {}
+  }
+
+  type CleaningLotGetPayload<S extends boolean | null | undefined | CleaningLotDefaultArgs> = $Result.GetResult<Prisma.$CleaningLotPayload, S>
+
+  type CleaningLotCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<CleaningLotFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: CleaningLotCountAggregateInputType | true
+    }
+
+  export interface CleaningLotDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CleaningLot'], meta: { name: 'CleaningLot' } }
+    /**
+     * Find zero or one CleaningLot that matches the filter.
+     * @param {CleaningLotFindUniqueArgs} args - Arguments to find a CleaningLot
+     * @example
+     * // Get one CleaningLot
+     * const cleaningLot = await prisma.cleaningLot.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CleaningLotFindUniqueArgs>(args: SelectSubset<T, CleaningLotFindUniqueArgs<ExtArgs>>): Prisma__CleaningLotClient<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one CleaningLot that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {CleaningLotFindUniqueOrThrowArgs} args - Arguments to find a CleaningLot
+     * @example
+     * // Get one CleaningLot
+     * const cleaningLot = await prisma.cleaningLot.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CleaningLotFindUniqueOrThrowArgs>(args: SelectSubset<T, CleaningLotFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CleaningLotClient<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CleaningLot that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CleaningLotFindFirstArgs} args - Arguments to find a CleaningLot
+     * @example
+     * // Get one CleaningLot
+     * const cleaningLot = await prisma.cleaningLot.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CleaningLotFindFirstArgs>(args?: SelectSubset<T, CleaningLotFindFirstArgs<ExtArgs>>): Prisma__CleaningLotClient<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first CleaningLot that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CleaningLotFindFirstOrThrowArgs} args - Arguments to find a CleaningLot
+     * @example
+     * // Get one CleaningLot
+     * const cleaningLot = await prisma.cleaningLot.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CleaningLotFindFirstOrThrowArgs>(args?: SelectSubset<T, CleaningLotFindFirstOrThrowArgs<ExtArgs>>): Prisma__CleaningLotClient<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more CleaningLots that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CleaningLotFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CleaningLots
+     * const cleaningLots = await prisma.cleaningLot.findMany()
+     * 
+     * // Get first 10 CleaningLots
+     * const cleaningLots = await prisma.cleaningLot.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const cleaningLotWithIdOnly = await prisma.cleaningLot.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CleaningLotFindManyArgs>(args?: SelectSubset<T, CleaningLotFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a CleaningLot.
+     * @param {CleaningLotCreateArgs} args - Arguments to create a CleaningLot.
+     * @example
+     * // Create one CleaningLot
+     * const CleaningLot = await prisma.cleaningLot.create({
+     *   data: {
+     *     // ... data to create a CleaningLot
+     *   }
+     * })
+     * 
+     */
+    create<T extends CleaningLotCreateArgs>(args: SelectSubset<T, CleaningLotCreateArgs<ExtArgs>>): Prisma__CleaningLotClient<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many CleaningLots.
+     * @param {CleaningLotCreateManyArgs} args - Arguments to create many CleaningLots.
+     * @example
+     * // Create many CleaningLots
+     * const cleaningLot = await prisma.cleaningLot.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CleaningLotCreateManyArgs>(args?: SelectSubset<T, CleaningLotCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CleaningLots and returns the data saved in the database.
+     * @param {CleaningLotCreateManyAndReturnArgs} args - Arguments to create many CleaningLots.
+     * @example
+     * // Create many CleaningLots
+     * const cleaningLot = await prisma.cleaningLot.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CleaningLots and only return the `id`
+     * const cleaningLotWithIdOnly = await prisma.cleaningLot.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CleaningLotCreateManyAndReturnArgs>(args?: SelectSubset<T, CleaningLotCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a CleaningLot.
+     * @param {CleaningLotDeleteArgs} args - Arguments to delete one CleaningLot.
+     * @example
+     * // Delete one CleaningLot
+     * const CleaningLot = await prisma.cleaningLot.delete({
+     *   where: {
+     *     // ... filter to delete one CleaningLot
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CleaningLotDeleteArgs>(args: SelectSubset<T, CleaningLotDeleteArgs<ExtArgs>>): Prisma__CleaningLotClient<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one CleaningLot.
+     * @param {CleaningLotUpdateArgs} args - Arguments to update one CleaningLot.
+     * @example
+     * // Update one CleaningLot
+     * const cleaningLot = await prisma.cleaningLot.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CleaningLotUpdateArgs>(args: SelectSubset<T, CleaningLotUpdateArgs<ExtArgs>>): Prisma__CleaningLotClient<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more CleaningLots.
+     * @param {CleaningLotDeleteManyArgs} args - Arguments to filter CleaningLots to delete.
+     * @example
+     * // Delete a few CleaningLots
+     * const { count } = await prisma.cleaningLot.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CleaningLotDeleteManyArgs>(args?: SelectSubset<T, CleaningLotDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CleaningLots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CleaningLotUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CleaningLots
+     * const cleaningLot = await prisma.cleaningLot.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CleaningLotUpdateManyArgs>(args: SelectSubset<T, CleaningLotUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CleaningLots and returns the data updated in the database.
+     * @param {CleaningLotUpdateManyAndReturnArgs} args - Arguments to update many CleaningLots.
+     * @example
+     * // Update many CleaningLots
+     * const cleaningLot = await prisma.cleaningLot.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more CleaningLots and only return the `id`
+     * const cleaningLotWithIdOnly = await prisma.cleaningLot.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends CleaningLotUpdateManyAndReturnArgs>(args: SelectSubset<T, CleaningLotUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one CleaningLot.
+     * @param {CleaningLotUpsertArgs} args - Arguments to update or create a CleaningLot.
+     * @example
+     * // Update or create a CleaningLot
+     * const cleaningLot = await prisma.cleaningLot.upsert({
+     *   create: {
+     *     // ... data to create a CleaningLot
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CleaningLot we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CleaningLotUpsertArgs>(args: SelectSubset<T, CleaningLotUpsertArgs<ExtArgs>>): Prisma__CleaningLotClient<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of CleaningLots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CleaningLotCountArgs} args - Arguments to filter CleaningLots to count.
+     * @example
+     * // Count the number of CleaningLots
+     * const count = await prisma.cleaningLot.count({
+     *   where: {
+     *     // ... the filter for the CleaningLots we want to count
+     *   }
+     * })
+    **/
+    count<T extends CleaningLotCountArgs>(
+      args?: Subset<T, CleaningLotCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CleaningLotCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CleaningLot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CleaningLotAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CleaningLotAggregateArgs>(args: Subset<T, CleaningLotAggregateArgs>): Prisma.PrismaPromise<GetCleaningLotAggregateType<T>>
+
+    /**
+     * Group by CleaningLot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CleaningLotGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CleaningLotGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CleaningLotGroupByArgs['orderBy'] }
+        : { orderBy?: CleaningLotGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CleaningLotGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCleaningLotGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CleaningLot model
+   */
+  readonly fields: CleaningLotFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CleaningLot.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CleaningLotClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    cleaningJob<T extends CleaningJobDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CleaningJobDefaultArgs<ExtArgs>>): Prisma__CleaningJobClient<$Result.GetResult<Prisma.$CleaningJobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    grn<T extends GRNbyPoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GRNbyPoDefaultArgs<ExtArgs>>): Prisma__GRNbyPoClient<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    rawMaterial<T extends RawMaterialProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProductDefaultArgs<ExtArgs>>): Prisma__RawMaterialProductClient<$Result.GetResult<Prisma.$RawMaterialProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    warehouse<T extends WarehouseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WarehouseDefaultArgs<ExtArgs>>): Prisma__WarehouseClient<$Result.GetResult<Prisma.$WarehousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CleaningLot model
+   */
+  interface CleaningLotFieldRefs {
+    readonly id: FieldRef<"CleaningLot", 'String'>
+    readonly lotNumber: FieldRef<"CleaningLot", 'String'>
+    readonly cleaningJobId: FieldRef<"CleaningLot", 'String'>
+    readonly grnId: FieldRef<"CleaningLot", 'String'>
+    readonly rawMaterialId: FieldRef<"CleaningLot", 'String'>
+    readonly warehouseId: FieldRef<"CleaningLot", 'String'>
+    readonly quantity: FieldRef<"CleaningLot", 'Float'>
+    readonly status: FieldRef<"CleaningLot", 'String'>
+    readonly leftoverQuantity: FieldRef<"CleaningLot", 'Float'>
+    readonly reasonCode: FieldRef<"CleaningLot", 'String'>
+    readonly isReusable: FieldRef<"CleaningLot", 'Boolean'>
+    readonly createdAt: FieldRef<"CleaningLot", 'DateTime'>
+    readonly updatedAt: FieldRef<"CleaningLot", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CleaningLot findUnique
+   */
+  export type CleaningLotFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    /**
+     * Filter, which CleaningLot to fetch.
+     */
+    where: CleaningLotWhereUniqueInput
+  }
+
+  /**
+   * CleaningLot findUniqueOrThrow
+   */
+  export type CleaningLotFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    /**
+     * Filter, which CleaningLot to fetch.
+     */
+    where: CleaningLotWhereUniqueInput
+  }
+
+  /**
+   * CleaningLot findFirst
+   */
+  export type CleaningLotFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    /**
+     * Filter, which CleaningLot to fetch.
+     */
+    where?: CleaningLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CleaningLots to fetch.
+     */
+    orderBy?: CleaningLotOrderByWithRelationInput | CleaningLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CleaningLots.
+     */
+    cursor?: CleaningLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CleaningLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CleaningLots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CleaningLots.
+     */
+    distinct?: CleaningLotScalarFieldEnum | CleaningLotScalarFieldEnum[]
+  }
+
+  /**
+   * CleaningLot findFirstOrThrow
+   */
+  export type CleaningLotFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    /**
+     * Filter, which CleaningLot to fetch.
+     */
+    where?: CleaningLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CleaningLots to fetch.
+     */
+    orderBy?: CleaningLotOrderByWithRelationInput | CleaningLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CleaningLots.
+     */
+    cursor?: CleaningLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CleaningLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CleaningLots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CleaningLots.
+     */
+    distinct?: CleaningLotScalarFieldEnum | CleaningLotScalarFieldEnum[]
+  }
+
+  /**
+   * CleaningLot findMany
+   */
+  export type CleaningLotFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    /**
+     * Filter, which CleaningLots to fetch.
+     */
+    where?: CleaningLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CleaningLots to fetch.
+     */
+    orderBy?: CleaningLotOrderByWithRelationInput | CleaningLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CleaningLots.
+     */
+    cursor?: CleaningLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CleaningLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CleaningLots.
+     */
+    skip?: number
+    distinct?: CleaningLotScalarFieldEnum | CleaningLotScalarFieldEnum[]
+  }
+
+  /**
+   * CleaningLot create
+   */
+  export type CleaningLotCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CleaningLot.
+     */
+    data: XOR<CleaningLotCreateInput, CleaningLotUncheckedCreateInput>
+  }
+
+  /**
+   * CleaningLot createMany
+   */
+  export type CleaningLotCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CleaningLots.
+     */
+    data: CleaningLotCreateManyInput | CleaningLotCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CleaningLot createManyAndReturn
+   */
+  export type CleaningLotCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * The data used to create many CleaningLots.
+     */
+    data: CleaningLotCreateManyInput | CleaningLotCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CleaningLot update
+   */
+  export type CleaningLotUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CleaningLot.
+     */
+    data: XOR<CleaningLotUpdateInput, CleaningLotUncheckedUpdateInput>
+    /**
+     * Choose, which CleaningLot to update.
+     */
+    where: CleaningLotWhereUniqueInput
+  }
+
+  /**
+   * CleaningLot updateMany
+   */
+  export type CleaningLotUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CleaningLots.
+     */
+    data: XOR<CleaningLotUpdateManyMutationInput, CleaningLotUncheckedUpdateManyInput>
+    /**
+     * Filter which CleaningLots to update
+     */
+    where?: CleaningLotWhereInput
+    /**
+     * Limit how many CleaningLots to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * CleaningLot updateManyAndReturn
+   */
+  export type CleaningLotUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * The data used to update CleaningLots.
+     */
+    data: XOR<CleaningLotUpdateManyMutationInput, CleaningLotUncheckedUpdateManyInput>
+    /**
+     * Filter which CleaningLots to update
+     */
+    where?: CleaningLotWhereInput
+    /**
+     * Limit how many CleaningLots to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CleaningLot upsert
+   */
+  export type CleaningLotUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CleaningLot to update in case it exists.
+     */
+    where: CleaningLotWhereUniqueInput
+    /**
+     * In case the CleaningLot found by the `where` argument doesn't exist, create a new CleaningLot with this data.
+     */
+    create: XOR<CleaningLotCreateInput, CleaningLotUncheckedCreateInput>
+    /**
+     * In case the CleaningLot was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CleaningLotUpdateInput, CleaningLotUncheckedUpdateInput>
+  }
+
+  /**
+   * CleaningLot delete
+   */
+  export type CleaningLotDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
+    /**
+     * Filter which CleaningLot to delete.
+     */
+    where: CleaningLotWhereUniqueInput
+  }
+
+  /**
+   * CleaningLot deleteMany
+   */
+  export type CleaningLotDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CleaningLots to delete
+     */
+    where?: CleaningLotWhereInput
+    /**
+     * Limit how many CleaningLots to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * CleaningLot without action
+   */
+  export type CleaningLotDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CleaningLot
+     */
+    select?: CleaningLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the CleaningLot
+     */
+    omit?: CleaningLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CleaningLotInclude<ExtArgs> | null
   }
 
 
@@ -82292,7 +83899,11 @@ export namespace Prisma {
     quantity: 'quantity',
     status: 'status',
     startedAt: 'startedAt',
-    finishedAt: 'finishedAt'
+    finishedAt: 'finishedAt',
+    grnId: 'grnId',
+    leftoverQuantity: 'leftoverQuantity',
+    reasonCode: 'reasonCode',
+    isReusable: 'isReusable'
   };
 
   export type CleaningJobScalarFieldEnum = (typeof CleaningJobScalarFieldEnum)[keyof typeof CleaningJobScalarFieldEnum]
@@ -82449,6 +84060,25 @@ export namespace Prisma {
   };
 
   export type GRNbyPoScalarFieldEnum = (typeof GRNbyPoScalarFieldEnum)[keyof typeof GRNbyPoScalarFieldEnum]
+
+
+  export const CleaningLotScalarFieldEnum: {
+    id: 'id',
+    lotNumber: 'lotNumber',
+    cleaningJobId: 'cleaningJobId',
+    grnId: 'grnId',
+    rawMaterialId: 'rawMaterialId',
+    warehouseId: 'warehouseId',
+    quantity: 'quantity',
+    status: 'status',
+    leftoverQuantity: 'leftoverQuantity',
+    reasonCode: 'reasonCode',
+    isReusable: 'isReusable',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type CleaningLotScalarFieldEnum = (typeof CleaningLotScalarFieldEnum)[keyof typeof CleaningLotScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -86486,6 +88116,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"RawMaterialProduct"> | Date | string
     vendorId?: StringNullableFilter<"RawMaterialProduct"> | string | null
     cleaningJobs?: CleaningJobListRelationFilter
+    cleaningLots?: CleaningLotListRelationFilter
     currentStocks?: CurrentStockListRelationFilter
     processingJobs?: ProcessingJobListRelationFilter
     purchaseOrderItems?: PurchaseOrderItemListRelationFilter
@@ -86505,6 +88136,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     vendorId?: SortOrderInput | SortOrder
     cleaningJobs?: CleaningJobOrderByRelationAggregateInput
+    cleaningLots?: CleaningLotOrderByRelationAggregateInput
     currentStocks?: CurrentStockOrderByRelationAggregateInput
     processingJobs?: ProcessingJobOrderByRelationAggregateInput
     purchaseOrderItems?: PurchaseOrderItemOrderByRelationAggregateInput
@@ -86527,6 +88159,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"RawMaterialProduct"> | Date | string
     vendorId?: StringNullableFilter<"RawMaterialProduct"> | string | null
     cleaningJobs?: CleaningJobListRelationFilter
+    cleaningLots?: CleaningLotListRelationFilter
     currentStocks?: CurrentStockListRelationFilter
     processingJobs?: ProcessingJobListRelationFilter
     purchaseOrderItems?: PurchaseOrderItemListRelationFilter
@@ -86949,6 +88582,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobListRelationFilter
     cleaningLogsFrom?: CleaningLogListRelationFilter
     cleaningLogsTo?: CleaningLogListRelationFilter
+    cleaningLots?: CleaningLotListRelationFilter
     currentStocks?: CurrentStockListRelationFilter
     finishedGoods?: FinishedGoodListRelationFilter
     receivalEntries?: ReceivalEntryListRelationFilter
@@ -86968,6 +88602,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobOrderByRelationAggregateInput
     cleaningLogsFrom?: CleaningLogOrderByRelationAggregateInput
     cleaningLogsTo?: CleaningLogOrderByRelationAggregateInput
+    cleaningLots?: CleaningLotOrderByRelationAggregateInput
     currentStocks?: CurrentStockOrderByRelationAggregateInput
     finishedGoods?: FinishedGoodOrderByRelationAggregateInput
     receivalEntries?: ReceivalEntryOrderByRelationAggregateInput
@@ -86990,6 +88625,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobListRelationFilter
     cleaningLogsFrom?: CleaningLogListRelationFilter
     cleaningLogsTo?: CleaningLogListRelationFilter
+    cleaningLots?: CleaningLotListRelationFilter
     currentStocks?: CurrentStockListRelationFilter
     finishedGoods?: FinishedGoodListRelationFilter
     receivalEntries?: ReceivalEntryListRelationFilter
@@ -87032,10 +88668,16 @@ export namespace Prisma {
     status?: StringFilter<"CleaningJob"> | string
     startedAt?: DateTimeFilter<"CleaningJob"> | Date | string
     finishedAt?: DateTimeNullableFilter<"CleaningJob"> | Date | string | null
+    grnId?: StringNullableFilter<"CleaningJob"> | string | null
+    leftoverQuantity?: FloatNullableFilter<"CleaningJob"> | number | null
+    reasonCode?: StringNullableFilter<"CleaningJob"> | string | null
+    isReusable?: BoolFilter<"CleaningJob"> | boolean
     fromWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     toWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
+    grn?: XOR<GRNbyPoNullableScalarRelationFilter, GRNbyPoWhereInput> | null
     cleaningLogs?: CleaningLogListRelationFilter
+    cleaningLots?: CleaningLotListRelationFilter
   }
 
   export type CleaningJobOrderByWithRelationInput = {
@@ -87047,10 +88689,16 @@ export namespace Prisma {
     status?: SortOrder
     startedAt?: SortOrder
     finishedAt?: SortOrderInput | SortOrder
+    grnId?: SortOrderInput | SortOrder
+    leftoverQuantity?: SortOrderInput | SortOrder
+    reasonCode?: SortOrderInput | SortOrder
+    isReusable?: SortOrder
     fromWarehouse?: WarehouseOrderByWithRelationInput
     rawMaterial?: RawMaterialProductOrderByWithRelationInput
     toWarehouse?: WarehouseOrderByWithRelationInput
+    grn?: GRNbyPoOrderByWithRelationInput
     cleaningLogs?: CleaningLogOrderByRelationAggregateInput
+    cleaningLots?: CleaningLotOrderByRelationAggregateInput
   }
 
   export type CleaningJobWhereUniqueInput = Prisma.AtLeast<{
@@ -87065,10 +88713,16 @@ export namespace Prisma {
     status?: StringFilter<"CleaningJob"> | string
     startedAt?: DateTimeFilter<"CleaningJob"> | Date | string
     finishedAt?: DateTimeNullableFilter<"CleaningJob"> | Date | string | null
+    grnId?: StringNullableFilter<"CleaningJob"> | string | null
+    leftoverQuantity?: FloatNullableFilter<"CleaningJob"> | number | null
+    reasonCode?: StringNullableFilter<"CleaningJob"> | string | null
+    isReusable?: BoolFilter<"CleaningJob"> | boolean
     fromWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     toWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
+    grn?: XOR<GRNbyPoNullableScalarRelationFilter, GRNbyPoWhereInput> | null
     cleaningLogs?: CleaningLogListRelationFilter
+    cleaningLots?: CleaningLotListRelationFilter
   }, "id">
 
   export type CleaningJobOrderByWithAggregationInput = {
@@ -87080,6 +88734,10 @@ export namespace Prisma {
     status?: SortOrder
     startedAt?: SortOrder
     finishedAt?: SortOrderInput | SortOrder
+    grnId?: SortOrderInput | SortOrder
+    leftoverQuantity?: SortOrderInput | SortOrder
+    reasonCode?: SortOrderInput | SortOrder
+    isReusable?: SortOrder
     _count?: CleaningJobCountOrderByAggregateInput
     _avg?: CleaningJobAvgOrderByAggregateInput
     _max?: CleaningJobMaxOrderByAggregateInput
@@ -87099,6 +88757,10 @@ export namespace Prisma {
     status?: StringWithAggregatesFilter<"CleaningJob"> | string
     startedAt?: DateTimeWithAggregatesFilter<"CleaningJob"> | Date | string
     finishedAt?: DateTimeNullableWithAggregatesFilter<"CleaningJob"> | Date | string | null
+    grnId?: StringNullableWithAggregatesFilter<"CleaningJob"> | string | null
+    leftoverQuantity?: FloatNullableWithAggregatesFilter<"CleaningJob"> | number | null
+    reasonCode?: StringNullableWithAggregatesFilter<"CleaningJob"> | string | null
+    isReusable?: BoolWithAggregatesFilter<"CleaningJob"> | boolean
   }
 
   export type CleaningLogWhereInput = {
@@ -87842,6 +89504,8 @@ export namespace Prisma {
     purchaseOrderItem?: XOR<PurchaseOrderItemScalarRelationFilter, PurchaseOrderItemWhereInput>
     qualityReport?: XOR<RMQualityReportNullableScalarRelationFilter, RMQualityReportWhereInput> | null
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    cleaningJobs?: CleaningJobListRelationFilter
+    cleaningLots?: CleaningLotListRelationFilter
   }
 
   export type GRNbyPoOrderByWithRelationInput = {
@@ -87860,6 +89524,8 @@ export namespace Prisma {
     purchaseOrderItem?: PurchaseOrderItemOrderByWithRelationInput
     qualityReport?: RMQualityReportOrderByWithRelationInput
     createdBy?: UserOrderByWithRelationInput
+    cleaningJobs?: CleaningJobOrderByRelationAggregateInput
+    cleaningLots?: CleaningLotOrderByRelationAggregateInput
   }
 
   export type GRNbyPoWhereUniqueInput = Prisma.AtLeast<{
@@ -87881,6 +89547,8 @@ export namespace Prisma {
     purchaseOrderItem?: XOR<PurchaseOrderItemScalarRelationFilter, PurchaseOrderItemWhereInput>
     qualityReport?: XOR<RMQualityReportNullableScalarRelationFilter, RMQualityReportWhereInput> | null
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+    cleaningJobs?: CleaningJobListRelationFilter
+    cleaningLots?: CleaningLotListRelationFilter
   }, "id" | "grnNumber" | "qualityReportId">
 
   export type GRNbyPoOrderByWithAggregationInput = {
@@ -87915,6 +89583,112 @@ export namespace Prisma {
     createdById?: StringWithAggregatesFilter<"GRNbyPo"> | string
     createdAt?: DateTimeWithAggregatesFilter<"GRNbyPo"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"GRNbyPo"> | Date | string
+  }
+
+  export type CleaningLotWhereInput = {
+    AND?: CleaningLotWhereInput | CleaningLotWhereInput[]
+    OR?: CleaningLotWhereInput[]
+    NOT?: CleaningLotWhereInput | CleaningLotWhereInput[]
+    id?: StringFilter<"CleaningLot"> | string
+    lotNumber?: StringFilter<"CleaningLot"> | string
+    cleaningJobId?: StringFilter<"CleaningLot"> | string
+    grnId?: StringFilter<"CleaningLot"> | string
+    rawMaterialId?: StringFilter<"CleaningLot"> | string
+    warehouseId?: StringFilter<"CleaningLot"> | string
+    quantity?: FloatFilter<"CleaningLot"> | number
+    status?: StringFilter<"CleaningLot"> | string
+    leftoverQuantity?: FloatNullableFilter<"CleaningLot"> | number | null
+    reasonCode?: StringNullableFilter<"CleaningLot"> | string | null
+    isReusable?: BoolFilter<"CleaningLot"> | boolean
+    createdAt?: DateTimeFilter<"CleaningLot"> | Date | string
+    updatedAt?: DateTimeFilter<"CleaningLot"> | Date | string
+    cleaningJob?: XOR<CleaningJobScalarRelationFilter, CleaningJobWhereInput>
+    grn?: XOR<GRNbyPoScalarRelationFilter, GRNbyPoWhereInput>
+    rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
+    warehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
+  }
+
+  export type CleaningLotOrderByWithRelationInput = {
+    id?: SortOrder
+    lotNumber?: SortOrder
+    cleaningJobId?: SortOrder
+    grnId?: SortOrder
+    rawMaterialId?: SortOrder
+    warehouseId?: SortOrder
+    quantity?: SortOrder
+    status?: SortOrder
+    leftoverQuantity?: SortOrderInput | SortOrder
+    reasonCode?: SortOrderInput | SortOrder
+    isReusable?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    cleaningJob?: CleaningJobOrderByWithRelationInput
+    grn?: GRNbyPoOrderByWithRelationInput
+    rawMaterial?: RawMaterialProductOrderByWithRelationInput
+    warehouse?: WarehouseOrderByWithRelationInput
+  }
+
+  export type CleaningLotWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    lotNumber?: string
+    AND?: CleaningLotWhereInput | CleaningLotWhereInput[]
+    OR?: CleaningLotWhereInput[]
+    NOT?: CleaningLotWhereInput | CleaningLotWhereInput[]
+    cleaningJobId?: StringFilter<"CleaningLot"> | string
+    grnId?: StringFilter<"CleaningLot"> | string
+    rawMaterialId?: StringFilter<"CleaningLot"> | string
+    warehouseId?: StringFilter<"CleaningLot"> | string
+    quantity?: FloatFilter<"CleaningLot"> | number
+    status?: StringFilter<"CleaningLot"> | string
+    leftoverQuantity?: FloatNullableFilter<"CleaningLot"> | number | null
+    reasonCode?: StringNullableFilter<"CleaningLot"> | string | null
+    isReusable?: BoolFilter<"CleaningLot"> | boolean
+    createdAt?: DateTimeFilter<"CleaningLot"> | Date | string
+    updatedAt?: DateTimeFilter<"CleaningLot"> | Date | string
+    cleaningJob?: XOR<CleaningJobScalarRelationFilter, CleaningJobWhereInput>
+    grn?: XOR<GRNbyPoScalarRelationFilter, GRNbyPoWhereInput>
+    rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
+    warehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
+  }, "id" | "lotNumber">
+
+  export type CleaningLotOrderByWithAggregationInput = {
+    id?: SortOrder
+    lotNumber?: SortOrder
+    cleaningJobId?: SortOrder
+    grnId?: SortOrder
+    rawMaterialId?: SortOrder
+    warehouseId?: SortOrder
+    quantity?: SortOrder
+    status?: SortOrder
+    leftoverQuantity?: SortOrderInput | SortOrder
+    reasonCode?: SortOrderInput | SortOrder
+    isReusable?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: CleaningLotCountOrderByAggregateInput
+    _avg?: CleaningLotAvgOrderByAggregateInput
+    _max?: CleaningLotMaxOrderByAggregateInput
+    _min?: CleaningLotMinOrderByAggregateInput
+    _sum?: CleaningLotSumOrderByAggregateInput
+  }
+
+  export type CleaningLotScalarWhereWithAggregatesInput = {
+    AND?: CleaningLotScalarWhereWithAggregatesInput | CleaningLotScalarWhereWithAggregatesInput[]
+    OR?: CleaningLotScalarWhereWithAggregatesInput[]
+    NOT?: CleaningLotScalarWhereWithAggregatesInput | CleaningLotScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"CleaningLot"> | string
+    lotNumber?: StringWithAggregatesFilter<"CleaningLot"> | string
+    cleaningJobId?: StringWithAggregatesFilter<"CleaningLot"> | string
+    grnId?: StringWithAggregatesFilter<"CleaningLot"> | string
+    rawMaterialId?: StringWithAggregatesFilter<"CleaningLot"> | string
+    warehouseId?: StringWithAggregatesFilter<"CleaningLot"> | string
+    quantity?: FloatWithAggregatesFilter<"CleaningLot"> | number
+    status?: StringWithAggregatesFilter<"CleaningLot"> | string
+    leftoverQuantity?: FloatNullableWithAggregatesFilter<"CleaningLot"> | number | null
+    reasonCode?: StringNullableWithAggregatesFilter<"CleaningLot"> | string | null
+    isReusable?: BoolWithAggregatesFilter<"CleaningLot"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"CleaningLot"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"CleaningLot"> | Date | string
   }
 
   export type ActivityLogCreateInput = {
@@ -91877,6 +93651,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
@@ -91896,6 +93671,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     vendorId?: string | null
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
@@ -91913,6 +93689,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
@@ -91932,6 +93709,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vendorId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
@@ -92363,6 +94141,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
@@ -92382,6 +94161,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
@@ -92401,6 +94181,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
@@ -92420,6 +94201,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -92458,10 +94240,15 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
+    grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
     cleaningLogs?: CleaningLogCreateNestedManyWithoutCleaningJobInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutCleaningJobInput
   }
 
   export type CleaningJobUncheckedCreateInput = {
@@ -92473,7 +94260,12 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    grnId?: string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
 
   export type CleaningJobUpdateInput = {
@@ -92482,10 +94274,15 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
+    grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
     cleaningLogs?: CleaningLogUpdateManyWithoutCleaningJobNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutCleaningJobNestedInput
   }
 
   export type CleaningJobUncheckedUpdateInput = {
@@ -92497,7 +94294,12 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grnId?: NullableStringFieldUpdateOperationsInput | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
 
   export type CleaningJobCreateManyInput = {
@@ -92509,6 +94311,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    grnId?: string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
   }
 
   export type CleaningJobUpdateManyMutationInput = {
@@ -92517,6 +94323,9 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type CleaningJobUncheckedUpdateManyInput = {
@@ -92528,6 +94337,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grnId?: NullableStringFieldUpdateOperationsInput | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type CleaningLogCreateInput = {
@@ -93285,6 +95098,8 @@ export namespace Prisma {
     purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
     qualityReport?: RMQualityReportCreateNestedOneWithoutGrn_entryInput
     createdBy: UserCreateNestedOneWithoutCreatedGRNsInput
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutGrnInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutGrnInput
   }
 
   export type GRNbyPoUncheckedCreateInput = {
@@ -93299,6 +95114,8 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutGrnInput
   }
 
   export type GRNbyPoUpdateInput = {
@@ -93313,6 +95130,8 @@ export namespace Prisma {
     purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
     qualityReport?: RMQualityReportUpdateOneWithoutGrn_entryNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedGRNsNestedInput
+    cleaningJobs?: CleaningJobUpdateManyWithoutGrnNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutGrnNestedInput
   }
 
   export type GRNbyPoUncheckedUpdateInput = {
@@ -93327,6 +95146,8 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutGrnNestedInput
   }
 
   export type GRNbyPoCreateManyInput = {
@@ -93363,6 +95184,114 @@ export namespace Prisma {
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CleaningLotCreateInput = {
+    id?: string
+    lotNumber: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
+    grn: GRNbyPoCreateNestedOneWithoutCleaningLotsInput
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningLotsInput
+    warehouse: WarehouseCreateNestedOneWithoutCleaningLotsInput
+  }
+
+  export type CleaningLotUncheckedCreateInput = {
+    id?: string
+    lotNumber: string
+    cleaningJobId: string
+    grnId: string
+    rawMaterialId: string
+    warehouseId: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CleaningLotUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
+    grn?: GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput
+    warehouse?: WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput
+  }
+
+  export type CleaningLotUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    cleaningJobId?: StringFieldUpdateOperationsInput | string
+    grnId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CleaningLotCreateManyInput = {
+    id?: string
+    lotNumber: string
+    cleaningJobId: string
+    grnId: string
+    rawMaterialId: string
+    warehouseId: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CleaningLotUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CleaningLotUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    cleaningJobId?: StringFieldUpdateOperationsInput | string
+    grnId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -96041,6 +97970,12 @@ export namespace Prisma {
     none?: CleaningJobWhereInput
   }
 
+  export type CleaningLotListRelationFilter = {
+    every?: CleaningLotWhereInput
+    some?: CleaningLotWhereInput
+    none?: CleaningLotWhereInput
+  }
+
   export type CurrentStockListRelationFilter = {
     every?: CurrentStockWhereInput
     some?: CurrentStockWhereInput
@@ -96071,6 +98006,10 @@ export namespace Prisma {
   }
 
   export type CleaningJobOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CleaningLotOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -96516,6 +98455,22 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type GRNbyPoNullableScalarRelationFilter = {
+    is?: GRNbyPoWhereInput | null
+    isNot?: GRNbyPoWhereInput | null
+  }
+
   export type CleaningJobCountOrderByAggregateInput = {
     id?: SortOrder
     rawMaterialId?: SortOrder
@@ -96525,10 +98480,15 @@ export namespace Prisma {
     status?: SortOrder
     startedAt?: SortOrder
     finishedAt?: SortOrder
+    grnId?: SortOrder
+    leftoverQuantity?: SortOrder
+    reasonCode?: SortOrder
+    isReusable?: SortOrder
   }
 
   export type CleaningJobAvgOrderByAggregateInput = {
     quantity?: SortOrder
+    leftoverQuantity?: SortOrder
   }
 
   export type CleaningJobMaxOrderByAggregateInput = {
@@ -96540,6 +98500,10 @@ export namespace Prisma {
     status?: SortOrder
     startedAt?: SortOrder
     finishedAt?: SortOrder
+    grnId?: SortOrder
+    leftoverQuantity?: SortOrder
+    reasonCode?: SortOrder
+    isReusable?: SortOrder
   }
 
   export type CleaningJobMinOrderByAggregateInput = {
@@ -96551,10 +98515,31 @@ export namespace Prisma {
     status?: SortOrder
     startedAt?: SortOrder
     finishedAt?: SortOrder
+    grnId?: SortOrder
+    leftoverQuantity?: SortOrder
+    reasonCode?: SortOrder
+    isReusable?: SortOrder
   }
 
   export type CleaningJobSumOrderByAggregateInput = {
     quantity?: SortOrder
+    leftoverQuantity?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type CleaningJobScalarRelationFilter = {
@@ -96891,11 +98876,6 @@ export namespace Prisma {
     none?: RMQualityParameterWhereInput
   }
 
-  export type GRNbyPoNullableScalarRelationFilter = {
-    is?: GRNbyPoWhereInput | null
-    isNot?: GRNbyPoWhereInput | null
-  }
-
   export type RMQualityParameterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -97016,6 +98996,69 @@ export namespace Prisma {
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type GRNbyPoScalarRelationFilter = {
+    is?: GRNbyPoWhereInput
+    isNot?: GRNbyPoWhereInput
+  }
+
+  export type CleaningLotCountOrderByAggregateInput = {
+    id?: SortOrder
+    lotNumber?: SortOrder
+    cleaningJobId?: SortOrder
+    grnId?: SortOrder
+    rawMaterialId?: SortOrder
+    warehouseId?: SortOrder
+    quantity?: SortOrder
+    status?: SortOrder
+    leftoverQuantity?: SortOrder
+    reasonCode?: SortOrder
+    isReusable?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CleaningLotAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+    leftoverQuantity?: SortOrder
+  }
+
+  export type CleaningLotMaxOrderByAggregateInput = {
+    id?: SortOrder
+    lotNumber?: SortOrder
+    cleaningJobId?: SortOrder
+    grnId?: SortOrder
+    rawMaterialId?: SortOrder
+    warehouseId?: SortOrder
+    quantity?: SortOrder
+    status?: SortOrder
+    leftoverQuantity?: SortOrder
+    reasonCode?: SortOrder
+    isReusable?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CleaningLotMinOrderByAggregateInput = {
+    id?: SortOrder
+    lotNumber?: SortOrder
+    cleaningJobId?: SortOrder
+    grnId?: SortOrder
+    rawMaterialId?: SortOrder
+    warehouseId?: SortOrder
+    quantity?: SortOrder
+    status?: SortOrder
+    leftoverQuantity?: SortOrder
+    reasonCode?: SortOrder
+    isReusable?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type CleaningLotSumOrderByAggregateInput = {
+    quantity?: SortOrder
+    leftoverQuantity?: SortOrder
   }
 
   export type BatchCreateNestedOneWithoutActivityLogInput = {
@@ -102189,6 +104232,13 @@ export namespace Prisma {
     connect?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
   }
 
+  export type CleaningLotCreateNestedManyWithoutRawMaterialInput = {
+    create?: XOR<CleaningLotCreateWithoutRawMaterialInput, CleaningLotUncheckedCreateWithoutRawMaterialInput> | CleaningLotCreateWithoutRawMaterialInput[] | CleaningLotUncheckedCreateWithoutRawMaterialInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutRawMaterialInput | CleaningLotCreateOrConnectWithoutRawMaterialInput[]
+    createMany?: CleaningLotCreateManyRawMaterialInputEnvelope
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+  }
+
   export type CurrentStockCreateNestedManyWithoutRawMaterialInput = {
     create?: XOR<CurrentStockCreateWithoutRawMaterialInput, CurrentStockUncheckedCreateWithoutRawMaterialInput> | CurrentStockCreateWithoutRawMaterialInput[] | CurrentStockUncheckedCreateWithoutRawMaterialInput[]
     connectOrCreate?: CurrentStockCreateOrConnectWithoutRawMaterialInput | CurrentStockCreateOrConnectWithoutRawMaterialInput[]
@@ -102228,6 +104278,13 @@ export namespace Prisma {
     connectOrCreate?: CleaningJobCreateOrConnectWithoutRawMaterialInput | CleaningJobCreateOrConnectWithoutRawMaterialInput[]
     createMany?: CleaningJobCreateManyRawMaterialInputEnvelope
     connect?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+  }
+
+  export type CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput = {
+    create?: XOR<CleaningLotCreateWithoutRawMaterialInput, CleaningLotUncheckedCreateWithoutRawMaterialInput> | CleaningLotCreateWithoutRawMaterialInput[] | CleaningLotUncheckedCreateWithoutRawMaterialInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutRawMaterialInput | CleaningLotCreateOrConnectWithoutRawMaterialInput[]
+    createMany?: CleaningLotCreateManyRawMaterialInputEnvelope
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
   }
 
   export type CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput = {
@@ -102270,6 +104327,20 @@ export namespace Prisma {
     update?: CleaningJobUpdateWithWhereUniqueWithoutRawMaterialInput | CleaningJobUpdateWithWhereUniqueWithoutRawMaterialInput[]
     updateMany?: CleaningJobUpdateManyWithWhereWithoutRawMaterialInput | CleaningJobUpdateManyWithWhereWithoutRawMaterialInput[]
     deleteMany?: CleaningJobScalarWhereInput | CleaningJobScalarWhereInput[]
+  }
+
+  export type CleaningLotUpdateManyWithoutRawMaterialNestedInput = {
+    create?: XOR<CleaningLotCreateWithoutRawMaterialInput, CleaningLotUncheckedCreateWithoutRawMaterialInput> | CleaningLotCreateWithoutRawMaterialInput[] | CleaningLotUncheckedCreateWithoutRawMaterialInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutRawMaterialInput | CleaningLotCreateOrConnectWithoutRawMaterialInput[]
+    upsert?: CleaningLotUpsertWithWhereUniqueWithoutRawMaterialInput | CleaningLotUpsertWithWhereUniqueWithoutRawMaterialInput[]
+    createMany?: CleaningLotCreateManyRawMaterialInputEnvelope
+    set?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    disconnect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    delete?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    update?: CleaningLotUpdateWithWhereUniqueWithoutRawMaterialInput | CleaningLotUpdateWithWhereUniqueWithoutRawMaterialInput[]
+    updateMany?: CleaningLotUpdateManyWithWhereWithoutRawMaterialInput | CleaningLotUpdateManyWithWhereWithoutRawMaterialInput[]
+    deleteMany?: CleaningLotScalarWhereInput | CleaningLotScalarWhereInput[]
   }
 
   export type CurrentStockUpdateManyWithoutRawMaterialNestedInput = {
@@ -102350,6 +104421,20 @@ export namespace Prisma {
     update?: CleaningJobUpdateWithWhereUniqueWithoutRawMaterialInput | CleaningJobUpdateWithWhereUniqueWithoutRawMaterialInput[]
     updateMany?: CleaningJobUpdateManyWithWhereWithoutRawMaterialInput | CleaningJobUpdateManyWithWhereWithoutRawMaterialInput[]
     deleteMany?: CleaningJobScalarWhereInput | CleaningJobScalarWhereInput[]
+  }
+
+  export type CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput = {
+    create?: XOR<CleaningLotCreateWithoutRawMaterialInput, CleaningLotUncheckedCreateWithoutRawMaterialInput> | CleaningLotCreateWithoutRawMaterialInput[] | CleaningLotUncheckedCreateWithoutRawMaterialInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutRawMaterialInput | CleaningLotCreateOrConnectWithoutRawMaterialInput[]
+    upsert?: CleaningLotUpsertWithWhereUniqueWithoutRawMaterialInput | CleaningLotUpsertWithWhereUniqueWithoutRawMaterialInput[]
+    createMany?: CleaningLotCreateManyRawMaterialInputEnvelope
+    set?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    disconnect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    delete?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    update?: CleaningLotUpdateWithWhereUniqueWithoutRawMaterialInput | CleaningLotUpdateWithWhereUniqueWithoutRawMaterialInput[]
+    updateMany?: CleaningLotUpdateManyWithWhereWithoutRawMaterialInput | CleaningLotUpdateManyWithWhereWithoutRawMaterialInput[]
+    deleteMany?: CleaningLotScalarWhereInput | CleaningLotScalarWhereInput[]
   }
 
   export type CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput = {
@@ -102781,6 +104866,13 @@ export namespace Prisma {
     connect?: CleaningLogWhereUniqueInput | CleaningLogWhereUniqueInput[]
   }
 
+  export type CleaningLotCreateNestedManyWithoutWarehouseInput = {
+    create?: XOR<CleaningLotCreateWithoutWarehouseInput, CleaningLotUncheckedCreateWithoutWarehouseInput> | CleaningLotCreateWithoutWarehouseInput[] | CleaningLotUncheckedCreateWithoutWarehouseInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutWarehouseInput | CleaningLotCreateOrConnectWithoutWarehouseInput[]
+    createMany?: CleaningLotCreateManyWarehouseInputEnvelope
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+  }
+
   export type CurrentStockCreateNestedManyWithoutWarehouseInput = {
     create?: XOR<CurrentStockCreateWithoutWarehouseInput, CurrentStockUncheckedCreateWithoutWarehouseInput> | CurrentStockCreateWithoutWarehouseInput[] | CurrentStockUncheckedCreateWithoutWarehouseInput[]
     connectOrCreate?: CurrentStockCreateOrConnectWithoutWarehouseInput | CurrentStockCreateOrConnectWithoutWarehouseInput[]
@@ -102856,6 +104948,13 @@ export namespace Prisma {
     connectOrCreate?: CleaningLogCreateOrConnectWithoutToWarehouseInput | CleaningLogCreateOrConnectWithoutToWarehouseInput[]
     createMany?: CleaningLogCreateManyToWarehouseInputEnvelope
     connect?: CleaningLogWhereUniqueInput | CleaningLogWhereUniqueInput[]
+  }
+
+  export type CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput = {
+    create?: XOR<CleaningLotCreateWithoutWarehouseInput, CleaningLotUncheckedCreateWithoutWarehouseInput> | CleaningLotCreateWithoutWarehouseInput[] | CleaningLotUncheckedCreateWithoutWarehouseInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutWarehouseInput | CleaningLotCreateOrConnectWithoutWarehouseInput[]
+    createMany?: CleaningLotCreateManyWarehouseInputEnvelope
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
   }
 
   export type CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput = {
@@ -102968,6 +105067,20 @@ export namespace Prisma {
     update?: CleaningLogUpdateWithWhereUniqueWithoutToWarehouseInput | CleaningLogUpdateWithWhereUniqueWithoutToWarehouseInput[]
     updateMany?: CleaningLogUpdateManyWithWhereWithoutToWarehouseInput | CleaningLogUpdateManyWithWhereWithoutToWarehouseInput[]
     deleteMany?: CleaningLogScalarWhereInput | CleaningLogScalarWhereInput[]
+  }
+
+  export type CleaningLotUpdateManyWithoutWarehouseNestedInput = {
+    create?: XOR<CleaningLotCreateWithoutWarehouseInput, CleaningLotUncheckedCreateWithoutWarehouseInput> | CleaningLotCreateWithoutWarehouseInput[] | CleaningLotUncheckedCreateWithoutWarehouseInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutWarehouseInput | CleaningLotCreateOrConnectWithoutWarehouseInput[]
+    upsert?: CleaningLotUpsertWithWhereUniqueWithoutWarehouseInput | CleaningLotUpsertWithWhereUniqueWithoutWarehouseInput[]
+    createMany?: CleaningLotCreateManyWarehouseInputEnvelope
+    set?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    disconnect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    delete?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    update?: CleaningLotUpdateWithWhereUniqueWithoutWarehouseInput | CleaningLotUpdateWithWhereUniqueWithoutWarehouseInput[]
+    updateMany?: CleaningLotUpdateManyWithWhereWithoutWarehouseInput | CleaningLotUpdateManyWithWhereWithoutWarehouseInput[]
+    deleteMany?: CleaningLotScalarWhereInput | CleaningLotScalarWhereInput[]
   }
 
   export type CurrentStockUpdateManyWithoutWarehouseNestedInput = {
@@ -103124,6 +105237,20 @@ export namespace Prisma {
     deleteMany?: CleaningLogScalarWhereInput | CleaningLogScalarWhereInput[]
   }
 
+  export type CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput = {
+    create?: XOR<CleaningLotCreateWithoutWarehouseInput, CleaningLotUncheckedCreateWithoutWarehouseInput> | CleaningLotCreateWithoutWarehouseInput[] | CleaningLotUncheckedCreateWithoutWarehouseInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutWarehouseInput | CleaningLotCreateOrConnectWithoutWarehouseInput[]
+    upsert?: CleaningLotUpsertWithWhereUniqueWithoutWarehouseInput | CleaningLotUpsertWithWhereUniqueWithoutWarehouseInput[]
+    createMany?: CleaningLotCreateManyWarehouseInputEnvelope
+    set?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    disconnect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    delete?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    update?: CleaningLotUpdateWithWhereUniqueWithoutWarehouseInput | CleaningLotUpdateWithWhereUniqueWithoutWarehouseInput[]
+    updateMany?: CleaningLotUpdateManyWithWhereWithoutWarehouseInput | CleaningLotUpdateManyWithWhereWithoutWarehouseInput[]
+    deleteMany?: CleaningLotScalarWhereInput | CleaningLotScalarWhereInput[]
+  }
+
   export type CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput = {
     create?: XOR<CurrentStockCreateWithoutWarehouseInput, CurrentStockUncheckedCreateWithoutWarehouseInput> | CurrentStockCreateWithoutWarehouseInput[] | CurrentStockUncheckedCreateWithoutWarehouseInput[]
     connectOrCreate?: CurrentStockCreateOrConnectWithoutWarehouseInput | CurrentStockCreateOrConnectWithoutWarehouseInput[]
@@ -103226,6 +105353,12 @@ export namespace Prisma {
     connect?: WarehouseWhereUniqueInput
   }
 
+  export type GRNbyPoCreateNestedOneWithoutCleaningJobsInput = {
+    create?: XOR<GRNbyPoCreateWithoutCleaningJobsInput, GRNbyPoUncheckedCreateWithoutCleaningJobsInput>
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutCleaningJobsInput
+    connect?: GRNbyPoWhereUniqueInput
+  }
+
   export type CleaningLogCreateNestedManyWithoutCleaningJobInput = {
     create?: XOR<CleaningLogCreateWithoutCleaningJobInput, CleaningLogUncheckedCreateWithoutCleaningJobInput> | CleaningLogCreateWithoutCleaningJobInput[] | CleaningLogUncheckedCreateWithoutCleaningJobInput[]
     connectOrCreate?: CleaningLogCreateOrConnectWithoutCleaningJobInput | CleaningLogCreateOrConnectWithoutCleaningJobInput[]
@@ -103233,11 +105366,33 @@ export namespace Prisma {
     connect?: CleaningLogWhereUniqueInput | CleaningLogWhereUniqueInput[]
   }
 
+  export type CleaningLotCreateNestedManyWithoutCleaningJobInput = {
+    create?: XOR<CleaningLotCreateWithoutCleaningJobInput, CleaningLotUncheckedCreateWithoutCleaningJobInput> | CleaningLotCreateWithoutCleaningJobInput[] | CleaningLotUncheckedCreateWithoutCleaningJobInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutCleaningJobInput | CleaningLotCreateOrConnectWithoutCleaningJobInput[]
+    createMany?: CleaningLotCreateManyCleaningJobInputEnvelope
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+  }
+
   export type CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput = {
     create?: XOR<CleaningLogCreateWithoutCleaningJobInput, CleaningLogUncheckedCreateWithoutCleaningJobInput> | CleaningLogCreateWithoutCleaningJobInput[] | CleaningLogUncheckedCreateWithoutCleaningJobInput[]
     connectOrCreate?: CleaningLogCreateOrConnectWithoutCleaningJobInput | CleaningLogCreateOrConnectWithoutCleaningJobInput[]
     createMany?: CleaningLogCreateManyCleaningJobInputEnvelope
     connect?: CleaningLogWhereUniqueInput | CleaningLogWhereUniqueInput[]
+  }
+
+  export type CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput = {
+    create?: XOR<CleaningLotCreateWithoutCleaningJobInput, CleaningLotUncheckedCreateWithoutCleaningJobInput> | CleaningLotCreateWithoutCleaningJobInput[] | CleaningLotUncheckedCreateWithoutCleaningJobInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutCleaningJobInput | CleaningLotCreateOrConnectWithoutCleaningJobInput[]
+    createMany?: CleaningLotCreateManyCleaningJobInputEnvelope
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput = {
@@ -103264,6 +105419,16 @@ export namespace Prisma {
     update?: XOR<XOR<WarehouseUpdateToOneWithWhereWithoutCleaningJobsToInput, WarehouseUpdateWithoutCleaningJobsToInput>, WarehouseUncheckedUpdateWithoutCleaningJobsToInput>
   }
 
+  export type GRNbyPoUpdateOneWithoutCleaningJobsNestedInput = {
+    create?: XOR<GRNbyPoCreateWithoutCleaningJobsInput, GRNbyPoUncheckedCreateWithoutCleaningJobsInput>
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutCleaningJobsInput
+    upsert?: GRNbyPoUpsertWithoutCleaningJobsInput
+    disconnect?: GRNbyPoWhereInput | boolean
+    delete?: GRNbyPoWhereInput | boolean
+    connect?: GRNbyPoWhereUniqueInput
+    update?: XOR<XOR<GRNbyPoUpdateToOneWithWhereWithoutCleaningJobsInput, GRNbyPoUpdateWithoutCleaningJobsInput>, GRNbyPoUncheckedUpdateWithoutCleaningJobsInput>
+  }
+
   export type CleaningLogUpdateManyWithoutCleaningJobNestedInput = {
     create?: XOR<CleaningLogCreateWithoutCleaningJobInput, CleaningLogUncheckedCreateWithoutCleaningJobInput> | CleaningLogCreateWithoutCleaningJobInput[] | CleaningLogUncheckedCreateWithoutCleaningJobInput[]
     connectOrCreate?: CleaningLogCreateOrConnectWithoutCleaningJobInput | CleaningLogCreateOrConnectWithoutCleaningJobInput[]
@@ -103278,6 +105443,20 @@ export namespace Prisma {
     deleteMany?: CleaningLogScalarWhereInput | CleaningLogScalarWhereInput[]
   }
 
+  export type CleaningLotUpdateManyWithoutCleaningJobNestedInput = {
+    create?: XOR<CleaningLotCreateWithoutCleaningJobInput, CleaningLotUncheckedCreateWithoutCleaningJobInput> | CleaningLotCreateWithoutCleaningJobInput[] | CleaningLotUncheckedCreateWithoutCleaningJobInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutCleaningJobInput | CleaningLotCreateOrConnectWithoutCleaningJobInput[]
+    upsert?: CleaningLotUpsertWithWhereUniqueWithoutCleaningJobInput | CleaningLotUpsertWithWhereUniqueWithoutCleaningJobInput[]
+    createMany?: CleaningLotCreateManyCleaningJobInputEnvelope
+    set?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    disconnect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    delete?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    update?: CleaningLotUpdateWithWhereUniqueWithoutCleaningJobInput | CleaningLotUpdateWithWhereUniqueWithoutCleaningJobInput[]
+    updateMany?: CleaningLotUpdateManyWithWhereWithoutCleaningJobInput | CleaningLotUpdateManyWithWhereWithoutCleaningJobInput[]
+    deleteMany?: CleaningLotScalarWhereInput | CleaningLotScalarWhereInput[]
+  }
+
   export type CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput = {
     create?: XOR<CleaningLogCreateWithoutCleaningJobInput, CleaningLogUncheckedCreateWithoutCleaningJobInput> | CleaningLogCreateWithoutCleaningJobInput[] | CleaningLogUncheckedCreateWithoutCleaningJobInput[]
     connectOrCreate?: CleaningLogCreateOrConnectWithoutCleaningJobInput | CleaningLogCreateOrConnectWithoutCleaningJobInput[]
@@ -103290,6 +105469,20 @@ export namespace Prisma {
     update?: CleaningLogUpdateWithWhereUniqueWithoutCleaningJobInput | CleaningLogUpdateWithWhereUniqueWithoutCleaningJobInput[]
     updateMany?: CleaningLogUpdateManyWithWhereWithoutCleaningJobInput | CleaningLogUpdateManyWithWhereWithoutCleaningJobInput[]
     deleteMany?: CleaningLogScalarWhereInput | CleaningLogScalarWhereInput[]
+  }
+
+  export type CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput = {
+    create?: XOR<CleaningLotCreateWithoutCleaningJobInput, CleaningLotUncheckedCreateWithoutCleaningJobInput> | CleaningLotCreateWithoutCleaningJobInput[] | CleaningLotUncheckedCreateWithoutCleaningJobInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutCleaningJobInput | CleaningLotCreateOrConnectWithoutCleaningJobInput[]
+    upsert?: CleaningLotUpsertWithWhereUniqueWithoutCleaningJobInput | CleaningLotUpsertWithWhereUniqueWithoutCleaningJobInput[]
+    createMany?: CleaningLotCreateManyCleaningJobInputEnvelope
+    set?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    disconnect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    delete?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    update?: CleaningLotUpdateWithWhereUniqueWithoutCleaningJobInput | CleaningLotUpdateWithWhereUniqueWithoutCleaningJobInput[]
+    updateMany?: CleaningLotUpdateManyWithWhereWithoutCleaningJobInput | CleaningLotUpdateManyWithWhereWithoutCleaningJobInput[]
+    deleteMany?: CleaningLotScalarWhereInput | CleaningLotScalarWhereInput[]
   }
 
   export type CleaningJobCreateNestedOneWithoutCleaningLogsInput = {
@@ -103686,6 +105879,34 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type CleaningJobCreateNestedManyWithoutGrnInput = {
+    create?: XOR<CleaningJobCreateWithoutGrnInput, CleaningJobUncheckedCreateWithoutGrnInput> | CleaningJobCreateWithoutGrnInput[] | CleaningJobUncheckedCreateWithoutGrnInput[]
+    connectOrCreate?: CleaningJobCreateOrConnectWithoutGrnInput | CleaningJobCreateOrConnectWithoutGrnInput[]
+    createMany?: CleaningJobCreateManyGrnInputEnvelope
+    connect?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+  }
+
+  export type CleaningLotCreateNestedManyWithoutGrnInput = {
+    create?: XOR<CleaningLotCreateWithoutGrnInput, CleaningLotUncheckedCreateWithoutGrnInput> | CleaningLotCreateWithoutGrnInput[] | CleaningLotUncheckedCreateWithoutGrnInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutGrnInput | CleaningLotCreateOrConnectWithoutGrnInput[]
+    createMany?: CleaningLotCreateManyGrnInputEnvelope
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+  }
+
+  export type CleaningJobUncheckedCreateNestedManyWithoutGrnInput = {
+    create?: XOR<CleaningJobCreateWithoutGrnInput, CleaningJobUncheckedCreateWithoutGrnInput> | CleaningJobCreateWithoutGrnInput[] | CleaningJobUncheckedCreateWithoutGrnInput[]
+    connectOrCreate?: CleaningJobCreateOrConnectWithoutGrnInput | CleaningJobCreateOrConnectWithoutGrnInput[]
+    createMany?: CleaningJobCreateManyGrnInputEnvelope
+    connect?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+  }
+
+  export type CleaningLotUncheckedCreateNestedManyWithoutGrnInput = {
+    create?: XOR<CleaningLotCreateWithoutGrnInput, CleaningLotUncheckedCreateWithoutGrnInput> | CleaningLotCreateWithoutGrnInput[] | CleaningLotUncheckedCreateWithoutGrnInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutGrnInput | CleaningLotCreateOrConnectWithoutGrnInput[]
+    createMany?: CleaningLotCreateManyGrnInputEnvelope
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+  }
+
   export type PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput = {
     create?: XOR<PurchaseOrderCreateWithoutGrnsInput, PurchaseOrderUncheckedCreateWithoutGrnsInput>
     connectOrCreate?: PurchaseOrderCreateOrConnectWithoutGrnsInput
@@ -103718,6 +105939,118 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutCreatedGRNsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutCreatedGRNsInput, UserUpdateWithoutCreatedGRNsInput>, UserUncheckedUpdateWithoutCreatedGRNsInput>
+  }
+
+  export type CleaningJobUpdateManyWithoutGrnNestedInput = {
+    create?: XOR<CleaningJobCreateWithoutGrnInput, CleaningJobUncheckedCreateWithoutGrnInput> | CleaningJobCreateWithoutGrnInput[] | CleaningJobUncheckedCreateWithoutGrnInput[]
+    connectOrCreate?: CleaningJobCreateOrConnectWithoutGrnInput | CleaningJobCreateOrConnectWithoutGrnInput[]
+    upsert?: CleaningJobUpsertWithWhereUniqueWithoutGrnInput | CleaningJobUpsertWithWhereUniqueWithoutGrnInput[]
+    createMany?: CleaningJobCreateManyGrnInputEnvelope
+    set?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+    disconnect?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+    delete?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+    connect?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+    update?: CleaningJobUpdateWithWhereUniqueWithoutGrnInput | CleaningJobUpdateWithWhereUniqueWithoutGrnInput[]
+    updateMany?: CleaningJobUpdateManyWithWhereWithoutGrnInput | CleaningJobUpdateManyWithWhereWithoutGrnInput[]
+    deleteMany?: CleaningJobScalarWhereInput | CleaningJobScalarWhereInput[]
+  }
+
+  export type CleaningLotUpdateManyWithoutGrnNestedInput = {
+    create?: XOR<CleaningLotCreateWithoutGrnInput, CleaningLotUncheckedCreateWithoutGrnInput> | CleaningLotCreateWithoutGrnInput[] | CleaningLotUncheckedCreateWithoutGrnInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutGrnInput | CleaningLotCreateOrConnectWithoutGrnInput[]
+    upsert?: CleaningLotUpsertWithWhereUniqueWithoutGrnInput | CleaningLotUpsertWithWhereUniqueWithoutGrnInput[]
+    createMany?: CleaningLotCreateManyGrnInputEnvelope
+    set?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    disconnect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    delete?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    update?: CleaningLotUpdateWithWhereUniqueWithoutGrnInput | CleaningLotUpdateWithWhereUniqueWithoutGrnInput[]
+    updateMany?: CleaningLotUpdateManyWithWhereWithoutGrnInput | CleaningLotUpdateManyWithWhereWithoutGrnInput[]
+    deleteMany?: CleaningLotScalarWhereInput | CleaningLotScalarWhereInput[]
+  }
+
+  export type CleaningJobUncheckedUpdateManyWithoutGrnNestedInput = {
+    create?: XOR<CleaningJobCreateWithoutGrnInput, CleaningJobUncheckedCreateWithoutGrnInput> | CleaningJobCreateWithoutGrnInput[] | CleaningJobUncheckedCreateWithoutGrnInput[]
+    connectOrCreate?: CleaningJobCreateOrConnectWithoutGrnInput | CleaningJobCreateOrConnectWithoutGrnInput[]
+    upsert?: CleaningJobUpsertWithWhereUniqueWithoutGrnInput | CleaningJobUpsertWithWhereUniqueWithoutGrnInput[]
+    createMany?: CleaningJobCreateManyGrnInputEnvelope
+    set?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+    disconnect?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+    delete?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+    connect?: CleaningJobWhereUniqueInput | CleaningJobWhereUniqueInput[]
+    update?: CleaningJobUpdateWithWhereUniqueWithoutGrnInput | CleaningJobUpdateWithWhereUniqueWithoutGrnInput[]
+    updateMany?: CleaningJobUpdateManyWithWhereWithoutGrnInput | CleaningJobUpdateManyWithWhereWithoutGrnInput[]
+    deleteMany?: CleaningJobScalarWhereInput | CleaningJobScalarWhereInput[]
+  }
+
+  export type CleaningLotUncheckedUpdateManyWithoutGrnNestedInput = {
+    create?: XOR<CleaningLotCreateWithoutGrnInput, CleaningLotUncheckedCreateWithoutGrnInput> | CleaningLotCreateWithoutGrnInput[] | CleaningLotUncheckedCreateWithoutGrnInput[]
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutGrnInput | CleaningLotCreateOrConnectWithoutGrnInput[]
+    upsert?: CleaningLotUpsertWithWhereUniqueWithoutGrnInput | CleaningLotUpsertWithWhereUniqueWithoutGrnInput[]
+    createMany?: CleaningLotCreateManyGrnInputEnvelope
+    set?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    disconnect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    delete?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
+    update?: CleaningLotUpdateWithWhereUniqueWithoutGrnInput | CleaningLotUpdateWithWhereUniqueWithoutGrnInput[]
+    updateMany?: CleaningLotUpdateManyWithWhereWithoutGrnInput | CleaningLotUpdateManyWithWhereWithoutGrnInput[]
+    deleteMany?: CleaningLotScalarWhereInput | CleaningLotScalarWhereInput[]
+  }
+
+  export type CleaningJobCreateNestedOneWithoutCleaningLotsInput = {
+    create?: XOR<CleaningJobCreateWithoutCleaningLotsInput, CleaningJobUncheckedCreateWithoutCleaningLotsInput>
+    connectOrCreate?: CleaningJobCreateOrConnectWithoutCleaningLotsInput
+    connect?: CleaningJobWhereUniqueInput
+  }
+
+  export type GRNbyPoCreateNestedOneWithoutCleaningLotsInput = {
+    create?: XOR<GRNbyPoCreateWithoutCleaningLotsInput, GRNbyPoUncheckedCreateWithoutCleaningLotsInput>
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutCleaningLotsInput
+    connect?: GRNbyPoWhereUniqueInput
+  }
+
+  export type RawMaterialProductCreateNestedOneWithoutCleaningLotsInput = {
+    create?: XOR<RawMaterialProductCreateWithoutCleaningLotsInput, RawMaterialProductUncheckedCreateWithoutCleaningLotsInput>
+    connectOrCreate?: RawMaterialProductCreateOrConnectWithoutCleaningLotsInput
+    connect?: RawMaterialProductWhereUniqueInput
+  }
+
+  export type WarehouseCreateNestedOneWithoutCleaningLotsInput = {
+    create?: XOR<WarehouseCreateWithoutCleaningLotsInput, WarehouseUncheckedCreateWithoutCleaningLotsInput>
+    connectOrCreate?: WarehouseCreateOrConnectWithoutCleaningLotsInput
+    connect?: WarehouseWhereUniqueInput
+  }
+
+  export type CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput = {
+    create?: XOR<CleaningJobCreateWithoutCleaningLotsInput, CleaningJobUncheckedCreateWithoutCleaningLotsInput>
+    connectOrCreate?: CleaningJobCreateOrConnectWithoutCleaningLotsInput
+    upsert?: CleaningJobUpsertWithoutCleaningLotsInput
+    connect?: CleaningJobWhereUniqueInput
+    update?: XOR<XOR<CleaningJobUpdateToOneWithWhereWithoutCleaningLotsInput, CleaningJobUpdateWithoutCleaningLotsInput>, CleaningJobUncheckedUpdateWithoutCleaningLotsInput>
+  }
+
+  export type GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput = {
+    create?: XOR<GRNbyPoCreateWithoutCleaningLotsInput, GRNbyPoUncheckedCreateWithoutCleaningLotsInput>
+    connectOrCreate?: GRNbyPoCreateOrConnectWithoutCleaningLotsInput
+    upsert?: GRNbyPoUpsertWithoutCleaningLotsInput
+    connect?: GRNbyPoWhereUniqueInput
+    update?: XOR<XOR<GRNbyPoUpdateToOneWithWhereWithoutCleaningLotsInput, GRNbyPoUpdateWithoutCleaningLotsInput>, GRNbyPoUncheckedUpdateWithoutCleaningLotsInput>
+  }
+
+  export type RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput = {
+    create?: XOR<RawMaterialProductCreateWithoutCleaningLotsInput, RawMaterialProductUncheckedCreateWithoutCleaningLotsInput>
+    connectOrCreate?: RawMaterialProductCreateOrConnectWithoutCleaningLotsInput
+    upsert?: RawMaterialProductUpsertWithoutCleaningLotsInput
+    connect?: RawMaterialProductWhereUniqueInput
+    update?: XOR<XOR<RawMaterialProductUpdateToOneWithWhereWithoutCleaningLotsInput, RawMaterialProductUpdateWithoutCleaningLotsInput>, RawMaterialProductUncheckedUpdateWithoutCleaningLotsInput>
+  }
+
+  export type WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput = {
+    create?: XOR<WarehouseCreateWithoutCleaningLotsInput, WarehouseUncheckedCreateWithoutCleaningLotsInput>
+    connectOrCreate?: WarehouseCreateOrConnectWithoutCleaningLotsInput
+    upsert?: WarehouseUpsertWithoutCleaningLotsInput
+    connect?: WarehouseWhereUniqueInput
+    update?: XOR<XOR<WarehouseUpdateToOneWithWhereWithoutCleaningLotsInput, WarehouseUpdateWithoutCleaningLotsInput>, WarehouseUncheckedUpdateWithoutCleaningLotsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -104277,6 +106610,22 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumWeightModeFilter<$PrismaModel>
     _max?: NestedEnumWeightModeFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type BatchCreateWithoutActivityLogInput = {
@@ -107599,6 +109948,8 @@ export namespace Prisma {
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
     purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
     qualityReport?: RMQualityReportCreateNestedOneWithoutGrn_entryInput
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutGrnInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutGrnInput
   }
 
   export type GRNbyPoUncheckedCreateWithoutCreatedByInput = {
@@ -107612,6 +109963,8 @@ export namespace Prisma {
     qualityReportId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutGrnInput
   }
 
   export type GRNbyPoCreateOrConnectWithoutCreatedByInput = {
@@ -119916,6 +122269,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
@@ -119933,6 +122287,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
@@ -120017,9 +122372,14 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
+    grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
     cleaningLogs?: CleaningLogCreateNestedManyWithoutCleaningJobInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutCleaningJobInput
   }
 
   export type CleaningJobUncheckedCreateWithoutRawMaterialInput = {
@@ -120030,7 +122390,12 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    grnId?: string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
 
   export type CleaningJobCreateOrConnectWithoutRawMaterialInput = {
@@ -120040,6 +122405,46 @@ export namespace Prisma {
 
   export type CleaningJobCreateManyRawMaterialInputEnvelope = {
     data: CleaningJobCreateManyRawMaterialInput | CleaningJobCreateManyRawMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CleaningLotCreateWithoutRawMaterialInput = {
+    id?: string
+    lotNumber: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
+    grn: GRNbyPoCreateNestedOneWithoutCleaningLotsInput
+    warehouse: WarehouseCreateNestedOneWithoutCleaningLotsInput
+  }
+
+  export type CleaningLotUncheckedCreateWithoutRawMaterialInput = {
+    id?: string
+    lotNumber: string
+    cleaningJobId: string
+    grnId: string
+    warehouseId: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CleaningLotCreateOrConnectWithoutRawMaterialInput = {
+    where: CleaningLotWhereUniqueInput
+    create: XOR<CleaningLotCreateWithoutRawMaterialInput, CleaningLotUncheckedCreateWithoutRawMaterialInput>
+  }
+
+  export type CleaningLotCreateManyRawMaterialInputEnvelope = {
+    data: CleaningLotCreateManyRawMaterialInput | CleaningLotCreateManyRawMaterialInput[]
     skipDuplicates?: boolean
   }
 
@@ -120232,6 +122637,45 @@ export namespace Prisma {
     status?: StringFilter<"CleaningJob"> | string
     startedAt?: DateTimeFilter<"CleaningJob"> | Date | string
     finishedAt?: DateTimeNullableFilter<"CleaningJob"> | Date | string | null
+    grnId?: StringNullableFilter<"CleaningJob"> | string | null
+    leftoverQuantity?: FloatNullableFilter<"CleaningJob"> | number | null
+    reasonCode?: StringNullableFilter<"CleaningJob"> | string | null
+    isReusable?: BoolFilter<"CleaningJob"> | boolean
+  }
+
+  export type CleaningLotUpsertWithWhereUniqueWithoutRawMaterialInput = {
+    where: CleaningLotWhereUniqueInput
+    update: XOR<CleaningLotUpdateWithoutRawMaterialInput, CleaningLotUncheckedUpdateWithoutRawMaterialInput>
+    create: XOR<CleaningLotCreateWithoutRawMaterialInput, CleaningLotUncheckedCreateWithoutRawMaterialInput>
+  }
+
+  export type CleaningLotUpdateWithWhereUniqueWithoutRawMaterialInput = {
+    where: CleaningLotWhereUniqueInput
+    data: XOR<CleaningLotUpdateWithoutRawMaterialInput, CleaningLotUncheckedUpdateWithoutRawMaterialInput>
+  }
+
+  export type CleaningLotUpdateManyWithWhereWithoutRawMaterialInput = {
+    where: CleaningLotScalarWhereInput
+    data: XOR<CleaningLotUpdateManyMutationInput, CleaningLotUncheckedUpdateManyWithoutRawMaterialInput>
+  }
+
+  export type CleaningLotScalarWhereInput = {
+    AND?: CleaningLotScalarWhereInput | CleaningLotScalarWhereInput[]
+    OR?: CleaningLotScalarWhereInput[]
+    NOT?: CleaningLotScalarWhereInput | CleaningLotScalarWhereInput[]
+    id?: StringFilter<"CleaningLot"> | string
+    lotNumber?: StringFilter<"CleaningLot"> | string
+    cleaningJobId?: StringFilter<"CleaningLot"> | string
+    grnId?: StringFilter<"CleaningLot"> | string
+    rawMaterialId?: StringFilter<"CleaningLot"> | string
+    warehouseId?: StringFilter<"CleaningLot"> | string
+    quantity?: FloatFilter<"CleaningLot"> | number
+    status?: StringFilter<"CleaningLot"> | string
+    leftoverQuantity?: FloatNullableFilter<"CleaningLot"> | number | null
+    reasonCode?: StringNullableFilter<"CleaningLot"> | string | null
+    isReusable?: BoolFilter<"CleaningLot"> | boolean
+    createdAt?: DateTimeFilter<"CleaningLot"> | Date | string
+    updatedAt?: DateTimeFilter<"CleaningLot"> | Date | string
   }
 
   export type CurrentStockUpsertWithWhereUniqueWithoutRawMaterialInput = {
@@ -120478,6 +122922,8 @@ export namespace Prisma {
     purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
     qualityReport?: RMQualityReportCreateNestedOneWithoutGrn_entryInput
     createdBy: UserCreateNestedOneWithoutCreatedGRNsInput
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutGrnInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutGrnInput
   }
 
   export type GRNbyPoUncheckedCreateWithoutPurchaseOrderInput = {
@@ -120491,6 +122937,8 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutGrnInput
   }
 
   export type GRNbyPoCreateOrConnectWithoutPurchaseOrderInput = {
@@ -120620,6 +123068,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
@@ -120638,6 +123087,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     vendorId?: string | null
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
@@ -120689,6 +123139,8 @@ export namespace Prisma {
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
     qualityReport?: RMQualityReportCreateNestedOneWithoutGrn_entryInput
     createdBy: UserCreateNestedOneWithoutCreatedGRNsInput
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutGrnInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutGrnInput
   }
 
   export type GRNbyPoUncheckedCreateWithoutPurchaseOrderItemInput = {
@@ -120702,6 +123154,8 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutGrnInput
   }
 
   export type GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput = {
@@ -120771,6 +123225,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
@@ -120789,6 +123244,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vendorId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
@@ -120899,6 +123355,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     reusableStocks?: ReusableStockCreateNestedManyWithoutWarehouseInput
@@ -120917,6 +123374,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     reusableStocks?: ReusableStockUncheckedCreateNestedManyWithoutWarehouseInput
@@ -121010,6 +123468,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     reusableStocks?: ReusableStockUpdateManyWithoutWarehouseNestedInput
@@ -121028,6 +123487,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     reusableStocks?: ReusableStockUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -121102,6 +123562,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
@@ -121120,6 +123581,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     vendorId?: string | null
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
@@ -121141,6 +123603,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
@@ -121159,6 +123622,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
@@ -121193,6 +123657,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
@@ -121211,6 +123676,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vendorId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
@@ -121238,6 +123704,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
@@ -121256,6 +123723,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -121299,9 +123767,14 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
+    grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
     cleaningLogs?: CleaningLogCreateNestedManyWithoutCleaningJobInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutCleaningJobInput
   }
 
   export type CleaningJobUncheckedCreateWithoutFromWarehouseInput = {
@@ -121312,7 +123785,12 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    grnId?: string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
 
   export type CleaningJobCreateOrConnectWithoutFromWarehouseInput = {
@@ -121331,9 +123809,14 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
+    grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
     cleaningLogs?: CleaningLogCreateNestedManyWithoutCleaningJobInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutCleaningJobInput
   }
 
   export type CleaningJobUncheckedCreateWithoutToWarehouseInput = {
@@ -121344,7 +123827,12 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    grnId?: string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
 
   export type CleaningJobCreateOrConnectWithoutToWarehouseInput = {
@@ -121418,6 +123906,46 @@ export namespace Prisma {
 
   export type CleaningLogCreateManyToWarehouseInputEnvelope = {
     data: CleaningLogCreateManyToWarehouseInput | CleaningLogCreateManyToWarehouseInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CleaningLotCreateWithoutWarehouseInput = {
+    id?: string
+    lotNumber: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
+    grn: GRNbyPoCreateNestedOneWithoutCleaningLotsInput
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningLotsInput
+  }
+
+  export type CleaningLotUncheckedCreateWithoutWarehouseInput = {
+    id?: string
+    lotNumber: string
+    cleaningJobId: string
+    grnId: string
+    rawMaterialId: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CleaningLotCreateOrConnectWithoutWarehouseInput = {
+    where: CleaningLotWhereUniqueInput
+    create: XOR<CleaningLotCreateWithoutWarehouseInput, CleaningLotUncheckedCreateWithoutWarehouseInput>
+  }
+
+  export type CleaningLotCreateManyWarehouseInputEnvelope = {
+    data: CleaningLotCreateManyWarehouseInput | CleaningLotCreateManyWarehouseInput[]
     skipDuplicates?: boolean
   }
 
@@ -121712,6 +124240,22 @@ export namespace Prisma {
     data: XOR<CleaningLogUpdateManyMutationInput, CleaningLogUncheckedUpdateManyWithoutToWarehouseInput>
   }
 
+  export type CleaningLotUpsertWithWhereUniqueWithoutWarehouseInput = {
+    where: CleaningLotWhereUniqueInput
+    update: XOR<CleaningLotUpdateWithoutWarehouseInput, CleaningLotUncheckedUpdateWithoutWarehouseInput>
+    create: XOR<CleaningLotCreateWithoutWarehouseInput, CleaningLotUncheckedCreateWithoutWarehouseInput>
+  }
+
+  export type CleaningLotUpdateWithWhereUniqueWithoutWarehouseInput = {
+    where: CleaningLotWhereUniqueInput
+    data: XOR<CleaningLotUpdateWithoutWarehouseInput, CleaningLotUncheckedUpdateWithoutWarehouseInput>
+  }
+
+  export type CleaningLotUpdateManyWithWhereWithoutWarehouseInput = {
+    where: CleaningLotScalarWhereInput
+    data: XOR<CleaningLotUpdateManyMutationInput, CleaningLotUncheckedUpdateManyWithoutWarehouseInput>
+  }
+
   export type CurrentStockUpsertWithWhereUniqueWithoutWarehouseInput = {
     where: CurrentStockWhereUniqueInput
     update: XOR<CurrentStockUpdateWithoutWarehouseInput, CurrentStockUncheckedUpdateWithoutWarehouseInput>
@@ -121861,6 +124405,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
@@ -121879,6 +124424,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
@@ -121902,6 +124448,7 @@ export namespace Prisma {
     minReorderLevel: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
@@ -121920,6 +124467,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     vendorId?: string | null
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
@@ -121941,6 +124489,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
@@ -121959,6 +124508,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
@@ -121970,6 +124520,41 @@ export namespace Prisma {
   export type WarehouseCreateOrConnectWithoutCleaningJobsToInput = {
     where: WarehouseWhereUniqueInput
     create: XOR<WarehouseCreateWithoutCleaningJobsToInput, WarehouseUncheckedCreateWithoutCleaningJobsToInput>
+  }
+
+  export type GRNbyPoCreateWithoutCleaningJobsInput = {
+    id?: string
+    grnNumber: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
+    purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
+    qualityReport?: RMQualityReportCreateNestedOneWithoutGrn_entryInput
+    createdBy: UserCreateNestedOneWithoutCreatedGRNsInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutGrnInput
+  }
+
+  export type GRNbyPoUncheckedCreateWithoutCleaningJobsInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderId: string
+    purchaseOrderItemId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutGrnInput
+  }
+
+  export type GRNbyPoCreateOrConnectWithoutCleaningJobsInput = {
+    where: GRNbyPoWhereUniqueInput
+    create: XOR<GRNbyPoCreateWithoutCleaningJobsInput, GRNbyPoUncheckedCreateWithoutCleaningJobsInput>
   }
 
   export type CleaningLogCreateWithoutCleaningJobInput = {
@@ -122004,6 +124589,46 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type CleaningLotCreateWithoutCleaningJobInput = {
+    id?: string
+    lotNumber: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    grn: GRNbyPoCreateNestedOneWithoutCleaningLotsInput
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningLotsInput
+    warehouse: WarehouseCreateNestedOneWithoutCleaningLotsInput
+  }
+
+  export type CleaningLotUncheckedCreateWithoutCleaningJobInput = {
+    id?: string
+    lotNumber: string
+    grnId: string
+    rawMaterialId: string
+    warehouseId: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CleaningLotCreateOrConnectWithoutCleaningJobInput = {
+    where: CleaningLotWhereUniqueInput
+    create: XOR<CleaningLotCreateWithoutCleaningJobInput, CleaningLotUncheckedCreateWithoutCleaningJobInput>
+  }
+
+  export type CleaningLotCreateManyCleaningJobInputEnvelope = {
+    data: CleaningLotCreateManyCleaningJobInput | CleaningLotCreateManyCleaningJobInput[]
+    skipDuplicates?: boolean
+  }
+
   export type WarehouseUpsertWithoutCleaningJobsFromInput = {
     update: XOR<WarehouseUpdateWithoutCleaningJobsFromInput, WarehouseUncheckedUpdateWithoutCleaningJobsFromInput>
     create: XOR<WarehouseCreateWithoutCleaningJobsFromInput, WarehouseUncheckedCreateWithoutCleaningJobsFromInput>
@@ -122025,6 +124650,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
@@ -122043,6 +124669,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -122072,6 +124699,7 @@ export namespace Prisma {
     minReorderLevel?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
@@ -122090,6 +124718,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vendorId?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
@@ -122117,6 +124746,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
@@ -122135,12 +124765,54 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
     reusableStocks?: ReusableStockUncheckedUpdateManyWithoutWarehouseNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutWarehouseNestedInput
     unfinishedStocks?: UnfinishedStockUncheckedUpdateManyWithoutWarehouseNestedInput
+  }
+
+  export type GRNbyPoUpsertWithoutCleaningJobsInput = {
+    update: XOR<GRNbyPoUpdateWithoutCleaningJobsInput, GRNbyPoUncheckedUpdateWithoutCleaningJobsInput>
+    create: XOR<GRNbyPoCreateWithoutCleaningJobsInput, GRNbyPoUncheckedCreateWithoutCleaningJobsInput>
+    where?: GRNbyPoWhereInput
+  }
+
+  export type GRNbyPoUpdateToOneWithWhereWithoutCleaningJobsInput = {
+    where?: GRNbyPoWhereInput
+    data: XOR<GRNbyPoUpdateWithoutCleaningJobsInput, GRNbyPoUncheckedUpdateWithoutCleaningJobsInput>
+  }
+
+  export type GRNbyPoUpdateWithoutCleaningJobsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
+    purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
+    qualityReport?: RMQualityReportUpdateOneWithoutGrn_entryNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedGRNsNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutGrnNestedInput
+  }
+
+  export type GRNbyPoUncheckedUpdateWithoutCleaningJobsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutGrnNestedInput
   }
 
   export type CleaningLogUpsertWithWhereUniqueWithoutCleaningJobInput = {
@@ -122159,15 +124831,36 @@ export namespace Prisma {
     data: XOR<CleaningLogUpdateManyMutationInput, CleaningLogUncheckedUpdateManyWithoutCleaningJobInput>
   }
 
+  export type CleaningLotUpsertWithWhereUniqueWithoutCleaningJobInput = {
+    where: CleaningLotWhereUniqueInput
+    update: XOR<CleaningLotUpdateWithoutCleaningJobInput, CleaningLotUncheckedUpdateWithoutCleaningJobInput>
+    create: XOR<CleaningLotCreateWithoutCleaningJobInput, CleaningLotUncheckedCreateWithoutCleaningJobInput>
+  }
+
+  export type CleaningLotUpdateWithWhereUniqueWithoutCleaningJobInput = {
+    where: CleaningLotWhereUniqueInput
+    data: XOR<CleaningLotUpdateWithoutCleaningJobInput, CleaningLotUncheckedUpdateWithoutCleaningJobInput>
+  }
+
+  export type CleaningLotUpdateManyWithWhereWithoutCleaningJobInput = {
+    where: CleaningLotScalarWhereInput
+    data: XOR<CleaningLotUpdateManyMutationInput, CleaningLotUncheckedUpdateManyWithoutCleaningJobInput>
+  }
+
   export type CleaningJobCreateWithoutCleaningLogsInput = {
     id: string
     quantity: number
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
+    grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutCleaningJobInput
   }
 
   export type CleaningJobUncheckedCreateWithoutCleaningLogsInput = {
@@ -122179,6 +124872,11 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    grnId?: string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
 
   export type CleaningJobCreateOrConnectWithoutCleaningLogsInput = {
@@ -122196,6 +124894,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobCreateNestedManyWithoutFromWarehouseInput
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
@@ -122214,6 +124913,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
@@ -122237,6 +124937,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobCreateNestedManyWithoutFromWarehouseInput
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
@@ -122255,6 +124956,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
@@ -122285,9 +124987,14 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
+    grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutCleaningJobNestedInput
   }
 
   export type CleaningJobUncheckedUpdateWithoutCleaningLogsInput = {
@@ -122299,6 +125006,11 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grnId?: NullableStringFieldUpdateOperationsInput | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
 
   export type WarehouseUpsertWithoutCleaningLogsFromInput = {
@@ -122322,6 +125034,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobUpdateManyWithoutFromWarehouseNestedInput
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
@@ -122340,6 +125053,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -122369,6 +125083,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobUpdateManyWithoutFromWarehouseNestedInput
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
@@ -122387,6 +125102,7 @@ export namespace Prisma {
     cleaningJobsFrom?: CleaningJobUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -122406,6 +125122,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
@@ -122424,6 +125141,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
@@ -122458,6 +125176,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
@@ -122476,6 +125195,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -122558,6 +125278,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
@@ -122576,6 +125297,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     vendorId?: string | null
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
@@ -122640,6 +125362,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
@@ -122658,6 +125381,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vendorId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
@@ -122699,6 +125423,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
     reusableStocks?: ReusableStockCreateNestedManyWithoutWarehouseInput
@@ -122717,6 +125442,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
     reusableStocks?: ReusableStockUncheckedCreateNestedManyWithoutWarehouseInput
@@ -122782,6 +125508,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
     reusableStocks?: ReusableStockUpdateManyWithoutWarehouseNestedInput
@@ -122800,6 +125527,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
     reusableStocks?: ReusableStockUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -122842,6 +125570,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
@@ -122860,6 +125589,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
@@ -122925,6 +125655,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
@@ -122943,6 +125674,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -122962,6 +125694,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
@@ -122980,6 +125713,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     vendorId?: string | null
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
@@ -123001,6 +125735,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
     reusableStocks?: ReusableStockCreateNestedManyWithoutWarehouseInput
@@ -123019,6 +125754,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
     reusableStocks?: ReusableStockUncheckedCreateNestedManyWithoutWarehouseInput
@@ -123053,6 +125789,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
@@ -123071,6 +125808,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vendorId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
@@ -123098,6 +125836,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
     reusableStocks?: ReusableStockUpdateManyWithoutWarehouseNestedInput
@@ -123116,6 +125855,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
     reusableStocks?: ReusableStockUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -123322,6 +126062,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
@@ -123340,6 +126081,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
     cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
     cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutWarehouseInput
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
     finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
     receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
@@ -123374,6 +126116,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
@@ -123392,6 +126135,7 @@ export namespace Prisma {
     cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
     cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
     cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutWarehouseNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
     finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
     receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
@@ -123529,6 +126273,8 @@ export namespace Prisma {
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
     purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
     createdBy: UserCreateNestedOneWithoutCreatedGRNsInput
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutGrnInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutGrnInput
   }
 
   export type GRNbyPoUncheckedCreateWithoutQualityReportInput = {
@@ -123542,6 +126288,8 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutGrnInput
   }
 
   export type GRNbyPoCreateOrConnectWithoutQualityReportInput = {
@@ -123697,6 +126445,8 @@ export namespace Prisma {
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
     purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedGRNsNestedInput
+    cleaningJobs?: CleaningJobUpdateManyWithoutGrnNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutGrnNestedInput
   }
 
   export type GRNbyPoUncheckedUpdateWithoutQualityReportInput = {
@@ -123710,6 +126460,8 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutGrnNestedInput
   }
 
   export type RMQualityReportCreateWithoutParametersInput = {
@@ -123958,6 +126710,88 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutCreatedGRNsInput, UserUncheckedCreateWithoutCreatedGRNsInput>
   }
 
+  export type CleaningJobCreateWithoutGrnInput = {
+    id: string
+    quantity: number
+    status: string
+    startedAt: Date | string
+    finishedAt?: Date | string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
+    toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
+    cleaningLogs?: CleaningLogCreateNestedManyWithoutCleaningJobInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutCleaningJobInput
+  }
+
+  export type CleaningJobUncheckedCreateWithoutGrnInput = {
+    id: string
+    rawMaterialId: string
+    fromWarehouseId: string
+    toWarehouseId: string
+    quantity: number
+    status: string
+    startedAt: Date | string
+    finishedAt?: Date | string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
+  }
+
+  export type CleaningJobCreateOrConnectWithoutGrnInput = {
+    where: CleaningJobWhereUniqueInput
+    create: XOR<CleaningJobCreateWithoutGrnInput, CleaningJobUncheckedCreateWithoutGrnInput>
+  }
+
+  export type CleaningJobCreateManyGrnInputEnvelope = {
+    data: CleaningJobCreateManyGrnInput | CleaningJobCreateManyGrnInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CleaningLotCreateWithoutGrnInput = {
+    id?: string
+    lotNumber: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningLotsInput
+    warehouse: WarehouseCreateNestedOneWithoutCleaningLotsInput
+  }
+
+  export type CleaningLotUncheckedCreateWithoutGrnInput = {
+    id?: string
+    lotNumber: string
+    cleaningJobId: string
+    rawMaterialId: string
+    warehouseId: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CleaningLotCreateOrConnectWithoutGrnInput = {
+    where: CleaningLotWhereUniqueInput
+    create: XOR<CleaningLotCreateWithoutGrnInput, CleaningLotUncheckedCreateWithoutGrnInput>
+  }
+
+  export type CleaningLotCreateManyGrnInputEnvelope = {
+    data: CleaningLotCreateManyGrnInput | CleaningLotCreateManyGrnInput[]
+    skipDuplicates?: boolean
+  }
+
   export type PurchaseOrderUpsertWithoutGrnsInput = {
     update: XOR<PurchaseOrderUpdateWithoutGrnsInput, PurchaseOrderUncheckedUpdateWithoutGrnsInput>
     create: XOR<PurchaseOrderCreateWithoutGrnsInput, PurchaseOrderUncheckedCreateWithoutGrnsInput>
@@ -124158,6 +126992,374 @@ export namespace Prisma {
     uploadedPhotos?: TrainingPhotoUncheckedUpdateManyWithoutUploadedByNestedInput
     uploadedSessionPhotos?: TrainingSessionPhotoUncheckedUpdateManyWithoutUploadedByNestedInput
     transactionLogs?: TransactionLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type CleaningJobUpsertWithWhereUniqueWithoutGrnInput = {
+    where: CleaningJobWhereUniqueInput
+    update: XOR<CleaningJobUpdateWithoutGrnInput, CleaningJobUncheckedUpdateWithoutGrnInput>
+    create: XOR<CleaningJobCreateWithoutGrnInput, CleaningJobUncheckedCreateWithoutGrnInput>
+  }
+
+  export type CleaningJobUpdateWithWhereUniqueWithoutGrnInput = {
+    where: CleaningJobWhereUniqueInput
+    data: XOR<CleaningJobUpdateWithoutGrnInput, CleaningJobUncheckedUpdateWithoutGrnInput>
+  }
+
+  export type CleaningJobUpdateManyWithWhereWithoutGrnInput = {
+    where: CleaningJobScalarWhereInput
+    data: XOR<CleaningJobUpdateManyMutationInput, CleaningJobUncheckedUpdateManyWithoutGrnInput>
+  }
+
+  export type CleaningLotUpsertWithWhereUniqueWithoutGrnInput = {
+    where: CleaningLotWhereUniqueInput
+    update: XOR<CleaningLotUpdateWithoutGrnInput, CleaningLotUncheckedUpdateWithoutGrnInput>
+    create: XOR<CleaningLotCreateWithoutGrnInput, CleaningLotUncheckedCreateWithoutGrnInput>
+  }
+
+  export type CleaningLotUpdateWithWhereUniqueWithoutGrnInput = {
+    where: CleaningLotWhereUniqueInput
+    data: XOR<CleaningLotUpdateWithoutGrnInput, CleaningLotUncheckedUpdateWithoutGrnInput>
+  }
+
+  export type CleaningLotUpdateManyWithWhereWithoutGrnInput = {
+    where: CleaningLotScalarWhereInput
+    data: XOR<CleaningLotUpdateManyMutationInput, CleaningLotUncheckedUpdateManyWithoutGrnInput>
+  }
+
+  export type CleaningJobCreateWithoutCleaningLotsInput = {
+    id: string
+    quantity: number
+    status: string
+    startedAt: Date | string
+    finishedAt?: Date | string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
+    toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
+    grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
+    cleaningLogs?: CleaningLogCreateNestedManyWithoutCleaningJobInput
+  }
+
+  export type CleaningJobUncheckedCreateWithoutCleaningLotsInput = {
+    id: string
+    rawMaterialId: string
+    fromWarehouseId: string
+    toWarehouseId: string
+    quantity: number
+    status: string
+    startedAt: Date | string
+    finishedAt?: Date | string | null
+    grnId?: string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
+  }
+
+  export type CleaningJobCreateOrConnectWithoutCleaningLotsInput = {
+    where: CleaningJobWhereUniqueInput
+    create: XOR<CleaningJobCreateWithoutCleaningLotsInput, CleaningJobUncheckedCreateWithoutCleaningLotsInput>
+  }
+
+  export type GRNbyPoCreateWithoutCleaningLotsInput = {
+    id?: string
+    grnNumber: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
+    purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
+    qualityReport?: RMQualityReportCreateNestedOneWithoutGrn_entryInput
+    createdBy: UserCreateNestedOneWithoutCreatedGRNsInput
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutGrnInput
+  }
+
+  export type GRNbyPoUncheckedCreateWithoutCleaningLotsInput = {
+    id?: string
+    grnNumber: string
+    purchaseOrderId: string
+    purchaseOrderItemId: string
+    rawMaterialName: string
+    variety: string
+    supplier: string
+    qualityReportId?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
+  }
+
+  export type GRNbyPoCreateOrConnectWithoutCleaningLotsInput = {
+    where: GRNbyPoWhereUniqueInput
+    create: XOR<GRNbyPoCreateWithoutCleaningLotsInput, GRNbyPoUncheckedCreateWithoutCleaningLotsInput>
+  }
+
+  export type RawMaterialProductCreateWithoutCleaningLotsInput = {
+    id?: string
+    skuCode: string
+    name: string
+    category: string
+    variety?: string | null
+    unitOfMeasurement: string
+    minReorderLevel: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
+    processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
+    vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
+    stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+  }
+
+  export type RawMaterialProductUncheckedCreateWithoutCleaningLotsInput = {
+    id?: string
+    skuCode: string
+    name: string
+    category: string
+    variety?: string | null
+    unitOfMeasurement: string
+    minReorderLevel: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    vendorId?: string | null
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
+    processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+  }
+
+  export type RawMaterialProductCreateOrConnectWithoutCleaningLotsInput = {
+    where: RawMaterialProductWhereUniqueInput
+    create: XOR<RawMaterialProductCreateWithoutCleaningLotsInput, RawMaterialProductUncheckedCreateWithoutCleaningLotsInput>
+  }
+
+  export type WarehouseCreateWithoutCleaningLotsInput = {
+    id?: string
+    name: string
+    location: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    byProducts?: ByProductCreateNestedManyWithoutWarehouseInput
+    cleaningJobsFrom?: CleaningJobCreateNestedManyWithoutFromWarehouseInput
+    cleaningJobsTo?: CleaningJobCreateNestedManyWithoutToWarehouseInput
+    cleaningLogsFrom?: CleaningLogCreateNestedManyWithoutFromWarehouseInput
+    cleaningLogsTo?: CleaningLogCreateNestedManyWithoutToWarehouseInput
+    currentStocks?: CurrentStockCreateNestedManyWithoutWarehouseInput
+    finishedGoods?: FinishedGoodCreateNestedManyWithoutWarehouseInput
+    receivalEntries?: ReceivalEntryCreateNestedManyWithoutWarehouseInput
+    reusableStocks?: ReusableStockCreateNestedManyWithoutWarehouseInput
+    stockEntries?: StockEntryCreateNestedManyWithoutWarehouseInput
+    unfinishedStocks?: UnfinishedStockCreateNestedManyWithoutWarehouseInput
+  }
+
+  export type WarehouseUncheckedCreateWithoutCleaningLotsInput = {
+    id?: string
+    name: string
+    location: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    byProducts?: ByProductUncheckedCreateNestedManyWithoutWarehouseInput
+    cleaningJobsFrom?: CleaningJobUncheckedCreateNestedManyWithoutFromWarehouseInput
+    cleaningJobsTo?: CleaningJobUncheckedCreateNestedManyWithoutToWarehouseInput
+    cleaningLogsFrom?: CleaningLogUncheckedCreateNestedManyWithoutFromWarehouseInput
+    cleaningLogsTo?: CleaningLogUncheckedCreateNestedManyWithoutToWarehouseInput
+    currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutWarehouseInput
+    finishedGoods?: FinishedGoodUncheckedCreateNestedManyWithoutWarehouseInput
+    receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutWarehouseInput
+    reusableStocks?: ReusableStockUncheckedCreateNestedManyWithoutWarehouseInput
+    stockEntries?: StockEntryUncheckedCreateNestedManyWithoutWarehouseInput
+    unfinishedStocks?: UnfinishedStockUncheckedCreateNestedManyWithoutWarehouseInput
+  }
+
+  export type WarehouseCreateOrConnectWithoutCleaningLotsInput = {
+    where: WarehouseWhereUniqueInput
+    create: XOR<WarehouseCreateWithoutCleaningLotsInput, WarehouseUncheckedCreateWithoutCleaningLotsInput>
+  }
+
+  export type CleaningJobUpsertWithoutCleaningLotsInput = {
+    update: XOR<CleaningJobUpdateWithoutCleaningLotsInput, CleaningJobUncheckedUpdateWithoutCleaningLotsInput>
+    create: XOR<CleaningJobCreateWithoutCleaningLotsInput, CleaningJobUncheckedCreateWithoutCleaningLotsInput>
+    where?: CleaningJobWhereInput
+  }
+
+  export type CleaningJobUpdateToOneWithWhereWithoutCleaningLotsInput = {
+    where?: CleaningJobWhereInput
+    data: XOR<CleaningJobUpdateWithoutCleaningLotsInput, CleaningJobUncheckedUpdateWithoutCleaningLotsInput>
+  }
+
+  export type CleaningJobUpdateWithoutCleaningLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
+    toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
+    grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
+    cleaningLogs?: CleaningLogUpdateManyWithoutCleaningJobNestedInput
+  }
+
+  export type CleaningJobUncheckedUpdateWithoutCleaningLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    fromWarehouseId?: StringFieldUpdateOperationsInput | string
+    toWarehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grnId?: NullableStringFieldUpdateOperationsInput | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
+  }
+
+  export type GRNbyPoUpsertWithoutCleaningLotsInput = {
+    update: XOR<GRNbyPoUpdateWithoutCleaningLotsInput, GRNbyPoUncheckedUpdateWithoutCleaningLotsInput>
+    create: XOR<GRNbyPoCreateWithoutCleaningLotsInput, GRNbyPoUncheckedCreateWithoutCleaningLotsInput>
+    where?: GRNbyPoWhereInput
+  }
+
+  export type GRNbyPoUpdateToOneWithWhereWithoutCleaningLotsInput = {
+    where?: GRNbyPoWhereInput
+    data: XOR<GRNbyPoUpdateWithoutCleaningLotsInput, GRNbyPoUncheckedUpdateWithoutCleaningLotsInput>
+  }
+
+  export type GRNbyPoUpdateWithoutCleaningLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
+    purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
+    qualityReport?: RMQualityReportUpdateOneWithoutGrn_entryNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutCreatedGRNsNestedInput
+    cleaningJobs?: CleaningJobUpdateManyWithoutGrnNestedInput
+  }
+
+  export type GRNbyPoUncheckedUpdateWithoutCleaningLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: StringFieldUpdateOperationsInput | string
+    variety?: StringFieldUpdateOperationsInput | string
+    supplier?: StringFieldUpdateOperationsInput | string
+    qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
+  }
+
+  export type RawMaterialProductUpsertWithoutCleaningLotsInput = {
+    update: XOR<RawMaterialProductUpdateWithoutCleaningLotsInput, RawMaterialProductUncheckedUpdateWithoutCleaningLotsInput>
+    create: XOR<RawMaterialProductCreateWithoutCleaningLotsInput, RawMaterialProductUncheckedCreateWithoutCleaningLotsInput>
+    where?: RawMaterialProductWhereInput
+  }
+
+  export type RawMaterialProductUpdateToOneWithWhereWithoutCleaningLotsInput = {
+    where?: RawMaterialProductWhereInput
+    data: XOR<RawMaterialProductUpdateWithoutCleaningLotsInput, RawMaterialProductUncheckedUpdateWithoutCleaningLotsInput>
+  }
+
+  export type RawMaterialProductUpdateWithoutCleaningLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    minReorderLevel?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
+    processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
+    vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
+    stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+  }
+
+  export type RawMaterialProductUncheckedUpdateWithoutCleaningLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    minReorderLevel?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vendorId?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
+    processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+  }
+
+  export type WarehouseUpsertWithoutCleaningLotsInput = {
+    update: XOR<WarehouseUpdateWithoutCleaningLotsInput, WarehouseUncheckedUpdateWithoutCleaningLotsInput>
+    create: XOR<WarehouseCreateWithoutCleaningLotsInput, WarehouseUncheckedCreateWithoutCleaningLotsInput>
+    where?: WarehouseWhereInput
+  }
+
+  export type WarehouseUpdateToOneWithWhereWithoutCleaningLotsInput = {
+    where?: WarehouseWhereInput
+    data: XOR<WarehouseUpdateWithoutCleaningLotsInput, WarehouseUncheckedUpdateWithoutCleaningLotsInput>
+  }
+
+  export type WarehouseUpdateWithoutCleaningLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    byProducts?: ByProductUpdateManyWithoutWarehouseNestedInput
+    cleaningJobsFrom?: CleaningJobUpdateManyWithoutFromWarehouseNestedInput
+    cleaningJobsTo?: CleaningJobUpdateManyWithoutToWarehouseNestedInput
+    cleaningLogsFrom?: CleaningLogUpdateManyWithoutFromWarehouseNestedInput
+    cleaningLogsTo?: CleaningLogUpdateManyWithoutToWarehouseNestedInput
+    currentStocks?: CurrentStockUpdateManyWithoutWarehouseNestedInput
+    finishedGoods?: FinishedGoodUpdateManyWithoutWarehouseNestedInput
+    receivalEntries?: ReceivalEntryUpdateManyWithoutWarehouseNestedInput
+    reusableStocks?: ReusableStockUpdateManyWithoutWarehouseNestedInput
+    stockEntries?: StockEntryUpdateManyWithoutWarehouseNestedInput
+    unfinishedStocks?: UnfinishedStockUpdateManyWithoutWarehouseNestedInput
+  }
+
+  export type WarehouseUncheckedUpdateWithoutCleaningLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    byProducts?: ByProductUncheckedUpdateManyWithoutWarehouseNestedInput
+    cleaningJobsFrom?: CleaningJobUncheckedUpdateManyWithoutFromWarehouseNestedInput
+    cleaningJobsTo?: CleaningJobUncheckedUpdateManyWithoutToWarehouseNestedInput
+    cleaningLogsFrom?: CleaningLogUncheckedUpdateManyWithoutFromWarehouseNestedInput
+    cleaningLogsTo?: CleaningLogUncheckedUpdateManyWithoutToWarehouseNestedInput
+    currentStocks?: CurrentStockUncheckedUpdateManyWithoutWarehouseNestedInput
+    finishedGoods?: FinishedGoodUncheckedUpdateManyWithoutWarehouseNestedInput
+    receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutWarehouseNestedInput
+    reusableStocks?: ReusableStockUncheckedUpdateManyWithoutWarehouseNestedInput
+    stockEntries?: StockEntryUncheckedUpdateManyWithoutWarehouseNestedInput
+    unfinishedStocks?: UnfinishedStockUncheckedUpdateManyWithoutWarehouseNestedInput
   }
 
   export type ActivityLogCreateManyBatchInput = {
@@ -126495,6 +129697,8 @@ export namespace Prisma {
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
     purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
     qualityReport?: RMQualityReportUpdateOneWithoutGrn_entryNestedInput
+    cleaningJobs?: CleaningJobUpdateManyWithoutGrnNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutGrnNestedInput
   }
 
   export type GRNbyPoUncheckedUpdateWithoutCreatedByInput = {
@@ -126508,6 +129712,8 @@ export namespace Prisma {
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutGrnNestedInput
   }
 
   export type GRNbyPoUncheckedUpdateManyWithoutCreatedByInput = {
@@ -129015,6 +132221,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
@@ -129032,6 +132239,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
@@ -129058,6 +132266,25 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    grnId?: string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+  }
+
+  export type CleaningLotCreateManyRawMaterialInput = {
+    id?: string
+    lotNumber: string
+    cleaningJobId: string
+    grnId: string
+    warehouseId: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CurrentStockCreateManyRawMaterialInput = {
@@ -129103,9 +132330,14 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
+    grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
     cleaningLogs?: CleaningLogUpdateManyWithoutCleaningJobNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutCleaningJobNestedInput
   }
 
   export type CleaningJobUncheckedUpdateWithoutRawMaterialInput = {
@@ -129116,7 +132348,12 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grnId?: NullableStringFieldUpdateOperationsInput | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
 
   export type CleaningJobUncheckedUpdateManyWithoutRawMaterialInput = {
@@ -129127,6 +132364,55 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grnId?: NullableStringFieldUpdateOperationsInput | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type CleaningLotUpdateWithoutRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
+    grn?: GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput
+    warehouse?: WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput
+  }
+
+  export type CleaningLotUncheckedUpdateWithoutRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    cleaningJobId?: StringFieldUpdateOperationsInput | string
+    grnId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CleaningLotUncheckedUpdateManyWithoutRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    cleaningJobId?: StringFieldUpdateOperationsInput | string
+    grnId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CurrentStockUpdateWithoutRawMaterialInput = {
@@ -129312,6 +132598,8 @@ export namespace Prisma {
     purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
     qualityReport?: RMQualityReportUpdateOneWithoutGrn_entryNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedGRNsNestedInput
+    cleaningJobs?: CleaningJobUpdateManyWithoutGrnNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutGrnNestedInput
   }
 
   export type GRNbyPoUncheckedUpdateWithoutPurchaseOrderInput = {
@@ -129325,6 +132613,8 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutGrnNestedInput
   }
 
   export type GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderInput = {
@@ -129402,6 +132692,8 @@ export namespace Prisma {
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
     qualityReport?: RMQualityReportUpdateOneWithoutGrn_entryNestedInput
     createdBy?: UserUpdateOneRequiredWithoutCreatedGRNsNestedInput
+    cleaningJobs?: CleaningJobUpdateManyWithoutGrnNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutGrnNestedInput
   }
 
   export type GRNbyPoUncheckedUpdateWithoutPurchaseOrderItemInput = {
@@ -129415,6 +132707,8 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutGrnNestedInput
   }
 
   export type GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderItemInput = {
@@ -129472,6 +132766,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    grnId?: string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
   }
 
   export type CleaningJobCreateManyToWarehouseInput = {
@@ -129482,6 +132780,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
+    grnId?: string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
   }
 
   export type CleaningLogCreateManyFromWarehouseInput = {
@@ -129504,6 +132806,21 @@ export namespace Prisma {
     quantity: number
     status: string
     fromWarehouseId: string
+  }
+
+  export type CleaningLotCreateManyWarehouseInput = {
+    id?: string
+    lotNumber: string
+    cleaningJobId: string
+    grnId: string
+    rawMaterialId: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CurrentStockCreateManyWarehouseInput = {
@@ -129602,9 +132919,14 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
+    grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
     cleaningLogs?: CleaningLogUpdateManyWithoutCleaningJobNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutCleaningJobNestedInput
   }
 
   export type CleaningJobUncheckedUpdateWithoutFromWarehouseInput = {
@@ -129615,7 +132937,12 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grnId?: NullableStringFieldUpdateOperationsInput | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
 
   export type CleaningJobUncheckedUpdateManyWithoutFromWarehouseInput = {
@@ -129626,6 +132953,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grnId?: NullableStringFieldUpdateOperationsInput | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type CleaningJobUpdateWithoutToWarehouseInput = {
@@ -129634,9 +132965,14 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
+    grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
     cleaningLogs?: CleaningLogUpdateManyWithoutCleaningJobNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutCleaningJobNestedInput
   }
 
   export type CleaningJobUncheckedUpdateWithoutToWarehouseInput = {
@@ -129647,7 +132983,12 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grnId?: NullableStringFieldUpdateOperationsInput | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
 
   export type CleaningJobUncheckedUpdateManyWithoutToWarehouseInput = {
@@ -129658,6 +132999,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    grnId?: NullableStringFieldUpdateOperationsInput | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type CleaningLogUpdateWithoutFromWarehouseInput = {
@@ -129724,6 +133069,51 @@ export namespace Prisma {
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     fromWarehouseId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CleaningLotUpdateWithoutWarehouseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
+    grn?: GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput
+  }
+
+  export type CleaningLotUncheckedUpdateWithoutWarehouseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    cleaningJobId?: StringFieldUpdateOperationsInput | string
+    grnId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CleaningLotUncheckedUpdateManyWithoutWarehouseInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    cleaningJobId?: StringFieldUpdateOperationsInput | string
+    grnId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CurrentStockUpdateWithoutWarehouseInput = {
@@ -129919,6 +133309,21 @@ export namespace Prisma {
     toWarehouseId: string
   }
 
+  export type CleaningLotCreateManyCleaningJobInput = {
+    id?: string
+    lotNumber: string
+    grnId: string
+    rawMaterialId: string
+    warehouseId: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type CleaningLogUpdateWithoutCleaningJobInput = {
     id?: StringFieldUpdateOperationsInput | string
     from?: StringFieldUpdateOperationsInput | string
@@ -129950,6 +133355,51 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     fromWarehouseId?: StringFieldUpdateOperationsInput | string
     toWarehouseId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type CleaningLotUpdateWithoutCleaningJobInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    grn?: GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput
+    warehouse?: WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput
+  }
+
+  export type CleaningLotUncheckedUpdateWithoutCleaningJobInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    grnId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CleaningLotUncheckedUpdateManyWithoutCleaningJobInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    grnId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ByProductCreateManyProcessingJobInput = {
@@ -130072,6 +133522,126 @@ export namespace Prisma {
     parameter?: StringFieldUpdateOperationsInput | string
     standard?: StringFieldUpdateOperationsInput | string
     result?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CleaningJobCreateManyGrnInput = {
+    id: string
+    rawMaterialId: string
+    fromWarehouseId: string
+    toWarehouseId: string
+    quantity: number
+    status: string
+    startedAt: Date | string
+    finishedAt?: Date | string | null
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+  }
+
+  export type CleaningLotCreateManyGrnInput = {
+    id?: string
+    lotNumber: string
+    cleaningJobId: string
+    rawMaterialId: string
+    warehouseId: string
+    quantity: number
+    status?: string
+    leftoverQuantity?: number | null
+    reasonCode?: string | null
+    isReusable?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type CleaningJobUpdateWithoutGrnInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
+    toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
+    cleaningLogs?: CleaningLogUpdateManyWithoutCleaningJobNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutCleaningJobNestedInput
+  }
+
+  export type CleaningJobUncheckedUpdateWithoutGrnInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    fromWarehouseId?: StringFieldUpdateOperationsInput | string
+    toWarehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
+  }
+
+  export type CleaningJobUncheckedUpdateManyWithoutGrnInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    fromWarehouseId?: StringFieldUpdateOperationsInput | string
+    toWarehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type CleaningLotUpdateWithoutGrnInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput
+    warehouse?: WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput
+  }
+
+  export type CleaningLotUncheckedUpdateWithoutGrnInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    cleaningJobId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CleaningLotUncheckedUpdateManyWithoutGrnInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    cleaningJobId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
+    isReusable?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

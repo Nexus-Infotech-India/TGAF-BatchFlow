@@ -340,6 +340,13 @@ export const API_ROUTES = {
     GET_GRNS_BY_PO: (poId: string) => `${BASE_URL}/raw/grn/po/${poId}`,
     GET_GRN_BY_ID: (id: string) => `${BASE_URL}/raw/grn/${id}`,
     DELETE_GRN: (id: string) => `${BASE_URL}/raw/grn/${id}`,
+
+    // GRN-wise Cleaning
+    GET_GRNS_FOR_CLEANING: `${BASE_URL}/raw/cleaning-grn`,
+    GET_GRN_MATERIALS_BY_NUMBER: (grnNumber: string) => `${BASE_URL}/raw/cleaning-grn/${grnNumber}`,
+    CREATE_GRN_CLEANING_TRANSFER: `${BASE_URL}/raw/cleaning-grn/transfer`,
+    GET_CLEANING_LOTS: `${BASE_URL}/raw/cleaning-grn/lots`,
+    FINISH_CLEANING_JOB: (id: string) => `${BASE_URL}/raw/cleaning-grn/finish/${id}`,
   },
 
   DRAFT: {

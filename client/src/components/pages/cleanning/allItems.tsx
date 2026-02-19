@@ -1,830 +1,932 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
-import { Button, Modal, Input, Select, message, Switch } from 'antd';
-import { EditOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Modal, Select, message, InputNumber } from 'antd';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Package,
-  TrendingUp,
   CheckCircle,
-  FileText,
-  XCircle,
-  Warehouse,
-  Scale,
   Layers,
+  ArrowRight,
+  Hash,
+  FileText,
+  Sparkles,
+  ClipboardCheck,
+  Search,
+  RefreshCw,
+  X,
+  Eye,
+  Clock,
+  MapPin,
 } from 'lucide-react';
-import { convertToBaseUOM } from '../../../hooks/unit';
-import UnitSelect from '../../ui/Unitselect';
 
 const { Option } = Select;
 
-interface StockItem {
-  unitOfMeasurement: ReactNode;
-  rawMaterialId: string;
-  materialName: string;
-  warehouseId: string;
-  warehouseName: string;
-  currentQuantity: number;
-  lastUpdated: string;
-}
+// ─── Animations ──────────────────────────────────────────────────────────
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.2, staggerChildren: 0.05 },
+  },
+};
 
-interface CleaningJob {
+const itemVariants = {
+  hidden: { opacity: 0, y: 6 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.2 } },
+};
+
+// ─── Types ───────────────────────────────────────────────────────────────
+interface CleaningLotItem {
   id: string;
-  rawMaterialId: string;
-  fromWarehouseId: string;
-  toWarehouseId: string;
+  lotNumber: string;
   quantity: number;
   status: string;
-  startedAt?: string;
-  finishedAt?: string;
-  toWarehouse: { name: string };
-  fromWarehouse: { name: string };
-  rawMaterial: {
-    id: string;
-    skuCode: string;
-    name: string;
-    category: string;
-    unitOfMeasurement: string;
-    minReorderLevel: number;
-    createdAt: string;
-    updatedAt: string;
-    vendorId: string | null;
-  };
+  leftoverQuantity?: number;
+  reasonCode?: string;
+  isReusable?: boolean;
+  createdAt: string;
+  warehouse: { name: string };
 }
 
-interface WarehouseT {
+interface CleaningJobItem {
+  id: string;
+  quantity: number;
+  status: string;
+  startedAt: string;
+  finishedAt?: string;
+  leftoverQuantity?: number;
+  reasonCode?: string;
+  isReusable?: boolean;
+  fromWarehouse: { name: string };
+  toWarehouse: { name: string };
+  cleaningLots: CleaningLotItem[];
+}
+
+interface GRNItem {
+  id: string;
+  grnNumber: string;
+  rawMaterialName: string;
+  variety: string;
+  supplier: string;
+  createdAt: string;
+  purchaseOrder: { poNumber: string; vendor: { name: string } };
+  purchaseOrderItem: {
+    rawMaterialId: string;
+    rawMaterial: { name: string; skuCode: string; unitOfMeasurement: string; category: string };
+    totalReceived: number;
+    receivals: { warehouseId: string; warehouse: { name: string } }[];
+  };
+  qualityReport?: { id: string; parameters: { parameter: string; standard: string; result: string }[] };
+  cleaningJobs: CleaningJobItem[];
+  cleaningLots: CleaningLotItem[];
+  totalReceived: number;
+  totalTransferred: number;
+  leftQuantity: number;
+  allJobsFinished: boolean;
+}
+
+interface WarehouseItem {
   id: string;
   name: string;
 }
 
-const statusColors: Record<string, string> = {
-  Cleaned: 'bg-primary/10 text-primary border-primary/20',
-  Sent: 'bg-accent text-foreground border-border',
-  Pending: 'bg-muted text-foreground border-border',
-  Rejected: 'bg-destructive/10 text-destructive border-destructive/30',
-};
+// ─── Main Component ─────────────────────────────────────────────────────
+const CleaningRawMaterialList: React.FC = () => {
+  const [grns, setGrns] = useState<GRNItem[]>([]);
+  const [filteredGrns, setFilteredGrns] = useState<GRNItem[]>([]);
+  const [warehouses, setWarehouses] = useState<WarehouseItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
-const statusIcons: Record<string, React.ReactNode> = {
-  Cleaned: <CheckCircle className="w-4 h-4 mr-1" />,
-  Sent: <FileText className="w-4 h-4 mr-1" />,
-  Pending: <TrendingUp className="w-4 h-4 mr-1" />,
-  Rejected: <XCircle className="w-4 h-4 mr-1" />,
-};
+  // Transfer Modal
+  const [transferModalOpen, setTransferModalOpen] = useState(false);
+  const [selectedGrn, setSelectedGrn] = useState<GRNItem | null>(null);
+  const [transferQty, setTransferQty] = useState<number>(0);
+  const [toWarehouseId, setToWarehouseId] = useState('');
+  const [transferring, setTransferring] = useState(false);
 
-const AllItems: React.FC = () => {
-  const [stock, setStock] = useState<StockItem[]>([]);
-  const [, setLoading] = useState(false);
-  const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
-  const [cleaningJobs, setCleaningJobs] = useState<
-    Record<string, CleaningJob[]>
-  >({});
-  const [warehouses, setWarehouses] = useState<WarehouseT[]>([]);
-  const [transferModal, setTransferModal] = useState<{
-    visible: boolean;
-    item?: StockItem;
-  }>({ visible: false });
-  const [transfer, setTransfer] = useState<{
-    quantity: number;
-    unit?: string;
-    toWarehouseId: string;
-  }>({
-    quantity: 0,
-    unit: undefined,
-    toWarehouseId: '',
-  });
-  const [transferLoading, setTransferLoading] = useState(false);
+  // Finish Cleaning Modal
+  const [finishModalOpen, setFinishModalOpen] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState('');
+  const [leftoverQty, setLeftoverQty] = useState<number>(0);
+  const [reasonCode, setReasonCode] = useState('');
+  const [isReusable, setIsReusable] = useState(false);
+  const [finishing, setFinishing] = useState(false);
 
-  // Status update modal state
-  const [statusModal, setStatusModal] = useState<{
-    visible: boolean;
-    job?: CleaningJob;
-    leftoverQuantity: number;
-    reason: string;
-    loading: boolean;
-    isReusable?: boolean;
-  }>({
-    visible: false,
-    job: undefined,
-    leftoverQuantity: 0,
-    reason: '',
-    loading: false,
-    isReusable: false,
-  });
+  // Cleaning History Modal (Eye icon)
+  const [historyModalOpen, setHistoryModalOpen] = useState(false);
+  const [historyGrn, setHistoryGrn] = useState<GRNItem | null>(null);
 
-  // Fetch current stock
-  const fetchStock = async () => {
+  // ─── Fetch Data ────────────────────────────────────────────────────
+  const fetchGRNs = async () => {
     setLoading(true);
     try {
-      const res = await api.get(API_ROUTES.RAW.GET_ALL_PURCHASE_ORDER_ITEMS, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
+      const authToken = localStorage.getItem('authToken');
+      const res = await api.get(API_ROUTES.RAW.GET_GRNS_FOR_CLEANING, {
+        headers: { Authorization: `Bearer ${authToken}` },
       });
-      setStock(res.data);
-    } catch (err) {
-      message.error('Failed to fetch current stock');
+      const data = res.data?.data || res.data || [];
+      setGrns(data);
+      setFilteredGrns(data);
+    } catch (err: any) {
+      console.error('Failed to fetch GRNs:', err);
+      message.error(err?.response?.data?.error || 'Failed to fetch GRNs');
     }
     setLoading(false);
   };
 
-  // Fetch warehouses
   const fetchWarehouses = async () => {
     try {
+      const authToken = localStorage.getItem('authToken');
       const res = await api.get(API_ROUTES.RAW.GET_WAREHOUSES, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
+        headers: { Authorization: `Bearer ${authToken}` },
       });
-      setWarehouses(res.data);
-    } catch {
-      message.error('Failed to fetch warehouses');
-    }
-  };
-
-  const fetchCleaningJobs = async (
-    rawMaterialId: string,
-    warehouseId: string
-  ) => {
-    try {
-      const res = await api.get(API_ROUTES.RAW.GET_CLEANING_JOBS, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
-        params: { rawMaterialId, fromWarehouseId: warehouseId },
-      });
-      const filteredJobs = res.data.filter(
-        (job: CleaningJob) =>
-          job.rawMaterialId === rawMaterialId &&
-          job.fromWarehouseId === warehouseId
-      );
-      setCleaningJobs((prev) => ({
-        ...prev,
-        [`${rawMaterialId}_${warehouseId}`]: filteredJobs,
-      }));
-    } catch {
-      message.error('Failed to fetch cleaning jobs');
+      // Handle both { data: [...] } and direct array response
+      const data = res.data?.data || res.data || [];
+      setWarehouses(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error('Failed to fetch warehouses:', err);
     }
   };
 
   useEffect(() => {
-    fetchStock();
+    fetchGRNs();
     fetchWarehouses();
   }, []);
 
-  // Handle row expand/collapse
-  const handleExpand = (expanded: boolean, record: StockItem) => {
-    const key = `${record.rawMaterialId}_${record.warehouseId}`;
-    if (expanded) {
-      setExpandedRowKeys([key]);
-      fetchCleaningJobs(record.rawMaterialId, record.warehouseId);
-    } else {
-      setExpandedRowKeys([]);
-    }
-  };
-
-  // Handle transfer modal open
-  const openTransferModal = (item: StockItem) => {
-    setTransferModal({ visible: true, item });
-    setTransfer({ quantity: 0, toWarehouseId: '' });
-  };
-
-  // Handle transfer submit
-  const handleTransfer = async () => {
-    if (!transferModal.item) return;
-    const uom = (transfer.unit || transferModal.item.unitOfMeasurement || '')
-      .toString()
-      .toLowerCase()
-      .trim();
-    const baseUom = (transferModal.item.unitOfMeasurement || '')
-      .toString()
-      .toLowerCase()
-      .trim();
-    let baseQuantity = transfer.quantity;
-
-    if (uom !== baseUom) {
-      baseQuantity = convertToBaseUOM(transfer.quantity, uom, baseUom);
-    }
-
-    if (
-      baseQuantity <= 0 ||
-      baseQuantity > transferModal.item.currentQuantity
-    ) {
-      message.error('Invalid quantity');
+  // ─── Search / Filter ──────────────────────────────────────────────
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredGrns(grns);
       return;
     }
-    if (!transfer.toWarehouseId) {
-      message.error('Select destination warehouse');
-      return;
-    }
-    setTransferLoading(true);
-    try {
-      await api.post(
-        API_ROUTES.RAW.CREATE_CLEANING_JOB,
-        {
-          rawMaterialId: transferModal.item.rawMaterialId,
-          fromWarehouseId: transferModal.item.warehouseId,
-          toWarehouseId: transfer.toWarehouseId,
-          quantity: transfer.quantity,
-          unit:
-            transfer.unit || (transferModal.item.unitOfMeasurement as string),
-          status: 'Sent',
-          startedAt: new Date().toISOString(),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-          },
-        }
-      );
-      message.success('Transfer to cleaning initiated');
-      setTransferModal({ visible: false });
-      fetchStock();
-    } catch {
-      message.error('Failed to transfer');
-    }
-    setTransferLoading(false);
-  };
-
-  // Handle status update (mark as Cleaned)
-  const openStatusModal = (job: CleaningJob) => {
-    setStatusModal({
-      visible: true,
-      job,
-      leftoverQuantity: 0,
-      reason: '',
-      loading: false,
-    });
-  };
-
-  const handleStatusUpdate = async () => {
-    if (!statusModal.job) return;
-    if (
-      statusModal.leftoverQuantity < 0 ||
-      statusModal.leftoverQuantity > statusModal.job.quantity
-    ) {
-      message.error('Invalid leftover quantity');
-      return;
-    }
-    setStatusModal((prev) => ({ ...prev, loading: true }));
-    try {
-      await api.put(
-        API_ROUTES.RAW.UPDATE_CLEANING_JOB(statusModal.job.id),
-        {
-          status: 'Cleaned',
-          leftoverQuantity: statusModal.leftoverQuantity,
-          reasonCode: statusModal.reason,
-          finishedAt: new Date().toISOString(),
-          isReusable: statusModal.isReusable,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-          },
-        }
-      );
-      message.success('Cleaning job marked as Cleaned');
-      setStatusModal({
-        visible: false,
-        job: undefined,
-        leftoverQuantity: 0,
-        reason: '',
-        loading: false,
-      });
-      fetchStock();
-      if (statusModal.job)
-        fetchCleaningJobs(
-          statusModal.job.rawMaterialId,
-          statusModal.job.fromWarehouseId
-        );
-    } catch {
-      message.error('Failed to update status');
-      setStatusModal((prev) => ({ ...prev, loading: false }));
-    }
-  };
-  const unitOrder = ['g', 'kg', 'ton'];
-
-  const allUnits = stock
-    .map((s) =>
-      typeof s.unitOfMeasurement === 'string' ? s.unitOfMeasurement : ''
-    )
-    .filter(Boolean);
-  const highestUnit =
-    unitOrder
-      .slice()
-      .reverse()
-      .find((unit) => allUnits.includes(unit)) || '';
-
-  const totalQuantity = stock.reduce((sum, s) => {
-    const unit =
-      typeof s.unitOfMeasurement === 'string' ? s.unitOfMeasurement : '';
-    if (!unit || !highestUnit) {
-      return sum + (s.currentQuantity || 0);
-    }
-    if (unit !== highestUnit) {
-      try {
-        return sum + convertToBaseUOM(s.currentQuantity, unit, highestUnit);
-      } catch {
-        console.warn(`Failed to convert ${unit} to ${highestUnit}`);
-        return sum + (s.currentQuantity || 0);
-      }
-    }
-    return sum + (s.currentQuantity || 0);
-  }, 0);
-  const totalStock = stock.length;
-
-  const totalJobs = Object.values(cleaningJobs).flat().length;
-  const cleanedJobs = Object.values(cleaningJobs)
-    .flat()
-    .filter((j) => j.status === 'Cleaned').length;
-
-  const expandedRowRender = (record: StockItem) => {
-    const key = `${record.rawMaterialId}_${record.warehouseId}`;
-    const jobs = cleaningJobs[key] || [];
-    return (
-      <div className="overflow-x-auto rounded-xl border border-border bg-card mt-2 p-2">
-        <table className="min-w-full divide-y divide-border">
-          <thead>
-            <tr className="bg-muted/50">
-              <th className="px-2 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-left w-32">
-                Cleaning Job ID
-              </th>
-              <th className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-left">
-                To Warehouse
-              </th>
-              <th className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-right">
-                Quantity
-              </th>
-              <th className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
-                Status
-              </th>
-              <th className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
-                Started At
-              </th>
-              <th className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
-                Finished At
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobs.length === 0 && (
-              <tr>
-                <td
-                  colSpan={6}
-                  className="px-4 py-2 text-center text-muted-foreground italic"
-                >
-                  No cleaning jobs found.
-                </td>
-              </tr>
-            )}
-            {jobs.map((job) => (
-              <tr key={job.id} className="hover:bg-accent transition">
-                <td className="px-2 py-2 text-xs font-mono text-foreground break-all w-32">
-                  {job.id}
-                </td>
-                <td className="px-4 py-2 text-sm text-foreground">
-                  {job.toWarehouse?.name || '-'}
-                </td>
-                <td className="px-4 py-2 text-sm text-foreground text-right">
-                  {job.quantity} {record.unitOfMeasurement}
-                </td>
-                <td className="px-4 py-2 text-center">
-                  <span
-                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${statusColors[job.status] || 'bg-muted text-foreground border-border'}`}
-                  >
-                    {statusIcons[job.status] || null}
-                    {job.status}
-                    {job.status !== 'Cleaned' && (
-                      <Button
-                        type="link"
-                        icon={<EditOutlined />}
-                        onClick={() => openStatusModal(job)}
-                        style={{ marginLeft: 4, padding: 0, height: 18 }}
-                        size="small"
-                      />
-                    )}
-                  </span>
-                </td>
-                <td className="px-4 py-2 text-center text-xs text-foreground">
-                  {job.startedAt && !isNaN(Date.parse(job.startedAt))
-                    ? new Date(job.startedAt).toLocaleString(undefined, {
-                        year: 'numeric',
-                        month: 'numeric',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                      })
-                    : '-'}
-                </td>
-                <td className="px-4 py-2 text-center text-xs text-foreground">
-                  {job.finishedAt && !isNaN(Date.parse(job.finishedAt))
-                    ? new Date(job.finishedAt).toLocaleString(undefined, {
-                        year: 'numeric',
-                        month: 'numeric',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                      })
-                    : '-'}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    const lower = searchTerm.toLowerCase();
+    setFilteredGrns(
+      grns.filter(
+        (g) =>
+          g.grnNumber?.toLowerCase().includes(lower) ||
+          g.rawMaterialName?.toLowerCase().includes(lower) ||
+          g.supplier?.toLowerCase().includes(lower) ||
+          g.purchaseOrder?.poNumber?.toLowerCase().includes(lower)
+      )
     );
+  }, [searchTerm, grns]);
+
+  // ─── Transfer to Cleaning ─────────────────────────────────────────
+  const handleOpenTransfer = (grn: GRNItem) => {
+    setSelectedGrn(grn);
+    setTransferQty(0);
+    setToWarehouseId('');
+    setTransferModalOpen(true);
   };
 
+  const handleTransfer = async () => {
+    if (!selectedGrn || !toWarehouseId || transferQty <= 0) {
+      message.warning('Please fill all fields correctly');
+      return;
+    }
+    if (transferQty > selectedGrn.leftQuantity) {
+      message.error(`Cannot exceed available quantity (${selectedGrn.leftQuantity})`);
+      return;
+    }
+    setTransferring(true);
+    const transferKey = `transfer_${selectedGrn?.id || Date.now()}`;
+    message.loading({ content: 'Transferring...', key: transferKey, duration: 0 });
+    try {
+      const authToken = localStorage.getItem('authToken');
+      const res = await api.post(API_ROUTES.RAW.CREATE_GRN_CLEANING_TRANSFER, {
+        grnId: selectedGrn.id,
+        toWarehouseId,
+        quantity: transferQty,
+      }, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      message.success({ content: res.data?.message || 'Transfer created successfully!', key: transferKey, duration: 2 });
+      setTransferModalOpen(false);
+      fetchGRNs();
+    } catch (err: any) {
+      console.error('Transfer failed:', err);
+      message.error({ content: err?.response?.data?.error || 'Transfer failed', key: transferKey, duration: 2 });
+    }
+    setTransferring(false);
+  };
+
+  // ─── Finish Cleaning ──────────────────────────────────────────────
+  const handleOpenFinish = (jobId: string) => {
+    setSelectedJobId(jobId);
+    setLeftoverQty(0);
+    setReasonCode('');
+    setIsReusable(false);
+    setFinishModalOpen(true);
+  };
+
+  const handleFinishCleaning = async () => {
+    if (!selectedJobId) return;
+    setFinishing(true);
+    const finishKey = `finish_${selectedJobId || Date.now()}`;
+    message.loading({ content: 'Finishing...', key: finishKey, duration: 0 });
+    try {
+      const authToken = localStorage.getItem('authToken');
+      const res = await api.put(API_ROUTES.RAW.FINISH_CLEANING_JOB(selectedJobId), {
+        leftoverQuantity: leftoverQty,
+        reasonCode,
+        isReusable,
+      }, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      message.success({ content: res.data?.message || 'Cleaning finished!', key: finishKey, duration: 2 });
+      setFinishModalOpen(false);
+      fetchGRNs();
+    } catch (err: any) {
+      console.error('Finish cleaning failed:', err);
+      message.error({ content: err?.response?.data?.error || 'Failed to finish cleaning', key: finishKey, duration: 2 });
+    }
+    setFinishing(false);
+  };
+
+  // ─── View Cleaning History ─────────────────────────────────────────
+  const handleViewHistory = (grn: GRNItem) => {
+    setHistoryGrn(grn);
+    setHistoryModalOpen(true);
+  };
+
+  // ─── Status helpers ────────────────────────────────────────────────
+  const getStatusTag = (status: string) => {
+    switch (status) {
+      case 'Sent':
+        return <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--secondary) 14%, transparent)', color: 'var(--secondary)' }}>Sent</span>;
+      case 'Cleaning':
+        return <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, #f59e0b 14%, transparent)', color: '#d97706' }}>Cleaning</span>;
+      case 'Cleaned':
+        return <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, #10b981 14%, transparent)', color: '#059669' }}>Cleaned</span>;
+      case 'Active':
+        return <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--primary) 14%, transparent)', color: 'var(--primary)' }}>Active</span>;
+      default:
+        return <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}>{status}</span>;
+    }
+  };
+
+  // ─── Render ────────────────────────────────────────────────────────
   return (
-    <motion.div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <motion.div
-          className="bg-card rounded-2xl border border-border overflow-hidden"
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          {/* Header */}
-          <div className="p-6 border-b border-border">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary rounded-xl">
-                <Package className="text-primary-foreground" size={20} />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-foreground">
-                  Current Stock
-                </h1>
-                <p className="text-muted-foreground text-sm">
-                  View and manage all raw material stock and cleaning jobs
-                </p>
-              </div>
-              <div className="ml-auto flex gap-2">
-                <Button
-                  type="default"
-                  icon={<ReloadOutlined />}
-                  onClick={fetchStock}
-                  className="rounded-lg"
-                >
-                  Refresh
-                </Button>
-              </div>
+    <motion.div
+      className="min-h-screen"
+      style={{ background: 'var(--background)' }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-5">
+
+        {/* ─── Header ─────────────────────────────────────────────── */}
+        <motion.div variants={itemVariants} className="bg-brand-header rounded-2xl px-6 py-5 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className="flex items-center gap-4 flex-1">
+            <div
+              className="flex items-center justify-center w-11 h-11 rounded-xl shadow-md"
+              style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
+            >
+              <Sparkles size={20} strokeWidth={2.5} />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--foreground)' }}>
+                GRN-wise Cleaning
+              </h1>
+              <p className="text-sm mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
+                Transfer received materials to cleaning by GRN &amp; generate lot numbers
+              </p>
             </div>
           </div>
-          {/* Unified Stats + Table */}
+          <button
+            onClick={fetchGRNs}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 active:scale-95"
+            style={{ background: 'var(--muted)', color: 'var(--foreground)', border: '1px solid var(--border)' }}
+          >
+            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+            Refresh
+          </button>
+        </motion.div>
+
+        {/* ─── Summary Cards ──────────────────────────────────────── */}
+        <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <StatCard icon={<FileText size={18} />} label="Total GRNs" value={grns.length} color="var(--primary)" />
+          <StatCard icon={<Package size={18} />} label="Pending Transfer" value={grns.filter((g) => g.leftQuantity > 0).length} color="#d97706" />
+          <StatCard icon={<CheckCircle size={18} />} label="Fully Transferred" value={grns.filter((g) => g.leftQuantity === 0 && g.cleaningJobs?.length > 0).length} color="var(--secondary)" />
+          <StatCard icon={<ClipboardCheck size={18} />} label="All Cleaned" value={grns.filter((g) => g.allJobsFinished).length} color="#059669" />
+        </motion.div>
+
+        {/* ─── Search Bar ────────────────────────────────────────── */}
+        <motion.div variants={itemVariants} className="flex items-center gap-3">
+          <div
+            className="flex items-center gap-2 flex-1 rounded-xl px-4 py-2.5 transition-all duration-200"
+            style={{
+              background: 'color-mix(in srgb, var(--card) 96%, var(--primary) 4%)',
+              border: '1px solid var(--border)',
+            }}
+          >
+            <Search size={16} style={{ color: 'var(--muted-foreground)' }} />
+            <input
+              className="flex-1 outline-none text-sm bg-transparent"
+              style={{ color: 'var(--foreground)' }}
+              placeholder="Search by GRN, Material, Supplier, PO..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm && (
+              <button onClick={() => setSearchTerm('')} className="p-0.5 rounded hover:opacity-70 transition-all">
+                <X size={14} style={{ color: 'var(--muted-foreground)' }} />
+              </button>
+            )}
+          </div>
+          <span
+            className="text-xs font-semibold px-3 py-1.5 rounded-full"
+            style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}
+          >
+            {filteredGrns.length} entries
+          </span>
+        </motion.div>
+
+        {/* ─── GRN Table ──────────────────────────────────────────── */}
+        <motion.div
+          variants={itemVariants}
+          className="rounded-2xl border overflow-hidden"
+          style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
+        >
+          <div
+            className="px-5 py-4 flex items-center justify-between"
+            style={{ borderBottom: '1px solid var(--border)', background: 'linear-gradient(135deg, color-mix(in srgb, var(--primary) 6%, var(--card)), color-mix(in srgb, var(--secondary) 4%, var(--card)))' }}
+          >
+            <h2 className="text-base font-semibold flex items-center gap-2" style={{ color: 'var(--foreground)' }}>
+              <Layers size={16} style={{ color: 'var(--primary)' }} />
+              GRN Materials
+            </h2>
+          </div>
+
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-border">
-              {/* Stats Row */}
+            <table className="w-full border-collapse text-sm">
               <thead>
                 <tr>
-                  <th colSpan={6} className="p-0 border-b-0">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-muted/50">
-                      <div className="bg-card rounded-xl p-4 border border-border">
-                        <p className="text-xs font-medium text-muted-foreground mb-1">
-                          Total Stock Items
-                        </p>
-                        <p className="text-2xl font-bold text-foreground">
-                          {totalStock}
-                        </p>
-                        <div className="flex items-center mt-1">
-                          <TrendingUp size={12} className="text-primary mr-1" />
-                          <span className="text-xs text-primary font-medium">
-                            All records
-                          </span>
-                        </div>
-                      </div>
-                      <div className="bg-card rounded-xl p-4 border border-border">
-                        <p className="text-xs font-medium text-muted-foreground mb-1">
-                          Total Quantity
-                        </p>
-                        <p className="text-2xl font-bold text-foreground">
-                          {totalQuantity} {highestUnit}
-                        </p>
-                        <div className="flex items-center mt-1">
-                          <Scale size={12} className="text-foreground mr-1" />
-                          <span className="text-xs text-foreground/80 font-medium">
-                            In stock
-                          </span>
-                        </div>
-                      </div>
-                      <div className="bg-card rounded-xl p-4 border border-border">
-                        <p className="text-xs font-medium text-muted-foreground mb-1">
-                          Cleaning Jobs
-                        </p>
-                        <p className="text-2xl font-bold text-foreground">
-                          {totalJobs}
-                        </p>
-                        <div className="flex items-center mt-1">
-                          <FileText
-                            size={12}
-                            className="text-foreground mr-1"
-                          />
-                          <span className="text-xs text-foreground/80 font-medium">
-                            Total jobs
-                          </span>
-                        </div>
-                      </div>
-                      <div className="bg-card rounded-xl p-4 border border-border">
-                        <p className="text-xs font-medium text-muted-foreground mb-1">
-                          Cleaned
-                        </p>
-                        <p className="text-2xl font-bold text-foreground">
-                          {cleanedJobs}
-                        </p>
-                        <div className="flex items-center mt-1">
-                          <CheckCircle
-                            size={12}
-                            className="text-primary mr-1"
-                          />
-                          <span className="text-xs text-primary font-medium">
-                            Completed
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </th>
-                </tr>
-                <tr className="bg-muted/50">
-                  <th className="px-6 py-4"></th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    <div className="inline-flex items-center gap-2">
-                      <Layers className="w-3.5 h-3.5" />
-                      Material Name
-                    </div>
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    <div className="inline-flex items-center gap-2">
-                      <Warehouse className="w-3.5 h-3.5" />
-                      Warehouse
-                    </div>
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    <div className="inline-flex items-center gap-2">
-                      <Scale className="w-3.5 h-3.5" />
-                      Current Quantity
-                    </div>
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                    Action
-                  </th>
+                  {['GRN #', 'Material', 'Variety', 'Supplier', 'Received', 'Transferred', 'Remaining', 'Status', 'Actions'].map((h) => (
+                    <th
+                      key={h}
+                      className="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap"
+                      style={{
+                        color: 'var(--muted-foreground)',
+                        borderBottom: '1px solid var(--border)',
+                        background: 'var(--muted)',
+                      }}
+                    >
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
-              <tbody className="bg-card divide-y divide-border">
-                {stock.map((record, index) => (
-                  <React.Fragment
-                    key={`${record.rawMaterialId}_${record.warehouseId}`}
-                  >
-                    <motion.tr
-                      className="hover:bg-muted/50 transition-colors duration-150"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
-                    >
-                      <td className="px-2 py-4 whitespace-nowrap text-center">
-                        <Button
-                          type="text"
-                          size="small"
-                          icon={
-                            expandedRowKeys.includes(
-                              `${record.rawMaterialId}_${record.warehouseId}`
-                            ) ? (
-                              <ReloadOutlined />
-                            ) : (
-                              <PlusOutlined />
-                            )
-                          }
-                          onClick={() =>
-                            handleExpand(
-                              !expandedRowKeys.includes(
-                                `${record.rawMaterialId}_${record.warehouseId}`
-                              ),
-                              record
-                            )
-                          }
-                          className="rounded"
-                        />
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
-                        {record.materialName}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/80">
-                        {record.warehouseName}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                        <b>
-                          {record.currentQuantity} {record.unitOfMeasurement}
-                        </b>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-left">
-                        <Button
-                          type="primary"
-                          onClick={() => openTransferModal(record)}
-                          disabled={record.currentQuantity <= 0}
-                          className="rounded-lg"
-                        >
-                          Transfer
-                        </Button>
-                      </td>
-                    </motion.tr>
-                    <AnimatePresence>
-                      {expandedRowKeys.includes(
-                        `${record.rawMaterialId}_${record.warehouseId}`
-                      ) && (
-                        <motion.tr
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          className="bg-muted/50"
-                        >
-                          <td colSpan={5} className="px-10 py-4">
-                            {expandedRowRender(record)}
-                          </td>
-                        </motion.tr>
-                      )}
-                    </AnimatePresence>
-                  </React.Fragment>
-                ))}
+              <tbody>
+                <AnimatePresence>
+                  {filteredGrns.map((grn, idx) => {
+                    const unit = grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
+                    return (
+                      <motion.tr
+                        key={grn.id}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.02, duration: 0.15 }}
+                        className="transition-colors duration-150 cursor-default"
+                        style={{ borderBottom: '1px solid color-mix(in srgb, var(--border) 50%, transparent)' }}
+                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--muted)'; }}
+                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                      >
+                        <td className="px-4 py-3 whitespace-nowrap" style={{ color: 'var(--foreground)' }}>
+                          <span
+                            className="inline-flex items-center text-xs font-bold px-2.5 py-1 rounded-lg"
+                            style={{
+                              background: 'color-mix(in srgb, var(--primary) 10%, transparent)',
+                              color: 'var(--primary)',
+                            }}
+                          >
+                            {grn.grnNumber}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>{grn.rawMaterialName}</div>
+
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm" style={{ color: 'var(--foreground)' }}>{grn.variety || '—'}</td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm" style={{ color: 'var(--foreground)' }}>{grn.supplier}</td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold" style={{ color: 'var(--primary)' }}>
+                          {grn.totalReceived} {unit}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold" style={{ color: 'var(--secondary)' }}>
+                          {grn.totalTransferred} {unit}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap text-sm font-bold" style={{ color: grn.leftQuantity > 0 ? '#d97706' : '#059669' }}>
+                          {grn.leftQuantity} {unit}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          {grn.allJobsFinished ? (
+                            <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, #10b981 14%, transparent)', color: '#059669' }}>
+                              <CheckCircle size={10} className="mr-1" /> All Cleaned
+                            </span>
+                          ) : grn.cleaningJobs?.length > 0 ? (
+                            <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--secondary) 14%, transparent)', color: 'var(--secondary)' }}>
+                              In Progress
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}>
+                              Not Started
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-4 py-3 whitespace-nowrap">
+                          <div className="flex items-center gap-2">
+                            {grn.leftQuantity > 0 && (
+                              <button
+                                onClick={() => handleOpenTransfer(grn)}
+                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 active:scale-95"
+                                style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
+                              >
+                                <ArrowRight size={12} /> Transfer
+                              </button>
+                            )}
+                            {/* Eye icon for cleaning history */}
+                            <button
+                              onClick={() => handleViewHistory(grn)}
+                              className="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 active:scale-95"
+                              style={{
+                                background: 'color-mix(in srgb, var(--secondary) 10%, transparent)',
+                                color: 'var(--secondary)',
+                                border: '1px solid color-mix(in srgb, var(--secondary) 20%, var(--border))',
+                              }}
+                              title="View Cleaning History"
+                            >
+                              <Eye size={15} />
+                            </button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    );
+                  })}
+                </AnimatePresence>
+                {filteredGrns.length === 0 && (
+                  <tr>
+                    <td colSpan={9} className="text-center py-12">
+                      <div style={{ color: 'var(--muted-foreground)' }} className="text-sm">
+                        {loading ? 'Loading GRN data...' : 'No GRN entries found'}
+                      </div>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         </motion.div>
       </div>
 
-      {/* Transfer Modal */}
+      {/* ─── Transfer Modal ─────────────────────────────────────── */}
       <Modal
-        open={transferModal.visible}
         title={
-          <div>
-            <span className="text-lg font-semibold text-foreground">
-              Transfer to Cleaning
-            </span>
-            <div className="text-xs text-muted-foreground mt-1">
-              {transferModal.item?.materialName && (
-                <>
-                  Material: <b>{transferModal.item.materialName}</b>
-                </>
-              )}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-9 h-9 rounded-xl" style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}>
+              <ArrowRight size={16} />
             </div>
+            <span className="text-base font-bold" style={{ color: 'var(--foreground)' }}>Transfer to Cleaning</span>
           </div>
         }
-        onCancel={() => setTransferModal({ visible: false })}
-        onOk={handleTransfer}
-        confirmLoading={transferLoading}
-        okText="Transfer"
-        className="rounded-xl"
+        open={transferModalOpen}
+        onCancel={() => setTransferModalOpen(false)}
+        footer={null}
+        centered
       >
-        <div className="mb-3">
-          <div className="text-xs text-muted-foreground mb-1">
-            Available Quantity
+        {selectedGrn && (
+          <div className="space-y-4 pt-2">
+            <div className="rounded-xl p-4 space-y-2" style={{ background: 'color-mix(in srgb, var(--primary) 4%, var(--card))', border: '1px solid var(--border)' }}>
+              <InfoRow label="GRN" value={selectedGrn.grnNumber} />
+              <InfoRow label="Material" value={selectedGrn.rawMaterialName} />
+              <InfoRow label="Available Qty" value={`${selectedGrn.leftQuantity} ${selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}`} valueColor="#d97706" />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
+                Transfer Quantity <span style={{ color: 'var(--destructive)' }}>*</span>
+              </label>
+              <InputNumber
+                className="w-full"
+                min={0.01}
+                max={selectedGrn.leftQuantity}
+                step={0.1}
+                value={transferQty}
+                onChange={(v) => setTransferQty(v || 0)}
+                placeholder={`Max: ${selectedGrn.leftQuantity}`}
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
+                Destination Warehouse <span style={{ color: 'var(--destructive)' }}>*</span>
+              </label>
+              <Select
+                className="w-full"
+                placeholder="Select warehouse"
+                value={toWarehouseId || undefined}
+                onChange={(v) => setToWarehouseId(v)}
+              >
+                {warehouses.map((w) => (
+                  <Option key={w.id} value={w.id}>{w.name}</Option>
+                ))}
+              </Select>
+            </div>
+
+            <div className="flex items-center gap-3 pt-3" style={{ borderTop: '1px solid var(--border)' }}>
+              <button
+                onClick={() => setTransferModalOpen(false)}
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95"
+                style={{ background: 'var(--muted)', color: 'var(--foreground)', border: '1px solid var(--border)' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleTransfer}
+                disabled={!toWarehouseId || transferQty <= 0 || transferring}
+                className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-95 disabled:opacity-50"
+                style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
+              >
+                {transferring ? 'Transferring...' : 'Transfer & Generate Lot'}
+              </button>
+            </div>
           </div>
-          <div className="font-medium text-foreground">
-            {transferModal.item?.currentQuantity}{' '}
-            {transferModal.item?.unitOfMeasurement}
+        )}
+      </Modal>
+
+      {/* ─── Finish Cleaning Modal ──────────────────────────────── */}
+      <Modal
+        title={
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-9 h-9 rounded-xl" style={{ background: '#059669', color: '#fff' }}>
+              <CheckCircle size={16} />
+            </div>
+            <span className="text-base font-bold" style={{ color: 'var(--foreground)' }}>Finish Cleaning</span>
           </div>
-        </div>
-        <div className="mb-3">
-          <div className="text-xs text-muted-foreground mb-1">
-            Quantity to transfer
+        }
+        open={finishModalOpen}
+        onCancel={() => setFinishModalOpen(false)}
+        footer={null}
+        centered
+      >
+        <div className="space-y-4 pt-2">
+          <div className="rounded-xl p-4" style={{ background: 'color-mix(in srgb, #059669 4%, var(--card))', border: '1px solid var(--border)' }}>
+            <InfoRow label="Cleaning Job" value={selectedJobId} />
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <Input
-              type="number"
-              min={1}
-              max={transferModal.item?.currentQuantity}
-              value={transfer.quantity}
-              onChange={(e) =>
-                setTransfer((prev) => ({
-                  ...prev,
-                  quantity: Number(e.target.value),
-                }))
-              }
-              placeholder="Enter quantity"
-              className="rounded"
-              style={{ flex: 2 }}
+
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
+              Leftover / Wastage Quantity
+            </label>
+            <InputNumber
+              className="w-full"
+              min={0}
+              step={0.1}
+              value={leftoverQty}
+              onChange={(v) => setLeftoverQty(v || 0)}
+              placeholder="Enter leftover qty (optional)"
             />
-            <UnitSelect
-              value={transfer.unit}
-              baseUnit={transferModal.item?.unitOfMeasurement as string}
-              onChange={(val) =>
-                setTransfer((prev) => ({
-                  ...prev,
-                  unit: String(val),
-                }))
-              }
-            />
           </div>
-        </div>
-        <div>
-          <div className="text-xs text-muted-foreground mb-1">
-            Destination warehouse
+
+          {leftoverQty > 0 && (
+            <>
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
+                  Reason Code
+                </label>
+                <Select
+                  className="w-full"
+                  placeholder="Select reason"
+                  value={reasonCode || undefined}
+                  onChange={(v) => setReasonCode(v)}
+                >
+                  <Option value="contamination">Contamination</Option>
+                  <Option value="quality_issue">Quality Issue</Option>
+                  <Option value="damaged">Damaged</Option>
+                  <Option value="expired">Expired</Option>
+                  <Option value="other">Other</Option>
+                </Select>
+              </div>
+              <div className="flex items-center gap-2.5 pt-1">
+                <input
+                  type="checkbox"
+                  checked={isReusable}
+                  onChange={(e) => setIsReusable(e.target.checked)}
+                  className="w-4 h-4 rounded"
+                  style={{ accentColor: 'var(--primary)' }}
+                />
+                <label className="text-sm" style={{ color: 'var(--foreground)' }}>Mark leftover as reusable stock</label>
+              </div>
+            </>
+          )}
+
+          <div className="flex items-center gap-3 pt-3" style={{ borderTop: '1px solid var(--border)' }}>
+            <button
+              onClick={() => setFinishModalOpen(false)}
+              className="flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95"
+              style={{ background: 'var(--muted)', color: 'var(--foreground)', border: '1px solid var(--border)' }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleFinishCleaning}
+              disabled={finishing}
+              className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-95 disabled:opacity-50"
+              style={{ background: '#059669', color: '#fff' }}
+            >
+              {finishing ? 'Finishing...' : 'Finish Cleaning'}
+            </button>
           </div>
-          <Select
-            style={{ width: '100%' }}
-            placeholder="Select destination warehouse"
-            value={transfer.toWarehouseId}
-            onChange={(val) =>
-              setTransfer((prev) => ({ ...prev, toWarehouseId: val }))
-            }
-            className="rounded"
-          >
-            {warehouses
-              .filter((w) => w.id !== transferModal.item?.warehouseId)
-              .map((w) => (
-                <Option key={w.id} value={w.id}>
-                  {w.name}
-                </Option>
-              ))}
-          </Select>
         </div>
       </Modal>
 
-      {/* Status Update Modal */}
+      {/* ─── Cleaning History Modal (Eye Icon) ──────────────────── */}
       <Modal
-        open={statusModal.visible}
         title={
-          <div>
-            <span className="text-lg font-semibold text-foreground">
-              Mark as Cleaned
-            </span>
-            <div className="text-xs text-muted-foreground mt-1">
-              Cleaning Job ID: <b>{statusModal.job?.id}</b>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-9 h-9 rounded-xl" style={{ background: 'var(--secondary)', color: '#fff' }}>
+              <Eye size={16} />
+            </div>
+            <div>
+              <span className="text-base font-bold block" style={{ color: 'var(--foreground)' }}>
+                Cleaning History
+              </span>
+              <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
+                {historyGrn?.grnNumber} — {historyGrn?.rawMaterialName}
+              </span>
             </div>
           </div>
         }
-        onCancel={() => setStatusModal({ ...statusModal, visible: false })}
-        onOk={handleStatusUpdate}
-        confirmLoading={statusModal.loading}
-        okText="Update"
-        className="rounded-xl"
+        open={historyModalOpen}
+        onCancel={() => setHistoryModalOpen(false)}
+        footer={null}
+        centered
+        width={780}
+        styles={{ body: { maxHeight: '70vh', overflowY: 'auto' } }}
       >
-        <div className="mb-3">
-          <div className="text-xs text-muted-foreground mb-1">
-            Total Quantity
-          </div>
-          <div className="font-medium text-foreground">
-            {statusModal.job?.quantity}{' '}
-            {statusModal.job?.rawMaterial?.unitOfMeasurement}
-          </div>
-        </div>
-        <div className="mb-3">
-          <div className="text-xs text-muted-foreground mb-1">
-            Unfinished/Rejected Quantity
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <Input
-              type="number"
-              min={0}
-              max={statusModal.job?.quantity}
-              value={statusModal.leftoverQuantity}
-              onChange={(e) =>
-                setStatusModal((prev) => ({
-                  ...prev,
-                  leftoverQuantity: Number(e.target.value),
-                }))
-              }
-              placeholder="Enter unfinished/rejected quantity"
-              className="rounded"
-              style={{ flex: 2 }}
-            />
-            <UnitSelect
-              value={statusModal.job?.rawMaterial?.unitOfMeasurement}
-              baseUnit={statusModal.job?.rawMaterial?.unitOfMeasurement}
-              onChange={() => {}}
-            />
-          </div>
-          <div className="mb-3">
-            <div className="text-xs text-muted-foreground mb-1">
-              Is this wastage reusable?
+        {historyGrn && (
+          <div className="space-y-5 pt-2">
+
+            {/* Quantity Summary */}
+            <div className="grid grid-cols-3 gap-3">
+              <QuantityCard label="Total Received" value={historyGrn.totalReceived} unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'} color="var(--primary)" />
+              <QuantityCard label="Transferred" value={historyGrn.totalTransferred} unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'} color="var(--secondary)" />
+              <QuantityCard label="Remaining" value={historyGrn.leftQuantity} unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'} color={historyGrn.leftQuantity > 0 ? '#d97706' : '#059669'} />
             </div>
-            <Switch
-              checked={statusModal.isReusable}
-              onChange={(checked) =>
-                setStatusModal((prev) => ({ ...prev, isReusable: checked }))
-              }
-              checkedChildren="Yes"
-              unCheckedChildren="No"
-            />
+
+            {/* Cleaning Jobs + Lot Timeline */}
+            {historyGrn.cleaningJobs?.length > 0 ? (
+              <div className="space-y-3">
+                <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--primary)' }}>
+                  <ClipboardCheck size={14} /> Cleaning Transfers &amp; Lots
+                </h3>
+                {historyGrn.cleaningJobs.map((job) => {
+                  const unit = historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
+                  return (
+                    <div key={job.id} className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
+                      {/* Job Header */}
+                      <div
+                        className="px-4 py-3 flex items-center justify-between flex-wrap gap-2"
+                        style={{
+                          background: 'linear-gradient(135deg, color-mix(in srgb, var(--primary) 5%, var(--card)), color-mix(in srgb, var(--secondary) 3%, var(--card)))',
+                          borderBottom: '1px solid var(--border)',
+                        }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center justify-center w-8 h-8 rounded-lg" style={{ background: 'color-mix(in srgb, var(--primary) 12%, transparent)', color: 'var(--primary)' }}>
+                            <ClipboardCheck size={14} />
+                          </div>
+                          <div>
+                            <span className="text-sm font-bold" style={{ color: 'var(--foreground)' }}>Job {job.id}</span>
+                            <div className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--muted-foreground)' }}>
+                              <MapPin size={10} />
+                              {job.fromWarehouse?.name} → {job.toWarehouse?.name}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {getStatusTag(job.status)}
+                          <span className="text-sm font-bold" style={{ color: 'var(--primary)' }}>
+                            {job.quantity} {unit}
+                          </span>
+                          {job.status === 'Sent' && (
+                            <button
+                              onClick={() => { setHistoryModalOpen(false); handleOpenFinish(job.id); }}
+                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all active:scale-95"
+                              style={{ background: '#059669', color: '#fff' }}
+                            >
+                              <CheckCircle size={11} /> Finish
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Leftover / Wastage Info for this Job */}
+                      {job.status === 'Cleaned' && (job.leftoverQuantity ?? 0) > 0 && (
+                        <div
+                          className="px-4 py-2.5 flex items-center flex-wrap gap-3 text-xs"
+                          style={{
+                            background: 'color-mix(in srgb, #f59e0b 5%, var(--card))',
+                            borderBottom: '1px solid var(--border)',
+                          }}
+                        >
+                          <span className="font-semibold" style={{ color: '#d97706' }}>
+                            ⚠ Leftover/Wastage: {job.leftoverQuantity} {unit}
+                          </span>
+                          {job.reasonCode && (
+                            <span
+                              className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase"
+                              style={{ background: 'color-mix(in srgb, #ef4444 12%, transparent)', color: '#dc2626' }}
+                            >
+                              {job.reasonCode.replace(/_/g, ' ')}
+                            </span>
+                          )}
+                          <span
+                            className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold"
+                            style={{
+                              background: job.isReusable
+                                ? 'color-mix(in srgb, #10b981 12%, transparent)'
+                                : 'color-mix(in srgb, #ef4444 12%, transparent)',
+                              color: job.isReusable ? '#059669' : '#dc2626',
+                            }}
+                          >
+                            {job.isReusable ? '♻ Reusable Stock' : '✗ Not Reusable'}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Lot Numbers for this Job */}
+                      {job.cleaningLots?.length > 0 ? (
+                        <div className="divide-y" style={{ borderColor: 'var(--border)' }}>
+                          {job.cleaningLots.map((lot) => (
+                            <div
+                              key={lot.lotNumber}
+                              className="px-4 py-3 flex items-center justify-between transition-colors duration-150"
+                              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--muted)'; }}
+                              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="flex items-center justify-center w-7 h-7 rounded-md" style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)' }}>
+                                  <Hash size={13} style={{ color: 'var(--primary)' }} />
+                                </div>
+                                <div>
+                                  <div className="text-sm font-bold" style={{ color: 'var(--primary)' }}>{lot.lotNumber}</div>
+                                  <div className="flex items-center gap-2 text-[11px]" style={{ color: 'var(--muted-foreground)' }}>
+                                    <MapPin size={9} /> {lot.warehouse?.name}
+                                    <span>•</span>
+                                    <Clock size={9} /> {new Date(lot.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-3 flex-wrap">
+                                <span className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>
+                                  {lot.quantity} {unit}
+                                </span>
+                                {getStatusTag(lot.status)}
+                                {(lot.leftoverQuantity ?? 0) > 0 && (
+                                  <span
+                                    className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full"
+                                    style={{ background: 'color-mix(in srgb, #f59e0b 14%, transparent)', color: '#d97706' }}
+                                  >
+                                    Wastage: {lot.leftoverQuantity} {unit}
+                                    {lot.reasonCode ? ` (${lot.reasonCode.replace(/_/g, ' ')})` : ''}
+                                  </span>
+                                )}
+                                {lot.isReusable && (
+                                  <span
+                                    className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full"
+                                    style={{ background: 'color-mix(in srgb, #10b981 12%, transparent)', color: '#059669' }}
+                                  >
+                                    ♻ Reusable
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="px-4 py-6 text-center">
+                          <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>No lot numbers generated for this job</span>
+                        </div>
+                      )}
+
+                      {/* Job Footer with timestamps */}
+                      <div className="px-4 py-2 flex items-center gap-4 text-[10px]" style={{ background: 'var(--muted)', borderTop: '1px solid var(--border)', color: 'var(--muted-foreground)' }}>
+                        <span className="flex items-center gap-1">
+                          <Clock size={9} /> Started: {new Date(job.startedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                        </span>
+                        {job.finishedAt && (
+                          <span className="flex items-center gap-1">
+                            <CheckCircle size={9} /> Finished: {new Date(job.finishedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="rounded-xl p-8 text-center" style={{ background: 'color-mix(in srgb, var(--primary) 4%, transparent)', border: '1px dashed color-mix(in srgb, var(--primary) 25%, var(--border))' }}>
+                <Sparkles size={32} style={{ color: 'var(--muted-foreground)', margin: '0 auto 12px' }} />
+                <div className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>No Cleaning History</div>
+                <div className="text-xs mt-1" style={{ color: 'var(--muted-foreground)' }}>
+                  This GRN has not been transferred to cleaning yet. Use the "Transfer" button to start.
+                </div>
+              </div>
+            )}
+
+            {/* Summary: All Lot Numbers Table */}
+            {historyGrn.cleaningLots?.length > 0 && (
+              <div className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
+                <div className="px-4 py-3 flex items-center gap-2" style={{ background: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
+                  <Hash size={14} style={{ color: 'var(--primary)' }} />
+                  <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--primary)' }}>
+                    All Generated Lot Numbers
+                  </h3>
+                  <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--primary) 12%, transparent)', color: 'var(--primary)' }}>
+                    {historyGrn.cleaningLots.length} lots
+                  </span>
+                </div>
+                <table className="w-full border-collapse text-xs">
+                  <thead>
+                    <tr>
+                      {['Lot #', 'Quantity', 'Warehouse', 'Status', 'Created'].map((h) => (
+                        <th key={h} className="text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)', borderBottom: '1px solid var(--border)', background: 'var(--muted)' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {historyGrn.cleaningLots.map((lot) => (
+                      <tr
+                        key={lot.id}
+                        className="transition-colors duration-150"
+                        style={{ borderBottom: '1px solid color-mix(in srgb, var(--border) 50%, transparent)' }}
+                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--muted)'; }}
+                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                      >
+                        <td className="px-4 py-2.5 font-bold" style={{ color: 'var(--primary)' }}>{lot.lotNumber}</td>
+                        <td className="px-4 py-2.5 font-semibold" style={{ color: 'var(--foreground)' }}>{lot.quantity} {historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}</td>
+                        <td className="px-4 py-2.5" style={{ color: 'var(--foreground)' }}>{lot.warehouse?.name}</td>
+                        <td className="px-4 py-2.5">{getStatusTag(lot.status)}</td>
+                        <td className="px-4 py-2.5" style={{ color: 'var(--muted-foreground)' }}>{new Date(lot.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
-        </div>
-        <div>
-          <div className="text-xs text-muted-foreground mb-1">
-            Reason for unfinished/rejected material
-          </div>
-          <Input.TextArea
-            rows={2}
-            value={statusModal.reason}
-            onChange={(e) =>
-              setStatusModal((prev) => ({
-                ...prev,
-                reason: e.target.value,
-              }))
-            }
-            placeholder="Enter reason"
-            className="rounded"
-          />
-        </div>
+        )}
       </Modal>
     </motion.div>
   );
 };
 
-export default AllItems;
+// ─── Sub Components ──────────────────────────────────────────────────────
+const StatCard: React.FC<{ icon: React.ReactNode; label: string; value: number; color: string }> = ({
+  icon, label, value, color,
+}) => (
+  <motion.div
+    whileHover={{ y: -2 }}
+    transition={{ duration: 0.15 }}
+    className="rounded-xl border p-4 flex items-center gap-3 cursor-default"
+    style={{ background: 'var(--card)', borderColor: 'var(--border)' }}
+  >
+    <div
+      className="flex items-center justify-center w-10 h-10 rounded-lg"
+      style={{ background: `color-mix(in srgb, ${color} 12%, transparent)`, color }}
+    >
+      {icon}
+    </div>
+    <div>
+      <div className="text-xl font-extrabold" style={{ color: 'var(--foreground)' }}>{value}</div>
+      <div className="text-[11px] font-medium" style={{ color: 'var(--muted-foreground)' }}>{label}</div>
+    </div>
+  </motion.div>
+);
+
+const InfoRow: React.FC<{ label: string; value: string; valueColor?: string }> = ({ label, value, valueColor }) => (
+  <div className="flex items-center justify-between py-1">
+    <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>{label}</span>
+    <span className="text-sm font-semibold" style={{ color: valueColor || 'var(--foreground)' }}>{value}</span>
+  </div>
+);
+
+const QuantityCard: React.FC<{ label: string; value: number; unit: string; color: string }> = ({
+  label, value, unit, color,
+}) => (
+  <div
+    className="rounded-lg p-3 text-center"
+    style={{
+      background: `color-mix(in srgb, ${color} 6%, var(--card))`,
+      border: `1px solid color-mix(in srgb, ${color} 20%, var(--border))`,
+    }}
+  >
+    <div className="text-xl font-extrabold" style={{ color }}>{value}</div>
+    <div className="text-[10px] font-medium mt-0.5" style={{ color: 'var(--muted-foreground)' }}>{unit}</div>
+    <div className="text-[10px] mt-1" style={{ color: 'var(--muted-foreground)' }}>{label}</div>
+  </div>
+);
+
+export default CleaningRawMaterialList;

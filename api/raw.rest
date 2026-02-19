@@ -107,3 +107,33 @@ Content-Type: application/json
   "reasonCode": "DAMAGED",
   "warehouseId": "replace-with-warehouse-id"
 }
+
+### GRN Cleaning Transfer
+POST http://localhost:3000/raw/cleaning-grn/transfer
+Content-Type: application/json
+Authorization: Bearer replace-with-token
+
+{
+  "grnId": "replace-with-grn-id",
+  "toWarehouseId": "replace-with-warehouse-id",
+  "quantity": 50
+}
+
+### Finish Cleaning Job (with Leftover, Reason Code, Reusable)
+PUT http://localhost:3000/raw/cleaning-grn/finish/replace-with-job-id
+Content-Type: application/json
+Authorization: Bearer replace-with-token
+
+{
+  "leftoverQuantity": 5.0,
+  "reasonCode": "damaged",
+  "isReusable": false
+}
+
+### Get Cleaning Lots
+GET http://localhost:3000/raw/cleaning-grn/lots
+Authorization: Bearer replace-with-token
+
+### Get Cleaning Lots by GRN
+GET http://localhost:3000/raw/cleaning-grn/lots?grnId=replace-with-grn-id
+Authorization: Bearer replace-with-token

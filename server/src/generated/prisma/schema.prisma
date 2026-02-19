@@ -737,6 +737,7 @@ model RawMaterialProduct {
   updatedAt          DateTime            @updatedAt
   vendorId           String?
   cleaningJobs       CleaningJob[]
+  cleaningLots       CleaningLot[]
   currentStocks      CurrentStock[]
   processingJobs     ProcessingJob[]
   purchaseOrderItems PurchaseOrderItem[]
@@ -820,6 +821,7 @@ model Warehouse {
   cleaningJobsTo   CleaningJob[]     @relation("CleaningToWarehouse")
   cleaningLogsFrom CleaningLog[]     @relation("CleaningFromWarehouse")
   cleaningLogsTo   CleaningLog[]     @relation("CleaningToWarehouse")
+  cleaningLots     CleaningLot[]
   currentStocks    CurrentStock[]
   finishedGoods    FinishedGood[]
   receivalEntries  ReceivalEntry[]
@@ -829,18 +831,24 @@ model Warehouse {
 }
 
 model CleaningJob {
-  id              String             @id
-  rawMaterialId   String
-  fromWarehouseId String
-  toWarehouseId   String
-  quantity        Float
-  status          String
-  startedAt       DateTime
-  finishedAt      DateTime?
-  fromWarehouse   Warehouse          @relation("CleaningFromWarehouse", fields: [fromWarehouseId], references: [id])
-  rawMaterial     RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
-  toWarehouse     Warehouse          @relation("CleaningToWarehouse", fields: [toWarehouseId], references: [id])
-  cleaningLogs    CleaningLog[]
+  id               String             @id
+  rawMaterialId    String
+  fromWarehouseId  String
+  toWarehouseId    String
+  quantity         Float
+  status           String
+  startedAt        DateTime
+  finishedAt       DateTime?
+  grnId            String?
+  leftoverQuantity Float?             @default(0)
+  reasonCode       String?
+  isReusable       Boolean            @default(false)
+  fromWarehouse    Warehouse          @relation("CleaningFromWarehouse", fields: [fromWarehouseId], references: [id])
+  rawMaterial      RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
+  toWarehouse      Warehouse          @relation("CleaningToWarehouse", fields: [toWarehouseId], references: [id])
+  grn              GRNbyPo?           @relation(fields: [grnId], references: [id])
+  cleaningLogs     CleaningLog[]
+  cleaningLots     CleaningLot[]
 }
 
 model CleaningLog {
@@ -1119,4 +1127,27 @@ model GRNbyPo {
   purchaseOrderItem PurchaseOrderItem @relation(fields: [purchaseOrderItemId], references: [id])
   qualityReport     RMQualityReport?  @relation(fields: [qualityReportId], references: [id])
   createdBy         User              @relation("GRNCreatedBy", fields: [createdById], references: [id])
+  cleaningJobs      CleaningJob[]
+  cleaningLots      CleaningLot[]
+}
+
+model CleaningLot {
+  id               String   @id @default(uuid())
+  lotNumber        String   @unique
+  cleaningJobId    String
+  grnId            String
+  rawMaterialId    String
+  warehouseId      String
+  quantity         Float
+  status           String   @default("Active")
+  leftoverQuantity Float?   @default(0)
+  reasonCode       String?
+  isReusable       Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  cleaningJob CleaningJob        @relation(fields: [cleaningJobId], references: [id])
+  grn         GRNbyPo            @relation(fields: [grnId], references: [id])
+  rawMaterial RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
+  warehouse   Warehouse          @relation(fields: [warehouseId], references: [id])
 }
