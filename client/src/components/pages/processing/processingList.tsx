@@ -616,10 +616,7 @@ const ProcessingList: React.FC = () => {
                                     <thead>
                                       <tr className="bg-muted/40">
                                         <th className="px-3 py-2 text-xs text-left font-semibold text-muted-foreground uppercase">
-                                          Lot Number
-                                        </th>
-                                        <th className="px-3 py-2 text-xs text-left font-semibold text-muted-foreground uppercase">
-                                          GRN
+                                          Lot No
                                         </th>
                                         <th className="px-3 py-2 text-xs text-right font-semibold text-muted-foreground uppercase">
                                           Lot Qty
@@ -633,29 +630,44 @@ const ProcessingList: React.FC = () => {
                                       </tr>
                                     </thead>
                                     <tbody className="divide-y divide-border">
-                                      {job.processingBatchLots.map((bl) => (
-                                        <tr key={bl.id} className="hover:bg-accent/50 transition">
-                                          <td className="px-3 py-2 text-sm font-mono text-primary">
-                                            {bl.cleaningLot?.lotNumber || '-'}
-                                          </td>
-                                          <td className="px-3 py-2 text-sm text-foreground">
-                                            {bl.cleaningLot?.grn?.grnNumber || '-'}
-                                          </td>
-                                          <td className="px-3 py-2 text-sm text-foreground text-right">
-                                            {bl.cleaningLot?.quantity || 0}{' '}
-                                            {job.inputRawMaterial?.unitOfMeasurement || ''}
-                                          </td>
-                                          <td className="px-3 py-2 text-sm font-semibold text-foreground text-right">
-                                            {bl.allocatedQuantity}{' '}
-                                            {job.inputRawMaterial?.unitOfMeasurement || ''}
-                                          </td>
-                                          <td className="px-3 py-2 text-center">
-                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
-                                              {bl.cleaningLot?.status || 'InProcessing'}
-                                            </span>
-                                          </td>
-                                        </tr>
-                                      ))}
+                                      {job.processingBatchLots.map((bl) => {
+                                        // Derive lot status from parent batch status
+                                        const lotStatus =
+                                          job.status === 'Finished' || job.status === 'Completed'
+                                            ? 'Finished'
+                                            : job.status === 'In-Progress'
+                                              ? 'In Processing'
+                                              : bl.cleaningLot?.status || 'Pending';
+
+                                        const statusStyle =
+                                          lotStatus === 'Finished'
+                                            ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+                                            : lotStatus === 'In Processing'
+                                              ? 'bg-amber-500/10 text-amber-600 border-amber-500/20'
+                                              : 'bg-primary/10 text-primary border-primary/20';
+
+                                        return (
+                                          <tr key={bl.id} className="hover:bg-accent/50 transition">
+                                            <td className="px-3 py-2 text-sm font-mono text-primary">
+                                              {bl.cleaningLot?.lotNumber || '-'}
+                                            </td>
+                                            <td className="px-3 py-2 text-sm text-foreground text-right">
+                                              {bl.cleaningLot?.quantity || 0}{' '}
+                                              {job.inputRawMaterial?.unitOfMeasurement || ''}
+                                            </td>
+                                            <td className="px-3 py-2 text-sm font-semibold text-foreground text-right">
+                                              {bl.allocatedQuantity}{' '}
+                                              {job.inputRawMaterial?.unitOfMeasurement || ''}
+                                            </td>
+                                            <td className="px-3 py-2 text-center">
+                                              <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ${statusStyle}`}>
+                                                {lotStatus === 'Finished' && <CheckCircle className="w-3 h-3 mr-1" />}
+                                                {lotStatus}
+                                              </span>
+                                            </td>
+                                          </tr>
+                                        );
+                                      })}
                                     </tbody>
                                   </table>
                                 </div>
