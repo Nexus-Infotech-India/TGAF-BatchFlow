@@ -755,7 +755,9 @@ exports.Prisma.UnfinishedStockScalarFieldEnum = {
 
 exports.Prisma.ProcessingJobScalarFieldEnum = {
   id: 'id',
+  batchNumber: 'batchNumber',
   inputRawMaterialId: 'inputRawMaterialId',
+  warehouseId: 'warehouseId',
   quantityInput: 'quantityInput',
   startedAt: 'startedAt',
   finishedAt: 'finishedAt',
@@ -864,6 +866,14 @@ exports.Prisma.CleaningLotScalarFieldEnum = {
   isReusable: 'isReusable',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProcessingBatchLotScalarFieldEnum = {
+  id: 'id',
+  processingJobId: 'processingJobId',
+  cleaningLotId: 'cleaningLotId',
+  allocatedQuantity: 'allocatedQuantity',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -1081,7 +1091,8 @@ exports.Prisma.ModelName = {
   RMQualityReport: 'RMQualityReport',
   RMQualityParameter: 'RMQualityParameter',
   GRNbyPo: 'GRNbyPo',
-  CleaningLot: 'CleaningLot'
+  CleaningLot: 'CleaningLot',
+  ProcessingBatchLot: 'ProcessingBatchLot'
 };
 
 /**

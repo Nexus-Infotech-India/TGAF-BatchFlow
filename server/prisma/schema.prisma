@@ -828,6 +828,7 @@ model Warehouse {
   reusableStocks   ReusableStock[]
   stockEntries     StockEntry[]
   unfinishedStocks UnfinishedStock[]
+  processingJobs   ProcessingJob[]
 }
 
 model CleaningJob {
@@ -879,15 +880,19 @@ model UnfinishedStock {
 }
 
 model ProcessingJob {
-  id                 String             @id
-  inputRawMaterialId String
-  quantityInput      Float
-  startedAt          DateTime
-  finishedAt         DateTime?
-  status             String
-  byProducts         ByProduct[]
-  finishedGoods      FinishedGood[]
-  inputRawMaterial   RawMaterialProduct @relation(fields: [inputRawMaterialId], references: [id])
+  id                  String               @id
+  batchNumber         String?              @unique
+  inputRawMaterialId  String
+  warehouseId         String?
+  quantityInput       Float
+  startedAt           DateTime
+  finishedAt          DateTime?
+  status              String
+  byProducts          ByProduct[]
+  finishedGoods       FinishedGood[]
+  processingBatchLots ProcessingBatchLot[]
+  inputRawMaterial    RawMaterialProduct   @relation(fields: [inputRawMaterialId], references: [id])
+  warehouse           Warehouse?           @relation(fields: [warehouseId], references: [id])
 }
 
 model FinishedGood {
@@ -1146,8 +1151,20 @@ model CleaningLot {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  cleaningJob CleaningJob        @relation(fields: [cleaningJobId], references: [id])
-  grn         GRNbyPo            @relation(fields: [grnId], references: [id])
-  rawMaterial RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
-  warehouse   Warehouse          @relation(fields: [warehouseId], references: [id])
+  cleaningJob        CleaningJob         @relation(fields: [cleaningJobId], references: [id])
+  grn                GRNbyPo             @relation(fields: [grnId], references: [id])
+  rawMaterial        RawMaterialProduct  @relation(fields: [rawMaterialId], references: [id])
+  warehouse          Warehouse           @relation(fields: [warehouseId], references: [id])
+  processingBatchLot ProcessingBatchLot?
+}
+
+model ProcessingBatchLot {
+  id                String   @id @default(uuid())
+  processingJobId   String
+  cleaningLotId     String   @unique
+  allocatedQuantity Float
+  createdAt         DateTime @default(now())
+
+  processingJob ProcessingJob @relation(fields: [processingJobId], references: [id])
+  cleaningLot   CleaningLot   @relation(fields: [cleaningLotId], references: [id])
 }

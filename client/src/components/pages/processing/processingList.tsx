@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
-import { Button, Modal, Input, Select, message, Switch } from 'antd';
-import { PlusOutlined, ReloadOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Modal, Input, Select, message, Switch, Checkbox, Steps } from 'antd';
+import { PlusOutlined, EditOutlined, CheckOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Package,
@@ -11,79 +11,102 @@ import {
   Boxes,
   Warehouse,
   Scale,
+  Layers,
+  Hash,
+  CalendarDays,
+  ArrowRight,
 } from 'lucide-react';
 import UnitSelect from '../../ui/Unitselect';
-import { convertToBaseUOM } from '../../../hooks/unit';
 
 const { Option } = Select;
 
-interface CleaningMaterial {
+/* ─── Types ─── */
+interface RawMaterial {
+  id: string;
+  name: string;
+  skuCode: string;
+  unitOfMeasurement: string;
+  category?: string;
+}
+
+interface WarehouseType {
+  id: string;
+  name: string;
+  location?: string;
+}
+
+interface CleaningLot {
+  id: string;
+  lotNumber: string;
+  cleaningJobId: string;
+  grnId: string;
   rawMaterialId: string;
-  toWarehouseId: string;
-  rawMaterial: {
-    id: string;
-    name: string;
-    unitOfMeasurement: string;
-    skuCode?: string;
-  };
-  toWarehouse: { id: string; name: string };
-  netQuantity: number;
-  availableQuantity: number;
-  wastageQuantity: number;
+  warehouseId: string;
+  quantity: number;
   status: string;
-  startedAt?: string;
-  finishedAt?: string;
+  createdAt: string;
+  rawMaterial: RawMaterial;
+  warehouse: WarehouseType;
+  grn?: { grnNumber: string };
+  cleaningJob?: {
+    fromWarehouse?: WarehouseType;
+    toWarehouse?: WarehouseType;
+  };
+}
+
+interface ProcessingBatchLot {
+  id: string;
+  cleaningLotId: string;
+  allocatedQuantity: number;
+  cleaningLot: CleaningLot;
 }
 
 interface ProcessingJob {
   id: string;
+  batchNumber?: string;
   inputRawMaterialId: string;
+  warehouseId?: string;
   quantityInput: number;
   status: string;
   startedAt: string;
   finishedAt: string | null;
-  warehouse: { id: string; name: string };
-  inputRawMaterial?: {
-    skuCode: string;
-    name: string;
-    unitOfMeasurement: string;
-  };
+  warehouse?: WarehouseType;
+  inputRawMaterial?: RawMaterial;
+  processingBatchLots?: ProcessingBatchLot[];
 }
 
-interface Warehouse {
-  id: string;
-  name: string;
-}
-
+/* ─── Component ─── */
 const ProcessingList: React.FC = () => {
-  const [cleaningJobs, setCleaningJobs] = useState<CleaningMaterial[]>([]);
+  // ── Main data ──
+  const [processingJobs, setProcessingJobs] = useState<ProcessingJob[]>([]);
+  const [warehouses, setWarehouses] = useState<WarehouseType[]>([]);
+  const [rawMaterials, setRawMaterials] = useState<RawMaterial[]>([]);
+  const [availableLots, setAvailableLots] = useState<CleaningLot[]>([]);
   const [, setLoading] = useState(false);
-  const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
-  const [processingJobs, setProcessingJobs] = useState<
-    Record<string, ProcessingJob[]>
-  >({});
-  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
-  const [modal, setModal] = useState<{
+  const [expandedJobId, setExpandedJobId] = useState<string | null>(null);
+
+  // ── Create Batch Modal ──
+  const [batchModal, setBatchModal] = useState<{
     visible: boolean;
-    job?: CleaningMaterial;
-    quantity: number;
-    unit?: string;
+    step: number; // 0 = select warehouse, 1 = select material, 2 = select lots
     warehouseId: string;
+    rawMaterialId: string;
+    selectedLots: Record<string, number>; // lotId -> allocatedQuantity
     loading: boolean;
   }>({
     visible: false,
-    job: undefined,
-    quantity: 0,
-    unit: undefined,
+    step: 0,
     warehouseId: '',
+    rawMaterialId: '',
+    selectedLots: {},
     loading: false,
   });
 
-  // Pencil edit modal state
+  // ── Finish Modal (received quantity approach) ──
   const [editStatusModal, setEditStatusModal] = useState<{
     visible: boolean;
     job?: ProcessingJob;
-    byProductQuantity: number;
+    receivedQuantity: number;
     unit?: string;
     reason: string;
     warehouseId: string;
@@ -92,7 +115,7 @@ const ProcessingList: React.FC = () => {
   }>({
     visible: false,
     job: undefined,
-    byProductQuantity: 0,
+    receivedQuantity: 0,
     unit: undefined,
     reason: '',
     warehouseId: '',
@@ -100,156 +123,213 @@ const ProcessingList: React.FC = () => {
     isReusable: false,
   });
 
-  // Fetch cleaned materials
-  const fetchCleaningJobs = async () => {
+  /* ─── Fetchers ─── */
+  const fetchProcessingJobs = async () => {
     setLoading(true);
     try {
-      const res = await api.get(API_ROUTES.RAW.GET_CLEANED_MATERIALS, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
-      });
-      setCleaningJobs(res.data);
+      const res = await api.get(API_ROUTES.RAW.GET_PROCESSING_JOBS);
+      setProcessingJobs(res.data);
     } catch {
-      setCleaningJobs([]);
-      message.error('Failed to fetch cleaned jobs');
+      message.error('Failed to fetch processing jobs');
     }
     setLoading(false);
   };
 
-  // Fetch warehouses
   const fetchWarehouses = async () => {
     try {
-      const res = await api.get(API_ROUTES.RAW.GET_WAREHOUSES, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
-      });
+      const res = await api.get(API_ROUTES.RAW.GET_WAREHOUSES);
       setWarehouses(res.data);
     } catch {
       message.error('Failed to fetch warehouses');
     }
   };
 
-  // Fetch processing jobs for a cleaned material
-  const fetchProcessingJobs = async (
-    rawMaterialId: string,
-    toWarehouseId: string
-  ) => {
+  const fetchRawMaterials = async () => {
     try {
-      const res = await api.get(API_ROUTES.RAW.GET_PROCESSING_JOBS, {
-        params: { inputRawMaterialId: rawMaterialId },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-        },
-      });
-      setProcessingJobs((prev) => ({
-        ...prev,
-        [`${rawMaterialId}_${toWarehouseId}`]: res.data,
-      }));
+      const res = await api.get(API_ROUTES.RAW.GET_PRODUCTS);
+      setRawMaterials(res.data);
     } catch {
-      message.error('Failed to fetch processing jobs');
+      message.error('Failed to fetch raw materials');
+    }
+  };
+
+  const fetchAvailableLots = async (warehouseId?: string, rawMaterialId?: string) => {
+    try {
+      const params: any = {};
+      if (warehouseId) params.warehouseId = warehouseId;
+      if (rawMaterialId) params.rawMaterialId = rawMaterialId;
+      const res = await api.get(API_ROUTES.RAW.GET_AVAILABLE_LOTS, { params });
+      setAvailableLots(res.data);
+    } catch {
+      message.error('Failed to fetch available lots');
     }
   };
 
   useEffect(() => {
-    fetchCleaningJobs();
+    fetchProcessingJobs();
     fetchWarehouses();
+    fetchRawMaterials();
   }, []);
 
-  // Handle row expand/collapse
-  const handleExpand = (expanded: boolean, record: CleaningMaterial) => {
-    const rowKey = record.rawMaterialId + record.toWarehouseId;
-    if (expanded) {
-      setExpandedRowKeys([rowKey]);
-      fetchProcessingJobs(record.rawMaterialId, record.toWarehouseId);
-    } else {
-      setExpandedRowKeys([]);
-    }
-  };
-
-  // Open modal for initiating processing
-  const openModal = (job: CleaningMaterial) => {
-    setModal({
+  /* ─── Batch Modal Helpers ─── */
+  const openBatchModal = () => {
+    setBatchModal({
       visible: true,
-      job,
-      quantity: job.availableQuantity,
-      unit: job.rawMaterial?.unitOfMeasurement,
-      warehouseId: job.toWarehouse.id,
+      step: 0,
+      warehouseId: '',
+      rawMaterialId: '',
+      selectedLots: {},
       loading: false,
     });
   };
 
-  // Handle modal submit
-  const handleSubmit = async () => {
-    if (!modal.job) return;
-    if (modal.quantity <= 0) {
-      message.error('Quantity must be greater than 0');
+  const closeBatchModal = () => {
+    setBatchModal({
+      visible: false,
+      step: 0,
+      warehouseId: '',
+      rawMaterialId: '',
+      selectedLots: {},
+      loading: false,
+    });
+  };
+
+  const handleBatchWarehouseSelect = (warehouseId: string) => {
+    setBatchModal((prev) => ({ ...prev, warehouseId, rawMaterialId: '', selectedLots: {} }));
+  };
+
+  const handleBatchMaterialSelect = (rawMaterialId: string) => {
+    setBatchModal((prev) => ({ ...prev, rawMaterialId, selectedLots: {} }));
+    fetchAvailableLots(batchModal.warehouseId, rawMaterialId);
+  };
+
+  const handleBatchNextStep = () => {
+    if (batchModal.step === 0 && !batchModal.warehouseId) {
+      message.error('Please select a warehouse');
       return;
     }
-    if (!modal.warehouseId) {
-      message.error('Select a warehouse');
+    if (batchModal.step === 1 && !batchModal.rawMaterialId) {
+      message.error('Please select a raw material');
       return;
     }
-    setModal((prev) => ({ ...prev, loading: true }));
-    try {
-      await api.post(
-        API_ROUTES.RAW.CREATE_PROCESSING_JOB,
-        {
-          inputRawMaterialId: modal.job.rawMaterial.id,
-          quantityInput: modal.quantity,
-          unit: modal.unit || modal.job.rawMaterial.unitOfMeasurement,
-          startedAt: new Date().toISOString(),
-          status: 'In-Progress',
-          warehouseId: modal.warehouseId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
-          },
+    if (batchModal.step === 1) {
+      fetchAvailableLots(batchModal.warehouseId, batchModal.rawMaterialId);
+    }
+    setBatchModal((prev) => ({ ...prev, step: prev.step + 1 }));
+  };
+
+  const handleBatchPrevStep = () => {
+    setBatchModal((prev) => ({ ...prev, step: Math.max(0, prev.step - 1) }));
+  };
+
+  const toggleLotSelection = (lotId: string, quantity: number) => {
+    setBatchModal((prev) => {
+      const newSelected = { ...prev.selectedLots };
+      if (newSelected[lotId] !== undefined) {
+        delete newSelected[lotId];
+      } else {
+        newSelected[lotId] = quantity;
+      }
+      return { ...prev, selectedLots: newSelected };
+    });
+  };
+
+  const updateLotQuantity = (lotId: string, qty: number) => {
+    setBatchModal((prev) => ({
+      ...prev,
+      selectedLots: { ...prev.selectedLots, [lotId]: qty },
+    }));
+  };
+
+  const totalSelectedQuantity = useMemo(() => {
+    return Object.values(batchModal.selectedLots).reduce((sum, q) => sum + q, 0);
+  }, [batchModal.selectedLots]);
+
+  // Filter available lots to match the selected warehouse
+  const filteredLots = useMemo(() => {
+    return availableLots.filter((lot) => lot.warehouseId === batchModal.warehouseId);
+  }, [availableLots, batchModal.warehouseId]);
+
+  // Unique materials from the available lots for the selected warehouse 
+  const materialsInWarehouse = useMemo(() => {
+    const materialIds = new Set<string>();
+    const materials: RawMaterial[] = [];
+    availableLots
+      .filter((l) => l.warehouseId === batchModal.warehouseId)
+      .forEach((lot) => {
+        if (!materialIds.has(lot.rawMaterialId)) {
+          materialIds.add(lot.rawMaterialId);
+          materials.push(lot.rawMaterial);
         }
-      );
-      message.success('Processing job initiated');
-      setModal({
-        visible: false,
-        job: undefined,
-        quantity: 0,
-        warehouseId: '',
-        loading: false,
-      } as any);
-      fetchCleaningJobs();
-      fetchProcessingJobs(modal.job.rawMaterial.id, modal.job.toWarehouse.id);
-    } catch {
-      message.error('Failed to initiate processing job');
-      setModal((prev) => ({ ...prev, loading: false }));
+      });
+    // Also include from raw materials list
+    rawMaterials.forEach((rm) => {
+      if (!materialIds.has(rm.id)) {
+        materialIds.add(rm.id);
+        materials.push(rm);
+      }
+    });
+    return materials;
+  }, [availableLots, batchModal.warehouseId, rawMaterials]);
+
+  /* ─── Submit Create Batch ─── */
+  const handleCreateBatch = async () => {
+    const selectedEntries = Object.entries(batchModal.selectedLots);
+    if (selectedEntries.length === 0) {
+      message.error('Select at least one lot');
+      return;
+    }
+    setBatchModal((prev) => ({ ...prev, loading: true }));
+    try {
+      await api.post(API_ROUTES.RAW.CREATE_PROCESSING_BATCH, {
+        warehouseId: batchModal.warehouseId,
+        inputRawMaterialId: batchModal.rawMaterialId,
+        lots: selectedEntries.map(([lotId, allocatedQuantity]) => ({
+          lotId,
+          allocatedQuantity,
+        })),
+      });
+      message.success('Processing batch created successfully!');
+      closeBatchModal();
+      fetchProcessingJobs();
+    } catch (err: any) {
+      message.error(err?.response?.data?.error || 'Failed to create batch');
+      setBatchModal((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  // Pencil edit: open modal
+  /* ─── Finish Processing Submit ─── */
   const openEditStatusModal = (job: ProcessingJob) => {
     setEditStatusModal({
       visible: true,
       job,
-      byProductQuantity: 0,
+      receivedQuantity: job.quantityInput, // default to full qty (no loss)
       unit: job.inputRawMaterial?.unitOfMeasurement,
       reason: '',
       warehouseId: job.warehouse?.id || '',
       loading: false,
+      isReusable: false,
     });
   };
 
-  // Pencil edit: submit
+  // Auto-computed loss
+  const inputQty = editStatusModal.job?.quantityInput || 0;
+  const receivedQty = editStatusModal.receivedQuantity || 0;
+  const lossQty = Math.max(0, inputQty - receivedQty);
+  const hasLoss = lossQty > 0;
+
   const handleEditStatusSubmit = async () => {
     if (!editStatusModal.job) return;
-    if (
-      !editStatusModal.byProductQuantity ||
-      editStatusModal.byProductQuantity < 0
-    ) {
-      message.error('Enter by-product/semi-processed quantity');
+    if (editStatusModal.receivedQuantity < 0) {
+      message.error('Received quantity cannot be negative');
       return;
     }
-    if (!editStatusModal.reason) {
-      message.error('Enter a reason');
+    if (editStatusModal.receivedQuantity > inputQty) {
+      message.error(`Received quantity cannot exceed input quantity (${inputQty})`);
+      return;
+    }
+    if (hasLoss && !editStatusModal.reason) {
+      message.error('Please enter a reason for the loss');
       return;
     }
     if (!editStatusModal.warehouseId) {
@@ -258,168 +338,50 @@ const ProcessingList: React.FC = () => {
     }
     setEditStatusModal((prev) => ({ ...prev, loading: true }));
     try {
-      const byProducts = [
-        {
-          quantity: editStatusModal.byProductQuantity,
-          unit:
-            editStatusModal.unit ||
-            editStatusModal.job?.inputRawMaterial?.unitOfMeasurement,
-          reason: editStatusModal.reason,
-          warehouseId: editStatusModal.warehouseId,
-          skuCode: editStatusModal.job.inputRawMaterial?.skuCode || '',
-          tag: 'Processing_Waste',
-        },
-      ];
-      await api.put(
-        API_ROUTES.RAW.UPDATE_PROCESSING_JOB(editStatusModal.job.id),
-        {
-          status: 'Finished',
-          byProducts,
-          finishedAt: new Date().toISOString(),
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('authToken')}`,
+      const payload: any = {
+        status: 'Finished',
+        finishedAt: new Date().toISOString(),
+        receivedQuantity: editStatusModal.receivedQuantity,
+      };
+
+      // Only send by-product data if there is a loss
+      if (hasLoss) {
+        payload.byProducts = [
+          {
+            quantity: lossQty,
+            unit: editStatusModal.unit || editStatusModal.job?.inputRawMaterial?.unitOfMeasurement,
+            reason: editStatusModal.reason,
+            warehouseId: editStatusModal.warehouseId,
+            skuCode: editStatusModal.job.inputRawMaterial?.skuCode || '',
+            tag: 'Processing_Waste',
+            isReusable: editStatusModal.isReusable,
           },
-        }
-      );
-      setProcessingJobs((prev) => {
-        const rmKey = editStatusModal.job!.inputRawMaterialId;
-        const updated = { ...prev };
-        if (updated[rmKey]) {
-          updated[rmKey] = updated[rmKey].map((j) =>
-            j.id === editStatusModal.job!.id ? { ...j, status: 'Finished' } : j
-          );
-        }
-        return updated;
-      });
+        ];
+      }
+
+      await api.put(API_ROUTES.RAW.UPDATE_PROCESSING_JOB(editStatusModal.job.id), payload);
+      message.success('Processing job finished successfully!');
       setEditStatusModal({
         visible: false,
         job: undefined,
-        byProductQuantity: 0,
+        receivedQuantity: 0,
         reason: '',
         warehouseId: '',
         loading: false,
       });
-      message.success('Processing job marked as Finished');
+      fetchProcessingJobs();
     } catch {
-      message.error('Failed to update status');
+      message.error('Failed to finish processing');
       setEditStatusModal((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  // Stats
-  const unitOrder = ['g', 'kg', 'ton'];
-  const allUnits = cleaningJobs
-    .map((j) => j.rawMaterial?.unitOfMeasurement || '')
-    .filter(Boolean);
-  const highestUnit =
-    unitOrder
-      .slice()
-      .reverse()
-      .find((unit) => allUnits.includes(unit)) || '';
+  /* ─── Stats ─── */
+  const totalBatches = processingJobs.length;
+  const inProgressBatches = processingJobs.filter((j) => j.status === 'In-Progress').length;
+  const finishedBatches = processingJobs.filter((j) => j.status === 'Finished' || j.status === 'Completed').length;
 
-  const totalQuantity = cleaningJobs.reduce((sum, j) => {
-    const unit = j.rawMaterial?.unitOfMeasurement || '';
-    if (unit && highestUnit && unit !== highestUnit) {
-      return sum + convertToBaseUOM(j.netQuantity, unit, highestUnit);
-    }
-    return sum + (j.netQuantity || 0);
-  }, 0);
-  const totalCleaned = cleaningJobs.length;
-
-  const totalProcessingJobs = Object.values(processingJobs).flat().length;
-
-  // Expanded row render: Processing jobs table
-  const expandedRowRender = (record: CleaningMaterial) => {
-    const jobs =
-      processingJobs[`${record.rawMaterialId}_${record.toWarehouseId}`] || [];
-    return (
-      <div className="overflow-x-auto rounded-xl border border-border bg-card mt-2 p-2">
-        <table className="min-w-full divide-y divide-border">
-          <thead>
-            <tr className="bg-muted/50">
-              <th className="px-2 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-left w-32">
-                Processing Job ID
-              </th>
-              <th className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-left">
-                Warehouse
-              </th>
-              <th className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-right">
-                Quantity
-              </th>
-              <th className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
-                Status
-              </th>
-              <th className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
-                Started At
-              </th>
-              <th className="px-4 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
-                Finished At
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobs.length === 0 && (
-              <tr>
-                <td
-                  colSpan={7}
-                  className="px-4 py-2 text-center text-muted-foreground italic"
-                >
-                  No processing jobs found.
-                </td>
-              </tr>
-            )}
-            {jobs.map((job) => (
-              <tr key={job.id} className="hover:bg-accent transition">
-                <td className="px-2 py-2 text-xs font-mono text-foreground break-all w-32">
-                  {job.id}
-                </td>
-                <td className="px-4 py-2 text-sm text-foreground">
-                  {job.warehouse?.name || '-'}
-                </td>
-                <td className="px-4 py-2 text-sm text-foreground text-right">
-                  <b>
-                    {job.quantityInput}{' '}
-                    {job.inputRawMaterial?.unitOfMeasurement || ''}
-                  </b>
-                </td>
-                <td className="px-4 py-2 text-center">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border bg-accent text-foreground border-border">
-                    <FileText className="w-4 h-4 mr-1" />
-                    {job.status}
-                  </span>
-                  {job.status !== 'Finished' && (
-                    <Button
-                      icon={<EditOutlined />}
-                      size="small"
-                      type="text"
-                      style={{ marginLeft: 8 }}
-                      onClick={() => openEditStatusModal(job)}
-                    />
-                  )}
-                </td>
-                <td className="px-4 py-2 text-center text-xs text-foreground">
-                  {job.startedAt && !isNaN(Date.parse(job.startedAt))
-                    ? new Date(job.startedAt).toLocaleString()
-                    : '-'}
-                </td>
-                <td className="px-4 py-2 text-center text-xs text-foreground">
-                  {job.finishedAt && !isNaN(Date.parse(job.finishedAt))
-                    ? new Date(job.finishedAt).toLocaleString()
-                    : '-'}
-                </td>
-                <td className="px-4 py-2 text-center">
-                  {/* existing actions if any */}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
-
+  /* ─── Render ─── */
   return (
     <motion.div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -432,283 +394,518 @@ const ProcessingList: React.FC = () => {
           <div className="p-6 border-b border-border">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary rounded-xl">
-                <Package className="text-primary-foreground" size={20} />
+                <Layers className="text-primary-foreground" size={20} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-foreground">
-                  Cleaned Raw Materials Ready for Processing
-                </h1>
+                <h1 className="text-2xl font-bold text-foreground">Processing Batches</h1>
                 <p className="text-muted-foreground text-sm">
-                  View and initiate processing jobs for cleaned raw materials
+                  Create batches from cleaned lots and manage processing
                 </p>
               </div>
               <div className="ml-auto flex gap-2">
                 <Button
-                  type="default"
-                  icon={<ReloadOutlined />}
-                  onClick={fetchCleaningJobs}
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={openBatchModal}
                   className="rounded-lg"
+                  style={{
+                    background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                    border: 'none',
+                    fontWeight: 600,
+                  }}
                 >
-                  Refresh
+                  Create Batch
                 </Button>
               </div>
             </div>
           </div>
-          {/* Unified Stats + Table */}
+
+          {/* Stats Row */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-muted/50">
+            <div className="bg-card rounded-xl p-4 border border-border">
+              <p className="text-xs font-medium text-muted-foreground mb-1">Total Batches</p>
+              <p className="text-2xl font-bold text-foreground">{totalBatches}</p>
+              <div className="flex items-center mt-1">
+                <Boxes size={12} className="text-primary mr-1" />
+                <span className="text-xs text-primary font-medium">All records</span>
+              </div>
+            </div>
+            <div className="bg-card rounded-xl p-4 border border-border">
+              <p className="text-xs font-medium text-muted-foreground mb-1">In-Progress</p>
+              <p className="text-2xl font-bold text-foreground">{inProgressBatches}</p>
+              <div className="flex items-center mt-1">
+                <TrendingUp size={12} className="text-amber-500 mr-1" />
+                <span className="text-xs text-amber-500 font-medium">Active processing</span>
+              </div>
+            </div>
+            <div className="bg-card rounded-xl p-4 border border-border">
+              <p className="text-xs font-medium text-muted-foreground mb-1">Finished</p>
+              <p className="text-2xl font-bold text-foreground">{finishedBatches}</p>
+              <div className="flex items-center mt-1">
+                <CheckCircle size={12} className="text-emerald-500 mr-1" />
+                <span className="text-xs text-emerald-500 font-medium">Completed</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Table */}
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-border">
-              {/* Stats Row */}
               <thead>
-                <tr>
-                  <th colSpan={8} className="p-0 border-b-0">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4 bg-muted/50">
-                      <div className="bg-card rounded-xl p-4 border border-border">
-                        <p className="text-xs font-medium text-muted-foreground mb-1">
-                          Total Cleaned Jobs
-                        </p>
-                        <p className="text-2xl font-bold text-foreground">
-                          {totalCleaned}
-                        </p>
-                        <div className="flex items-center mt-1">
-                          <TrendingUp size={12} className="text-primary mr-1" />
-                          <span className="text-xs text-primary font-medium">
-                            All records
-                          </span>
-                        </div>
-                      </div>
-                      <div className="bg-card rounded-xl p-4 border border-border">
-                        <p className="text-xs font-medium text-muted-foreground mb-1">
-                          Total Quantity
-                        </p>
-                        <p className="text-2xl font-bold text-foreground">
-                          {totalQuantity} {highestUnit}
-                        </p>
-                        <div className="flex items-center mt-1">
-                          <Scale size={12} className="text-foreground mr-1" />
-                          <span className="text-xs text-foreground/80 font-medium">
-                            Cleaned
-                          </span>
-                        </div>
-                      </div>
-                      <div className="bg-card rounded-xl p-4 border border-border">
-                        <p className="text-xs font-medium text-muted-foreground mb-1">
-                          Processing Jobs
-                        </p>
-                        <p className="text-2xl font-bold text-foreground">
-                          {totalProcessingJobs}
-                        </p>
-                        <div className="flex items-center mt-1">
-                          <Boxes size={12} className="text-foreground mr-1" />
-                          <span className="text-xs text-foreground/80 font-medium">
-                            Total jobs
-                          </span>
-                        </div>
-                      </div>
+                <tr className="bg-muted/50">
+                  <th className="px-4 py-4"></th>
+                  <th className="px-4 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2">
+                      <Hash className="w-3.5 h-3.5" />
+                      Batch No.
                     </div>
                   </th>
-                </tr>
-                <tr className="bg-muted/50">
-                  <th className="px-6 py-4"></th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <th className="px-4 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     <div className="inline-flex items-center gap-2">
                       <Package className="w-3.5 h-3.5" />
                       Raw Material
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <th className="px-4 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     <div className="inline-flex items-center gap-2">
                       <Warehouse className="w-3.5 h-3.5" />
-                      To Warehouse
+                      Warehouse
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <th className="px-4 py-4 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     <div className="inline-flex items-center gap-2">
                       <Scale className="w-3.5 h-3.5" />
-                      Quantity
+                      Total Qty
                     </div>
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <th className="px-4 py-4 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <th className="px-4 py-4 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2">
+                      <CalendarDays className="w-3.5 h-3.5" />
+                      Started / Finished
+                    </div>
+                  </th>
+                  <th className="px-4 py-4 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Action
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-card divide-y divide-border">
-                {cleaningJobs.map((record, index) => {
-                  const rowKey = record.rawMaterialId + record.toWarehouseId;
-                  return (
-                    <React.Fragment key={rowKey}>
-                      <motion.tr
-                        className="hover:bg-muted/50 transition-colors duration-150"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.05 }}
-                      >
-                        <td className="px-2 py-4 whitespace-nowrap text-center">
-                          <Button
-                            type="text"
-                            size="small"
-                            icon={
-                              expandedRowKeys.includes(rowKey) ? (
-                                <ReloadOutlined />
-                              ) : (
-                                <PlusOutlined />
-                              )
-                            }
-                            onClick={() =>
-                              handleExpand(
-                                !expandedRowKeys.includes(rowKey),
-                                record
-                              )
-                            }
-                          />
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
-                          {record.rawMaterial?.name}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground/80">
-                          {record.toWarehouse?.name}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
-                          <b>
-                            {record.availableQuantity}{' '}
-                            {record.rawMaterial?.unitOfMeasurement || ''}
-                          </b>
-                        </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-sm">
-                          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border bg-primary/10 text-primary border-primary/20">
-                            <CheckCircle className="w-4 h-4 mr-1" />
-                            {record.status}
+                {processingJobs.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="px-6 py-12 text-center text-muted-foreground">
+                      <Boxes className="mx-auto mb-3 opacity-40" size={36} />
+                      <p className="text-lg font-medium">No processing batches yet</p>
+                      <p className="text-sm">Click "Create Batch" to start.</p>
+                    </td>
+                  </tr>
+                )}
+                {processingJobs.map((job, index) => (
+                  <React.Fragment key={job.id}>
+                    <motion.tr
+                      className="hover:bg-muted/50 transition-colors duration-150"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.04 }}
+                    >
+                      {/* Expand */}
+                      <td className="px-2 py-4 text-center">
+                        <Button
+                          type="text"
+                          size="small"
+                          icon={expandedJobId === job.id ? <CheckOutlined /> : <PlusOutlined />}
+                          onClick={() =>
+                            setExpandedJobId(expandedJobId === job.id ? null : job.id)
+                          }
+                        />
+                      </td>
+                      {/* Batch No */}
+                      <td className="px-4 py-4 whitespace-nowrap text-sm font-mono text-primary font-semibold">
+                        {job.batchNumber || job.id}
+                      </td>
+                      {/* Material */}
+                      <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-foreground">
+                        {job.inputRawMaterial?.name || '-'}
+                        {job.inputRawMaterial?.skuCode && (
+                          <span className="ml-1 text-xs text-muted-foreground">
+                            ({job.inputRawMaterial.skuCode})
                           </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-left">
+                        )}
+                      </td>
+                      {/* Warehouse */}
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-foreground/80">
+                        {job.warehouse?.name || '-'}
+                      </td>
+                      {/* Qty */}
+                      <td className="px-4 py-4 whitespace-nowrap text-sm text-foreground text-right font-semibold">
+                        {job.quantityInput} {job.inputRawMaterial?.unitOfMeasurement || ''}
+                      </td>
+                      {/* Status */}
+                      <td className="px-4 py-4 text-center">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${job.status === 'Finished' || job.status === 'Completed'
+                            ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20'
+                            : 'bg-amber-500/10 text-amber-600 border-amber-500/20'
+                            }`}
+                        >
+                          {job.status === 'Finished' || job.status === 'Completed' ? (
+                            <CheckCircle className="w-3.5 h-3.5 mr-1" />
+                          ) : (
+                            <FileText className="w-3.5 h-3.5 mr-1" />
+                          )}
+                          {job.status}
+                        </span>
+                      </td>
+                      {/* Dates */}
+                      <td className="px-4 py-4 text-center text-xs text-foreground/70">
+                        <div>
+                          {job.startedAt && !isNaN(Date.parse(job.startedAt))
+                            ? new Date(job.startedAt).toLocaleString()
+                            : '-'}
+                        </div>
+                        {job.finishedAt && !isNaN(Date.parse(job.finishedAt)) && (
+                          <div className="text-emerald-500 mt-0.5">
+                            → {new Date(job.finishedAt).toLocaleString()}
+                          </div>
+                        )}
+                      </td>
+                      {/* Action */}
+                      <td className="px-4 py-4 text-center">
+                        {job.status !== 'Finished' && job.status !== 'Completed' && (
                           <Button
                             type="primary"
-                            onClick={() => openModal(record)}
-                            disabled={record.availableQuantity === 0}
+                            size="small"
+                            icon={<EditOutlined />}
+                            onClick={() => openEditStatusModal(job)}
                             className="rounded-lg"
+                            style={{
+                              background: 'linear-gradient(135deg, #10b981, #059669)',
+                              border: 'none',
+                            }}
                           >
-                            Initiate Processing
+                            Finish
                           </Button>
-                        </td>
-                      </motion.tr>
-                      <AnimatePresence>
-                        {expandedRowKeys.includes(rowKey) && (
-                          <motion.tr
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="bg-muted/50"
-                          >
-                            <td colSpan={8} className="px-10 py-4">
-                              {expandedRowRender(record)}
-                            </td>
-                          </motion.tr>
                         )}
-                      </AnimatePresence>
-                    </React.Fragment>
-                  );
-                })}
+                      </td>
+                    </motion.tr>
+
+                    {/* Expanded: show lot details */}
+                    <AnimatePresence>
+                      {expandedJobId === job.id && (
+                        <motion.tr
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="bg-muted/30"
+                        >
+                          <td colSpan={8} className="px-6 py-4">
+                            <div className="rounded-xl border border-border bg-card p-4">
+                              <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                                <Layers className="w-4 h-4 text-primary" />
+                                Allocated Cleaning Lots
+                              </h4>
+                              {(!job.processingBatchLots || job.processingBatchLots.length === 0) ? (
+                                <p className="text-sm text-muted-foreground italic">
+                                  No lot allocations found for this batch.
+                                </p>
+                              ) : (
+                                <div className="overflow-x-auto">
+                                  <table className="min-w-full divide-y divide-border">
+                                    <thead>
+                                      <tr className="bg-muted/40">
+                                        <th className="px-3 py-2 text-xs text-left font-semibold text-muted-foreground uppercase">
+                                          Lot Number
+                                        </th>
+                                        <th className="px-3 py-2 text-xs text-left font-semibold text-muted-foreground uppercase">
+                                          GRN
+                                        </th>
+                                        <th className="px-3 py-2 text-xs text-right font-semibold text-muted-foreground uppercase">
+                                          Lot Qty
+                                        </th>
+                                        <th className="px-3 py-2 text-xs text-right font-semibold text-muted-foreground uppercase">
+                                          Allocated Qty
+                                        </th>
+                                        <th className="px-3 py-2 text-xs text-center font-semibold text-muted-foreground uppercase">
+                                          Status
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-border">
+                                      {job.processingBatchLots.map((bl) => (
+                                        <tr key={bl.id} className="hover:bg-accent/50 transition">
+                                          <td className="px-3 py-2 text-sm font-mono text-primary">
+                                            {bl.cleaningLot?.lotNumber || '-'}
+                                          </td>
+                                          <td className="px-3 py-2 text-sm text-foreground">
+                                            {bl.cleaningLot?.grn?.grnNumber || '-'}
+                                          </td>
+                                          <td className="px-3 py-2 text-sm text-foreground text-right">
+                                            {bl.cleaningLot?.quantity || 0}{' '}
+                                            {job.inputRawMaterial?.unitOfMeasurement || ''}
+                                          </td>
+                                          <td className="px-3 py-2 text-sm font-semibold text-foreground text-right">
+                                            {bl.allocatedQuantity}{' '}
+                                            {job.inputRawMaterial?.unitOfMeasurement || ''}
+                                          </td>
+                                          <td className="px-3 py-2 text-center">
+                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                                              {bl.cleaningLot?.status || 'InProcessing'}
+                                            </span>
+                                          </td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              )}
+                            </div>
+                          </td>
+                        </motion.tr>
+                      )}
+                    </AnimatePresence>
+                  </React.Fragment>
+                ))}
               </tbody>
             </table>
           </div>
         </motion.div>
       </div>
 
-      {/* Modal for initiating processing */}
+      {/* ─── CREATE BATCH MODAL ─── */}
       <Modal
-        open={modal.visible}
+        open={batchModal.visible}
         title={
-          <div>
-            <span className="text-lg font-semibold text-foreground">
-              Initiate Processing
-            </span>
-            <div className="text-xs text-muted-foreground mt-1">
-              {modal.job?.rawMaterial?.name && (
-                <>
-                  Material: <b>{modal.job.rawMaterial.name}</b>
-                </>
-              )}
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg" style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
+              <Layers className="text-white" size={16} />
             </div>
+            <span className="text-lg font-semibold text-foreground">Create Processing Batch</span>
           </div>
         }
-        onCancel={() =>
-          setModal({
-            visible: false,
-            job: undefined,
-            quantity: 0,
-            warehouseId: '',
-            unit: undefined,
-            loading: false,
-          })
-        }
-        onOk={handleSubmit}
-        confirmLoading={modal.loading}
-        okText="Initiate"
+        onCancel={closeBatchModal}
+        width={680}
+        footer={null}
         className="rounded-xl"
       >
-        <div className="mb-3">
-          <div className="text-xs text-muted-foreground mb-1">Quantity</div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <Input
-              type="number"
-              min={1}
-              max={modal.job?.availableQuantity}
-              value={modal.quantity}
-              onChange={(e) =>
-                setModal((prev) => ({
-                  ...prev,
-                  quantity: Number(e.target.value),
-                }))
+        {/* Steps indicator */}
+        <Steps
+          current={batchModal.step}
+          size="small"
+          className="mb-6"
+          items={[
+            { title: 'Warehouse' },
+            { title: 'Material' },
+            { title: 'Select Lots' },
+          ]}
+        />
+
+        {/* Step 0: Select Warehouse */}
+        {batchModal.step === 0 && (
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+            <div className="text-sm text-muted-foreground mb-3">
+              Select the warehouse where the cleaned material is stored:
+            </div>
+            <Select
+              style={{ width: '100%' }}
+              size="large"
+              placeholder="Choose warehouse..."
+              value={batchModal.warehouseId || undefined}
+              onChange={handleBatchWarehouseSelect}
+            >
+              {warehouses.map((w) => (
+                <Option key={w.id} value={w.id}>
+                  <div className="flex items-center gap-2">
+                    <Warehouse className="w-4 h-4 text-primary" />
+                    {w.name}
+                  </div>
+                </Option>
+              ))}
+            </Select>
+            <div className="flex justify-end mt-6">
+              <Button
+                type="primary"
+                onClick={handleBatchNextStep}
+                disabled={!batchModal.warehouseId}
+                style={{
+                  background: batchModal.warehouseId ? 'linear-gradient(135deg, #6366f1, #8b5cf6)' : undefined,
+                  border: 'none',
+                }}
+              >
+                Next <ArrowRight className="w-4 h-4 ml-1 inline" />
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Step 1: Select Material */}
+        {batchModal.step === 1 && (
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+            <div className="text-sm text-muted-foreground mb-3">
+              Select the raw material to process:
+            </div>
+            <Select
+              style={{ width: '100%' }}
+              size="large"
+              placeholder="Choose raw material..."
+              value={batchModal.rawMaterialId || undefined}
+              onChange={handleBatchMaterialSelect}
+              showSearch
+              filterOption={(input, option) =>
+                (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())
               }
-              placeholder="Enter quantity"
-              className="rounded"
-              style={{ flex: 2 }}
-            />
-            <UnitSelect
-              value={modal.unit}
-              baseUnit={modal.job?.rawMaterial?.unitOfMeasurement}
-              onChange={(val) =>
-                setModal((prev) => ({
-                  ...prev,
-                  unit: String(val),
-                }))
-              }
-            />
-          </div>
-        </div>
-        <div>
-          <div className="text-xs text-muted-foreground mb-1">Warehouse</div>
-          <Select
-            style={{ width: '100%' }}
-            placeholder="Select warehouse"
-            value={modal.warehouseId}
-            onChange={(val) =>
-              setModal((prev) => ({ ...prev, warehouseId: val }))
-            }
-            className="rounded"
-          >
-            {warehouses.map((w) => (
-              <Option key={w.id} value={w.id}>
-                {w.name}
-              </Option>
-            ))}
-          </Select>
-        </div>
+            >
+              {materialsInWarehouse.map((rm) => (
+                <Option key={rm.id} value={rm.id}>
+                  {rm.name} ({rm.skuCode})
+                </Option>
+              ))}
+            </Select>
+            <div className="flex justify-between mt-6">
+              <Button onClick={handleBatchPrevStep}>Back</Button>
+              <Button
+                type="primary"
+                onClick={handleBatchNextStep}
+                disabled={!batchModal.rawMaterialId}
+                style={{
+                  background: batchModal.rawMaterialId ? 'linear-gradient(135deg, #6366f1, #8b5cf6)' : undefined,
+                  border: 'none',
+                }}
+              >
+                Next <ArrowRight className="w-4 h-4 ml-1 inline" />
+              </Button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Step 2: Select Lots */}
+        {batchModal.step === 2 && (
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-sm text-muted-foreground">
+                Select lot(s) and set allocated quantities:
+              </div>
+              <div className="text-sm font-medium text-primary">
+                Total: {totalSelectedQuantity}{' '}
+                {rawMaterials.find((rm) => rm.id === batchModal.rawMaterialId)?.unitOfMeasurement || ''}
+              </div>
+            </div>
+
+            {filteredLots.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                <Package className="mx-auto mb-2 opacity-40" size={28} />
+                <p>No available lots found for the selected warehouse and material.</p>
+              </div>
+            ) : (
+              <div className="max-h-[340px] overflow-y-auto rounded-lg border border-border">
+                <table className="min-w-full divide-y divide-border">
+                  <thead className="sticky top-0 bg-muted/70 z-10">
+                    <tr>
+                      <th className="px-3 py-2 text-xs text-center font-semibold text-muted-foreground uppercase w-10">
+                        ✓
+                      </th>
+                      <th className="px-3 py-2 text-xs text-left font-semibold text-muted-foreground uppercase">
+                        Lot No.
+                      </th>
+                      <th className="px-3 py-2 text-xs text-left font-semibold text-muted-foreground uppercase">
+                        GRN
+                      </th>
+                      <th className="px-3 py-2 text-xs text-right font-semibold text-muted-foreground uppercase">
+                        Available Qty
+                      </th>
+                      <th className="px-3 py-2 text-xs text-right font-semibold text-muted-foreground uppercase w-36">
+                        Allocate Qty
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border bg-card">
+                    {filteredLots.map((lot) => {
+                      const isSelected = batchModal.selectedLots[lot.id] !== undefined;
+                      return (
+                        <tr
+                          key={lot.id}
+                          className={`transition-colors ${isSelected ? 'bg-primary/5' : 'hover:bg-accent/50'}`}
+                        >
+                          <td className="px-3 py-2 text-center">
+                            <Checkbox
+                              checked={isSelected}
+                              onChange={() => toggleLotSelection(lot.id, lot.quantity)}
+                            />
+                          </td>
+                          <td className="px-3 py-2 text-sm font-mono text-primary font-medium">
+                            {lot.lotNumber}
+                          </td>
+                          <td className="px-3 py-2 text-sm text-foreground">
+                            {lot.grn?.grnNumber || '-'}
+                          </td>
+                          <td className="px-3 py-2 text-sm text-foreground text-right">
+                            {lot.quantity}{' '}
+                            {lot.rawMaterial?.unitOfMeasurement || ''}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {isSelected ? (
+                              <Input
+                                type="number"
+                                min={0.01}
+                                max={lot.quantity}
+                                step={0.01}
+                                value={batchModal.selectedLots[lot.id]}
+                                onChange={(e) =>
+                                  updateLotQuantity(lot.id, Number(e.target.value))
+                                }
+                                style={{ width: 120, textAlign: 'right' }}
+                                size="small"
+                              />
+                            ) : (
+                              <span className="text-muted-foreground text-sm">-</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <div className="flex justify-between mt-6">
+              <Button onClick={handleBatchPrevStep}>Back</Button>
+              <Button
+                type="primary"
+                onClick={handleCreateBatch}
+                loading={batchModal.loading}
+                disabled={Object.keys(batchModal.selectedLots).length === 0}
+                style={{
+                  background: Object.keys(batchModal.selectedLots).length > 0
+                    ? 'linear-gradient(135deg, #10b981, #059669)'
+                    : undefined,
+                  border: 'none',
+                  fontWeight: 600,
+                }}
+              >
+                <CheckCircle className="w-4 h-4 mr-1 inline" />
+                Create Batch
+              </Button>
+            </div>
+          </motion.div>
+        )}
       </Modal>
 
-      {/* Modal for editing status (pencil) */}
+      {/* ─── FINISH PROCESSING MODAL ─── */}
       <Modal
         open={editStatusModal.visible}
-        title="Finish Processing Job"
+        title={
+          <div className="flex items-center gap-2">
+            <CheckCircle className="text-emerald-500" size={18} />
+            <span>Finish Processing ─ {editStatusModal.job?.batchNumber || editStatusModal.job?.id}</span>
+          </div>
+        }
         onCancel={() =>
           setEditStatusModal({
             visible: false,
             job: undefined,
-            byProductQuantity: 0,
+            receivedQuantity: 0,
             reason: '',
             warehouseId: '',
             loading: false,
@@ -719,31 +916,42 @@ const ProcessingList: React.FC = () => {
         okText="Finish"
         className="rounded-xl"
       >
-        <div className="mb-3">
-          <div className="text-xs text-muted-foreground mb-1">
-            By-Product/Semi-Processed Quantity
+        {/* Input Quantity Summary */}
+        <div className="mb-4 rounded-lg border border-border bg-muted/40 p-3">
+          <div className="flex items-center justify-between">
+            <div className="text-xs text-muted-foreground font-medium">Input Quantity (sent for processing)</div>
+            <div className="text-lg font-bold text-foreground">
+              {inputQty} {editStatusModal.job?.inputRawMaterial?.unitOfMeasurement || ''}
+            </div>
+          </div>
+        </div>
+
+        {/* Received Quantity */}
+        <div className="mb-4">
+          <div className="text-xs text-muted-foreground mb-1 font-medium">
+            Received Quantity (after processing)
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
             <Input
               type="number"
               min={0}
-              value={editStatusModal.byProductQuantity}
+              max={inputQty}
+              step={0.01}
+              value={editStatusModal.receivedQuantity}
               onChange={(e) =>
                 setEditStatusModal((prev) => ({
                   ...prev,
-                  byProductQuantity: Number(e.target.value),
+                  receivedQuantity: Number(e.target.value),
                 }))
               }
-              placeholder="Enter by-product/semi-processed quantity"
+              placeholder="Enter received quantity"
               className="rounded"
               style={{ flex: 2 }}
             />
             <UnitSelect
               value={editStatusModal.unit}
-              baseUnit={
-                editStatusModal.job?.inputRawMaterial?.unitOfMeasurement
-              }
-              onChange={(val) =>
+              baseUnit={editStatusModal.job?.inputRawMaterial?.unitOfMeasurement}
+              onChange={(val: string | number) =>
                 setEditStatusModal((prev) => ({
                   ...prev,
                   unit: String(val),
@@ -752,39 +960,95 @@ const ProcessingList: React.FC = () => {
             />
           </div>
         </div>
-        <div className="mb-3">
-          <div className="text-xs text-muted-foreground mb-1">
-            Is this by-product reusable?
+
+        {/* Auto-calculated Loss/Waste indicator */}
+        {hasLoss && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 rounded-lg border p-3"
+            style={{
+              borderColor: 'rgba(245, 158, 11, 0.3)',
+              background: 'rgba(245, 158, 11, 0.06)',
+            }}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                <span className="text-xs font-semibold text-amber-600 uppercase tracking-wider">Loss / Waste Detected</span>
+              </div>
+              <span className="text-lg font-bold text-amber-600">
+                {lossQty.toFixed(2)} {editStatusModal.job?.inputRawMaterial?.unitOfMeasurement || ''}
+              </span>
+            </div>
+            <div className="text-xs text-amber-600/70">
+              {((lossQty / inputQty) * 100).toFixed(1)}% of input quantity
+            </div>
+          </motion.div>
+        )}
+
+        {/* Reason — show only when there is a loss */}
+        {hasLoss && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4"
+          >
+            <div className="text-xs text-muted-foreground mb-1 font-medium">
+              Reason for Loss <span className="text-red-500">*</span>
+            </div>
+            <Input
+              value={editStatusModal.reason}
+              onChange={(e) =>
+                setEditStatusModal((prev) => ({
+                  ...prev,
+                  reason: e.target.value,
+                }))
+              }
+              placeholder="Enter reason (e.g., moisture loss, breakage, spillage)"
+              className="rounded"
+            />
+          </motion.div>
+        )}
+
+        {/* Reusable toggle — only if loss */}
+        {hasLoss && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4"
+          >
+            <div className="text-xs text-muted-foreground mb-1 font-medium">Is the lost/waste material reusable?</div>
+            <Switch
+              checked={editStatusModal.isReusable}
+              onChange={(checked) =>
+                setEditStatusModal((prev) => ({ ...prev, isReusable: checked }))
+              }
+              checkedChildren="Yes"
+              unCheckedChildren="No"
+            />
+          </motion.div>
+        )}
+
+        {/* No loss — confirmation */}
+        {!hasLoss && receivedQty > 0 && (
+          <div className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="text-emerald-500" size={16} />
+              <span className="text-sm font-medium text-emerald-600">
+                No loss — full quantity received
+              </span>
+            </div>
           </div>
-          <Switch
-            checked={editStatusModal.isReusable}
-            onChange={(checked) =>
-              setEditStatusModal((prev) => ({ ...prev, isReusable: checked }))
-            }
-            checkedChildren="Yes"
-            unCheckedChildren="No"
-          />
-        </div>
-        <div className="mb-3">
-          <div className="text-xs text-muted-foreground mb-1">Reason</div>
-          <Input
-            value={editStatusModal.reason}
-            onChange={(e) =>
-              setEditStatusModal((prev) => ({
-                ...prev,
-                reason: e.target.value,
-              }))
-            }
-            placeholder="Enter reason"
-            className="rounded"
-          />
-        </div>
+        )}
+
+        {/* Warehouse */}
         <div>
-          <div className="text-xs text-muted-foreground mb-1">Warehouse</div>
+          <div className="text-xs text-muted-foreground mb-1 font-medium">Warehouse</div>
           <Select
             style={{ width: '100%' }}
             placeholder="Select warehouse"
-            value={editStatusModal.warehouseId}
+            value={editStatusModal.warehouseId || undefined}
             onChange={(val) =>
               setEditStatusModal((prev) => ({
                 ...prev,

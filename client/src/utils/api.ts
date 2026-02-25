@@ -251,6 +251,8 @@ export const API_ROUTES = {
 
     // Processing Jobs
     CREATE_PROCESSING_JOB: `${BASE_URL}/raw/processing`,
+    CREATE_PROCESSING_BATCH: `${BASE_URL}/raw/processing/batch`,
+    GET_AVAILABLE_LOTS: `${BASE_URL}/raw/processing/available-lots`,
     GET_PROCESSING_JOBS: `${BASE_URL}/raw/processing`,
     GET_PROCESSING_JOB_BY_ID: (id: string) => `${BASE_URL}/raw/processing/${id}`,
     UPDATE_PROCESSING_JOB: (id: string) => `${BASE_URL}/raw/processing/${id}`,

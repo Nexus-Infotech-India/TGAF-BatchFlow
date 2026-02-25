@@ -32,6 +32,8 @@ router.put('/cleaning/:id', CleaningJobController.updateCleaningJob);
 
 // Processing Jobs
 router.post('/processing', ProcessingJobController.createProcessingJob);
+router.post('/processing/batch', ProcessingJobController.createProcessingBatch);
+router.get('/processing/available-lots', ProcessingJobController.getAvailableLots);
 router.get('/processing', ProcessingJobController.getProcessingJobs);
 router.get('/processing/:id', ProcessingJobController.getProcessingJobById);
 router.put('/processing/:id', ProcessingJobController.updateProcessingJob);
