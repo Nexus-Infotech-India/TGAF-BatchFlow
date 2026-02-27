@@ -40,6 +40,7 @@ import TransactionalLog from './components/pages/Order/TransactionalLog';
 import ProcessingList from './components/pages/processing/processingList';
 import RawDashboard from './components/pages/Dashboard/rawDashboard';
 import RMQualityReport from './components/pages/QualityReport/RMQualityReport';
+import CreateBOMPage from './components/pages/Masters/CreateBOM';
 
 const App = () => {
   // Pre-register permissioned routes so they appear in the permission selector
@@ -87,6 +88,7 @@ const App = () => {
     { path: '/raw/transaction-logs', name: 'Transactional Logs', description: 'View all transactional logs in the system', permissionKey: 'view_activity_logs' },
     { path: '/raw-dashboard', name: 'Raw Dashboard', description: 'View all cleaned raw materials ready for processing', permissionKey: 'manage_raw_dashboard' },
     { path: '/raw/processing-list', name: 'Processing List', description: 'View all processing raw materials ready for processing', permissionKey: 'process_raw_materials' },
+    { path: '/masters/bom/create', name: 'Bill of Material', description: 'Create and manage Bill of Materials', permissionKey: 'manage_bom' },
   ];
 
   staticRoutes.forEach(r => registerRoute({ ...r, element: <></>, resource: 'page' }));
@@ -752,6 +754,24 @@ const App = () => {
                   name="Create Raw Material"
                   description="Create raw material master data"
                   permissionKey="manage_raw_materials"
+                />
+              }
+            />
+
+            <Route
+              path="/masters/bom/create"
+              element={
+                <PermissionedRoute
+                  path="/masters/bom/create"
+                  element={
+                    <SecureRoute
+                      element={<CreateBOMPage />}
+                      permissionKey="manage_bom"
+                    />
+                  }
+                  name="Bill of Material"
+                  description="Create and manage Bill of Materials"
+                  permissionKey="manage_bom"
                 />
               }
             />

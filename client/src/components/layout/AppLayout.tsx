@@ -62,6 +62,13 @@ const AppLayout = () => {
         { title: 'Home', path: '/' },
         { title: 'Settings', path: '/settings' },
       ];
+    } else if (path.includes('/masters/bom')) {
+      title = 'Bill of Material';
+      currentNavStack = [
+        { title: 'Home', path: '/' },
+        { title: 'Masters', path: '/masters/bom/create' },
+        { title: 'Bill of Material', path: '/masters/bom/create' },
+      ];
     }
     // Add breadcrumb for document-library
     else if (path.includes('/document-library')) {

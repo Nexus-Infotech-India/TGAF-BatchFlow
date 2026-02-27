@@ -349,6 +349,13 @@ export const API_ROUTES = {
     CREATE_GRN_CLEANING_TRANSFER: `${BASE_URL}/raw/cleaning-grn/transfer`,
     GET_CLEANING_LOTS: `${BASE_URL}/raw/cleaning-grn/lots`,
     FINISH_CLEANING_JOB: (id: string) => `${BASE_URL}/raw/cleaning-grn/finish/${id}`,
+
+    // Bill of Material (BOM)
+    CREATE_BOM: `${BASE_URL}/raw/bom`,
+    GET_BOMS: `${BASE_URL}/raw/bom`,
+    GET_BOM_BY_ID: (id: string) => `${BASE_URL}/raw/bom/${id}`,
+    UPDATE_BOM: (id: string) => `${BASE_URL}/raw/bom/${id}`,
+    DELETE_BOM: (id: string) => `${BASE_URL}/raw/bom/${id}`,
   },
 
   DRAFT: {

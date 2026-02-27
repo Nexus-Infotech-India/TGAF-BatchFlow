@@ -3,6 +3,7 @@ import api, { API_ROUTES } from '../../../utils/api';
 import { CheckCircle, Clock, Package, Mail, ChevronDown, ChevronUp, Eye, Trash2, Pencil } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
+import { Pagination } from 'antd';
 import ReceiveModal, { DeleteOrderModal, EditOrderModal } from '../../ui/Order/statusModal';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,7 +26,7 @@ type PurchaseOrderItem = {
     totalReceived: number;
     rate: number;
     status: string;
-    rawMaterial?: { id: string; skuCode: string; name: string };
+    rawMaterial?: { id: string; skuCode: string; name: string; unitOfMeasurement?: string };
     receivals?: ReceivalEntry[];
 };
 type PurchaseOrder = {
@@ -69,6 +70,13 @@ const getStatusConfig = (status: string) => {
     }
 };
 
+// Format quantity: round to max 2 decimals and trim trailing .00
+const formatQty = (n: number) => {
+    const v = Math.max(0, Number(n) || 0);
+    const rounded = parseFloat(v.toFixed(2));
+    return rounded.toString();
+};
+
 const PurchaseOrderList: React.FC = () => {
     const navigate = useNavigate();
     const [orders, setOrders] = useState<PurchaseOrder[]>([]);
@@ -80,6 +88,9 @@ const PurchaseOrderList: React.FC = () => {
     const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
     const [sendingMail, setSendingMail] = useState(false);
     const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 5;
 
     const fetchOrders = async () => {
         setLoading(true);
@@ -107,6 +118,8 @@ const PurchaseOrderList: React.FC = () => {
             return next;
         });
     };
+
+    
 
     const handleReceiveConfirm = async (data: any) => {
         if (!receiveItem) return;
@@ -187,6 +200,8 @@ const PurchaseOrderList: React.FC = () => {
         );
     }
 
+    const paginatedOrders = orders.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
     return (
         <div className="p-6 max-w-[95vw] mx-auto">
             {/* Header */}
@@ -250,11 +265,11 @@ const PurchaseOrderList: React.FC = () => {
                     background: 'linear-gradient(90deg, rgba(83, 23, 170, 0.03) 0%, rgba(83, 23, 170, 0.01) 50%, transparent 100%)',
                 }}
             >
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
+                <div className="overflow-x-auto" id="table-scroll-container">
+                    <table className="w-full text-sm" id="purchase-order-table">
                         <thead>
                             <tr className="border-b border-border/30">
-                                {['PO Number', 'Vendor', 'SKU', 'Product', 'Order Date', 'Expected', 'Ordered', 'Received', 'Rate', 'Status', 'Actions'].map(
+                                {['PO Number', 'Vendor', 'Product', 'Order Date', 'Expected', 'Ordered Quantity', 'Received Quantity', 'Leftover Quantity', 'Rate   (Per KG)', 'Status', 'Actions'].map(
                                     (h) => (
                                         <th key={h} className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wider px-4 py-3">
                                             {h}
@@ -264,7 +279,7 @@ const PurchaseOrderList: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map((order) =>
+                            {paginatedOrders.map((order) =>
                                 order.items.map((item, itemIdx) => {
                                     const stConfig = getStatusConfig(item.status);
                                     const pct = item.quantityOrdered > 0 ? Math.min(100, (item.totalReceived / item.quantityOrdered) * 100) : 0;
@@ -319,11 +334,13 @@ const PurchaseOrderList: React.FC = () => {
                                                         </td>
                                                     </>
                                                 )}
-                                                <td className="px-4 py-3 text-muted-foreground text-xs font-mono">
-                                                    {item.rawMaterial?.skuCode || '-'}
-                                                </td>
                                                 <td className="px-4 py-3 text-foreground/90">
-                                                    {item.rawMaterial?.name || '-'}
+                                                    <div className="flex flex-col">
+                                                        <span className="font-medium">{item.rawMaterial?.name || '-'}</span>
+                                                        {item.rawMaterial?.skuCode ? (
+                                                            <span className="text-xs text-muted-foreground mt-1">SKU code - {item.rawMaterial.skuCode}</span>
+                                                        ) : null}
+                                                    </div>
                                                 </td>
                                                 <td className="px-4 py-3 text-muted-foreground">
                                                     {formatDate(order.orderDate)}
@@ -333,6 +350,7 @@ const PurchaseOrderList: React.FC = () => {
                                                 </td>
                                                 <td className="px-4 py-3 text-foreground font-medium">
                                                     {item.quantityOrdered}
+                                                    {item.rawMaterial?.unitOfMeasurement ? ` ${item.rawMaterial.unitOfMeasurement}` : ''}
                                                 </td>
                                                 <td className="px-4 py-3">
                                                     <div className="flex flex-col items-center gap-2">
@@ -349,8 +367,12 @@ const PurchaseOrderList: React.FC = () => {
                                                         </div>
                                                     </div>
                                                 </td>
+                                                <td className="px-4 py-3 text-foreground font-medium">
+                                                    {formatQty(item.quantityOrdered - item.totalReceived)}
+                                                    {item.rawMaterial?.unitOfMeasurement ? ` ${item.rawMaterial.unitOfMeasurement}` : ''}
+                                                </td>
                                                 <td className="px-4 py-3 text-foreground/80">
-                                                    ₹{item.rate.toLocaleString()}
+                                                    ₦{item.rate.toLocaleString()}
                                                 </td>
                                                 <td className="px-4 py-3">
                                                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border ${stConfig.classes}`}>
@@ -411,20 +433,20 @@ const PurchaseOrderList: React.FC = () => {
                                                                     <table className="w-full text-sm">
                                                                         <thead>
                                                                             <tr className="text-left text-xs text-muted-foreground border-b border-border/20">
-                                                                                <th className="px-3 py-2">Received</th>
+                                                                                <th className="px-3 py-2">Received Quantity</th>
                                                                                 <th className="px-3 py-2">Warehouse</th>
-                                                                                <th className="px-3 py-2">Mode</th>
                                                                                 <th className="px-3 py-2">Bags/Weight(No./KG)</th>
                                                                                 <th className="px-3 py-2">Notes</th>
-                                                                                <th className="px-3 py-2">Date</th>
+                                                                                <th className="px-3 py-2">Received Date</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody className="divide-y divide-border">
                                                                             {item.receivals.map((r, ri) => (
                                                                                 <tr key={r.id || ri} className="bg-muted/15">
-                                                                                    <td className="px-3 py-3 text-sm font-medium">{r.totalWeight}</td>
+                                                                                    <td className="px-3 py-3 text-sm font-medium">
+                                                                                        {r.totalWeight}{item.rawMaterial?.unitOfMeasurement ? ` ${item.rawMaterial.unitOfMeasurement}` : ''}
+                                                                                    </td>
                                                                                     <td className="px-3 py-3 text-sm text-foreground/80">{r.warehouse?.name || '-'}</td>
-                                                                                    <td className="px-3 py-3 text-sm text-muted-foreground">{r.weightMode}</td>
                                                                                     <td className="px-3 py-3 text-sm text-muted-foreground">
                                                                                         {r.bags && r.bags.length > 0 ? (
                                                                                             <div className="flex flex-col gap-1">
@@ -469,6 +491,19 @@ const PurchaseOrderList: React.FC = () => {
                     </table>
                 </div>
             </div>
+
+            {/* Pagination */}
+            {orders.length > pageSize && (
+                <div className="flex justify-end mt-4 px-2">
+                    <Pagination
+                        current={currentPage}
+                        pageSize={pageSize}
+                        total={orders.length}
+                        onChange={(page) => setCurrentPage(page)}
+                        showSizeChanger={false}
+                    />
+                </div>
+            )}
 
             {/* Modals */}
             <ReceiveModal

@@ -15,6 +15,7 @@ import {
   Hash,
   CalendarDays,
   ArrowRight,
+  Eye,
 } from 'lucide-react';
 import UnitSelect from '../../ui/Unitselect';
 
@@ -515,7 +516,7 @@ const ProcessingList: React.FC = () => {
                         <Button
                           type="text"
                           size="small"
-                          icon={expandedJobId === job.id ? <CheckOutlined /> : <PlusOutlined />}
+                          icon={expandedJobId === job.id ? <CheckOutlined /> : <Eye className="w-4 h-4" />}
                           onClick={() =>
                             setExpandedJobId(expandedJobId === job.id ? null : job.id)
                           }

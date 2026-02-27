@@ -18,6 +18,7 @@ import { RMQualityMailFilteredController } from '../controllers/rawmaterial/qual
 import { RMQualityExportFilteredController } from '../controllers/rawmaterial/qualityExportFiltered.controller';
 import { sendPurchaseOrderMail } from '../controllers/rawmaterial/sendPurchaseOrderMail.controller';
 import { GRNController } from '../controllers/rawmaterial/grn.controller';
+import { BOMController } from '../controllers/rawmaterial/bom.controller';
 
 const router = Router();
 
@@ -131,5 +132,12 @@ router.get('/cleaning-grn/lots', CleaningGrnController.getCleaningLots);
 router.get('/cleaning-grn/:grnNumber', CleaningGrnController.getGRNMaterialsByGrnNumber);
 router.post('/cleaning-grn/transfer', CleaningGrnController.createGRNCleaningTransfer);
 router.put('/cleaning-grn/finish/:id', CleaningGrnController.finishCleaning);
+
+// Bill of Material (BOM)
+router.post('/bom', BOMController.createBOM);
+router.get('/bom', BOMController.getBOMs);
+router.get('/bom/:id', BOMController.getBOMById);
+router.put('/bom/:id', BOMController.updateBOM);
+router.delete('/bom/:id', BOMController.deleteBOM);
 
 export default router;

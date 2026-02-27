@@ -333,6 +333,16 @@ export type CleaningLot = $Result.DefaultSelection<Prisma.$CleaningLotPayload>
  * 
  */
 export type ProcessingBatchLot = $Result.DefaultSelection<Prisma.$ProcessingBatchLotPayload>
+/**
+ * Model BillOfMaterial
+ * 
+ */
+export type BillOfMaterial = $Result.DefaultSelection<Prisma.$BillOfMaterialPayload>
+/**
+ * Model BOMItem
+ * 
+ */
+export type BOMItem = $Result.DefaultSelection<Prisma.$BOMItemPayload>
 
 /**
  * Enums
@@ -523,6 +533,15 @@ export const WeightMode: {
 
 export type WeightMode = (typeof WeightMode)[keyof typeof WeightMode]
 
+
+export const BOMStatus: {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  DRAFT: 'DRAFT'
+};
+
+export type BOMStatus = (typeof BOMStatus)[keyof typeof BOMStatus]
+
 }
 
 export type BatchStatus = $Enums.BatchStatus
@@ -596,6 +615,10 @@ export const PurchaseOrderItemStatus: typeof $Enums.PurchaseOrderItemStatus
 export type WeightMode = $Enums.WeightMode
 
 export const WeightMode: typeof $Enums.WeightMode
+
+export type BOMStatus = $Enums.BOMStatus
+
+export const BOMStatus: typeof $Enums.BOMStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1354,6 +1377,26 @@ export class PrismaClient<
     * ```
     */
   get processingBatchLot(): Prisma.ProcessingBatchLotDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.billOfMaterial`: Exposes CRUD operations for the **BillOfMaterial** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BillOfMaterials
+    * const billOfMaterials = await prisma.billOfMaterial.findMany()
+    * ```
+    */
+  get billOfMaterial(): Prisma.BillOfMaterialDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.bOMItem`: Exposes CRUD operations for the **BOMItem** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BOMItems
+    * const bOMItems = await prisma.bOMItem.findMany()
+    * ```
+    */
+  get bOMItem(): Prisma.BOMItemDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1858,7 +1901,9 @@ export namespace Prisma {
     RMQualityParameter: 'RMQualityParameter',
     GRNbyPo: 'GRNbyPo',
     CleaningLot: 'CleaningLot',
-    ProcessingBatchLot: 'ProcessingBatchLot'
+    ProcessingBatchLot: 'ProcessingBatchLot',
+    BillOfMaterial: 'BillOfMaterial',
+    BOMItem: 'BOMItem'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1877,7 +1922,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6617,6 +6662,154 @@ export namespace Prisma {
           }
         }
       }
+      BillOfMaterial: {
+        payload: Prisma.$BillOfMaterialPayload<ExtArgs>
+        fields: Prisma.BillOfMaterialFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BillOfMaterialFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BillOfMaterialFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload>
+          }
+          findFirst: {
+            args: Prisma.BillOfMaterialFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BillOfMaterialFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload>
+          }
+          findMany: {
+            args: Prisma.BillOfMaterialFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload>[]
+          }
+          create: {
+            args: Prisma.BillOfMaterialCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload>
+          }
+          createMany: {
+            args: Prisma.BillOfMaterialCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BillOfMaterialCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload>[]
+          }
+          delete: {
+            args: Prisma.BillOfMaterialDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload>
+          }
+          update: {
+            args: Prisma.BillOfMaterialUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload>
+          }
+          deleteMany: {
+            args: Prisma.BillOfMaterialDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BillOfMaterialUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BillOfMaterialUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload>[]
+          }
+          upsert: {
+            args: Prisma.BillOfMaterialUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BillOfMaterialPayload>
+          }
+          aggregate: {
+            args: Prisma.BillOfMaterialAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBillOfMaterial>
+          }
+          groupBy: {
+            args: Prisma.BillOfMaterialGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BillOfMaterialGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BillOfMaterialCountArgs<ExtArgs>
+            result: $Utils.Optional<BillOfMaterialCountAggregateOutputType> | number
+          }
+        }
+      }
+      BOMItem: {
+        payload: Prisma.$BOMItemPayload<ExtArgs>
+        fields: Prisma.BOMItemFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BOMItemFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BOMItemFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload>
+          }
+          findFirst: {
+            args: Prisma.BOMItemFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BOMItemFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload>
+          }
+          findMany: {
+            args: Prisma.BOMItemFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload>[]
+          }
+          create: {
+            args: Prisma.BOMItemCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload>
+          }
+          createMany: {
+            args: Prisma.BOMItemCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BOMItemCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload>[]
+          }
+          delete: {
+            args: Prisma.BOMItemDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload>
+          }
+          update: {
+            args: Prisma.BOMItemUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload>
+          }
+          deleteMany: {
+            args: Prisma.BOMItemDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BOMItemUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BOMItemUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload>[]
+          }
+          upsert: {
+            args: Prisma.BOMItemUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BOMItemPayload>
+          }
+          aggregate: {
+            args: Prisma.BOMItemAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBOMItem>
+          }
+          groupBy: {
+            args: Prisma.BOMItemGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BOMItemGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BOMItemCountArgs<ExtArgs>
+            result: $Utils.Optional<BOMItemCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -6777,6 +6970,8 @@ export namespace Prisma {
     gRNbyPo?: GRNbyPoOmit
     cleaningLot?: CleaningLotOmit
     processingBatchLot?: ProcessingBatchLotOmit
+    billOfMaterial?: BillOfMaterialOmit
+    bOMItem?: BOMItemOmit
   }
 
   /* Types for Logging */
@@ -8127,6 +8322,7 @@ export namespace Prisma {
     processingJobs: number
     purchaseOrderItems: number
     stockEntries: number
+    bomItems: number
   }
 
   export type RawMaterialProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8136,6 +8332,7 @@ export namespace Prisma {
     processingJobs?: boolean | RawMaterialProductCountOutputTypeCountProcessingJobsArgs
     purchaseOrderItems?: boolean | RawMaterialProductCountOutputTypeCountPurchaseOrderItemsArgs
     stockEntries?: boolean | RawMaterialProductCountOutputTypeCountStockEntriesArgs
+    bomItems?: boolean | RawMaterialProductCountOutputTypeCountBomItemsArgs
   }
 
   // Custom InputTypes
@@ -8189,6 +8386,13 @@ export namespace Prisma {
    */
   export type RawMaterialProductCountOutputTypeCountStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: StockEntryWhereInput
+  }
+
+  /**
+   * RawMaterialProductCountOutputType without action
+   */
+  export type RawMaterialProductCountOutputTypeCountBomItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BOMItemWhereInput
   }
 
 
@@ -8599,6 +8803,37 @@ export namespace Prisma {
    */
   export type GRNbyPoCountOutputTypeCountCleaningLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: CleaningLotWhereInput
+  }
+
+
+  /**
+   * Count Type BillOfMaterialCountOutputType
+   */
+
+  export type BillOfMaterialCountOutputType = {
+    items: number
+  }
+
+  export type BillOfMaterialCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | BillOfMaterialCountOutputTypeCountItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * BillOfMaterialCountOutputType without action
+   */
+  export type BillOfMaterialCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterialCountOutputType
+     */
+    select?: BillOfMaterialCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BillOfMaterialCountOutputType without action
+   */
+  export type BillOfMaterialCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BOMItemWhereInput
   }
 
 
@@ -59924,6 +60159,7 @@ export namespace Prisma {
     purchaseOrderItems?: boolean | RawMaterialProduct$purchaseOrderItemsArgs<ExtArgs>
     vendor?: boolean | RawMaterialProduct$vendorArgs<ExtArgs>
     stockEntries?: boolean | RawMaterialProduct$stockEntriesArgs<ExtArgs>
+    bomItems?: boolean | RawMaterialProduct$bomItemsArgs<ExtArgs>
     _count?: boolean | RawMaterialProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["rawMaterialProduct"]>
 
@@ -59977,6 +60213,7 @@ export namespace Prisma {
     purchaseOrderItems?: boolean | RawMaterialProduct$purchaseOrderItemsArgs<ExtArgs>
     vendor?: boolean | RawMaterialProduct$vendorArgs<ExtArgs>
     stockEntries?: boolean | RawMaterialProduct$stockEntriesArgs<ExtArgs>
+    bomItems?: boolean | RawMaterialProduct$bomItemsArgs<ExtArgs>
     _count?: boolean | RawMaterialProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RawMaterialProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -59996,6 +60233,7 @@ export namespace Prisma {
       purchaseOrderItems: Prisma.$PurchaseOrderItemPayload<ExtArgs>[]
       vendor: Prisma.$VendorPayload<ExtArgs> | null
       stockEntries: Prisma.$StockEntryPayload<ExtArgs>[]
+      bomItems: Prisma.$BOMItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -60409,6 +60647,7 @@ export namespace Prisma {
     purchaseOrderItems<T extends RawMaterialProduct$purchaseOrderItemsArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$purchaseOrderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PurchaseOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     vendor<T extends RawMaterialProduct$vendorArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$vendorArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     stockEntries<T extends RawMaterialProduct$stockEntriesArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$stockEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bomItems<T extends RawMaterialProduct$bomItemsArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$bomItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -61004,6 +61243,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: StockEntryScalarFieldEnum | StockEntryScalarFieldEnum[]
+  }
+
+  /**
+   * RawMaterialProduct.bomItems
+   */
+  export type RawMaterialProduct$bomItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    where?: BOMItemWhereInput
+    orderBy?: BOMItemOrderByWithRelationInput | BOMItemOrderByWithRelationInput[]
+    cursor?: BOMItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BOMItemScalarFieldEnum | BOMItemScalarFieldEnum[]
   }
 
   /**
@@ -84475,6 +84738,2314 @@ export namespace Prisma {
 
 
   /**
+   * Model BillOfMaterial
+   */
+
+  export type AggregateBillOfMaterial = {
+    _count: BillOfMaterialCountAggregateOutputType | null
+    _avg: BillOfMaterialAvgAggregateOutputType | null
+    _sum: BillOfMaterialSumAggregateOutputType | null
+    _min: BillOfMaterialMinAggregateOutputType | null
+    _max: BillOfMaterialMaxAggregateOutputType | null
+  }
+
+  export type BillOfMaterialAvgAggregateOutputType = {
+    outputQuantity: number | null
+  }
+
+  export type BillOfMaterialSumAggregateOutputType = {
+    outputQuantity: number | null
+  }
+
+  export type BillOfMaterialMinAggregateOutputType = {
+    id: string | null
+    bomCode: string | null
+    productName: string | null
+    productCode: string | null
+    unitOfMeasurement: string | null
+    outputQuantity: number | null
+    description: string | null
+    status: $Enums.BOMStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BillOfMaterialMaxAggregateOutputType = {
+    id: string | null
+    bomCode: string | null
+    productName: string | null
+    productCode: string | null
+    unitOfMeasurement: string | null
+    outputQuantity: number | null
+    description: string | null
+    status: $Enums.BOMStatus | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BillOfMaterialCountAggregateOutputType = {
+    id: number
+    bomCode: number
+    productName: number
+    productCode: number
+    unitOfMeasurement: number
+    outputQuantity: number
+    description: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BillOfMaterialAvgAggregateInputType = {
+    outputQuantity?: true
+  }
+
+  export type BillOfMaterialSumAggregateInputType = {
+    outputQuantity?: true
+  }
+
+  export type BillOfMaterialMinAggregateInputType = {
+    id?: true
+    bomCode?: true
+    productName?: true
+    productCode?: true
+    unitOfMeasurement?: true
+    outputQuantity?: true
+    description?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BillOfMaterialMaxAggregateInputType = {
+    id?: true
+    bomCode?: true
+    productName?: true
+    productCode?: true
+    unitOfMeasurement?: true
+    outputQuantity?: true
+    description?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BillOfMaterialCountAggregateInputType = {
+    id?: true
+    bomCode?: true
+    productName?: true
+    productCode?: true
+    unitOfMeasurement?: true
+    outputQuantity?: true
+    description?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BillOfMaterialAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BillOfMaterial to aggregate.
+     */
+    where?: BillOfMaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BillOfMaterials to fetch.
+     */
+    orderBy?: BillOfMaterialOrderByWithRelationInput | BillOfMaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BillOfMaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BillOfMaterials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BillOfMaterials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BillOfMaterials
+    **/
+    _count?: true | BillOfMaterialCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BillOfMaterialAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BillOfMaterialSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BillOfMaterialMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BillOfMaterialMaxAggregateInputType
+  }
+
+  export type GetBillOfMaterialAggregateType<T extends BillOfMaterialAggregateArgs> = {
+        [P in keyof T & keyof AggregateBillOfMaterial]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBillOfMaterial[P]>
+      : GetScalarType<T[P], AggregateBillOfMaterial[P]>
+  }
+
+
+
+
+  export type BillOfMaterialGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BillOfMaterialWhereInput
+    orderBy?: BillOfMaterialOrderByWithAggregationInput | BillOfMaterialOrderByWithAggregationInput[]
+    by: BillOfMaterialScalarFieldEnum[] | BillOfMaterialScalarFieldEnum
+    having?: BillOfMaterialScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BillOfMaterialCountAggregateInputType | true
+    _avg?: BillOfMaterialAvgAggregateInputType
+    _sum?: BillOfMaterialSumAggregateInputType
+    _min?: BillOfMaterialMinAggregateInputType
+    _max?: BillOfMaterialMaxAggregateInputType
+  }
+
+  export type BillOfMaterialGroupByOutputType = {
+    id: string
+    bomCode: string
+    productName: string
+    productCode: string | null
+    unitOfMeasurement: string
+    outputQuantity: number
+    description: string | null
+    status: $Enums.BOMStatus
+    createdAt: Date
+    updatedAt: Date
+    _count: BillOfMaterialCountAggregateOutputType | null
+    _avg: BillOfMaterialAvgAggregateOutputType | null
+    _sum: BillOfMaterialSumAggregateOutputType | null
+    _min: BillOfMaterialMinAggregateOutputType | null
+    _max: BillOfMaterialMaxAggregateOutputType | null
+  }
+
+  type GetBillOfMaterialGroupByPayload<T extends BillOfMaterialGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BillOfMaterialGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BillOfMaterialGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BillOfMaterialGroupByOutputType[P]>
+            : GetScalarType<T[P], BillOfMaterialGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BillOfMaterialSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bomCode?: boolean
+    productName?: boolean
+    productCode?: boolean
+    unitOfMeasurement?: boolean
+    outputQuantity?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    items?: boolean | BillOfMaterial$itemsArgs<ExtArgs>
+    _count?: boolean | BillOfMaterialCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["billOfMaterial"]>
+
+  export type BillOfMaterialSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bomCode?: boolean
+    productName?: boolean
+    productCode?: boolean
+    unitOfMeasurement?: boolean
+    outputQuantity?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["billOfMaterial"]>
+
+  export type BillOfMaterialSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bomCode?: boolean
+    productName?: boolean
+    productCode?: boolean
+    unitOfMeasurement?: boolean
+    outputQuantity?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["billOfMaterial"]>
+
+  export type BillOfMaterialSelectScalar = {
+    id?: boolean
+    bomCode?: boolean
+    productName?: boolean
+    productCode?: boolean
+    unitOfMeasurement?: boolean
+    outputQuantity?: boolean
+    description?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BillOfMaterialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bomCode" | "productName" | "productCode" | "unitOfMeasurement" | "outputQuantity" | "description" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["billOfMaterial"]>
+  export type BillOfMaterialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    items?: boolean | BillOfMaterial$itemsArgs<ExtArgs>
+    _count?: boolean | BillOfMaterialCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type BillOfMaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type BillOfMaterialIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $BillOfMaterialPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BillOfMaterial"
+    objects: {
+      items: Prisma.$BOMItemPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      bomCode: string
+      productName: string
+      productCode: string | null
+      unitOfMeasurement: string
+      outputQuantity: number
+      description: string | null
+      status: $Enums.BOMStatus
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["billOfMaterial"]>
+    composites: {}
+  }
+
+  type BillOfMaterialGetPayload<S extends boolean | null | undefined | BillOfMaterialDefaultArgs> = $Result.GetResult<Prisma.$BillOfMaterialPayload, S>
+
+  type BillOfMaterialCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BillOfMaterialFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BillOfMaterialCountAggregateInputType | true
+    }
+
+  export interface BillOfMaterialDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BillOfMaterial'], meta: { name: 'BillOfMaterial' } }
+    /**
+     * Find zero or one BillOfMaterial that matches the filter.
+     * @param {BillOfMaterialFindUniqueArgs} args - Arguments to find a BillOfMaterial
+     * @example
+     * // Get one BillOfMaterial
+     * const billOfMaterial = await prisma.billOfMaterial.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BillOfMaterialFindUniqueArgs>(args: SelectSubset<T, BillOfMaterialFindUniqueArgs<ExtArgs>>): Prisma__BillOfMaterialClient<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BillOfMaterial that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BillOfMaterialFindUniqueOrThrowArgs} args - Arguments to find a BillOfMaterial
+     * @example
+     * // Get one BillOfMaterial
+     * const billOfMaterial = await prisma.billOfMaterial.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BillOfMaterialFindUniqueOrThrowArgs>(args: SelectSubset<T, BillOfMaterialFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BillOfMaterialClient<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BillOfMaterial that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillOfMaterialFindFirstArgs} args - Arguments to find a BillOfMaterial
+     * @example
+     * // Get one BillOfMaterial
+     * const billOfMaterial = await prisma.billOfMaterial.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BillOfMaterialFindFirstArgs>(args?: SelectSubset<T, BillOfMaterialFindFirstArgs<ExtArgs>>): Prisma__BillOfMaterialClient<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BillOfMaterial that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillOfMaterialFindFirstOrThrowArgs} args - Arguments to find a BillOfMaterial
+     * @example
+     * // Get one BillOfMaterial
+     * const billOfMaterial = await prisma.billOfMaterial.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BillOfMaterialFindFirstOrThrowArgs>(args?: SelectSubset<T, BillOfMaterialFindFirstOrThrowArgs<ExtArgs>>): Prisma__BillOfMaterialClient<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BillOfMaterials that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillOfMaterialFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BillOfMaterials
+     * const billOfMaterials = await prisma.billOfMaterial.findMany()
+     * 
+     * // Get first 10 BillOfMaterials
+     * const billOfMaterials = await prisma.billOfMaterial.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const billOfMaterialWithIdOnly = await prisma.billOfMaterial.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BillOfMaterialFindManyArgs>(args?: SelectSubset<T, BillOfMaterialFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BillOfMaterial.
+     * @param {BillOfMaterialCreateArgs} args - Arguments to create a BillOfMaterial.
+     * @example
+     * // Create one BillOfMaterial
+     * const BillOfMaterial = await prisma.billOfMaterial.create({
+     *   data: {
+     *     // ... data to create a BillOfMaterial
+     *   }
+     * })
+     * 
+     */
+    create<T extends BillOfMaterialCreateArgs>(args: SelectSubset<T, BillOfMaterialCreateArgs<ExtArgs>>): Prisma__BillOfMaterialClient<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BillOfMaterials.
+     * @param {BillOfMaterialCreateManyArgs} args - Arguments to create many BillOfMaterials.
+     * @example
+     * // Create many BillOfMaterials
+     * const billOfMaterial = await prisma.billOfMaterial.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BillOfMaterialCreateManyArgs>(args?: SelectSubset<T, BillOfMaterialCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BillOfMaterials and returns the data saved in the database.
+     * @param {BillOfMaterialCreateManyAndReturnArgs} args - Arguments to create many BillOfMaterials.
+     * @example
+     * // Create many BillOfMaterials
+     * const billOfMaterial = await prisma.billOfMaterial.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BillOfMaterials and only return the `id`
+     * const billOfMaterialWithIdOnly = await prisma.billOfMaterial.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BillOfMaterialCreateManyAndReturnArgs>(args?: SelectSubset<T, BillOfMaterialCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BillOfMaterial.
+     * @param {BillOfMaterialDeleteArgs} args - Arguments to delete one BillOfMaterial.
+     * @example
+     * // Delete one BillOfMaterial
+     * const BillOfMaterial = await prisma.billOfMaterial.delete({
+     *   where: {
+     *     // ... filter to delete one BillOfMaterial
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BillOfMaterialDeleteArgs>(args: SelectSubset<T, BillOfMaterialDeleteArgs<ExtArgs>>): Prisma__BillOfMaterialClient<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BillOfMaterial.
+     * @param {BillOfMaterialUpdateArgs} args - Arguments to update one BillOfMaterial.
+     * @example
+     * // Update one BillOfMaterial
+     * const billOfMaterial = await prisma.billOfMaterial.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BillOfMaterialUpdateArgs>(args: SelectSubset<T, BillOfMaterialUpdateArgs<ExtArgs>>): Prisma__BillOfMaterialClient<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BillOfMaterials.
+     * @param {BillOfMaterialDeleteManyArgs} args - Arguments to filter BillOfMaterials to delete.
+     * @example
+     * // Delete a few BillOfMaterials
+     * const { count } = await prisma.billOfMaterial.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BillOfMaterialDeleteManyArgs>(args?: SelectSubset<T, BillOfMaterialDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BillOfMaterials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillOfMaterialUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BillOfMaterials
+     * const billOfMaterial = await prisma.billOfMaterial.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BillOfMaterialUpdateManyArgs>(args: SelectSubset<T, BillOfMaterialUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BillOfMaterials and returns the data updated in the database.
+     * @param {BillOfMaterialUpdateManyAndReturnArgs} args - Arguments to update many BillOfMaterials.
+     * @example
+     * // Update many BillOfMaterials
+     * const billOfMaterial = await prisma.billOfMaterial.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BillOfMaterials and only return the `id`
+     * const billOfMaterialWithIdOnly = await prisma.billOfMaterial.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BillOfMaterialUpdateManyAndReturnArgs>(args: SelectSubset<T, BillOfMaterialUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BillOfMaterial.
+     * @param {BillOfMaterialUpsertArgs} args - Arguments to update or create a BillOfMaterial.
+     * @example
+     * // Update or create a BillOfMaterial
+     * const billOfMaterial = await prisma.billOfMaterial.upsert({
+     *   create: {
+     *     // ... data to create a BillOfMaterial
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BillOfMaterial we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BillOfMaterialUpsertArgs>(args: SelectSubset<T, BillOfMaterialUpsertArgs<ExtArgs>>): Prisma__BillOfMaterialClient<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BillOfMaterials.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillOfMaterialCountArgs} args - Arguments to filter BillOfMaterials to count.
+     * @example
+     * // Count the number of BillOfMaterials
+     * const count = await prisma.billOfMaterial.count({
+     *   where: {
+     *     // ... the filter for the BillOfMaterials we want to count
+     *   }
+     * })
+    **/
+    count<T extends BillOfMaterialCountArgs>(
+      args?: Subset<T, BillOfMaterialCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BillOfMaterialCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BillOfMaterial.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillOfMaterialAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BillOfMaterialAggregateArgs>(args: Subset<T, BillOfMaterialAggregateArgs>): Prisma.PrismaPromise<GetBillOfMaterialAggregateType<T>>
+
+    /**
+     * Group by BillOfMaterial.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BillOfMaterialGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BillOfMaterialGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BillOfMaterialGroupByArgs['orderBy'] }
+        : { orderBy?: BillOfMaterialGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BillOfMaterialGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBillOfMaterialGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BillOfMaterial model
+   */
+  readonly fields: BillOfMaterialFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BillOfMaterial.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BillOfMaterialClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    items<T extends BillOfMaterial$itemsArgs<ExtArgs> = {}>(args?: Subset<T, BillOfMaterial$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BillOfMaterial model
+   */
+  interface BillOfMaterialFieldRefs {
+    readonly id: FieldRef<"BillOfMaterial", 'String'>
+    readonly bomCode: FieldRef<"BillOfMaterial", 'String'>
+    readonly productName: FieldRef<"BillOfMaterial", 'String'>
+    readonly productCode: FieldRef<"BillOfMaterial", 'String'>
+    readonly unitOfMeasurement: FieldRef<"BillOfMaterial", 'String'>
+    readonly outputQuantity: FieldRef<"BillOfMaterial", 'Float'>
+    readonly description: FieldRef<"BillOfMaterial", 'String'>
+    readonly status: FieldRef<"BillOfMaterial", 'BOMStatus'>
+    readonly createdAt: FieldRef<"BillOfMaterial", 'DateTime'>
+    readonly updatedAt: FieldRef<"BillOfMaterial", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BillOfMaterial findUnique
+   */
+  export type BillOfMaterialFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which BillOfMaterial to fetch.
+     */
+    where: BillOfMaterialWhereUniqueInput
+  }
+
+  /**
+   * BillOfMaterial findUniqueOrThrow
+   */
+  export type BillOfMaterialFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which BillOfMaterial to fetch.
+     */
+    where: BillOfMaterialWhereUniqueInput
+  }
+
+  /**
+   * BillOfMaterial findFirst
+   */
+  export type BillOfMaterialFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which BillOfMaterial to fetch.
+     */
+    where?: BillOfMaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BillOfMaterials to fetch.
+     */
+    orderBy?: BillOfMaterialOrderByWithRelationInput | BillOfMaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BillOfMaterials.
+     */
+    cursor?: BillOfMaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BillOfMaterials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BillOfMaterials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BillOfMaterials.
+     */
+    distinct?: BillOfMaterialScalarFieldEnum | BillOfMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * BillOfMaterial findFirstOrThrow
+   */
+  export type BillOfMaterialFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which BillOfMaterial to fetch.
+     */
+    where?: BillOfMaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BillOfMaterials to fetch.
+     */
+    orderBy?: BillOfMaterialOrderByWithRelationInput | BillOfMaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BillOfMaterials.
+     */
+    cursor?: BillOfMaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BillOfMaterials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BillOfMaterials.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BillOfMaterials.
+     */
+    distinct?: BillOfMaterialScalarFieldEnum | BillOfMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * BillOfMaterial findMany
+   */
+  export type BillOfMaterialFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+    /**
+     * Filter, which BillOfMaterials to fetch.
+     */
+    where?: BillOfMaterialWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BillOfMaterials to fetch.
+     */
+    orderBy?: BillOfMaterialOrderByWithRelationInput | BillOfMaterialOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BillOfMaterials.
+     */
+    cursor?: BillOfMaterialWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BillOfMaterials from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BillOfMaterials.
+     */
+    skip?: number
+    distinct?: BillOfMaterialScalarFieldEnum | BillOfMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * BillOfMaterial create
+   */
+  export type BillOfMaterialCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BillOfMaterial.
+     */
+    data: XOR<BillOfMaterialCreateInput, BillOfMaterialUncheckedCreateInput>
+  }
+
+  /**
+   * BillOfMaterial createMany
+   */
+  export type BillOfMaterialCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BillOfMaterials.
+     */
+    data: BillOfMaterialCreateManyInput | BillOfMaterialCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BillOfMaterial createManyAndReturn
+   */
+  export type BillOfMaterialCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * The data used to create many BillOfMaterials.
+     */
+    data: BillOfMaterialCreateManyInput | BillOfMaterialCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BillOfMaterial update
+   */
+  export type BillOfMaterialUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BillOfMaterial.
+     */
+    data: XOR<BillOfMaterialUpdateInput, BillOfMaterialUncheckedUpdateInput>
+    /**
+     * Choose, which BillOfMaterial to update.
+     */
+    where: BillOfMaterialWhereUniqueInput
+  }
+
+  /**
+   * BillOfMaterial updateMany
+   */
+  export type BillOfMaterialUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BillOfMaterials.
+     */
+    data: XOR<BillOfMaterialUpdateManyMutationInput, BillOfMaterialUncheckedUpdateManyInput>
+    /**
+     * Filter which BillOfMaterials to update
+     */
+    where?: BillOfMaterialWhereInput
+    /**
+     * Limit how many BillOfMaterials to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BillOfMaterial updateManyAndReturn
+   */
+  export type BillOfMaterialUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * The data used to update BillOfMaterials.
+     */
+    data: XOR<BillOfMaterialUpdateManyMutationInput, BillOfMaterialUncheckedUpdateManyInput>
+    /**
+     * Filter which BillOfMaterials to update
+     */
+    where?: BillOfMaterialWhereInput
+    /**
+     * Limit how many BillOfMaterials to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BillOfMaterial upsert
+   */
+  export type BillOfMaterialUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BillOfMaterial to update in case it exists.
+     */
+    where: BillOfMaterialWhereUniqueInput
+    /**
+     * In case the BillOfMaterial found by the `where` argument doesn't exist, create a new BillOfMaterial with this data.
+     */
+    create: XOR<BillOfMaterialCreateInput, BillOfMaterialUncheckedCreateInput>
+    /**
+     * In case the BillOfMaterial was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BillOfMaterialUpdateInput, BillOfMaterialUncheckedUpdateInput>
+  }
+
+  /**
+   * BillOfMaterial delete
+   */
+  export type BillOfMaterialDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+    /**
+     * Filter which BillOfMaterial to delete.
+     */
+    where: BillOfMaterialWhereUniqueInput
+  }
+
+  /**
+   * BillOfMaterial deleteMany
+   */
+  export type BillOfMaterialDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BillOfMaterials to delete
+     */
+    where?: BillOfMaterialWhereInput
+    /**
+     * Limit how many BillOfMaterials to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BillOfMaterial.items
+   */
+  export type BillOfMaterial$itemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    where?: BOMItemWhereInput
+    orderBy?: BOMItemOrderByWithRelationInput | BOMItemOrderByWithRelationInput[]
+    cursor?: BOMItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BOMItemScalarFieldEnum | BOMItemScalarFieldEnum[]
+  }
+
+  /**
+   * BillOfMaterial without action
+   */
+  export type BillOfMaterialDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BOMItem
+   */
+
+  export type AggregateBOMItem = {
+    _count: BOMItemCountAggregateOutputType | null
+    _avg: BOMItemAvgAggregateOutputType | null
+    _sum: BOMItemSumAggregateOutputType | null
+    _min: BOMItemMinAggregateOutputType | null
+    _max: BOMItemMaxAggregateOutputType | null
+  }
+
+  export type BOMItemAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type BOMItemSumAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type BOMItemMinAggregateOutputType = {
+    id: string | null
+    bomId: string | null
+    rawMaterialId: string | null
+    quantity: number | null
+    unitOfMeasurement: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BOMItemMaxAggregateOutputType = {
+    id: string | null
+    bomId: string | null
+    rawMaterialId: string | null
+    quantity: number | null
+    unitOfMeasurement: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type BOMItemCountAggregateOutputType = {
+    id: number
+    bomId: number
+    rawMaterialId: number
+    quantity: number
+    unitOfMeasurement: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BOMItemAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type BOMItemSumAggregateInputType = {
+    quantity?: true
+  }
+
+  export type BOMItemMinAggregateInputType = {
+    id?: true
+    bomId?: true
+    rawMaterialId?: true
+    quantity?: true
+    unitOfMeasurement?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BOMItemMaxAggregateInputType = {
+    id?: true
+    bomId?: true
+    rawMaterialId?: true
+    quantity?: true
+    unitOfMeasurement?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type BOMItemCountAggregateInputType = {
+    id?: true
+    bomId?: true
+    rawMaterialId?: true
+    quantity?: true
+    unitOfMeasurement?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BOMItemAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BOMItem to aggregate.
+     */
+    where?: BOMItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BOMItems to fetch.
+     */
+    orderBy?: BOMItemOrderByWithRelationInput | BOMItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BOMItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BOMItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BOMItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BOMItems
+    **/
+    _count?: true | BOMItemCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BOMItemAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BOMItemSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BOMItemMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BOMItemMaxAggregateInputType
+  }
+
+  export type GetBOMItemAggregateType<T extends BOMItemAggregateArgs> = {
+        [P in keyof T & keyof AggregateBOMItem]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBOMItem[P]>
+      : GetScalarType<T[P], AggregateBOMItem[P]>
+  }
+
+
+
+
+  export type BOMItemGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BOMItemWhereInput
+    orderBy?: BOMItemOrderByWithAggregationInput | BOMItemOrderByWithAggregationInput[]
+    by: BOMItemScalarFieldEnum[] | BOMItemScalarFieldEnum
+    having?: BOMItemScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BOMItemCountAggregateInputType | true
+    _avg?: BOMItemAvgAggregateInputType
+    _sum?: BOMItemSumAggregateInputType
+    _min?: BOMItemMinAggregateInputType
+    _max?: BOMItemMaxAggregateInputType
+  }
+
+  export type BOMItemGroupByOutputType = {
+    id: string
+    bomId: string
+    rawMaterialId: string
+    quantity: number
+    unitOfMeasurement: string
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: BOMItemCountAggregateOutputType | null
+    _avg: BOMItemAvgAggregateOutputType | null
+    _sum: BOMItemSumAggregateOutputType | null
+    _min: BOMItemMinAggregateOutputType | null
+    _max: BOMItemMaxAggregateOutputType | null
+  }
+
+  type GetBOMItemGroupByPayload<T extends BOMItemGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BOMItemGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BOMItemGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BOMItemGroupByOutputType[P]>
+            : GetScalarType<T[P], BOMItemGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BOMItemSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bomId?: boolean
+    rawMaterialId?: boolean
+    quantity?: boolean
+    unitOfMeasurement?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    bom?: boolean | BillOfMaterialDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bOMItem"]>
+
+  export type BOMItemSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bomId?: boolean
+    rawMaterialId?: boolean
+    quantity?: boolean
+    unitOfMeasurement?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    bom?: boolean | BillOfMaterialDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bOMItem"]>
+
+  export type BOMItemSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    bomId?: boolean
+    rawMaterialId?: boolean
+    quantity?: boolean
+    unitOfMeasurement?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    bom?: boolean | BillOfMaterialDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["bOMItem"]>
+
+  export type BOMItemSelectScalar = {
+    id?: boolean
+    bomId?: boolean
+    rawMaterialId?: boolean
+    quantity?: boolean
+    unitOfMeasurement?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BOMItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bomId" | "rawMaterialId" | "quantity" | "unitOfMeasurement" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["bOMItem"]>
+  export type BOMItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bom?: boolean | BillOfMaterialDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }
+  export type BOMItemIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bom?: boolean | BillOfMaterialDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }
+  export type BOMItemIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    bom?: boolean | BillOfMaterialDefaultArgs<ExtArgs>
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }
+
+  export type $BOMItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BOMItem"
+    objects: {
+      bom: Prisma.$BillOfMaterialPayload<ExtArgs>
+      rawMaterial: Prisma.$RawMaterialProductPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      bomId: string
+      rawMaterialId: string
+      quantity: number
+      unitOfMeasurement: string
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["bOMItem"]>
+    composites: {}
+  }
+
+  type BOMItemGetPayload<S extends boolean | null | undefined | BOMItemDefaultArgs> = $Result.GetResult<Prisma.$BOMItemPayload, S>
+
+  type BOMItemCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BOMItemFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BOMItemCountAggregateInputType | true
+    }
+
+  export interface BOMItemDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BOMItem'], meta: { name: 'BOMItem' } }
+    /**
+     * Find zero or one BOMItem that matches the filter.
+     * @param {BOMItemFindUniqueArgs} args - Arguments to find a BOMItem
+     * @example
+     * // Get one BOMItem
+     * const bOMItem = await prisma.bOMItem.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BOMItemFindUniqueArgs>(args: SelectSubset<T, BOMItemFindUniqueArgs<ExtArgs>>): Prisma__BOMItemClient<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BOMItem that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BOMItemFindUniqueOrThrowArgs} args - Arguments to find a BOMItem
+     * @example
+     * // Get one BOMItem
+     * const bOMItem = await prisma.bOMItem.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BOMItemFindUniqueOrThrowArgs>(args: SelectSubset<T, BOMItemFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BOMItemClient<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BOMItem that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMItemFindFirstArgs} args - Arguments to find a BOMItem
+     * @example
+     * // Get one BOMItem
+     * const bOMItem = await prisma.bOMItem.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BOMItemFindFirstArgs>(args?: SelectSubset<T, BOMItemFindFirstArgs<ExtArgs>>): Prisma__BOMItemClient<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BOMItem that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMItemFindFirstOrThrowArgs} args - Arguments to find a BOMItem
+     * @example
+     * // Get one BOMItem
+     * const bOMItem = await prisma.bOMItem.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BOMItemFindFirstOrThrowArgs>(args?: SelectSubset<T, BOMItemFindFirstOrThrowArgs<ExtArgs>>): Prisma__BOMItemClient<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BOMItems that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMItemFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BOMItems
+     * const bOMItems = await prisma.bOMItem.findMany()
+     * 
+     * // Get first 10 BOMItems
+     * const bOMItems = await prisma.bOMItem.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const bOMItemWithIdOnly = await prisma.bOMItem.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BOMItemFindManyArgs>(args?: SelectSubset<T, BOMItemFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BOMItem.
+     * @param {BOMItemCreateArgs} args - Arguments to create a BOMItem.
+     * @example
+     * // Create one BOMItem
+     * const BOMItem = await prisma.bOMItem.create({
+     *   data: {
+     *     // ... data to create a BOMItem
+     *   }
+     * })
+     * 
+     */
+    create<T extends BOMItemCreateArgs>(args: SelectSubset<T, BOMItemCreateArgs<ExtArgs>>): Prisma__BOMItemClient<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BOMItems.
+     * @param {BOMItemCreateManyArgs} args - Arguments to create many BOMItems.
+     * @example
+     * // Create many BOMItems
+     * const bOMItem = await prisma.bOMItem.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BOMItemCreateManyArgs>(args?: SelectSubset<T, BOMItemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BOMItems and returns the data saved in the database.
+     * @param {BOMItemCreateManyAndReturnArgs} args - Arguments to create many BOMItems.
+     * @example
+     * // Create many BOMItems
+     * const bOMItem = await prisma.bOMItem.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BOMItems and only return the `id`
+     * const bOMItemWithIdOnly = await prisma.bOMItem.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BOMItemCreateManyAndReturnArgs>(args?: SelectSubset<T, BOMItemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BOMItem.
+     * @param {BOMItemDeleteArgs} args - Arguments to delete one BOMItem.
+     * @example
+     * // Delete one BOMItem
+     * const BOMItem = await prisma.bOMItem.delete({
+     *   where: {
+     *     // ... filter to delete one BOMItem
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BOMItemDeleteArgs>(args: SelectSubset<T, BOMItemDeleteArgs<ExtArgs>>): Prisma__BOMItemClient<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BOMItem.
+     * @param {BOMItemUpdateArgs} args - Arguments to update one BOMItem.
+     * @example
+     * // Update one BOMItem
+     * const bOMItem = await prisma.bOMItem.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BOMItemUpdateArgs>(args: SelectSubset<T, BOMItemUpdateArgs<ExtArgs>>): Prisma__BOMItemClient<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BOMItems.
+     * @param {BOMItemDeleteManyArgs} args - Arguments to filter BOMItems to delete.
+     * @example
+     * // Delete a few BOMItems
+     * const { count } = await prisma.bOMItem.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BOMItemDeleteManyArgs>(args?: SelectSubset<T, BOMItemDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BOMItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMItemUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BOMItems
+     * const bOMItem = await prisma.bOMItem.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BOMItemUpdateManyArgs>(args: SelectSubset<T, BOMItemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BOMItems and returns the data updated in the database.
+     * @param {BOMItemUpdateManyAndReturnArgs} args - Arguments to update many BOMItems.
+     * @example
+     * // Update many BOMItems
+     * const bOMItem = await prisma.bOMItem.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BOMItems and only return the `id`
+     * const bOMItemWithIdOnly = await prisma.bOMItem.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BOMItemUpdateManyAndReturnArgs>(args: SelectSubset<T, BOMItemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BOMItem.
+     * @param {BOMItemUpsertArgs} args - Arguments to update or create a BOMItem.
+     * @example
+     * // Update or create a BOMItem
+     * const bOMItem = await prisma.bOMItem.upsert({
+     *   create: {
+     *     // ... data to create a BOMItem
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BOMItem we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BOMItemUpsertArgs>(args: SelectSubset<T, BOMItemUpsertArgs<ExtArgs>>): Prisma__BOMItemClient<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BOMItems.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMItemCountArgs} args - Arguments to filter BOMItems to count.
+     * @example
+     * // Count the number of BOMItems
+     * const count = await prisma.bOMItem.count({
+     *   where: {
+     *     // ... the filter for the BOMItems we want to count
+     *   }
+     * })
+    **/
+    count<T extends BOMItemCountArgs>(
+      args?: Subset<T, BOMItemCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BOMItemCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BOMItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMItemAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BOMItemAggregateArgs>(args: Subset<T, BOMItemAggregateArgs>): Prisma.PrismaPromise<GetBOMItemAggregateType<T>>
+
+    /**
+     * Group by BOMItem.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BOMItemGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BOMItemGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BOMItemGroupByArgs['orderBy'] }
+        : { orderBy?: BOMItemGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BOMItemGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBOMItemGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BOMItem model
+   */
+  readonly fields: BOMItemFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BOMItem.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BOMItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    bom<T extends BillOfMaterialDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BillOfMaterialDefaultArgs<ExtArgs>>): Prisma__BillOfMaterialClient<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    rawMaterial<T extends RawMaterialProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProductDefaultArgs<ExtArgs>>): Prisma__RawMaterialProductClient<$Result.GetResult<Prisma.$RawMaterialProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BOMItem model
+   */
+  interface BOMItemFieldRefs {
+    readonly id: FieldRef<"BOMItem", 'String'>
+    readonly bomId: FieldRef<"BOMItem", 'String'>
+    readonly rawMaterialId: FieldRef<"BOMItem", 'String'>
+    readonly quantity: FieldRef<"BOMItem", 'Float'>
+    readonly unitOfMeasurement: FieldRef<"BOMItem", 'String'>
+    readonly notes: FieldRef<"BOMItem", 'String'>
+    readonly createdAt: FieldRef<"BOMItem", 'DateTime'>
+    readonly updatedAt: FieldRef<"BOMItem", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BOMItem findUnique
+   */
+  export type BOMItemFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    /**
+     * Filter, which BOMItem to fetch.
+     */
+    where: BOMItemWhereUniqueInput
+  }
+
+  /**
+   * BOMItem findUniqueOrThrow
+   */
+  export type BOMItemFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    /**
+     * Filter, which BOMItem to fetch.
+     */
+    where: BOMItemWhereUniqueInput
+  }
+
+  /**
+   * BOMItem findFirst
+   */
+  export type BOMItemFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    /**
+     * Filter, which BOMItem to fetch.
+     */
+    where?: BOMItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BOMItems to fetch.
+     */
+    orderBy?: BOMItemOrderByWithRelationInput | BOMItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BOMItems.
+     */
+    cursor?: BOMItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BOMItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BOMItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BOMItems.
+     */
+    distinct?: BOMItemScalarFieldEnum | BOMItemScalarFieldEnum[]
+  }
+
+  /**
+   * BOMItem findFirstOrThrow
+   */
+  export type BOMItemFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    /**
+     * Filter, which BOMItem to fetch.
+     */
+    where?: BOMItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BOMItems to fetch.
+     */
+    orderBy?: BOMItemOrderByWithRelationInput | BOMItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BOMItems.
+     */
+    cursor?: BOMItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BOMItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BOMItems.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BOMItems.
+     */
+    distinct?: BOMItemScalarFieldEnum | BOMItemScalarFieldEnum[]
+  }
+
+  /**
+   * BOMItem findMany
+   */
+  export type BOMItemFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    /**
+     * Filter, which BOMItems to fetch.
+     */
+    where?: BOMItemWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BOMItems to fetch.
+     */
+    orderBy?: BOMItemOrderByWithRelationInput | BOMItemOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BOMItems.
+     */
+    cursor?: BOMItemWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BOMItems from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BOMItems.
+     */
+    skip?: number
+    distinct?: BOMItemScalarFieldEnum | BOMItemScalarFieldEnum[]
+  }
+
+  /**
+   * BOMItem create
+   */
+  export type BOMItemCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BOMItem.
+     */
+    data: XOR<BOMItemCreateInput, BOMItemUncheckedCreateInput>
+  }
+
+  /**
+   * BOMItem createMany
+   */
+  export type BOMItemCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BOMItems.
+     */
+    data: BOMItemCreateManyInput | BOMItemCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BOMItem createManyAndReturn
+   */
+  export type BOMItemCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * The data used to create many BOMItems.
+     */
+    data: BOMItemCreateManyInput | BOMItemCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BOMItem update
+   */
+  export type BOMItemUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BOMItem.
+     */
+    data: XOR<BOMItemUpdateInput, BOMItemUncheckedUpdateInput>
+    /**
+     * Choose, which BOMItem to update.
+     */
+    where: BOMItemWhereUniqueInput
+  }
+
+  /**
+   * BOMItem updateMany
+   */
+  export type BOMItemUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BOMItems.
+     */
+    data: XOR<BOMItemUpdateManyMutationInput, BOMItemUncheckedUpdateManyInput>
+    /**
+     * Filter which BOMItems to update
+     */
+    where?: BOMItemWhereInput
+    /**
+     * Limit how many BOMItems to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BOMItem updateManyAndReturn
+   */
+  export type BOMItemUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * The data used to update BOMItems.
+     */
+    data: XOR<BOMItemUpdateManyMutationInput, BOMItemUncheckedUpdateManyInput>
+    /**
+     * Filter which BOMItems to update
+     */
+    where?: BOMItemWhereInput
+    /**
+     * Limit how many BOMItems to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BOMItem upsert
+   */
+  export type BOMItemUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BOMItem to update in case it exists.
+     */
+    where: BOMItemWhereUniqueInput
+    /**
+     * In case the BOMItem found by the `where` argument doesn't exist, create a new BOMItem with this data.
+     */
+    create: XOR<BOMItemCreateInput, BOMItemUncheckedCreateInput>
+    /**
+     * In case the BOMItem was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BOMItemUpdateInput, BOMItemUncheckedUpdateInput>
+  }
+
+  /**
+   * BOMItem delete
+   */
+  export type BOMItemDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+    /**
+     * Filter which BOMItem to delete.
+     */
+    where: BOMItemWhereUniqueInput
+  }
+
+  /**
+   * BOMItem deleteMany
+   */
+  export type BOMItemDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BOMItems to delete
+     */
+    where?: BOMItemWhereInput
+    /**
+     * Limit how many BOMItems to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BOMItem without action
+   */
+  export type BOMItemDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BOMItem
+     */
+    select?: BOMItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BOMItem
+     */
+    omit?: BOMItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BOMItemInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -85435,6 +88006,36 @@ export namespace Prisma {
   export type ProcessingBatchLotScalarFieldEnum = (typeof ProcessingBatchLotScalarFieldEnum)[keyof typeof ProcessingBatchLotScalarFieldEnum]
 
 
+  export const BillOfMaterialScalarFieldEnum: {
+    id: 'id',
+    bomCode: 'bomCode',
+    productName: 'productName',
+    productCode: 'productCode',
+    unitOfMeasurement: 'unitOfMeasurement',
+    outputQuantity: 'outputQuantity',
+    description: 'description',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BillOfMaterialScalarFieldEnum = (typeof BillOfMaterialScalarFieldEnum)[keyof typeof BillOfMaterialScalarFieldEnum]
+
+
+  export const BOMItemScalarFieldEnum: {
+    id: 'id',
+    bomId: 'bomId',
+    rawMaterialId: 'rawMaterialId',
+    quantity: 'quantity',
+    unitOfMeasurement: 'unitOfMeasurement',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BOMItemScalarFieldEnum = (typeof BOMItemScalarFieldEnum)[keyof typeof BOMItemScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -85793,6 +88394,20 @@ export namespace Prisma {
    * Reference to a field of type 'WeightMode[]'
    */
   export type ListEnumWeightModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'WeightMode[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'BOMStatus'
+   */
+  export type EnumBOMStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BOMStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'BOMStatus[]'
+   */
+  export type ListEnumBOMStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BOMStatus[]'>
     
   /**
    * Deep Input Types
@@ -89476,6 +92091,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemListRelationFilter
     vendor?: XOR<VendorNullableScalarRelationFilter, VendorWhereInput> | null
     stockEntries?: StockEntryListRelationFilter
+    bomItems?: BOMItemListRelationFilter
   }
 
   export type RawMaterialProductOrderByWithRelationInput = {
@@ -89496,6 +92112,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemOrderByRelationAggregateInput
     vendor?: VendorOrderByWithRelationInput
     stockEntries?: StockEntryOrderByRelationAggregateInput
+    bomItems?: BOMItemOrderByRelationAggregateInput
   }
 
   export type RawMaterialProductWhereUniqueInput = Prisma.AtLeast<{
@@ -89519,6 +92136,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemListRelationFilter
     vendor?: XOR<VendorNullableScalarRelationFilter, VendorWhereInput> | null
     stockEntries?: StockEntryListRelationFilter
+    bomItems?: BOMItemListRelationFilter
   }, "id" | "skuCode">
 
   export type RawMaterialProductOrderByWithAggregationInput = {
@@ -91125,6 +93743,164 @@ export namespace Prisma {
     cleaningLotId?: StringWithAggregatesFilter<"ProcessingBatchLot"> | string
     allocatedQuantity?: FloatWithAggregatesFilter<"ProcessingBatchLot"> | number
     createdAt?: DateTimeWithAggregatesFilter<"ProcessingBatchLot"> | Date | string
+  }
+
+  export type BillOfMaterialWhereInput = {
+    AND?: BillOfMaterialWhereInput | BillOfMaterialWhereInput[]
+    OR?: BillOfMaterialWhereInput[]
+    NOT?: BillOfMaterialWhereInput | BillOfMaterialWhereInput[]
+    id?: StringFilter<"BillOfMaterial"> | string
+    bomCode?: StringFilter<"BillOfMaterial"> | string
+    productName?: StringFilter<"BillOfMaterial"> | string
+    productCode?: StringNullableFilter<"BillOfMaterial"> | string | null
+    unitOfMeasurement?: StringFilter<"BillOfMaterial"> | string
+    outputQuantity?: FloatFilter<"BillOfMaterial"> | number
+    description?: StringNullableFilter<"BillOfMaterial"> | string | null
+    status?: EnumBOMStatusFilter<"BillOfMaterial"> | $Enums.BOMStatus
+    createdAt?: DateTimeFilter<"BillOfMaterial"> | Date | string
+    updatedAt?: DateTimeFilter<"BillOfMaterial"> | Date | string
+    items?: BOMItemListRelationFilter
+  }
+
+  export type BillOfMaterialOrderByWithRelationInput = {
+    id?: SortOrder
+    bomCode?: SortOrder
+    productName?: SortOrder
+    productCode?: SortOrderInput | SortOrder
+    unitOfMeasurement?: SortOrder
+    outputQuantity?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    items?: BOMItemOrderByRelationAggregateInput
+  }
+
+  export type BillOfMaterialWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    bomCode?: string
+    AND?: BillOfMaterialWhereInput | BillOfMaterialWhereInput[]
+    OR?: BillOfMaterialWhereInput[]
+    NOT?: BillOfMaterialWhereInput | BillOfMaterialWhereInput[]
+    productName?: StringFilter<"BillOfMaterial"> | string
+    productCode?: StringNullableFilter<"BillOfMaterial"> | string | null
+    unitOfMeasurement?: StringFilter<"BillOfMaterial"> | string
+    outputQuantity?: FloatFilter<"BillOfMaterial"> | number
+    description?: StringNullableFilter<"BillOfMaterial"> | string | null
+    status?: EnumBOMStatusFilter<"BillOfMaterial"> | $Enums.BOMStatus
+    createdAt?: DateTimeFilter<"BillOfMaterial"> | Date | string
+    updatedAt?: DateTimeFilter<"BillOfMaterial"> | Date | string
+    items?: BOMItemListRelationFilter
+  }, "id" | "bomCode">
+
+  export type BillOfMaterialOrderByWithAggregationInput = {
+    id?: SortOrder
+    bomCode?: SortOrder
+    productName?: SortOrder
+    productCode?: SortOrderInput | SortOrder
+    unitOfMeasurement?: SortOrder
+    outputQuantity?: SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BillOfMaterialCountOrderByAggregateInput
+    _avg?: BillOfMaterialAvgOrderByAggregateInput
+    _max?: BillOfMaterialMaxOrderByAggregateInput
+    _min?: BillOfMaterialMinOrderByAggregateInput
+    _sum?: BillOfMaterialSumOrderByAggregateInput
+  }
+
+  export type BillOfMaterialScalarWhereWithAggregatesInput = {
+    AND?: BillOfMaterialScalarWhereWithAggregatesInput | BillOfMaterialScalarWhereWithAggregatesInput[]
+    OR?: BillOfMaterialScalarWhereWithAggregatesInput[]
+    NOT?: BillOfMaterialScalarWhereWithAggregatesInput | BillOfMaterialScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BillOfMaterial"> | string
+    bomCode?: StringWithAggregatesFilter<"BillOfMaterial"> | string
+    productName?: StringWithAggregatesFilter<"BillOfMaterial"> | string
+    productCode?: StringNullableWithAggregatesFilter<"BillOfMaterial"> | string | null
+    unitOfMeasurement?: StringWithAggregatesFilter<"BillOfMaterial"> | string
+    outputQuantity?: FloatWithAggregatesFilter<"BillOfMaterial"> | number
+    description?: StringNullableWithAggregatesFilter<"BillOfMaterial"> | string | null
+    status?: EnumBOMStatusWithAggregatesFilter<"BillOfMaterial"> | $Enums.BOMStatus
+    createdAt?: DateTimeWithAggregatesFilter<"BillOfMaterial"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BillOfMaterial"> | Date | string
+  }
+
+  export type BOMItemWhereInput = {
+    AND?: BOMItemWhereInput | BOMItemWhereInput[]
+    OR?: BOMItemWhereInput[]
+    NOT?: BOMItemWhereInput | BOMItemWhereInput[]
+    id?: StringFilter<"BOMItem"> | string
+    bomId?: StringFilter<"BOMItem"> | string
+    rawMaterialId?: StringFilter<"BOMItem"> | string
+    quantity?: FloatFilter<"BOMItem"> | number
+    unitOfMeasurement?: StringFilter<"BOMItem"> | string
+    notes?: StringNullableFilter<"BOMItem"> | string | null
+    createdAt?: DateTimeFilter<"BOMItem"> | Date | string
+    updatedAt?: DateTimeFilter<"BOMItem"> | Date | string
+    bom?: XOR<BillOfMaterialScalarRelationFilter, BillOfMaterialWhereInput>
+    rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
+  }
+
+  export type BOMItemOrderByWithRelationInput = {
+    id?: SortOrder
+    bomId?: SortOrder
+    rawMaterialId?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasurement?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    bom?: BillOfMaterialOrderByWithRelationInput
+    rawMaterial?: RawMaterialProductOrderByWithRelationInput
+  }
+
+  export type BOMItemWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    bomId_rawMaterialId?: BOMItemBomIdRawMaterialIdCompoundUniqueInput
+    AND?: BOMItemWhereInput | BOMItemWhereInput[]
+    OR?: BOMItemWhereInput[]
+    NOT?: BOMItemWhereInput | BOMItemWhereInput[]
+    bomId?: StringFilter<"BOMItem"> | string
+    rawMaterialId?: StringFilter<"BOMItem"> | string
+    quantity?: FloatFilter<"BOMItem"> | number
+    unitOfMeasurement?: StringFilter<"BOMItem"> | string
+    notes?: StringNullableFilter<"BOMItem"> | string | null
+    createdAt?: DateTimeFilter<"BOMItem"> | Date | string
+    updatedAt?: DateTimeFilter<"BOMItem"> | Date | string
+    bom?: XOR<BillOfMaterialScalarRelationFilter, BillOfMaterialWhereInput>
+    rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
+  }, "id" | "bomId_rawMaterialId">
+
+  export type BOMItemOrderByWithAggregationInput = {
+    id?: SortOrder
+    bomId?: SortOrder
+    rawMaterialId?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasurement?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BOMItemCountOrderByAggregateInput
+    _avg?: BOMItemAvgOrderByAggregateInput
+    _max?: BOMItemMaxOrderByAggregateInput
+    _min?: BOMItemMinOrderByAggregateInput
+    _sum?: BOMItemSumOrderByAggregateInput
+  }
+
+  export type BOMItemScalarWhereWithAggregatesInput = {
+    AND?: BOMItemScalarWhereWithAggregatesInput | BOMItemScalarWhereWithAggregatesInput[]
+    OR?: BOMItemScalarWhereWithAggregatesInput[]
+    NOT?: BOMItemScalarWhereWithAggregatesInput | BOMItemScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BOMItem"> | string
+    bomId?: StringWithAggregatesFilter<"BOMItem"> | string
+    rawMaterialId?: StringWithAggregatesFilter<"BOMItem"> | string
+    quantity?: FloatWithAggregatesFilter<"BOMItem"> | number
+    unitOfMeasurement?: StringWithAggregatesFilter<"BOMItem"> | string
+    notes?: StringNullableWithAggregatesFilter<"BOMItem"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"BOMItem"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"BOMItem"> | Date | string
   }
 
   export type ActivityLogCreateInput = {
@@ -95093,6 +97869,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateInput = {
@@ -95112,6 +97889,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUpdateInput = {
@@ -95131,6 +97909,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateInput = {
@@ -95150,6 +97929,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductCreateManyInput = {
@@ -96809,6 +99589,176 @@ export namespace Prisma {
     cleaningLotId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BillOfMaterialCreateInput = {
+    id?: string
+    bomCode: string
+    productName: string
+    productCode?: string | null
+    unitOfMeasurement: string
+    outputQuantity?: number
+    description?: string | null
+    status?: $Enums.BOMStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: BOMItemCreateNestedManyWithoutBomInput
+  }
+
+  export type BillOfMaterialUncheckedCreateInput = {
+    id?: string
+    bomCode: string
+    productName: string
+    productCode?: string | null
+    unitOfMeasurement: string
+    outputQuantity?: number
+    description?: string | null
+    status?: $Enums.BOMStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: BOMItemUncheckedCreateNestedManyWithoutBomInput
+  }
+
+  export type BillOfMaterialUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomCode?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    outputQuantity?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBOMStatusFieldUpdateOperationsInput | $Enums.BOMStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: BOMItemUpdateManyWithoutBomNestedInput
+  }
+
+  export type BillOfMaterialUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomCode?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    outputQuantity?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBOMStatusFieldUpdateOperationsInput | $Enums.BOMStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: BOMItemUncheckedUpdateManyWithoutBomNestedInput
+  }
+
+  export type BillOfMaterialCreateManyInput = {
+    id?: string
+    bomCode: string
+    productName: string
+    productCode?: string | null
+    unitOfMeasurement: string
+    outputQuantity?: number
+    description?: string | null
+    status?: $Enums.BOMStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BillOfMaterialUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomCode?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    outputQuantity?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBOMStatusFieldUpdateOperationsInput | $Enums.BOMStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BillOfMaterialUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomCode?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    outputQuantity?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBOMStatusFieldUpdateOperationsInput | $Enums.BOMStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMItemCreateInput = {
+    id?: string
+    quantity: number
+    unitOfMeasurement: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bom: BillOfMaterialCreateNestedOneWithoutItemsInput
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutBomItemsInput
+  }
+
+  export type BOMItemUncheckedCreateInput = {
+    id?: string
+    bomId: string
+    rawMaterialId: string
+    quantity: number
+    unitOfMeasurement: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMItemUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bom?: BillOfMaterialUpdateOneRequiredWithoutItemsNestedInput
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutBomItemsNestedInput
+  }
+
+  export type BOMItemUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMItemCreateManyInput = {
+    id?: string
+    bomId: string
+    rawMaterialId: string
+    quantity: number
+    unitOfMeasurement: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMItemUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMItemUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -99520,6 +102470,12 @@ export namespace Prisma {
     none?: StockEntryWhereInput
   }
 
+  export type BOMItemListRelationFilter = {
+    every?: BOMItemWhereInput
+    some?: BOMItemWhereInput
+    none?: BOMItemWhereInput
+  }
+
   export type CleaningJobOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -99541,6 +102497,10 @@ export namespace Prisma {
   }
 
   export type StockEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BOMItemOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -100637,6 +103597,121 @@ export namespace Prisma {
 
   export type ProcessingBatchLotSumOrderByAggregateInput = {
     allocatedQuantity?: SortOrder
+  }
+
+  export type EnumBOMStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BOMStatus | EnumBOMStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BOMStatus[] | ListEnumBOMStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BOMStatus[] | ListEnumBOMStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBOMStatusFilter<$PrismaModel> | $Enums.BOMStatus
+  }
+
+  export type BillOfMaterialCountOrderByAggregateInput = {
+    id?: SortOrder
+    bomCode?: SortOrder
+    productName?: SortOrder
+    productCode?: SortOrder
+    unitOfMeasurement?: SortOrder
+    outputQuantity?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BillOfMaterialAvgOrderByAggregateInput = {
+    outputQuantity?: SortOrder
+  }
+
+  export type BillOfMaterialMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bomCode?: SortOrder
+    productName?: SortOrder
+    productCode?: SortOrder
+    unitOfMeasurement?: SortOrder
+    outputQuantity?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BillOfMaterialMinOrderByAggregateInput = {
+    id?: SortOrder
+    bomCode?: SortOrder
+    productName?: SortOrder
+    productCode?: SortOrder
+    unitOfMeasurement?: SortOrder
+    outputQuantity?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BillOfMaterialSumOrderByAggregateInput = {
+    outputQuantity?: SortOrder
+  }
+
+  export type EnumBOMStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BOMStatus | EnumBOMStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BOMStatus[] | ListEnumBOMStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BOMStatus[] | ListEnumBOMStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBOMStatusWithAggregatesFilter<$PrismaModel> | $Enums.BOMStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBOMStatusFilter<$PrismaModel>
+    _max?: NestedEnumBOMStatusFilter<$PrismaModel>
+  }
+
+  export type BillOfMaterialScalarRelationFilter = {
+    is?: BillOfMaterialWhereInput
+    isNot?: BillOfMaterialWhereInput
+  }
+
+  export type BOMItemBomIdRawMaterialIdCompoundUniqueInput = {
+    bomId: string
+    rawMaterialId: string
+  }
+
+  export type BOMItemCountOrderByAggregateInput = {
+    id?: SortOrder
+    bomId?: SortOrder
+    rawMaterialId?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasurement?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BOMItemAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type BOMItemMaxOrderByAggregateInput = {
+    id?: SortOrder
+    bomId?: SortOrder
+    rawMaterialId?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasurement?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BOMItemMinOrderByAggregateInput = {
+    id?: SortOrder
+    bomId?: SortOrder
+    rawMaterialId?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasurement?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BOMItemSumOrderByAggregateInput = {
+    quantity?: SortOrder
   }
 
   export type BatchCreateNestedOneWithoutActivityLogInput = {
@@ -105851,6 +108926,13 @@ export namespace Prisma {
     connect?: StockEntryWhereUniqueInput | StockEntryWhereUniqueInput[]
   }
 
+  export type BOMItemCreateNestedManyWithoutRawMaterialInput = {
+    create?: XOR<BOMItemCreateWithoutRawMaterialInput, BOMItemUncheckedCreateWithoutRawMaterialInput> | BOMItemCreateWithoutRawMaterialInput[] | BOMItemUncheckedCreateWithoutRawMaterialInput[]
+    connectOrCreate?: BOMItemCreateOrConnectWithoutRawMaterialInput | BOMItemCreateOrConnectWithoutRawMaterialInput[]
+    createMany?: BOMItemCreateManyRawMaterialInputEnvelope
+    connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+  }
+
   export type CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput = {
     create?: XOR<CleaningJobCreateWithoutRawMaterialInput, CleaningJobUncheckedCreateWithoutRawMaterialInput> | CleaningJobCreateWithoutRawMaterialInput[] | CleaningJobUncheckedCreateWithoutRawMaterialInput[]
     connectOrCreate?: CleaningJobCreateOrConnectWithoutRawMaterialInput | CleaningJobCreateOrConnectWithoutRawMaterialInput[]
@@ -105891,6 +108973,13 @@ export namespace Prisma {
     connectOrCreate?: StockEntryCreateOrConnectWithoutRawMaterialInput | StockEntryCreateOrConnectWithoutRawMaterialInput[]
     createMany?: StockEntryCreateManyRawMaterialInputEnvelope
     connect?: StockEntryWhereUniqueInput | StockEntryWhereUniqueInput[]
+  }
+
+  export type BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput = {
+    create?: XOR<BOMItemCreateWithoutRawMaterialInput, BOMItemUncheckedCreateWithoutRawMaterialInput> | BOMItemCreateWithoutRawMaterialInput[] | BOMItemUncheckedCreateWithoutRawMaterialInput[]
+    connectOrCreate?: BOMItemCreateOrConnectWithoutRawMaterialInput | BOMItemCreateOrConnectWithoutRawMaterialInput[]
+    createMany?: BOMItemCreateManyRawMaterialInputEnvelope
+    connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
   }
 
   export type CleaningJobUpdateManyWithoutRawMaterialNestedInput = {
@@ -105987,6 +109076,20 @@ export namespace Prisma {
     deleteMany?: StockEntryScalarWhereInput | StockEntryScalarWhereInput[]
   }
 
+  export type BOMItemUpdateManyWithoutRawMaterialNestedInput = {
+    create?: XOR<BOMItemCreateWithoutRawMaterialInput, BOMItemUncheckedCreateWithoutRawMaterialInput> | BOMItemCreateWithoutRawMaterialInput[] | BOMItemUncheckedCreateWithoutRawMaterialInput[]
+    connectOrCreate?: BOMItemCreateOrConnectWithoutRawMaterialInput | BOMItemCreateOrConnectWithoutRawMaterialInput[]
+    upsert?: BOMItemUpsertWithWhereUniqueWithoutRawMaterialInput | BOMItemUpsertWithWhereUniqueWithoutRawMaterialInput[]
+    createMany?: BOMItemCreateManyRawMaterialInputEnvelope
+    set?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    disconnect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    delete?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    update?: BOMItemUpdateWithWhereUniqueWithoutRawMaterialInput | BOMItemUpdateWithWhereUniqueWithoutRawMaterialInput[]
+    updateMany?: BOMItemUpdateManyWithWhereWithoutRawMaterialInput | BOMItemUpdateManyWithWhereWithoutRawMaterialInput[]
+    deleteMany?: BOMItemScalarWhereInput | BOMItemScalarWhereInput[]
+  }
+
   export type CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput = {
     create?: XOR<CleaningJobCreateWithoutRawMaterialInput, CleaningJobUncheckedCreateWithoutRawMaterialInput> | CleaningJobCreateWithoutRawMaterialInput[] | CleaningJobUncheckedCreateWithoutRawMaterialInput[]
     connectOrCreate?: CleaningJobCreateOrConnectWithoutRawMaterialInput | CleaningJobCreateOrConnectWithoutRawMaterialInput[]
@@ -106069,6 +109172,20 @@ export namespace Prisma {
     update?: StockEntryUpdateWithWhereUniqueWithoutRawMaterialInput | StockEntryUpdateWithWhereUniqueWithoutRawMaterialInput[]
     updateMany?: StockEntryUpdateManyWithWhereWithoutRawMaterialInput | StockEntryUpdateManyWithWhereWithoutRawMaterialInput[]
     deleteMany?: StockEntryScalarWhereInput | StockEntryScalarWhereInput[]
+  }
+
+  export type BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput = {
+    create?: XOR<BOMItemCreateWithoutRawMaterialInput, BOMItemUncheckedCreateWithoutRawMaterialInput> | BOMItemCreateWithoutRawMaterialInput[] | BOMItemUncheckedCreateWithoutRawMaterialInput[]
+    connectOrCreate?: BOMItemCreateOrConnectWithoutRawMaterialInput | BOMItemCreateOrConnectWithoutRawMaterialInput[]
+    upsert?: BOMItemUpsertWithWhereUniqueWithoutRawMaterialInput | BOMItemUpsertWithWhereUniqueWithoutRawMaterialInput[]
+    createMany?: BOMItemCreateManyRawMaterialInputEnvelope
+    set?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    disconnect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    delete?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    update?: BOMItemUpdateWithWhereUniqueWithoutRawMaterialInput | BOMItemUpdateWithWhereUniqueWithoutRawMaterialInput[]
+    updateMany?: BOMItemUpdateManyWithWhereWithoutRawMaterialInput | BOMItemUpdateManyWithWhereWithoutRawMaterialInput[]
+    deleteMany?: BOMItemScalarWhereInput | BOMItemScalarWhereInput[]
   }
 
   export type VendorCreateNestedOneWithoutPurchaseOrdersInput = {
@@ -107791,6 +110908,80 @@ export namespace Prisma {
     update?: XOR<XOR<CleaningLotUpdateToOneWithWhereWithoutProcessingBatchLotInput, CleaningLotUpdateWithoutProcessingBatchLotInput>, CleaningLotUncheckedUpdateWithoutProcessingBatchLotInput>
   }
 
+  export type BOMItemCreateNestedManyWithoutBomInput = {
+    create?: XOR<BOMItemCreateWithoutBomInput, BOMItemUncheckedCreateWithoutBomInput> | BOMItemCreateWithoutBomInput[] | BOMItemUncheckedCreateWithoutBomInput[]
+    connectOrCreate?: BOMItemCreateOrConnectWithoutBomInput | BOMItemCreateOrConnectWithoutBomInput[]
+    createMany?: BOMItemCreateManyBomInputEnvelope
+    connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+  }
+
+  export type BOMItemUncheckedCreateNestedManyWithoutBomInput = {
+    create?: XOR<BOMItemCreateWithoutBomInput, BOMItemUncheckedCreateWithoutBomInput> | BOMItemCreateWithoutBomInput[] | BOMItemUncheckedCreateWithoutBomInput[]
+    connectOrCreate?: BOMItemCreateOrConnectWithoutBomInput | BOMItemCreateOrConnectWithoutBomInput[]
+    createMany?: BOMItemCreateManyBomInputEnvelope
+    connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+  }
+
+  export type EnumBOMStatusFieldUpdateOperationsInput = {
+    set?: $Enums.BOMStatus
+  }
+
+  export type BOMItemUpdateManyWithoutBomNestedInput = {
+    create?: XOR<BOMItemCreateWithoutBomInput, BOMItemUncheckedCreateWithoutBomInput> | BOMItemCreateWithoutBomInput[] | BOMItemUncheckedCreateWithoutBomInput[]
+    connectOrCreate?: BOMItemCreateOrConnectWithoutBomInput | BOMItemCreateOrConnectWithoutBomInput[]
+    upsert?: BOMItemUpsertWithWhereUniqueWithoutBomInput | BOMItemUpsertWithWhereUniqueWithoutBomInput[]
+    createMany?: BOMItemCreateManyBomInputEnvelope
+    set?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    disconnect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    delete?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    update?: BOMItemUpdateWithWhereUniqueWithoutBomInput | BOMItemUpdateWithWhereUniqueWithoutBomInput[]
+    updateMany?: BOMItemUpdateManyWithWhereWithoutBomInput | BOMItemUpdateManyWithWhereWithoutBomInput[]
+    deleteMany?: BOMItemScalarWhereInput | BOMItemScalarWhereInput[]
+  }
+
+  export type BOMItemUncheckedUpdateManyWithoutBomNestedInput = {
+    create?: XOR<BOMItemCreateWithoutBomInput, BOMItemUncheckedCreateWithoutBomInput> | BOMItemCreateWithoutBomInput[] | BOMItemUncheckedCreateWithoutBomInput[]
+    connectOrCreate?: BOMItemCreateOrConnectWithoutBomInput | BOMItemCreateOrConnectWithoutBomInput[]
+    upsert?: BOMItemUpsertWithWhereUniqueWithoutBomInput | BOMItemUpsertWithWhereUniqueWithoutBomInput[]
+    createMany?: BOMItemCreateManyBomInputEnvelope
+    set?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    disconnect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    delete?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+    update?: BOMItemUpdateWithWhereUniqueWithoutBomInput | BOMItemUpdateWithWhereUniqueWithoutBomInput[]
+    updateMany?: BOMItemUpdateManyWithWhereWithoutBomInput | BOMItemUpdateManyWithWhereWithoutBomInput[]
+    deleteMany?: BOMItemScalarWhereInput | BOMItemScalarWhereInput[]
+  }
+
+  export type BillOfMaterialCreateNestedOneWithoutItemsInput = {
+    create?: XOR<BillOfMaterialCreateWithoutItemsInput, BillOfMaterialUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: BillOfMaterialCreateOrConnectWithoutItemsInput
+    connect?: BillOfMaterialWhereUniqueInput
+  }
+
+  export type RawMaterialProductCreateNestedOneWithoutBomItemsInput = {
+    create?: XOR<RawMaterialProductCreateWithoutBomItemsInput, RawMaterialProductUncheckedCreateWithoutBomItemsInput>
+    connectOrCreate?: RawMaterialProductCreateOrConnectWithoutBomItemsInput
+    connect?: RawMaterialProductWhereUniqueInput
+  }
+
+  export type BillOfMaterialUpdateOneRequiredWithoutItemsNestedInput = {
+    create?: XOR<BillOfMaterialCreateWithoutItemsInput, BillOfMaterialUncheckedCreateWithoutItemsInput>
+    connectOrCreate?: BillOfMaterialCreateOrConnectWithoutItemsInput
+    upsert?: BillOfMaterialUpsertWithoutItemsInput
+    connect?: BillOfMaterialWhereUniqueInput
+    update?: XOR<XOR<BillOfMaterialUpdateToOneWithWhereWithoutItemsInput, BillOfMaterialUpdateWithoutItemsInput>, BillOfMaterialUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type RawMaterialProductUpdateOneRequiredWithoutBomItemsNestedInput = {
+    create?: XOR<RawMaterialProductCreateWithoutBomItemsInput, RawMaterialProductUncheckedCreateWithoutBomItemsInput>
+    connectOrCreate?: RawMaterialProductCreateOrConnectWithoutBomItemsInput
+    upsert?: RawMaterialProductUpsertWithoutBomItemsInput
+    connect?: RawMaterialProductWhereUniqueInput
+    update?: XOR<XOR<RawMaterialProductUpdateToOneWithWhereWithoutBomItemsInput, RawMaterialProductUpdateWithoutBomItemsInput>, RawMaterialProductUncheckedUpdateWithoutBomItemsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -108364,6 +111555,23 @@ export namespace Prisma {
     _sum?: NestedFloatNullableFilter<$PrismaModel>
     _min?: NestedFloatNullableFilter<$PrismaModel>
     _max?: NestedFloatNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumBOMStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.BOMStatus | EnumBOMStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BOMStatus[] | ListEnumBOMStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BOMStatus[] | ListEnumBOMStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBOMStatusFilter<$PrismaModel> | $Enums.BOMStatus
+  }
+
+  export type NestedEnumBOMStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.BOMStatus | EnumBOMStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.BOMStatus[] | ListEnumBOMStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.BOMStatus[] | ListEnumBOMStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumBOMStatusWithAggregatesFilter<$PrismaModel> | $Enums.BOMStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumBOMStatusFilter<$PrismaModel>
+    _max?: NestedEnumBOMStatusFilter<$PrismaModel>
   }
 
   export type BatchCreateWithoutActivityLogInput = {
@@ -124012,6 +127220,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutVendorInput = {
@@ -124030,6 +127239,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutVendorInput = {
@@ -124355,6 +127565,36 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BOMItemCreateWithoutRawMaterialInput = {
+    id?: string
+    quantity: number
+    unitOfMeasurement: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bom: BillOfMaterialCreateNestedOneWithoutItemsInput
+  }
+
+  export type BOMItemUncheckedCreateWithoutRawMaterialInput = {
+    id?: string
+    bomId: string
+    quantity: number
+    unitOfMeasurement: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMItemCreateOrConnectWithoutRawMaterialInput = {
+    where: BOMItemWhereUniqueInput
+    create: XOR<BOMItemCreateWithoutRawMaterialInput, BOMItemUncheckedCreateWithoutRawMaterialInput>
+  }
+
+  export type BOMItemCreateManyRawMaterialInputEnvelope = {
+    data: BOMItemCreateManyRawMaterialInput | BOMItemCreateManyRawMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CleaningJobUpsertWithWhereUniqueWithoutRawMaterialInput = {
     where: CleaningJobWhereUniqueInput
     update: XOR<CleaningJobUpdateWithoutRawMaterialInput, CleaningJobUncheckedUpdateWithoutRawMaterialInput>
@@ -124586,6 +127826,36 @@ export namespace Prisma {
     status?: StringFilter<"StockEntry"> | string
     reasonCode?: StringNullableFilter<"StockEntry"> | string | null
     createdAt?: DateTimeFilter<"StockEntry"> | Date | string
+  }
+
+  export type BOMItemUpsertWithWhereUniqueWithoutRawMaterialInput = {
+    where: BOMItemWhereUniqueInput
+    update: XOR<BOMItemUpdateWithoutRawMaterialInput, BOMItemUncheckedUpdateWithoutRawMaterialInput>
+    create: XOR<BOMItemCreateWithoutRawMaterialInput, BOMItemUncheckedCreateWithoutRawMaterialInput>
+  }
+
+  export type BOMItemUpdateWithWhereUniqueWithoutRawMaterialInput = {
+    where: BOMItemWhereUniqueInput
+    data: XOR<BOMItemUpdateWithoutRawMaterialInput, BOMItemUncheckedUpdateWithoutRawMaterialInput>
+  }
+
+  export type BOMItemUpdateManyWithWhereWithoutRawMaterialInput = {
+    where: BOMItemScalarWhereInput
+    data: XOR<BOMItemUpdateManyMutationInput, BOMItemUncheckedUpdateManyWithoutRawMaterialInput>
+  }
+
+  export type BOMItemScalarWhereInput = {
+    AND?: BOMItemScalarWhereInput | BOMItemScalarWhereInput[]
+    OR?: BOMItemScalarWhereInput[]
+    NOT?: BOMItemScalarWhereInput | BOMItemScalarWhereInput[]
+    id?: StringFilter<"BOMItem"> | string
+    bomId?: StringFilter<"BOMItem"> | string
+    rawMaterialId?: StringFilter<"BOMItem"> | string
+    quantity?: FloatFilter<"BOMItem"> | number
+    unitOfMeasurement?: StringFilter<"BOMItem"> | string
+    notes?: StringNullableFilter<"BOMItem"> | string | null
+    createdAt?: DateTimeFilter<"BOMItem"> | Date | string
+    updatedAt?: DateTimeFilter<"BOMItem"> | Date | string
   }
 
   export type VendorCreateWithoutPurchaseOrdersInput = {
@@ -124821,6 +128091,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutPurchaseOrderItemsInput = {
@@ -124839,6 +128110,7 @@ export namespace Prisma {
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutPurchaseOrderItemsInput = {
@@ -124978,6 +128250,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutPurchaseOrderItemsInput = {
@@ -124996,6 +128269,7 @@ export namespace Prisma {
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type ReceivalEntryUpsertWithWhereUniqueWithoutPurchaseOrderItemInput = {
@@ -125319,6 +128593,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutStockEntriesInput = {
@@ -125337,6 +128612,7 @@ export namespace Prisma {
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutStockEntriesInput = {
@@ -125416,6 +128692,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutStockEntriesInput = {
@@ -125434,6 +128711,7 @@ export namespace Prisma {
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutStockEntriesInput = {
@@ -126266,6 +129544,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutCleaningJobsInput = {
@@ -126284,6 +129563,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutCleaningJobsInput = {
@@ -126523,6 +129803,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutCleaningJobsInput = {
@@ -126541,6 +129822,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutCleaningJobsToInput = {
@@ -127139,6 +130421,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutProcessingJobsInput = {
@@ -127157,6 +130440,7 @@ export namespace Prisma {
     currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutProcessingJobsInput = {
@@ -127295,6 +130579,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutProcessingJobsInput = {
@@ -127313,6 +130598,7 @@ export namespace Prisma {
     currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutProcessingJobsInput = {
@@ -127710,6 +130996,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutCurrentStocksInput = {
@@ -127728,6 +131015,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutCurrentStocksInput = {
@@ -127807,6 +131095,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutCurrentStocksInput = {
@@ -127825,6 +131114,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutCurrentStocksInput = {
@@ -129135,6 +132425,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutCleaningLotsInput = {
@@ -129153,6 +132444,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutCleaningLotsInput = {
@@ -129335,6 +132627,7 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutCleaningLotsInput = {
@@ -129353,6 +132646,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutCleaningLotsInput = {
@@ -129577,6 +132871,212 @@ export namespace Prisma {
     isReusable?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMItemCreateWithoutBomInput = {
+    id?: string
+    quantity: number
+    unitOfMeasurement: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutBomItemsInput
+  }
+
+  export type BOMItemUncheckedCreateWithoutBomInput = {
+    id?: string
+    rawMaterialId: string
+    quantity: number
+    unitOfMeasurement: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMItemCreateOrConnectWithoutBomInput = {
+    where: BOMItemWhereUniqueInput
+    create: XOR<BOMItemCreateWithoutBomInput, BOMItemUncheckedCreateWithoutBomInput>
+  }
+
+  export type BOMItemCreateManyBomInputEnvelope = {
+    data: BOMItemCreateManyBomInput | BOMItemCreateManyBomInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BOMItemUpsertWithWhereUniqueWithoutBomInput = {
+    where: BOMItemWhereUniqueInput
+    update: XOR<BOMItemUpdateWithoutBomInput, BOMItemUncheckedUpdateWithoutBomInput>
+    create: XOR<BOMItemCreateWithoutBomInput, BOMItemUncheckedCreateWithoutBomInput>
+  }
+
+  export type BOMItemUpdateWithWhereUniqueWithoutBomInput = {
+    where: BOMItemWhereUniqueInput
+    data: XOR<BOMItemUpdateWithoutBomInput, BOMItemUncheckedUpdateWithoutBomInput>
+  }
+
+  export type BOMItemUpdateManyWithWhereWithoutBomInput = {
+    where: BOMItemScalarWhereInput
+    data: XOR<BOMItemUpdateManyMutationInput, BOMItemUncheckedUpdateManyWithoutBomInput>
+  }
+
+  export type BillOfMaterialCreateWithoutItemsInput = {
+    id?: string
+    bomCode: string
+    productName: string
+    productCode?: string | null
+    unitOfMeasurement: string
+    outputQuantity?: number
+    description?: string | null
+    status?: $Enums.BOMStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BillOfMaterialUncheckedCreateWithoutItemsInput = {
+    id?: string
+    bomCode: string
+    productName: string
+    productCode?: string | null
+    unitOfMeasurement: string
+    outputQuantity?: number
+    description?: string | null
+    status?: $Enums.BOMStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BillOfMaterialCreateOrConnectWithoutItemsInput = {
+    where: BillOfMaterialWhereUniqueInput
+    create: XOR<BillOfMaterialCreateWithoutItemsInput, BillOfMaterialUncheckedCreateWithoutItemsInput>
+  }
+
+  export type RawMaterialProductCreateWithoutBomItemsInput = {
+    id?: string
+    skuCode: string
+    name: string
+    category: string
+    variety?: string | null
+    unitOfMeasurement: string
+    minReorderLevel: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
+    currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
+    processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
+    vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
+    stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+  }
+
+  export type RawMaterialProductUncheckedCreateWithoutBomItemsInput = {
+    id?: string
+    skuCode: string
+    name: string
+    category: string
+    variety?: string | null
+    unitOfMeasurement: string
+    minReorderLevel: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    vendorId?: string | null
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
+    currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
+    processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+  }
+
+  export type RawMaterialProductCreateOrConnectWithoutBomItemsInput = {
+    where: RawMaterialProductWhereUniqueInput
+    create: XOR<RawMaterialProductCreateWithoutBomItemsInput, RawMaterialProductUncheckedCreateWithoutBomItemsInput>
+  }
+
+  export type BillOfMaterialUpsertWithoutItemsInput = {
+    update: XOR<BillOfMaterialUpdateWithoutItemsInput, BillOfMaterialUncheckedUpdateWithoutItemsInput>
+    create: XOR<BillOfMaterialCreateWithoutItemsInput, BillOfMaterialUncheckedCreateWithoutItemsInput>
+    where?: BillOfMaterialWhereInput
+  }
+
+  export type BillOfMaterialUpdateToOneWithWhereWithoutItemsInput = {
+    where?: BillOfMaterialWhereInput
+    data: XOR<BillOfMaterialUpdateWithoutItemsInput, BillOfMaterialUncheckedUpdateWithoutItemsInput>
+  }
+
+  export type BillOfMaterialUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomCode?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    outputQuantity?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBOMStatusFieldUpdateOperationsInput | $Enums.BOMStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BillOfMaterialUncheckedUpdateWithoutItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomCode?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    outputQuantity?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBOMStatusFieldUpdateOperationsInput | $Enums.BOMStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RawMaterialProductUpsertWithoutBomItemsInput = {
+    update: XOR<RawMaterialProductUpdateWithoutBomItemsInput, RawMaterialProductUncheckedUpdateWithoutBomItemsInput>
+    create: XOR<RawMaterialProductCreateWithoutBomItemsInput, RawMaterialProductUncheckedCreateWithoutBomItemsInput>
+    where?: RawMaterialProductWhereInput
+  }
+
+  export type RawMaterialProductUpdateToOneWithWhereWithoutBomItemsInput = {
+    where?: RawMaterialProductWhereInput
+    data: XOR<RawMaterialProductUpdateWithoutBomItemsInput, RawMaterialProductUncheckedUpdateWithoutBomItemsInput>
+  }
+
+  export type RawMaterialProductUpdateWithoutBomItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    minReorderLevel?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
+    currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
+    processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
+    vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
+    stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+  }
+
+  export type RawMaterialProductUncheckedUpdateWithoutBomItemsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    minReorderLevel?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vendorId?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
+    currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
+    processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type ActivityLogCreateManyBatchInput = {
@@ -134443,6 +137943,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutVendorInput = {
@@ -134461,6 +137962,7 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateManyWithoutVendorInput = {
@@ -134541,6 +138043,16 @@ export namespace Prisma {
     status: string
     reasonCode?: string | null
     createdAt?: Date | string
+  }
+
+  export type BOMItemCreateManyRawMaterialInput = {
+    id?: string
+    bomId: string
+    quantity: number
+    unitOfMeasurement: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type CleaningJobUpdateWithoutRawMaterialInput = {
@@ -134761,6 +138273,36 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMItemUpdateWithoutRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bom?: BillOfMaterialUpdateOneRequiredWithoutItemsNestedInput
+  }
+
+  export type BOMItemUncheckedUpdateWithoutRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMItemUncheckedUpdateManyWithoutRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PurchaseOrderItemCreateManyPurchaseOrderInput = {
@@ -135951,6 +139493,46 @@ export namespace Prisma {
     leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
     reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
     isReusable?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMItemCreateManyBomInput = {
+    id?: string
+    rawMaterialId: string
+    quantity: number
+    unitOfMeasurement: string
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type BOMItemUpdateWithoutBomInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutBomItemsNestedInput
+  }
+
+  export type BOMItemUncheckedUpdateWithoutBomInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BOMItemUncheckedUpdateManyWithoutBomInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

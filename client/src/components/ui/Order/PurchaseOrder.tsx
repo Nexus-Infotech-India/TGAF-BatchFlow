@@ -494,7 +494,7 @@ const PurchaseOrder = () => {
 
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Quantity
+                        Quantity(KG)
                       </label>
                       <input
                         type="number"
@@ -518,7 +518,7 @@ const PurchaseOrder = () => {
 
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Rate (₦)
+                        Rate per KG(₦)
                       </label>
                       <div className="flex items-center gap-2">
                         <input

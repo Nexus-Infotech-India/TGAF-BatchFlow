@@ -876,6 +876,30 @@ exports.Prisma.ProcessingBatchLotScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.BillOfMaterialScalarFieldEnum = {
+  id: 'id',
+  bomCode: 'bomCode',
+  productName: 'productName',
+  productCode: 'productCode',
+  unitOfMeasurement: 'unitOfMeasurement',
+  outputQuantity: 'outputQuantity',
+  description: 'description',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.BOMItemScalarFieldEnum = {
+  id: 'id',
+  bomId: 'bomId',
+  rawMaterialId: 'rawMaterialId',
+  quantity: 'quantity',
+  unitOfMeasurement: 'unitOfMeasurement',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1028,6 +1052,12 @@ exports.WeightMode = exports.$Enums.WeightMode = {
   TOTAL: 'TOTAL'
 };
 
+exports.BOMStatus = exports.$Enums.BOMStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  DRAFT: 'DRAFT'
+};
+
 exports.Prisma.ModelName = {
   ActivityLog: 'ActivityLog',
   Batch: 'Batch',
@@ -1092,7 +1122,9 @@ exports.Prisma.ModelName = {
   RMQualityParameter: 'RMQualityParameter',
   GRNbyPo: 'GRNbyPo',
   CleaningLot: 'CleaningLot',
-  ProcessingBatchLot: 'ProcessingBatchLot'
+  ProcessingBatchLot: 'ProcessingBatchLot',
+  BillOfMaterial: 'BillOfMaterial',
+  BOMItem: 'BOMItem'
 };
 
 /**

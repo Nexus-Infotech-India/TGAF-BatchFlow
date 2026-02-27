@@ -743,6 +743,7 @@ model RawMaterialProduct {
   purchaseOrderItems PurchaseOrderItem[]
   vendor             Vendor?             @relation(fields: [vendorId], references: [id])
   stockEntries       StockEntry[]
+  bomItems           BOMItem[]
 }
 
 model PurchaseOrder {
@@ -1167,4 +1168,42 @@ model ProcessingBatchLot {
 
   processingJob ProcessingJob @relation(fields: [processingJobId], references: [id])
   cleaningLot   CleaningLot   @relation(fields: [cleaningLotId], references: [id])
+}
+
+// ==================== BILL OF MATERIAL ====================
+
+enum BOMStatus {
+  ACTIVE
+  INACTIVE
+  DRAFT
+}
+
+model BillOfMaterial {
+  id                String    @id @default(uuid())
+  bomCode           String    @unique
+  productName       String
+  productCode       String?
+  unitOfMeasurement String
+  outputQuantity    Float     @default(1)
+  description       String?
+  status            BOMStatus @default(DRAFT)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  items             BOMItem[]
+}
+
+model BOMItem {
+  id                String   @id @default(uuid())
+  bomId             String
+  rawMaterialId     String
+  quantity          Float
+  unitOfMeasurement String
+  notes             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  bom         BillOfMaterial     @relation(fields: [bomId], references: [id], onDelete: Cascade)
+  rawMaterial RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
+
+  @@unique([bomId, rawMaterialId])
 }

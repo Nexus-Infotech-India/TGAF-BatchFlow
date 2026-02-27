@@ -174,10 +174,16 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "Raw Material Master",
           icon: <PackageOpen className="sidebar-icon" size={18} />,
           permissionKey: "manage_raw_materials"
+        },
+        {
+          path: "/masters/bom/create",
+          name: "Bill of Material",
+          icon: <ClipboardEdit className="sidebar-icon" size={18} />,
+          permissionKey: "manage_bom"
         }
       ]
     },
-    
+
     {
       key: "raw-material",
       name: "Material Management",
@@ -195,7 +201,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           icon: <FileStack className="sidebar-icon" size={18} />,
           permissionKey: "manage_purchase_order"
         },
-          {
+        {
           path: "/raw/quality-report",
           name: "RM Quality Report",
           icon: <FileText className="sidebar-icon" size={18} />,
@@ -213,7 +219,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           icon: <SwitchCamera className="sidebar-icon" size={18} />,
           permissionKey: "manage_purchase_order"
         },
-      
+
         {
           path: "/stock-distribution",
           name: "Stock Distribution",
@@ -223,7 +229,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
       ]
     },
 
-    
+
 
     {
       key: "batch-management",
