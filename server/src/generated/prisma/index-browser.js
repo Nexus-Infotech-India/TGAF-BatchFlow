@@ -818,9 +818,12 @@ exports.Prisma.ReusableStockScalarFieldEnum = {
 
 exports.Prisma.RMQualityReportScalarFieldEnum = {
   id: 'id',
+  reportNumber: 'reportNumber',
   rawMaterialName: 'rawMaterialName',
   variety: 'variety',
   supplier: 'supplier',
+  purchaseOrderId: 'purchaseOrderId',
+  purchaseOrderItemId: 'purchaseOrderItemId',
   dateOfReport: 'dateOfReport',
   grn: 'grn',
   createdById: 'createdById',
@@ -848,6 +851,11 @@ exports.Prisma.GRNbyPoScalarFieldEnum = {
   supplier: 'supplier',
   qualityReportId: 'qualityReportId',
   createdById: 'createdById',
+  truckNumber: 'truckNumber',
+  deliveryLocation: 'deliveryLocation',
+  costCenter: 'costCenter',
+  receivedBagsPacks: 'receivedBagsPacks',
+  remarks: 'remarks',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

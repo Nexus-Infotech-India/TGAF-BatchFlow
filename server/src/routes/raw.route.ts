@@ -109,6 +109,8 @@ router.get('/dashboard/product-wise-conversion', DashboardController.getProductW
 // RM Quality Reports
 router.post('/quality-report', RMQualityController.createQualityReport);
 router.get('/quality-report', RMQualityController.getQualityReports);
+router.get('/quality-report/without-grn', RMQualityController.getReportsWithoutGRN);
+router.get('/quality-report/for-grn-page', RMQualityController.getReportsForGRNPage);
 router.get('/quality-report/export/all', RMQualityController.exportAllQualityReports);
 router.get('/quality-report/mail/all', RMQualityMailController.mailAllQualityReports);
 router.post('/quality-report/mail/filtered', RMQualityMailFilteredController.mailFilteredQualityReports);
@@ -120,6 +122,7 @@ router.get('/quality-report/:id/export', RMQualityController.exportQualityReport
 
 // GRN by PO
 router.post('/grn', GRNController.createGRN);
+router.post('/grn/from-report', GRNController.generateGRNForReport);
 router.get('/grn', GRNController.getGRNs);
 router.get('/grn/received-pos', GRNController.getReceivedPOs);
 router.get('/grn/po/:poId', GRNController.getGRNsByPO);

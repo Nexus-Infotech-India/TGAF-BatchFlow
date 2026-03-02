@@ -78918,9 +78918,12 @@ export namespace Prisma {
 
   export type RMQualityReportMinAggregateOutputType = {
     id: string | null
+    reportNumber: string | null
     rawMaterialName: string | null
     variety: string | null
     supplier: string | null
+    purchaseOrderId: string | null
+    purchaseOrderItemId: string | null
     dateOfReport: Date | null
     grn: string | null
     createdById: string | null
@@ -78930,9 +78933,12 @@ export namespace Prisma {
 
   export type RMQualityReportMaxAggregateOutputType = {
     id: string | null
+    reportNumber: string | null
     rawMaterialName: string | null
     variety: string | null
     supplier: string | null
+    purchaseOrderId: string | null
+    purchaseOrderItemId: string | null
     dateOfReport: Date | null
     grn: string | null
     createdById: string | null
@@ -78942,9 +78948,12 @@ export namespace Prisma {
 
   export type RMQualityReportCountAggregateOutputType = {
     id: number
+    reportNumber: number
     rawMaterialName: number
     variety: number
     supplier: number
+    purchaseOrderId: number
+    purchaseOrderItemId: number
     dateOfReport: number
     grn: number
     createdById: number
@@ -78956,9 +78965,12 @@ export namespace Prisma {
 
   export type RMQualityReportMinAggregateInputType = {
     id?: true
+    reportNumber?: true
     rawMaterialName?: true
     variety?: true
     supplier?: true
+    purchaseOrderId?: true
+    purchaseOrderItemId?: true
     dateOfReport?: true
     grn?: true
     createdById?: true
@@ -78968,9 +78980,12 @@ export namespace Prisma {
 
   export type RMQualityReportMaxAggregateInputType = {
     id?: true
+    reportNumber?: true
     rawMaterialName?: true
     variety?: true
     supplier?: true
+    purchaseOrderId?: true
+    purchaseOrderItemId?: true
     dateOfReport?: true
     grn?: true
     createdById?: true
@@ -78980,9 +78995,12 @@ export namespace Prisma {
 
   export type RMQualityReportCountAggregateInputType = {
     id?: true
+    reportNumber?: true
     rawMaterialName?: true
     variety?: true
     supplier?: true
+    purchaseOrderId?: true
+    purchaseOrderItemId?: true
     dateOfReport?: true
     grn?: true
     createdById?: true
@@ -79065,11 +79083,14 @@ export namespace Prisma {
 
   export type RMQualityReportGroupByOutputType = {
     id: string
+    reportNumber: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId: string | null
+    purchaseOrderItemId: string | null
     dateOfReport: Date
-    grn: string
+    grn: string | null
     createdById: string
     createdAt: Date
     updatedAt: Date
@@ -79094,9 +79115,12 @@ export namespace Prisma {
 
   export type RMQualityReportSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    reportNumber?: boolean
     rawMaterialName?: boolean
     variety?: boolean
     supplier?: boolean
+    purchaseOrderId?: boolean
+    purchaseOrderItemId?: boolean
     dateOfReport?: boolean
     grn?: boolean
     createdById?: boolean
@@ -79110,9 +79134,12 @@ export namespace Prisma {
 
   export type RMQualityReportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    reportNumber?: boolean
     rawMaterialName?: boolean
     variety?: boolean
     supplier?: boolean
+    purchaseOrderId?: boolean
+    purchaseOrderItemId?: boolean
     dateOfReport?: boolean
     grn?: boolean
     createdById?: boolean
@@ -79123,9 +79150,12 @@ export namespace Prisma {
 
   export type RMQualityReportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    reportNumber?: boolean
     rawMaterialName?: boolean
     variety?: boolean
     supplier?: boolean
+    purchaseOrderId?: boolean
+    purchaseOrderItemId?: boolean
     dateOfReport?: boolean
     grn?: boolean
     createdById?: boolean
@@ -79136,9 +79166,12 @@ export namespace Prisma {
 
   export type RMQualityReportSelectScalar = {
     id?: boolean
+    reportNumber?: boolean
     rawMaterialName?: boolean
     variety?: boolean
     supplier?: boolean
+    purchaseOrderId?: boolean
+    purchaseOrderItemId?: boolean
     dateOfReport?: boolean
     grn?: boolean
     createdById?: boolean
@@ -79146,7 +79179,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type RMQualityReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rawMaterialName" | "variety" | "supplier" | "dateOfReport" | "grn" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["rMQualityReport"]>
+  export type RMQualityReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reportNumber" | "rawMaterialName" | "variety" | "supplier" | "purchaseOrderId" | "purchaseOrderItemId" | "dateOfReport" | "grn" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["rMQualityReport"]>
   export type RMQualityReportInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     parameters?: boolean | RMQualityReport$parametersArgs<ExtArgs>
     createdBy?: boolean | UserDefaultArgs<ExtArgs>
@@ -79169,11 +79202,14 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      reportNumber: string | null
       rawMaterialName: string
       variety: string
       supplier: string
+      purchaseOrderId: string | null
+      purchaseOrderItemId: string | null
       dateOfReport: Date
-      grn: string
+      grn: string | null
       createdById: string
       createdAt: Date
       updatedAt: Date
@@ -79604,9 +79640,12 @@ export namespace Prisma {
    */
   interface RMQualityReportFieldRefs {
     readonly id: FieldRef<"RMQualityReport", 'String'>
+    readonly reportNumber: FieldRef<"RMQualityReport", 'String'>
     readonly rawMaterialName: FieldRef<"RMQualityReport", 'String'>
     readonly variety: FieldRef<"RMQualityReport", 'String'>
     readonly supplier: FieldRef<"RMQualityReport", 'String'>
+    readonly purchaseOrderId: FieldRef<"RMQualityReport", 'String'>
+    readonly purchaseOrderItemId: FieldRef<"RMQualityReport", 'String'>
     readonly dateOfReport: FieldRef<"RMQualityReport", 'DateTime'>
     readonly grn: FieldRef<"RMQualityReport", 'String'>
     readonly createdById: FieldRef<"RMQualityReport", 'String'>
@@ -81173,6 +81212,11 @@ export namespace Prisma {
     supplier: string | null
     qualityReportId: string | null
     createdById: string | null
+    truckNumber: string | null
+    deliveryLocation: string | null
+    costCenter: string | null
+    receivedBagsPacks: string | null
+    remarks: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -81187,6 +81231,11 @@ export namespace Prisma {
     supplier: string | null
     qualityReportId: string | null
     createdById: string | null
+    truckNumber: string | null
+    deliveryLocation: string | null
+    costCenter: string | null
+    receivedBagsPacks: string | null
+    remarks: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -81201,6 +81250,11 @@ export namespace Prisma {
     supplier: number
     qualityReportId: number
     createdById: number
+    truckNumber: number
+    deliveryLocation: number
+    costCenter: number
+    receivedBagsPacks: number
+    remarks: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -81217,6 +81271,11 @@ export namespace Prisma {
     supplier?: true
     qualityReportId?: true
     createdById?: true
+    truckNumber?: true
+    deliveryLocation?: true
+    costCenter?: true
+    receivedBagsPacks?: true
+    remarks?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -81231,6 +81290,11 @@ export namespace Prisma {
     supplier?: true
     qualityReportId?: true
     createdById?: true
+    truckNumber?: true
+    deliveryLocation?: true
+    costCenter?: true
+    receivedBagsPacks?: true
+    remarks?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -81245,6 +81309,11 @@ export namespace Prisma {
     supplier?: true
     qualityReportId?: true
     createdById?: true
+    truckNumber?: true
+    deliveryLocation?: true
+    costCenter?: true
+    receivedBagsPacks?: true
+    remarks?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -81332,6 +81401,11 @@ export namespace Prisma {
     supplier: string
     qualityReportId: string | null
     createdById: string
+    truckNumber: string | null
+    deliveryLocation: string | null
+    costCenter: string | null
+    receivedBagsPacks: string | null
+    remarks: string | null
     createdAt: Date
     updatedAt: Date
     _count: GRNbyPoCountAggregateOutputType | null
@@ -81363,6 +81437,11 @@ export namespace Prisma {
     supplier?: boolean
     qualityReportId?: boolean
     createdById?: boolean
+    truckNumber?: boolean
+    deliveryLocation?: boolean
+    costCenter?: boolean
+    receivedBagsPacks?: boolean
+    remarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
@@ -81384,6 +81463,11 @@ export namespace Prisma {
     supplier?: boolean
     qualityReportId?: boolean
     createdById?: boolean
+    truckNumber?: boolean
+    deliveryLocation?: boolean
+    costCenter?: boolean
+    receivedBagsPacks?: boolean
+    remarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
@@ -81402,6 +81486,11 @@ export namespace Prisma {
     supplier?: boolean
     qualityReportId?: boolean
     createdById?: boolean
+    truckNumber?: boolean
+    deliveryLocation?: boolean
+    costCenter?: boolean
+    receivedBagsPacks?: boolean
+    remarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
@@ -81420,11 +81509,16 @@ export namespace Prisma {
     supplier?: boolean
     qualityReportId?: boolean
     createdById?: boolean
+    truckNumber?: boolean
+    deliveryLocation?: boolean
+    costCenter?: boolean
+    receivedBagsPacks?: boolean
+    remarks?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type GRNbyPoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "grnNumber" | "purchaseOrderId" | "purchaseOrderItemId" | "rawMaterialName" | "variety" | "supplier" | "qualityReportId" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["gRNbyPo"]>
+  export type GRNbyPoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "grnNumber" | "purchaseOrderId" | "purchaseOrderItemId" | "rawMaterialName" | "variety" | "supplier" | "qualityReportId" | "createdById" | "truckNumber" | "deliveryLocation" | "costCenter" | "receivedBagsPacks" | "remarks" | "createdAt" | "updatedAt", ExtArgs["result"]["gRNbyPo"]>
   export type GRNbyPoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     purchaseOrder?: boolean | PurchaseOrderDefaultArgs<ExtArgs>
     purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
@@ -81467,6 +81561,11 @@ export namespace Prisma {
       supplier: string
       qualityReportId: string | null
       createdById: string
+      truckNumber: string | null
+      deliveryLocation: string | null
+      costCenter: string | null
+      receivedBagsPacks: string | null
+      remarks: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["gRNbyPo"]>
@@ -81907,6 +82006,11 @@ export namespace Prisma {
     readonly supplier: FieldRef<"GRNbyPo", 'String'>
     readonly qualityReportId: FieldRef<"GRNbyPo", 'String'>
     readonly createdById: FieldRef<"GRNbyPo", 'String'>
+    readonly truckNumber: FieldRef<"GRNbyPo", 'String'>
+    readonly deliveryLocation: FieldRef<"GRNbyPo", 'String'>
+    readonly costCenter: FieldRef<"GRNbyPo", 'String'>
+    readonly receivedBagsPacks: FieldRef<"GRNbyPo", 'String'>
+    readonly remarks: FieldRef<"GRNbyPo", 'String'>
     readonly createdAt: FieldRef<"GRNbyPo", 'DateTime'>
     readonly updatedAt: FieldRef<"GRNbyPo", 'DateTime'>
   }
@@ -87933,9 +88037,12 @@ export namespace Prisma {
 
   export const RMQualityReportScalarFieldEnum: {
     id: 'id',
+    reportNumber: 'reportNumber',
     rawMaterialName: 'rawMaterialName',
     variety: 'variety',
     supplier: 'supplier',
+    purchaseOrderId: 'purchaseOrderId',
+    purchaseOrderItemId: 'purchaseOrderItemId',
     dateOfReport: 'dateOfReport',
     grn: 'grn',
     createdById: 'createdById',
@@ -87969,6 +88076,11 @@ export namespace Prisma {
     supplier: 'supplier',
     qualityReportId: 'qualityReportId',
     createdById: 'createdById',
+    truckNumber: 'truckNumber',
+    deliveryLocation: 'deliveryLocation',
+    costCenter: 'costCenter',
+    receivedBagsPacks: 'receivedBagsPacks',
+    remarks: 'remarks',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -93335,11 +93447,14 @@ export namespace Prisma {
     OR?: RMQualityReportWhereInput[]
     NOT?: RMQualityReportWhereInput | RMQualityReportWhereInput[]
     id?: StringFilter<"RMQualityReport"> | string
+    reportNumber?: StringNullableFilter<"RMQualityReport"> | string | null
     rawMaterialName?: StringFilter<"RMQualityReport"> | string
     variety?: StringFilter<"RMQualityReport"> | string
     supplier?: StringFilter<"RMQualityReport"> | string
+    purchaseOrderId?: StringNullableFilter<"RMQualityReport"> | string | null
+    purchaseOrderItemId?: StringNullableFilter<"RMQualityReport"> | string | null
     dateOfReport?: DateTimeFilter<"RMQualityReport"> | Date | string
-    grn?: StringFilter<"RMQualityReport"> | string
+    grn?: StringNullableFilter<"RMQualityReport"> | string | null
     createdById?: StringFilter<"RMQualityReport"> | string
     createdAt?: DateTimeFilter<"RMQualityReport"> | Date | string
     updatedAt?: DateTimeFilter<"RMQualityReport"> | Date | string
@@ -93350,11 +93465,14 @@ export namespace Prisma {
 
   export type RMQualityReportOrderByWithRelationInput = {
     id?: SortOrder
+    reportNumber?: SortOrderInput | SortOrder
     rawMaterialName?: SortOrder
     variety?: SortOrder
     supplier?: SortOrder
+    purchaseOrderId?: SortOrderInput | SortOrder
+    purchaseOrderItemId?: SortOrderInput | SortOrder
     dateOfReport?: SortOrder
-    grn?: SortOrder
+    grn?: SortOrderInput | SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -93365,29 +93483,35 @@ export namespace Prisma {
 
   export type RMQualityReportWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    reportNumber?: string
     AND?: RMQualityReportWhereInput | RMQualityReportWhereInput[]
     OR?: RMQualityReportWhereInput[]
     NOT?: RMQualityReportWhereInput | RMQualityReportWhereInput[]
     rawMaterialName?: StringFilter<"RMQualityReport"> | string
     variety?: StringFilter<"RMQualityReport"> | string
     supplier?: StringFilter<"RMQualityReport"> | string
+    purchaseOrderId?: StringNullableFilter<"RMQualityReport"> | string | null
+    purchaseOrderItemId?: StringNullableFilter<"RMQualityReport"> | string | null
     dateOfReport?: DateTimeFilter<"RMQualityReport"> | Date | string
-    grn?: StringFilter<"RMQualityReport"> | string
+    grn?: StringNullableFilter<"RMQualityReport"> | string | null
     createdById?: StringFilter<"RMQualityReport"> | string
     createdAt?: DateTimeFilter<"RMQualityReport"> | Date | string
     updatedAt?: DateTimeFilter<"RMQualityReport"> | Date | string
     parameters?: RMQualityParameterListRelationFilter
     createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
     grn_entry?: XOR<GRNbyPoNullableScalarRelationFilter, GRNbyPoWhereInput> | null
-  }, "id">
+  }, "id" | "reportNumber">
 
   export type RMQualityReportOrderByWithAggregationInput = {
     id?: SortOrder
+    reportNumber?: SortOrderInput | SortOrder
     rawMaterialName?: SortOrder
     variety?: SortOrder
     supplier?: SortOrder
+    purchaseOrderId?: SortOrderInput | SortOrder
+    purchaseOrderItemId?: SortOrderInput | SortOrder
     dateOfReport?: SortOrder
-    grn?: SortOrder
+    grn?: SortOrderInput | SortOrder
     createdById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -93401,11 +93525,14 @@ export namespace Prisma {
     OR?: RMQualityReportScalarWhereWithAggregatesInput[]
     NOT?: RMQualityReportScalarWhereWithAggregatesInput | RMQualityReportScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"RMQualityReport"> | string
+    reportNumber?: StringNullableWithAggregatesFilter<"RMQualityReport"> | string | null
     rawMaterialName?: StringWithAggregatesFilter<"RMQualityReport"> | string
     variety?: StringWithAggregatesFilter<"RMQualityReport"> | string
     supplier?: StringWithAggregatesFilter<"RMQualityReport"> | string
+    purchaseOrderId?: StringNullableWithAggregatesFilter<"RMQualityReport"> | string | null
+    purchaseOrderItemId?: StringNullableWithAggregatesFilter<"RMQualityReport"> | string | null
     dateOfReport?: DateTimeWithAggregatesFilter<"RMQualityReport"> | Date | string
-    grn?: StringWithAggregatesFilter<"RMQualityReport"> | string
+    grn?: StringNullableWithAggregatesFilter<"RMQualityReport"> | string | null
     createdById?: StringWithAggregatesFilter<"RMQualityReport"> | string
     createdAt?: DateTimeWithAggregatesFilter<"RMQualityReport"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"RMQualityReport"> | Date | string
@@ -93489,6 +93616,11 @@ export namespace Prisma {
     supplier?: StringFilter<"GRNbyPo"> | string
     qualityReportId?: StringNullableFilter<"GRNbyPo"> | string | null
     createdById?: StringFilter<"GRNbyPo"> | string
+    truckNumber?: StringNullableFilter<"GRNbyPo"> | string | null
+    deliveryLocation?: StringNullableFilter<"GRNbyPo"> | string | null
+    costCenter?: StringNullableFilter<"GRNbyPo"> | string | null
+    receivedBagsPacks?: StringNullableFilter<"GRNbyPo"> | string | null
+    remarks?: StringNullableFilter<"GRNbyPo"> | string | null
     createdAt?: DateTimeFilter<"GRNbyPo"> | Date | string
     updatedAt?: DateTimeFilter<"GRNbyPo"> | Date | string
     purchaseOrder?: XOR<PurchaseOrderScalarRelationFilter, PurchaseOrderWhereInput>
@@ -93509,6 +93641,11 @@ export namespace Prisma {
     supplier?: SortOrder
     qualityReportId?: SortOrderInput | SortOrder
     createdById?: SortOrder
+    truckNumber?: SortOrderInput | SortOrder
+    deliveryLocation?: SortOrderInput | SortOrder
+    costCenter?: SortOrderInput | SortOrder
+    receivedBagsPacks?: SortOrderInput | SortOrder
+    remarks?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     purchaseOrder?: PurchaseOrderOrderByWithRelationInput
@@ -93532,6 +93669,11 @@ export namespace Prisma {
     variety?: StringFilter<"GRNbyPo"> | string
     supplier?: StringFilter<"GRNbyPo"> | string
     createdById?: StringFilter<"GRNbyPo"> | string
+    truckNumber?: StringNullableFilter<"GRNbyPo"> | string | null
+    deliveryLocation?: StringNullableFilter<"GRNbyPo"> | string | null
+    costCenter?: StringNullableFilter<"GRNbyPo"> | string | null
+    receivedBagsPacks?: StringNullableFilter<"GRNbyPo"> | string | null
+    remarks?: StringNullableFilter<"GRNbyPo"> | string | null
     createdAt?: DateTimeFilter<"GRNbyPo"> | Date | string
     updatedAt?: DateTimeFilter<"GRNbyPo"> | Date | string
     purchaseOrder?: XOR<PurchaseOrderScalarRelationFilter, PurchaseOrderWhereInput>
@@ -93552,6 +93694,11 @@ export namespace Prisma {
     supplier?: SortOrder
     qualityReportId?: SortOrderInput | SortOrder
     createdById?: SortOrder
+    truckNumber?: SortOrderInput | SortOrder
+    deliveryLocation?: SortOrderInput | SortOrder
+    costCenter?: SortOrderInput | SortOrder
+    receivedBagsPacks?: SortOrderInput | SortOrder
+    remarks?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: GRNbyPoCountOrderByAggregateInput
@@ -93572,6 +93719,11 @@ export namespace Prisma {
     supplier?: StringWithAggregatesFilter<"GRNbyPo"> | string
     qualityReportId?: StringNullableWithAggregatesFilter<"GRNbyPo"> | string | null
     createdById?: StringWithAggregatesFilter<"GRNbyPo"> | string
+    truckNumber?: StringNullableWithAggregatesFilter<"GRNbyPo"> | string | null
+    deliveryLocation?: StringNullableWithAggregatesFilter<"GRNbyPo"> | string | null
+    costCenter?: StringNullableWithAggregatesFilter<"GRNbyPo"> | string | null
+    receivedBagsPacks?: StringNullableWithAggregatesFilter<"GRNbyPo"> | string | null
+    remarks?: StringNullableWithAggregatesFilter<"GRNbyPo"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"GRNbyPo"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"GRNbyPo"> | Date | string
   }
@@ -99165,11 +99317,14 @@ export namespace Prisma {
 
   export type RMQualityReportCreateInput = {
     id?: string
+    reportNumber?: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId?: string | null
+    purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
-    grn: string
+    grn?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: RMQualityParameterCreateNestedManyWithoutReportInput
@@ -99179,11 +99334,14 @@ export namespace Prisma {
 
   export type RMQualityReportUncheckedCreateInput = {
     id?: string
+    reportNumber?: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId?: string | null
+    purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
-    grn: string
+    grn?: string | null
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -99193,11 +99351,14 @@ export namespace Prisma {
 
   export type RMQualityReportUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: RMQualityParameterUpdateManyWithoutReportNestedInput
@@ -99207,11 +99368,14 @@ export namespace Prisma {
 
   export type RMQualityReportUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -99221,11 +99385,14 @@ export namespace Prisma {
 
   export type RMQualityReportCreateManyInput = {
     id?: string
+    reportNumber?: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId?: string | null
+    purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
-    grn: string
+    grn?: string | null
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -99233,22 +99400,28 @@ export namespace Prisma {
 
   export type RMQualityReportUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RMQualityReportUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -99329,6 +99502,11 @@ export namespace Prisma {
     rawMaterialName: string
     variety: string
     supplier: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
@@ -99349,6 +99527,11 @@ export namespace Prisma {
     supplier: string
     qualityReportId?: string | null
     createdById: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
@@ -99361,6 +99544,11 @@ export namespace Prisma {
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
@@ -99381,6 +99569,11 @@ export namespace Prisma {
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
@@ -99397,6 +99590,11 @@ export namespace Prisma {
     supplier: string
     qualityReportId?: string | null
     createdById: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -99407,6 +99605,11 @@ export namespace Prisma {
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -99421,6 +99624,11 @@ export namespace Prisma {
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -103378,9 +103586,12 @@ export namespace Prisma {
 
   export type RMQualityReportCountOrderByAggregateInput = {
     id?: SortOrder
+    reportNumber?: SortOrder
     rawMaterialName?: SortOrder
     variety?: SortOrder
     supplier?: SortOrder
+    purchaseOrderId?: SortOrder
+    purchaseOrderItemId?: SortOrder
     dateOfReport?: SortOrder
     grn?: SortOrder
     createdById?: SortOrder
@@ -103390,9 +103601,12 @@ export namespace Prisma {
 
   export type RMQualityReportMaxOrderByAggregateInput = {
     id?: SortOrder
+    reportNumber?: SortOrder
     rawMaterialName?: SortOrder
     variety?: SortOrder
     supplier?: SortOrder
+    purchaseOrderId?: SortOrder
+    purchaseOrderItemId?: SortOrder
     dateOfReport?: SortOrder
     grn?: SortOrder
     createdById?: SortOrder
@@ -103402,9 +103616,12 @@ export namespace Prisma {
 
   export type RMQualityReportMinOrderByAggregateInput = {
     id?: SortOrder
+    reportNumber?: SortOrder
     rawMaterialName?: SortOrder
     variety?: SortOrder
     supplier?: SortOrder
+    purchaseOrderId?: SortOrder
+    purchaseOrderItemId?: SortOrder
     dateOfReport?: SortOrder
     grn?: SortOrder
     createdById?: SortOrder
@@ -103462,6 +103679,11 @@ export namespace Prisma {
     supplier?: SortOrder
     qualityReportId?: SortOrder
     createdById?: SortOrder
+    truckNumber?: SortOrder
+    deliveryLocation?: SortOrder
+    costCenter?: SortOrder
+    receivedBagsPacks?: SortOrder
+    remarks?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -103476,6 +103698,11 @@ export namespace Prisma {
     supplier?: SortOrder
     qualityReportId?: SortOrder
     createdById?: SortOrder
+    truckNumber?: SortOrder
+    deliveryLocation?: SortOrder
+    costCenter?: SortOrder
+    receivedBagsPacks?: SortOrder
+    remarks?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -103490,6 +103717,11 @@ export namespace Prisma {
     supplier?: SortOrder
     qualityReportId?: SortOrder
     createdById?: SortOrder
+    truckNumber?: SortOrder
+    deliveryLocation?: SortOrder
+    costCenter?: SortOrder
+    receivedBagsPacks?: SortOrder
+    remarks?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -114849,11 +115081,14 @@ export namespace Prisma {
 
   export type RMQualityReportCreateWithoutCreatedByInput = {
     id?: string
+    reportNumber?: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId?: string | null
+    purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
-    grn: string
+    grn?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: RMQualityParameterCreateNestedManyWithoutReportInput
@@ -114862,11 +115097,14 @@ export namespace Prisma {
 
   export type RMQualityReportUncheckedCreateWithoutCreatedByInput = {
     id?: string
+    reportNumber?: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId?: string | null
+    purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
-    grn: string
+    grn?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: RMQualityParameterUncheckedCreateNestedManyWithoutReportInput
@@ -114889,6 +115127,11 @@ export namespace Prisma {
     rawMaterialName: string
     variety: string
     supplier: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
@@ -114907,6 +115150,11 @@ export namespace Prisma {
     variety: string
     supplier: string
     qualityReportId?: string | null
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
@@ -115958,11 +116206,14 @@ export namespace Prisma {
     OR?: RMQualityReportScalarWhereInput[]
     NOT?: RMQualityReportScalarWhereInput | RMQualityReportScalarWhereInput[]
     id?: StringFilter<"RMQualityReport"> | string
+    reportNumber?: StringNullableFilter<"RMQualityReport"> | string | null
     rawMaterialName?: StringFilter<"RMQualityReport"> | string
     variety?: StringFilter<"RMQualityReport"> | string
     supplier?: StringFilter<"RMQualityReport"> | string
+    purchaseOrderId?: StringNullableFilter<"RMQualityReport"> | string | null
+    purchaseOrderItemId?: StringNullableFilter<"RMQualityReport"> | string | null
     dateOfReport?: DateTimeFilter<"RMQualityReport"> | Date | string
-    grn?: StringFilter<"RMQualityReport"> | string
+    grn?: StringNullableFilter<"RMQualityReport"> | string | null
     createdById?: StringFilter<"RMQualityReport"> | string
     createdAt?: DateTimeFilter<"RMQualityReport"> | Date | string
     updatedAt?: DateTimeFilter<"RMQualityReport"> | Date | string
@@ -115997,6 +116248,11 @@ export namespace Prisma {
     supplier?: StringFilter<"GRNbyPo"> | string
     qualityReportId?: StringNullableFilter<"GRNbyPo"> | string | null
     createdById?: StringFilter<"GRNbyPo"> | string
+    truckNumber?: StringNullableFilter<"GRNbyPo"> | string | null
+    deliveryLocation?: StringNullableFilter<"GRNbyPo"> | string | null
+    costCenter?: StringNullableFilter<"GRNbyPo"> | string | null
+    receivedBagsPacks?: StringNullableFilter<"GRNbyPo"> | string | null
+    remarks?: StringNullableFilter<"GRNbyPo"> | string | null
     createdAt?: DateTimeFilter<"GRNbyPo"> | Date | string
     updatedAt?: DateTimeFilter<"GRNbyPo"> | Date | string
   }
@@ -127935,6 +128191,11 @@ export namespace Prisma {
     rawMaterialName: string
     variety: string
     supplier: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutGrnsInput
@@ -127953,6 +128214,11 @@ export namespace Prisma {
     supplier: string
     qualityReportId?: string | null
     createdById: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
@@ -128154,6 +128420,11 @@ export namespace Prisma {
     rawMaterialName: string
     variety: string
     supplier: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
@@ -128172,6 +128443,11 @@ export namespace Prisma {
     supplier: string
     qualityReportId?: string | null
     createdById: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
@@ -129622,6 +129898,11 @@ export namespace Prisma {
     rawMaterialName: string
     variety: string
     supplier: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
@@ -129641,6 +129922,11 @@ export namespace Prisma {
     supplier: string
     qualityReportId?: string | null
     createdById: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutGrnInput
@@ -129893,6 +130179,11 @@ export namespace Prisma {
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
@@ -129912,6 +130203,11 @@ export namespace Prisma {
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutGrnNestedInput
@@ -131577,6 +131873,11 @@ export namespace Prisma {
     rawMaterialName: string
     variety: string
     supplier: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
@@ -131595,6 +131896,11 @@ export namespace Prisma {
     variety: string
     supplier: string
     createdById: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
@@ -131749,6 +132055,11 @@ export namespace Prisma {
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
@@ -131767,6 +132078,11 @@ export namespace Prisma {
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
     createdById?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
@@ -131775,11 +132091,14 @@ export namespace Prisma {
 
   export type RMQualityReportCreateWithoutParametersInput = {
     id?: string
+    reportNumber?: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId?: string | null
+    purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
-    grn: string
+    grn?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: UserCreateNestedOneWithoutRmQualityReportsInput
@@ -131788,11 +132107,14 @@ export namespace Prisma {
 
   export type RMQualityReportUncheckedCreateWithoutParametersInput = {
     id?: string
+    reportNumber?: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId?: string | null
+    purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
-    grn: string
+    grn?: string | null
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -131817,11 +132139,14 @@ export namespace Prisma {
 
   export type RMQualityReportUpdateWithoutParametersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: UserUpdateOneRequiredWithoutRmQualityReportsNestedInput
@@ -131830,11 +132155,14 @@ export namespace Prisma {
 
   export type RMQualityReportUncheckedUpdateWithoutParametersInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -131899,11 +132227,14 @@ export namespace Prisma {
 
   export type RMQualityReportCreateWithoutGrn_entryInput = {
     id?: string
+    reportNumber?: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId?: string | null
+    purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
-    grn: string
+    grn?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     parameters?: RMQualityParameterCreateNestedManyWithoutReportInput
@@ -131912,11 +132243,14 @@ export namespace Prisma {
 
   export type RMQualityReportUncheckedCreateWithoutGrn_entryInput = {
     id?: string
+    reportNumber?: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId?: string | null
+    purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
-    grn: string
+    grn?: string | null
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -132184,11 +132518,14 @@ export namespace Prisma {
 
   export type RMQualityReportUpdateWithoutGrn_entryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: RMQualityParameterUpdateManyWithoutReportNestedInput
@@ -132197,11 +132534,14 @@ export namespace Prisma {
 
   export type RMQualityReportUncheckedUpdateWithoutGrn_entryInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -132380,6 +132720,11 @@ export namespace Prisma {
     rawMaterialName: string
     variety: string
     supplier: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     purchaseOrder: PurchaseOrderCreateNestedOneWithoutGrnsInput
@@ -132399,6 +132744,11 @@ export namespace Prisma {
     supplier: string
     qualityReportId?: string | null
     createdById: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutGrnInput
@@ -132576,6 +132926,11 @@ export namespace Prisma {
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
@@ -132595,6 +132950,11 @@ export namespace Prisma {
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
@@ -134374,11 +134734,14 @@ export namespace Prisma {
 
   export type RMQualityReportCreateManyCreatedByInput = {
     id?: string
+    reportNumber?: string | null
     rawMaterialName: string
     variety: string
     supplier: string
+    purchaseOrderId?: string | null
+    purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
-    grn: string
+    grn?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -134392,6 +134755,11 @@ export namespace Prisma {
     variety: string
     supplier: string
     qualityReportId?: string | null
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -135368,11 +135736,14 @@ export namespace Prisma {
 
   export type RMQualityReportUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: RMQualityParameterUpdateManyWithoutReportNestedInput
@@ -135381,11 +135752,14 @@ export namespace Prisma {
 
   export type RMQualityReportUncheckedUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameters?: RMQualityParameterUncheckedUpdateManyWithoutReportNestedInput
@@ -135394,11 +135768,14 @@ export namespace Prisma {
 
   export type RMQualityReportUncheckedUpdateManyWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    purchaseOrderId?: NullableStringFieldUpdateOperationsInput | string | null
+    purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
-    grn?: StringFieldUpdateOperationsInput | string
+    grn?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -135409,6 +135786,11 @@ export namespace Prisma {
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
@@ -135427,6 +135809,11 @@ export namespace Prisma {
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
@@ -135442,6 +135829,11 @@ export namespace Prisma {
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -138323,6 +138715,11 @@ export namespace Prisma {
     supplier: string
     qualityReportId?: string | null
     createdById: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -138364,6 +138761,11 @@ export namespace Prisma {
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutGrnsNestedInput
@@ -138382,6 +138784,11 @@ export namespace Prisma {
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
@@ -138397,6 +138804,11 @@ export namespace Prisma {
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -138419,6 +138831,11 @@ export namespace Prisma {
     supplier: string
     qualityReportId?: string | null
     createdById: string
+    truckNumber?: string | null
+    deliveryLocation?: string | null
+    costCenter?: string | null
+    receivedBagsPacks?: string | null
+    remarks?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -138458,6 +138875,11 @@ export namespace Prisma {
     rawMaterialName?: StringFieldUpdateOperationsInput | string
     variety?: StringFieldUpdateOperationsInput | string
     supplier?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrder?: PurchaseOrderUpdateOneRequiredWithoutGrnsNestedInput
@@ -138476,6 +138898,11 @@ export namespace Prisma {
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutGrnNestedInput
@@ -138491,6 +138918,11 @@ export namespace Prisma {
     supplier?: StringFieldUpdateOperationsInput | string
     qualityReportId?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
+    truckNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    deliveryLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    costCenter?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedBagsPacks?: NullableStringFieldUpdateOperationsInput | string | null
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

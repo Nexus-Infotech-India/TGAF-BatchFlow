@@ -80,7 +80,7 @@ interface POItem {
   rate: number;
   totalReceived: number;
   status: string;
-  rawMaterial: { id: string; name: string; skuCode: string; category: string };
+  rawMaterial: { id: string; name: string; skuCode: string; category: string; unitOfMeasurement?: string };
   receivals: any[];
 }
 
@@ -97,16 +97,20 @@ interface ReceivedPO {
 
 interface GRNEntry {
   id: string;
-  grnNumber: string;
-  purchaseOrderId: string;
-  purchaseOrderItemId: string;
+  reportNumber: string | null;
+  grnNumber?: string;
+  purchaseOrderId: string | null;
+  purchaseOrderItemId: string | null;
   rawMaterialName: string;
   variety: string;
   supplier: string;
   createdAt: string;
-  purchaseOrder: { id: string; poNumber: string; vendor: { name: string } };
-  purchaseOrderItem: { rawMaterial: { name: string; skuCode: string }; quantityOrdered: number; totalReceived: number };
-  qualityReport: RMQualityReportType | null;
+  grn: string | null;
+  purchaseOrder: { id: string; poNumber: string; vendor: { name: string } } | null;
+  purchaseOrderItem: { rawMaterial: { name: string; skuCode: string; unitOfMeasurement?: string }; quantityOrdered: number; quantityReceived: number; totalReceived: number } | null;
+  qualityReport?: RMQualityReportType | null;
+  parameters: any[];
+  grn_entry?: { id: string; grnNumber: string } | null;
   createdBy: { id: string; name: string; email: string };
 }
 
@@ -120,23 +124,14 @@ const RMQualityReport: React.FC = () => {
     try {
       setIsExportingFiltered(true);
       setError(null);
-      // If user selected GRN rows, map them to their quality report IDs
       let idsToSend: string[] | undefined = undefined;
       if (selectedGRNIds && selectedGRNIds.length > 0) {
-        const mapped = selectedGRNIds
-          .map(sid => grns.find(g => g.id === sid)?.qualityReport?.id)
-          .filter((v): v is string => typeof v === 'string' && v.length > 0);
-        if (mapped.length === 0) {
-          setError('Selected GRNs do not have associated quality reports to export');
-          setIsExportingFiltered(false);
-          return;
-        }
-        idsToSend = mapped;
+        idsToSend = selectedGRNIds;
       }
 
       const filtersToSend = {
         supplier: appliedFilters.supplier,
-        grn: appliedFilters.grn,
+        grn: appliedFilters.reportNumber,
         fromDate: appliedFilters.fromDate,
         toDate: appliedFilters.toDate,
         ids: idsToSend,
@@ -168,7 +163,7 @@ const RMQualityReport: React.FC = () => {
     }
   };
 
-  // GRN list state
+  // Report list state
   const [grns, setGRNs] = useState<GRNEntry[]>([]);
   const [reports, setReports] = useState<RMQualityReportType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -178,6 +173,8 @@ const RMQualityReport: React.FC = () => {
   const [isExportingAll, setIsExportingAll] = useState(false);
   const [isMailingAll, setIsMailingAll] = useState(false);
   const [isMailingFiltered, setIsMailingFiltered] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 5;
   const [selectedGRNIds, setSelectedGRNIds] = useState<string[]>([]);
   const [actionModalGRN, setActionModalGRN] = useState<GRNEntry | null>(null);
   const [viewGRN, setViewGRN] = useState<GRNEntry | null>(null);
@@ -191,23 +188,14 @@ const RMQualityReport: React.FC = () => {
       setIsMailingFiltered(true);
       setError(null);
 
-      // If user selected GRN rows, map them to their quality report IDs
       let idsToSend: string[] | undefined = undefined;
       if (selectedGRNIds && selectedGRNIds.length > 0) {
-        const mapped = selectedGRNIds
-          .map(sid => grns.find(g => g.id === sid)?.qualityReport?.id)
-          .filter((v): v is string => typeof v === 'string' && v.length > 0);
-        if (mapped.length === 0) {
-          setError('Selected GRNs do not have associated quality reports to mail');
-          setIsMailingFiltered(false);
-          return;
-        }
-        idsToSend = mapped;
+        idsToSend = selectedGRNIds;
       }
 
       const filtersToSend = {
         supplier: appliedFilters.supplier,
-        grn: appliedFilters.grn,
+        grn: appliedFilters.reportNumber,
         fromDate: appliedFilters.fromDate,
         toDate: appliedFilters.toDate,
         ids: idsToSend,
@@ -231,20 +219,20 @@ const RMQualityReport: React.FC = () => {
   // Filters
   const [filters, setFilters] = useState({
     supplier: '',
-    grn: '',
+    reportNumber: '',
     fromDate: '',
     toDate: '',
   });
   const [appliedFilters, setAppliedFilters] = useState({
     supplier: '',
-    grn: '',
+    reportNumber: '',
     fromDate: '',
     toDate: '',
   });
 
   const applyFilters = () => setAppliedFilters(filters);
   const clearFilters = () => {
-    const empty = { supplier: '', grn: '', fromDate: '', toDate: '' };
+    const empty = { supplier: '', reportNumber: '', fromDate: '', toDate: '' };
     setFilters(empty);
     setAppliedFilters(empty);
   };
@@ -255,6 +243,9 @@ const RMQualityReport: React.FC = () => {
   // PO-based form state
   const [receivedPOs, setReceivedPOs] = useState<ReceivedPO[]>([]);
   const [selectedPOId, setSelectedPOId] = useState('');
+  const [selectedItemId, setSelectedItemId] = useState('');
+  const [poDropdownOpen, setPoDropdownOpen] = useState(false);
+  const [poSearchTerm, setPoSearchTerm] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
 
   // Results state for fixed parameters
@@ -265,7 +256,16 @@ const RMQualityReport: React.FC = () => {
   const authToken = localStorage.getItem('authToken');
 
   const selectedPO = receivedPOs.find((p) => p.id === selectedPOId);
-  const selectedItem = selectedPO?.items?.[0];
+  const selectedItem = selectedPO?.items?.find((i) => i.id === selectedItemId) || null;
+
+  // Auto-select item when PO changes (if single item, auto-select it)
+  useEffect(() => {
+    if (selectedPO && selectedPO.items.length === 1) {
+      setSelectedItemId(selectedPO.items[0].id);
+    } else {
+      setSelectedItemId('');
+    }
+  }, [selectedPOId]);
 
   useEffect(() => {
     fetchGRNs();
@@ -289,14 +289,14 @@ const RMQualityReport: React.FC = () => {
   const fetchGRNs = async () => {
     try {
       setLoading(true);
-      const response = await api.get(API_ROUTES.RAW.GET_GRNS, {
+      const response = await api.get(API_ROUTES.RAW.GET_REPORTS_FOR_GRN_PAGE, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       if (response.data.success) {
         setGRNs(response.data.data);
       }
     } catch (error) {
-      toast.error('Failed to fetch GRNs');
+      toast.error('Failed to fetch reports');
     } finally {
       setLoading(false);
     }
@@ -315,10 +315,10 @@ const RMQualityReport: React.FC = () => {
 
   // Check if form is valid
   useEffect(() => {
-    const poSelected = selectedPOId !== '' && !!selectedItem;
+    const itemSelected = selectedPOId !== '' && selectedItemId !== '' && !!selectedItem;
     const parametersValid = results.every((r) => r.trim() !== '');
-    setIsFormValid(poSelected && parametersValid);
-  }, [selectedPOId, selectedItem, results]);
+    setIsFormValid(itemSelected && parametersValid);
+  }, [selectedPOId, selectedItemId, selectedItem, results]);
 
 
 
@@ -328,7 +328,7 @@ const RMQualityReport: React.FC = () => {
     setResults(newResults);
   };
 
-  // Generate GRN handler
+  // Generate Quality Report handler
   const handleGenerateGRN = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -354,26 +354,24 @@ const RMQualityReport: React.FC = () => {
         })),
       };
 
-      const response = await api.post(API_ROUTES.RAW.CREATE_GRN, data, {
+      const response = await api.post(API_ROUTES.RAW.CREATE_QUALITY_REPORT, data, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
 
       if (response.data.success) {
-        toast.success(`GRN ${response.data.data.grnNumber} generated successfully`);
+        toast.success(`Report ${response.data.data.reportNumber} generated successfully`);
         setShowForm(false);
         resetForm();
         fetchGRNs();
         fetchReports();
         fetchReceivedPOs();
       } else {
-        setError(response.data.error || 'Failed to generate GRN');
+        setError(response.data.error || 'Failed to generate report');
       }
     } catch (error) {
-      // Show server-provided error when available
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const err: any = error;
       const serverMsg = err?.response?.data?.error || err?.message;
-      setError(serverMsg || 'Failed to generate GRN');
+      setError(serverMsg || 'Failed to generate report');
     } finally {
       setIsSaving(false);
     }
@@ -393,17 +391,18 @@ const RMQualityReport: React.FC = () => {
     }
   };
 
-  // PDF Download handler — generates a styled PDF from GRN data
+  // PDF Download handler — generates a styled PDF from report data
   const handleDownloadPDF = (grn: GRNEntry) => {
-    const params = grn.qualityReport?.parameters || [];
-    const grnDate = grn.createdAt ? format(new Date(grn.createdAt), 'dd MMM yyyy') : 'N/A';
+    const params = grn.parameters || [];
+    const reportDate = grn.createdAt ? format(new Date(grn.createdAt), 'dd MMM yyyy') : 'N/A';
+    const reportNo = grn.reportNumber || '—';
 
     const paramRows = params.map((p: any) =>
       `<tr><td style="padding:8px 12px;border:1px solid #e2e2e2;font-size:13px;">${p.parameter}</td><td style="padding:8px 12px;border:1px solid #e2e2e2;font-size:13px;text-align:center;">${p.standard}</td><td style="padding:8px 12px;border:1px solid #e2e2e2;font-size:13px;text-align:center;font-weight:600;">${p.result}</td></tr>`
     ).join('');
 
     const html = `
-      <html><head><title>GRN Report - ${grn.grnNumber}</title>
+      <html><head><title>RM Quality Report - ${reportNo}</title>
       <style>
         @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin:0; padding:40px; color:#222; }
@@ -422,23 +421,23 @@ const RMQualityReport: React.FC = () => {
         tbody tr:nth-child(even) { background:#f8f6ff; }
         .footer { margin-top:32px; padding-top:16px; border-top:1px solid #e2e2e2; font-size:11px; color:#999; text-align:center; }
       </style></head><body>
-      <div class="header"><h1>RM Quality Report</h1><p>GRN: ${grn.grnNumber} &middot; Generated on ${grnDate}</p></div>
-      <div class="section"><div class="section-title">GRN Details</div>
+      <div class="header"><h1>RM Quality Report</h1><p>Report: ${reportNo} &middot; Generated on ${reportDate}</p></div>
+      <div class="section"><div class="section-title">Report Details</div>
         <div class="details-grid">
-          <div class="detail-item"><span class="detail-label">GRN Number:</span><span class="detail-value">${grn.grnNumber}</span></div>
+          <div class="detail-item"><span class="detail-label">Report No.:</span><span class="detail-value">${reportNo}</span></div>
           <div class="detail-item"><span class="detail-label">PO Number:</span><span class="detail-value">${grn.purchaseOrder?.poNumber || '—'}</span></div>
           <div class="detail-item"><span class="detail-label">Raw Material:</span><span class="detail-value">${grn.rawMaterialName}</span></div>
-          <div class="detail-item"><span class="detail-label">Variety:</span><span class="detail-value">${grn.variety || '—'}</span></div>
+          <div class="detail-item"><span class="detail-label">SKU Code:</span><span class="detail-value">${grn.purchaseOrderItem?.rawMaterial?.skuCode || '—'}</span></div>
           <div class="detail-item"><span class="detail-label">Supplier:</span><span class="detail-value">${grn.supplier}</span></div>
-          <div class="detail-item"><span class="detail-label">Date:</span><span class="detail-value">${grnDate}</span></div>
-          <div class="detail-item"><span class="detail-label">Qty Ordered:</span><span class="detail-value">${grn.purchaseOrderItem?.quantityOrdered ?? '—'}</span></div>
-          <div class="detail-item"><span class="detail-label">Qty Received:</span><span class="detail-value">${grn.purchaseOrderItem?.totalReceived ?? '—'}</span></div>
+          <div class="detail-item"><span class="detail-label">Date:</span><span class="detail-value">${reportDate}</span></div>
+          <div class="detail-item"><span class="detail-label">Qty Ordered:</span><span class="detail-value">${grn.purchaseOrderItem?.quantityOrdered ?? '—'}${grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement ? ' ' + grn.purchaseOrderItem.rawMaterial.unitOfMeasurement : ''}</span></div>
+          <div class="detail-item"><span class="detail-label">Qty Received:</span><span class="detail-value">${grn.purchaseOrderItem?.totalReceived ?? '—'}${grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement ? ' ' + grn.purchaseOrderItem.rawMaterial.unitOfMeasurement : ''}</span></div>
         </div>
       </div>
       <div class="section"><div class="section-title">Quality Parameters</div>
         <table><thead><tr><th>Parameter</th><th>Standard</th><th>Result</th></tr></thead><tbody>${paramRows || '<tr><td colspan="3" style="padding:16px;text-align:center;color:#999;">No parameters recorded</td></tr>'}</tbody></table>
       </div>
-      <div class="footer">TGAF BatchFlow &middot; RM Quality Report &middot; ${grn.grnNumber} &middot; Printed ${format(new Date(), 'dd MMM yyyy, HH:mm')}</div>
+      <div class="footer">TGAF BatchFlow &middot; RM Quality Report &middot; ${reportNo} &middot; Printed ${format(new Date(), 'dd MMM yyyy, HH:mm')}</div>
       </body></html>
     `;
 
@@ -458,14 +457,8 @@ const RMQualityReport: React.FC = () => {
   ) => {
     try {
       if (fmt === 'excel') {
-        // Find the GRN's quality report ID
         const grn = grns.find(g => g.id === id);
-        const reportId = grn?.qualityReport?.id;
-        if (!reportId) {
-          toast.error('No quality report associated with this GRN');
-          return;
-        }
-        const url = `${API_ROUTES.RAW.EXPORT_QUALITY_REPORT(reportId)}?format=excel`;
+        const url = `${API_ROUTES.RAW.EXPORT_QUALITY_REPORT(id)}?format=excel`;
         const response = await fetch(url, {
           headers: { Authorization: `Bearer ${authToken}` },
         });
@@ -479,7 +472,7 @@ const RMQualityReport: React.FC = () => {
         const downloadUrl = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = downloadUrl;
-        link.download = `RM_Quality_Report_${grn?.grnNumber || id}.xlsx`;
+        link.download = `RM_Quality_Report_${grn?.reportNumber || id}.xlsx`;
         document.body.appendChild(link);
         link.click();
         link.remove();
@@ -560,6 +553,7 @@ const RMQualityReport: React.FC = () => {
 
   const resetForm = () => {
     setSelectedPOId('');
+    setSelectedItemId('');
     setResults(Array(CHILLI_PARAMETERS.length).fill(''));
     setError(null);
   };
@@ -568,21 +562,29 @@ const RMQualityReport: React.FC = () => {
     const q = searchTerm.trim().toLowerCase();
     const matchesSearch =
       !q ||
-      [grn.rawMaterialName, grn.variety, grn.supplier, grn.grnNumber,
+      [grn.rawMaterialName, grn.variety, grn.supplier, grn.reportNumber,
       grn.purchaseOrder?.poNumber].some((f) =>
         String(f || '').toLowerCase().includes(q)
       );
 
-    const { supplier, grn: grnFilter, fromDate, toDate } = appliedFilters;
+    const { supplier, reportNumber: reportFilter, fromDate, toDate } = appliedFilters;
     if (supplier && supplier !== grn.supplier) return false;
-    if (grnFilter && !grn.grnNumber.toLowerCase().includes(grnFilter.toLowerCase())) return false;
+    if (reportFilter && !(grn.reportNumber || '').toLowerCase().includes(reportFilter.toLowerCase())) return false;
 
-    const grnDate = grn.createdAt ? new Date(grn.createdAt) : null;
-    if (fromDate && grnDate && new Date(fromDate) > grnDate) return false;
-    if (toDate && grnDate && new Date(toDate) < grnDate) return false;
+    const reportDate = grn.createdAt ? new Date(grn.createdAt) : null;
+    if (fromDate && reportDate && new Date(fromDate) > reportDate) return false;
+    if (toDate && reportDate && new Date(toDate) < reportDate) return false;
 
     return matchesSearch;
   });
+
+  // Pagination
+  const totalPages = Math.max(1, Math.ceil(filteredGRNs.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedGRNs = filteredGRNs.slice((safePage - 1) * ITEMS_PER_PAGE, safePage * ITEMS_PER_PAGE);
+
+  // Reset page when search or filters change
+  useEffect(() => { setCurrentPage(1); }, [searchTerm, appliedFilters]);
 
   const parametersComplete =
     results.length > 0 && results.every((r) => r.trim() !== '');
@@ -665,34 +667,155 @@ const RMQualityReport: React.FC = () => {
                 </div>
 
                 <div className="p-5 space-y-5">
-                  {/* PO Selector */}
+                  {/* PO Selector - Custom Searchable Dropdown */}
                   <div className="space-y-1.5">
                     <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
                       Purchase Order <span style={{ color: 'var(--destructive)' }}>*</span>
                     </label>
                     <div className="relative">
-                      <select
-                        value={selectedPOId}
-                        onChange={(e) => setSelectedPOId(e.target.value)}
-                        className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200 appearance-none cursor-pointer"
+                      <div
+                        onClick={() => setPoDropdownOpen(!poDropdownOpen)}
+                        className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200 cursor-pointer flex items-center gap-2"
                         style={{
                           background: 'color-mix(in srgb, var(--card) 96%, var(--primary) 4%)',
-                          border: '1px solid var(--border)',
-                          color: 'var(--foreground)',
+                          border: poDropdownOpen ? '1px solid var(--primary)' : '1px solid var(--border)',
+                          boxShadow: poDropdownOpen ? '0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent)' : 'none',
+                          color: selectedPOId ? 'var(--foreground)' : 'var(--muted-foreground)',
                           paddingLeft: '2.25rem',
                         }}
                       >
-                        <option value="">Select Purchase Order</option>
-                        {receivedPOs.map((po) => (
-                          <option key={po.id} value={po.id}>
-                            {po.poNumber} — {po.vendor.name}
-                          </option>
-                        ))}
-                      </select>
-                      <ShoppingCart size={14} className="absolute left-3.5 top-3 pointer-events-none" style={{ color: 'var(--primary)' }} />
-                      <ChevronDown size={14} className="absolute right-3.5 top-3 pointer-events-none" style={{ color: 'var(--muted-foreground)' }} />
+                        <ShoppingCart size={14} className="absolute left-3.5 top-3 pointer-events-none" style={{ color: 'var(--primary)' }} />
+                        <span className="flex-1 truncate">
+                          {selectedPO ? (
+                            <span className="flex items-center gap-2">
+                              <span className="font-mono font-semibold text-xs px-1.5 py-0.5 rounded" style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}>{selectedPO.poNumber}</span>
+                              <span className="truncate">{selectedPO.vendor.name}</span>
+                            </span>
+                          ) : 'Select Purchase Order'}
+                        </span>
+                        <motion.div animate={{ rotate: poDropdownOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                          <ChevronDown size={14} style={{ color: 'var(--muted-foreground)' }} />
+                        </motion.div>
+                      </div>
+
+                      <AnimatePresence>
+                        {poDropdownOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -4, scale: 0.98 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: -4, scale: 0.98 }}
+                            transition={{ duration: 0.15 }}
+                            className="absolute z-50 left-0 right-0 mt-1.5 rounded-xl shadow-xl overflow-hidden"
+                            style={{ background: 'var(--card)', border: '1px solid var(--border)' }}
+                          >
+                            {/* Search */}
+                            <div className="p-2" style={{ borderBottom: '1px solid var(--border)' }}>
+                              <div className="relative">
+                                <Search size={13} className="absolute left-2.5 top-2.5 pointer-events-none" style={{ color: 'var(--muted-foreground)' }} />
+                                <input
+                                  type="text"
+                                  value={poSearchTerm}
+                                  onChange={(e) => setPoSearchTerm(e.target.value)}
+                                  placeholder="Search PO or vendor..."
+                                  className="w-full rounded-lg px-3 py-2 text-xs outline-none"
+                                  style={{ background: 'var(--muted)', color: 'var(--foreground)', paddingLeft: '2rem' }}
+                                  autoFocus
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                              </div>
+                            </div>
+
+                            {/* Options */}
+                            <div className="max-h-[220px] overflow-y-auto" style={{ scrollbarWidth: 'thin' }}>
+                              {receivedPOs
+                                .filter(po => {
+                                  if (!poSearchTerm.trim()) return true;
+                                  const q = poSearchTerm.trim().toLowerCase();
+                                  return po.poNumber.toLowerCase().includes(q) ||
+                                    po.vendor.name.toLowerCase().includes(q) ||
+                                    po.items.some(item => item.rawMaterial.name.toLowerCase().includes(q));
+                                })
+                                .map((po) => (
+                                  <div
+                                    key={po.id}
+                                    onClick={() => { setSelectedPOId(po.id); setPoDropdownOpen(false); setPoSearchTerm(''); }}
+                                    className="px-3 py-2.5 cursor-pointer transition-colors duration-100 flex items-start gap-2.5"
+                                    style={{
+                                      background: selectedPOId === po.id ? 'color-mix(in srgb, var(--primary) 8%, transparent)' : 'transparent',
+                                      borderBottom: '1px solid color-mix(in srgb, var(--border) 50%, transparent)',
+                                    }}
+                                    onMouseEnter={(e) => { if (selectedPOId !== po.id) (e.currentTarget as HTMLDivElement).style.background = 'var(--muted)'; }}
+                                    onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = selectedPOId === po.id ? 'color-mix(in srgb, var(--primary) 8%, transparent)' : 'transparent'; }}
+                                  >
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center gap-2 mb-0.5">
+                                        <span className="font-mono text-xs font-bold" style={{ color: 'var(--primary)' }}>{po.poNumber}</span>
+                                        {selectedPOId === po.id && <Check size={12} style={{ color: 'var(--primary)' }} />}
+                                      </div>
+                                      <div className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
+                                        {po.vendor.name}
+                                      </div>
+                                      <div className="flex flex-wrap gap-1 mt-1">
+                                        {po.items.map(item => (
+                                          <span key={item.id} className="text-[10px] px-1.5 py-0.5 rounded-md font-medium" style={{ background: 'color-mix(in srgb, var(--secondary) 10%, transparent)', color: 'var(--secondary)' }}>
+                                            {item.rawMaterial.name}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              {receivedPOs.filter(po => {
+                                if (!poSearchTerm.trim()) return true;
+                                const q = poSearchTerm.trim().toLowerCase();
+                                return po.poNumber.toLowerCase().includes(q) || po.vendor.name.toLowerCase().includes(q) || po.items.some(item => item.rawMaterial.name.toLowerCase().includes(q));
+                              }).length === 0 && (
+                                  <div className="px-3 py-6 text-center text-xs" style={{ color: 'var(--muted-foreground)' }}>
+                                    No matching Purchase Orders
+                                  </div>
+                                )}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      {/* Click-away backdrop */}
+                      {poDropdownOpen && (
+                        <div className="fixed inset-0 z-40" onClick={() => { setPoDropdownOpen(false); setPoSearchTerm(''); }} />
+                      )}
                     </div>
                   </div>
+
+                  {/* Item Selector (when PO has multiple items) */}
+                  {selectedPO && selectedPO.items.length > 1 && (
+                    <div className="space-y-1.5">
+                      <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
+                        Select Item <span style={{ color: 'var(--destructive)' }}>*</span>
+                      </label>
+                      <div className="relative">
+                        <select
+                          value={selectedItemId}
+                          onChange={(e) => setSelectedItemId(e.target.value)}
+                          className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200 appearance-none cursor-pointer"
+                          style={{
+                            background: 'color-mix(in srgb, var(--card) 96%, var(--primary) 4%)',
+                            border: '1px solid var(--border)',
+                            color: 'var(--foreground)',
+                            paddingLeft: '2.25rem',
+                          }}
+                        >
+                          <option value="">Select Item</option>
+                          {selectedPO.items.map((item) => (
+                            <option key={item.id} value={item.id}>
+                              {item.rawMaterial.name} — {item.totalReceived}/{item.quantityOrdered} received
+                            </option>
+                          ))}
+                        </select>
+                        <Package size={14} className="absolute left-3.5 top-3 pointer-events-none" style={{ color: 'var(--primary)' }} />
+                        <ChevronDown size={14} className="absolute right-3.5 top-3 pointer-events-none" style={{ color: 'var(--muted-foreground)' }} />
+                      </div>
+                    </div>
+                  )}
 
                   {/* Auto-filled details */}
                   {selectedItem && (
@@ -706,8 +829,8 @@ const RMQualityReport: React.FC = () => {
                           { icon: Package, label: 'Raw Material', value: selectedItem.rawMaterial.name },
                           { icon: Building, label: 'Supplier', value: selectedPO!.vendor.name },
                           { icon: Hash, label: 'PO Number', value: selectedPO!.poNumber },
-                          { icon: Package, label: 'Qty Ordered', value: selectedItem.quantityOrdered },
-                          { icon: Check, label: 'Qty Received', value: selectedItem.totalReceived },
+                          { icon: Package, label: 'Qty Ordered', value: `${selectedItem.quantityOrdered} ${selectedItem.rawMaterial.unitOfMeasurement || ''}`.trim() },
+                          { icon: Check, label: 'Qty Received', value: `${selectedItem.totalReceived} ${selectedItem.rawMaterial.unitOfMeasurement || ''}`.trim() },
                         ].map(({ icon: Icon, label, value }) => (
                           <div key={label} className="flex items-center gap-2.5 text-sm">
                             <Icon size={13} style={{ color: 'var(--primary)' }} />
@@ -821,7 +944,7 @@ const RMQualityReport: React.FC = () => {
                   {isFormValid ? (
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold" style={{ background: 'color-mix(in srgb, var(--primary) 12%, transparent)', color: 'var(--primary)', border: '1px solid color-mix(in srgb, var(--primary) 20%, transparent)' }}>
                       <Check size={13} />
-                      Ready to generate GRN
+                      Ready to generate report
                     </div>
                   ) : (
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium" style={{ background: 'var(--muted)', color: 'var(--muted-foreground)', border: '1px solid var(--border)' }}>
@@ -869,7 +992,7 @@ const RMQualityReport: React.FC = () => {
     );
   }
 
-  // Main list view - GRN-wise tabular
+  // Main list view - Report-wise tabular
   return (
     <motion.div
       className="min-h-screen bg-background"
@@ -892,7 +1015,7 @@ const RMQualityReport: React.FC = () => {
                 RM Quality Reports
               </h1>
               <p className="text-sm mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
-                Goods Receipt Notes &middot; <span className="font-medium" style={{ color: 'var(--primary)' }}>{grns.length}</span> GRN{grns.length !== 1 ? 's' : ''} recorded
+                Quality Reports &middot; <span className="font-medium" style={{ color: 'var(--primary)' }}>{grns.length}</span> report{grns.length !== 1 ? 's' : ''} recorded
               </p>
             </div>
           </div>
@@ -1003,7 +1126,7 @@ const RMQualityReport: React.FC = () => {
                   </span>
                   <input
                     type="text"
-                    placeholder="Search by GRN, PO, raw material, supplier..."
+                    placeholder="Search by Report No., PO, raw material, supplier..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200"
@@ -1065,8 +1188,8 @@ const RMQualityReport: React.FC = () => {
                       />
                     </div>
                     <div className="md:col-span-2 flex flex-col">
-                      <label className="block text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--muted-foreground)' }}>GRN</label>
-                      <input value={filters.grn} onChange={(e) => handleFilterChange('grn', e.target.value)} placeholder="Contains GRN"
+                      <label className="block text-xs font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--muted-foreground)' }}>Report No.</label>
+                      <input value={filters.reportNumber} onChange={(e) => handleFilterChange('reportNumber', e.target.value)} placeholder="Contains Report No."
                         className="w-full rounded-lg px-3 py-2 text-sm outline-none transition-all"
                         style={{ background: 'var(--card)', border: '1px solid var(--border)', color: 'var(--foreground)' }}
                       />
@@ -1105,12 +1228,12 @@ const RMQualityReport: React.FC = () => {
             </AnimatePresence>
           </div>
 
-          {/* GRN Table Section */}
+          {/* Report Table Section */}
           <div>
             {loading ? (
               <div className="flex flex-col justify-center items-center py-16 gap-3">
                 <span className="inline-block w-10 h-10 border-[3px] rounded-full animate-spin" style={{ borderColor: 'var(--border)', borderTopColor: 'var(--primary)' }} />
-                <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>Loading GRNs…</span>
+                <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>Loading reports…</span>
               </div>
             ) : filteredGRNs.length === 0 ? (
               <div className="p-12 text-center">
@@ -1118,12 +1241,12 @@ const RMQualityReport: React.FC = () => {
                   <FileText size={32} style={{ color: 'var(--primary)' }} />
                 </div>
                 <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--foreground)' }}>
-                  No GRNs found
+                  No reports found
                 </h3>
                 <p className="max-w-md mx-auto text-sm mb-6" style={{ color: 'var(--muted-foreground)' }}>
                   {searchTerm
-                    ? 'No GRNs match your search criteria. Try adjusting your search.'
-                    : 'Get started by generating your first GRN from a Purchase Order'}
+                    ? 'No reports match your search criteria. Try adjusting your search.'
+                    : 'Get started by generating your first Quality Report from a Purchase Order'}
                 </p>
                 {!searchTerm && (
                   <motion.button
@@ -1133,80 +1256,116 @@ const RMQualityReport: React.FC = () => {
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold shadow-md transition-all"
                     style={{ background: 'linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 80%, var(--secondary)))', color: 'var(--primary-foreground)' }}
                   >
-                    <Plus size={14} /> Generate First GRN
+                    <Plus size={14} /> Generate First Report
                   </motion.button>
                 )}
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full table-auto">
-                  <thead>
-                    <tr style={{ background: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
-                      {['', 'GRN Number', 'PO Number', 'Raw Material', 'Variety', 'Supplier', 'Qty (Ord/Recv)', 'Date', 'Params', 'Actions'].map((h, i) => (
-                        <th key={h || 'cb'} className={`px-4 py-3 text-xs font-bold uppercase tracking-wider ${i === 0 ? 'w-12 text-center' : i === 9 ? 'text-right' : 'text-left'}`} style={{ color: 'var(--muted-foreground)' }}>
-                          {i === 0 ? (
-                            <input type="checkbox" checked={filteredGRNs.length > 0 && selectedGRNIds.length === filteredGRNs.length} onChange={handleToggleSelectAll} className="w-4 h-4 cursor-pointer accent-primary" title="Select all" />
-                          ) : h}
-                        </th>
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full table-auto">
+                    <thead>
+                      <tr style={{ background: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
+                        {['', 'Report No.', 'PO Number', 'Raw Material', 'Supplier', 'Date', 'Params', 'Actions'].map((h, i) => (
+                          <th key={h || 'cb'} className={`px-4 py-3 text-xs font-bold uppercase tracking-wider ${i === 0 ? 'w-12 text-center' : i === 7 ? 'text-right' : 'text-left'}`} style={{ color: 'var(--muted-foreground)' }}>
+                            {i === 0 ? (
+                              <input type="checkbox" checked={filteredGRNs.length > 0 && selectedGRNIds.length === filteredGRNs.length} onChange={handleToggleSelectAll} className="w-4 h-4 cursor-pointer accent-primary" title="Select all" />
+                            ) : h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedGRNs.map((grn, index) => (
+                        <motion.tr
+                          key={grn.id}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.03 }}
+                          className="group transition-colors duration-150"
+                          style={{ borderBottom: '1px solid color-mix(in srgb, var(--border) 50%, transparent)' }}
+                          onMouseEnter={(e) => { (e.currentTarget as HTMLTableRowElement).style.background = 'var(--muted)'; }}
+                          onMouseLeave={(e) => { (e.currentTarget as HTMLTableRowElement).style.background = 'transparent'; }}
+                        >
+                          <td className="px-4 py-3.5 text-center">
+                            <input type="checkbox" checked={selectedGRNIds.includes(grn.id)} onChange={() => handleToggleSelect(grn.id)} className="w-4 h-4 cursor-pointer accent-primary" onClick={(e) => e.stopPropagation()} />
+                          </td>
+                          <td className="px-4 py-3.5">
+                            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded inline-block whitespace-nowrap" style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}>{grn.reportNumber || '—'}</span>
+                          </td>
+                          <td className="px-4 py-3.5">
+                            <span className="font-mono text-xs" style={{ color: 'var(--muted-foreground)' }}>{grn.purchaseOrder?.poNumber || '—'}</span>
+                          </td>
+                          <td className="px-4 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{grn.rawMaterialName}</td>
+                          <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{grn.supplier}</td>
+                          <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{formatDate(grn.createdAt)}</td>
+                          <td className="px-4 py-3.5">
+                            <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--secondary) 12%, transparent)', color: 'var(--secondary)' }}>
+                              {grn.parameters?.length || 0}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3.5 text-right">
+                            <motion.button
+                              whileHover={{ scale: 1.15 }}
+                              whileTap={{ scale: 0.9 }}
+                              onClick={() => setActionModalGRN(grn)}
+                              className="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200"
+                              style={{ color: 'var(--muted-foreground)' }}
+                              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'color-mix(in srgb, var(--primary) 10%, transparent)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--primary)'; }}
+                              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--muted-foreground)'; }}
+                              title="Actions"
+                            >
+                              <MoreVertical size={16} />
+                            </motion.button>
+                          </td>
+                        </motion.tr>
                       ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredGRNs.map((grn, index) => (
-                      <motion.tr
-                        key={grn.id}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.03 }}
-                        className="group transition-colors duration-150"
-                        style={{ borderBottom: '1px solid color-mix(in srgb, var(--border) 50%, transparent)' }}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLTableRowElement).style.background = 'var(--muted)'; }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLTableRowElement).style.background = 'transparent'; }}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Pagination Controls */}
+                {filteredGRNs.length > ITEMS_PER_PAGE && (
+                  <div className="flex items-center justify-between px-4 py-3" style={{ borderTop: '1px solid var(--border)' }}>
+                    <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
+                      Showing {((safePage - 1) * ITEMS_PER_PAGE) + 1}–{Math.min(safePage * ITEMS_PER_PAGE, filteredGRNs.length)} of {filteredGRNs.length} reports
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={safePage <= 1}
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+                        style={{ background: 'var(--muted)', color: 'var(--foreground)', border: '1px solid var(--border)' }}
                       >
-                        <td className="px-4 py-3.5 text-center">
-                          <input type="checkbox" checked={selectedGRNIds.includes(grn.id)} onChange={() => handleToggleSelect(grn.id)} className="w-4 h-4 cursor-pointer accent-primary" onClick={(e) => e.stopPropagation()} />
-                        </td>
-                        <td className="px-4 py-3.5">
-                          <span className="font-mono text-xs font-bold px-2 py-0.5 rounded inline-block whitespace-nowrap" style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}>{grn.grnNumber}</span>
-                        </td>
-                        <td className="px-4 py-3.5">
-                          <span className="font-mono text-xs" style={{ color: 'var(--muted-foreground)' }}>{grn.purchaseOrder?.poNumber || '—'}</span>
-                        </td>
-                        <td className="px-4 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{grn.rawMaterialName}</td>
-                        <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{grn.variety || '—'}</td>
-                        <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{grn.supplier}</td>
-                        <td className="px-4 py-3.5 text-sm">
-                          <span style={{ color: 'var(--foreground)' }} className="font-medium">{grn.purchaseOrderItem?.quantityOrdered ?? '—'}</span>
-                          <span style={{ color: 'var(--muted-foreground)' }}> / </span>
-                          <span style={{ color: 'var(--primary)' }} className="font-semibold">{grn.purchaseOrderItem?.totalReceived ?? '—'}</span>
-                        </td>
-                        <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{formatDate(grn.createdAt)}</td>
-                        <td className="px-4 py-3.5">
-                          <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--secondary) 12%, transparent)', color: 'var(--secondary)' }}>
-                            {grn.qualityReport?.parameters?.length || 0}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3.5 text-right">
-                          <motion.button
-                            whileHover={{ scale: 1.15 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => setActionModalGRN(grn)}
-                            className="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200"
-                            style={{ color: 'var(--muted-foreground)' }}
-                            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'color-mix(in srgb, var(--primary) 10%, transparent)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--primary)'; }}
-                            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--muted-foreground)'; }}
-                            title="Actions"
-                          >
-                            <MoreVertical size={16} />
-                          </motion.button>
-                        </td>
-                      </motion.tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+                        ‹
+                      </button>
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold transition-all duration-150"
+                          style={{
+                            background: page === safePage ? 'var(--primary)' : 'var(--muted)',
+                            color: page === safePage ? 'var(--primary-foreground)' : 'var(--foreground)',
+                            border: page === safePage ? 'none' : '1px solid var(--border)',
+                          }}
+                        >
+                          {page}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={safePage >= totalPages}
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-semibold transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+                        style={{ background: 'var(--muted)', color: 'var(--foreground)', border: '1px solid var(--border)' }}
+                      >
+                        ›
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}          </div>
         </motion.div>
       </div>
 
@@ -1239,7 +1398,7 @@ const RMQualityReport: React.FC = () => {
                 <div>
                   <h3 className="text-lg font-bold" style={{ color: 'var(--foreground)' }}>Choose Action</h3>
                   <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
-                    GRN: <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>{actionModalGRN.grnNumber}</span>
+                    Report: <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>{actionModalGRN.reportNumber || '—'}</span>
                   </p>
                 </div>
                 <motion.button
@@ -1271,8 +1430,8 @@ const RMQualityReport: React.FC = () => {
                     <Eye size={20} />
                   </div>
                   <div className="flex-1">
-                    <span className="text-sm font-semibold block" style={{ color: 'var(--foreground)' }}>View GRN Details</span>
-                    <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>View full GRN and quality report details</span>
+                    <span className="text-sm font-semibold block" style={{ color: 'var(--foreground)' }}>View Report Details</span>
+                    <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>View full quality report details</span>
                   </div>
                   <ChevronRight size={14} style={{ color: 'var(--muted-foreground)' }} />
                 </motion.button>
@@ -1313,7 +1472,7 @@ const RMQualityReport: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* ── View GRN Detail Modal ── */}
+      {/* ── View Report Detail Modal ── */}
       <AnimatePresence>
         {viewGRN && (
           <motion.div
@@ -1342,9 +1501,9 @@ const RMQualityReport: React.FC = () => {
                     <FileText size={18} strokeWidth={2.5} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold" style={{ color: 'var(--foreground)' }}>GRN Details</h3>
+                    <h3 className="text-lg font-bold" style={{ color: 'var(--foreground)' }}>Report Details</h3>
                     <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
-                      <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>{viewGRN.grnNumber}</span>
+                      <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>{viewGRN.reportNumber || '—'}</span>
                     </p>
                   </div>
                 </div>
@@ -1366,15 +1525,15 @@ const RMQualityReport: React.FC = () => {
                 {/* GRN Info Grid */}
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--primary)' }}>GRN Information</span>
+                    <span className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--primary)' }}>Report Information</span>
                     <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { icon: Hash, label: 'GRN Number', value: viewGRN.grnNumber },
+                      { icon: Hash, label: 'Report No.', value: viewGRN.reportNumber || '—' },
                       { icon: ShoppingCart, label: 'PO Number', value: viewGRN.purchaseOrder?.poNumber || '—' },
                       { icon: Package, label: 'Raw Material', value: viewGRN.rawMaterialName },
-                      { icon: Package, label: 'Variety', value: viewGRN.variety || '—' },
+                      { icon: Hash, label: 'SKU Code', value: viewGRN.purchaseOrderItem?.rawMaterial?.skuCode || '—' },
                       { icon: Building, label: 'Supplier', value: viewGRN.supplier },
                       { icon: Calendar, label: 'Date', value: viewGRN.createdAt ? format(new Date(viewGRN.createdAt), 'dd MMM yyyy') : 'N/A' },
                     ].map(({ icon: Icon, label, value }) => (
@@ -1394,6 +1553,9 @@ const RMQualityReport: React.FC = () => {
                           <span className="font-medium" style={{ color: 'var(--foreground)' }}>{viewGRN.purchaseOrderItem?.quantityOrdered ?? '—'}</span>
                           <span style={{ color: 'var(--muted-foreground)' }}> / </span>
                           <span className="font-semibold" style={{ color: 'var(--primary)' }}>{viewGRN.purchaseOrderItem?.totalReceived ?? '—'}</span>
+                          {viewGRN.purchaseOrderItem?.rawMaterial?.unitOfMeasurement && (
+                            <span className="ml-1 text-xs" style={{ color: 'var(--muted-foreground)' }}>{viewGRN.purchaseOrderItem.rawMaterial.unitOfMeasurement}</span>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1415,11 +1577,11 @@ const RMQualityReport: React.FC = () => {
                     <span className="text-xs font-bold uppercase tracking-widest" style={{ color: 'var(--secondary)' }}>Quality Parameters</span>
                     <div className="flex-1 h-px" style={{ background: 'var(--border)' }} />
                     <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--secondary) 12%, transparent)', color: 'var(--secondary)' }}>
-                      {viewGRN.qualityReport?.parameters?.length || 0} params
+                      {viewGRN.parameters?.length || 0} params
                     </span>
                   </div>
 
-                  {viewGRN.qualityReport?.parameters && viewGRN.qualityReport.parameters.length > 0 ? (
+                  {viewGRN.parameters && viewGRN.parameters.length > 0 ? (
                     <div className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
                       <table className="w-full">
                         <thead>
@@ -1430,8 +1592,8 @@ const RMQualityReport: React.FC = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {viewGRN.qualityReport.parameters.map((p: any, i: number) => (
-                            <tr key={i} style={{ borderBottom: i < viewGRN.qualityReport!.parameters.length - 1 ? '1px solid color-mix(in srgb, var(--border) 50%, transparent)' : undefined }}>
+                          {viewGRN.parameters.map((p: any, i: number) => (
+                            <tr key={i} style={{ borderBottom: i < viewGRN.parameters!.length - 1 ? '1px solid color-mix(in srgb, var(--border) 50%, transparent)' : undefined }}>
                               <td className="px-4 py-3 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{p.parameter}</td>
                               <td className="px-4 py-3 text-sm text-center" style={{ color: 'var(--secondary)' }}>{p.standard}</td>
                               <td className="px-4 py-3 text-sm text-center font-semibold" style={{ color: 'var(--primary)' }}>{p.result}</td>
@@ -1442,7 +1604,7 @@ const RMQualityReport: React.FC = () => {
                     </div>
                   ) : (
                     <div className="p-6 rounded-xl text-center" style={{ background: 'color-mix(in srgb, var(--primary) 4%, transparent)', border: '1px dashed color-mix(in srgb, var(--primary) 20%, var(--border))' }}>
-                      <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>No quality parameters recorded for this GRN.</p>
+                      <p className="text-sm" style={{ color: 'var(--muted-foreground)' }}>No quality parameters recorded for this report.</p>
                     </div>
                   )}
                 </div>

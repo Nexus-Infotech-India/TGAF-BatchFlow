@@ -40,6 +40,7 @@ import TransactionalLog from './components/pages/Order/TransactionalLog';
 import ProcessingList from './components/pages/processing/processingList';
 import RawDashboard from './components/pages/Dashboard/rawDashboard';
 import RMQualityReport from './components/pages/QualityReport/RMQualityReport';
+import GenerateGRN from './components/pages/GenerateGRN/GenerateGRN';
 import CreateBOMPage from './components/pages/Masters/CreateBOM';
 
 const App = () => {
@@ -62,6 +63,7 @@ const App = () => {
     { path: '/batches/verification', name: 'Batch Verification', description: 'Verify and validate batch compliance', permissionKey: 'verify_batches' },
     { path: '/compare-batch', name: 'Batch Compliance Review', description: 'Review and approve batch compliance standards', permissionKey: 'review_batches' },
     { path: '/raw/quality-report', name: 'RM Quality Report', description: 'Manage raw material quality reports', permissionKey: 'manage_rm_quality_report' },
+    { path: '/raw/generate-grn', name: 'Generate GRN', description: 'Generate GRN numbers against quality reports', permissionKey: 'manage_generate_grn' },
     { path: '/trainings', name: 'Training Management', description: 'Manage training sessions and participants', permissionKey: 'manage_trainings' },
     { path: '/trainings/create', name: 'Create Training', description: 'Create new training sessions', permissionKey: 'create_training' },
     { path: '/trainings/:id', name: 'Training Details', description: 'View training session details and progress', permissionKey: 'view_training_details' },
@@ -369,6 +371,23 @@ const App = () => {
                   name="RM Quality Report"
                   description="Manage raw material quality reports"
                   permissionKey="manage_rm_quality_report"
+                />
+              }
+            />
+            <Route
+              path="/raw/generate-grn"
+              element={
+                <PermissionedRoute
+                  path="/raw/generate-grn"
+                  element={
+                    <SecureRoute
+                      element={<GenerateGRN />}
+                      permissionKey="manage_generate_grn"
+                    />
+                  }
+                  name="Generate GRN"
+                  description="Generate GRN numbers against quality reports"
+                  permissionKey="manage_generate_grn"
                 />
               }
             />

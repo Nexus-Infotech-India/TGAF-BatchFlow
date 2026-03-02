@@ -17,7 +17,8 @@ import {
   FileStack,
   ClipboardEdit,
   SwitchCamera,
-  FileText
+  FileText,
+  Hash
 } from "lucide-react";
 import { usePermissions } from "../../hooks/permission";
 
@@ -206,6 +207,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "RM Quality Report",
           icon: <FileText className="sidebar-icon" size={18} />,
           permissionKey: "manage_rm_quality_report"
+        },
+        {
+          path: "/raw/generate-grn",
+          name: "Generate GRN",
+          icon: <Hash className="sidebar-icon" size={18} />,
+          permissionKey: "manage_generate_grn"
         },
         {
           path: "/raw/cleaning-raw-materials",

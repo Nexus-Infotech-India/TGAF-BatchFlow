@@ -218,15 +218,18 @@ model ReusableStock {
 }
 
 model RMQualityReport {
-  id              String   @id @default(uuid())
-  rawMaterialName String
-  variety         String
-  supplier        String
-  dateOfReport    DateTime @default(now())
-  grn             String
-  createdById     String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                  String               @id @default(uuid())
+  reportNumber        String?              @unique
+  rawMaterialName     String
+  variety             String
+  supplier            String
+  purchaseOrderId     String?
+  purchaseOrderItemId String?
+  dateOfReport        DateTime             @default(now())
+  grn                 String?
+  createdById         String
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
 
   // Relations
   createdBy  User                 @relation(fields: [createdById], references: [id])

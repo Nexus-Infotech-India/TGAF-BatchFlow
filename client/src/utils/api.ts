@@ -337,11 +337,14 @@ export const API_ROUTES = {
 
     // GRN by PO
     CREATE_GRN: `${BASE_URL}/raw/grn`,
+    GENERATE_GRN_FROM_REPORT: `${BASE_URL}/raw/grn/from-report`,
     GET_GRNS: `${BASE_URL}/raw/grn`,
     GET_RECEIVED_POS: `${BASE_URL}/raw/grn/received-pos`,
     GET_GRNS_BY_PO: (poId: string) => `${BASE_URL}/raw/grn/po/${poId}`,
     GET_GRN_BY_ID: (id: string) => `${BASE_URL}/raw/grn/${id}`,
     DELETE_GRN: (id: string) => `${BASE_URL}/raw/grn/${id}`,
+    GET_REPORTS_WITHOUT_GRN: `${BASE_URL}/raw/quality-report/without-grn`,
+    GET_REPORTS_FOR_GRN_PAGE: `${BASE_URL}/raw/quality-report/for-grn-page`,
 
     // GRN-wise Cleaning
     GET_GRNS_FOR_CLEANING: `${BASE_URL}/raw/cleaning-grn`,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
-import { CheckCircle, Clock, Package, Mail, ChevronDown, ChevronUp, Eye, Trash2, Pencil } from 'lucide-react';
+import { CheckCircle, Clock, Package, Mail, ChevronUp, Eye, Trash2, Pencil } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { Pagination } from 'antd';
@@ -269,7 +269,7 @@ const PurchaseOrderList: React.FC = () => {
                     <table className="w-full text-sm" id="purchase-order-table">
                         <thead>
                             <tr className="border-b border-border/30">
-                                {['PO Number', 'Vendor', 'Product', 'Order Date', 'Expected', 'Ordered Quantity', 'Received Quantity', 'Leftover Quantity', 'Rate   (Per KG)', 'Status', 'Actions'].map(
+                                {['PO Number', 'Vendor', 'Product', 'Order Date', 'Expected Date', 'Ordered Quantity', 'Received Quantity', 'Remaining Quantity', 'Rate   (Per KG)', 'Status', 'Actions'].map(
                                     (h) => (
                                         <th key={h} className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wider px-4 py-3">
                                             {h}

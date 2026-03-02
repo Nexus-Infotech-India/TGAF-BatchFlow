@@ -959,18 +959,21 @@ model ReusableStock {
 }
 
 model RMQualityReport {
-  id              String               @id @default(uuid())
-  rawMaterialName String
-  variety         String
-  supplier        String
-  dateOfReport    DateTime             @default(now())
-  grn             String
-  createdById     String
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
-  parameters      RMQualityParameter[]
-  createdBy       User                 @relation(fields: [createdById], references: [id])
-  grn_entry       GRNbyPo?
+  id                  String               @id @default(uuid())
+  reportNumber        String?              @unique
+  rawMaterialName     String
+  variety             String
+  supplier            String
+  purchaseOrderId     String?
+  purchaseOrderItemId String?
+  dateOfReport        DateTime             @default(now())
+  grn                 String?
+  createdById         String
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  parameters          RMQualityParameter[]
+  createdBy           User                 @relation(fields: [createdById], references: [id])
+  grn_entry           GRNbyPo?
 }
 
 model RMQualityParameter {
@@ -1126,6 +1129,11 @@ model GRNbyPo {
   supplier            String
   qualityReportId     String?  @unique
   createdById         String
+  truckNumber         String?
+  deliveryLocation    String?
+  costCenter          String?
+  receivedBagsPacks   String?
+  remarks             String?
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 

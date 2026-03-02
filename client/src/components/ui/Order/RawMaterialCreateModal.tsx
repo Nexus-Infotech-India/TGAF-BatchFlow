@@ -6,10 +6,7 @@ import {
     AlertCircle,
     CheckCircle,
     Loader2,
-    Building2,
-    ChevronRight,
-    Check,
-    Search,
+    
 } from "lucide-react";
 import api, { API_ROUTES } from "../../../utils/api";
 
@@ -89,18 +86,18 @@ const RawMaterialCreateModal: React.FC<RawMaterialCreateModalProps> = ({
         onClose();
     };
 
-    const handleVendorSelect = (vendor: Vendor) => {
-        setSelectedVendor(vendor);
-        setForm({ ...form, vendorId: vendor.id });
-        setShowVendorPicker(false);
-        setVendorSearch("");
-    };
+    // const handleVendorSelect = (vendor: Vendor) => {
+    //     setSelectedVendor(vendor);
+    //     setForm({ ...form, vendorId: vendor.id });
+    //     setShowVendorPicker(false);
+    //     setVendorSearch("");
+    // };
 
-    const filteredVendors = vendors.filter(
-        (v) =>
-            v.name.toLowerCase().includes(vendorSearch.toLowerCase()) ||
-            v.vendorCode.toLowerCase().includes(vendorSearch.toLowerCase())
-    );
+    // const filteredVendors = vendors.filter(
+    //     (v) =>
+    //         v.name.toLowerCase().includes(vendorSearch.toLowerCase()) ||
+    //         v.vendorCode.toLowerCase().includes(vendorSearch.toLowerCase())
+    // );
 
     const handleCreate = async (e: React.FormEvent) => {
         e.preventDefault();
