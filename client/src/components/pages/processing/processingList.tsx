@@ -1000,7 +1000,7 @@ const ProcessingList: React.FC = () => {
           </motion.div>
         )}
 
-        {/* Reason — show only when there is a loss */}
+        {/* Reason - show only when there is a loss */}
         {hasLoss && (
           <motion.div
             initial={{ opacity: 0, y: -8 }}
@@ -1024,7 +1024,7 @@ const ProcessingList: React.FC = () => {
           </motion.div>
         )}
 
-        {/* Reusable toggle — only if loss */}
+        {/* Reusable toggle - only if loss */}
         {hasLoss && (
           <motion.div
             initial={{ opacity: 0, y: -8 }}
@@ -1043,13 +1043,13 @@ const ProcessingList: React.FC = () => {
           </motion.div>
         )}
 
-        {/* No loss — confirmation */}
+        {/* No loss - confirmation */}
         {!hasLoss && receivedQty > 0 && (
           <div className="mb-4 rounded-lg border border-emerald-500/30 bg-emerald-500/5 p-3">
             <div className="flex items-center gap-2">
               <CheckCircle className="text-emerald-500" size={16} />
               <span className="text-sm font-medium text-emerald-600">
-                No loss — full quantity received
+                No loss - full quantity received
               </span>
             </div>
           </div>

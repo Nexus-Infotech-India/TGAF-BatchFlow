@@ -4,11 +4,47 @@ import { createActivityLog } from '../utils/handler/activityLogger';
 const prisma = new PrismaClient();
 
 /**
+ * Helper to wait for a specified number of milliseconds
+ */
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+/**
+ * Checks if the database is reachable by running a simple query.
+ * Retries with exponential backoff for Neon cold-start wake-up.
+ */
+const waitForDatabase = async (maxRetries = 5, initialDelayMs = 2000): Promise<boolean> => {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+      console.log(`Database connected successfully (attempt ${attempt})`);
+      return true;
+    } catch (error) {
+      const waitTime = initialDelayMs * Math.pow(2, attempt - 1);
+      console.warn(
+        `Database connection attempt ${attempt}/${maxRetries} failed. ` +
+        (attempt < maxRetries ? `Retrying in ${waitTime / 1000}s...` : 'No more retries.')
+      );
+      if (attempt < maxRetries) {
+        await delay(waitTime);
+      }
+    }
+  }
+  return false;
+};
+
+/**
  * Updates audit statuses based on date criteria:
  * - PLANNED to IN_PROGRESS when current date >= startDate
  * - IN_PROGRESS to COMPLETED when current date > endDate
  */
 export const updateAuditStatuses = async () => {
+  // Wait for database to be reachable before proceeding
+  const dbReady = await waitForDatabase();
+  if (!dbReady) {
+    console.error('Database is unreachable after multiple retries. Skipping audit status update.');
+    return { success: false, error: 'Database unreachable' };
+  }
+
   const currentDate = new Date();
   let updatedAudits = 0;
   

@@ -391,11 +391,11 @@ const RMQualityReport: React.FC = () => {
     }
   };
 
-  // PDF Download handler — generates a styled PDF from report data
+  // PDF Download handler - generates a styled PDF from report data
   const handleDownloadPDF = (grn: GRNEntry) => {
     const params = grn.parameters || [];
     const reportDate = grn.createdAt ? format(new Date(grn.createdAt), 'dd MMM yyyy') : 'N/A';
-    const reportNo = grn.reportNumber || '—';
+    const reportNo = grn.reportNumber || '-';
 
     const paramRows = params.map((p: any) =>
       `<tr><td style="padding:8px 12px;border:1px solid #e2e2e2;font-size:13px;">${p.parameter}</td><td style="padding:8px 12px;border:1px solid #e2e2e2;font-size:13px;text-align:center;">${p.standard}</td><td style="padding:8px 12px;border:1px solid #e2e2e2;font-size:13px;text-align:center;font-weight:600;">${p.result}</td></tr>`
@@ -425,13 +425,13 @@ const RMQualityReport: React.FC = () => {
       <div class="section"><div class="section-title">Report Details</div>
         <div class="details-grid">
           <div class="detail-item"><span class="detail-label">Report No.:</span><span class="detail-value">${reportNo}</span></div>
-          <div class="detail-item"><span class="detail-label">PO Number:</span><span class="detail-value">${grn.purchaseOrder?.poNumber || '—'}</span></div>
+          <div class="detail-item"><span class="detail-label">PO Number:</span><span class="detail-value">${grn.purchaseOrder?.poNumber || '-'}</span></div>
           <div class="detail-item"><span class="detail-label">Raw Material:</span><span class="detail-value">${grn.rawMaterialName}</span></div>
-          <div class="detail-item"><span class="detail-label">SKU Code:</span><span class="detail-value">${grn.purchaseOrderItem?.rawMaterial?.skuCode || '—'}</span></div>
+          <div class="detail-item"><span class="detail-label">SKU Code:</span><span class="detail-value">${grn.purchaseOrderItem?.rawMaterial?.skuCode || '-'}</span></div>
           <div class="detail-item"><span class="detail-label">Supplier:</span><span class="detail-value">${grn.supplier}</span></div>
           <div class="detail-item"><span class="detail-label">Date:</span><span class="detail-value">${reportDate}</span></div>
-          <div class="detail-item"><span class="detail-label">Qty Ordered:</span><span class="detail-value">${grn.purchaseOrderItem?.quantityOrdered ?? '—'}${grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement ? ' ' + grn.purchaseOrderItem.rawMaterial.unitOfMeasurement : ''}</span></div>
-          <div class="detail-item"><span class="detail-label">Qty Received:</span><span class="detail-value">${grn.purchaseOrderItem?.totalReceived ?? '—'}${grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement ? ' ' + grn.purchaseOrderItem.rawMaterial.unitOfMeasurement : ''}</span></div>
+          <div class="detail-item"><span class="detail-label">Qty Ordered:</span><span class="detail-value">${grn.purchaseOrderItem?.quantityOrdered ?? '-'}${grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement ? ' ' + grn.purchaseOrderItem.rawMaterial.unitOfMeasurement : ''}</span></div>
+          <div class="detail-item"><span class="detail-label">Qty Received:</span><span class="detail-value">${grn.purchaseOrderItem?.totalReceived ?? '-'}${grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement ? ' ' + grn.purchaseOrderItem.rawMaterial.unitOfMeasurement : ''}</span></div>
         </div>
       </div>
       <div class="section"><div class="section-title">Quality Parameters</div>
@@ -807,7 +807,7 @@ const RMQualityReport: React.FC = () => {
                           <option value="">Select Item</option>
                           {selectedPO.items.map((item) => (
                             <option key={item.id} value={item.id}>
-                              {item.rawMaterial.name} — {item.totalReceived}/{item.quantityOrdered} received
+                              {item.rawMaterial.name} - {item.totalReceived}/{item.quantityOrdered} received
                             </option>
                           ))}
                         </select>
@@ -1291,10 +1291,10 @@ const RMQualityReport: React.FC = () => {
                             <input type="checkbox" checked={selectedGRNIds.includes(grn.id)} onChange={() => handleToggleSelect(grn.id)} className="w-4 h-4 cursor-pointer accent-primary" onClick={(e) => e.stopPropagation()} />
                           </td>
                           <td className="px-4 py-3.5">
-                            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded inline-block whitespace-nowrap" style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}>{grn.reportNumber || '—'}</span>
+                            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded inline-block whitespace-nowrap" style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}>{grn.reportNumber || '-'}</span>
                           </td>
                           <td className="px-4 py-3.5">
-                            <span className="font-mono text-xs" style={{ color: 'var(--muted-foreground)' }}>{grn.purchaseOrder?.poNumber || '—'}</span>
+                            <span className="font-mono text-xs" style={{ color: 'var(--muted-foreground)' }}>{grn.purchaseOrder?.poNumber || '-'}</span>
                           </td>
                           <td className="px-4 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{grn.rawMaterialName}</td>
                           <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{grn.supplier}</td>
@@ -1398,7 +1398,7 @@ const RMQualityReport: React.FC = () => {
                 <div>
                   <h3 className="text-lg font-bold" style={{ color: 'var(--foreground)' }}>Choose Action</h3>
                   <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
-                    Report: <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>{actionModalGRN.reportNumber || '—'}</span>
+                    Report: <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>{actionModalGRN.reportNumber || '-'}</span>
                   </p>
                 </div>
                 <motion.button
@@ -1503,7 +1503,7 @@ const RMQualityReport: React.FC = () => {
                   <div>
                     <h3 className="text-lg font-bold" style={{ color: 'var(--foreground)' }}>Report Details</h3>
                     <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
-                      <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>{viewGRN.reportNumber || '—'}</span>
+                      <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>{viewGRN.reportNumber || '-'}</span>
                     </p>
                   </div>
                 </div>
@@ -1530,10 +1530,10 @@ const RMQualityReport: React.FC = () => {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { icon: Hash, label: 'Report No.', value: viewGRN.reportNumber || '—' },
-                      { icon: ShoppingCart, label: 'PO Number', value: viewGRN.purchaseOrder?.poNumber || '—' },
+                      { icon: Hash, label: 'Report No.', value: viewGRN.reportNumber || '-' },
+                      { icon: ShoppingCart, label: 'PO Number', value: viewGRN.purchaseOrder?.poNumber || '-' },
                       { icon: Package, label: 'Raw Material', value: viewGRN.rawMaterialName },
-                      { icon: Hash, label: 'SKU Code', value: viewGRN.purchaseOrderItem?.rawMaterial?.skuCode || '—' },
+                      { icon: Hash, label: 'SKU Code', value: viewGRN.purchaseOrderItem?.rawMaterial?.skuCode || '-' },
                       { icon: Building, label: 'Supplier', value: viewGRN.supplier },
                       { icon: Calendar, label: 'Date', value: viewGRN.createdAt ? format(new Date(viewGRN.createdAt), 'dd MMM yyyy') : 'N/A' },
                     ].map(({ icon: Icon, label, value }) => (
@@ -1550,9 +1550,9 @@ const RMQualityReport: React.FC = () => {
                       <div>
                         <div className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>Quantity (Ordered / Received)</div>
                         <div className="text-sm">
-                          <span className="font-medium" style={{ color: 'var(--foreground)' }}>{viewGRN.purchaseOrderItem?.quantityOrdered ?? '—'}</span>
+                          <span className="font-medium" style={{ color: 'var(--foreground)' }}>{viewGRN.purchaseOrderItem?.quantityOrdered ?? '-'}</span>
                           <span style={{ color: 'var(--muted-foreground)' }}> / </span>
-                          <span className="font-semibold" style={{ color: 'var(--primary)' }}>{viewGRN.purchaseOrderItem?.totalReceived ?? '—'}</span>
+                          <span className="font-semibold" style={{ color: 'var(--primary)' }}>{viewGRN.purchaseOrderItem?.totalReceived ?? '-'}</span>
                           {viewGRN.purchaseOrderItem?.rawMaterial?.unitOfMeasurement && (
                             <span className="ml-1 text-xs" style={{ color: 'var(--muted-foreground)' }}>{viewGRN.purchaseOrderItem.rawMaterial.unitOfMeasurement}</span>
                           )}

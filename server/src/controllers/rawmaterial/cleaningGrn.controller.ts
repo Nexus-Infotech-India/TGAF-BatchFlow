@@ -316,7 +316,7 @@ export class CleaningGrnController {
     static async finishCleaning(req: Request, res: Response): Promise<void> {
         try {
             const { id } = req.params;
-            const { leftoverQuantity, reasonCode, isReusable } = req.body;
+            const { stoneWastageQty, stoneWastageUnit, seedWastageQty, seedWastageUnit } = req.body;
 
             const cleaningJob = await prisma.cleaningJob.findUnique({
                 where: { id },
@@ -328,59 +328,37 @@ export class CleaningGrnController {
                 return;
             }
 
-            const parsedLeftover = leftoverQuantity ? parseFloat(leftoverQuantity) : 0;
-            const parsedReasonCode = reasonCode || null;
-            const parsedIsReusable = isReusable === true || isReusable === 'true';
+            const parsedStoneWastageQty = stoneWastageQty ? parseFloat(stoneWastageQty) : 0;
+            const parsedStoneWastageUnit = stoneWastageUnit || 'kg';
+            const parsedSeedWastageQty = seedWastageQty ? parseFloat(seedWastageQty) : 0;
+            const parsedSeedWastageUnit = seedWastageUnit || 'kg';
 
             await prisma.$transaction(async (tx) => {
-                // Update cleaning job status + persist leftover/reason/reusable fields
+                // Update cleaning job status + persist stone & seed wastage fields
                 await tx.cleaningJob.update({
                     where: { id },
                     data: {
                         status: 'Cleaned',
                         finishedAt: new Date(),
-                        leftoverQuantity: parsedLeftover,
-                        reasonCode: parsedReasonCode,
-                        isReusable: parsedIsReusable,
+                        stoneWastageQty: parsedStoneWastageQty,
+                        stoneWastageUnit: parsedStoneWastageUnit,
+                        seedWastageQty: parsedSeedWastageQty,
+                        seedWastageUnit: parsedSeedWastageUnit,
                     },
                 });
 
-                // Update lot status + persist leftover/reason/reusable on each lot (lot-wise tracking)
+                // Update lot status + persist wastage on each lot (lot-wise tracking)
                 for (const lot of cleaningJob.cleaningLots) {
                     await tx.cleaningLot.update({
                         where: { id: lot.id },
                         data: {
                             status: 'Cleaned',
-                            leftoverQuantity: parsedLeftover,
-                            reasonCode: parsedReasonCode,
-                            isReusable: parsedIsReusable,
+                            stoneWastageQty: parsedStoneWastageQty,
+                            stoneWastageUnit: parsedStoneWastageUnit,
+                            seedWastageQty: parsedSeedWastageQty,
+                            seedWastageUnit: parsedSeedWastageUnit,
                         },
                     });
-                }
-
-                // Handle leftover/unusable stock (also create UnfinishedStock + ReusableStock entries)
-                if (parsedLeftover > 0) {
-                    const unfinishedSku = `${cleaningJob.rawMaterialId}-UNF-${Date.now()}`;
-                    await tx.unfinishedStock.create({
-                        data: {
-                            cleaningJobId: cleaningJob.id,
-                            skuCode: unfinishedSku,
-                            quantity: parsedLeftover,
-                            reasonCode: parsedReasonCode || 'other',
-                            warehouseId: cleaningJob.toWarehouseId,
-                        },
-                    });
-
-                    if (parsedIsReusable) {
-                        await tx.reusableStock.create({
-                            data: {
-                                cleaningJobId: cleaningJob.id,
-                                skuCode: unfinishedSku,
-                                quantity: parsedLeftover,
-                                warehouseId: cleaningJob.toWarehouseId,
-                            },
-                        });
-                    }
                 }
 
                 // Create transaction log
@@ -391,7 +369,7 @@ export class CleaningGrnController {
                             entity: 'CleaningJob',
                             entityId: cleaningJob.id,
                             userId: req.user.id,
-                            description: `Cleaning finished for job ${cleaningJob.id}. Leftover: ${parsedLeftover}, Reason: ${parsedReasonCode || 'N/A'}, Reusable: ${parsedIsReusable}`,
+                            description: `Cleaning finished for job ${cleaningJob.id}. Stone Wastage: ${parsedStoneWastageQty} ${parsedStoneWastageUnit}, Seed Wastage: ${parsedSeedWastageQty} ${parsedSeedWastageUnit}`,
                         },
                     });
                 }
@@ -414,6 +392,8 @@ export class CleaningGrnController {
             res.status(500).json({ success: false, error: 'Failed to finish cleaning' });
         }
     }
+
+
 
     /**
      * Get all cleaning lots (optionally filter by grnId)

@@ -494,7 +494,7 @@ const CreateVendorPage: React.FC = () => {
                             </div>
                           )}
                           {!v.contactPerson && !v.contactNumber && (
-                            <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>—</span>
+                            <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>-</span>
                           )}
                         </div>
                       </td>
@@ -506,13 +506,13 @@ const CreateVendorPage: React.FC = () => {
                             <IconMail /> {v.email}
                           </div>
                         ) : (
-                          <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>—</span>
+                          <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>-</span>
                         )}
                       </td>
 
                       {/* Address */}
                       <td className="px-5 py-3.5 text-sm max-w-[200px] truncate" style={{ color: 'var(--muted-foreground)' }}>
-                        {v.address || '—'}
+                        {v.address || '-'}
                       </td>
 
                       {/* Actions */}

@@ -25,8 +25,8 @@ export class CleaningJobController {
         select: { unitOfMeasurement: true },
       });
       if (!rawMaterial) {
-         res.status(400).json({ error: 'Invalid rawMaterialId' });
-         return;
+        res.status(400).json({ error: 'Invalid rawMaterialId' });
+        return;
       }
 
       // Convert quantity to base unit
@@ -76,7 +76,7 @@ export class CleaningJobController {
     } catch (error) {
       res.status(500).json({ error: 'Failed to create cleaning job', details: error });
       console.log(error);
-      
+
     }
   }
 
@@ -126,9 +126,10 @@ export class CleaningJobController {
         status,
         startedAt,
         finishedAt,
-        leftoverQuantity, // <-- Add these to destructure from req.body
-        reasonCode,
-        isReusable,
+        stoneWastageQty,
+        stoneWastageUnit,
+        seedWastageQty,
+        seedWastageUnit,
       } = req.body;
 
       const cleaningJob = await prisma.cleaningJob.update({
@@ -138,43 +139,19 @@ export class CleaningJobController {
           status,
           startedAt: startedAt ? new Date(startedAt) : undefined,
           finishedAt: finishedAt ? new Date(finishedAt) : undefined,
+          stoneWastageQty: stoneWastageQty ? parseFloat(stoneWastageQty) : undefined,
+          stoneWastageUnit: stoneWastageUnit || undefined,
+          seedWastageQty: seedWastageQty ? parseFloat(seedWastageQty) : undefined,
+          seedWastageUnit: seedWastageUnit || undefined,
         },
       });
-
-      // Handle leftover/unusable stock if job is marked as Cleaned/Finished
-      if (
-        (status === 'Cleaned' || status === 'Finished') &&
-        leftoverQuantity > 0
-      ) {
-        const unfinishedSku = `${cleaningJob.rawMaterialId}-UNF-${Date.now()}`;
-        await prisma.unfinishedStock.create({
-          data: {
-            cleaningJobId: cleaningJob.id,
-            skuCode: unfinishedSku,
-            quantity: leftoverQuantity,
-            reasonCode,
-            warehouseId: cleaningJob.toWarehouseId,
-          },
-        });
-
-         if (isReusable) {
-          await prisma.reusableStock.create({
-            data: {
-              cleaningJobId: cleaningJob.id,
-              skuCode: unfinishedSku,
-              quantity: leftoverQuantity,
-              warehouseId: cleaningJob.toWarehouseId,
-              createdAt: new Date(),
-            },
-          });
-        }
-      }
 
       res.json(cleaningJob);
     } catch (error) {
       res.status(500).json({ error: 'Failed to update cleaning job', details: error });
     }
   }
+
 
   static async getCleanedMaterials(req: Request, res: Response) {
     try {

@@ -1,12 +1,12 @@
-# RECREATION GUIDE — Purchase Order Receiving System
+# RECREATION GUIDE - Purchase Order Receiving System
 
 ## ⚠️ CURRENT STATE: BROKEN
 All files currently have **git merge conflict markers** (`<<<<<<<`, `=======`, `>>>>>>>`) throughout them from a bad git stash pop/merge. The following files need to be recreated or have conflicts resolved:
 
-1. `server/prisma/schema.prisma` — has merge conflicts in the generator block AND in the PurchaseOrderItem model
-2. `server/src/controllers/rawmaterial/purchase.controller.ts` — has merge conflicts throughout the `updatePurchaseOrderItem` method  
-3. `client/src/components/ui/Order/statusModal.tsx` — **FILE IS EMPTY** (was accidentally deleted, needs full recreation)
-4. `client/src/components/pages/Order/PurchaseOrder.tsx` — **FILE IS EMPTY** (was accidentally deleted, needs full recreation)
+1. `server/prisma/schema.prisma` - has merge conflicts in the generator block AND in the PurchaseOrderItem model
+2. `server/src/controllers/rawmaterial/purchase.controller.ts` - has merge conflicts throughout the `updatePurchaseOrderItem` method  
+3. `client/src/components/ui/Order/statusModal.tsx` - **FILE IS EMPTY** (was accidentally deleted, needs full recreation)
+4. `client/src/components/pages/Order/PurchaseOrder.tsx` - **FILE IS EMPTY** (was accidentally deleted, needs full recreation)
 
 ---
 
@@ -118,7 +118,7 @@ static async updatePurchaseOrderItem(req: Request, res: Response): Promise<void>
   try {
     const { itemId } = req.params;
     const {
-      status,         // 'PARTIALLY_RECEIVED' or 'RECEIVED' (ignored — auto-determined)
+      status,         // 'PARTIALLY_RECEIVED' or 'RECEIVED' (ignored - auto-determined)
       warehouseId,
       weightMode,     // 'INDIVIDUAL' or 'TOTAL'
       bags,           // [{ bagNo, bagWeight }] - used when weightMode is INDIVIDUAL
@@ -347,15 +347,15 @@ if (corrections.length > 0) {
 ```
 
 ### Other methods that should exist in the controller (keep as-is, no conflicts):
-- `createPurchaseOrder` — creates PO with items
-- `getPurchaseOrders` — lists all POs with items, receivals, bags, warehouse
-- `getPurchaseOrderById` — single PO by ID
-- `updatePurchaseOrder` — update PO status/expectedDate
-- `getReceivalHistory` — get receivals for a specific item
-- `getAllPurchaseOrderItems` — get all current stock
-- `getReceivedRawMaterials` — unique raw materials that have been received
-- `getVendorsFromReceivedOrders` — unique vendors from received orders
-- `deletePurchaseOrder` — delete PO (only if no receivals exist)
+- `createPurchaseOrder` - creates PO with items
+- `getPurchaseOrders` - lists all POs with items, receivals, bags, warehouse
+- `getPurchaseOrderById` - single PO by ID
+- `updatePurchaseOrder` - update PO status/expectedDate
+- `getReceivalHistory` - get receivals for a specific item
+- `getAllPurchaseOrderItems` - get all current stock
+- `getReceivedRawMaterials` - unique raw materials that have been received
+- `getVendorsFromReceivedOrders` - unique vendors from received orders
+- `deletePurchaseOrder` - delete PO (only if no receivals exist)
 
 ---
 
@@ -372,7 +372,7 @@ This file was completely deleted. It needs to be recreated with these components
     - **Receival history toggle** (collapsible previous receivals list)
     - **Auto-status info box**: Explains that status is auto-determined. If `remaining <= 0`, says "already fully received". Otherwise says "If total received reaches {ordered}, item will be marked as Fully Received."
     - **Warehouse selection**: Dropdown of warehouses fetched from `API_ROUTES.RAW.GET_WAREHOUSES`, plus a "+" button to add a new warehouse (shows inline `WarehouseForm`)
-    - **Weight Entry Mode toggle**: Two buttons — "Total Weight" (Scale icon) and "Individual Bags" (Hash icon)
+    - **Weight Entry Mode toggle**: Two buttons - "Total Weight" (Scale icon) and "Individual Bags" (Hash icon)
     - **Total Weight mode**: Input for total weight + optional number of bags for splitting
     - **Individual Bags mode**: Dynamic list of bags with weight inputs, add/remove buttons, running total
     - **Notes textarea** (optional)
@@ -424,7 +424,7 @@ This file was completely deleted. It needs to be recreated:
 - **Layout**:
   1. **Header**: Title "Purchase Orders" with Package icon, "Send All via Email" button, "+ Create Order" button (navigates to `/raw/purchase-order`)
   2. **Stats Bar**: 4 cards showing Total Orders, Fully Received, Partially Received, Pending counts
-  3. **Table**: Columns — PO Number, Vendor, SKU Code, Product Name, Order Date, Expected Date, Ordered, Received (with progress bar), Rate, Status, Actions
+  3. **Table**: Columns - PO Number, Vendor, SKU Code, Product Name, Order Date, Expected Date, Ordered, Received (with progress bar), Rate, Status, Actions
      - PO Number and Vendor are `rowSpan`-ed across items in the same order
      - Received column shows a progress bar (green if >=100%, amber otherwise)
      - Status shows a badge with icon
@@ -470,8 +470,8 @@ type PurchaseOrder = {
 ```
 
 ### Helper functions:
-- `formatDate(dateString)` — returns `new Date(dateString).toLocaleDateString()` or 'N/A'
-- `getStatusConfig(status)` — returns `{ label, icon, classes }` for RECEIVED (green), PARTIALLY_RECEIVED (amber), PENDING (muted)
+- `formatDate(dateString)` - returns `new Date(dateString).toLocaleDateString()` or 'N/A'
+- `getStatusConfig(status)` - returns `{ label, icon, classes }` for RECEIVED (green), PARTIALLY_RECEIVED (amber), PENDING (muted)
 
 ### Imports:
 ```typescript

@@ -41,9 +41,10 @@ interface CleaningLotItem {
   lotNumber: string;
   quantity: number;
   status: string;
-  leftoverQuantity?: number;
-  reasonCode?: string;
-  isReusable?: boolean;
+  stoneWastageQty?: number;
+  stoneWastageUnit?: string;
+  seedWastageQty?: number;
+  seedWastageUnit?: string;
   createdAt: string;
   warehouse: { name: string };
 }
@@ -54,9 +55,10 @@ interface CleaningJobItem {
   status: string;
   startedAt: string;
   finishedAt?: string;
-  leftoverQuantity?: number;
-  reasonCode?: string;
-  isReusable?: boolean;
+  stoneWastageQty?: number;
+  stoneWastageUnit?: string;
+  seedWastageQty?: number;
+  seedWastageUnit?: string;
   fromWarehouse: { name: string };
   toWarehouse: { name: string };
   cleaningLots: CleaningLotItem[];
@@ -97,6 +99,8 @@ const CleaningRawMaterialList: React.FC = () => {
   const [warehouses, setWarehouses] = useState<WarehouseItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 6;
 
   // Transfer Modal
   const [transferModalOpen, setTransferModalOpen] = useState(false);
@@ -108,16 +112,17 @@ const CleaningRawMaterialList: React.FC = () => {
   // Finish Cleaning Modal
   const [finishModalOpen, setFinishModalOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState('');
-  const [leftoverQty, setLeftoverQty] = useState<number>(0);
-  const [reasonCode, setReasonCode] = useState('');
-  const [isReusable, setIsReusable] = useState(false);
+  const [stoneWastageQty, setStoneWastageQty] = useState<number>(0);
+  const [stoneWastageUnit, setStoneWastageUnit] = useState<string>('kg');
+  const [seedWastageQty, setSeedWastageQty] = useState<number>(0);
+  const [seedWastageUnit, setSeedWastageUnit] = useState<string>('kg');
   const [finishing, setFinishing] = useState(false);
 
   // Cleaning History Modal (Eye icon)
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
   const [historyGrn, setHistoryGrn] = useState<GRNItem | null>(null);
 
-  // ─── Fetch Data ────────────────────────────────────────────────────
+
   const fetchGRNs = async () => {
     setLoading(true);
     try {
@@ -170,6 +175,7 @@ const CleaningRawMaterialList: React.FC = () => {
           g.purchaseOrder?.poNumber?.toLowerCase().includes(lower)
       )
     );
+    setCurrentPage(1);
   }, [searchTerm, grns]);
 
   // ─── Transfer to Cleaning ─────────────────────────────────────────
@@ -214,9 +220,10 @@ const CleaningRawMaterialList: React.FC = () => {
   // ─── Finish Cleaning ──────────────────────────────────────────────
   const handleOpenFinish = (jobId: string) => {
     setSelectedJobId(jobId);
-    setLeftoverQty(0);
-    setReasonCode('');
-    setIsReusable(false);
+    setStoneWastageQty(0);
+    setStoneWastageUnit('kg');
+    setSeedWastageQty(0);
+    setSeedWastageUnit('kg');
     setFinishModalOpen(true);
   };
 
@@ -228,9 +235,10 @@ const CleaningRawMaterialList: React.FC = () => {
     try {
       const authToken = localStorage.getItem('authToken');
       const res = await api.put(API_ROUTES.RAW.FINISH_CLEANING_JOB(selectedJobId), {
-        leftoverQuantity: leftoverQty,
-        reasonCode,
-        isReusable,
+        stoneWastageQty,
+        stoneWastageUnit,
+        seedWastageQty,
+        seedWastageUnit,
       }, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
@@ -364,7 +372,7 @@ const CleaningRawMaterialList: React.FC = () => {
             <table className="w-full border-collapse text-sm">
               <thead>
                 <tr>
-                  {['GRN #', 'Material', 'Variety', 'Supplier', 'Received', 'Transferred', 'Remaining', 'Status', 'Actions'].map((h) => (
+                  {['GRN #', 'Material', 'Supplier', 'Received', 'Transferred', 'Remaining', 'Cleaned', 'Status', 'Actions'].map((h) => (
                     <th
                       key={h}
                       className="text-left px-4 py-3 text-[10px] font-bold uppercase tracking-wider whitespace-nowrap"
@@ -381,89 +389,96 @@ const CleaningRawMaterialList: React.FC = () => {
               </thead>
               <tbody>
                 <AnimatePresence>
-                  {filteredGrns.map((grn, idx) => {
-                    const unit = grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
-                    return (
-                      <motion.tr
-                        key={grn.id}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.02, duration: 0.15 }}
-                        className="transition-colors duration-150 cursor-default"
-                        style={{ borderBottom: '1px solid color-mix(in srgb, var(--border) 50%, transparent)' }}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--muted)'; }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
-                      >
-                        <td className="px-4 py-3 whitespace-nowrap" style={{ color: 'var(--foreground)' }}>
-                          <span
-                            className="inline-flex items-center text-xs font-bold px-2.5 py-1 rounded-lg"
-                            style={{
-                              background: 'color-mix(in srgb, var(--primary) 10%, transparent)',
-                              color: 'var(--primary)',
-                            }}
-                          >
-                            {grn.grnNumber}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          <div className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>{grn.rawMaterialName}</div>
-
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm" style={{ color: 'var(--foreground)' }}>{grn.variety || '—'}</td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm" style={{ color: 'var(--foreground)' }}>{grn.supplier}</td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold" style={{ color: 'var(--primary)' }}>
-                          {grn.totalReceived} {unit}
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold" style={{ color: 'var(--secondary)' }}>
-                          {grn.totalTransferred} {unit}
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-sm font-bold" style={{ color: grn.leftQuantity > 0 ? '#d97706' : '#059669' }}>
-                          {grn.leftQuantity} {unit}
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          {grn.allJobsFinished ? (
-                            <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, #10b981 14%, transparent)', color: '#059669' }}>
-                              <CheckCircle size={10} className="mr-1" /> All Cleaned
-                            </span>
-                          ) : grn.cleaningJobs?.length > 0 ? (
-                            <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--secondary) 14%, transparent)', color: 'var(--secondary)' }}>
-                              In Progress
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}>
-                              Not Started
-                            </span>
-                          )}
-                        </td>
-                        <td className="px-4 py-3 whitespace-nowrap">
-                          <div className="flex items-center gap-2">
-                            {grn.leftQuantity > 0 && (
-                              <button
-                                onClick={() => handleOpenTransfer(grn)}
-                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 active:scale-95"
-                                style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
-                              >
-                                <ArrowRight size={12} /> Transfer
-                              </button>
-                            )}
-                            {/* Eye icon for cleaning history */}
-                            <button
-                              onClick={() => handleViewHistory(grn)}
-                              className="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 active:scale-95"
+                  {filteredGrns
+                    .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+                    .map((grn, idx) => {
+                      const unit = grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
+                      return (
+                        <motion.tr
+                          key={grn.id}
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.02, duration: 0.15 }}
+                          className="transition-colors duration-150 cursor-default"
+                          style={{ borderBottom: '1px solid color-mix(in srgb, var(--border) 50%, transparent)' }}
+                          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--muted)'; }}
+                          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                        >
+                          <td className="px-4 py-3 whitespace-nowrap" style={{ color: 'var(--foreground)' }}>
+                            <span
+                              className="inline-flex items-center text-xs font-bold px-2.5 py-1 rounded-lg"
                               style={{
-                                background: 'color-mix(in srgb, var(--secondary) 10%, transparent)',
-                                color: 'var(--secondary)',
-                                border: '1px solid color-mix(in srgb, var(--secondary) 20%, var(--border))',
+                                background: 'color-mix(in srgb, var(--primary) 10%, transparent)',
+                                color: 'var(--primary)',
                               }}
-                              title="View Cleaning History"
                             >
-                              <Eye size={15} />
-                            </button>
-                          </div>
-                        </td>
-                      </motion.tr>
-                    );
-                  })}
+                              {grn.grnNumber}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <div className="font-semibold text-sm" style={{ color: 'var(--foreground)' }}>{grn.rawMaterialName}</div>
+
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm" style={{ color: 'var(--foreground)' }}>{grn.supplier}</td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold" style={{ color: 'var(--primary)' }}>
+                            {grn.totalReceived} {unit}
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold" style={{ color: 'var(--secondary)' }}>
+                            {grn.totalTransferred} {unit}
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm font-bold" style={{ color: grn.leftQuantity > 0 ? '#d97706' : '#059669' }}>
+                            {grn.leftQuantity} {unit}
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold" style={{ color: '#059669' }}>
+                            {grn.cleaningJobs?.filter((j) => j.status === 'Cleaned').reduce((sum, j) => {
+                              const net = (j.quantity || 0) - (j.stoneWastageQty || 0) - (j.seedWastageQty || 0);
+                              return sum + Math.max(0, net);
+                            }, 0)} {unit}
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            {grn.allJobsFinished ? (
+                              <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, #10b981 14%, transparent)', color: '#059669' }}>
+                                <CheckCircle size={10} className="mr-1" /> All Cleaned
+                              </span>
+                            ) : grn.cleaningJobs?.length > 0 ? (
+                              <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--secondary) 14%, transparent)', color: 'var(--secondary)' }}>
+                                In Progress
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'var(--muted)', color: 'var(--muted-foreground)' }}>
+                                Not Started
+                              </span>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 whitespace-nowrap">
+                            <div className="flex items-center gap-2">
+                              {grn.leftQuantity > 0 && (
+                                <button
+                                  onClick={() => handleOpenTransfer(grn)}
+                                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 active:scale-95"
+                                  style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
+                                >
+                                  <ArrowRight size={12} /> Transfer
+                                </button>
+                              )}
+                              {/* Eye icon for cleaning history */}
+                              <button
+                                onClick={() => handleViewHistory(grn)}
+                                className="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-all duration-200 active:scale-95"
+                                style={{
+                                  background: 'color-mix(in srgb, var(--secondary) 10%, transparent)',
+                                  color: 'var(--secondary)',
+                                  border: '1px solid color-mix(in srgb, var(--secondary) 20%, var(--border))',
+                                }}
+                                title="View Cleaning History"
+                              >
+                                <Eye size={15} />
+                              </button>
+                            </div>
+                          </td>
+                        </motion.tr>
+                      );
+                    })}
                 </AnimatePresence>
                 {filteredGrns.length === 0 && (
                   <tr>
@@ -477,6 +492,50 @@ const CleaningRawMaterialList: React.FC = () => {
               </tbody>
             </table>
           </div>
+
+          {/* ─── Pagination Controls ─────────────────────────────── */}
+          {filteredGrns.length > ITEMS_PER_PAGE && (
+            <div
+              className="px-5 py-3 flex items-center justify-between"
+              style={{ borderTop: '1px solid var(--border)', background: 'var(--muted)' }}
+            >
+              <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
+                Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(currentPage * ITEMS_PER_PAGE, filteredGrns.length)} of {filteredGrns.length}
+              </span>
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95 disabled:opacity-40"
+                  style={{ background: 'var(--card)', color: 'var(--foreground)', border: '1px solid var(--border)' }}
+                >
+                  ← Prev
+                </button>
+                {Array.from({ length: Math.ceil(filteredGrns.length / ITEMS_PER_PAGE) }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className="w-8 h-8 rounded-lg text-xs font-bold transition-all active:scale-95"
+                    style={{
+                      background: page === currentPage ? 'var(--primary)' : 'var(--card)',
+                      color: page === currentPage ? 'var(--primary-foreground)' : 'var(--muted-foreground)',
+                      border: page === currentPage ? 'none' : '1px solid var(--border)',
+                    }}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setCurrentPage((p) => Math.min(Math.ceil(filteredGrns.length / ITEMS_PER_PAGE), p + 1))}
+                  disabled={currentPage === Math.ceil(filteredGrns.length / ITEMS_PER_PAGE)}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95 disabled:opacity-40"
+                  style={{ background: 'var(--card)', color: 'var(--foreground)', border: '1px solid var(--border)' }}
+                >
+                  Next →
+                </button>
+              </div>
+            </div>
+          )}
         </motion.div>
       </div>
 
@@ -505,7 +564,7 @@ const CleaningRawMaterialList: React.FC = () => {
 
             <div className="space-y-1.5">
               <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
-                Transfer Quantity <span style={{ color: 'var(--destructive)' }}>*</span>
+                Transfer Quantity(KG) <span style={{ color: 'var(--destructive)' }}>*</span>
               </label>
               <InputNumber
                 className="w-full"
@@ -575,51 +634,55 @@ const CleaningRawMaterialList: React.FC = () => {
             <InfoRow label="Cleaning Job" value={selectedJobId} />
           </div>
 
+          {/* Stone Wastage */}
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
-              Leftover / Wastage Quantity
+              Stone Wastage
             </label>
-            <InputNumber
-              className="w-full"
-              min={0}
-              step={0.1}
-              value={leftoverQty}
-              onChange={(v) => setLeftoverQty(v || 0)}
-              placeholder="Enter leftover qty (optional)"
-            />
+            <div className="flex items-center gap-2">
+              <InputNumber
+                className="flex-1"
+                min={0}
+                step={0.1}
+                value={stoneWastageQty}
+                onChange={(v) => setStoneWastageQty(v || 0)}
+                placeholder="Qty"
+              />
+              <Select
+                style={{ width: 90 }}
+                value={stoneWastageUnit}
+                onChange={(v) => setStoneWastageUnit(v)}
+              >
+                <Option value="kg">KG</Option>
+                <Option value="gm">GM</Option>
+              </Select>
+            </div>
           </div>
 
-          {leftoverQty > 0 && (
-            <>
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
-                  Reason Code
-                </label>
-                <Select
-                  className="w-full"
-                  placeholder="Select reason"
-                  value={reasonCode || undefined}
-                  onChange={(v) => setReasonCode(v)}
-                >
-                  <Option value="contamination">Contamination</Option>
-                  <Option value="quality_issue">Quality Issue</Option>
-                  <Option value="damaged">Damaged</Option>
-                  <Option value="expired">Expired</Option>
-                  <Option value="other">Other</Option>
-                </Select>
-              </div>
-              <div className="flex items-center gap-2.5 pt-1">
-                <input
-                  type="checkbox"
-                  checked={isReusable}
-                  onChange={(e) => setIsReusable(e.target.checked)}
-                  className="w-4 h-4 rounded"
-                  style={{ accentColor: 'var(--primary)' }}
-                />
-                <label className="text-sm" style={{ color: 'var(--foreground)' }}>Mark leftover as reusable stock</label>
-              </div>
-            </>
-          )}
+          {/* Seed Wastage */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
+               Seed Wastage
+            </label>
+            <div className="flex items-center gap-2">
+              <InputNumber
+                className="flex-1"
+                min={0}
+                step={0.1}
+                value={seedWastageQty}
+                onChange={(v) => setSeedWastageQty(v || 0)}
+                placeholder="Qty"
+              />
+              <Select
+                style={{ width: 90 }}
+                value={seedWastageUnit}
+                onChange={(v) => setSeedWastageUnit(v)}
+              >
+                <Option value="kg">KG</Option>
+                <Option value="gm">GM</Option>
+              </Select>
+            </div>
+          </div>
 
           <div className="flex items-center gap-3 pt-3" style={{ borderTop: '1px solid var(--border)' }}>
             <button
@@ -653,7 +716,7 @@ const CleaningRawMaterialList: React.FC = () => {
                 Cleaning History
               </span>
               <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
-                {historyGrn?.grnNumber} — {historyGrn?.rawMaterialName}
+                {historyGrn?.grnNumber} - {historyGrn?.rawMaterialName}
               </span>
             </div>
           </div>
@@ -705,10 +768,11 @@ const CleaningRawMaterialList: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2">
                           {getStatusTag(job.status)}
                           <span className="text-sm font-bold" style={{ color: 'var(--primary)' }}>
-                            {job.quantity} {unit}
+                            {/* Show cleaned quantity = transferred - wastage */}
+                            {Math.max(0, (job.quantity || 0) - (job.stoneWastageQty || 0) - (job.seedWastageQty || 0))} {unit}
                           </span>
                           {job.status === 'Sent' && (
                             <button
@@ -722,8 +786,8 @@ const CleaningRawMaterialList: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Leftover / Wastage Info for this Job */}
-                      {job.status === 'Cleaned' && (job.leftoverQuantity ?? 0) > 0 && (
+                      {/* Stone & Seed Wastage Info for this Job */}
+                      {job.status === 'Cleaned' && ((job.stoneWastageQty ?? 0) > 0 || (job.seedWastageQty ?? 0) > 0) && (
                         <div
                           className="px-4 py-2.5 flex items-center flex-wrap gap-3 text-xs"
                           style={{
@@ -731,28 +795,16 @@ const CleaningRawMaterialList: React.FC = () => {
                             borderBottom: '1px solid var(--border)',
                           }}
                         >
-                          <span className="font-semibold" style={{ color: '#d97706' }}>
-                            ⚠ Leftover/Wastage: {job.leftoverQuantity} {unit}
-                          </span>
-                          {job.reasonCode && (
-                            <span
-                              className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase"
-                              style={{ background: 'color-mix(in srgb, #ef4444 12%, transparent)', color: '#dc2626' }}
-                            >
-                              {job.reasonCode.replace(/_/g, ' ')}
+                          {(job.stoneWastageQty ?? 0) > 0 && (
+                            <span className="font-semibold" style={{ color: '#d97706' }}>
+                              Stone: {job.stoneWastageQty} {(job.stoneWastageUnit || 'kg').toUpperCase()}
                             </span>
                           )}
-                          <span
-                            className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold"
-                            style={{
-                              background: job.isReusable
-                                ? 'color-mix(in srgb, #10b981 12%, transparent)'
-                                : 'color-mix(in srgb, #ef4444 12%, transparent)',
-                              color: job.isReusable ? '#059669' : '#dc2626',
-                            }}
-                          >
-                            {job.isReusable ? '♻ Reusable Stock' : '✗ Not Reusable'}
-                          </span>
+                          {(job.seedWastageQty ?? 0) > 0 && (
+                            <span className="font-semibold" style={{ color: '#d97706' }}>
+                               Seed: {job.seedWastageQty} {(job.seedWastageUnit || 'kg').toUpperCase()}
+                            </span>
+                          )}
                         </div>
                       )}
 
@@ -784,21 +836,14 @@ const CleaningRawMaterialList: React.FC = () => {
                                   {lot.quantity} {unit}
                                 </span>
                                 {getStatusTag(lot.status)}
-                                {(lot.leftoverQuantity ?? 0) > 0 && (
+                                {((lot.stoneWastageQty ?? 0) > 0 || (lot.seedWastageQty ?? 0) > 0) && (
                                   <span
                                     className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full"
                                     style={{ background: 'color-mix(in srgb, #f59e0b 14%, transparent)', color: '#d97706' }}
                                   >
-                                    Wastage: {lot.leftoverQuantity} {unit}
-                                    {lot.reasonCode ? ` (${lot.reasonCode.replace(/_/g, ' ')})` : ''}
-                                  </span>
-                                )}
-                                {lot.isReusable && (
-                                  <span
-                                    className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full"
-                                    style={{ background: 'color-mix(in srgb, #10b981 12%, transparent)', color: '#059669' }}
-                                  >
-                                    ♻ Reusable
+                                    {(lot.stoneWastageQty ?? 0) > 0 && ` ${lot.stoneWastageQty} ${(lot.stoneWastageUnit || 'kg').toUpperCase()}`}
+                                    {(lot.stoneWastageQty ?? 0) > 0 && (lot.seedWastageQty ?? 0) > 0 && ' · '}
+                                    {(lot.seedWastageQty ?? 0) > 0 && ` ${lot.seedWastageQty} ${(lot.seedWastageUnit || 'kg').toUpperCase()}`}
                                   </span>
                                 )}
                               </div>

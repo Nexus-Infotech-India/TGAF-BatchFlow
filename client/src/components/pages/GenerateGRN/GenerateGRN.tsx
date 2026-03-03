@@ -20,10 +20,14 @@ import {
   MessageSquare,
   Download,
   Boxes,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import api, { API_ROUTES } from '../../../utils/api';
 import { format } from 'date-fns';
+
+const ITEMS_PER_PAGE = 6;
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -86,6 +90,7 @@ const GenerateGRN: React.FC = () => {
   const [reports, setReports] = useState<ReportEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [generatingId, setGeneratingId] = useState<string | null>(null);
   const [viewReport, setViewReport] = useState<ReportEntry | null>(null);
   const [grnFormReport, setGrnFormReport] = useState<ReportEntry | null>(null);
@@ -151,23 +156,23 @@ const GenerateGRN: React.FC = () => {
     }
   };
 
-  // PDF Download handler — generates a TG Agri Farms GRN PDF
+  // PDF Download handler - generates a TG Agri Farms GRN PDF
   const handleDownloadGRNPdf = (report: ReportEntry) => {
     if (!report.grn_entry) return;
     const grn = report.grn_entry;
     const reportDate = report.createdAt ? format(new Date(report.createdAt), 'dd/MM/yyyy') : 'N/A';
-    const poNumber = report.purchaseOrder?.poNumber || '—';
+    const poNumber = report.purchaseOrder?.poNumber || '-';
     const supplier = report.supplier;
     const rawMaterial = report.rawMaterialName;
-    const skuCode = report.purchaseOrderItem?.rawMaterial?.skuCode || '—';
-    const uom = report.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '—';
-    const qtyOrdered = report.purchaseOrderItem?.quantityOrdered ?? '—';
-    const qtyReceived = report.purchaseOrderItem?.totalReceived ?? report.purchaseOrderItem?.quantityReceived ?? '—';
-    const truckNumber = grn.truckNumber || '—';
-    const deliveryLocation = grn.deliveryLocation || '—';
-    const costCenter = grn.costCenter || '—';
-    const receivedBagsPacks = grn.receivedBagsPacks || '—';
-    const remarks = grn.remarks || '—';
+    const skuCode = report.purchaseOrderItem?.rawMaterial?.skuCode || '-';
+    const uom = report.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '-';
+    const qtyOrdered = report.purchaseOrderItem?.quantityOrdered ?? '-';
+    const qtyReceived = report.purchaseOrderItem?.totalReceived ?? report.purchaseOrderItem?.quantityReceived ?? '-';
+    const truckNumber = grn.truckNumber || '-';
+    const deliveryLocation = grn.deliveryLocation || '-';
+    const costCenter = grn.costCenter || '-';
+    const receivedBagsPacks = grn.receivedBagsPacks || '-';
+    const remarks = grn.remarks || '-';
 
     const html = `
       <html><head><title>GRN - ${grn.grnNumber}</title>
@@ -305,6 +310,12 @@ const GenerateGRN: React.FC = () => {
     ].some((f) => String(f || '').toLowerCase().includes(q));
   });
 
+  const totalPages = Math.max(1, Math.ceil(filteredReports.length / ITEMS_PER_PAGE));
+  const paginatedReports = filteredReports.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
   const reportsWithoutGRN = filteredReports.filter((r) => !r.grn_entry);
 
   return (
@@ -363,7 +374,7 @@ const GenerateGRN: React.FC = () => {
                 type="text"
                 placeholder="Search by Report No., PO, raw material, supplier, GRN..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
                 className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200"
                 style={{
                   background: 'color-mix(in srgb, var(--card) 96%, var(--primary) 4%)',
@@ -397,116 +408,171 @@ const GenerateGRN: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full table-auto">
-                  <thead>
-                    <tr style={{ background: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
-                      {['Report No.', 'PO Number', 'Raw Material', 'Supplier', 'Date', 'Params', 'GRN Status', 'Actions'].map((h, i) => (
-                        <th key={h} className={`px-4 py-3 text-xs font-bold uppercase tracking-wider ${i === 7 ? 'text-right' : 'text-left'}`} style={{ color: 'var(--muted-foreground)' }}>
-                          {h}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredReports.map((report, index) => {
-                      const hasGRN = !!report.grn_entry;
-                      const isGenerating = generatingId === report.id;
-                      return (
-                        <motion.tr
-                          key={report.id}
-                          initial={{ opacity: 0, y: 6 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.03 }}
-                          className="group transition-colors duration-150"
-                          style={{ borderBottom: '1px solid color-mix(in srgb, var(--border) 50%, transparent)' }}
-                          onMouseEnter={(e) => { (e.currentTarget as HTMLTableRowElement).style.background = 'var(--muted)'; }}
-                          onMouseLeave={(e) => { (e.currentTarget as HTMLTableRowElement).style.background = 'transparent'; }}
-                        >
-                          <td className="px-4 py-3.5">
-                            <span className="font-mono text-xs font-bold px-2 py-0.5 rounded inline-block whitespace-nowrap" style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}>
-                              {report.reportNumber || '—'}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3.5">
-                            <span className="font-mono text-xs" style={{ color: 'var(--muted-foreground)' }}>{report.purchaseOrder?.poNumber || '—'}</span>
-                          </td>
-                          <td className="px-4 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{report.rawMaterialName}</td>
-                          <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{report.supplier}</td>
-                          <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{formatDate(report.createdAt)}</td>
-                          <td className="px-4 py-3.5">
-                            <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--secondary) 12%, transparent)', color: 'var(--secondary)' }}>
-                              {report.parameters?.length || 0}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3.5">
-                            {hasGRN ? (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold" style={{ background: 'color-mix(in srgb, #22c55e 12%, transparent)', color: '#16a34a', border: '1px solid color-mix(in srgb, #22c55e 20%, transparent)' }}>
-                                <Check size={12} />
-                                {report.grn_entry?.grnNumber}
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full table-auto">
+                    <thead>
+                      <tr style={{ background: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
+                        {['Report No.', 'PO Number', 'Raw Material', 'Supplier', 'Date', 'Params', 'GRN Status', 'Actions'].map((h, i) => (
+                          <th key={h} className={`px-4 py-3 text-xs font-bold uppercase tracking-wider ${i === 7 ? 'text-right' : 'text-left'}`} style={{ color: 'var(--muted-foreground)' }}>
+                            {h}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {paginatedReports.map((report, index) => {
+                        const hasGRN = !!report.grn_entry;
+                        const isGenerating = generatingId === report.id;
+                        return (
+                          <motion.tr
+                            key={report.id}
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.03 }}
+                            className="group transition-colors duration-150"
+                            style={{ borderBottom: '1px solid color-mix(in srgb, var(--border) 50%, transparent)' }}
+                            onMouseEnter={(e) => { (e.currentTarget as HTMLTableRowElement).style.background = 'var(--muted)'; }}
+                            onMouseLeave={(e) => { (e.currentTarget as HTMLTableRowElement).style.background = 'transparent'; }}
+                          >
+                            <td className="px-4 py-3.5">
+                              <span className="font-mono text-xs font-bold px-2 py-0.5 rounded inline-block whitespace-nowrap" style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}>
+                                {report.reportNumber || '-'}
                               </span>
-                            ) : (
-                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium" style={{ background: 'color-mix(in srgb, var(--primary) 8%, transparent)', color: 'var(--primary)', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
-                                <Clock size={12} />
-                                Pending
+                            </td>
+                            <td className="px-4 py-3.5">
+                              <span className="font-mono text-xs" style={{ color: 'var(--muted-foreground)' }}>{report.purchaseOrder?.poNumber || '-'}</span>
+                            </td>
+                            <td className="px-4 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{report.rawMaterialName}</td>
+                            <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{report.supplier}</td>
+                            <td className="px-4 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{formatDate(report.createdAt)}</td>
+                            <td className="px-4 py-3.5">
+                              <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--secondary) 12%, transparent)', color: 'var(--secondary)' }}>
+                                {report.parameters?.length || 0}
                               </span>
-                            )}
-                          </td>
-                          <td className="px-4 py-3.5 text-right">
-                            <div className="inline-flex items-center gap-2">
-                              <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => setViewReport(report)}
-                                className="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200"
-                                style={{ color: 'var(--muted-foreground)' }}
-                                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'color-mix(in srgb, var(--secondary) 10%, transparent)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--secondary)'; }}
-                                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--muted-foreground)'; }}
-                                title="View details"
-                              >
-                                <Eye size={16} />
-                              </motion.button>
-                              {hasGRN && (
+                            </td>
+                            <td className="px-4 py-3.5">
+                              {hasGRN ? (
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold" style={{ background: 'color-mix(in srgb, #22c55e 12%, transparent)', color: '#16a34a', border: '1px solid color-mix(in srgb, #22c55e 20%, transparent)' }}>
+                                  <Check size={12} />
+                                  {report.grn_entry?.grnNumber}
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium" style={{ background: 'color-mix(in srgb, var(--primary) 8%, transparent)', color: 'var(--primary)', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
+                                  <Clock size={12} />
+                                  Pending
+                                </span>
+                              )}
+                            </td>
+                            <td className="px-4 py-3.5 text-right">
+                              <div className="inline-flex items-center gap-2">
                                 <motion.button
                                   whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
-                                  onClick={() => handleDownloadGRNPdf(report)}
+                                  onClick={() => setViewReport(report)}
                                   className="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200"
                                   style={{ color: 'var(--muted-foreground)' }}
-                                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'color-mix(in srgb, var(--primary) 10%, transparent)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--primary)'; }}
+                                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'color-mix(in srgb, var(--secondary) 10%, transparent)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--secondary)'; }}
                                   onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--muted-foreground)'; }}
-                                  title="Download GRN PDF"
+                                  title="View details"
                                 >
-                                  <Download size={16} />
+                                  <Eye size={16} />
                                 </motion.button>
-                              )}
-                              {!hasGRN && (
-                                <motion.button
-                                  whileHover={{ scale: 1.04 }}
-                                  whileTap={{ scale: 0.97 }}
-                                  onClick={() => openGRNForm(report)}
-                                  disabled={isGenerating}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm transition-all duration-200 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-                                  style={{
-                                    background: isGenerating ? 'var(--muted)' : 'linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 80%, var(--secondary)))',
-                                    color: isGenerating ? 'var(--muted-foreground)' : 'var(--primary-foreground)',
-                                  }}
-                                >
-                                  {isGenerating ? (
-                                    <><span className="inline-block w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Generating...</>
-                                  ) : (
-                                    <><Hash size={12} /> Generate GRN</>
-                                  )}
-                                </motion.button>
-                              )}
-                            </div>
-                          </td>
-                        </motion.tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                                {hasGRN && (
+                                  <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => handleDownloadGRNPdf(report)}
+                                    className="inline-flex items-center justify-center w-8 h-8 rounded-lg transition-colors duration-200"
+                                    style={{ color: 'var(--muted-foreground)' }}
+                                    onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'color-mix(in srgb, var(--primary) 10%, transparent)'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--primary)'; }}
+                                    onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = 'var(--muted-foreground)'; }}
+                                    title="Download GRN PDF"
+                                  >
+                                    <Download size={16} />
+                                  </motion.button>
+                                )}
+                                {!hasGRN && (
+                                  <motion.button
+                                    whileHover={{ scale: 1.04 }}
+                                    whileTap={{ scale: 0.97 }}
+                                    onClick={() => openGRNForm(report)}
+                                    disabled={isGenerating}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm transition-all duration-200 hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                                    style={{
+                                      background: isGenerating ? 'var(--muted)' : 'linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 80%, var(--secondary)))',
+                                      color: isGenerating ? 'var(--muted-foreground)' : 'var(--primary-foreground)',
+                                    }}
+                                  >
+                                    {isGenerating ? (
+                                      <><span className="inline-block w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Generating...</>
+                                    ) : (
+                                      <><Hash size={12} /> Generate GRN</>
+                                    )}
+                                  </motion.button>
+                                )}
+                              </div>
+                            </td>
+                          </motion.tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Pagination Controls */}
+                {filteredReports.length > ITEMS_PER_PAGE && (
+                  <div
+                    className="flex items-center justify-between px-5 py-3"
+                    style={{ borderTop: '1px solid var(--border)' }}
+                  >
+                    <span className="text-xs font-medium" style={{ color: 'var(--muted-foreground)' }}>
+                      Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(currentPage * ITEMS_PER_PAGE, filteredReports.length)} of {filteredReports.length} entries
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-sm font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                        style={{ background: 'var(--muted)', color: 'var(--muted-foreground)', border: '1px solid var(--border)' }}
+                      >
+                        <ChevronLeft size={15} />
+                      </motion.button>
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <motion.button
+                          key={page}
+                          whileHover={{ scale: 1.08 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setCurrentPage(page)}
+                          className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs font-bold transition-all duration-200"
+                          style={{
+                            background: page === currentPage
+                              ? 'linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 80%, var(--secondary)))'
+                              : 'var(--muted)',
+                            color: page === currentPage ? 'var(--primary-foreground)' : 'var(--muted-foreground)',
+                            border: page === currentPage ? 'none' : '1px solid var(--border)',
+                            boxShadow: page === currentPage ? '0 2px 8px color-mix(in srgb, var(--primary) 30%, transparent)' : 'none',
+                          }}
+                        >
+                          {page}
+                        </motion.button>
+                      ))}
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                        className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-sm font-medium transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+                        style={{ background: 'var(--muted)', color: 'var(--muted-foreground)', border: '1px solid var(--border)' }}
+                      >
+                        <ChevronRight size={15} />
+                      </motion.button>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </motion.div>
@@ -569,14 +635,14 @@ const GenerateGRN: React.FC = () => {
                   </div>
                   <div className="grid grid-cols-2 gap-2.5">
                     {[
-                      { icon: ShoppingCart, label: 'PO Number', value: grnFormReport.purchaseOrder?.poNumber || '—' },
+                      { icon: ShoppingCart, label: 'PO Number', value: grnFormReport.purchaseOrder?.poNumber || '-' },
                       { icon: Building, label: 'Supplier', value: grnFormReport.supplier },
                       { icon: Package, label: 'Raw Material', value: grnFormReport.rawMaterialName },
-                      { icon: Hash, label: 'Material Code', value: grnFormReport.purchaseOrderItem?.rawMaterial?.skuCode || '—' },
-                      { icon: ClipboardList, label: 'UOM', value: grnFormReport.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '—' },
+                      { icon: Hash, label: 'Material Code', value: grnFormReport.purchaseOrderItem?.rawMaterial?.skuCode || '-' },
+                      { icon: ClipboardList, label: 'UOM', value: grnFormReport.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '-' },
                       { icon: Calendar, label: 'Date', value: grnFormReport.createdAt ? format(new Date(grnFormReport.createdAt), 'dd MMM yyyy') : 'N/A' },
-                      { icon: Package, label: 'Qty Ordered', value: grnFormReport.purchaseOrderItem?.quantityOrdered ?? '—' },
-                      { icon: Check, label: 'Qty Received', value: grnFormReport.purchaseOrderItem?.totalReceived ?? grnFormReport.purchaseOrderItem?.quantityReceived ?? '—' },
+                      { icon: Package, label: 'Qty Ordered', value: grnFormReport.purchaseOrderItem?.quantityOrdered ?? '-' },
+                      { icon: Check, label: 'Qty Received', value: grnFormReport.purchaseOrderItem?.totalReceived ?? grnFormReport.purchaseOrderItem?.quantityReceived ?? '-' },
                     ].map(({ icon: Icon, label, value }) => (
                       <div key={label} className="flex items-center gap-2.5 p-2.5 rounded-xl" style={{ background: 'var(--muted)' }}>
                         <Icon size={13} style={{ color: 'var(--primary)' }} />
@@ -704,7 +770,7 @@ const GenerateGRN: React.FC = () => {
                   <div>
                     <h3 className="text-lg font-bold" style={{ color: 'var(--foreground)' }}>Report Details</h3>
                     <p className="text-xs mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
-                      <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>{viewReport.reportNumber || '—'}</span>
+                      <span className="font-mono font-semibold" style={{ color: 'var(--primary)' }}>{viewReport.reportNumber || '-'}</span>
                       {viewReport.grn_entry && (
                         <span className="ml-2 font-mono" style={{ color: '#16a34a' }}>GRN: {viewReport.grn_entry.grnNumber}</span>
                       )}
@@ -733,8 +799,8 @@ const GenerateGRN: React.FC = () => {
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {[
-                      { icon: Hash, label: 'Report No.', value: viewReport.reportNumber || '—' },
-                      { icon: ShoppingCart, label: 'PO Number', value: viewReport.purchaseOrder?.poNumber || '—' },
+                      { icon: Hash, label: 'Report No.', value: viewReport.reportNumber || '-' },
+                      { icon: ShoppingCart, label: 'PO Number', value: viewReport.purchaseOrder?.poNumber || '-' },
                       { icon: Package, label: 'Raw Material', value: viewReport.rawMaterialName },
                       { icon: Building, label: 'Supplier', value: viewReport.supplier },
                       { icon: Calendar, label: 'Date', value: viewReport.createdAt ? format(new Date(viewReport.createdAt), 'dd MMM yyyy') : 'N/A' },
@@ -777,11 +843,11 @@ const GenerateGRN: React.FC = () => {
                       </thead>
                       <tbody>
                         <tr>
-                          <td className="px-3 py-3 text-xs font-mono font-semibold" style={{ color: 'var(--primary)' }}>{viewReport.purchaseOrderItem?.rawMaterial?.skuCode || '—'}</td>
+                          <td className="px-3 py-3 text-xs font-mono font-semibold" style={{ color: 'var(--primary)' }}>{viewReport.purchaseOrderItem?.rawMaterial?.skuCode || '-'}</td>
                           <td className="px-3 py-3 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{viewReport.rawMaterialName}</td>
-                          <td className="px-3 py-3 text-sm" style={{ color: 'var(--muted-foreground)' }}>{viewReport.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '—'}</td>
-                          <td className="px-3 py-3 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{viewReport.purchaseOrderItem?.quantityOrdered ?? '—'}</td>
-                          <td className="px-3 py-3 text-sm font-semibold" style={{ color: 'var(--primary)' }}>{viewReport.purchaseOrderItem?.totalReceived ?? '—'}</td>
+                          <td className="px-3 py-3 text-sm" style={{ color: 'var(--muted-foreground)' }}>{viewReport.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '-'}</td>
+                          <td className="px-3 py-3 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{viewReport.purchaseOrderItem?.quantityOrdered ?? '-'}</td>
+                          <td className="px-3 py-3 text-sm font-semibold" style={{ color: 'var(--primary)' }}>{viewReport.purchaseOrderItem?.totalReceived ?? '-'}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -797,10 +863,10 @@ const GenerateGRN: React.FC = () => {
                     </div>
                     <div className="grid grid-cols-2 gap-2.5">
                       {[
-                        { icon: Truck, label: 'Truck Number', value: viewReport.grn_entry.truckNumber || '—' },
-                        { icon: MapPin, label: 'Delivery Location', value: viewReport.grn_entry.deliveryLocation || '—' },
-                        { icon: Building, label: 'Cost Center', value: viewReport.grn_entry.costCenter || '—' },
-                        { icon: Boxes, label: 'Received Bags/Packs', value: viewReport.grn_entry.receivedBagsPacks || '—' },
+                        { icon: Truck, label: 'Truck Number', value: viewReport.grn_entry.truckNumber || '-' },
+                        { icon: MapPin, label: 'Delivery Location', value: viewReport.grn_entry.deliveryLocation || '-' },
+                        { icon: Building, label: 'Cost Center', value: viewReport.grn_entry.costCenter || '-' },
+                        { icon: Boxes, label: 'Received Bags/Packs', value: viewReport.grn_entry.receivedBagsPacks || '-' },
                       ].map(({ icon: Icon, label, value }) => (
                         <div key={label} className="flex items-center gap-2.5 p-2.5 rounded-xl" style={{ background: 'var(--muted)' }}>
                           <Icon size={13} style={{ color: 'var(--primary)' }} />

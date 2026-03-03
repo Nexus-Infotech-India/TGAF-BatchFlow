@@ -725,9 +725,10 @@ exports.Prisma.CleaningJobScalarFieldEnum = {
   startedAt: 'startedAt',
   finishedAt: 'finishedAt',
   grnId: 'grnId',
-  leftoverQuantity: 'leftoverQuantity',
-  reasonCode: 'reasonCode',
-  isReusable: 'isReusable'
+  stoneWastageQty: 'stoneWastageQty',
+  stoneWastageUnit: 'stoneWastageUnit',
+  seedWastageQty: 'seedWastageQty',
+  seedWastageUnit: 'seedWastageUnit'
 };
 
 exports.Prisma.CleaningLogScalarFieldEnum = {
@@ -869,9 +870,10 @@ exports.Prisma.CleaningLotScalarFieldEnum = {
   warehouseId: 'warehouseId',
   quantity: 'quantity',
   status: 'status',
-  leftoverQuantity: 'leftoverQuantity',
-  reasonCode: 'reasonCode',
-  isReusable: 'isReusable',
+  stoneWastageQty: 'stoneWastageQty',
+  stoneWastageUnit: 'stoneWastageUnit',
+  seedWastageQty: 'seedWastageQty',
+  seedWastageUnit: 'seedWastageUnit',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

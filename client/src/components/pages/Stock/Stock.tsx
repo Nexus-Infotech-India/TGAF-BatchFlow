@@ -207,7 +207,7 @@ const Stock: React.FC = () => {
                             </span>
                           ) : (
                             <span style={{ color: 'var(--muted-foreground)' }}>
-                              —
+                              -
                             </span>
                           )}
                         </td>

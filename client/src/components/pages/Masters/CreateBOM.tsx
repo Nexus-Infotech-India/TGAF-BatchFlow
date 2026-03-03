@@ -511,7 +511,7 @@ const CreateBOMPage: React.FC = () => {
                                 {/* Detail grid */}
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                     {[
-                                        { label: 'Product Code', value: viewBOM.productCode || '—' },
+                                        { label: 'Product Code', value: viewBOM.productCode || '-' },
                                         { label: 'Unit', value: viewBOM.unitOfMeasurement },
                                         { label: 'Output Qty', value: viewBOM.outputQuantity },
                                         { label: 'Status', value: viewBOM.status },
@@ -546,16 +546,16 @@ const CreateBOMPage: React.FC = () => {
                                             {viewBOM.items.map((item, idx) => (
                                                 <tr key={item.id || idx} style={{ borderBottom: idx < viewBOM.items.length - 1 ? '1px solid color-mix(in srgb, var(--border) 50%, transparent)' : undefined }}>
                                                     <td className="px-4 py-2.5 text-xs font-semibold" style={{ color: 'var(--muted-foreground)' }}>{idx + 1}</td>
-                                                    <td className="px-4 py-2.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{item.rawMaterial?.name || '—'}</td>
+                                                    <td className="px-4 py-2.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{item.rawMaterial?.name || '-'}</td>
                                                     <td className="px-4 py-2.5">
                                                         <span className="inline-block px-2 py-0.5 text-xs font-mono font-semibold rounded-md"
                                                             style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}>
-                                                            {item.rawMaterial?.skuCode || '—'}
+                                                            {item.rawMaterial?.skuCode || '-'}
                                                         </span>
                                                     </td>
                                                     <td className="px-4 py-2.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{item.quantity}</td>
                                                     <td className="px-4 py-2.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{item.unitOfMeasurement}</td>
-                                                    <td className="px-4 py-2.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{item.notes || '—'}</td>
+                                                    <td className="px-4 py-2.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{item.notes || '-'}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -646,7 +646,7 @@ const CreateBOMPage: React.FC = () => {
                                                     </span>
                                                 </td>
                                                 <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{bom.productName}</td>
-                                                <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{bom.productCode || '—'}</td>
+                                                <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{bom.productCode || '-'}</td>
                                                 <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{bom.unitOfMeasurement}</td>
                                                 <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{bom.outputQuantity}</td>
                                                 <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>

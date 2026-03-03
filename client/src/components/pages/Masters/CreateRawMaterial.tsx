@@ -547,10 +547,10 @@ const CreateRawMaterialPage: React.FC = () => {
                         </span>
                       </td>
                       <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{m.name}</td>
-                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.category || '—'}</td>
-                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.variety || '—'}</td>
-                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.unitOfMeasurement || '—'}</td>
-                      <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{m.minReorderLevel ?? '—'}</td>
+                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.category || '-'}</td>
+                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.variety || '-'}</td>
+                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.unitOfMeasurement || '-'}</td>
+                      <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{m.minReorderLevel ?? '-'}</td>
                       <td className="px-5 py-3.5">
                         <div className="flex items-center gap-1.5">
                           <button

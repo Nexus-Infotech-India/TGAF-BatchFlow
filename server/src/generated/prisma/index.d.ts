@@ -68472,12 +68472,14 @@ export namespace Prisma {
 
   export type CleaningJobAvgAggregateOutputType = {
     quantity: number | null
-    leftoverQuantity: number | null
+    stoneWastageQty: number | null
+    seedWastageQty: number | null
   }
 
   export type CleaningJobSumAggregateOutputType = {
     quantity: number | null
-    leftoverQuantity: number | null
+    stoneWastageQty: number | null
+    seedWastageQty: number | null
   }
 
   export type CleaningJobMinAggregateOutputType = {
@@ -68490,9 +68492,10 @@ export namespace Prisma {
     startedAt: Date | null
     finishedAt: Date | null
     grnId: string | null
-    leftoverQuantity: number | null
-    reasonCode: string | null
-    isReusable: boolean | null
+    stoneWastageQty: number | null
+    stoneWastageUnit: string | null
+    seedWastageQty: number | null
+    seedWastageUnit: string | null
   }
 
   export type CleaningJobMaxAggregateOutputType = {
@@ -68505,9 +68508,10 @@ export namespace Prisma {
     startedAt: Date | null
     finishedAt: Date | null
     grnId: string | null
-    leftoverQuantity: number | null
-    reasonCode: string | null
-    isReusable: boolean | null
+    stoneWastageQty: number | null
+    stoneWastageUnit: string | null
+    seedWastageQty: number | null
+    seedWastageUnit: string | null
   }
 
   export type CleaningJobCountAggregateOutputType = {
@@ -68520,21 +68524,24 @@ export namespace Prisma {
     startedAt: number
     finishedAt: number
     grnId: number
-    leftoverQuantity: number
-    reasonCode: number
-    isReusable: number
+    stoneWastageQty: number
+    stoneWastageUnit: number
+    seedWastageQty: number
+    seedWastageUnit: number
     _all: number
   }
 
 
   export type CleaningJobAvgAggregateInputType = {
     quantity?: true
-    leftoverQuantity?: true
+    stoneWastageQty?: true
+    seedWastageQty?: true
   }
 
   export type CleaningJobSumAggregateInputType = {
     quantity?: true
-    leftoverQuantity?: true
+    stoneWastageQty?: true
+    seedWastageQty?: true
   }
 
   export type CleaningJobMinAggregateInputType = {
@@ -68547,9 +68554,10 @@ export namespace Prisma {
     startedAt?: true
     finishedAt?: true
     grnId?: true
-    leftoverQuantity?: true
-    reasonCode?: true
-    isReusable?: true
+    stoneWastageQty?: true
+    stoneWastageUnit?: true
+    seedWastageQty?: true
+    seedWastageUnit?: true
   }
 
   export type CleaningJobMaxAggregateInputType = {
@@ -68562,9 +68570,10 @@ export namespace Prisma {
     startedAt?: true
     finishedAt?: true
     grnId?: true
-    leftoverQuantity?: true
-    reasonCode?: true
-    isReusable?: true
+    stoneWastageQty?: true
+    stoneWastageUnit?: true
+    seedWastageQty?: true
+    seedWastageUnit?: true
   }
 
   export type CleaningJobCountAggregateInputType = {
@@ -68577,9 +68586,10 @@ export namespace Prisma {
     startedAt?: true
     finishedAt?: true
     grnId?: true
-    leftoverQuantity?: true
-    reasonCode?: true
-    isReusable?: true
+    stoneWastageQty?: true
+    stoneWastageUnit?: true
+    seedWastageQty?: true
+    seedWastageUnit?: true
     _all?: true
   }
 
@@ -68679,9 +68689,10 @@ export namespace Prisma {
     startedAt: Date
     finishedAt: Date | null
     grnId: string | null
-    leftoverQuantity: number | null
-    reasonCode: string | null
-    isReusable: boolean
+    stoneWastageQty: number | null
+    stoneWastageUnit: string | null
+    seedWastageQty: number | null
+    seedWastageUnit: string | null
     _count: CleaningJobCountAggregateOutputType | null
     _avg: CleaningJobAvgAggregateOutputType | null
     _sum: CleaningJobSumAggregateOutputType | null
@@ -68713,9 +68724,10 @@ export namespace Prisma {
     startedAt?: boolean
     finishedAt?: boolean
     grnId?: boolean
-    leftoverQuantity?: boolean
-    reasonCode?: boolean
-    isReusable?: boolean
+    stoneWastageQty?: boolean
+    stoneWastageUnit?: boolean
+    seedWastageQty?: boolean
+    seedWastageUnit?: boolean
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
@@ -68735,9 +68747,10 @@ export namespace Prisma {
     startedAt?: boolean
     finishedAt?: boolean
     grnId?: boolean
-    leftoverQuantity?: boolean
-    reasonCode?: boolean
-    isReusable?: boolean
+    stoneWastageQty?: boolean
+    stoneWastageUnit?: boolean
+    seedWastageQty?: boolean
+    seedWastageUnit?: boolean
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
@@ -68754,9 +68767,10 @@ export namespace Prisma {
     startedAt?: boolean
     finishedAt?: boolean
     grnId?: boolean
-    leftoverQuantity?: boolean
-    reasonCode?: boolean
-    isReusable?: boolean
+    stoneWastageQty?: boolean
+    stoneWastageUnit?: boolean
+    seedWastageQty?: boolean
+    seedWastageUnit?: boolean
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
@@ -68773,12 +68787,13 @@ export namespace Prisma {
     startedAt?: boolean
     finishedAt?: boolean
     grnId?: boolean
-    leftoverQuantity?: boolean
-    reasonCode?: boolean
-    isReusable?: boolean
+    stoneWastageQty?: boolean
+    stoneWastageUnit?: boolean
+    seedWastageQty?: boolean
+    seedWastageUnit?: boolean
   }
 
-  export type CleaningJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rawMaterialId" | "fromWarehouseId" | "toWarehouseId" | "quantity" | "status" | "startedAt" | "finishedAt" | "grnId" | "leftoverQuantity" | "reasonCode" | "isReusable", ExtArgs["result"]["cleaningJob"]>
+  export type CleaningJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rawMaterialId" | "fromWarehouseId" | "toWarehouseId" | "quantity" | "status" | "startedAt" | "finishedAt" | "grnId" | "stoneWastageQty" | "stoneWastageUnit" | "seedWastageQty" | "seedWastageUnit", ExtArgs["result"]["cleaningJob"]>
   export type CleaningJobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
@@ -68821,9 +68836,10 @@ export namespace Prisma {
       startedAt: Date
       finishedAt: Date | null
       grnId: string | null
-      leftoverQuantity: number | null
-      reasonCode: string | null
-      isReusable: boolean
+      stoneWastageQty: number | null
+      stoneWastageUnit: string | null
+      seedWastageQty: number | null
+      seedWastageUnit: string | null
     }, ExtArgs["result"]["cleaningJob"]>
     composites: {}
   }
@@ -69262,9 +69278,10 @@ export namespace Prisma {
     readonly startedAt: FieldRef<"CleaningJob", 'DateTime'>
     readonly finishedAt: FieldRef<"CleaningJob", 'DateTime'>
     readonly grnId: FieldRef<"CleaningJob", 'String'>
-    readonly leftoverQuantity: FieldRef<"CleaningJob", 'Float'>
-    readonly reasonCode: FieldRef<"CleaningJob", 'String'>
-    readonly isReusable: FieldRef<"CleaningJob", 'Boolean'>
+    readonly stoneWastageQty: FieldRef<"CleaningJob", 'Float'>
+    readonly stoneWastageUnit: FieldRef<"CleaningJob", 'String'>
+    readonly seedWastageQty: FieldRef<"CleaningJob", 'Float'>
+    readonly seedWastageUnit: FieldRef<"CleaningJob", 'String'>
   }
     
 
@@ -82508,12 +82525,14 @@ export namespace Prisma {
 
   export type CleaningLotAvgAggregateOutputType = {
     quantity: number | null
-    leftoverQuantity: number | null
+    stoneWastageQty: number | null
+    seedWastageQty: number | null
   }
 
   export type CleaningLotSumAggregateOutputType = {
     quantity: number | null
-    leftoverQuantity: number | null
+    stoneWastageQty: number | null
+    seedWastageQty: number | null
   }
 
   export type CleaningLotMinAggregateOutputType = {
@@ -82525,9 +82544,10 @@ export namespace Prisma {
     warehouseId: string | null
     quantity: number | null
     status: string | null
-    leftoverQuantity: number | null
-    reasonCode: string | null
-    isReusable: boolean | null
+    stoneWastageQty: number | null
+    stoneWastageUnit: string | null
+    seedWastageQty: number | null
+    seedWastageUnit: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -82541,9 +82561,10 @@ export namespace Prisma {
     warehouseId: string | null
     quantity: number | null
     status: string | null
-    leftoverQuantity: number | null
-    reasonCode: string | null
-    isReusable: boolean | null
+    stoneWastageQty: number | null
+    stoneWastageUnit: string | null
+    seedWastageQty: number | null
+    seedWastageUnit: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -82557,9 +82578,10 @@ export namespace Prisma {
     warehouseId: number
     quantity: number
     status: number
-    leftoverQuantity: number
-    reasonCode: number
-    isReusable: number
+    stoneWastageQty: number
+    stoneWastageUnit: number
+    seedWastageQty: number
+    seedWastageUnit: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -82568,12 +82590,14 @@ export namespace Prisma {
 
   export type CleaningLotAvgAggregateInputType = {
     quantity?: true
-    leftoverQuantity?: true
+    stoneWastageQty?: true
+    seedWastageQty?: true
   }
 
   export type CleaningLotSumAggregateInputType = {
     quantity?: true
-    leftoverQuantity?: true
+    stoneWastageQty?: true
+    seedWastageQty?: true
   }
 
   export type CleaningLotMinAggregateInputType = {
@@ -82585,9 +82609,10 @@ export namespace Prisma {
     warehouseId?: true
     quantity?: true
     status?: true
-    leftoverQuantity?: true
-    reasonCode?: true
-    isReusable?: true
+    stoneWastageQty?: true
+    stoneWastageUnit?: true
+    seedWastageQty?: true
+    seedWastageUnit?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -82601,9 +82626,10 @@ export namespace Prisma {
     warehouseId?: true
     quantity?: true
     status?: true
-    leftoverQuantity?: true
-    reasonCode?: true
-    isReusable?: true
+    stoneWastageQty?: true
+    stoneWastageUnit?: true
+    seedWastageQty?: true
+    seedWastageUnit?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -82617,9 +82643,10 @@ export namespace Prisma {
     warehouseId?: true
     quantity?: true
     status?: true
-    leftoverQuantity?: true
-    reasonCode?: true
-    isReusable?: true
+    stoneWastageQty?: true
+    stoneWastageUnit?: true
+    seedWastageQty?: true
+    seedWastageUnit?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -82720,9 +82747,10 @@ export namespace Prisma {
     warehouseId: string
     quantity: number
     status: string
-    leftoverQuantity: number | null
-    reasonCode: string | null
-    isReusable: boolean
+    stoneWastageQty: number | null
+    stoneWastageUnit: string | null
+    seedWastageQty: number | null
+    seedWastageUnit: string | null
     createdAt: Date
     updatedAt: Date
     _count: CleaningLotCountAggregateOutputType | null
@@ -82755,9 +82783,10 @@ export namespace Prisma {
     warehouseId?: boolean
     quantity?: boolean
     status?: boolean
-    leftoverQuantity?: boolean
-    reasonCode?: boolean
-    isReusable?: boolean
+    stoneWastageQty?: boolean
+    stoneWastageUnit?: boolean
+    seedWastageQty?: boolean
+    seedWastageUnit?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
@@ -82776,9 +82805,10 @@ export namespace Prisma {
     warehouseId?: boolean
     quantity?: boolean
     status?: boolean
-    leftoverQuantity?: boolean
-    reasonCode?: boolean
-    isReusable?: boolean
+    stoneWastageQty?: boolean
+    stoneWastageUnit?: boolean
+    seedWastageQty?: boolean
+    seedWastageUnit?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
@@ -82796,9 +82826,10 @@ export namespace Prisma {
     warehouseId?: boolean
     quantity?: boolean
     status?: boolean
-    leftoverQuantity?: boolean
-    reasonCode?: boolean
-    isReusable?: boolean
+    stoneWastageQty?: boolean
+    stoneWastageUnit?: boolean
+    seedWastageQty?: boolean
+    seedWastageUnit?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
@@ -82816,14 +82847,15 @@ export namespace Prisma {
     warehouseId?: boolean
     quantity?: boolean
     status?: boolean
-    leftoverQuantity?: boolean
-    reasonCode?: boolean
-    isReusable?: boolean
+    stoneWastageQty?: boolean
+    stoneWastageUnit?: boolean
+    seedWastageQty?: boolean
+    seedWastageUnit?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CleaningLotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lotNumber" | "cleaningJobId" | "grnId" | "rawMaterialId" | "warehouseId" | "quantity" | "status" | "leftoverQuantity" | "reasonCode" | "isReusable" | "createdAt" | "updatedAt", ExtArgs["result"]["cleaningLot"]>
+  export type CleaningLotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lotNumber" | "cleaningJobId" | "grnId" | "rawMaterialId" | "warehouseId" | "quantity" | "status" | "stoneWastageQty" | "stoneWastageUnit" | "seedWastageQty" | "seedWastageUnit" | "createdAt" | "updatedAt", ExtArgs["result"]["cleaningLot"]>
   export type CleaningLotInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
     grn?: boolean | GRNbyPoDefaultArgs<ExtArgs>
@@ -82862,9 +82894,10 @@ export namespace Prisma {
       warehouseId: string
       quantity: number
       status: string
-      leftoverQuantity: number | null
-      reasonCode: string | null
-      isReusable: boolean
+      stoneWastageQty: number | null
+      stoneWastageUnit: string | null
+      seedWastageQty: number | null
+      seedWastageUnit: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["cleaningLot"]>
@@ -83303,9 +83336,10 @@ export namespace Prisma {
     readonly warehouseId: FieldRef<"CleaningLot", 'String'>
     readonly quantity: FieldRef<"CleaningLot", 'Float'>
     readonly status: FieldRef<"CleaningLot", 'String'>
-    readonly leftoverQuantity: FieldRef<"CleaningLot", 'Float'>
-    readonly reasonCode: FieldRef<"CleaningLot", 'String'>
-    readonly isReusable: FieldRef<"CleaningLot", 'Boolean'>
+    readonly stoneWastageQty: FieldRef<"CleaningLot", 'Float'>
+    readonly stoneWastageUnit: FieldRef<"CleaningLot", 'String'>
+    readonly seedWastageQty: FieldRef<"CleaningLot", 'Float'>
+    readonly seedWastageUnit: FieldRef<"CleaningLot", 'String'>
     readonly createdAt: FieldRef<"CleaningLot", 'DateTime'>
     readonly updatedAt: FieldRef<"CleaningLot", 'DateTime'>
   }
@@ -87917,9 +87951,10 @@ export namespace Prisma {
     startedAt: 'startedAt',
     finishedAt: 'finishedAt',
     grnId: 'grnId',
-    leftoverQuantity: 'leftoverQuantity',
-    reasonCode: 'reasonCode',
-    isReusable: 'isReusable'
+    stoneWastageQty: 'stoneWastageQty',
+    stoneWastageUnit: 'stoneWastageUnit',
+    seedWastageQty: 'seedWastageQty',
+    seedWastageUnit: 'seedWastageUnit'
   };
 
   export type CleaningJobScalarFieldEnum = (typeof CleaningJobScalarFieldEnum)[keyof typeof CleaningJobScalarFieldEnum]
@@ -88097,9 +88132,10 @@ export namespace Prisma {
     warehouseId: 'warehouseId',
     quantity: 'quantity',
     status: 'status',
-    leftoverQuantity: 'leftoverQuantity',
-    reasonCode: 'reasonCode',
-    isReusable: 'isReusable',
+    stoneWastageQty: 'stoneWastageQty',
+    stoneWastageUnit: 'stoneWastageUnit',
+    seedWastageQty: 'seedWastageQty',
+    seedWastageUnit: 'seedWastageUnit',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -92756,9 +92792,10 @@ export namespace Prisma {
     startedAt?: DateTimeFilter<"CleaningJob"> | Date | string
     finishedAt?: DateTimeNullableFilter<"CleaningJob"> | Date | string | null
     grnId?: StringNullableFilter<"CleaningJob"> | string | null
-    leftoverQuantity?: FloatNullableFilter<"CleaningJob"> | number | null
-    reasonCode?: StringNullableFilter<"CleaningJob"> | string | null
-    isReusable?: BoolFilter<"CleaningJob"> | boolean
+    stoneWastageQty?: FloatNullableFilter<"CleaningJob"> | number | null
+    stoneWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
+    seedWastageQty?: FloatNullableFilter<"CleaningJob"> | number | null
+    seedWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
     fromWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     toWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
@@ -92777,9 +92814,10 @@ export namespace Prisma {
     startedAt?: SortOrder
     finishedAt?: SortOrderInput | SortOrder
     grnId?: SortOrderInput | SortOrder
-    leftoverQuantity?: SortOrderInput | SortOrder
-    reasonCode?: SortOrderInput | SortOrder
-    isReusable?: SortOrder
+    stoneWastageQty?: SortOrderInput | SortOrder
+    stoneWastageUnit?: SortOrderInput | SortOrder
+    seedWastageQty?: SortOrderInput | SortOrder
+    seedWastageUnit?: SortOrderInput | SortOrder
     fromWarehouse?: WarehouseOrderByWithRelationInput
     rawMaterial?: RawMaterialProductOrderByWithRelationInput
     toWarehouse?: WarehouseOrderByWithRelationInput
@@ -92801,9 +92839,10 @@ export namespace Prisma {
     startedAt?: DateTimeFilter<"CleaningJob"> | Date | string
     finishedAt?: DateTimeNullableFilter<"CleaningJob"> | Date | string | null
     grnId?: StringNullableFilter<"CleaningJob"> | string | null
-    leftoverQuantity?: FloatNullableFilter<"CleaningJob"> | number | null
-    reasonCode?: StringNullableFilter<"CleaningJob"> | string | null
-    isReusable?: BoolFilter<"CleaningJob"> | boolean
+    stoneWastageQty?: FloatNullableFilter<"CleaningJob"> | number | null
+    stoneWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
+    seedWastageQty?: FloatNullableFilter<"CleaningJob"> | number | null
+    seedWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
     fromWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     toWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
@@ -92822,9 +92861,10 @@ export namespace Prisma {
     startedAt?: SortOrder
     finishedAt?: SortOrderInput | SortOrder
     grnId?: SortOrderInput | SortOrder
-    leftoverQuantity?: SortOrderInput | SortOrder
-    reasonCode?: SortOrderInput | SortOrder
-    isReusable?: SortOrder
+    stoneWastageQty?: SortOrderInput | SortOrder
+    stoneWastageUnit?: SortOrderInput | SortOrder
+    seedWastageQty?: SortOrderInput | SortOrder
+    seedWastageUnit?: SortOrderInput | SortOrder
     _count?: CleaningJobCountOrderByAggregateInput
     _avg?: CleaningJobAvgOrderByAggregateInput
     _max?: CleaningJobMaxOrderByAggregateInput
@@ -92845,9 +92885,10 @@ export namespace Prisma {
     startedAt?: DateTimeWithAggregatesFilter<"CleaningJob"> | Date | string
     finishedAt?: DateTimeNullableWithAggregatesFilter<"CleaningJob"> | Date | string | null
     grnId?: StringNullableWithAggregatesFilter<"CleaningJob"> | string | null
-    leftoverQuantity?: FloatNullableWithAggregatesFilter<"CleaningJob"> | number | null
-    reasonCode?: StringNullableWithAggregatesFilter<"CleaningJob"> | string | null
-    isReusable?: BoolWithAggregatesFilter<"CleaningJob"> | boolean
+    stoneWastageQty?: FloatNullableWithAggregatesFilter<"CleaningJob"> | number | null
+    stoneWastageUnit?: StringNullableWithAggregatesFilter<"CleaningJob"> | string | null
+    seedWastageQty?: FloatNullableWithAggregatesFilter<"CleaningJob"> | number | null
+    seedWastageUnit?: StringNullableWithAggregatesFilter<"CleaningJob"> | string | null
   }
 
   export type CleaningLogWhereInput = {
@@ -93740,9 +93781,10 @@ export namespace Prisma {
     warehouseId?: StringFilter<"CleaningLot"> | string
     quantity?: FloatFilter<"CleaningLot"> | number
     status?: StringFilter<"CleaningLot"> | string
-    leftoverQuantity?: FloatNullableFilter<"CleaningLot"> | number | null
-    reasonCode?: StringNullableFilter<"CleaningLot"> | string | null
-    isReusable?: BoolFilter<"CleaningLot"> | boolean
+    stoneWastageQty?: FloatNullableFilter<"CleaningLot"> | number | null
+    stoneWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
+    seedWastageQty?: FloatNullableFilter<"CleaningLot"> | number | null
+    seedWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
     createdAt?: DateTimeFilter<"CleaningLot"> | Date | string
     updatedAt?: DateTimeFilter<"CleaningLot"> | Date | string
     cleaningJob?: XOR<CleaningJobScalarRelationFilter, CleaningJobWhereInput>
@@ -93761,9 +93803,10 @@ export namespace Prisma {
     warehouseId?: SortOrder
     quantity?: SortOrder
     status?: SortOrder
-    leftoverQuantity?: SortOrderInput | SortOrder
-    reasonCode?: SortOrderInput | SortOrder
-    isReusable?: SortOrder
+    stoneWastageQty?: SortOrderInput | SortOrder
+    stoneWastageUnit?: SortOrderInput | SortOrder
+    seedWastageQty?: SortOrderInput | SortOrder
+    seedWastageUnit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     cleaningJob?: CleaningJobOrderByWithRelationInput
@@ -93785,9 +93828,10 @@ export namespace Prisma {
     warehouseId?: StringFilter<"CleaningLot"> | string
     quantity?: FloatFilter<"CleaningLot"> | number
     status?: StringFilter<"CleaningLot"> | string
-    leftoverQuantity?: FloatNullableFilter<"CleaningLot"> | number | null
-    reasonCode?: StringNullableFilter<"CleaningLot"> | string | null
-    isReusable?: BoolFilter<"CleaningLot"> | boolean
+    stoneWastageQty?: FloatNullableFilter<"CleaningLot"> | number | null
+    stoneWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
+    seedWastageQty?: FloatNullableFilter<"CleaningLot"> | number | null
+    seedWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
     createdAt?: DateTimeFilter<"CleaningLot"> | Date | string
     updatedAt?: DateTimeFilter<"CleaningLot"> | Date | string
     cleaningJob?: XOR<CleaningJobScalarRelationFilter, CleaningJobWhereInput>
@@ -93806,9 +93850,10 @@ export namespace Prisma {
     warehouseId?: SortOrder
     quantity?: SortOrder
     status?: SortOrder
-    leftoverQuantity?: SortOrderInput | SortOrder
-    reasonCode?: SortOrderInput | SortOrder
-    isReusable?: SortOrder
+    stoneWastageQty?: SortOrderInput | SortOrder
+    stoneWastageUnit?: SortOrderInput | SortOrder
+    seedWastageQty?: SortOrderInput | SortOrder
+    seedWastageUnit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CleaningLotCountOrderByAggregateInput
@@ -93830,9 +93875,10 @@ export namespace Prisma {
     warehouseId?: StringWithAggregatesFilter<"CleaningLot"> | string
     quantity?: FloatWithAggregatesFilter<"CleaningLot"> | number
     status?: StringWithAggregatesFilter<"CleaningLot"> | string
-    leftoverQuantity?: FloatNullableWithAggregatesFilter<"CleaningLot"> | number | null
-    reasonCode?: StringNullableWithAggregatesFilter<"CleaningLot"> | string | null
-    isReusable?: BoolWithAggregatesFilter<"CleaningLot"> | boolean
+    stoneWastageQty?: FloatNullableWithAggregatesFilter<"CleaningLot"> | number | null
+    stoneWastageUnit?: StringNullableWithAggregatesFilter<"CleaningLot"> | string | null
+    seedWastageQty?: FloatNullableWithAggregatesFilter<"CleaningLot"> | number | null
+    seedWastageUnit?: StringNullableWithAggregatesFilter<"CleaningLot"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CleaningLot"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CleaningLot"> | Date | string
   }
@@ -98612,9 +98658,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
@@ -98633,9 +98680,10 @@ export namespace Prisma {
     startedAt: Date | string
     finishedAt?: Date | string | null
     grnId?: string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
@@ -98646,9 +98694,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
@@ -98667,9 +98716,10 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     grnId?: NullableStringFieldUpdateOperationsInput | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
@@ -98684,9 +98734,10 @@ export namespace Prisma {
     startedAt: Date | string
     finishedAt?: Date | string | null
     grnId?: string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
   }
 
   export type CleaningJobUpdateManyMutationInput = {
@@ -98695,9 +98746,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningJobUncheckedUpdateManyInput = {
@@ -98710,9 +98762,10 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     grnId?: NullableStringFieldUpdateOperationsInput | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningLogCreateInput = {
@@ -99638,9 +99691,10 @@ export namespace Prisma {
     lotNumber: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
@@ -99659,9 +99713,10 @@ export namespace Prisma {
     warehouseId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLot?: ProcessingBatchLotUncheckedCreateNestedOneWithoutCleaningLotInput
@@ -99672,9 +99727,10 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -99693,9 +99749,10 @@ export namespace Prisma {
     warehouseId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLot?: ProcessingBatchLotUncheckedUpdateOneWithoutCleaningLotNestedInput
@@ -99710,9 +99767,10 @@ export namespace Prisma {
     warehouseId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -99722,9 +99780,10 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -99738,9 +99797,10 @@ export namespace Prisma {
     warehouseId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -103164,14 +103224,16 @@ export namespace Prisma {
     startedAt?: SortOrder
     finishedAt?: SortOrder
     grnId?: SortOrder
-    leftoverQuantity?: SortOrder
-    reasonCode?: SortOrder
-    isReusable?: SortOrder
+    stoneWastageQty?: SortOrder
+    stoneWastageUnit?: SortOrder
+    seedWastageQty?: SortOrder
+    seedWastageUnit?: SortOrder
   }
 
   export type CleaningJobAvgOrderByAggregateInput = {
     quantity?: SortOrder
-    leftoverQuantity?: SortOrder
+    stoneWastageQty?: SortOrder
+    seedWastageQty?: SortOrder
   }
 
   export type CleaningJobMaxOrderByAggregateInput = {
@@ -103184,9 +103246,10 @@ export namespace Prisma {
     startedAt?: SortOrder
     finishedAt?: SortOrder
     grnId?: SortOrder
-    leftoverQuantity?: SortOrder
-    reasonCode?: SortOrder
-    isReusable?: SortOrder
+    stoneWastageQty?: SortOrder
+    stoneWastageUnit?: SortOrder
+    seedWastageQty?: SortOrder
+    seedWastageUnit?: SortOrder
   }
 
   export type CleaningJobMinOrderByAggregateInput = {
@@ -103199,14 +103262,16 @@ export namespace Prisma {
     startedAt?: SortOrder
     finishedAt?: SortOrder
     grnId?: SortOrder
-    leftoverQuantity?: SortOrder
-    reasonCode?: SortOrder
-    isReusable?: SortOrder
+    stoneWastageQty?: SortOrder
+    stoneWastageUnit?: SortOrder
+    seedWastageQty?: SortOrder
+    seedWastageUnit?: SortOrder
   }
 
   export type CleaningJobSumOrderByAggregateInput = {
     quantity?: SortOrder
-    leftoverQuantity?: SortOrder
+    stoneWastageQty?: SortOrder
+    seedWastageQty?: SortOrder
   }
 
   export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -103745,16 +103810,18 @@ export namespace Prisma {
     warehouseId?: SortOrder
     quantity?: SortOrder
     status?: SortOrder
-    leftoverQuantity?: SortOrder
-    reasonCode?: SortOrder
-    isReusable?: SortOrder
+    stoneWastageQty?: SortOrder
+    stoneWastageUnit?: SortOrder
+    seedWastageQty?: SortOrder
+    seedWastageUnit?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type CleaningLotAvgOrderByAggregateInput = {
     quantity?: SortOrder
-    leftoverQuantity?: SortOrder
+    stoneWastageQty?: SortOrder
+    seedWastageQty?: SortOrder
   }
 
   export type CleaningLotMaxOrderByAggregateInput = {
@@ -103766,9 +103833,10 @@ export namespace Prisma {
     warehouseId?: SortOrder
     quantity?: SortOrder
     status?: SortOrder
-    leftoverQuantity?: SortOrder
-    reasonCode?: SortOrder
-    isReusable?: SortOrder
+    stoneWastageQty?: SortOrder
+    stoneWastageUnit?: SortOrder
+    seedWastageQty?: SortOrder
+    seedWastageUnit?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -103782,16 +103850,18 @@ export namespace Prisma {
     warehouseId?: SortOrder
     quantity?: SortOrder
     status?: SortOrder
-    leftoverQuantity?: SortOrder
-    reasonCode?: SortOrder
-    isReusable?: SortOrder
+    stoneWastageQty?: SortOrder
+    stoneWastageUnit?: SortOrder
+    seedWastageQty?: SortOrder
+    seedWastageUnit?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type CleaningLotSumOrderByAggregateInput = {
     quantity?: SortOrder
-    leftoverQuantity?: SortOrder
+    stoneWastageQty?: SortOrder
+    seedWastageQty?: SortOrder
   }
 
   export type CleaningLotScalarRelationFilter = {
@@ -127576,9 +127646,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
     grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
@@ -127595,9 +127666,10 @@ export namespace Prisma {
     startedAt: Date | string
     finishedAt?: Date | string | null
     grnId?: string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
@@ -127617,9 +127689,10 @@ export namespace Prisma {
     lotNumber: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
@@ -127636,9 +127709,10 @@ export namespace Prisma {
     warehouseId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLot?: ProcessingBatchLotUncheckedCreateNestedOneWithoutCleaningLotInput
@@ -127880,9 +127954,10 @@ export namespace Prisma {
     startedAt?: DateTimeFilter<"CleaningJob"> | Date | string
     finishedAt?: DateTimeNullableFilter<"CleaningJob"> | Date | string | null
     grnId?: StringNullableFilter<"CleaningJob"> | string | null
-    leftoverQuantity?: FloatNullableFilter<"CleaningJob"> | number | null
-    reasonCode?: StringNullableFilter<"CleaningJob"> | string | null
-    isReusable?: BoolFilter<"CleaningJob"> | boolean
+    stoneWastageQty?: FloatNullableFilter<"CleaningJob"> | number | null
+    stoneWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
+    seedWastageQty?: FloatNullableFilter<"CleaningJob"> | number | null
+    seedWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
   }
 
   export type CleaningLotUpsertWithWhereUniqueWithoutRawMaterialInput = {
@@ -127913,9 +127988,10 @@ export namespace Prisma {
     warehouseId?: StringFilter<"CleaningLot"> | string
     quantity?: FloatFilter<"CleaningLot"> | number
     status?: StringFilter<"CleaningLot"> | string
-    leftoverQuantity?: FloatNullableFilter<"CleaningLot"> | number | null
-    reasonCode?: StringNullableFilter<"CleaningLot"> | string | null
-    isReusable?: BoolFilter<"CleaningLot"> | boolean
+    stoneWastageQty?: FloatNullableFilter<"CleaningLot"> | number | null
+    stoneWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
+    seedWastageQty?: FloatNullableFilter<"CleaningLot"> | number | null
+    seedWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
     createdAt?: DateTimeFilter<"CleaningLot"> | Date | string
     updatedAt?: DateTimeFilter<"CleaningLot"> | Date | string
   }
@@ -129077,9 +129153,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
     grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
@@ -129096,9 +129173,10 @@ export namespace Prisma {
     startedAt: Date | string
     finishedAt?: Date | string | null
     grnId?: string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
@@ -129119,9 +129197,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
@@ -129138,9 +129217,10 @@ export namespace Prisma {
     startedAt: Date | string
     finishedAt?: Date | string | null
     grnId?: string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
@@ -129224,9 +129304,10 @@ export namespace Prisma {
     lotNumber: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
@@ -129243,9 +129324,10 @@ export namespace Prisma {
     rawMaterialId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLot?: ProcessingBatchLotUncheckedCreateNestedOneWithoutCleaningLotInput
@@ -129974,9 +130056,10 @@ export namespace Prisma {
     lotNumber: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     grn: GRNbyPoCreateNestedOneWithoutCleaningLotsInput
@@ -129993,9 +130076,10 @@ export namespace Prisma {
     warehouseId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLot?: ProcessingBatchLotUncheckedCreateNestedOneWithoutCleaningLotInput
@@ -130251,9 +130335,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
@@ -130271,9 +130356,10 @@ export namespace Prisma {
     startedAt: Date | string
     finishedAt?: Date | string | null
     grnId?: string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
 
@@ -130389,9 +130475,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
@@ -130409,9 +130496,10 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     grnId?: NullableStringFieldUpdateOperationsInput | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
 
@@ -132359,9 +132447,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
@@ -132378,9 +132467,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
@@ -132400,9 +132490,10 @@ export namespace Prisma {
     lotNumber: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
@@ -132419,9 +132510,10 @@ export namespace Prisma {
     warehouseId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLot?: ProcessingBatchLotUncheckedCreateNestedOneWithoutCleaningLotInput
@@ -132683,9 +132775,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
@@ -132703,9 +132796,10 @@ export namespace Prisma {
     startedAt: Date | string
     finishedAt?: Date | string | null
     grnId?: string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
   }
 
@@ -132883,9 +132977,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
@@ -132903,9 +132998,10 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     grnId?: NullableStringFieldUpdateOperationsInput | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
 
@@ -133121,9 +133217,10 @@ export namespace Prisma {
     lotNumber: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
@@ -133141,9 +133238,10 @@ export namespace Prisma {
     warehouseId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -133206,9 +133304,10 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -133226,9 +133325,10 @@ export namespace Prisma {
     warehouseId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -138378,9 +138478,10 @@ export namespace Prisma {
     startedAt: Date | string
     finishedAt?: Date | string | null
     grnId?: string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
   }
 
   export type CleaningLotCreateManyRawMaterialInput = {
@@ -138391,9 +138492,10 @@ export namespace Prisma {
     warehouseId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -138453,9 +138555,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
     grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
@@ -138472,9 +138575,10 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     grnId?: NullableStringFieldUpdateOperationsInput | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
@@ -138488,9 +138592,10 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     grnId?: NullableStringFieldUpdateOperationsInput | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningLotUpdateWithoutRawMaterialInput = {
@@ -138498,9 +138603,10 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -138517,9 +138623,10 @@ export namespace Prisma {
     warehouseId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLot?: ProcessingBatchLotUncheckedUpdateOneWithoutCleaningLotNestedInput
@@ -138533,9 +138640,10 @@ export namespace Prisma {
     warehouseId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -138970,9 +139078,10 @@ export namespace Prisma {
     startedAt: Date | string
     finishedAt?: Date | string | null
     grnId?: string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
   }
 
   export type CleaningJobCreateManyToWarehouseInput = {
@@ -138984,9 +139093,10 @@ export namespace Prisma {
     startedAt: Date | string
     finishedAt?: Date | string | null
     grnId?: string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
   }
 
   export type CleaningLogCreateManyFromWarehouseInput = {
@@ -139019,9 +139129,10 @@ export namespace Prisma {
     rawMaterialId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -139132,9 +139243,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
     grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
@@ -139151,9 +139263,10 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     grnId?: NullableStringFieldUpdateOperationsInput | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
@@ -139167,9 +139280,10 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     grnId?: NullableStringFieldUpdateOperationsInput | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningJobUpdateWithoutToWarehouseInput = {
@@ -139178,9 +139292,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
@@ -139197,9 +139312,10 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     grnId?: NullableStringFieldUpdateOperationsInput | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
@@ -139213,9 +139329,10 @@ export namespace Prisma {
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     grnId?: NullableStringFieldUpdateOperationsInput | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningLogUpdateWithoutFromWarehouseInput = {
@@ -139289,9 +139406,10 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -139308,9 +139426,10 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLot?: ProcessingBatchLotUncheckedUpdateOneWithoutCleaningLotNestedInput
@@ -139324,9 +139443,10 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -139568,9 +139688,10 @@ export namespace Prisma {
     warehouseId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -139613,9 +139734,10 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     grn?: GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -139632,9 +139754,10 @@ export namespace Prisma {
     warehouseId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLot?: ProcessingBatchLotUncheckedUpdateOneWithoutCleaningLotNestedInput
@@ -139648,9 +139771,10 @@ export namespace Prisma {
     warehouseId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -139816,9 +139940,10 @@ export namespace Prisma {
     status: string
     startedAt: Date | string
     finishedAt?: Date | string | null
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
   }
 
   export type CleaningLotCreateManyGrnInput = {
@@ -139829,9 +139954,10 @@ export namespace Prisma {
     warehouseId: string
     quantity: number
     status?: string
-    leftoverQuantity?: number | null
-    reasonCode?: string | null
-    isReusable?: boolean
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -139842,9 +139968,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
@@ -139861,9 +139988,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
@@ -139877,9 +140005,10 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     finishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningLotUpdateWithoutGrnInput = {
@@ -139887,9 +140016,10 @@ export namespace Prisma {
     lotNumber?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -139906,9 +140036,10 @@ export namespace Prisma {
     warehouseId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLot?: ProcessingBatchLotUncheckedUpdateOneWithoutCleaningLotNestedInput
@@ -139922,9 +140053,10 @@ export namespace Prisma {
     warehouseId?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
-    leftoverQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
-    reasonCode?: NullableStringFieldUpdateOperationsInput | string | null
-    isReusable?: BoolFieldUpdateOperationsInput | boolean
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -166,8 +166,11 @@ const ReceiveModal: React.FC<Props> = ({
                             <h2 className="text-lg font-semibold text-foreground">Receive Item</h2>
                             <p className="text-xs text-muted-foreground">
                                 Ordered: <span className="font-medium text-foreground">{defaultQuantity}</span>
+                                <span className="text-xs font-semibold text-muted-foreground"> KG</span>
                                 {' · '}Received: <span className="font-medium text-green-400">{currentReceived}</span>
+                                <span className="text-xs font-semibold text-muted-foreground"> KG</span>
                                 {' · '}Remaining: <span className="font-medium text-amber-400">{remaining > 0 ? remaining : 0}</span>
+                                <span className="text-xs font-semibold text-muted-foreground"> KG</span>
                             </p>
                         </div>
                     </div>
@@ -248,7 +251,7 @@ const ReceiveModal: React.FC<Props> = ({
                             </div>
                         )}
 
-                        {/* Status Info — auto-determined by backend */}
+                        {/* Status Info - auto-determined by backend */}
                         <div className="bg-muted/10 border border-border/20 rounded-lg p-3">
                             <p className="text-xs text-muted-foreground">
                                 <span className="font-medium text-foreground">Status is auto-determined:</span>{' '}
@@ -325,15 +328,18 @@ const ReceiveModal: React.FC<Props> = ({
                                     <label className="block text-xs font-medium text-muted-foreground mb-1">
                                         Total Weight Received
                                     </label>
-                                    <input
-                                        type="number"
-                                        min={0.01}
-                                        step="0.01"
-                                        className="w-full bg-muted/20 border border-border/30 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition"
-                                        value={totalWeight || ""}
-                                        onChange={(e) => setTotalWeight(Number(e.target.value))}
-                                        placeholder="Enter total weight"
-                                    />
+                                    <div className="flex items-center gap-2">
+                                        <input
+                                            type="number"
+                                            min={0.01}
+                                            step="0.01"
+                                            className="flex-1 bg-muted/20 border border-border/30 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition"
+                                            value={totalWeight || ""}
+                                            onChange={(e) => setTotalWeight(Number(e.target.value))}
+                                            placeholder="Enter total weight"
+                                        />
+                                        <span className="text-xs font-semibold text-muted-foreground shrink-0">KG</span>
+                                    </div>
                                 </div>
                                 <div>
                                     <label className="block text-xs font-medium text-muted-foreground mb-1">
@@ -366,17 +372,20 @@ const ReceiveModal: React.FC<Props> = ({
                                             <span className="text-xs text-muted-foreground w-14 shrink-0">
                                                 Bag {bag.bagNo}
                                             </span>
-                                            <input
-                                                type="number"
-                                                min={0.01}
-                                                step="0.01"
-                                                className="flex-1 bg-muted/20 border border-border/30 rounded-lg px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary/50 transition"
-                                                value={bag.bagWeight || ""}
-                                                onChange={(e) =>
-                                                    handleBagWeightChange(idx, Number(e.target.value))
-                                                }
-                                                placeholder="Weight"
-                                            />
+                                            <div className="flex items-center gap-2 flex-1">
+                                                <input
+                                                    type="number"
+                                                    min={0.01}
+                                                    step="0.01"
+                                                    className="flex-1 bg-muted/20 border border-border/30 rounded-lg px-3 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary/50 transition"
+                                                    value={bag.bagWeight || ""}
+                                                    onChange={(e) =>
+                                                        handleBagWeightChange(idx, Number(e.target.value))
+                                                    }
+                                                    placeholder="Weight"
+                                                />
+                                                <span className="text-xs font-semibold text-muted-foreground shrink-0">KG</span>
+                                            </div>
                                             {bags.length > 1 && (
                                                 <button
                                                     type="button"
