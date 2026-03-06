@@ -12,6 +12,7 @@ import {
   ShoppingCart,
 } from 'lucide-react';
 import api, { API_ROUTES } from '../../../utils/api';
+import { toast } from 'react-toastify';
 import VendorModal from './VendorModal';
 import RawMaterialModal from './RawMaterialModal';
 import { useNavigate } from 'react-router-dom';
@@ -59,13 +60,10 @@ const FormField: React.FC<FormFieldProps> = ({
   <div className="space-y-2">
     <label htmlFor={id} className="block text-sm font-medium text-foreground">
       {label}
-      {required && <span className="text-destructive ml-1">*</span>}
+      {required && <span className="text-destructive ml-0.5">*</span>}
     </label>
     {description && (
-      <p className="text-xs text-muted-foreground flex items-center gap-1">
-        <Info size={12} />
-        {description}
-      </p>
+      <p className="text-xs text-muted-foreground">{description}</p>
     )}
     {children}
     <AnimatePresence>
@@ -87,6 +85,11 @@ const FormField: React.FC<FormFieldProps> = ({
 const PurchaseOrder = () => {
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [rawMaterials, setRawMaterials] = useState<RawMaterial[]>([]);
+  const MATERIAL_CATEGORIES = [
+    { value: 'RAW_MATERIAL', label: 'Raw Material' },
+    { value: 'SEMI_FINISHED_GOOD', label: 'Semi-Finished Good' },
+    { value: 'FINISHED_GOOD', label: 'Finished Good' },
+  ];
   const [vendorId, setVendorId] = useState('');
   const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
   const [orderDate, setOrderDate] = useState(() => {
@@ -100,6 +103,7 @@ const PurchaseOrder = () => {
   const [selectedRawMaterials, setSelectedRawMaterials] = useState<
     Record<number, RawMaterial | null>
   >({});
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -405,7 +409,34 @@ const PurchaseOrder = () => {
               </FormField>
             </div>
 
-            {/* Order Items */}
+            {/* Category Filter */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-foreground mb-2">
+                Category <span className="text-destructive ml-0.5">*</span>
+              </label>
+              <div className="flex items-center gap-3 mb-4">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    // Reset selected raw materials when category changes
+                    setItems((prev) => prev.map((item) => ({ ...item, rawMaterialId: '' })));
+                    setSelectedRawMaterials({});
+                  }}
+                  className="rounded-xl px-3.5 py-2.5 text-sm border border-border bg-card text-foreground"
+                  required
+                >
+                  <option value="">Select a category</option>
+                  {MATERIAL_CATEGORIES.map((c) => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
+                </select>
+                <div className="text-xs text-muted-foreground">
+                  Select a category to filter the materials available below.
+                </div>
+              </div>
+            </div>
+
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
@@ -436,12 +467,16 @@ const PurchaseOrder = () => {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Raw Material
+                        Items
                       </label>
                       {/* Raw Material Selection Button */}
                       <button
                         type="button"
                         onClick={() => {
+                          if (!selectedCategory) {
+                            toast.error('Please select a category first to filter raw materials');
+                            return;
+                          }
                           setRawMaterialModalIdx(idx);
                           setRawMaterialModalOpen(true);
                         }}
@@ -470,12 +505,12 @@ const PurchaseOrder = () => {
                               </p>
                               <p className="text-xs text-muted-foreground truncate">
                                 {selectedRawMaterials[idx]!.skuCode} ·{' '}
-                                {selectedRawMaterials[idx]!.category}
+                                {MATERIAL_CATEGORIES.find(c => c.value === selectedRawMaterials[idx]!.category)?.label || selectedRawMaterials[idx]!.category}
                               </p>
                             </>
                           ) : (
                             <p className="text-sm text-muted-foreground">
-                              Select raw material
+                              Search & select items
                             </p>
                           )}
                         </div>
@@ -622,7 +657,7 @@ const PurchaseOrder = () => {
         onClose={() => setRawMaterialModalOpen(false)}
         onSelect={handleRawMaterialSelect}
         selectedRawMaterialId={items[rawMaterialModalIdx]?.rawMaterialId}
-        rawMaterials={rawMaterials}
+        rawMaterials={rawMaterials.filter((rm) => rm.category === selectedCategory)}
       />
 
       {/* Create modals removed from this page - use Masters section */}

@@ -729,7 +729,8 @@ model RawMaterialProduct {
   id                 String              @id @default(uuid())
   skuCode            String              @unique
   name               String
-  category           String
+  category           MaterialCategory
+  subcategory        String?
   variety            String?
   unitOfMeasurement  String
   minReorderLevel    Int
@@ -986,6 +987,12 @@ model RMQualityParameter {
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
   report    RMQualityReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+}
+
+enum MaterialCategory {
+  RAW_MATERIAL
+  SEMI_FINISHED_GOOD
+  FINISHED_GOOD
 }
 
 enum BatchStatus {

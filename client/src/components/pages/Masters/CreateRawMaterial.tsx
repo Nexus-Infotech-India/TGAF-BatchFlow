@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
 
+const MATERIAL_CATEGORIES = [
+  { value: 'RAW_MATERIAL', label: 'Raw Material' },
+  { value: 'SEMI_FINISHED_GOOD', label: 'Semi-Finished Good' },
+  { value: 'FINISHED_GOOD', label: 'Finished Good' },
+] as const;
+
 type RawMaterial = {
   id: string;
   skuCode: string;
   name: string;
   category?: string;
+  subcategory?: string;
   variety?: string;
   unitOfMeasurement?: string;
   minReorderLevel?: number;
@@ -40,7 +47,7 @@ const IconChevronRight = () => (
 const CreateRawMaterialPage: React.FC = () => {
   const [materials, setMaterials] = useState<RawMaterial[]>([]);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState<any>({ skuCode: '', name: '', category: '', variety: '', unitOfMeasurement: '', minReorderLevel: 0 });
+  const [form, setForm] = useState<any>({ skuCode: '', name: '', category: '', subcategory: '', variety: '', unitOfMeasurement: '', minReorderLevel: 0 });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -75,17 +82,17 @@ const CreateRawMaterialPage: React.FC = () => {
     setSaving(true); setError(''); setSuccess('');
     try {
       await api.post(API_ROUTES.RAW.CREATE_PRODUCT, { ...form, minReorderLevel: Number(form.minReorderLevel) });
-      setSuccess('Raw material created successfully');
+      setSuccess('Material created successfully');
       resetForm();
       fetchData();
     } catch (err: any) {
-      setError(err?.response?.data?.error || 'Failed to create raw material');
+      setError(err?.response?.data?.error || 'Failed to create material');
     }
     setSaving(false);
   };
 
   const resetForm = () => {
-    setForm({ skuCode: '', name: '', category: '', variety: '', unitOfMeasurement: '', minReorderLevel: 0 });
+    setForm({ skuCode: '', name: '', category: '', subcategory: '', variety: '', unitOfMeasurement: '', minReorderLevel: 0 });
   };
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -101,6 +108,7 @@ const CreateRawMaterialPage: React.FC = () => {
       skuCode: m.skuCode,
       name: m.name,
       category: m.category || '',
+      subcategory: m.subcategory || '',
       variety: m.variety || '',
       unitOfMeasurement: m.unitOfMeasurement || '',
       minReorderLevel: m.minReorderLevel || 0,
@@ -116,7 +124,7 @@ const CreateRawMaterialPage: React.FC = () => {
     setSaving(true); setError(''); setSuccess('');
     try {
       await api.put(API_ROUTES.RAW.UPDATE_PRODUCT(editingId), { ...form, minReorderLevel: Number(form.minReorderLevel) });
-      setSuccess('Raw material updated successfully');
+      setSuccess('Material updated successfully');
       setEditingId(null);
       resetForm();
       fetchData();
@@ -150,10 +158,10 @@ const CreateRawMaterialPage: React.FC = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--foreground)' }}>
-              Raw Materials
+            Materials
             </h1>
             <p className="text-sm mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
-              Manage your raw material inventory &middot; <span className="font-medium" style={{ color: 'var(--primary)' }}>{materials.length}</span> material{materials.length !== 1 ? 's' : ''}
+              Manage your material inventory &middot; <span className="font-medium" style={{ color: 'var(--primary)' }}>{materials.length}</span> material{materials.length !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
@@ -208,7 +216,7 @@ const CreateRawMaterialPage: React.FC = () => {
             </div>
             <div>
               <h2 className="text-lg font-semibold" style={{ color: 'var(--foreground)' }}>
-                {editingId ? 'Edit Raw Material' : 'Add New Raw Material'}
+                {editingId ? 'Edit Material' : 'Add New Material'}
               </h2>
               <p className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
                 {editingId ? 'Modify the details below and save' : 'Fill in the details to add a new material'}
@@ -278,9 +286,41 @@ const CreateRawMaterialPage: React.FC = () => {
               <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>
                 Category
               </label>
-              <input
+              <select
                 name="category"
                 value={form.category}
+                onChange={handleChange}
+                required
+                className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200"
+                style={{
+                  background: 'color-mix(in srgb, var(--card) 96%, var(--primary) 4%)',
+                  border: '1px solid var(--border)',
+                  color: form.category ? 'var(--foreground)' : 'var(--muted-foreground)',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--primary)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--primary) 12%, transparent)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <option value="">Select category</option>
+                {MATERIAL_CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value}>{cat.label}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Subcategory */}
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>
+                Subcategory
+              </label>
+              <input
+                name="subcategory"
+                value={form.subcategory}
                 onChange={handleChange}
                 placeholder="e.g. Chemicals"
                 className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200"
@@ -481,7 +521,7 @@ const CreateRawMaterialPage: React.FC = () => {
                     borderBottom: '1px solid var(--border)',
                   }}
                 >
-                  {['SKU Code', 'Name', 'Category', 'Variety', 'Unit', 'Reorder Lvl', 'Actions'].map((h) => (
+                  {['SKU Code', 'Name', 'Category', 'Subcategory', 'Variety', 'Unit', 'Reorder Lvl', 'Actions'].map((h) => (
                     <th
                       key={h}
                       className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider"
@@ -495,7 +535,7 @@ const CreateRawMaterialPage: React.FC = () => {
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="px-5 py-12 text-center">
+                    <td colSpan={8} className="px-5 py-12 text-center">
                       <div className="flex flex-col items-center gap-3">
                         <span
                           className="inline-block w-8 h-8 border-[3px] rounded-full animate-spin"
@@ -507,7 +547,7 @@ const CreateRawMaterialPage: React.FC = () => {
                   </tr>
                 ) : materials.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-5 py-12 text-center">
+                    <td colSpan={8} className="px-5 py-12 text-center">
                       <div className="flex flex-col items-center gap-2">
                         <div style={{ color: 'var(--muted-foreground)', opacity: 0.5 }}>
                           <IconPackage />
@@ -547,7 +587,10 @@ const CreateRawMaterialPage: React.FC = () => {
                         </span>
                       </td>
                       <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{m.name}</td>
-                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.category || '-'}</td>
+                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>
+                        {m.category ? MATERIAL_CATEGORIES.find(c => c.value === m.category)?.label || m.category : '-'}
+                      </td>
+                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.subcategory || '-'}</td>
                       <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.variety || '-'}</td>
                       <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{m.unitOfMeasurement || '-'}</td>
                       <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{m.minReorderLevel ?? '-'}</td>

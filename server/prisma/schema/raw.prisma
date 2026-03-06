@@ -16,11 +16,18 @@ model Vendor {
   rawMaterials   RawMaterialProduct[]
 }
 
+enum MaterialCategory {
+  RAW_MATERIAL
+  SEMI_FINISHED_GOOD
+  FINISHED_GOOD
+}
+
 model RawMaterialProduct {
   id                 String              @id @default(uuid())
   skuCode            String              @unique
   name               String
-  category           String
+  category           MaterialCategory
+  subcategory        String?
   unitOfMeasurement  String
   minReorderLevel    Int
   createdAt          DateTime            @default(now())

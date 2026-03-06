@@ -647,6 +647,7 @@ exports.Prisma.RawMaterialProductScalarFieldEnum = {
   skuCode: 'skuCode',
   name: 'name',
   category: 'category',
+  subcategory: 'subcategory',
   variety: 'variety',
   unitOfMeasurement: 'unitOfMeasurement',
   minReorderLevel: 'minReorderLevel',
@@ -1049,6 +1050,12 @@ exports.AuditDocumentType = exports.$Enums.AuditDocumentType = {
   EVIDENCE: 'EVIDENCE',
   REPORT: 'REPORT',
   OTHER: 'OTHER'
+};
+
+exports.MaterialCategory = exports.$Enums.MaterialCategory = {
+  RAW_MATERIAL: 'RAW_MATERIAL',
+  SEMI_FINISHED_GOOD: 'SEMI_FINISHED_GOOD',
+  FINISHED_GOOD: 'FINISHED_GOOD'
 };
 
 exports.PurchaseOrderItemStatus = exports.$Enums.PurchaseOrderItemStatus = {

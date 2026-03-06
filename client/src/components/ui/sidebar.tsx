@@ -172,7 +172,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
         },
         {
           path: "/masters/raw-materials/create",
-          name: "Raw Material Master",
+          name: "Material Master",
           icon: <PackageOpen className="sidebar-icon" size={18} />,
           permissionKey: "manage_raw_materials"
         },

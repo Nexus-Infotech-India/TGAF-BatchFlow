@@ -78,10 +78,10 @@ const RawMaterialModal: React.FC<RawMaterialModalProps> = ({
                                 </div>
                                 <div>
                                     <h2 className="text-lg font-semibold text-foreground">
-                                        Select Raw Material
+                                        Search Items
                                     </h2>
                                     <p className="text-xs text-muted-foreground">
-                                        {rawMaterials.length} material
+                                        {rawMaterials.length} item
                                         {rawMaterials.length !== 1 ? "s" : ""} available
                                     </p>
                                 </div>
@@ -100,7 +100,7 @@ const RawMaterialModal: React.FC<RawMaterialModalProps> = ({
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                 <input
                                     type="text"
-                                    placeholder="Search raw materials..."
+                                    placeholder="Search items..."
                                     className="w-full bg-background border border-input rounded-xl pl-10 pr-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring placeholder:text-muted-foreground"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -114,9 +114,9 @@ const RawMaterialModal: React.FC<RawMaterialModalProps> = ({
                             {filteredMaterials.length === 0 ? (
                                 <div className="text-center py-8 text-muted-foreground">
                                     <Package className="w-10 h-10 mx-auto mb-2 opacity-40" />
-                                    <p className="text-sm">No raw materials found</p>
+                                    <p className="text-sm">No items found</p>
                                     <p className="text-xs mt-1">
-                                        Try a different search or add a new raw material from the
+                                        Try a different search or add a new item from the
                                         topbar
                                     </p>
                                 </div>

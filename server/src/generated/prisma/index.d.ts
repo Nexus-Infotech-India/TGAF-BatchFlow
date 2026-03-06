@@ -348,7 +348,16 @@ export type BOMItem = $Result.DefaultSelection<Prisma.$BOMItemPayload>
  * Enums
  */
 export namespace $Enums {
-  export const BatchStatus: {
+  export const MaterialCategory: {
+  RAW_MATERIAL: 'RAW_MATERIAL',
+  SEMI_FINISHED_GOOD: 'SEMI_FINISHED_GOOD',
+  FINISHED_GOOD: 'FINISHED_GOOD'
+};
+
+export type MaterialCategory = (typeof MaterialCategory)[keyof typeof MaterialCategory]
+
+
+export const BatchStatus: {
   DRAFT: 'DRAFT',
   SUBMITTED: 'SUBMITTED',
   APPROVED: 'APPROVED',
@@ -543,6 +552,10 @@ export const BOMStatus: {
 export type BOMStatus = (typeof BOMStatus)[keyof typeof BOMStatus]
 
 }
+
+export type MaterialCategory = $Enums.MaterialCategory
+
+export const MaterialCategory: typeof $Enums.MaterialCategory
 
 export type BatchStatus = $Enums.BatchStatus
 
@@ -59938,7 +59951,8 @@ export namespace Prisma {
     id: string | null
     skuCode: string | null
     name: string | null
-    category: string | null
+    category: $Enums.MaterialCategory | null
+    subcategory: string | null
     variety: string | null
     unitOfMeasurement: string | null
     minReorderLevel: number | null
@@ -59951,7 +59965,8 @@ export namespace Prisma {
     id: string | null
     skuCode: string | null
     name: string | null
-    category: string | null
+    category: $Enums.MaterialCategory | null
+    subcategory: string | null
     variety: string | null
     unitOfMeasurement: string | null
     minReorderLevel: number | null
@@ -59965,6 +59980,7 @@ export namespace Prisma {
     skuCode: number
     name: number
     category: number
+    subcategory: number
     variety: number
     unitOfMeasurement: number
     minReorderLevel: number
@@ -59988,6 +60004,7 @@ export namespace Prisma {
     skuCode?: true
     name?: true
     category?: true
+    subcategory?: true
     variety?: true
     unitOfMeasurement?: true
     minReorderLevel?: true
@@ -60001,6 +60018,7 @@ export namespace Prisma {
     skuCode?: true
     name?: true
     category?: true
+    subcategory?: true
     variety?: true
     unitOfMeasurement?: true
     minReorderLevel?: true
@@ -60014,6 +60032,7 @@ export namespace Prisma {
     skuCode?: true
     name?: true
     category?: true
+    subcategory?: true
     variety?: true
     unitOfMeasurement?: true
     minReorderLevel?: true
@@ -60113,7 +60132,8 @@ export namespace Prisma {
     id: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory: string | null
     variety: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -60146,6 +60166,7 @@ export namespace Prisma {
     skuCode?: boolean
     name?: boolean
     category?: boolean
+    subcategory?: boolean
     variety?: boolean
     unitOfMeasurement?: boolean
     minReorderLevel?: boolean
@@ -60168,6 +60189,7 @@ export namespace Prisma {
     skuCode?: boolean
     name?: boolean
     category?: boolean
+    subcategory?: boolean
     variety?: boolean
     unitOfMeasurement?: boolean
     minReorderLevel?: boolean
@@ -60182,6 +60204,7 @@ export namespace Prisma {
     skuCode?: boolean
     name?: boolean
     category?: boolean
+    subcategory?: boolean
     variety?: boolean
     unitOfMeasurement?: boolean
     minReorderLevel?: boolean
@@ -60196,6 +60219,7 @@ export namespace Prisma {
     skuCode?: boolean
     name?: boolean
     category?: boolean
+    subcategory?: boolean
     variety?: boolean
     unitOfMeasurement?: boolean
     minReorderLevel?: boolean
@@ -60204,7 +60228,7 @@ export namespace Prisma {
     vendorId?: boolean
   }
 
-  export type RawMaterialProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "skuCode" | "name" | "category" | "variety" | "unitOfMeasurement" | "minReorderLevel" | "createdAt" | "updatedAt" | "vendorId", ExtArgs["result"]["rawMaterialProduct"]>
+  export type RawMaterialProductOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "skuCode" | "name" | "category" | "subcategory" | "variety" | "unitOfMeasurement" | "minReorderLevel" | "createdAt" | "updatedAt" | "vendorId", ExtArgs["result"]["rawMaterialProduct"]>
   export type RawMaterialProductInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cleaningJobs?: boolean | RawMaterialProduct$cleaningJobsArgs<ExtArgs>
     cleaningLots?: boolean | RawMaterialProduct$cleaningLotsArgs<ExtArgs>
@@ -60239,7 +60263,8 @@ export namespace Prisma {
       id: string
       skuCode: string
       name: string
-      category: string
+      category: $Enums.MaterialCategory
+      subcategory: string | null
       variety: string | null
       unitOfMeasurement: string
       minReorderLevel: number
@@ -60680,7 +60705,8 @@ export namespace Prisma {
     readonly id: FieldRef<"RawMaterialProduct", 'String'>
     readonly skuCode: FieldRef<"RawMaterialProduct", 'String'>
     readonly name: FieldRef<"RawMaterialProduct", 'String'>
-    readonly category: FieldRef<"RawMaterialProduct", 'String'>
+    readonly category: FieldRef<"RawMaterialProduct", 'MaterialCategory'>
+    readonly subcategory: FieldRef<"RawMaterialProduct", 'String'>
     readonly variety: FieldRef<"RawMaterialProduct", 'String'>
     readonly unitOfMeasurement: FieldRef<"RawMaterialProduct", 'String'>
     readonly minReorderLevel: FieldRef<"RawMaterialProduct", 'Int'>
@@ -87852,6 +87878,7 @@ export namespace Prisma {
     skuCode: 'skuCode',
     name: 'name',
     category: 'category',
+    subcategory: 'subcategory',
     variety: 'variety',
     unitOfMeasurement: 'unitOfMeasurement',
     minReorderLevel: 'minReorderLevel',
@@ -88500,6 +88527,20 @@ export namespace Prisma {
    * Reference to a field of type 'AuditDocumentType[]'
    */
   export type ListEnumAuditDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AuditDocumentType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MaterialCategory'
+   */
+  export type EnumMaterialCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaterialCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'MaterialCategory[]'
+   */
+  export type ListEnumMaterialCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MaterialCategory[]'>
     
 
 
@@ -92225,7 +92266,8 @@ export namespace Prisma {
     id?: StringFilter<"RawMaterialProduct"> | string
     skuCode?: StringFilter<"RawMaterialProduct"> | string
     name?: StringFilter<"RawMaterialProduct"> | string
-    category?: StringFilter<"RawMaterialProduct"> | string
+    category?: EnumMaterialCategoryFilter<"RawMaterialProduct"> | $Enums.MaterialCategory
+    subcategory?: StringNullableFilter<"RawMaterialProduct"> | string | null
     variety?: StringNullableFilter<"RawMaterialProduct"> | string | null
     unitOfMeasurement?: StringFilter<"RawMaterialProduct"> | string
     minReorderLevel?: IntFilter<"RawMaterialProduct"> | number
@@ -92247,6 +92289,7 @@ export namespace Prisma {
     skuCode?: SortOrder
     name?: SortOrder
     category?: SortOrder
+    subcategory?: SortOrderInput | SortOrder
     variety?: SortOrderInput | SortOrder
     unitOfMeasurement?: SortOrder
     minReorderLevel?: SortOrder
@@ -92270,7 +92313,8 @@ export namespace Prisma {
     OR?: RawMaterialProductWhereInput[]
     NOT?: RawMaterialProductWhereInput | RawMaterialProductWhereInput[]
     name?: StringFilter<"RawMaterialProduct"> | string
-    category?: StringFilter<"RawMaterialProduct"> | string
+    category?: EnumMaterialCategoryFilter<"RawMaterialProduct"> | $Enums.MaterialCategory
+    subcategory?: StringNullableFilter<"RawMaterialProduct"> | string | null
     variety?: StringNullableFilter<"RawMaterialProduct"> | string | null
     unitOfMeasurement?: StringFilter<"RawMaterialProduct"> | string
     minReorderLevel?: IntFilter<"RawMaterialProduct"> | number
@@ -92292,6 +92336,7 @@ export namespace Prisma {
     skuCode?: SortOrder
     name?: SortOrder
     category?: SortOrder
+    subcategory?: SortOrderInput | SortOrder
     variety?: SortOrderInput | SortOrder
     unitOfMeasurement?: SortOrder
     minReorderLevel?: SortOrder
@@ -92312,7 +92357,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"RawMaterialProduct"> | string
     skuCode?: StringWithAggregatesFilter<"RawMaterialProduct"> | string
     name?: StringWithAggregatesFilter<"RawMaterialProduct"> | string
-    category?: StringWithAggregatesFilter<"RawMaterialProduct"> | string
+    category?: EnumMaterialCategoryWithAggregatesFilter<"RawMaterialProduct"> | $Enums.MaterialCategory
+    subcategory?: StringNullableWithAggregatesFilter<"RawMaterialProduct"> | string | null
     variety?: StringNullableWithAggregatesFilter<"RawMaterialProduct"> | string | null
     unitOfMeasurement?: StringWithAggregatesFilter<"RawMaterialProduct"> | string
     minReorderLevel?: IntWithAggregatesFilter<"RawMaterialProduct"> | number
@@ -98054,7 +98100,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -98074,7 +98121,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -98094,7 +98142,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -98114,7 +98163,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -98134,7 +98184,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -98147,7 +98198,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -98159,7 +98211,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -102697,6 +102750,13 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type EnumMaterialCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.MaterialCategory | EnumMaterialCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumMaterialCategoryFilter<$PrismaModel> | $Enums.MaterialCategory
+  }
+
   export type CleaningJobListRelationFilter = {
     every?: CleaningJobWhereInput
     some?: CleaningJobWhereInput
@@ -102777,6 +102837,7 @@ export namespace Prisma {
     skuCode?: SortOrder
     name?: SortOrder
     category?: SortOrder
+    subcategory?: SortOrder
     variety?: SortOrder
     unitOfMeasurement?: SortOrder
     minReorderLevel?: SortOrder
@@ -102794,6 +102855,7 @@ export namespace Prisma {
     skuCode?: SortOrder
     name?: SortOrder
     category?: SortOrder
+    subcategory?: SortOrder
     variety?: SortOrder
     unitOfMeasurement?: SortOrder
     minReorderLevel?: SortOrder
@@ -102807,6 +102869,7 @@ export namespace Prisma {
     skuCode?: SortOrder
     name?: SortOrder
     category?: SortOrder
+    subcategory?: SortOrder
     variety?: SortOrder
     unitOfMeasurement?: SortOrder
     minReorderLevel?: SortOrder
@@ -102817,6 +102880,16 @@ export namespace Prisma {
 
   export type RawMaterialProductSumOrderByAggregateInput = {
     minReorderLevel?: SortOrder
+  }
+
+  export type EnumMaterialCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MaterialCategory | EnumMaterialCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumMaterialCategoryWithAggregatesFilter<$PrismaModel> | $Enums.MaterialCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMaterialCategoryFilter<$PrismaModel>
+    _max?: NestedEnumMaterialCategoryFilter<$PrismaModel>
   }
 
   export type VendorScalarRelationFilter = {
@@ -109284,6 +109357,10 @@ export namespace Prisma {
     connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
   }
 
+  export type EnumMaterialCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.MaterialCategory
+  }
+
   export type CleaningJobUpdateManyWithoutRawMaterialNestedInput = {
     create?: XOR<CleaningJobCreateWithoutRawMaterialInput, CleaningJobUncheckedCreateWithoutRawMaterialInput> | CleaningJobCreateWithoutRawMaterialInput[] | CleaningJobUncheckedCreateWithoutRawMaterialInput[]
     connectOrCreate?: CleaningJobCreateOrConnectWithoutRawMaterialInput | CleaningJobCreateOrConnectWithoutRawMaterialInput[]
@@ -111791,6 +111868,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAuditDocumentTypeFilter<$PrismaModel>
     _max?: NestedEnumAuditDocumentTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMaterialCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.MaterialCategory | EnumMaterialCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumMaterialCategoryFilter<$PrismaModel> | $Enums.MaterialCategory
+  }
+
+  export type NestedEnumMaterialCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MaterialCategory | EnumMaterialCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MaterialCategory[] | ListEnumMaterialCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumMaterialCategoryWithAggregatesFilter<$PrismaModel> | $Enums.MaterialCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMaterialCategoryFilter<$PrismaModel>
+    _max?: NestedEnumMaterialCategoryFilter<$PrismaModel>
   }
 
   export type NestedEnumPurchaseOrderItemStatusFilter<$PrismaModel = never> = {
@@ -127534,7 +127628,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -127553,7 +127648,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -127631,7 +127727,8 @@ export namespace Prisma {
     id?: StringFilter<"RawMaterialProduct"> | string
     skuCode?: StringFilter<"RawMaterialProduct"> | string
     name?: StringFilter<"RawMaterialProduct"> | string
-    category?: StringFilter<"RawMaterialProduct"> | string
+    category?: EnumMaterialCategoryFilter<"RawMaterialProduct"> | $Enums.MaterialCategory
+    subcategory?: StringNullableFilter<"RawMaterialProduct"> | string | null
     variety?: StringNullableFilter<"RawMaterialProduct"> | string | null
     unitOfMeasurement?: StringFilter<"RawMaterialProduct"> | string
     minReorderLevel?: IntFilter<"RawMaterialProduct"> | number
@@ -128421,7 +128518,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -128440,7 +128538,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -128590,7 +128689,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -128609,7 +128709,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -128933,7 +129034,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -128952,7 +129054,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -129032,7 +129135,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -129051,7 +129155,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -129890,7 +129995,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -129909,7 +130015,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -130161,7 +130268,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -130180,7 +130288,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -130793,7 +130902,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -130812,7 +130922,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -130951,7 +131062,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -130970,7 +131082,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -131368,7 +131481,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -131387,7 +131501,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -131467,7 +131582,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -131486,7 +131602,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -132857,7 +132974,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -132876,7 +132994,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -133071,7 +133190,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -133090,7 +133210,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -133414,7 +133535,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -133433,7 +133555,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -133505,7 +133628,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -133524,7 +133648,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -138377,7 +138502,8 @@ export namespace Prisma {
     id?: string
     skuCode: string
     name: string
-    category: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
     variety?: string | null
     unitOfMeasurement: string
     minReorderLevel: number
@@ -138423,7 +138549,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -138442,7 +138569,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
@@ -138461,7 +138589,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
     variety?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     minReorderLevel?: IntFieldUpdateOperationsInput | number
