@@ -118,6 +118,17 @@ const CreateBOMPage: React.FC = () => {
     useEffect(() => { if (success) { const t = setTimeout(() => setSuccess(''), 3000); return () => clearTimeout(t); } }, [success]);
     useEffect(() => { if (error) { const t = setTimeout(() => setError(''), 5000); return () => clearTimeout(t); } }, [error]);
 
+    // ── Derived lists ──
+    const finishedGoods = useMemo(() =>
+        rawMaterials.filter(rm => rm.category === 'FINISHED_GOOD' || rm.category === 'SEMI_FINISHED_GOOD'),
+        [rawMaterials]
+    );
+
+    const rawMaterialItems = useMemo(() =>
+        rawMaterials.filter(rm => rm.category === 'RAW_MATERIAL'),
+        [rawMaterials]
+    );
+
     // ── Filtered BOMs ──
     const filteredBOMs = useMemo(() => {
         if (!searchTerm.trim()) return boms;
@@ -135,7 +146,23 @@ const CreateBOMPage: React.FC = () => {
 
     // ── Form handlers ──
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+
+        // Auto-fill product details when a finished good is selected
+        if (name === 'productName') {
+            const selected = finishedGoods.find(fg => fg.name === value);
+            if (selected) {
+                setForm(prev => ({
+                    ...prev,
+                    productName: selected.name,
+                    productCode: selected.skuCode,
+                    unitOfMeasurement: selected.unitOfMeasurement,
+                }));
+                return;
+            }
+        }
+
+        setForm({ ...form, [name]: value });
     };
 
     const handleItemChange = (idx: number, field: string, value: any) => {
@@ -359,8 +386,14 @@ const CreateBOMPage: React.FC = () => {
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>Product Name *</label>
-                                    <input name="productName" value={form.productName} onChange={handleChange} required placeholder="Product name"
-                                        className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200" style={inputStyle} {...focusHandlers} />
+                                    <select name="productName" value={form.productName} onChange={handleChange} required
+                                        className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200 cursor-pointer"
+                                        style={{ ...inputStyle, color: form.productName ? 'var(--foreground)' : 'var(--muted-foreground)' }} {...focusHandlers}>
+                                        <option value="">-- Select Finished Good --</option>
+                                        {finishedGoods.map(fg => (
+                                            <option key={fg.id} value={fg.name}>{fg.name} ({fg.skuCode})</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>Product Code</label>
@@ -430,7 +463,7 @@ const CreateBOMPage: React.FC = () => {
                                                         style={inputStyle} {...focusHandlers}
                                                     >
                                                         <option value="">-- Select Raw Material --</option>
-                                                        {rawMaterials.map(rm => (
+                                                        {rawMaterialItems.map(rm => (
                                                             <option key={rm.id} value={rm.id}>{rm.name} ({rm.skuCode})</option>
                                                         ))}
                                                     </select>

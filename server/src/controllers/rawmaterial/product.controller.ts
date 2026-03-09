@@ -30,7 +30,7 @@ export class RawMaterialProductController {
         },
       });
 
-       await prisma.transactionLog.create({
+      await prisma.transactionLog.create({
         data: {
           type: 'CREATE',
           entity: 'RawMaterialProduct',
@@ -67,7 +67,7 @@ export class RawMaterialProductController {
       const { id } = req.params;
       const product = await prisma.rawMaterialProduct.findUnique({ where: { id } });
       if (!product) {
-         res.status(404).json({ error: 'Raw material product not found' });
+        res.status(404).json({ error: 'Raw material product not found' });
       }
       res.json(product);
     } catch (error) {
@@ -104,7 +104,7 @@ export class RawMaterialProductController {
         },
       });
 
-       await prisma.transactionLog.create({
+      await prisma.transactionLog.create({
         data: {
           type: 'UPDATE',
           entity: 'RawMaterialProduct',
@@ -121,7 +121,7 @@ export class RawMaterialProductController {
   }
 
   // Delete a raw material product
-   static async deleteRawMaterialProduct(req: Request, res: Response) {
+  static async deleteRawMaterialProduct(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const deletedProduct = await prisma.rawMaterialProduct.delete({ where: { id } });
