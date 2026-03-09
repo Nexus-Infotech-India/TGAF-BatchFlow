@@ -17,6 +17,8 @@ import {
   Eye,
   Clock,
   MapPin,
+  Mountain,
+  Sprout,
 } from 'lucide-react';
 
 const { Option } = Select;
@@ -663,7 +665,7 @@ const CleaningRawMaterialList: React.FC = () => {
           {/* Seed Wastage */}
           <div className="space-y-1.5">
             <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
-               Seed Wastage
+              Seed Wastage
             </label>
             <div className="flex items-center gap-2">
               <InputNumber
@@ -730,198 +732,188 @@ const CleaningRawMaterialList: React.FC = () => {
         styles={{ body: { maxHeight: '70vh', overflowY: 'auto' } }}
       >
         {historyGrn && (
-          <div className="space-y-5 pt-2">
+          <div className="space-y-6 pt-2">
 
-            {/* Quantity Summary */}
-            <div className="grid grid-cols-3 gap-3">
-              <QuantityCard label="Total Received" value={historyGrn.totalReceived} unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'} color="var(--primary)" />
-              <QuantityCard label="Transferred" value={historyGrn.totalTransferred} unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'} color="var(--secondary)" />
-              <QuantityCard label="Remaining" value={historyGrn.leftQuantity} unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'} color={historyGrn.leftQuantity > 0 ? '#d97706' : '#059669'} />
+            {/* Quantity Summary Cards */}
+            <div className="grid grid-cols-3 gap-4">
+              <QuantityCard
+                label="Total Received"
+                value={historyGrn.totalReceived}
+                unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
+                color="var(--primary)"
+              />
+              <QuantityCard
+                label="Transferred"
+                value={historyGrn.totalTransferred}
+                unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
+                color="var(--secondary)"
+              />
+              <QuantityCard
+                label="Remaining"
+                value={historyGrn.leftQuantity}
+                unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
+                color={historyGrn.leftQuantity > 0 ? '#d97706' : '#059669'}
+              />
             </div>
 
-            {/* Cleaning Jobs + Lot Timeline */}
-            {historyGrn.cleaningJobs?.length > 0 ? (
-              <div className="space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--primary)' }}>
-                  <ClipboardCheck size={14} /> Cleaning Transfers &amp; Lots
-                </h3>
-                {historyGrn.cleaningJobs.map((job) => {
-                  const unit = historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
-                  return (
-                    <div key={job.id} className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-                      {/* Job Header */}
-                      <div
-                        className="px-4 py-3 flex items-center justify-between flex-wrap gap-2"
-                        style={{
-                          background: 'linear-gradient(135deg, color-mix(in srgb, var(--primary) 5%, var(--card)), color-mix(in srgb, var(--secondary) 3%, var(--card)))',
-                          borderBottom: '1px solid var(--border)',
-                        }}
+            {/* Cleaning Jobs Timeline */}
+            <div className="space-y-4">
+              <h3 className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-2 px-1" style={{ color: 'var(--muted-foreground)' }}>
+                <ClipboardCheck size={14} className="text-primary" />
+                Cleaning Transfers & Job History
+              </h3>
+
+              {historyGrn.cleaningJobs?.length > 0 ? (
+                <div className="space-y-4">
+                  {historyGrn.cleaningJobs.map((job) => {
+                    const unit = historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
+                    const netQty = Math.max(0, (job.quantity || 0) - (job.stoneWastageQty || 0) - (job.seedWastageQty || 0));
+
+                    return (
+                      <motion.div
+                        key={job.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="rounded-2xl border overflow-hidden shadow-sm transition-all hover:shadow-md"
+                        style={{ borderColor: 'var(--border)', background: 'var(--card)' }}
                       >
-                        <div className="flex items-center gap-3">
-                          <div className="flex items-center justify-center w-8 h-8 rounded-lg" style={{ background: 'color-mix(in srgb, var(--primary) 12%, transparent)', color: 'var(--primary)' }}>
-                            <ClipboardCheck size={14} />
-                          </div>
-                          <div>
-                            <span className="text-sm font-bold" style={{ color: 'var(--foreground)' }}>LOT-{job.id}</span>
-                            <div className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--muted-foreground)' }}>
-                              <MapPin size={10} />
-                              {job.fromWarehouse?.name} → {job.toWarehouse?.name}
+                        {/* Job Header */}
+                        <div className="px-5 py-4 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)', background: 'linear-gradient(to right, color-mix(in srgb, var(--primary) 5%, transparent), transparent)' }}>
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center justify-center w-10 h-10 rounded-xl shadow-sm" style={{ background: '#fff', border: '1px solid var(--border)', color: 'var(--primary)' }}>
+                              <Package size={20} />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-base font-bold" style={{ color: 'var(--foreground)' }}>LOT-{job.id}</span>
+                                {getStatusTag(job.status)}
+                              </div>
+                              <div className="flex items-center gap-1.5 text-xs font-medium mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
+                                <MapPin size={12} className="text-primary" />
+                                <span>{job.fromWarehouse?.name}</span>
+                                <ArrowRight size={10} className="mx-1 text-muted-foreground" />
+                                <MapPin size={12} className="text-secondary" />
+                                <span>{job.toWarehouse?.name}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                          <div className="flex items-center gap-2">
-                          {getStatusTag(job.status)}
-                          <span className="text-sm font-bold" style={{ color: 'var(--primary)' }}>
-                            {/* Show cleaned quantity = transferred - wastage */}
-                            {Math.max(0, (job.quantity || 0) - (job.stoneWastageQty || 0) - (job.seedWastageQty || 0))} {unit}
-                          </span>
+
                           {job.status === 'Sent' && (
                             <button
                               onClick={() => { setHistoryModalOpen(false); handleOpenFinish(job.id); }}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all active:scale-95"
+                              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:shadow-md active:scale-95 shadow-sm"
                               style={{ background: '#059669', color: '#fff' }}
                             >
-                              <CheckCircle size={11} /> Finish
+                              <CheckCircle size={16} /> Finish Cleaning
                             </button>
                           )}
                         </div>
-                      </div>
 
-                      {/* Stone & Seed Wastage Info for this Job */}
-                      {job.status === 'Cleaned' && ((job.stoneWastageQty ?? 0) > 0 || (job.seedWastageQty ?? 0) > 0) && (
-                        <div
-                          className="px-4 py-2.5 flex items-center flex-wrap gap-3 text-xs"
-                          style={{
-                            background: 'color-mix(in srgb, #f59e0b 5%, var(--card))',
-                            borderBottom: '1px solid var(--border)',
-                          }}
-                        >
-                          {(job.stoneWastageQty ?? 0) > 0 && (
-                            <span className="font-semibold" style={{ color: '#d97706' }}>
-                              Stone: {job.stoneWastageQty} {(job.stoneWastageUnit || 'kg').toUpperCase()}
-                            </span>
-                          )}
-                          {(job.seedWastageQty ?? 0) > 0 && (
-                            <span className="font-semibold" style={{ color: '#d97706' }}>
-                               Seed: {job.seedWastageQty} {(job.seedWastageUnit || 'kg').toUpperCase()}
-                            </span>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Lot Numbers for this Job */}
-                      {job.cleaningLots?.length > 0 ? (
-                        <div className="divide-y" style={{ borderColor: 'var(--border)' }}>
-                          {job.cleaningLots.map((lot) => (
-                            <div
-                              key={lot.lotNumber}
-                              className="px-4 py-3 flex items-center justify-between transition-colors duration-150"
-                              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--muted)'; }}
-                              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
-                            >
-                              <div className="flex items-center gap-3">
-                                <div className="flex items-center justify-center w-7 h-7 rounded-md" style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)' }}>
-                                  <Hash size={13} style={{ color: 'var(--primary)' }} />
+                        {/* Job Details Grid */}
+                        <div className="p-5 grid grid-cols-1 md:grid-cols-2 gap-8">
+                          {/* Column 1: Quantity Flow */}
+                          <div className="space-y-5">
+                            <div className="flex items-center justify-between p-4 rounded-xl border border-dashed" style={{ borderColor: 'var(--border)', background: 'color-mix(in srgb, var(--muted) 40%, transparent)' }}>
+                              <div className="text-center flex-1">
+                                <div className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Transfer Qty</div>
+                                <div className="text-xl font-extrabold" style={{ color: 'var(--foreground)' }}>
+                                  {job.quantity} <span className="text-[10px] font-medium opacity-60 ml-0.5">{unit}</span>
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold" style={{ color: 'var(--primary)' }}>LOT-{job.id}</div>
-                                  <div className="flex items-center gap-2 text-[11px]" style={{ color: 'var(--muted-foreground)' }}>
-                                    <MapPin size={9} /> {lot.warehouse?.name}
-                                    <span>•</span>
-                                    <Clock size={9} /> {new Date(lot.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                              </div>
+                              <div className="px-4 flex flex-col items-center">
+                                <ArrowRight size={16} className="text-muted-foreground" />
+                                <div className="text-[9px] font-bold text-muted-foreground mt-1 uppercase tracking-tighter">PROCESS</div>
+                              </div>
+                              <div className="text-center flex-1">
+                                <div className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Cleaned Qty</div>
+                                <div className="text-xl font-extrabold" style={{ color: job.status === 'Cleaned' ? '#059669' : 'var(--primary)' }}>
+                                  {job.status === 'Cleaned' ? netQty : '--'} <span className="text-[10px] font-medium opacity-60 ml-0.5">{unit}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Wastage Breakdown If Cleaned */}
+                            {job.status === 'Cleaned' && (
+                              <div className="flex items-center gap-8 px-5 py-3.5 rounded-2xl border" style={{ background: 'color-mix(in srgb, #f59e0b 3%, var(--card))', borderColor: 'color-mix(in srgb, #f59e0b 15%, var(--border))' }}>
+                                <div className="flex items-center gap-3.5">
+                                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" style={{ background: '#fff', border: '1px solid color-mix(in srgb, #f59e0b 20%, var(--border))' }}>
+                                    <Mountain size={16} className="text-amber-600" />
+                                  </div>
+                                  <div>
+                                    <div className="text-[10px] font-bold text-amber-700/80 uppercase tracking-widest leading-none">Stone Loss</div>
+                                    <div className="text-base font-extrabold text-foreground mt-1">
+                                      {job.stoneWastageQty || 0} <span className="text-[10px] font-medium opacity-50">{(job.stoneWastageUnit || 'kg').toUpperCase()}</span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="w-px h-8 bg-amber-200/40" />
+
+                                <div className="flex items-center gap-3.5">
+                                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-sm" style={{ background: '#fff', border: '1px solid color-mix(in srgb, #f59e0b 20%, var(--border))' }}>
+                                    <Sprout size={16} className="text-amber-600" />
+                                  </div>
+                                  <div>
+                                    <div className="text-[10px] font-bold text-amber-700/80 uppercase tracking-widest leading-none">Seed Loss</div>
+                                    <div className="text-base font-extrabold text-foreground mt-1">
+                                      {job.seedWastageQty || 0} <span className="text-[10px] font-medium opacity-50">{(job.seedWastageUnit || 'kg').toUpperCase()}</span>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              <div className="flex items-center gap-3 flex-wrap">
-                                <span className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>
-                                  {Math.max(0, (job.quantity || 0) - (job.stoneWastageQty || 0) - (job.seedWastageQty || 0))} {unit}
-                                </span>
-                                {getStatusTag(lot.status)}
-                                {((lot.stoneWastageQty ?? 0) > 0 || (lot.seedWastageQty ?? 0) > 0) && (
-                                  <span
-                                    className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full"
-                                    style={{ background: 'color-mix(in srgb, #f59e0b 14%, transparent)', color: '#d97706' }}
-                                  >
-                                    {(lot.stoneWastageQty ?? 0) > 0 && ` ${lot.stoneWastageQty} ${(lot.stoneWastageUnit || 'kg').toUpperCase()}`}
-                                    {(lot.stoneWastageQty ?? 0) > 0 && (lot.seedWastageQty ?? 0) > 0 && ' · '}
-                                    {(lot.seedWastageQty ?? 0) > 0 && ` ${lot.seedWastageQty} ${(lot.seedWastageUnit || 'kg').toUpperCase()}`}
-                                  </span>
-                                )}
+                            )}
+                          </div>
+
+                          {/* Column 2: Timeline & Logs */}
+                          <div className="flex flex-col h-full">
+                            <div className="flex-1 space-y-5">
+                              <div className="flex gap-4">
+                                <div className="flex flex-col items-center pt-1">
+                                  <div className="w-2.5 h-2.5 rounded-full border-2 border-primary bg-white shadow-sm" />
+                                  <div className="w-0.5 flex-1 bg-border border-dashed my-1" />
+                                  <div className={`w-2.5 h-2.5 rounded-full border-2 ${job.finishedAt ? 'border-emerald-500 bg-emerald-50' : 'border-muted bg-muted'}`} />
+                                </div>
+                                <div className="space-y-6">
+                                  <div>
+                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">Job Initialized</div>
+                                    <div className="flex items-center gap-2 mt-1.5">
+                                      <Clock size={14} className="text-muted-foreground opacity-60" />
+                                      <span className="text-xs font-bold text-foreground">
+                                        {new Date(job.startedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">Process Completed</div>
+                                    <div className="flex items-center gap-2 mt-1.5">
+                                      <CheckCircle size={14} className={`${job.finishedAt ? 'text-emerald-500' : 'text-muted-foreground opacity-40'}`} />
+                                      <span className={`text-xs font-bold ${job.finishedAt ? 'text-foreground' : 'text-muted-foreground italic font-medium'}`}>
+                                        {job.finishedAt
+                                          ? new Date(job.finishedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                                          : 'Still in progress...'
+                                        }
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          ))}
+                          </div>
                         </div>
-                      ) : (
-                        <div className="px-4 py-6 text-center">
-                          <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>No lot numbers generated for this job</span>
-                        </div>
-                      )}
-
-                      {/* Job Footer with timestamps */}
-                      <div className="px-4 py-2 flex items-center gap-4 text-[10px]" style={{ background: 'var(--muted)', borderTop: '1px solid var(--border)', color: 'var(--muted-foreground)' }}>
-                        <span className="flex items-center gap-1">
-                          <Clock size={9} /> Started: {new Date(job.startedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                        </span>
-                        {job.finishedAt && (
-                          <span className="flex items-center gap-1">
-                            <CheckCircle size={9} /> Finished: {new Date(job.finishedAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="rounded-xl p-8 text-center" style={{ background: 'color-mix(in srgb, var(--primary) 4%, transparent)', border: '1px dashed color-mix(in srgb, var(--primary) 25%, var(--border))' }}>
-                <Sparkles size={32} style={{ color: 'var(--muted-foreground)', margin: '0 auto 12px' }} />
-                <div className="text-sm font-medium" style={{ color: 'var(--foreground)' }}>No Cleaning History</div>
-                <div className="text-xs mt-1" style={{ color: 'var(--muted-foreground)' }}>
-                  This GRN has not been transferred to cleaning yet. Use the "Transfer" button to start.
+                      </motion.div>
+                    );
+                  })}
                 </div>
-              </div>
-            )}
-
-            {/* Summary: All Lot Numbers Table */}
-            {historyGrn.cleaningLots?.length > 0 && (
-              <div className="rounded-xl border overflow-hidden" style={{ borderColor: 'var(--border)' }}>
-                <div className="px-4 py-3 flex items-center gap-2" style={{ background: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
-                  <Hash size={14} style={{ color: 'var(--primary)' }} />
-                  <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--primary)' }}>
-                    All Generated Lot Numbers
-                  </h3>
-                  <span className="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, var(--primary) 12%, transparent)', color: 'var(--primary)' }}>
-                    {historyGrn.cleaningLots.length} lots
-                  </span>
+              ) : (
+                <div className="rounded-2xl p-12 text-center border-2 border-dashed" style={{ borderColor: 'var(--border)', background: 'color-mix(in srgb, var(--primary) 2%, transparent)' }}>
+                  <Sparkles size={40} className="mx-auto mb-4 opacity-20 text-primary" />
+                  <div className="text-base font-bold text-foreground">No Cleaning Records Found</div>
+                  <p className="text-xs text-muted-foreground mt-2 max-w-xs mx-auto">
+                    This GRN hasn't been queued for cleaning yet. Start by transferring material from the main list.
+                  </p>
                 </div>
-                <table className="w-full border-collapse text-xs">
-                  <thead>
-                    <tr>
-                      {['Cleaning Job', 'Cleaned Qty', 'Warehouse', 'Status', 'Created'].map((h) => (
-                        <th key={h} className="text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)', borderBottom: '1px solid var(--border)', background: 'var(--muted)' }}>{h}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {historyGrn.cleaningLots.map((lot) => (
-                      <tr
-                        key={lot.id}
-                        className="transition-colors duration-150"
-                        style={{ borderBottom: '1px solid color-mix(in srgb, var(--border) 50%, transparent)' }}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--muted)'; }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
-                      >
-                        <td className="px-4 py-2.5 font-bold" style={{ color: 'var(--primary)' }}>LOT-{lot.cleaningJob?.id || lot.lotNumber}</td>
-                        <td className="px-4 py-2.5 font-semibold" style={{ color: 'var(--foreground)' }}>{lot.cleaningJob ? Math.max(0, (lot.cleaningJob.quantity || 0) - (lot.stoneWastageQty || 0) - (lot.seedWastageQty || 0)) : lot.quantity} {historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}</td>
-                        <td className="px-4 py-2.5" style={{ color: 'var(--foreground)' }}>{lot.warehouse?.name}</td>
-                        <td className="px-4 py-2.5">{getStatusTag(lot.status)}</td>
-                        <td className="px-4 py-2.5" style={{ color: 'var(--muted-foreground)' }}>{new Date(lot.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
       </Modal>

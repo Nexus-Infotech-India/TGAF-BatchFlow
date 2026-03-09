@@ -1165,6 +1165,7 @@ model CleaningLot {
   rawMaterialId    String
   warehouseId      String
   quantity         Float
+  cleanedQuantity  Float?   @default(0)
   status           String   @default("Active")
   stoneWastageQty  Float?   @default(0)
   stoneWastageUnit String?  @default("kg")
@@ -1173,17 +1174,17 @@ model CleaningLot {
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
-  cleaningJob        CleaningJob         @relation(fields: [cleaningJobId], references: [id])
-  grn                GRNbyPo             @relation(fields: [grnId], references: [id])
-  rawMaterial        RawMaterialProduct  @relation(fields: [rawMaterialId], references: [id])
-  warehouse          Warehouse           @relation(fields: [warehouseId], references: [id])
-  processingBatchLot ProcessingBatchLot?
+  cleaningJob         CleaningJob          @relation(fields: [cleaningJobId], references: [id])
+  grn                 GRNbyPo              @relation(fields: [grnId], references: [id])
+  rawMaterial         RawMaterialProduct   @relation(fields: [rawMaterialId], references: [id])
+  warehouse           Warehouse            @relation(fields: [warehouseId], references: [id])
+  processingBatchLots ProcessingBatchLot[]
 }
 
 model ProcessingBatchLot {
   id                String   @id @default(uuid())
   processingJobId   String
-  cleaningLotId     String   @unique
+  cleaningLotId     String
   allocatedQuantity Float
   createdAt         DateTime @default(now())
 

@@ -1912,13 +1912,16 @@ export class BatchController {
 
   async getAvailableLotNumbers(req: Request, res: Response): Promise<void> {
     try {
-      // Fetch all cleaned lots
+      // Fetch all cleaned lots that still have available cleaned quantity
       const lots = await prisma.cleaningLot.findMany({
-        where: { status: 'Cleaned' },
+        where: {
+          status: { in: ['Cleaned'] },
+          cleanedQuantity: { gt: 0 },
+        },
         include: {
           grn: { select: { grnNumber: true } },
           rawMaterial: { select: { name: true, skuCode: true, unitOfMeasurement: true } },
-          processingBatchLot: { select: { allocatedQuantity: true } },
+          processingBatchLots: { select: { allocatedQuantity: true } },
           cleaningJob: { select: { id: true, quantity: true } },
         },
         orderBy: { createdAt: 'desc' },
@@ -1936,18 +1939,21 @@ export class BatchController {
       const formattedLots = lots.map(lot => {
         const totalLotQty = lot.quantity || 0;
         const stoneWastage = lot.stoneWastageQty || 0;
-        // Use the greater of CleaningLot.seedWastageQty and aggregated SeedWastageRecord total
         const lotSeedWastage = lot.seedWastageQty || 0;
         const recordedSeedWastage = seedWastageMap.get(lot.lotNumber) || 0;
         const seedWastage = Math.max(lotSeedWastage, recordedSeedWastage);
-        const allocatedQty = lot.processingBatchLot?.allocatedQuantity || 0;
-        // Available = Total Lot Qty - Stone Wastage - Seed Wastage - Allocated to Processing
-        const availableQty = Math.max(totalLotQty - stoneWastage - seedWastage - allocatedQty, 0);
+        const totalAllocated = lot.processingBatchLots?.reduce((sum: number, pbl: any) => sum + (pbl.allocatedQuantity || 0), 0) || 0;
+        // cleanedQuantity is the authoritative remaining cleaned qty (already deducted on allocation)
+        const availableQty = lot.cleanedQuantity ?? 0;
+
+        const cleaningJobQty = lot.cleaningJob?.quantity || 0;
+        const cleanedQty = Math.max(cleaningJobQty - stoneWastage - seedWastage, 0);
 
         return {
           lotNumber: lot.lotNumber,
           cleaningJobId: lot.cleaningJobId,
-          cleaningJobQty: lot.cleaningJob?.quantity || 0,
+          cleaningJobQty,
+          cleanedQty,
           grnNumber: lot.grn?.grnNumber || '',
           rawMaterialName: lot.rawMaterial?.name || '',
           skuCode: lot.rawMaterial?.skuCode || '',
@@ -1955,7 +1961,7 @@ export class BatchController {
           totalLotQty,
           stoneWastage,
           seedWastage,
-          allocatedQty,
+          allocatedQty: totalAllocated,
           availableQty,
         };
       });

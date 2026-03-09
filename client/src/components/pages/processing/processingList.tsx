@@ -44,6 +44,9 @@ interface CleaningLot {
   rawMaterialId: string;
   warehouseId: string;
   quantity: number;
+  cleanedQuantity?: number;
+  stoneWastageQty?: number;
+  seedWastageQty?: number;
   status: string;
   createdAt: string;
   rawMaterial: RawMaterial;
@@ -52,6 +55,8 @@ interface CleaningLot {
   cleaningJob?: {
     id: string;
     quantity: number;
+    stoneWastageQty?: number;
+    seedWastageQty?: number;
     fromWarehouse?: WarehouseType;
     toWarehouse?: WarehouseType;
   };
@@ -225,13 +230,15 @@ const ProcessingList: React.FC = () => {
     setBatchModal((prev) => ({ ...prev, step: Math.max(0, prev.step - 1) }));
   };
 
-  const toggleLotSelection = (lotId: string, quantity: number) => {
+  const toggleLotSelection = (lotId: string, lot: CleaningLot) => {
     setBatchModal((prev) => {
       const newSelected = { ...prev.selectedLots };
       if (newSelected[lotId] !== undefined) {
         delete newSelected[lotId];
       } else {
-        newSelected[lotId] = quantity;
+        // Use the authoritative cleanedQuantity from the database
+        const netQty = lot.cleanedQuantity ?? 0;
+        newSelected[lotId] = netQty;
       }
       return { ...prev, selectedLots: newSelected };
     });
@@ -649,13 +656,18 @@ const ProcessingList: React.FC = () => {
                                               ? 'bg-amber-500/10 text-amber-600 border-amber-500/20'
                                               : 'bg-primary/10 text-primary border-primary/20';
 
+                                        const initialQty = bl.cleaningLot?.cleaningJob?.quantity || bl.cleaningLot?.quantity || 0;
+                                        const wastages = (bl.cleaningLot?.cleaningJob?.stoneWastageQty || bl.cleaningLot?.stoneWastageQty || 0) +
+                                          (bl.cleaningLot?.cleaningJob?.seedWastageQty || bl.cleaningLot?.seedWastageQty || 0);
+                                        const netQty = Math.max(0, initialQty - wastages);
+
                                         return (
                                           <tr key={bl.id} className="hover:bg-accent/50 transition">
                                             <td className="px-3 py-2 text-sm font-mono text-primary">
                                               LOT-{bl.cleaningLot?.cleaningJob?.id || bl.cleaningLot?.cleaningJobId || '-'}
                                             </td>
                                             <td className="px-3 py-2 text-sm text-foreground text-right">
-                                              {bl.cleaningLot?.cleaningJob?.quantity || bl.cleaningLot?.quantity || 0}{' '}
+                                              {netQty}{' '}
                                               {job.inputRawMaterial?.unitOfMeasurement || ''}
                                             </td>
                                             <td className="px-3 py-2 text-sm font-semibold text-foreground text-right">
@@ -837,6 +849,8 @@ const ProcessingList: React.FC = () => {
                   <tbody className="divide-y divide-border bg-card">
                     {filteredLots.map((lot) => {
                       const isSelected = batchModal.selectedLots[lot.id] !== undefined;
+                      const netQty = lot.cleanedQuantity ?? 0;
+
                       return (
                         <tr
                           key={lot.id}
@@ -845,7 +859,7 @@ const ProcessingList: React.FC = () => {
                           <td className="px-3 py-2 text-center">
                             <Checkbox
                               checked={isSelected}
-                              onChange={() => toggleLotSelection(lot.id, lot.quantity)}
+                              onChange={() => toggleLotSelection(lot.id, lot)}
                             />
                           </td>
                           <td className="px-3 py-2 text-sm font-mono text-primary font-medium">
@@ -855,7 +869,7 @@ const ProcessingList: React.FC = () => {
                             {lot.grn?.grnNumber || '-'}
                           </td>
                           <td className="px-3 py-2 text-sm text-foreground text-right">
-                            {lot.cleaningJob?.quantity || lot.quantity}{' '}
+                            {netQty}{' '}
                             {lot.rawMaterial?.unitOfMeasurement || ''}
                           </td>
                           <td className="px-3 py-2 text-right">
@@ -863,12 +877,13 @@ const ProcessingList: React.FC = () => {
                               <Input
                                 type="number"
                                 min={0.01}
-                                max={lot.quantity}
+                                max={netQty}
                                 step={0.01}
                                 value={batchModal.selectedLots[lot.id]}
-                                onChange={(e) =>
-                                  updateLotQuantity(lot.id, Number(e.target.value))
-                                }
+                                onChange={(e) => {
+                                  const val = Number(e.target.value);
+                                  updateLotQuantity(lot.id, Math.min(val, netQty));
+                                }}
                                 style={{ width: 120, textAlign: 'right' }}
                                 size="small"
                               />

@@ -48,17 +48,11 @@ export class ProcessingJobController {
           res.status(400).json({ error: `Lot ${lot.lotNumber} does not belong to selected material` });
           return;
         }
-        // Check lot is available (Active status, not already in processing)
-        const existingBatchLot = await prisma.processingBatchLot.findUnique({
-          where: { cleaningLotId: lot.id },
-        });
-        if (existingBatchLot) {
-          res.status(400).json({ error: `Lot ${lot.lotNumber} is already allocated to a batch` });
-          return;
-        }
-        if (lotEntry.allocatedQuantity <= 0 || lotEntry.allocatedQuantity > lot.quantity) {
+        // Check available cleaned quantity (cleanedQuantity tracks remaining after wastage & prior allocations)
+        const availableQty = lot.cleanedQuantity ?? 0;
+        if (lotEntry.allocatedQuantity <= 0 || lotEntry.allocatedQuantity > availableQty) {
           res.status(400).json({
-            error: `Invalid allocated quantity for lot ${lot.lotNumber}. Max: ${lot.quantity}`,
+            error: `Invalid allocated quantity for lot ${lot.lotNumber}. Available: ${availableQty}`,
           });
           return;
         }
@@ -118,14 +112,23 @@ export class ProcessingJobController {
           });
 
           // Mark cleaning lot as InProcessing
-          await tx.cleaningLot.update({
+          const updatedLot = await tx.cleaningLot.update({
             where: { id: lotEntry.lotId },
-            data: { status: 'InProcessing' },
+            data: {
+              cleanedQuantity: { decrement: lotEntry.allocatedQuantity },
+            },
           });
+          // If fully allocated, mark as InProcessing
+          if ((updatedLot.cleanedQuantity ?? 0) <= 0) {
+            await tx.cleaningLot.update({
+              where: { id: lotEntry.lotId },
+              data: { status: 'InProcessing' },
+            });
+          }
         }
 
         return processingJob;
-      });
+      }, { timeout: 15000 });
 
       // Return created job with full relations
       const fullJob = await prisma.processingJob.findUnique({
@@ -157,7 +160,7 @@ export class ProcessingJobController {
 
       const where: any = {
         status: { in: ['Active', 'Cleaned'] },
-        processingBatchLot: null, // Not yet allocated
+        cleanedQuantity: { gt: 0 },
       };
 
       if (warehouseId) where.warehouseId = warehouseId;

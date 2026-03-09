@@ -259,7 +259,7 @@ model RMQualityParameter {
 model ProcessingBatchLot {
   id                String   @id @default(uuid())
   processingJobId   String
-  cleaningLotId     String   @unique
+  cleaningLotId     String
   allocatedQuantity Float
   createdAt         DateTime @default(now())
 

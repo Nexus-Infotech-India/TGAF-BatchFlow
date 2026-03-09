@@ -873,6 +873,7 @@ exports.Prisma.CleaningLotScalarFieldEnum = {
   rawMaterialId: 'rawMaterialId',
   warehouseId: 'warehouseId',
   quantity: 'quantity',
+  cleanedQuantity: 'cleanedQuantity',
   status: 'status',
   stoneWastageQty: 'stoneWastageQty',
   stoneWastageUnit: 'stoneWastageUnit',

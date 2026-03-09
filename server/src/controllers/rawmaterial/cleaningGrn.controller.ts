@@ -355,11 +355,16 @@ export class CleaningGrnController {
                 });
 
                 // Update lot status + persist wastage on each lot (lot-wise tracking)
+                // Calculate cleaned quantity per lot = lot quantity - stone wastage - seed wastage
                 for (const lot of cleaningJob.cleaningLots) {
+                    const lotQty = lot.quantity || 0;
+                    const cleanedQty = Math.max(0, lotQty - parsedStoneWastageQty - parsedSeedWastageQty);
+
                     await tx.cleaningLot.update({
                         where: { id: lot.id },
                         data: {
                             status: 'Cleaned',
+                            cleanedQuantity: cleanedQty,
                             stoneWastageQty: parsedStoneWastageQty,
                             stoneWastageUnit: parsedStoneWastageUnit,
                             seedWastageQty: parsedSeedWastageQty,

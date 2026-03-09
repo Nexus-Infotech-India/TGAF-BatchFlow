@@ -780,7 +780,7 @@ const AddBatch: React.FC = () => {
                           </div>
                           <div className="text-xs mt-1">
                             <span className="text-primary font-semibold">
-                              Cleaned Qty: {lot.cleaningJobQty != null ? lot.cleaningJobQty.toFixed(2) : '—'} {lot.unit || 'kg'}
+                              Cleaned Qty: {lot.cleanedQty != null ? lot.cleanedQty.toFixed(2) : '—'} {lot.unit || 'kg'}
                             </span>
                             <span className="text-muted-foreground ml-2">
                               · Avail: {lot.availableQty != null ? lot.availableQty.toFixed(2) : '—'} {lot.unit || 'kg'}
@@ -805,7 +805,7 @@ const AddBatch: React.FC = () => {
                       {selectedLot.availableQty != null ? selectedLot.availableQty.toFixed(2) : '—'} {selectedLot.unit || 'kg'}
                     </div>
                     <div className="text-[11px] text-muted-foreground leading-relaxed space-y-0.5">
-                      <div>Cleaned Qty: <span className="font-medium text-foreground">{selectedLot.cleaningJobQty != null ? selectedLot.cleaningJobQty.toFixed(2) : '—'}</span></div>
+                      <div>Cleaned Qty: <span className="font-medium text-foreground">{selectedLot.cleanedQty != null ? selectedLot.cleanedQty.toFixed(2) : '—'}</span></div>
                       <div>Total Lot Qty: <span className="font-medium text-foreground">{selectedLot.totalLotQty != null ? selectedLot.totalLotQty.toFixed(2) : '—'}</span></div>
                       <div>− Stone Wastage: <span className="font-medium text-foreground">{selectedLot.stoneWastage != null ? selectedLot.stoneWastage.toFixed(2) : '0.00'}</span></div>
                       <div>− Seed Wastage: <span className="font-medium text-foreground">{selectedLot.seedWastage != null ? selectedLot.seedWastage.toFixed(2) : '0.00'}</span></div>
