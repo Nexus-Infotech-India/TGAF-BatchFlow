@@ -50,6 +50,8 @@ interface CleaningLot {
   warehouse: WarehouseType;
   grn?: { grnNumber: string };
   cleaningJob?: {
+    id: string;
+    quantity: number;
     fromWarehouse?: WarehouseType;
     toWarehouse?: WarehouseType;
   };
@@ -605,7 +607,7 @@ const ProcessingList: React.FC = () => {
                             <div className="rounded-xl border border-border bg-card p-4">
                               <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                                 <Layers className="w-4 h-4 text-primary" />
-                                Allocated Cleaning Lots
+                                Allocated Cleaning Jobs
                               </h4>
                               {(!job.processingBatchLots || job.processingBatchLots.length === 0) ? (
                                 <p className="text-sm text-muted-foreground italic">
@@ -617,10 +619,10 @@ const ProcessingList: React.FC = () => {
                                     <thead>
                                       <tr className="bg-muted/40">
                                         <th className="px-3 py-2 text-xs text-left font-semibold text-muted-foreground uppercase">
-                                          Lot No
+                                          Cleaning Job
                                         </th>
                                         <th className="px-3 py-2 text-xs text-right font-semibold text-muted-foreground uppercase">
-                                          Lot Qty
+                                          Cleaned Qty
                                         </th>
                                         <th className="px-3 py-2 text-xs text-right font-semibold text-muted-foreground uppercase">
                                           Allocated Qty
@@ -650,10 +652,10 @@ const ProcessingList: React.FC = () => {
                                         return (
                                           <tr key={bl.id} className="hover:bg-accent/50 transition">
                                             <td className="px-3 py-2 text-sm font-mono text-primary">
-                                              {bl.cleaningLot?.lotNumber || '-'}
+                                              LOT-{bl.cleaningLot?.cleaningJob?.id || bl.cleaningLot?.cleaningJobId || '-'}
                                             </td>
                                             <td className="px-3 py-2 text-sm text-foreground text-right">
-                                              {bl.cleaningLot?.quantity || 0}{' '}
+                                              {bl.cleaningLot?.cleaningJob?.quantity || bl.cleaningLot?.quantity || 0}{' '}
                                               {job.inputRawMaterial?.unitOfMeasurement || ''}
                                             </td>
                                             <td className="px-3 py-2 text-sm font-semibold text-foreground text-right">
@@ -819,13 +821,13 @@ const ProcessingList: React.FC = () => {
                         ✓
                       </th>
                       <th className="px-3 py-2 text-xs text-left font-semibold text-muted-foreground uppercase">
-                        Lot No.
+                        Cleaning Job
                       </th>
                       <th className="px-3 py-2 text-xs text-left font-semibold text-muted-foreground uppercase">
                         GRN
                       </th>
                       <th className="px-3 py-2 text-xs text-right font-semibold text-muted-foreground uppercase">
-                        Available Qty
+                        Cleaned Qty
                       </th>
                       <th className="px-3 py-2 text-xs text-right font-semibold text-muted-foreground uppercase w-36">
                         Allocate Qty
@@ -847,13 +849,13 @@ const ProcessingList: React.FC = () => {
                             />
                           </td>
                           <td className="px-3 py-2 text-sm font-mono text-primary font-medium">
-                            {lot.lotNumber}
+                            LOT-{lot.cleaningJob?.id || lot.cleaningJobId}
                           </td>
                           <td className="px-3 py-2 text-sm text-foreground">
                             {lot.grn?.grnNumber || '-'}
                           </td>
                           <td className="px-3 py-2 text-sm text-foreground text-right">
-                            {lot.quantity}{' '}
+                            {lot.cleaningJob?.quantity || lot.quantity}{' '}
                             {lot.rawMaterial?.unitOfMeasurement || ''}
                           </td>
                           <td className="px-3 py-2 text-right">

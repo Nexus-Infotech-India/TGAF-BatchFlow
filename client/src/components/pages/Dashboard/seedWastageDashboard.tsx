@@ -1,0 +1,337 @@
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Leaf, Package, Hash, CalendarDays, FileText, ArrowRight, Loader2, ChevronDown, ChevronUp, Layers } from 'lucide-react';
+import axios from 'axios';
+import { API_ROUTES } from '../../../utils/api';
+
+interface SeedWastageRecord {
+    id: string;
+    skuCode: string;
+    quantity: number;
+    unit: string;
+    grnNumber: string;
+    lotNumber: string;
+    batchId: string;
+    batchNumber: string;
+    productName: string;
+    rawMaterialName: string;
+    rawMaterialSku: string;
+    supplier: string;
+    dateOfGeneration: string;
+    dateOfProduction: string | null;
+}
+
+const SeedWastageDashboard: React.FC = () => {
+    const [records, setRecords] = useState<SeedWastageRecord[]>([]);
+    const [totalWastage, setTotalWastage] = useState<number>(0);
+    const [uniqueSkus, setUniqueSkus] = useState<string[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [expandedRow, setExpandedRow] = useState<string | null>(null);
+    const authToken = localStorage.getItem('authToken');
+
+    useEffect(() => {
+        const fetchSeedWastage = async () => {
+            try {
+                setLoading(true);
+                const response = await axios.get(API_ROUTES.BATCH.GET_SEED_WASTAGE, {
+                    headers: { Authorization: `Bearer ${authToken}` },
+                });
+                setRecords(response.data.data || []);
+                setTotalWastage(response.data.totalWastage || 0);
+                setUniqueSkus(response.data.uniqueSkus || []);
+            } catch (err) {
+                console.error('Error fetching seed wastage:', err);
+                setError('Failed to load seed wastage records');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (authToken) {
+            fetchSeedWastage();
+        }
+    }, [authToken]);
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center py-12">
+                <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 2, ease: 'linear', repeat: Infinity }}
+                >
+                    <Loader2 size={24} className="text-primary" />
+                </motion.div>
+                <span className="ml-3 text-sm text-muted-foreground">Loading seed wastage data...</span>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="bg-destructive/10 border border-destructive/30 text-destructive px-4 py-3 rounded-lg text-sm">
+                {error}
+            </div>
+        );
+    }
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="space-y-6"
+        >
+            {/* Header */}
+            <div className="flex items-center gap-3">
+                <div className="p-2 bg-amber-500/10 rounded-lg">
+                    <Leaf className="text-amber-500" size={22} />
+                </div>
+                <div>
+                    <h2 className="text-lg font-bold text-foreground">Seed Wastage</h2>
+                    <p className="text-xs text-muted-foreground">
+                        Track waste generated during processing
+                    </p>
+                </div>
+            </div>
+
+            {/* Summary Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.1 }}
+                    className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border border-amber-500/20 rounded-xl p-5"
+                >
+                    <div className="flex items-center gap-2 mb-2">
+                        <Leaf size={16} className="text-amber-500" />
+                        <span className="text-xs font-medium text-amber-600 uppercase tracking-wide">
+                            Total Seed Wastage
+                        </span>
+                    </div>
+                    <div className="text-3xl font-bold text-foreground">
+                        {totalWastage.toFixed(2)}
+                        <span className="text-sm font-normal text-muted-foreground ml-1">kg</span>
+                    </div>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.15 }}
+                    className="bg-card border border-border rounded-xl p-5"
+                >
+                    <div className="flex items-center gap-2 mb-2">
+                        <Hash size={16} className="text-primary" />
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                            Total Records
+                        </span>
+                    </div>
+                    <div className="text-3xl font-bold text-foreground">
+                        {records.length}
+                    </div>
+                </motion.div>
+
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.2 }}
+                    className="bg-card border border-border rounded-xl p-5"
+                >
+                    <div className="flex items-center gap-2 mb-2">
+                        <Package size={16} className="text-primary" />
+                        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                            SKU{uniqueSkus.length > 1 ? 's' : ''}
+                        </span>
+                    </div>
+                    <div className="text-sm font-bold text-foreground">
+                        {uniqueSkus.length > 0 ? uniqueSkus.join(', ') : 'N/A'}
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* Wastage Records Table */}
+            {records.length > 0 ? (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.25 }}
+                    className="bg-card border border-border rounded-xl overflow-hidden"
+                >
+                    <div className="px-4 py-3 border-b border-border flex items-center gap-2">
+                        <FileText size={14} className="text-primary" />
+                        <h3 className="text-sm font-semibold text-foreground">
+                            Wastage History & Traceability
+                        </h3>
+                    </div>
+
+                    {/* Table Header */}
+                    <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-muted/50 border-b border-border text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                        <div className="col-span-2 flex items-center gap-1">
+                            <Package size={11} /> SKU
+                        </div>
+                        <div className="col-span-1 flex items-center gap-1">
+                            Qty (kg)
+                        </div>
+                        <div className="col-span-2 flex items-center gap-1">
+                            Source GRN
+                        </div>
+                        <div className="col-span-2 flex items-center gap-1">
+                            Lot Number
+                        </div>
+                        <div className="col-span-2 flex items-center gap-1">
+                            Batch
+                        </div>
+                        <div className="col-span-2 flex items-center gap-1">
+                            <CalendarDays size={11} /> Date
+                        </div>
+                        <div className="col-span-1 flex items-center justify-center">
+                            <Layers size={11} />
+                        </div>
+                    </div>
+
+                    {/* Table Rows */}
+                    {records.map((record, index) => (
+                        <div key={record.id}>
+                            <motion.div
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.03 * Math.min(index, 20) }}
+                                className="grid grid-cols-12 gap-2 px-4 py-3 border-b border-border hover:bg-muted/30 transition-colors items-center text-sm cursor-pointer"
+                                onClick={() => setExpandedRow(expandedRow === record.id ? null : record.id)}
+                            >
+                                <div className="col-span-2">
+                                    <span className="inline-flex items-center px-2 py-0.5 bg-amber-500/10 text-amber-700 text-xs font-medium rounded">
+                                        {record.skuCode}
+                                    </span>
+                                </div>
+                                <div className="col-span-1 font-semibold text-foreground">
+                                    {record.quantity.toFixed(2)}
+                                </div>
+                                <div className="col-span-2 text-muted-foreground text-xs">
+                                    {record.grnNumber || '-'}
+                                </div>
+                                <div className="col-span-2">
+                                    <span className="text-xs font-mono bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                                        {record.lotNumber || '-'}
+                                    </span>
+                                </div>
+                                <div className="col-span-2 text-muted-foreground text-xs">
+                                    {record.batchNumber || '-'}
+                                </div>
+                                <div className="col-span-2 text-muted-foreground text-xs">
+                                    {new Date(record.dateOfGeneration).toLocaleDateString('en-IN', {
+                                        day: '2-digit',
+                                        month: 'short',
+                                        year: 'numeric',
+                                    })}
+                                </div>
+                                <div className="col-span-1 flex justify-center">
+                                    {expandedRow === record.id
+                                        ? <ChevronUp size={14} className="text-muted-foreground" />
+                                        : <ChevronDown size={14} className="text-muted-foreground" />
+                                    }
+                                </div>
+                            </motion.div>
+
+                            {/* Expanded Traceability Row */}
+                            <AnimatePresence>
+                                {expandedRow === record.id && (
+                                    <motion.div
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={{ height: 'auto', opacity: 1 }}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="overflow-hidden border-b border-border"
+                                    >
+                                        <div className="px-6 py-4 bg-muted/20">
+                                            {/* Full Traceability Chain */}
+                                            <div className="mb-3">
+                                                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                                                    Full Traceability Chain
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                {/* GRN */}
+                                                <div className="flex items-center gap-1.5 bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2">
+                                                    <div className="w-2 h-2 rounded-full bg-blue-500" />
+                                                    <div>
+                                                        <div className="text-[10px] text-blue-600 font-medium uppercase">GRN</div>
+                                                        <div className="text-xs font-semibold text-foreground">{record.grnNumber || '-'}</div>
+                                                        {record.supplier && (
+                                                            <div className="text-[10px] text-muted-foreground">{record.supplier}</div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <ArrowRight size={14} className="text-muted-foreground flex-shrink-0" />
+                                                {/* Lot */}
+                                                <div className="flex items-center gap-1.5 bg-purple-500/10 border border-purple-500/20 rounded-lg px-3 py-2">
+                                                    <div className="w-2 h-2 rounded-full bg-purple-500" />
+                                                    <div>
+                                                        <div className="text-[10px] text-purple-600 font-medium uppercase">Cleaning Lot</div>
+                                                        <div className="text-xs font-semibold text-foreground">{record.lotNumber || '-'}</div>
+                                                        {record.rawMaterialName && (
+                                                            <div className="text-[10px] text-muted-foreground">{record.rawMaterialName}</div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <ArrowRight size={14} className="text-muted-foreground flex-shrink-0" />
+                                                {/* Batch */}
+                                                <div className="flex items-center gap-1.5 bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2">
+                                                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                                                    <div>
+                                                        <div className="text-[10px] text-green-600 font-medium uppercase">Batch</div>
+                                                        <div className="text-xs font-semibold text-foreground">{record.batchNumber || '-'}</div>
+                                                        {record.productName && (
+                                                            <div className="text-[10px] text-muted-foreground">{record.productName}</div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                                <ArrowRight size={14} className="text-muted-foreground flex-shrink-0" />
+                                                {/* Wastage */}
+                                                <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
+                                                    <div className="w-2 h-2 rounded-full bg-amber-500" />
+                                                    <div>
+                                                        <div className="text-[10px] text-amber-600 font-medium uppercase">Seed Wastage</div>
+                                                        <div className="text-xs font-semibold text-foreground">{record.quantity.toFixed(2)} {record.unit}</div>
+                                                        <div className="text-[10px] text-muted-foreground">SKU: {record.skuCode}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                    ))}
+
+                    {/* Traceability Legend */}
+                    <div className="px-4 py-3 bg-muted/30 border-t border-border">
+                        <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
+                            <span className="font-medium">Traceability Chain:</span>
+                            <span className="inline-flex items-center gap-1">
+                                <span className="w-2 h-2 rounded-full bg-blue-500" /> GRN
+                                <ArrowRight size={10} />
+                                <span className="w-2 h-2 rounded-full bg-purple-500" /> Lot
+                                <ArrowRight size={10} />
+                                <span className="w-2 h-2 rounded-full bg-green-500" /> Batch
+                                <ArrowRight size={10} />
+                                <span className="w-2 h-2 rounded-full bg-amber-500" /> Wastage
+                            </span>
+                            <span className="ml-auto text-muted-foreground/60">Click a row to expand</span>
+                        </div>
+                    </div>
+                </motion.div>
+            ) : (
+                <div className="bg-muted/30 border border-border rounded-xl p-8 text-center">
+                    <Leaf size={32} className="text-muted-foreground mx-auto mb-3 opacity-50" />
+                    <p className="text-sm text-muted-foreground">
+                        No seed wastage records found. Seed wastage will appear here once recorded during batch creation.
+                    </p>
+                </div>
+            )}
+        </motion.div>
+    );
+};
+
+export default SeedWastageDashboard;

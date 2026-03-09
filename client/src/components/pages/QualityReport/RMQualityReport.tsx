@@ -56,7 +56,7 @@ const itemVariants = {
   },
 };
 
-// Fixed parameters for Chilli
+// Fixed parameters by raw material type
 const CHILLI_PARAMETERS = [
   { parameter: 'Moisture', standard: 'max 10%' },
   { parameter: 'ASTA Color', standard: 'min 40' },
@@ -66,6 +66,22 @@ const CHILLI_PARAMETERS = [
   { parameter: 'TPC', standard: 'max 10 million cfu' },
   { parameter: 'YM', standard: '10,000 cfu' },
 ];
+
+const POLYTHENE_PARAMETERS = [
+  { parameter: 'Thickness (Micron/Gauge)', standard: 'As per specification (e.g., 40–100 micron)' },
+  { parameter: 'Tensile Strength', standard: '≥ 8 MPa' },
+  { parameter: 'Seal Strength', standard: '≥ 1.5 kg / 15 mm' },
+  { parameter: 'Overall Migration', standard: '≤ 10 mg/dm² (Food grade standard)' },
+  { parameter: 'Odor', standard: 'Odorless / No foreign smell' },
+];
+
+// Returns the correct parameter set based on raw material name
+const getParametersForMaterial = (materialName: string) => {
+  if (materialName && materialName.toLowerCase().includes('polythene')) {
+    return POLYTHENE_PARAMETERS;
+  }
+  return CHILLI_PARAMETERS;
+};
 
 const formatDate = (dateString: string) => {
   if (!dateString) return 'N/A';
@@ -258,6 +274,19 @@ const RMQualityReport: React.FC = () => {
   const selectedPO = receivedPOs.find((p) => p.id === selectedPOId);
   const selectedItem = selectedPO?.items?.find((i) => i.id === selectedItemId) || null;
 
+  // Determine active parameters based on selected raw material
+  const activeParameters = selectedItem
+    ? getParametersForMaterial(selectedItem.rawMaterial.name)
+    : CHILLI_PARAMETERS;
+
+  // Reset results when the selected item changes (different parameter set)
+  useEffect(() => {
+    if (selectedItem) {
+      const params = getParametersForMaterial(selectedItem.rawMaterial.name);
+      setResults(Array(params.length).fill(''));
+    }
+  }, [selectedItemId]);
+
   // Auto-select item when PO changes (if single item, auto-select it)
   useEffect(() => {
     if (selectedPO && selectedPO.items.length === 1) {
@@ -316,9 +345,9 @@ const RMQualityReport: React.FC = () => {
   // Check if form is valid
   useEffect(() => {
     const itemSelected = selectedPOId !== '' && selectedItemId !== '' && !!selectedItem;
-    const parametersValid = results.every((r) => r.trim() !== '');
+    const parametersValid = results.length === activeParameters.length && results.every((r) => r.trim() !== '');
     setIsFormValid(itemSelected && parametersValid);
-  }, [selectedPOId, selectedItemId, selectedItem, results]);
+  }, [selectedPOId, selectedItemId, selectedItem, results, activeParameters]);
 
 
 
@@ -347,7 +376,7 @@ const RMQualityReport: React.FC = () => {
         rawMaterialName: selectedItem.rawMaterial.name,
         variety: '',
         supplier: selectedPO.vendor.name,
-        parameters: CHILLI_PARAMETERS.map((p, i) => ({
+        parameters: activeParameters.map((p, i) => ({
           parameter: p.parameter,
           standard: p.standard,
           result: results[i],
@@ -554,7 +583,7 @@ const RMQualityReport: React.FC = () => {
   const resetForm = () => {
     setSelectedPOId('');
     setSelectedItemId('');
-    setResults(Array(CHILLI_PARAMETERS.length).fill(''));
+    setResults(Array(activeParameters.length).fill(''));
     setError(null);
   };
 
@@ -863,14 +892,14 @@ const RMQualityReport: React.FC = () => {
 
                 {selectedItem ? (
                   <div className="divide-y divide-border">
-                    {CHILLI_PARAMETERS.map((param, index) => (
+                    {activeParameters.map((param, index) => (
                       <motion.div
-                        key={index}
+                        key={`${selectedItemId}-${index}`}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.04 }}
                         className="px-5 py-3.5 transition-colors duration-150"
-                        style={{ borderBottom: index < CHILLI_PARAMETERS.length - 1 ? '1px solid color-mix(in srgb, var(--border) 50%, transparent)' : undefined }}
+                        style={{ borderBottom: index < activeParameters.length - 1 ? '1px solid color-mix(in srgb, var(--border) 50%, transparent)' : undefined }}
                         onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = 'var(--muted)'; }}
                         onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = 'transparent'; }}
                       >

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import api, { API_ROUTES } from '../../../utils/api';
 import { Bar, Doughnut } from 'react-chartjs-2';
+import SeedWastageDashboard from './seedWastageDashboard';
 import {
   Chart,
   CategoryScale,
@@ -470,6 +471,19 @@ const RawDashboard: React.FC = () => {
             </div>
           </motion.div>
         )}
+
+        {/* Seed Wastage Section */}
+        <motion.div
+          variants={itemVariants}
+          initial="hidden"
+          animate="visible"
+          className="bg-card rounded-lg shadow-sm border border-border/50 p-4"
+          style={{
+            background: 'linear-gradient(90deg, rgba(83, 23, 170, 0.03) 0%, rgba(83, 23, 170, 0.01) 50%, transparent 100%)',
+          }}
+        >
+          <SeedWastageDashboard />
+        </motion.div>
       </div>
     </div>
   );

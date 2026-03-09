@@ -18,6 +18,7 @@ import {
   Ruler,
   CheckCircle,
   FileText,
+  Leaf,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAutoSave } from '../../../hooks/useAutoSave';
@@ -49,6 +50,8 @@ const AddBatch: React.FC = () => {
     batchNumber: '',
     batchCode: '',
     grnNumber: '',
+    lotNumber: '',
+    seedWastageQty: '',
     productId: '',
     dateOfProduction: '',
     bestBeforeDate: '',
@@ -56,15 +59,15 @@ const AddBatch: React.FC = () => {
     sampleAnalysisCompleted: '',
     sampleAnalysisStatus: 'PENDING',
   });
- const [parameterValues, setParameterValues] = useState<
-   Array<{
-     parameterId: string;
-     value: string;
-     standardValue?: string; // ADD THIS
-     unitId?: string;
-     remark?: string;
-   }>
- >([]);
+  const [parameterValues, setParameterValues] = useState<
+    Array<{
+      parameterId: string;
+      value: string;
+      standardValue?: string; // ADD THIS
+      unitId?: string;
+      remark?: string;
+    }>
+  >([]);
   const [sieveSelections, setSieveSelections] = useState<
     Record<string, string>
   >({});
@@ -78,6 +81,11 @@ const AddBatch: React.FC = () => {
   const [removedParameters, setRemovedParameters] = useState<Set<string>>(
     new Set()
   );
+  const [lotNumbers, setLotNumbers] = useState<any[]>([]);
+  const [selectedLot, setSelectedLot] = useState<any>(null);
+  const [lotSearchInput, setLotSearchInput] = useState('');
+  const [showLotSuggestions, setShowLotSuggestions] = useState(false);
+  const [filteredLotSuggestions, setFilteredLotSuggestions] = useState<any[]>([]);
 
   const { data: productsData = [] } = useQuery({
     queryKey: ['products'],
@@ -147,6 +155,8 @@ const AddBatch: React.FC = () => {
           batchNumber: draftData.batchNumber || '',
           batchCode: draftData.batchCode || '',
           grnNumber: draftData.grnNumber || '',
+          lotNumber: draftData.lotNumber || '',
+          seedWastageQty: draftData.seedWastageQty != null ? String(draftData.seedWastageQty) : '',
           productId: draftData.productId || '',
           dateOfProduction: toDateInputString(draftData.dateOfProduction),
           bestBeforeDate: toDateInputString(draftData.bestBeforeDate),
@@ -159,6 +169,12 @@ const AddBatch: React.FC = () => {
           sampleAnalysisStatus: draftData.sampleAnalysisStatus || 'PENDING',
         });
         setSelectedProductId(draftData.productId || '');
+        if (draftData.lotNumber) {
+          setLotSearchInput(draftData.lotNumber);
+        }
+        if (draftData.grnNumber) {
+          setGrnSearchInput(draftData.grnNumber);
+        }
         setNewProductName(draftData.newProductName || '');
         setDraftFetchedAt(draftData.updatedAt || draftData.createdAt || null);
         if (draftData.parameterValues) {
@@ -201,15 +217,15 @@ const AddBatch: React.FC = () => {
     }
   }, [productParametersData]);
 
- const handleInputChange = (
-   e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
- ) => {
-   const { name, value } = e.target;
-   setFormData((prev) => ({
-     ...prev,
-     [name]: value,
-   }));
- };
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleProductChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -283,6 +299,8 @@ const AddBatch: React.FC = () => {
       sampleAnalysisStarted: formData.sampleAnalysisStarted || null,
       sampleAnalysisCompleted: formData.sampleAnalysisCompleted || null,
       parameterValues,
+      lotNumber: formData.lotNumber || null,
+      seedWastageQty: formData.seedWastageQty || null,
       status: 'SUBMITTED',
     };
 
@@ -343,6 +361,8 @@ const AddBatch: React.FC = () => {
           batchNumber: draftData.batchNumber || '',
           batchCode: draftData.batchCode || '',
           grnNumber: draftData.grnNumber || '',
+          lotNumber: draftData.lotNumber || '',
+          seedWastageQty: draftData.seedWastageQty != null ? String(draftData.seedWastageQty) : '',
           productId: draftData.productId || '',
           dateOfProduction: toDateInputString(draftData.dateOfProduction),
           bestBeforeDate: toDateInputString(draftData.bestBeforeDate),
@@ -355,6 +375,12 @@ const AddBatch: React.FC = () => {
           sampleAnalysisStatus: draftData.sampleAnalysisStatus || 'PENDING',
         });
         setSelectedProductId(draftData.productId || '');
+        if (draftData.lotNumber) {
+          setLotSearchInput(draftData.lotNumber);
+        }
+        if (draftData.grnNumber) {
+          setGrnSearchInput(draftData.grnNumber);
+        }
         if (draftData.parameterValues) {
           const parsedData =
             typeof draftData.parameterValues === 'string'
@@ -417,6 +443,75 @@ const AddBatch: React.FC = () => {
     }
   }, [authToken]);
 
+  // Fetch lot numbers for selection
+  useEffect(() => {
+    const fetchLotNumbers = async () => {
+      try {
+        const response = await axios.get(
+          `${API_ROUTES.BATCH.GET_LOT_NUMBERS}`,
+          { headers: { Authorization: `Bearer ${authToken}` } }
+        );
+        setLotNumbers(response.data.data || []);
+      } catch (error) {
+        console.error('Error fetching lot numbers:', error);
+        setLotNumbers([]);
+      }
+    };
+
+    if (authToken) {
+      fetchLotNumbers();
+    }
+  }, [authToken]);
+
+  // Auto-match selectedLot when lotNumbers load and formData.lotNumber is already set (e.g. from draft)
+  useEffect(() => {
+    if (lotNumbers.length > 0 && formData.lotNumber && !selectedLot) {
+      const matched = lotNumbers.find(l => l.lotNumber === formData.lotNumber);
+      if (matched) {
+        setSelectedLot(matched);
+      }
+    }
+  }, [lotNumbers, formData.lotNumber]);
+
+  // Handler for lot search input
+  const handleLotInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setLotSearchInput(value);
+    setFormData((prev) => ({ ...prev, lotNumber: value }));
+
+    if (value.trim() === '') {
+      setFilteredLotSuggestions([]);
+      setShowLotSuggestions(false);
+      setSelectedLot(null);
+    } else {
+      const filtered = lotNumbers.filter(
+        (item) =>
+          item.lotNumber.toLowerCase().includes(value.toLowerCase()) ||
+          (`LOT-${item.cleaningJobId || ''}`).toLowerCase().includes(value.toLowerCase()) ||
+          (item.cleaningJobId || '').toLowerCase().includes(value.toLowerCase()) ||
+          item.rawMaterialName.toLowerCase().includes(value.toLowerCase()) ||
+          item.grnNumber.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredLotSuggestions(filtered);
+      setShowLotSuggestions(filtered.length > 0);
+    }
+  };
+
+  // Handler to select lot from suggestions
+  const handleSelectLot = (lot: any) => {
+    setLotSearchInput(lot.lotNumber);
+    setSelectedLot(lot);
+    setFormData((prev) => ({
+      ...prev,
+      lotNumber: lot.lotNumber,
+      grnNumber: lot.grnNumber || prev.grnNumber,
+    }));
+    if (lot.grnNumber) {
+      setGrnSearchInput(lot.grnNumber);
+    }
+    setShowLotSuggestions(false);
+  };
+
   // Add handler for GRN search input
   const handleGrnInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -470,8 +565,8 @@ const AddBatch: React.FC = () => {
       initial="hidden"
       animate="visible"
     >
-      <div style={{display:'none'}}>{isLoadingGRNs}{filteredGrnSuggestions}{showGrnSuggestions}</div>
-      
+      <div style={{ display: 'none' }}>{isLoadingGRNs}{filteredGrnSuggestions}{showGrnSuggestions}</div>
+
       <div className="max-w-7xl mx-auto pt-0 px-4 pb-4 sm:pt-0 sm:px-6 sm:pb-6">
         <AnimatePresence>
           {error && (
@@ -555,7 +650,7 @@ const AddBatch: React.FC = () => {
                     name="batchNumber"
                     value={formData.batchNumber}
                     onChange={handleInputChange}
-                      className="w-full border border-input px-2 py-1.5 bg-    background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
+                    className="w-full border border-input px-2 py-1.5 bg-    background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                     required
                   />
                 </div>
@@ -568,7 +663,7 @@ const AddBatch: React.FC = () => {
                   <select
                     value={showNewProductForm ? 'new' : selectedProductId}
                     onChange={handleProductChange}
-                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
+                    className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                     required
                   >
                     <option value="">Select</option>
@@ -588,7 +683,7 @@ const AddBatch: React.FC = () => {
                       type="text"
                       value={newProductName}
                       onChange={(e) => setNewProductName(e.target.value)}
-                        className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
+                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                       required
                     />
                   </div>
@@ -625,7 +720,7 @@ const AddBatch: React.FC = () => {
                     name="sampleAnalysisStatus"
                     value={formData.sampleAnalysisStatus}
                     onChange={handleInputChange}
-                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
+                    className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                   >
                     <option value="IN_PROGRESS">In Progress</option>
                     <option value="COMPLETED">Completed</option>
@@ -640,7 +735,7 @@ const AddBatch: React.FC = () => {
                     name="batchCode"
                     value={formData.batchCode}
                     onChange={handleInputChange}
-                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
+                    className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                   />
                 </div>
 
@@ -651,9 +746,100 @@ const AddBatch: React.FC = () => {
                     type="text"
                     value={grnSearchInput}
                     onChange={handleGrnInputChange}
-                      className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
+                    className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
                     placeholder="Optional"
                   />
+                </div>
+
+                {/* Lot Number with autocomplete */}
+                <div className="relative">
+                  <label className="text-xs text-muted-foreground">Lot Number</label>
+                  <input
+                    type="text"
+                    value={lotSearchInput}
+                    onChange={handleLotInputChange}
+                    onFocus={() => {
+                      if (filteredLotSuggestions.length > 0) setShowLotSuggestions(true);
+                    }}
+                    onBlur={() => setTimeout(() => setShowLotSuggestions(false), 200)}
+                    className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
+                    placeholder="Search lot..."
+                  />
+                  {showLotSuggestions && filteredLotSuggestions.length > 0 && (
+                    <div className="absolute z-50 w-full mt-1 bg-card border border-border rounded-md shadow-lg max-h-60 overflow-y-auto">
+                      {filteredLotSuggestions.map((lot) => (
+                        <button
+                          key={lot.lotNumber}
+                          type="button"
+                          className="w-full text-left px-3 py-2 hover:bg-accent text-sm border-b border-border last:border-b-0 transition-colors"
+                          onMouseDown={() => handleSelectLot(lot)}
+                        >
+                          <div className="font-medium text-foreground">LOT-{lot.cleaningJobId || lot.lotNumber}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {lot.rawMaterialName} · GRN: {lot.grnNumber}
+                          </div>
+                          <div className="text-xs mt-1">
+                            <span className="text-primary font-semibold">
+                              Cleaned Qty: {lot.cleaningJobQty != null ? lot.cleaningJobQty.toFixed(2) : '—'} {lot.unit || 'kg'}
+                            </span>
+                            <span className="text-muted-foreground ml-2">
+                              · Avail: {lot.availableQty != null ? lot.availableQty.toFixed(2) : '—'} {lot.unit || 'kg'}
+                            </span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Available Quantity (read-only, shown when a lot is selected) */}
+                {selectedLot && (
+                  <div className="bg-primary/5 border border-primary/20 rounded-md px-3 py-2 space-y-1">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs text-muted-foreground">Available Quantity</label>
+                      <span className="text-[10px] font-mono bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                        LOT-{selectedLot.cleaningJobId || selectedLot.lotNumber}
+                      </span>
+                    </div>
+                    <div className="text-lg font-bold text-primary">
+                      {selectedLot.availableQty != null ? selectedLot.availableQty.toFixed(2) : '—'} {selectedLot.unit || 'kg'}
+                    </div>
+                    <div className="text-[11px] text-muted-foreground leading-relaxed space-y-0.5">
+                      <div>Cleaned Qty: <span className="font-medium text-foreground">{selectedLot.cleaningJobQty != null ? selectedLot.cleaningJobQty.toFixed(2) : '—'}</span></div>
+                      <div>Total Lot Qty: <span className="font-medium text-foreground">{selectedLot.totalLotQty != null ? selectedLot.totalLotQty.toFixed(2) : '—'}</span></div>
+                      <div>− Stone Wastage: <span className="font-medium text-foreground">{selectedLot.stoneWastage != null ? selectedLot.stoneWastage.toFixed(2) : '0.00'}</span></div>
+                      <div>− Seed Wastage: <span className="font-medium text-foreground">{selectedLot.seedWastage != null ? selectedLot.seedWastage.toFixed(2) : '0.00'}</span></div>
+                      <div>− Allocated to Processing: <span className="font-medium text-foreground">{selectedLot.allocatedQty != null ? selectedLot.allocatedQty.toFixed(2) : '0.00'}</span></div>
+                    </div>
+                    <div className="text-[10px] text-muted-foreground pt-1 border-t border-primary/10">
+                      {selectedLot.rawMaterialName || '—'} · GRN: {selectedLot.grnNumber || '—'}
+                    </div>
+                  </div>
+                )}
+
+                {/* Seed Wastage Quantity */}
+                <div>
+                  <label className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Leaf size={12} className="text-amber-500" />
+                    Seed Wastage Quantity (kg)
+                  </label>
+                  <input
+                    type="number"
+                    name="seedWastageQty"
+                    value={formData.seedWastageQty}
+                    onChange={handleInputChange}
+                    min="0"
+                    step="0.01"
+                    className="w-full border border-input px-2 py-1.5 bg-background focus:outline-none focus:ring-1 focus:ring-ring text-gray-500"
+                    placeholder="0.00"
+                  />
+                  {selectedLot && formData.seedWastageQty && parseFloat(formData.seedWastageQty) > 0 && (
+                    <div className={`text-[11px] mt-1 ${parseFloat(formData.seedWastageQty) > (selectedLot.availableQty || 0) ? 'text-destructive' : 'text-muted-foreground'}`}>
+                      {parseFloat(formData.seedWastageQty) > (selectedLot.availableQty || 0)
+                        ? 'Warning: Exceeds available quantity'
+                        : `Will be recorded from Lot ${selectedLot.lotNumber}`}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -826,7 +1012,7 @@ const AddBatch: React.FC = () => {
                                           ];
                                         });
                                       }}
-                                        className="w-full text-sm px-3 py-1.5 border border-input bg-background rounded focus:outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-gray-400"
+                                      className="w-full text-sm px-3 py-1.5 border border-input bg-background rounded focus:outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-gray-400"
                                       placeholder="Enter value"
                                     />
                                   )}
@@ -869,7 +1055,7 @@ const AddBatch: React.FC = () => {
                                         ];
                                       });
                                     }}
-                                      className="w-full text-sm px-3 py-1.5 border border-input bg-background rounded focus:outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-gray-400"
+                                    className="w-full text-sm px-3 py-1.5 border border-input bg-background rounded focus:outline-none focus:ring-2 focus:ring-primary/40 placeholder:text-gray-400"
                                     placeholder="Add remark"
                                   />
                                 </div>
@@ -943,11 +1129,10 @@ const AddBatch: React.FC = () => {
                   type="button"
                   onClick={handleSave}
                   disabled={isSaving || !isFormValid}
-                  className={`px-5 py-2 rounded-lg text-sm font-semibold inline-flex items-center gap-2 transition ${
-                    isSaving || !isFormValid
+                  className={`px-5 py-2 rounded-lg text-sm font-semibold inline-flex items-center gap-2 transition ${isSaving || !isFormValid
                       ? 'bg-muted text-muted-foreground cursor-not-allowed'
                       : 'bg-primary text-primary-foreground hover:bg-primary/90'
-                  }`}
+                    }`}
                 >
                   {isSaving ? (
                     <>

@@ -26,6 +26,8 @@ router.post('/batches/mail/filtered', authenticate, BatchMailFilteredController.
 router.get('/logs', authenticate, BatchController.getActivityLogs);
 router.get('/batches-with-drafts', authenticate, BatchController.getBatchesWithDrafts);
 router.get('/grn-numbers', authenticate, BatchController.getAvailableGRNNumbers);
+router.get('/lot-numbers', authenticate, BatchController.getAvailableLotNumbers);
+router.get('/seed-wastage', authenticate, BatchController.getSeedWastageRecords);
 
 // Add the Certificate of Analysis route
 router.get('/batches/:id/certificate', authenticate, BatchController.generateCertificateOfAnalysis);

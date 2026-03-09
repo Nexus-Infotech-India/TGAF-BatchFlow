@@ -10,6 +10,8 @@ export interface JwtPayload {
 export interface BatchCreateRequest {
   batchCode: null;
   grnNumber: null;
+  lotNumber?: string;
+  seedWastageQty?: string;
   batchNumber: string;
   productId: string;
   dateOfProduction: string;
@@ -22,7 +24,7 @@ export interface BatchCreateRequest {
   unitIds?: string[];
   parameterValues: BatchParameterValueInput[];
   productName: string;
-  productCode: string; 
+  productCode: string;
 }
 
 // Updated BatchUpdateRequest type with deleteOtherParameters flag

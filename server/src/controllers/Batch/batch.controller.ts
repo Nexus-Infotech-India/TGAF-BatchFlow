@@ -110,6 +110,7 @@ export class BatchController {
             batchNumber: batchData.batchNumber,
             batchCode: batchData.batchCode || null,
             grnNumber: batchData.grnNumber || null,
+            lotNumber: batchData.lotNumber || null,
             productId: batchData.productId,
             dateOfProduction: new Date(batchData.dateOfProduction),
             bestBeforeDate: new Date(batchData.bestBeforeDate),
@@ -160,6 +161,64 @@ export class BatchController {
             details: `Created batch ${batchData.batchNumber}`,
           },
         });
+
+        // Create seed wastage record if seed wastage quantity was provided
+        if (batchData.seedWastageQty && parseFloat(batchData.seedWastageQty) > 0) {
+          // Look up the Seed Wastage SKU from RawMaterialProduct
+          let seedWastageSku = 'SEED-WASTAGE';
+          const seedWastageProduct = await prisma.rawMaterialProduct.findFirst({
+            where: {
+              OR: [
+                { name: { contains: 'Seed Wastage', mode: 'insensitive' } },
+                { name: { contains: 'seed wastage', mode: 'insensitive' } },
+              ]
+            },
+            select: { skuCode: true }
+          });
+          if (seedWastageProduct) {
+            seedWastageSku = seedWastageProduct.skuCode;
+          }
+
+          // Determine the GRN number for the wastage record
+          let wastageGrnNumber = batchData.grnNumber || '';
+          if (batchData.lotNumber) {
+            // Try to get GRN from lot's associated GRN
+            const lot = await prisma.cleaningLot.findUnique({
+              where: { lotNumber: batchData.lotNumber },
+              include: { grn: { select: { grnNumber: true } } }
+            });
+            if (lot?.grn?.grnNumber) {
+              wastageGrnNumber = lot.grn.grnNumber;
+            }
+          }
+
+          await prisma.seedWastageRecord.create({
+            data: {
+              batchId,
+              lotNumber: batchData.lotNumber || '',
+              grnNumber: wastageGrnNumber,
+              skuCode: seedWastageSku,
+              quantity: parseFloat(batchData.seedWastageQty),
+              unit: 'kg',
+            },
+          });
+
+          // Update CleaningLot.seedWastageQty so available quantity stays accurate
+          if (batchData.lotNumber) {
+            const existingLot = await prisma.cleaningLot.findUnique({
+              where: { lotNumber: batchData.lotNumber },
+              select: { seedWastageQty: true },
+            });
+            if (existingLot) {
+              await prisma.cleaningLot.update({
+                where: { lotNumber: batchData.lotNumber },
+                data: {
+                  seedWastageQty: (existingLot.seedWastageQty || 0) + parseFloat(batchData.seedWastageQty),
+                },
+              });
+            }
+          }
+        }
 
         return batch;
       });
@@ -1850,6 +1909,145 @@ export class BatchController {
       res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+  async getAvailableLotNumbers(req: Request, res: Response): Promise<void> {
+    try {
+      // Fetch all cleaned lots
+      const lots = await prisma.cleaningLot.findMany({
+        where: { status: 'Cleaned' },
+        include: {
+          grn: { select: { grnNumber: true } },
+          rawMaterial: { select: { name: true, skuCode: true, unitOfMeasurement: true } },
+          processingBatchLot: { select: { allocatedQuantity: true } },
+          cleaningJob: { select: { id: true, quantity: true } },
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      // Aggregate seed wastage from SeedWastageRecord per lot for accurate calculation
+      const seedWastageByLot = await prisma.seedWastageRecord.groupBy({
+        by: ['lotNumber'],
+        _sum: { quantity: true },
+      });
+      const seedWastageMap = new Map(
+        seedWastageByLot.map(sw => [sw.lotNumber, sw._sum.quantity || 0])
+      );
+
+      const formattedLots = lots.map(lot => {
+        const totalLotQty = lot.quantity || 0;
+        const stoneWastage = lot.stoneWastageQty || 0;
+        // Use the greater of CleaningLot.seedWastageQty and aggregated SeedWastageRecord total
+        const lotSeedWastage = lot.seedWastageQty || 0;
+        const recordedSeedWastage = seedWastageMap.get(lot.lotNumber) || 0;
+        const seedWastage = Math.max(lotSeedWastage, recordedSeedWastage);
+        const allocatedQty = lot.processingBatchLot?.allocatedQuantity || 0;
+        // Available = Total Lot Qty - Stone Wastage - Seed Wastage - Allocated to Processing
+        const availableQty = Math.max(totalLotQty - stoneWastage - seedWastage - allocatedQty, 0);
+
+        return {
+          lotNumber: lot.lotNumber,
+          cleaningJobId: lot.cleaningJobId,
+          cleaningJobQty: lot.cleaningJob?.quantity || 0,
+          grnNumber: lot.grn?.grnNumber || '',
+          rawMaterialName: lot.rawMaterial?.name || '',
+          skuCode: lot.rawMaterial?.skuCode || '',
+          unit: lot.rawMaterial?.unitOfMeasurement || 'kg',
+          totalLotQty,
+          stoneWastage,
+          seedWastage,
+          allocatedQty,
+          availableQty,
+        };
+      });
+
+      res.status(200).json({
+        success: true,
+        data: formattedLots,
+      });
+    } catch (error) {
+      console.error('Get lot numbers error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  async getSeedWastageRecords(req: Request, res: Response): Promise<void> {
+    try {
+      const records = await prisma.seedWastageRecord.findMany({
+        include: {
+          batch: {
+            select: {
+              batchNumber: true,
+              grnNumber: true,
+              lotNumber: true,
+              dateOfProduction: true,
+              Product: { select: { name: true } },
+            },
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      // Look up raw material names for each lot to build full traceability
+      const lotNumbers = [...new Set(records.map(r => r.lotNumber).filter(Boolean))];
+      const lotDetails = lotNumbers.length > 0
+        ? await prisma.cleaningLot.findMany({
+            where: { lotNumber: { in: lotNumbers } },
+            select: {
+              lotNumber: true,
+              rawMaterial: { select: { name: true, skuCode: true } },
+              grn: { select: { grnNumber: true, supplier: true } },
+            },
+          })
+        : [];
+      const lotMap = new Map(
+        lotDetails.map(l => [l.lotNumber, {
+          rawMaterialName: l.rawMaterial?.name || '',
+          rawMaterialSku: l.rawMaterial?.skuCode || '',
+          supplier: l.grn?.supplier || '',
+          sourceGrn: l.grn?.grnNumber || '',
+        }])
+      );
+
+      // Calculate total seed wastage
+      const totalWastage = records.reduce((sum, r) => sum + r.quantity, 0);
+
+      // Get unique SKU codes
+      const uniqueSkus = [...new Set(records.map(r => r.skuCode))];
+
+      const formattedRecords = records.map(r => {
+        const lot = lotMap.get(r.lotNumber);
+        return {
+          id: r.id,
+          skuCode: r.skuCode,
+          quantity: r.quantity,
+          unit: r.unit,
+          grnNumber: r.grnNumber || lot?.sourceGrn || '',
+          lotNumber: r.lotNumber,
+          batchId: r.batchId,
+          batchNumber: r.batch?.batchNumber || '',
+          productName: r.batch?.Product?.name || '',
+          rawMaterialName: lot?.rawMaterialName || '',
+          rawMaterialSku: lot?.rawMaterialSku || '',
+          supplier: lot?.supplier || '',
+          dateOfGeneration: r.createdAt,
+          dateOfProduction: r.batch?.dateOfProduction || null,
+        };
+      });
+
+      res.status(200).json({
+        success: true,
+        totalWastage,
+        recordCount: records.length,
+        uniqueSkus,
+        data: formattedRecords,
+      });
+    } catch (error) {
+      console.error('Get seed wastage records error:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  }
 }
+
 export default new BatchController();
+
 

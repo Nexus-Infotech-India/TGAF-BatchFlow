@@ -47,6 +47,7 @@ interface CleaningLotItem {
   seedWastageUnit?: string;
   createdAt: string;
   warehouse: { name: string };
+  cleaningJob?: { id: string; quantity: number };
 }
 
 interface CleaningJobItem {
@@ -761,7 +762,7 @@ const CleaningRawMaterialList: React.FC = () => {
                             <ClipboardCheck size={14} />
                           </div>
                           <div>
-                            <span className="text-sm font-bold" style={{ color: 'var(--foreground)' }}>Job {job.id}</span>
+                            <span className="text-sm font-bold" style={{ color: 'var(--foreground)' }}>LOT-{job.id}</span>
                             <div className="flex items-center gap-1.5 text-[11px]" style={{ color: 'var(--muted-foreground)' }}>
                               <MapPin size={10} />
                               {job.fromWarehouse?.name} → {job.toWarehouse?.name}
@@ -823,7 +824,7 @@ const CleaningRawMaterialList: React.FC = () => {
                                   <Hash size={13} style={{ color: 'var(--primary)' }} />
                                 </div>
                                 <div>
-                                  <div className="text-sm font-bold" style={{ color: 'var(--primary)' }}>{lot.lotNumber}</div>
+                                  <div className="text-sm font-bold" style={{ color: 'var(--primary)' }}>LOT-{job.id}</div>
                                   <div className="flex items-center gap-2 text-[11px]" style={{ color: 'var(--muted-foreground)' }}>
                                     <MapPin size={9} /> {lot.warehouse?.name}
                                     <span>•</span>
@@ -833,7 +834,7 @@ const CleaningRawMaterialList: React.FC = () => {
                               </div>
                               <div className="flex items-center gap-3 flex-wrap">
                                 <span className="text-sm font-semibold" style={{ color: 'var(--foreground)' }}>
-                                  {lot.quantity} {unit}
+                                  {Math.max(0, (job.quantity || 0) - (job.stoneWastageQty || 0) - (job.seedWastageQty || 0))} {unit}
                                 </span>
                                 {getStatusTag(lot.status)}
                                 {((lot.stoneWastageQty ?? 0) > 0 || (lot.seedWastageQty ?? 0) > 0) && (
@@ -896,7 +897,7 @@ const CleaningRawMaterialList: React.FC = () => {
                 <table className="w-full border-collapse text-xs">
                   <thead>
                     <tr>
-                      {['Lot #', 'Quantity', 'Warehouse', 'Status', 'Created'].map((h) => (
+                      {['Cleaning Job', 'Cleaned Qty', 'Warehouse', 'Status', 'Created'].map((h) => (
                         <th key={h} className="text-left px-4 py-2.5 text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)', borderBottom: '1px solid var(--border)', background: 'var(--muted)' }}>{h}</th>
                       ))}
                     </tr>
@@ -910,8 +911,8 @@ const CleaningRawMaterialList: React.FC = () => {
                         onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'var(--muted)'; }}
                         onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
                       >
-                        <td className="px-4 py-2.5 font-bold" style={{ color: 'var(--primary)' }}>{lot.lotNumber}</td>
-                        <td className="px-4 py-2.5 font-semibold" style={{ color: 'var(--foreground)' }}>{lot.quantity} {historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}</td>
+                        <td className="px-4 py-2.5 font-bold" style={{ color: 'var(--primary)' }}>LOT-{lot.cleaningJob?.id || lot.lotNumber}</td>
+                        <td className="px-4 py-2.5 font-semibold" style={{ color: 'var(--foreground)' }}>{lot.cleaningJob ? Math.max(0, (lot.cleaningJob.quantity || 0) - (lot.stoneWastageQty || 0) - (lot.seedWastageQty || 0)) : lot.quantity} {historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}</td>
                         <td className="px-4 py-2.5" style={{ color: 'var(--foreground)' }}>{lot.warehouse?.name}</td>
                         <td className="px-4 py-2.5">{getStatusTag(lot.status)}</td>
                         <td className="px-4 py-2.5" style={{ color: 'var(--muted-foreground)' }}>{new Date(lot.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</td>

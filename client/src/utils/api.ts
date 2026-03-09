@@ -72,6 +72,8 @@ export const API_ROUTES = {
     COMPLETE_BATCH_VERIFICATION: (batchId: string) =>
       `${BASE_URL}/batch/verification/batches/${batchId}/complete`,
     GET_BATCHES_WITH_DRAFTS: `${BASE_URL}/batch/batches-with-drafts`,
+    GET_LOT_NUMBERS: `${BASE_URL}/batch/lot-numbers`,
+    GET_SEED_WASTAGE: `${BASE_URL}/batch/seed-wastage`,
     DELETE_BATCH: (id: string) => `${BASE_URL}/draft/batch/${id}`,
   },
 

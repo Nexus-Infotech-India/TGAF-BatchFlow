@@ -343,6 +343,11 @@ export type BillOfMaterial = $Result.DefaultSelection<Prisma.$BillOfMaterialPayl
  * 
  */
 export type BOMItem = $Result.DefaultSelection<Prisma.$BOMItemPayload>
+/**
+ * Model SeedWastageRecord
+ * 
+ */
+export type SeedWastageRecord = $Result.DefaultSelection<Prisma.$SeedWastageRecordPayload>
 
 /**
  * Enums
@@ -1410,6 +1415,16 @@ export class PrismaClient<
     * ```
     */
   get bOMItem(): Prisma.BOMItemDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.seedWastageRecord`: Exposes CRUD operations for the **SeedWastageRecord** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more SeedWastageRecords
+    * const seedWastageRecords = await prisma.seedWastageRecord.findMany()
+    * ```
+    */
+  get seedWastageRecord(): Prisma.SeedWastageRecordDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1916,7 +1931,8 @@ export namespace Prisma {
     CleaningLot: 'CleaningLot',
     ProcessingBatchLot: 'ProcessingBatchLot',
     BillOfMaterial: 'BillOfMaterial',
-    BOMItem: 'BOMItem'
+    BOMItem: 'BOMItem',
+    SeedWastageRecord: 'SeedWastageRecord'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1935,7 +1951,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6823,6 +6839,80 @@ export namespace Prisma {
           }
         }
       }
+      SeedWastageRecord: {
+        payload: Prisma.$SeedWastageRecordPayload<ExtArgs>
+        fields: Prisma.SeedWastageRecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.SeedWastageRecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.SeedWastageRecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload>
+          }
+          findFirst: {
+            args: Prisma.SeedWastageRecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.SeedWastageRecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload>
+          }
+          findMany: {
+            args: Prisma.SeedWastageRecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload>[]
+          }
+          create: {
+            args: Prisma.SeedWastageRecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload>
+          }
+          createMany: {
+            args: Prisma.SeedWastageRecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.SeedWastageRecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload>[]
+          }
+          delete: {
+            args: Prisma.SeedWastageRecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload>
+          }
+          update: {
+            args: Prisma.SeedWastageRecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.SeedWastageRecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.SeedWastageRecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.SeedWastageRecordUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload>[]
+          }
+          upsert: {
+            args: Prisma.SeedWastageRecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$SeedWastageRecordPayload>
+          }
+          aggregate: {
+            args: Prisma.SeedWastageRecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateSeedWastageRecord>
+          }
+          groupBy: {
+            args: Prisma.SeedWastageRecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<SeedWastageRecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.SeedWastageRecordCountArgs<ExtArgs>
+            result: $Utils.Optional<SeedWastageRecordCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -6985,6 +7075,7 @@ export namespace Prisma {
     processingBatchLot?: ProcessingBatchLotOmit
     billOfMaterial?: BillOfMaterialOmit
     bOMItem?: BOMItemOmit
+    seedWastageRecord?: SeedWastageRecordOmit
   }
 
   /* Types for Logging */
@@ -7068,6 +7159,7 @@ export namespace Prisma {
     ActivityLog: number
     parameterValues: number
     Notification: number
+    seedWastageRecords: number
     methodologies: number
     standards: number
     unitOfMeasurements: number
@@ -7077,6 +7169,7 @@ export namespace Prisma {
     ActivityLog?: boolean | BatchCountOutputTypeCountActivityLogArgs
     parameterValues?: boolean | BatchCountOutputTypeCountParameterValuesArgs
     Notification?: boolean | BatchCountOutputTypeCountNotificationArgs
+    seedWastageRecords?: boolean | BatchCountOutputTypeCountSeedWastageRecordsArgs
     methodologies?: boolean | BatchCountOutputTypeCountMethodologiesArgs
     standards?: boolean | BatchCountOutputTypeCountStandardsArgs
     unitOfMeasurements?: boolean | BatchCountOutputTypeCountUnitOfMeasurementsArgs
@@ -7112,6 +7205,13 @@ export namespace Prisma {
    */
   export type BatchCountOutputTypeCountNotificationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * BatchCountOutputType without action
+   */
+  export type BatchCountOutputTypeCountSeedWastageRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SeedWastageRecordWhereInput
   }
 
   /**
@@ -9968,6 +10068,7 @@ export namespace Prisma {
     batchCode: string | null
     productId: string | null
     grnNumber: string | null
+    lotNumber: string | null
     dateOfProduction: Date | null
     bestBeforeDate: Date | null
     sampleAnalysisStarted: Date | null
@@ -9987,6 +10088,7 @@ export namespace Prisma {
     batchCode: string | null
     productId: string | null
     grnNumber: string | null
+    lotNumber: string | null
     dateOfProduction: Date | null
     bestBeforeDate: Date | null
     sampleAnalysisStarted: Date | null
@@ -10006,6 +10108,7 @@ export namespace Prisma {
     batchCode: number
     productId: number
     grnNumber: number
+    lotNumber: number
     dateOfProduction: number
     bestBeforeDate: number
     sampleAnalysisStarted: number
@@ -10027,6 +10130,7 @@ export namespace Prisma {
     batchCode?: true
     productId?: true
     grnNumber?: true
+    lotNumber?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -10046,6 +10150,7 @@ export namespace Prisma {
     batchCode?: true
     productId?: true
     grnNumber?: true
+    lotNumber?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -10065,6 +10170,7 @@ export namespace Prisma {
     batchCode?: true
     productId?: true
     grnNumber?: true
+    lotNumber?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -10157,6 +10263,7 @@ export namespace Prisma {
     batchCode: string | null
     productId: string
     grnNumber: string | null
+    lotNumber: string | null
     dateOfProduction: Date
     bestBeforeDate: Date
     sampleAnalysisStarted: Date | null
@@ -10193,6 +10300,7 @@ export namespace Prisma {
     batchCode?: boolean
     productId?: boolean
     grnNumber?: boolean
+    lotNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -10210,6 +10318,7 @@ export namespace Prisma {
     Product?: boolean | ProductDefaultArgs<ExtArgs>
     parameterValues?: boolean | Batch$parameterValuesArgs<ExtArgs>
     Notification?: boolean | Batch$NotificationArgs<ExtArgs>
+    seedWastageRecords?: boolean | Batch$seedWastageRecordsArgs<ExtArgs>
     methodologies?: boolean | Batch$methodologiesArgs<ExtArgs>
     standards?: boolean | Batch$standardsArgs<ExtArgs>
     unitOfMeasurements?: boolean | Batch$unitOfMeasurementsArgs<ExtArgs>
@@ -10222,6 +10331,7 @@ export namespace Prisma {
     batchCode?: boolean
     productId?: boolean
     grnNumber?: boolean
+    lotNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -10244,6 +10354,7 @@ export namespace Prisma {
     batchCode?: boolean
     productId?: boolean
     grnNumber?: boolean
+    lotNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -10266,6 +10377,7 @@ export namespace Prisma {
     batchCode?: boolean
     productId?: boolean
     grnNumber?: boolean
+    lotNumber?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -10279,7 +10391,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "batchCode" | "productId" | "grnNumber" | "dateOfProduction" | "bestBeforeDate" | "sampleAnalysisStarted" | "sampleAnalysisCompleted" | "sampleAnalysisStatus" | "makerId" | "checkerId" | "status" | "rejectionRemarks" | "createdAt" | "updatedAt", ExtArgs["result"]["batch"]>
+  export type BatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "batchCode" | "productId" | "grnNumber" | "lotNumber" | "dateOfProduction" | "bestBeforeDate" | "sampleAnalysisStarted" | "sampleAnalysisCompleted" | "sampleAnalysisStatus" | "makerId" | "checkerId" | "status" | "rejectionRemarks" | "createdAt" | "updatedAt", ExtArgs["result"]["batch"]>
   export type BatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     ActivityLog?: boolean | Batch$ActivityLogArgs<ExtArgs>
     User_Batch_checkerIdToUser?: boolean | Batch$User_Batch_checkerIdToUserArgs<ExtArgs>
@@ -10287,6 +10399,7 @@ export namespace Prisma {
     Product?: boolean | ProductDefaultArgs<ExtArgs>
     parameterValues?: boolean | Batch$parameterValuesArgs<ExtArgs>
     Notification?: boolean | Batch$NotificationArgs<ExtArgs>
+    seedWastageRecords?: boolean | Batch$seedWastageRecordsArgs<ExtArgs>
     methodologies?: boolean | Batch$methodologiesArgs<ExtArgs>
     standards?: boolean | Batch$standardsArgs<ExtArgs>
     unitOfMeasurements?: boolean | Batch$unitOfMeasurementsArgs<ExtArgs>
@@ -10312,6 +10425,7 @@ export namespace Prisma {
       Product: Prisma.$ProductPayload<ExtArgs>
       parameterValues: Prisma.$BatchParameterValuePayload<ExtArgs>[]
       Notification: Prisma.$NotificationPayload<ExtArgs>[]
+      seedWastageRecords: Prisma.$SeedWastageRecordPayload<ExtArgs>[]
       methodologies: Prisma.$MethodologyPayload<ExtArgs>[]
       standards: Prisma.$StandardPayload<ExtArgs>[]
       unitOfMeasurements: Prisma.$UnitOfMeasurementPayload<ExtArgs>[]
@@ -10322,6 +10436,7 @@ export namespace Prisma {
       batchCode: string | null
       productId: string
       grnNumber: string | null
+      lotNumber: string | null
       dateOfProduction: Date
       bestBeforeDate: Date
       sampleAnalysisStarted: Date | null
@@ -10733,6 +10848,7 @@ export namespace Prisma {
     Product<T extends ProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductDefaultArgs<ExtArgs>>): Prisma__ProductClient<$Result.GetResult<Prisma.$ProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     parameterValues<T extends Batch$parameterValuesArgs<ExtArgs> = {}>(args?: Subset<T, Batch$parameterValuesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BatchParameterValuePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     Notification<T extends Batch$NotificationArgs<ExtArgs> = {}>(args?: Subset<T, Batch$NotificationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    seedWastageRecords<T extends Batch$seedWastageRecordsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$seedWastageRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     methodologies<T extends Batch$methodologiesArgs<ExtArgs> = {}>(args?: Subset<T, Batch$methodologiesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MethodologyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     standards<T extends Batch$standardsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$standardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     unitOfMeasurements<T extends Batch$unitOfMeasurementsArgs<ExtArgs> = {}>(args?: Subset<T, Batch$unitOfMeasurementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UnitOfMeasurementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -10770,6 +10886,7 @@ export namespace Prisma {
     readonly batchCode: FieldRef<"Batch", 'String'>
     readonly productId: FieldRef<"Batch", 'String'>
     readonly grnNumber: FieldRef<"Batch", 'String'>
+    readonly lotNumber: FieldRef<"Batch", 'String'>
     readonly dateOfProduction: FieldRef<"Batch", 'DateTime'>
     readonly bestBeforeDate: FieldRef<"Batch", 'DateTime'>
     readonly sampleAnalysisStarted: FieldRef<"Batch", 'DateTime'>
@@ -11265,6 +11382,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: NotificationScalarFieldEnum | NotificationScalarFieldEnum[]
+  }
+
+  /**
+   * Batch.seedWastageRecords
+   */
+  export type Batch$seedWastageRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+    where?: SeedWastageRecordWhereInput
+    orderBy?: SeedWastageRecordOrderByWithRelationInput | SeedWastageRecordOrderByWithRelationInput[]
+    cursor?: SeedWastageRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: SeedWastageRecordScalarFieldEnum | SeedWastageRecordScalarFieldEnum[]
   }
 
   /**
@@ -22238,8 +22379,18 @@ export namespace Prisma {
 
   export type AggregateBatchDraft = {
     _count: BatchDraftCountAggregateOutputType | null
+    _avg: BatchDraftAvgAggregateOutputType | null
+    _sum: BatchDraftSumAggregateOutputType | null
     _min: BatchDraftMinAggregateOutputType | null
     _max: BatchDraftMaxAggregateOutputType | null
+  }
+
+  export type BatchDraftAvgAggregateOutputType = {
+    seedWastageQty: number | null
+  }
+
+  export type BatchDraftSumAggregateOutputType = {
+    seedWastageQty: number | null
   }
 
   export type BatchDraftMinAggregateOutputType = {
@@ -22248,6 +22399,8 @@ export namespace Prisma {
     batchCode: string | null
     productId: string | null
     grnNumber: string | null
+    lotNumber: string | null
+    seedWastageQty: number | null
     dateOfProduction: Date | null
     bestBeforeDate: Date | null
     sampleAnalysisStarted: Date | null
@@ -22266,6 +22419,8 @@ export namespace Prisma {
     batchCode: string | null
     productId: string | null
     grnNumber: string | null
+    lotNumber: string | null
+    seedWastageQty: number | null
     dateOfProduction: Date | null
     bestBeforeDate: Date | null
     sampleAnalysisStarted: Date | null
@@ -22284,6 +22439,8 @@ export namespace Prisma {
     batchCode: number
     productId: number
     grnNumber: number
+    lotNumber: number
+    seedWastageQty: number
     dateOfProduction: number
     bestBeforeDate: number
     sampleAnalysisStarted: number
@@ -22299,12 +22456,22 @@ export namespace Prisma {
   }
 
 
+  export type BatchDraftAvgAggregateInputType = {
+    seedWastageQty?: true
+  }
+
+  export type BatchDraftSumAggregateInputType = {
+    seedWastageQty?: true
+  }
+
   export type BatchDraftMinAggregateInputType = {
     id?: true
     batchNumber?: true
     batchCode?: true
     productId?: true
     grnNumber?: true
+    lotNumber?: true
+    seedWastageQty?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -22323,6 +22490,8 @@ export namespace Prisma {
     batchCode?: true
     productId?: true
     grnNumber?: true
+    lotNumber?: true
+    seedWastageQty?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -22341,6 +22510,8 @@ export namespace Prisma {
     batchCode?: true
     productId?: true
     grnNumber?: true
+    lotNumber?: true
+    seedWastageQty?: true
     dateOfProduction?: true
     bestBeforeDate?: true
     sampleAnalysisStarted?: true
@@ -22393,6 +22564,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: BatchDraftAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BatchDraftSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: BatchDraftMinAggregateInputType
@@ -22423,6 +22606,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: BatchDraftCountAggregateInputType | true
+    _avg?: BatchDraftAvgAggregateInputType
+    _sum?: BatchDraftSumAggregateInputType
     _min?: BatchDraftMinAggregateInputType
     _max?: BatchDraftMaxAggregateInputType
   }
@@ -22433,6 +22618,8 @@ export namespace Prisma {
     batchCode: string | null
     productId: string | null
     grnNumber: string | null
+    lotNumber: string | null
+    seedWastageQty: number | null
     dateOfProduction: Date | null
     bestBeforeDate: Date | null
     sampleAnalysisStarted: Date | null
@@ -22445,6 +22632,8 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     _count: BatchDraftCountAggregateOutputType | null
+    _avg: BatchDraftAvgAggregateOutputType | null
+    _sum: BatchDraftSumAggregateOutputType | null
     _min: BatchDraftMinAggregateOutputType | null
     _max: BatchDraftMaxAggregateOutputType | null
   }
@@ -22469,6 +22658,8 @@ export namespace Prisma {
     batchCode?: boolean
     productId?: boolean
     grnNumber?: boolean
+    lotNumber?: boolean
+    seedWastageQty?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -22489,6 +22680,8 @@ export namespace Prisma {
     batchCode?: boolean
     productId?: boolean
     grnNumber?: boolean
+    lotNumber?: boolean
+    seedWastageQty?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -22509,6 +22702,8 @@ export namespace Prisma {
     batchCode?: boolean
     productId?: boolean
     grnNumber?: boolean
+    lotNumber?: boolean
+    seedWastageQty?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -22529,6 +22724,8 @@ export namespace Prisma {
     batchCode?: boolean
     productId?: boolean
     grnNumber?: boolean
+    lotNumber?: boolean
+    seedWastageQty?: boolean
     dateOfProduction?: boolean
     bestBeforeDate?: boolean
     sampleAnalysisStarted?: boolean
@@ -22542,7 +22739,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BatchDraftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "batchCode" | "productId" | "grnNumber" | "dateOfProduction" | "bestBeforeDate" | "sampleAnalysisStarted" | "sampleAnalysisCompleted" | "sampleAnalysisStatus" | "makerId" | "status" | "newProductName" | "parameterValues" | "createdAt" | "updatedAt", ExtArgs["result"]["batchDraft"]>
+  export type BatchDraftOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "batchCode" | "productId" | "grnNumber" | "lotNumber" | "seedWastageQty" | "dateOfProduction" | "bestBeforeDate" | "sampleAnalysisStarted" | "sampleAnalysisCompleted" | "sampleAnalysisStatus" | "makerId" | "status" | "newProductName" | "parameterValues" | "createdAt" | "updatedAt", ExtArgs["result"]["batchDraft"]>
   export type BatchDraftInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     maker?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -22564,6 +22761,8 @@ export namespace Prisma {
       batchCode: string | null
       productId: string | null
       grnNumber: string | null
+      lotNumber: string | null
+      seedWastageQty: number | null
       dateOfProduction: Date | null
       bestBeforeDate: Date | null
       sampleAnalysisStarted: Date | null
@@ -23004,6 +23203,8 @@ export namespace Prisma {
     readonly batchCode: FieldRef<"BatchDraft", 'String'>
     readonly productId: FieldRef<"BatchDraft", 'String'>
     readonly grnNumber: FieldRef<"BatchDraft", 'String'>
+    readonly lotNumber: FieldRef<"BatchDraft", 'String'>
+    readonly seedWastageQty: FieldRef<"BatchDraft", 'Float'>
     readonly dateOfProduction: FieldRef<"BatchDraft", 'DateTime'>
     readonly bestBeforeDate: FieldRef<"BatchDraft", 'DateTime'>
     readonly sampleAnalysisStarted: FieldRef<"BatchDraft", 'DateTime'>
@@ -87210,6 +87411,1137 @@ export namespace Prisma {
 
 
   /**
+   * Model SeedWastageRecord
+   */
+
+  export type AggregateSeedWastageRecord = {
+    _count: SeedWastageRecordCountAggregateOutputType | null
+    _avg: SeedWastageRecordAvgAggregateOutputType | null
+    _sum: SeedWastageRecordSumAggregateOutputType | null
+    _min: SeedWastageRecordMinAggregateOutputType | null
+    _max: SeedWastageRecordMaxAggregateOutputType | null
+  }
+
+  export type SeedWastageRecordAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type SeedWastageRecordSumAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type SeedWastageRecordMinAggregateOutputType = {
+    id: string | null
+    batchId: string | null
+    lotNumber: string | null
+    grnNumber: string | null
+    skuCode: string | null
+    quantity: number | null
+    unit: string | null
+    createdAt: Date | null
+  }
+
+  export type SeedWastageRecordMaxAggregateOutputType = {
+    id: string | null
+    batchId: string | null
+    lotNumber: string | null
+    grnNumber: string | null
+    skuCode: string | null
+    quantity: number | null
+    unit: string | null
+    createdAt: Date | null
+  }
+
+  export type SeedWastageRecordCountAggregateOutputType = {
+    id: number
+    batchId: number
+    lotNumber: number
+    grnNumber: number
+    skuCode: number
+    quantity: number
+    unit: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type SeedWastageRecordAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type SeedWastageRecordSumAggregateInputType = {
+    quantity?: true
+  }
+
+  export type SeedWastageRecordMinAggregateInputType = {
+    id?: true
+    batchId?: true
+    lotNumber?: true
+    grnNumber?: true
+    skuCode?: true
+    quantity?: true
+    unit?: true
+    createdAt?: true
+  }
+
+  export type SeedWastageRecordMaxAggregateInputType = {
+    id?: true
+    batchId?: true
+    lotNumber?: true
+    grnNumber?: true
+    skuCode?: true
+    quantity?: true
+    unit?: true
+    createdAt?: true
+  }
+
+  export type SeedWastageRecordCountAggregateInputType = {
+    id?: true
+    batchId?: true
+    lotNumber?: true
+    grnNumber?: true
+    skuCode?: true
+    quantity?: true
+    unit?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type SeedWastageRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SeedWastageRecord to aggregate.
+     */
+    where?: SeedWastageRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeedWastageRecords to fetch.
+     */
+    orderBy?: SeedWastageRecordOrderByWithRelationInput | SeedWastageRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: SeedWastageRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeedWastageRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeedWastageRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned SeedWastageRecords
+    **/
+    _count?: true | SeedWastageRecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: SeedWastageRecordAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SeedWastageRecordSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: SeedWastageRecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: SeedWastageRecordMaxAggregateInputType
+  }
+
+  export type GetSeedWastageRecordAggregateType<T extends SeedWastageRecordAggregateArgs> = {
+        [P in keyof T & keyof AggregateSeedWastageRecord]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateSeedWastageRecord[P]>
+      : GetScalarType<T[P], AggregateSeedWastageRecord[P]>
+  }
+
+
+
+
+  export type SeedWastageRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: SeedWastageRecordWhereInput
+    orderBy?: SeedWastageRecordOrderByWithAggregationInput | SeedWastageRecordOrderByWithAggregationInput[]
+    by: SeedWastageRecordScalarFieldEnum[] | SeedWastageRecordScalarFieldEnum
+    having?: SeedWastageRecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: SeedWastageRecordCountAggregateInputType | true
+    _avg?: SeedWastageRecordAvgAggregateInputType
+    _sum?: SeedWastageRecordSumAggregateInputType
+    _min?: SeedWastageRecordMinAggregateInputType
+    _max?: SeedWastageRecordMaxAggregateInputType
+  }
+
+  export type SeedWastageRecordGroupByOutputType = {
+    id: string
+    batchId: string
+    lotNumber: string
+    grnNumber: string
+    skuCode: string
+    quantity: number
+    unit: string
+    createdAt: Date
+    _count: SeedWastageRecordCountAggregateOutputType | null
+    _avg: SeedWastageRecordAvgAggregateOutputType | null
+    _sum: SeedWastageRecordSumAggregateOutputType | null
+    _min: SeedWastageRecordMinAggregateOutputType | null
+    _max: SeedWastageRecordMaxAggregateOutputType | null
+  }
+
+  type GetSeedWastageRecordGroupByPayload<T extends SeedWastageRecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<SeedWastageRecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof SeedWastageRecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], SeedWastageRecordGroupByOutputType[P]>
+            : GetScalarType<T[P], SeedWastageRecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type SeedWastageRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    lotNumber?: boolean
+    grnNumber?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unit?: boolean
+    createdAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["seedWastageRecord"]>
+
+  export type SeedWastageRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    lotNumber?: boolean
+    grnNumber?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unit?: boolean
+    createdAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["seedWastageRecord"]>
+
+  export type SeedWastageRecordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchId?: boolean
+    lotNumber?: boolean
+    grnNumber?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unit?: boolean
+    createdAt?: boolean
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["seedWastageRecord"]>
+
+  export type SeedWastageRecordSelectScalar = {
+    id?: boolean
+    batchId?: boolean
+    lotNumber?: boolean
+    grnNumber?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unit?: boolean
+    createdAt?: boolean
+  }
+
+  export type SeedWastageRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "lotNumber" | "grnNumber" | "skuCode" | "quantity" | "unit" | "createdAt", ExtArgs["result"]["seedWastageRecord"]>
+  export type SeedWastageRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }
+  export type SeedWastageRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }
+  export type SeedWastageRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    batch?: boolean | BatchDefaultArgs<ExtArgs>
+  }
+
+  export type $SeedWastageRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "SeedWastageRecord"
+    objects: {
+      batch: Prisma.$BatchPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      batchId: string
+      lotNumber: string
+      grnNumber: string
+      skuCode: string
+      quantity: number
+      unit: string
+      createdAt: Date
+    }, ExtArgs["result"]["seedWastageRecord"]>
+    composites: {}
+  }
+
+  type SeedWastageRecordGetPayload<S extends boolean | null | undefined | SeedWastageRecordDefaultArgs> = $Result.GetResult<Prisma.$SeedWastageRecordPayload, S>
+
+  type SeedWastageRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<SeedWastageRecordFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: SeedWastageRecordCountAggregateInputType | true
+    }
+
+  export interface SeedWastageRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SeedWastageRecord'], meta: { name: 'SeedWastageRecord' } }
+    /**
+     * Find zero or one SeedWastageRecord that matches the filter.
+     * @param {SeedWastageRecordFindUniqueArgs} args - Arguments to find a SeedWastageRecord
+     * @example
+     * // Get one SeedWastageRecord
+     * const seedWastageRecord = await prisma.seedWastageRecord.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends SeedWastageRecordFindUniqueArgs>(args: SelectSubset<T, SeedWastageRecordFindUniqueArgs<ExtArgs>>): Prisma__SeedWastageRecordClient<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one SeedWastageRecord that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {SeedWastageRecordFindUniqueOrThrowArgs} args - Arguments to find a SeedWastageRecord
+     * @example
+     * // Get one SeedWastageRecord
+     * const seedWastageRecord = await prisma.seedWastageRecord.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends SeedWastageRecordFindUniqueOrThrowArgs>(args: SelectSubset<T, SeedWastageRecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__SeedWastageRecordClient<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SeedWastageRecord that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeedWastageRecordFindFirstArgs} args - Arguments to find a SeedWastageRecord
+     * @example
+     * // Get one SeedWastageRecord
+     * const seedWastageRecord = await prisma.seedWastageRecord.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends SeedWastageRecordFindFirstArgs>(args?: SelectSubset<T, SeedWastageRecordFindFirstArgs<ExtArgs>>): Prisma__SeedWastageRecordClient<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first SeedWastageRecord that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeedWastageRecordFindFirstOrThrowArgs} args - Arguments to find a SeedWastageRecord
+     * @example
+     * // Get one SeedWastageRecord
+     * const seedWastageRecord = await prisma.seedWastageRecord.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends SeedWastageRecordFindFirstOrThrowArgs>(args?: SelectSubset<T, SeedWastageRecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__SeedWastageRecordClient<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more SeedWastageRecords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeedWastageRecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all SeedWastageRecords
+     * const seedWastageRecords = await prisma.seedWastageRecord.findMany()
+     * 
+     * // Get first 10 SeedWastageRecords
+     * const seedWastageRecords = await prisma.seedWastageRecord.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const seedWastageRecordWithIdOnly = await prisma.seedWastageRecord.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends SeedWastageRecordFindManyArgs>(args?: SelectSubset<T, SeedWastageRecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a SeedWastageRecord.
+     * @param {SeedWastageRecordCreateArgs} args - Arguments to create a SeedWastageRecord.
+     * @example
+     * // Create one SeedWastageRecord
+     * const SeedWastageRecord = await prisma.seedWastageRecord.create({
+     *   data: {
+     *     // ... data to create a SeedWastageRecord
+     *   }
+     * })
+     * 
+     */
+    create<T extends SeedWastageRecordCreateArgs>(args: SelectSubset<T, SeedWastageRecordCreateArgs<ExtArgs>>): Prisma__SeedWastageRecordClient<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many SeedWastageRecords.
+     * @param {SeedWastageRecordCreateManyArgs} args - Arguments to create many SeedWastageRecords.
+     * @example
+     * // Create many SeedWastageRecords
+     * const seedWastageRecord = await prisma.seedWastageRecord.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends SeedWastageRecordCreateManyArgs>(args?: SelectSubset<T, SeedWastageRecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many SeedWastageRecords and returns the data saved in the database.
+     * @param {SeedWastageRecordCreateManyAndReturnArgs} args - Arguments to create many SeedWastageRecords.
+     * @example
+     * // Create many SeedWastageRecords
+     * const seedWastageRecord = await prisma.seedWastageRecord.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many SeedWastageRecords and only return the `id`
+     * const seedWastageRecordWithIdOnly = await prisma.seedWastageRecord.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends SeedWastageRecordCreateManyAndReturnArgs>(args?: SelectSubset<T, SeedWastageRecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a SeedWastageRecord.
+     * @param {SeedWastageRecordDeleteArgs} args - Arguments to delete one SeedWastageRecord.
+     * @example
+     * // Delete one SeedWastageRecord
+     * const SeedWastageRecord = await prisma.seedWastageRecord.delete({
+     *   where: {
+     *     // ... filter to delete one SeedWastageRecord
+     *   }
+     * })
+     * 
+     */
+    delete<T extends SeedWastageRecordDeleteArgs>(args: SelectSubset<T, SeedWastageRecordDeleteArgs<ExtArgs>>): Prisma__SeedWastageRecordClient<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one SeedWastageRecord.
+     * @param {SeedWastageRecordUpdateArgs} args - Arguments to update one SeedWastageRecord.
+     * @example
+     * // Update one SeedWastageRecord
+     * const seedWastageRecord = await prisma.seedWastageRecord.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends SeedWastageRecordUpdateArgs>(args: SelectSubset<T, SeedWastageRecordUpdateArgs<ExtArgs>>): Prisma__SeedWastageRecordClient<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more SeedWastageRecords.
+     * @param {SeedWastageRecordDeleteManyArgs} args - Arguments to filter SeedWastageRecords to delete.
+     * @example
+     * // Delete a few SeedWastageRecords
+     * const { count } = await prisma.seedWastageRecord.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends SeedWastageRecordDeleteManyArgs>(args?: SelectSubset<T, SeedWastageRecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SeedWastageRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeedWastageRecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many SeedWastageRecords
+     * const seedWastageRecord = await prisma.seedWastageRecord.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends SeedWastageRecordUpdateManyArgs>(args: SelectSubset<T, SeedWastageRecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more SeedWastageRecords and returns the data updated in the database.
+     * @param {SeedWastageRecordUpdateManyAndReturnArgs} args - Arguments to update many SeedWastageRecords.
+     * @example
+     * // Update many SeedWastageRecords
+     * const seedWastageRecord = await prisma.seedWastageRecord.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more SeedWastageRecords and only return the `id`
+     * const seedWastageRecordWithIdOnly = await prisma.seedWastageRecord.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends SeedWastageRecordUpdateManyAndReturnArgs>(args: SelectSubset<T, SeedWastageRecordUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one SeedWastageRecord.
+     * @param {SeedWastageRecordUpsertArgs} args - Arguments to update or create a SeedWastageRecord.
+     * @example
+     * // Update or create a SeedWastageRecord
+     * const seedWastageRecord = await prisma.seedWastageRecord.upsert({
+     *   create: {
+     *     // ... data to create a SeedWastageRecord
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the SeedWastageRecord we want to update
+     *   }
+     * })
+     */
+    upsert<T extends SeedWastageRecordUpsertArgs>(args: SelectSubset<T, SeedWastageRecordUpsertArgs<ExtArgs>>): Prisma__SeedWastageRecordClient<$Result.GetResult<Prisma.$SeedWastageRecordPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of SeedWastageRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeedWastageRecordCountArgs} args - Arguments to filter SeedWastageRecords to count.
+     * @example
+     * // Count the number of SeedWastageRecords
+     * const count = await prisma.seedWastageRecord.count({
+     *   where: {
+     *     // ... the filter for the SeedWastageRecords we want to count
+     *   }
+     * })
+    **/
+    count<T extends SeedWastageRecordCountArgs>(
+      args?: Subset<T, SeedWastageRecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], SeedWastageRecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a SeedWastageRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeedWastageRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends SeedWastageRecordAggregateArgs>(args: Subset<T, SeedWastageRecordAggregateArgs>): Prisma.PrismaPromise<GetSeedWastageRecordAggregateType<T>>
+
+    /**
+     * Group by SeedWastageRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {SeedWastageRecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends SeedWastageRecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: SeedWastageRecordGroupByArgs['orderBy'] }
+        : { orderBy?: SeedWastageRecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, SeedWastageRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSeedWastageRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the SeedWastageRecord model
+   */
+  readonly fields: SeedWastageRecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for SeedWastageRecord.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__SeedWastageRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    batch<T extends BatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BatchDefaultArgs<ExtArgs>>): Prisma__BatchClient<$Result.GetResult<Prisma.$BatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the SeedWastageRecord model
+   */
+  interface SeedWastageRecordFieldRefs {
+    readonly id: FieldRef<"SeedWastageRecord", 'String'>
+    readonly batchId: FieldRef<"SeedWastageRecord", 'String'>
+    readonly lotNumber: FieldRef<"SeedWastageRecord", 'String'>
+    readonly grnNumber: FieldRef<"SeedWastageRecord", 'String'>
+    readonly skuCode: FieldRef<"SeedWastageRecord", 'String'>
+    readonly quantity: FieldRef<"SeedWastageRecord", 'Float'>
+    readonly unit: FieldRef<"SeedWastageRecord", 'String'>
+    readonly createdAt: FieldRef<"SeedWastageRecord", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * SeedWastageRecord findUnique
+   */
+  export type SeedWastageRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which SeedWastageRecord to fetch.
+     */
+    where: SeedWastageRecordWhereUniqueInput
+  }
+
+  /**
+   * SeedWastageRecord findUniqueOrThrow
+   */
+  export type SeedWastageRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which SeedWastageRecord to fetch.
+     */
+    where: SeedWastageRecordWhereUniqueInput
+  }
+
+  /**
+   * SeedWastageRecord findFirst
+   */
+  export type SeedWastageRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which SeedWastageRecord to fetch.
+     */
+    where?: SeedWastageRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeedWastageRecords to fetch.
+     */
+    orderBy?: SeedWastageRecordOrderByWithRelationInput | SeedWastageRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SeedWastageRecords.
+     */
+    cursor?: SeedWastageRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeedWastageRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeedWastageRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SeedWastageRecords.
+     */
+    distinct?: SeedWastageRecordScalarFieldEnum | SeedWastageRecordScalarFieldEnum[]
+  }
+
+  /**
+   * SeedWastageRecord findFirstOrThrow
+   */
+  export type SeedWastageRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which SeedWastageRecord to fetch.
+     */
+    where?: SeedWastageRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeedWastageRecords to fetch.
+     */
+    orderBy?: SeedWastageRecordOrderByWithRelationInput | SeedWastageRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for SeedWastageRecords.
+     */
+    cursor?: SeedWastageRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeedWastageRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeedWastageRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of SeedWastageRecords.
+     */
+    distinct?: SeedWastageRecordScalarFieldEnum | SeedWastageRecordScalarFieldEnum[]
+  }
+
+  /**
+   * SeedWastageRecord findMany
+   */
+  export type SeedWastageRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which SeedWastageRecords to fetch.
+     */
+    where?: SeedWastageRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of SeedWastageRecords to fetch.
+     */
+    orderBy?: SeedWastageRecordOrderByWithRelationInput | SeedWastageRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing SeedWastageRecords.
+     */
+    cursor?: SeedWastageRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` SeedWastageRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` SeedWastageRecords.
+     */
+    skip?: number
+    distinct?: SeedWastageRecordScalarFieldEnum | SeedWastageRecordScalarFieldEnum[]
+  }
+
+  /**
+   * SeedWastageRecord create
+   */
+  export type SeedWastageRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a SeedWastageRecord.
+     */
+    data: XOR<SeedWastageRecordCreateInput, SeedWastageRecordUncheckedCreateInput>
+  }
+
+  /**
+   * SeedWastageRecord createMany
+   */
+  export type SeedWastageRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many SeedWastageRecords.
+     */
+    data: SeedWastageRecordCreateManyInput | SeedWastageRecordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * SeedWastageRecord createManyAndReturn
+   */
+  export type SeedWastageRecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * The data used to create many SeedWastageRecords.
+     */
+    data: SeedWastageRecordCreateManyInput | SeedWastageRecordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SeedWastageRecord update
+   */
+  export type SeedWastageRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a SeedWastageRecord.
+     */
+    data: XOR<SeedWastageRecordUpdateInput, SeedWastageRecordUncheckedUpdateInput>
+    /**
+     * Choose, which SeedWastageRecord to update.
+     */
+    where: SeedWastageRecordWhereUniqueInput
+  }
+
+  /**
+   * SeedWastageRecord updateMany
+   */
+  export type SeedWastageRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update SeedWastageRecords.
+     */
+    data: XOR<SeedWastageRecordUpdateManyMutationInput, SeedWastageRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which SeedWastageRecords to update
+     */
+    where?: SeedWastageRecordWhereInput
+    /**
+     * Limit how many SeedWastageRecords to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * SeedWastageRecord updateManyAndReturn
+   */
+  export type SeedWastageRecordUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * The data used to update SeedWastageRecords.
+     */
+    data: XOR<SeedWastageRecordUpdateManyMutationInput, SeedWastageRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which SeedWastageRecords to update
+     */
+    where?: SeedWastageRecordWhereInput
+    /**
+     * Limit how many SeedWastageRecords to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * SeedWastageRecord upsert
+   */
+  export type SeedWastageRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the SeedWastageRecord to update in case it exists.
+     */
+    where: SeedWastageRecordWhereUniqueInput
+    /**
+     * In case the SeedWastageRecord found by the `where` argument doesn't exist, create a new SeedWastageRecord with this data.
+     */
+    create: XOR<SeedWastageRecordCreateInput, SeedWastageRecordUncheckedCreateInput>
+    /**
+     * In case the SeedWastageRecord was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<SeedWastageRecordUpdateInput, SeedWastageRecordUncheckedUpdateInput>
+  }
+
+  /**
+   * SeedWastageRecord delete
+   */
+  export type SeedWastageRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+    /**
+     * Filter which SeedWastageRecord to delete.
+     */
+    where: SeedWastageRecordWhereUniqueInput
+  }
+
+  /**
+   * SeedWastageRecord deleteMany
+   */
+  export type SeedWastageRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which SeedWastageRecords to delete
+     */
+    where?: SeedWastageRecordWhereInput
+    /**
+     * Limit how many SeedWastageRecords to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * SeedWastageRecord without action
+   */
+  export type SeedWastageRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SeedWastageRecord
+     */
+    select?: SeedWastageRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SeedWastageRecord
+     */
+    omit?: SeedWastageRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SeedWastageRecordInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -87241,6 +88573,7 @@ export namespace Prisma {
     batchCode: 'batchCode',
     productId: 'productId',
     grnNumber: 'grnNumber',
+    lotNumber: 'lotNumber',
     dateOfProduction: 'dateOfProduction',
     bestBeforeDate: 'bestBeforeDate',
     sampleAnalysisStarted: 'sampleAnalysisStarted',
@@ -87369,6 +88702,8 @@ export namespace Prisma {
     batchCode: 'batchCode',
     productId: 'productId',
     grnNumber: 'grnNumber',
+    lotNumber: 'lotNumber',
+    seedWastageQty: 'seedWastageQty',
     dateOfProduction: 'dateOfProduction',
     bestBeforeDate: 'bestBeforeDate',
     sampleAnalysisStarted: 'sampleAnalysisStarted',
@@ -88211,6 +89546,20 @@ export namespace Prisma {
   export type BOMItemScalarFieldEnum = (typeof BOMItemScalarFieldEnum)[keyof typeof BOMItemScalarFieldEnum]
 
 
+  export const SeedWastageRecordScalarFieldEnum: {
+    id: 'id',
+    batchId: 'batchId',
+    lotNumber: 'lotNumber',
+    grnNumber: 'grnNumber',
+    skuCode: 'skuCode',
+    quantity: 'quantity',
+    unit: 'unit',
+    createdAt: 'createdAt'
+  };
+
+  export type SeedWastageRecordScalarFieldEnum = (typeof SeedWastageRecordScalarFieldEnum)[keyof typeof SeedWastageRecordScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -88331,6 +89680,20 @@ export namespace Prisma {
    * Reference to a field of type 'Boolean'
    */
   export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 
@@ -88545,20 +89908,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Float'
-   */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-  /**
-   * Reference to a field of type 'Float[]'
-   */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-  /**
    * Reference to a field of type 'PurchaseOrderItemStatus'
    */
   export type EnumPurchaseOrderItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PurchaseOrderItemStatus'>
@@ -88675,6 +90024,7 @@ export namespace Prisma {
     batchCode?: StringNullableFilter<"Batch"> | string | null
     productId?: StringFilter<"Batch"> | string
     grnNumber?: StringNullableFilter<"Batch"> | string | null
+    lotNumber?: StringNullableFilter<"Batch"> | string | null
     dateOfProduction?: DateTimeFilter<"Batch"> | Date | string
     bestBeforeDate?: DateTimeFilter<"Batch"> | Date | string
     sampleAnalysisStarted?: DateTimeNullableFilter<"Batch"> | Date | string | null
@@ -88692,6 +90042,7 @@ export namespace Prisma {
     Product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     parameterValues?: BatchParameterValueListRelationFilter
     Notification?: NotificationListRelationFilter
+    seedWastageRecords?: SeedWastageRecordListRelationFilter
     methodologies?: MethodologyListRelationFilter
     standards?: StandardListRelationFilter
     unitOfMeasurements?: UnitOfMeasurementListRelationFilter
@@ -88703,6 +90054,7 @@ export namespace Prisma {
     batchCode?: SortOrderInput | SortOrder
     productId?: SortOrder
     grnNumber?: SortOrderInput | SortOrder
+    lotNumber?: SortOrderInput | SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrderInput | SortOrder
@@ -88720,6 +90072,7 @@ export namespace Prisma {
     Product?: ProductOrderByWithRelationInput
     parameterValues?: BatchParameterValueOrderByRelationAggregateInput
     Notification?: NotificationOrderByRelationAggregateInput
+    seedWastageRecords?: SeedWastageRecordOrderByRelationAggregateInput
     methodologies?: MethodologyOrderByRelationAggregateInput
     standards?: StandardOrderByRelationAggregateInput
     unitOfMeasurements?: UnitOfMeasurementOrderByRelationAggregateInput
@@ -88734,6 +90087,7 @@ export namespace Prisma {
     batchCode?: StringNullableFilter<"Batch"> | string | null
     productId?: StringFilter<"Batch"> | string
     grnNumber?: StringNullableFilter<"Batch"> | string | null
+    lotNumber?: StringNullableFilter<"Batch"> | string | null
     dateOfProduction?: DateTimeFilter<"Batch"> | Date | string
     bestBeforeDate?: DateTimeFilter<"Batch"> | Date | string
     sampleAnalysisStarted?: DateTimeNullableFilter<"Batch"> | Date | string | null
@@ -88751,6 +90105,7 @@ export namespace Prisma {
     Product?: XOR<ProductScalarRelationFilter, ProductWhereInput>
     parameterValues?: BatchParameterValueListRelationFilter
     Notification?: NotificationListRelationFilter
+    seedWastageRecords?: SeedWastageRecordListRelationFilter
     methodologies?: MethodologyListRelationFilter
     standards?: StandardListRelationFilter
     unitOfMeasurements?: UnitOfMeasurementListRelationFilter
@@ -88762,6 +90117,7 @@ export namespace Prisma {
     batchCode?: SortOrderInput | SortOrder
     productId?: SortOrder
     grnNumber?: SortOrderInput | SortOrder
+    lotNumber?: SortOrderInput | SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrderInput | SortOrder
@@ -88787,6 +90143,7 @@ export namespace Prisma {
     batchCode?: StringNullableWithAggregatesFilter<"Batch"> | string | null
     productId?: StringWithAggregatesFilter<"Batch"> | string
     grnNumber?: StringNullableWithAggregatesFilter<"Batch"> | string | null
+    lotNumber?: StringNullableWithAggregatesFilter<"Batch"> | string | null
     dateOfProduction?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
     bestBeforeDate?: DateTimeWithAggregatesFilter<"Batch"> | Date | string
     sampleAnalysisStarted?: DateTimeNullableWithAggregatesFilter<"Batch"> | Date | string | null
@@ -89476,6 +90833,8 @@ export namespace Prisma {
     batchCode?: StringNullableFilter<"BatchDraft"> | string | null
     productId?: StringNullableFilter<"BatchDraft"> | string | null
     grnNumber?: StringNullableFilter<"BatchDraft"> | string | null
+    lotNumber?: StringNullableFilter<"BatchDraft"> | string | null
+    seedWastageQty?: FloatNullableFilter<"BatchDraft"> | number | null
     dateOfProduction?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     bestBeforeDate?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     sampleAnalysisStarted?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
@@ -89496,6 +90855,8 @@ export namespace Prisma {
     batchCode?: SortOrderInput | SortOrder
     productId?: SortOrderInput | SortOrder
     grnNumber?: SortOrderInput | SortOrder
+    lotNumber?: SortOrderInput | SortOrder
+    seedWastageQty?: SortOrderInput | SortOrder
     dateOfProduction?: SortOrderInput | SortOrder
     bestBeforeDate?: SortOrderInput | SortOrder
     sampleAnalysisStarted?: SortOrderInput | SortOrder
@@ -89519,6 +90880,8 @@ export namespace Prisma {
     batchCode?: StringNullableFilter<"BatchDraft"> | string | null
     productId?: StringNullableFilter<"BatchDraft"> | string | null
     grnNumber?: StringNullableFilter<"BatchDraft"> | string | null
+    lotNumber?: StringNullableFilter<"BatchDraft"> | string | null
+    seedWastageQty?: FloatNullableFilter<"BatchDraft"> | number | null
     dateOfProduction?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     bestBeforeDate?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     sampleAnalysisStarted?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
@@ -89539,6 +90902,8 @@ export namespace Prisma {
     batchCode?: SortOrderInput | SortOrder
     productId?: SortOrderInput | SortOrder
     grnNumber?: SortOrderInput | SortOrder
+    lotNumber?: SortOrderInput | SortOrder
+    seedWastageQty?: SortOrderInput | SortOrder
     dateOfProduction?: SortOrderInput | SortOrder
     bestBeforeDate?: SortOrderInput | SortOrder
     sampleAnalysisStarted?: SortOrderInput | SortOrder
@@ -89551,8 +90916,10 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: BatchDraftCountOrderByAggregateInput
+    _avg?: BatchDraftAvgOrderByAggregateInput
     _max?: BatchDraftMaxOrderByAggregateInput
     _min?: BatchDraftMinOrderByAggregateInput
+    _sum?: BatchDraftSumOrderByAggregateInput
   }
 
   export type BatchDraftScalarWhereWithAggregatesInput = {
@@ -89564,6 +90931,8 @@ export namespace Prisma {
     batchCode?: StringNullableWithAggregatesFilter<"BatchDraft"> | string | null
     productId?: StringNullableWithAggregatesFilter<"BatchDraft"> | string | null
     grnNumber?: StringNullableWithAggregatesFilter<"BatchDraft"> | string | null
+    lotNumber?: StringNullableWithAggregatesFilter<"BatchDraft"> | string | null
+    seedWastageQty?: FloatNullableWithAggregatesFilter<"BatchDraft"> | number | null
     dateOfProduction?: DateTimeNullableWithAggregatesFilter<"BatchDraft"> | Date | string | null
     bestBeforeDate?: DateTimeNullableWithAggregatesFilter<"BatchDraft"> | Date | string | null
     sampleAnalysisStarted?: DateTimeNullableWithAggregatesFilter<"BatchDraft"> | Date | string | null
@@ -94147,6 +95516,78 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"BOMItem"> | Date | string
   }
 
+  export type SeedWastageRecordWhereInput = {
+    AND?: SeedWastageRecordWhereInput | SeedWastageRecordWhereInput[]
+    OR?: SeedWastageRecordWhereInput[]
+    NOT?: SeedWastageRecordWhereInput | SeedWastageRecordWhereInput[]
+    id?: StringFilter<"SeedWastageRecord"> | string
+    batchId?: StringFilter<"SeedWastageRecord"> | string
+    lotNumber?: StringFilter<"SeedWastageRecord"> | string
+    grnNumber?: StringFilter<"SeedWastageRecord"> | string
+    skuCode?: StringFilter<"SeedWastageRecord"> | string
+    quantity?: FloatFilter<"SeedWastageRecord"> | number
+    unit?: StringFilter<"SeedWastageRecord"> | string
+    createdAt?: DateTimeFilter<"SeedWastageRecord"> | Date | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+  }
+
+  export type SeedWastageRecordOrderByWithRelationInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    lotNumber?: SortOrder
+    grnNumber?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    createdAt?: SortOrder
+    batch?: BatchOrderByWithRelationInput
+  }
+
+  export type SeedWastageRecordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: SeedWastageRecordWhereInput | SeedWastageRecordWhereInput[]
+    OR?: SeedWastageRecordWhereInput[]
+    NOT?: SeedWastageRecordWhereInput | SeedWastageRecordWhereInput[]
+    batchId?: StringFilter<"SeedWastageRecord"> | string
+    lotNumber?: StringFilter<"SeedWastageRecord"> | string
+    grnNumber?: StringFilter<"SeedWastageRecord"> | string
+    skuCode?: StringFilter<"SeedWastageRecord"> | string
+    quantity?: FloatFilter<"SeedWastageRecord"> | number
+    unit?: StringFilter<"SeedWastageRecord"> | string
+    createdAt?: DateTimeFilter<"SeedWastageRecord"> | Date | string
+    batch?: XOR<BatchScalarRelationFilter, BatchWhereInput>
+  }, "id">
+
+  export type SeedWastageRecordOrderByWithAggregationInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    lotNumber?: SortOrder
+    grnNumber?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    createdAt?: SortOrder
+    _count?: SeedWastageRecordCountOrderByAggregateInput
+    _avg?: SeedWastageRecordAvgOrderByAggregateInput
+    _max?: SeedWastageRecordMaxOrderByAggregateInput
+    _min?: SeedWastageRecordMinOrderByAggregateInput
+    _sum?: SeedWastageRecordSumOrderByAggregateInput
+  }
+
+  export type SeedWastageRecordScalarWhereWithAggregatesInput = {
+    AND?: SeedWastageRecordScalarWhereWithAggregatesInput | SeedWastageRecordScalarWhereWithAggregatesInput[]
+    OR?: SeedWastageRecordScalarWhereWithAggregatesInput[]
+    NOT?: SeedWastageRecordScalarWhereWithAggregatesInput | SeedWastageRecordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
+    batchId?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
+    lotNumber?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
+    grnNumber?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
+    skuCode?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
+    quantity?: FloatWithAggregatesFilter<"SeedWastageRecord"> | number
+    unit?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"SeedWastageRecord"> | Date | string
+  }
+
   export type ActivityLogCreateInput = {
     id: string
     action: string
@@ -94213,6 +95654,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -94228,6 +95670,7 @@ export namespace Prisma {
     Product: ProductCreateNestedOneWithoutBatchInput
     parameterValues?: BatchParameterValueCreateNestedManyWithoutBatchInput
     Notification?: NotificationCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyCreateNestedManyWithoutBatchesInput
     standards?: StandardCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementCreateNestedManyWithoutBatchesInput
@@ -94239,6 +95682,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -94253,6 +95697,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutBatchInput
     parameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutBatchInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyUncheckedCreateNestedManyWithoutBatchesInput
     standards?: StandardUncheckedCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedCreateNestedManyWithoutBatchesInput
@@ -94263,6 +95708,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -94278,6 +95724,7 @@ export namespace Prisma {
     Product?: ProductUpdateOneRequiredWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUpdateManyWithoutBatchesNestedInput
     standards?: StandardUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUpdateManyWithoutBatchesNestedInput
@@ -94289,6 +95736,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -94303,6 +95751,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedUpdateManyWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUncheckedUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
     standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
@@ -94314,6 +95763,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -94332,6 +95782,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -94349,6 +95800,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -95112,6 +96564,8 @@ export namespace Prisma {
     batchCode?: string | null
     productId?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
+    seedWastageQty?: number | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -95131,6 +96585,8 @@ export namespace Prisma {
     batchCode?: string | null
     productId?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
+    seedWastageQty?: number | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -95150,6 +96606,8 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -95169,6 +96627,8 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -95188,6 +96648,8 @@ export namespace Prisma {
     batchCode?: string | null
     productId?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
+    seedWastageQty?: number | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -95207,6 +96669,8 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -95225,6 +96689,8 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -100082,6 +101548,82 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type SeedWastageRecordCreateInput = {
+    id?: string
+    lotNumber: string
+    grnNumber: string
+    skuCode: string
+    quantity: number
+    unit?: string
+    createdAt?: Date | string
+    batch: BatchCreateNestedOneWithoutSeedWastageRecordsInput
+  }
+
+  export type SeedWastageRecordUncheckedCreateInput = {
+    id?: string
+    batchId: string
+    lotNumber: string
+    grnNumber: string
+    skuCode: string
+    quantity: number
+    unit?: string
+    createdAt?: Date | string
+  }
+
+  export type SeedWastageRecordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    batch?: BatchUpdateOneRequiredWithoutSeedWastageRecordsNestedInput
+  }
+
+  export type SeedWastageRecordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeedWastageRecordCreateManyInput = {
+    id?: string
+    batchId: string
+    lotNumber: string
+    grnNumber: string
+    skuCode: string
+    quantity: number
+    unit?: string
+    createdAt?: Date | string
+  }
+
+  export type SeedWastageRecordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeedWastageRecordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchId?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -100268,6 +101810,12 @@ export namespace Prisma {
     none?: NotificationWhereInput
   }
 
+  export type SeedWastageRecordListRelationFilter = {
+    every?: SeedWastageRecordWhereInput
+    some?: SeedWastageRecordWhereInput
+    none?: SeedWastageRecordWhereInput
+  }
+
   export type MethodologyListRelationFilter = {
     every?: MethodologyWhereInput
     some?: MethodologyWhereInput
@@ -100298,6 +101846,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type SeedWastageRecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type MethodologyOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -100316,6 +101868,7 @@ export namespace Prisma {
     batchCode?: SortOrder
     productId?: SortOrder
     grnNumber?: SortOrder
+    lotNumber?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -100335,6 +101888,7 @@ export namespace Prisma {
     batchCode?: SortOrder
     productId?: SortOrder
     grnNumber?: SortOrder
+    lotNumber?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -100354,6 +101908,7 @@ export namespace Prisma {
     batchCode?: SortOrder
     productId?: SortOrder
     grnNumber?: SortOrder
+    lotNumber?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -100963,6 +102518,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type EnumSampleAnalysisStatusNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.SampleAnalysisStatus | EnumSampleAnalysisStatusFieldRefInput<$PrismaModel> | null
     in?: $Enums.SampleAnalysisStatus[] | ListEnumSampleAnalysisStatusFieldRefInput<$PrismaModel> | null
@@ -100999,6 +102565,8 @@ export namespace Prisma {
     batchCode?: SortOrder
     productId?: SortOrder
     grnNumber?: SortOrder
+    lotNumber?: SortOrder
+    seedWastageQty?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -101012,12 +102580,18 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type BatchDraftAvgOrderByAggregateInput = {
+    seedWastageQty?: SortOrder
+  }
+
   export type BatchDraftMaxOrderByAggregateInput = {
     id?: SortOrder
     batchNumber?: SortOrder
     batchCode?: SortOrder
     productId?: SortOrder
     grnNumber?: SortOrder
+    lotNumber?: SortOrder
+    seedWastageQty?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -101036,6 +102610,8 @@ export namespace Prisma {
     batchCode?: SortOrder
     productId?: SortOrder
     grnNumber?: SortOrder
+    lotNumber?: SortOrder
+    seedWastageQty?: SortOrder
     dateOfProduction?: SortOrder
     bestBeforeDate?: SortOrder
     sampleAnalysisStarted?: SortOrder
@@ -101046,6 +102622,26 @@ export namespace Prisma {
     newProductName?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type BatchDraftSumOrderByAggregateInput = {
+    seedWastageQty?: SortOrder
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type EnumSampleAnalysisStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -103271,17 +104867,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
   export type GRNbyPoNullableScalarRelationFilter = {
     is?: GRNbyPoWhereInput | null
     isNot?: GRNbyPoWhereInput | null
@@ -103345,22 +104930,6 @@ export namespace Prisma {
     quantity?: SortOrder
     stoneWastageQty?: SortOrder
     seedWastageQty?: SortOrder
-  }
-
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type CleaningJobScalarRelationFilter = {
@@ -104089,6 +105658,47 @@ export namespace Prisma {
     quantity?: SortOrder
   }
 
+  export type SeedWastageRecordCountOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    lotNumber?: SortOrder
+    grnNumber?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SeedWastageRecordAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type SeedWastageRecordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    lotNumber?: SortOrder
+    grnNumber?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SeedWastageRecordMinOrderByAggregateInput = {
+    id?: SortOrder
+    batchId?: SortOrder
+    lotNumber?: SortOrder
+    grnNumber?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SeedWastageRecordSumOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
   export type BatchCreateNestedOneWithoutActivityLogInput = {
     create?: XOR<BatchCreateWithoutActivityLogInput, BatchUncheckedCreateWithoutActivityLogInput>
     connectOrCreate?: BatchCreateOrConnectWithoutActivityLogInput
@@ -104170,6 +105780,13 @@ export namespace Prisma {
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
   }
 
+  export type SeedWastageRecordCreateNestedManyWithoutBatchInput = {
+    create?: XOR<SeedWastageRecordCreateWithoutBatchInput, SeedWastageRecordUncheckedCreateWithoutBatchInput> | SeedWastageRecordCreateWithoutBatchInput[] | SeedWastageRecordUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: SeedWastageRecordCreateOrConnectWithoutBatchInput | SeedWastageRecordCreateOrConnectWithoutBatchInput[]
+    createMany?: SeedWastageRecordCreateManyBatchInputEnvelope
+    connect?: SeedWastageRecordWhereUniqueInput | SeedWastageRecordWhereUniqueInput[]
+  }
+
   export type MethodologyCreateNestedManyWithoutBatchesInput = {
     create?: XOR<MethodologyCreateWithoutBatchesInput, MethodologyUncheckedCreateWithoutBatchesInput> | MethodologyCreateWithoutBatchesInput[] | MethodologyUncheckedCreateWithoutBatchesInput[]
     connectOrCreate?: MethodologyCreateOrConnectWithoutBatchesInput | MethodologyCreateOrConnectWithoutBatchesInput[]
@@ -104207,6 +105824,13 @@ export namespace Prisma {
     connectOrCreate?: NotificationCreateOrConnectWithoutBatchInput | NotificationCreateOrConnectWithoutBatchInput[]
     createMany?: NotificationCreateManyBatchInputEnvelope
     connect?: NotificationWhereUniqueInput | NotificationWhereUniqueInput[]
+  }
+
+  export type SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput = {
+    create?: XOR<SeedWastageRecordCreateWithoutBatchInput, SeedWastageRecordUncheckedCreateWithoutBatchInput> | SeedWastageRecordCreateWithoutBatchInput[] | SeedWastageRecordUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: SeedWastageRecordCreateOrConnectWithoutBatchInput | SeedWastageRecordCreateOrConnectWithoutBatchInput[]
+    createMany?: SeedWastageRecordCreateManyBatchInputEnvelope
+    connect?: SeedWastageRecordWhereUniqueInput | SeedWastageRecordWhereUniqueInput[]
   }
 
   export type MethodologyUncheckedCreateNestedManyWithoutBatchesInput = {
@@ -104307,6 +105931,20 @@ export namespace Prisma {
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
   }
 
+  export type SeedWastageRecordUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<SeedWastageRecordCreateWithoutBatchInput, SeedWastageRecordUncheckedCreateWithoutBatchInput> | SeedWastageRecordCreateWithoutBatchInput[] | SeedWastageRecordUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: SeedWastageRecordCreateOrConnectWithoutBatchInput | SeedWastageRecordCreateOrConnectWithoutBatchInput[]
+    upsert?: SeedWastageRecordUpsertWithWhereUniqueWithoutBatchInput | SeedWastageRecordUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: SeedWastageRecordCreateManyBatchInputEnvelope
+    set?: SeedWastageRecordWhereUniqueInput | SeedWastageRecordWhereUniqueInput[]
+    disconnect?: SeedWastageRecordWhereUniqueInput | SeedWastageRecordWhereUniqueInput[]
+    delete?: SeedWastageRecordWhereUniqueInput | SeedWastageRecordWhereUniqueInput[]
+    connect?: SeedWastageRecordWhereUniqueInput | SeedWastageRecordWhereUniqueInput[]
+    update?: SeedWastageRecordUpdateWithWhereUniqueWithoutBatchInput | SeedWastageRecordUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: SeedWastageRecordUpdateManyWithWhereWithoutBatchInput | SeedWastageRecordUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: SeedWastageRecordScalarWhereInput | SeedWastageRecordScalarWhereInput[]
+  }
+
   export type MethodologyUpdateManyWithoutBatchesNestedInput = {
     create?: XOR<MethodologyCreateWithoutBatchesInput, MethodologyUncheckedCreateWithoutBatchesInput> | MethodologyCreateWithoutBatchesInput[] | MethodologyUncheckedCreateWithoutBatchesInput[]
     connectOrCreate?: MethodologyCreateOrConnectWithoutBatchesInput | MethodologyCreateOrConnectWithoutBatchesInput[]
@@ -104386,6 +106024,20 @@ export namespace Prisma {
     update?: NotificationUpdateWithWhereUniqueWithoutBatchInput | NotificationUpdateWithWhereUniqueWithoutBatchInput[]
     updateMany?: NotificationUpdateManyWithWhereWithoutBatchInput | NotificationUpdateManyWithWhereWithoutBatchInput[]
     deleteMany?: NotificationScalarWhereInput | NotificationScalarWhereInput[]
+  }
+
+  export type SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput = {
+    create?: XOR<SeedWastageRecordCreateWithoutBatchInput, SeedWastageRecordUncheckedCreateWithoutBatchInput> | SeedWastageRecordCreateWithoutBatchInput[] | SeedWastageRecordUncheckedCreateWithoutBatchInput[]
+    connectOrCreate?: SeedWastageRecordCreateOrConnectWithoutBatchInput | SeedWastageRecordCreateOrConnectWithoutBatchInput[]
+    upsert?: SeedWastageRecordUpsertWithWhereUniqueWithoutBatchInput | SeedWastageRecordUpsertWithWhereUniqueWithoutBatchInput[]
+    createMany?: SeedWastageRecordCreateManyBatchInputEnvelope
+    set?: SeedWastageRecordWhereUniqueInput | SeedWastageRecordWhereUniqueInput[]
+    disconnect?: SeedWastageRecordWhereUniqueInput | SeedWastageRecordWhereUniqueInput[]
+    delete?: SeedWastageRecordWhereUniqueInput | SeedWastageRecordWhereUniqueInput[]
+    connect?: SeedWastageRecordWhereUniqueInput | SeedWastageRecordWhereUniqueInput[]
+    update?: SeedWastageRecordUpdateWithWhereUniqueWithoutBatchInput | SeedWastageRecordUpdateWithWhereUniqueWithoutBatchInput[]
+    updateMany?: SeedWastageRecordUpdateManyWithWhereWithoutBatchInput | SeedWastageRecordUpdateManyWithWhereWithoutBatchInput[]
+    deleteMany?: SeedWastageRecordScalarWhereInput | SeedWastageRecordScalarWhereInput[]
   }
 
   export type MethodologyUncheckedUpdateManyWithoutBatchesNestedInput = {
@@ -106535,6 +108187,14 @@ export namespace Prisma {
     create?: XOR<UserCreateWithoutBatchDraftsInput, UserUncheckedCreateWithoutBatchDraftsInput>
     connectOrCreate?: UserCreateOrConnectWithoutBatchDraftsInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type NullableEnumSampleAnalysisStatusFieldUpdateOperationsInput = {
@@ -110503,14 +112163,6 @@ export namespace Prisma {
     connect?: CleaningLotWhereUniqueInput | CleaningLotWhereUniqueInput[]
   }
 
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
   export type WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput = {
     create?: XOR<WarehouseCreateWithoutCleaningJobsFromInput, WarehouseUncheckedCreateWithoutCleaningJobsFromInput>
     connectOrCreate?: WarehouseCreateOrConnectWithoutCleaningJobsFromInput
@@ -111361,6 +113013,20 @@ export namespace Prisma {
     update?: XOR<XOR<RawMaterialProductUpdateToOneWithWhereWithoutBomItemsInput, RawMaterialProductUpdateWithoutBomItemsInput>, RawMaterialProductUncheckedUpdateWithoutBomItemsInput>
   }
 
+  export type BatchCreateNestedOneWithoutSeedWastageRecordsInput = {
+    create?: XOR<BatchCreateWithoutSeedWastageRecordsInput, BatchUncheckedCreateWithoutSeedWastageRecordsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutSeedWastageRecordsInput
+    connect?: BatchWhereUniqueInput
+  }
+
+  export type BatchUpdateOneRequiredWithoutSeedWastageRecordsNestedInput = {
+    create?: XOR<BatchCreateWithoutSeedWastageRecordsInput, BatchUncheckedCreateWithoutSeedWastageRecordsInput>
+    connectOrCreate?: BatchCreateOrConnectWithoutSeedWastageRecordsInput
+    upsert?: BatchUpsertWithoutSeedWastageRecordsInput
+    connect?: BatchWhereUniqueInput
+    update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutSeedWastageRecordsInput, BatchUpdateWithoutSeedWastageRecordsInput>, BatchUncheckedUpdateWithoutSeedWastageRecordsInput>
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -111559,11 +113225,38 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
   export type NestedEnumSampleAnalysisStatusNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.SampleAnalysisStatus | EnumSampleAnalysisStatusFieldRefInput<$PrismaModel> | null
     in?: $Enums.SampleAnalysisStatus[] | ListEnumSampleAnalysisStatusFieldRefInput<$PrismaModel> | null
     notIn?: $Enums.SampleAnalysisStatus[] | ListEnumSampleAnalysisStatusFieldRefInput<$PrismaModel> | null
     not?: NestedEnumSampleAnalysisStatusNullableFilter<$PrismaModel> | $Enums.SampleAnalysisStatus | null
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumSampleAnalysisStatusNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -111708,17 +113401,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedEnumDocumentTypeFilter<$PrismaModel = never> = {
@@ -111937,22 +113619,6 @@ export namespace Prisma {
     _max?: NestedEnumWeightModeFilter<$PrismaModel>
   }
 
-  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
-  }
-
   export type NestedEnumBOMStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.BOMStatus | EnumBOMStatusFieldRefInput<$PrismaModel>
     in?: $Enums.BOMStatus[] | ListEnumBOMStatusFieldRefInput<$PrismaModel>
@@ -111975,6 +113641,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -111989,6 +113656,7 @@ export namespace Prisma {
     Product: ProductCreateNestedOneWithoutBatchInput
     parameterValues?: BatchParameterValueCreateNestedManyWithoutBatchInput
     Notification?: NotificationCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyCreateNestedManyWithoutBatchesInput
     standards?: StandardCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementCreateNestedManyWithoutBatchesInput
@@ -112000,6 +113668,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -112013,6 +113682,7 @@ export namespace Prisma {
     updatedAt: Date | string
     parameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutBatchInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyUncheckedCreateNestedManyWithoutBatchesInput
     standards?: StandardUncheckedCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedCreateNestedManyWithoutBatchesInput
@@ -112130,6 +113800,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -112144,6 +113815,7 @@ export namespace Prisma {
     Product?: ProductUpdateOneRequiredWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUpdateManyWithoutBatchesNestedInput
     standards?: StandardUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUpdateManyWithoutBatchesNestedInput
@@ -112155,6 +113827,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -112168,6 +113841,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parameterValues?: BatchParameterValueUncheckedUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
     standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
@@ -112570,6 +114244,36 @@ export namespace Prisma {
 
   export type NotificationCreateManyBatchInputEnvelope = {
     data: NotificationCreateManyBatchInput | NotificationCreateManyBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SeedWastageRecordCreateWithoutBatchInput = {
+    id?: string
+    lotNumber: string
+    grnNumber: string
+    skuCode: string
+    quantity: number
+    unit?: string
+    createdAt?: Date | string
+  }
+
+  export type SeedWastageRecordUncheckedCreateWithoutBatchInput = {
+    id?: string
+    lotNumber: string
+    grnNumber: string
+    skuCode: string
+    quantity: number
+    unit?: string
+    createdAt?: Date | string
+  }
+
+  export type SeedWastageRecordCreateOrConnectWithoutBatchInput = {
+    where: SeedWastageRecordWhereUniqueInput
+    create: XOR<SeedWastageRecordCreateWithoutBatchInput, SeedWastageRecordUncheckedCreateWithoutBatchInput>
+  }
+
+  export type SeedWastageRecordCreateManyBatchInputEnvelope = {
+    data: SeedWastageRecordCreateManyBatchInput | SeedWastageRecordCreateManyBatchInput[]
     skipDuplicates?: boolean
   }
 
@@ -112986,6 +114690,36 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Notification"> | Date | string
   }
 
+  export type SeedWastageRecordUpsertWithWhereUniqueWithoutBatchInput = {
+    where: SeedWastageRecordWhereUniqueInput
+    update: XOR<SeedWastageRecordUpdateWithoutBatchInput, SeedWastageRecordUncheckedUpdateWithoutBatchInput>
+    create: XOR<SeedWastageRecordCreateWithoutBatchInput, SeedWastageRecordUncheckedCreateWithoutBatchInput>
+  }
+
+  export type SeedWastageRecordUpdateWithWhereUniqueWithoutBatchInput = {
+    where: SeedWastageRecordWhereUniqueInput
+    data: XOR<SeedWastageRecordUpdateWithoutBatchInput, SeedWastageRecordUncheckedUpdateWithoutBatchInput>
+  }
+
+  export type SeedWastageRecordUpdateManyWithWhereWithoutBatchInput = {
+    where: SeedWastageRecordScalarWhereInput
+    data: XOR<SeedWastageRecordUpdateManyMutationInput, SeedWastageRecordUncheckedUpdateManyWithoutBatchInput>
+  }
+
+  export type SeedWastageRecordScalarWhereInput = {
+    AND?: SeedWastageRecordScalarWhereInput | SeedWastageRecordScalarWhereInput[]
+    OR?: SeedWastageRecordScalarWhereInput[]
+    NOT?: SeedWastageRecordScalarWhereInput | SeedWastageRecordScalarWhereInput[]
+    id?: StringFilter<"SeedWastageRecord"> | string
+    batchId?: StringFilter<"SeedWastageRecord"> | string
+    lotNumber?: StringFilter<"SeedWastageRecord"> | string
+    grnNumber?: StringFilter<"SeedWastageRecord"> | string
+    skuCode?: StringFilter<"SeedWastageRecord"> | string
+    quantity?: FloatFilter<"SeedWastageRecord"> | number
+    unit?: StringFilter<"SeedWastageRecord"> | string
+    createdAt?: DateTimeFilter<"SeedWastageRecord"> | Date | string
+  }
+
   export type MethodologyUpsertWithWhereUniqueWithoutBatchesInput = {
     where: MethodologyWhereUniqueInput
     update: XOR<MethodologyUpdateWithoutBatchesInput, MethodologyUncheckedUpdateWithoutBatchesInput>
@@ -113155,6 +114889,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -113170,6 +114905,7 @@ export namespace Prisma {
     Product: ProductCreateNestedOneWithoutBatchInput
     parameterValues?: BatchParameterValueCreateNestedManyWithoutBatchInput
     Notification?: NotificationCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordCreateNestedManyWithoutBatchInput
     standards?: StandardCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementCreateNestedManyWithoutBatchesInput
   }
@@ -113180,6 +114916,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -113194,6 +114931,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutBatchInput
     parameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutBatchInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput
     standards?: StandardUncheckedCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedCreateNestedManyWithoutBatchesInput
   }
@@ -113311,6 +115049,7 @@ export namespace Prisma {
     batchCode?: StringNullableFilter<"Batch"> | string | null
     productId?: StringFilter<"Batch"> | string
     grnNumber?: StringNullableFilter<"Batch"> | string | null
+    lotNumber?: StringNullableFilter<"Batch"> | string | null
     dateOfProduction?: DateTimeFilter<"Batch"> | Date | string
     bestBeforeDate?: DateTimeFilter<"Batch"> | Date | string
     sampleAnalysisStarted?: DateTimeNullableFilter<"Batch"> | Date | string | null
@@ -113345,6 +115084,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -113359,6 +115099,7 @@ export namespace Prisma {
     User_Batch_makerIdToUser: UserCreateNestedOneWithoutBatch_Batch_makerIdToUserInput
     Product: ProductCreateNestedOneWithoutBatchInput
     parameterValues?: BatchParameterValueCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyCreateNestedManyWithoutBatchesInput
     standards?: StandardCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementCreateNestedManyWithoutBatchesInput
@@ -113370,6 +115111,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -113383,6 +115125,7 @@ export namespace Prisma {
     updatedAt: Date | string
     ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutBatchInput
     parameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyUncheckedCreateNestedManyWithoutBatchesInput
     standards?: StandardUncheckedCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedCreateNestedManyWithoutBatchesInput
@@ -113500,6 +115243,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -113514,6 +115258,7 @@ export namespace Prisma {
     User_Batch_makerIdToUser?: UserUpdateOneRequiredWithoutBatch_Batch_makerIdToUserNestedInput
     Product?: ProductUpdateOneRequiredWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUpdateManyWithoutBatchesNestedInput
     standards?: StandardUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUpdateManyWithoutBatchesNestedInput
@@ -113525,6 +115270,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -113538,6 +115284,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ActivityLog?: ActivityLogUncheckedUpdateManyWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUncheckedUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
     standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
@@ -113695,6 +115442,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -113709,6 +115457,7 @@ export namespace Prisma {
     User_Batch_makerIdToUser: UserCreateNestedOneWithoutBatch_Batch_makerIdToUserInput
     parameterValues?: BatchParameterValueCreateNestedManyWithoutBatchInput
     Notification?: NotificationCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyCreateNestedManyWithoutBatchesInput
     standards?: StandardCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementCreateNestedManyWithoutBatchesInput
@@ -113719,6 +115468,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -113733,6 +115483,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutBatchInput
     parameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutBatchInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyUncheckedCreateNestedManyWithoutBatchesInput
     standards?: StandardUncheckedCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedCreateNestedManyWithoutBatchesInput
@@ -114295,6 +116046,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -114310,6 +116062,7 @@ export namespace Prisma {
     Product: ProductCreateNestedOneWithoutBatchInput
     parameterValues?: BatchParameterValueCreateNestedManyWithoutBatchInput
     Notification?: NotificationCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyCreateNestedManyWithoutBatchesInput
     standards?: StandardCreateNestedManyWithoutBatchesInput
   }
@@ -114320,6 +116073,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -114334,6 +116088,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutBatchInput
     parameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutBatchInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyUncheckedCreateNestedManyWithoutBatchesInput
     standards?: StandardUncheckedCreateNestedManyWithoutBatchesInput
   }
@@ -114826,6 +116581,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -114840,6 +116596,7 @@ export namespace Prisma {
     Product: ProductCreateNestedOneWithoutBatchInput
     parameterValues?: BatchParameterValueCreateNestedManyWithoutBatchInput
     Notification?: NotificationCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyCreateNestedManyWithoutBatchesInput
     standards?: StandardCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementCreateNestedManyWithoutBatchesInput
@@ -114851,6 +116608,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -114864,6 +116622,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutBatchInput
     parameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutBatchInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyUncheckedCreateNestedManyWithoutBatchesInput
     standards?: StandardUncheckedCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedCreateNestedManyWithoutBatchesInput
@@ -114884,6 +116643,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -114898,6 +116658,7 @@ export namespace Prisma {
     Product: ProductCreateNestedOneWithoutBatchInput
     parameterValues?: BatchParameterValueCreateNestedManyWithoutBatchInput
     Notification?: NotificationCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyCreateNestedManyWithoutBatchesInput
     standards?: StandardCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementCreateNestedManyWithoutBatchesInput
@@ -114909,6 +116670,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -114922,6 +116684,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutBatchInput
     parameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutBatchInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyUncheckedCreateNestedManyWithoutBatchesInput
     standards?: StandardUncheckedCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedCreateNestedManyWithoutBatchesInput
@@ -114943,6 +116706,8 @@ export namespace Prisma {
     batchCode?: string | null
     productId?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
+    seedWastageQty?: number | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -114961,6 +116726,8 @@ export namespace Prisma {
     batchCode?: string | null
     productId?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
+    seedWastageQty?: number | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -116153,6 +117920,8 @@ export namespace Prisma {
     batchCode?: StringNullableFilter<"BatchDraft"> | string | null
     productId?: StringNullableFilter<"BatchDraft"> | string | null
     grnNumber?: StringNullableFilter<"BatchDraft"> | string | null
+    lotNumber?: StringNullableFilter<"BatchDraft"> | string | null
+    seedWastageQty?: FloatNullableFilter<"BatchDraft"> | number | null
     dateOfProduction?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     bestBeforeDate?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
     sampleAnalysisStarted?: DateTimeNullableFilter<"BatchDraft"> | Date | string | null
@@ -117163,6 +118932,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -117178,6 +118948,7 @@ export namespace Prisma {
     Product: ProductCreateNestedOneWithoutBatchInput
     parameterValues?: BatchParameterValueCreateNestedManyWithoutBatchInput
     Notification?: NotificationCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementCreateNestedManyWithoutBatchesInput
   }
@@ -117188,6 +118959,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -117202,6 +118974,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutBatchInput
     parameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutBatchInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyUncheckedCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedCreateNestedManyWithoutBatchesInput
   }
@@ -118671,6 +120444,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -118685,6 +120459,7 @@ export namespace Prisma {
     User_Batch_makerIdToUser: UserCreateNestedOneWithoutBatch_Batch_makerIdToUserInput
     Product: ProductCreateNestedOneWithoutBatchInput
     Notification?: NotificationCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyCreateNestedManyWithoutBatchesInput
     standards?: StandardCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementCreateNestedManyWithoutBatchesInput
@@ -118696,6 +120471,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -118709,6 +120485,7 @@ export namespace Prisma {
     updatedAt: Date | string
     ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutBatchInput
     Notification?: NotificationUncheckedCreateNestedManyWithoutBatchInput
+    seedWastageRecords?: SeedWastageRecordUncheckedCreateNestedManyWithoutBatchInput
     methodologies?: MethodologyUncheckedCreateNestedManyWithoutBatchesInput
     standards?: StandardUncheckedCreateNestedManyWithoutBatchesInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedCreateNestedManyWithoutBatchesInput
@@ -118830,6 +120607,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118844,6 +120622,7 @@ export namespace Prisma {
     User_Batch_makerIdToUser?: UserUpdateOneRequiredWithoutBatch_Batch_makerIdToUserNestedInput
     Product?: ProductUpdateOneRequiredWithoutBatchNestedInput
     Notification?: NotificationUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUpdateManyWithoutBatchesNestedInput
     standards?: StandardUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUpdateManyWithoutBatchesNestedInput
@@ -118855,6 +120634,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118868,6 +120648,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     ActivityLog?: ActivityLogUncheckedUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
     standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
@@ -133664,6 +135445,126 @@ export namespace Prisma {
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
   }
 
+  export type BatchCreateWithoutSeedWastageRecordsInput = {
+    id: string
+    batchNumber: string
+    batchCode?: string | null
+    grnNumber?: string | null
+    lotNumber?: string | null
+    dateOfProduction: Date | string
+    bestBeforeDate: Date | string
+    sampleAnalysisStarted?: Date | string | null
+    sampleAnalysisCompleted?: Date | string | null
+    sampleAnalysisStatus?: $Enums.SampleAnalysisStatus
+    status?: $Enums.BatchStatus
+    rejectionRemarks?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    ActivityLog?: ActivityLogCreateNestedManyWithoutBatchInput
+    User_Batch_checkerIdToUser?: UserCreateNestedOneWithoutBatch_Batch_checkerIdToUserInput
+    User_Batch_makerIdToUser: UserCreateNestedOneWithoutBatch_Batch_makerIdToUserInput
+    Product: ProductCreateNestedOneWithoutBatchInput
+    parameterValues?: BatchParameterValueCreateNestedManyWithoutBatchInput
+    Notification?: NotificationCreateNestedManyWithoutBatchInput
+    methodologies?: MethodologyCreateNestedManyWithoutBatchesInput
+    standards?: StandardCreateNestedManyWithoutBatchesInput
+    unitOfMeasurements?: UnitOfMeasurementCreateNestedManyWithoutBatchesInput
+  }
+
+  export type BatchUncheckedCreateWithoutSeedWastageRecordsInput = {
+    id: string
+    batchNumber: string
+    batchCode?: string | null
+    productId: string
+    grnNumber?: string | null
+    lotNumber?: string | null
+    dateOfProduction: Date | string
+    bestBeforeDate: Date | string
+    sampleAnalysisStarted?: Date | string | null
+    sampleAnalysisCompleted?: Date | string | null
+    sampleAnalysisStatus?: $Enums.SampleAnalysisStatus
+    makerId: string
+    checkerId?: string | null
+    status?: $Enums.BatchStatus
+    rejectionRemarks?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutBatchInput
+    parameterValues?: BatchParameterValueUncheckedCreateNestedManyWithoutBatchInput
+    Notification?: NotificationUncheckedCreateNestedManyWithoutBatchInput
+    methodologies?: MethodologyUncheckedCreateNestedManyWithoutBatchesInput
+    standards?: StandardUncheckedCreateNestedManyWithoutBatchesInput
+    unitOfMeasurements?: UnitOfMeasurementUncheckedCreateNestedManyWithoutBatchesInput
+  }
+
+  export type BatchCreateOrConnectWithoutSeedWastageRecordsInput = {
+    where: BatchWhereUniqueInput
+    create: XOR<BatchCreateWithoutSeedWastageRecordsInput, BatchUncheckedCreateWithoutSeedWastageRecordsInput>
+  }
+
+  export type BatchUpsertWithoutSeedWastageRecordsInput = {
+    update: XOR<BatchUpdateWithoutSeedWastageRecordsInput, BatchUncheckedUpdateWithoutSeedWastageRecordsInput>
+    create: XOR<BatchCreateWithoutSeedWastageRecordsInput, BatchUncheckedCreateWithoutSeedWastageRecordsInput>
+    where?: BatchWhereInput
+  }
+
+  export type BatchUpdateToOneWithWhereWithoutSeedWastageRecordsInput = {
+    where?: BatchWhereInput
+    data: XOR<BatchUpdateWithoutSeedWastageRecordsInput, BatchUncheckedUpdateWithoutSeedWastageRecordsInput>
+  }
+
+  export type BatchUpdateWithoutSeedWastageRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
+    bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sampleAnalysisCompleted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sampleAnalysisStatus?: EnumSampleAnalysisStatusFieldUpdateOperationsInput | $Enums.SampleAnalysisStatus
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    rejectionRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ActivityLog?: ActivityLogUpdateManyWithoutBatchNestedInput
+    User_Batch_checkerIdToUser?: UserUpdateOneWithoutBatch_Batch_checkerIdToUserNestedInput
+    User_Batch_makerIdToUser?: UserUpdateOneRequiredWithoutBatch_Batch_makerIdToUserNestedInput
+    Product?: ProductUpdateOneRequiredWithoutBatchNestedInput
+    parameterValues?: BatchParameterValueUpdateManyWithoutBatchNestedInput
+    Notification?: NotificationUpdateManyWithoutBatchNestedInput
+    methodologies?: MethodologyUpdateManyWithoutBatchesNestedInput
+    standards?: StandardUpdateManyWithoutBatchesNestedInput
+    unitOfMeasurements?: UnitOfMeasurementUpdateManyWithoutBatchesNestedInput
+  }
+
+  export type BatchUncheckedUpdateWithoutSeedWastageRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    batchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    productId?: StringFieldUpdateOperationsInput | string
+    grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
+    bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sampleAnalysisCompleted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sampleAnalysisStatus?: EnumSampleAnalysisStatusFieldUpdateOperationsInput | $Enums.SampleAnalysisStatus
+    makerId?: StringFieldUpdateOperationsInput | string
+    checkerId?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBatchStatusFieldUpdateOperationsInput | $Enums.BatchStatus
+    rejectionRemarks?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ActivityLog?: ActivityLogUncheckedUpdateManyWithoutBatchNestedInput
+    parameterValues?: BatchParameterValueUncheckedUpdateManyWithoutBatchNestedInput
+    Notification?: NotificationUncheckedUpdateManyWithoutBatchNestedInput
+    methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
+    standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
+    unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
+  }
+
   export type ActivityLogCreateManyBatchInput = {
     id: string
     userId: string
@@ -133694,6 +135595,16 @@ export namespace Prisma {
     message: string
     type: $Enums.NotificationType
     isRead?: boolean
+    createdAt?: Date | string
+  }
+
+  export type SeedWastageRecordCreateManyBatchInput = {
+    id?: string
+    lotNumber: string
+    grnNumber: string
+    skuCode: string
+    quantity: number
+    unit?: string
     createdAt?: Date | string
   }
 
@@ -133793,6 +135704,36 @@ export namespace Prisma {
     message?: StringFieldUpdateOperationsInput | string
     type?: EnumNotificationTypeFieldUpdateOperationsInput | $Enums.NotificationType
     isRead?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeedWastageRecordUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeedWastageRecordUncheckedUpdateWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SeedWastageRecordUncheckedUpdateManyWithoutBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    grnNumber?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -134024,6 +135965,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -134039,6 +135981,7 @@ export namespace Prisma {
     Product?: ProductUpdateOneRequiredWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUpdateManyWithoutBatchNestedInput
     standards?: StandardUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUpdateManyWithoutBatchesNestedInput
   }
@@ -134049,6 +135992,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -134063,6 +136007,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedUpdateManyWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUncheckedUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput
     standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
   }
@@ -134073,6 +136018,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -134160,6 +136106,7 @@ export namespace Prisma {
     batchNumber: string
     batchCode?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -134193,6 +136140,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -134207,6 +136155,7 @@ export namespace Prisma {
     User_Batch_makerIdToUser?: UserUpdateOneRequiredWithoutBatch_Batch_makerIdToUserNestedInput
     parameterValues?: BatchParameterValueUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUpdateManyWithoutBatchesNestedInput
     standards?: StandardUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUpdateManyWithoutBatchesNestedInput
@@ -134217,6 +136166,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -134231,6 +136181,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedUpdateManyWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUncheckedUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
     standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
@@ -134241,6 +136192,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -134598,6 +136550,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -134613,6 +136566,7 @@ export namespace Prisma {
     Product?: ProductUpdateOneRequiredWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUpdateManyWithoutBatchesNestedInput
     standards?: StandardUpdateManyWithoutBatchesNestedInput
   }
@@ -134623,6 +136577,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -134637,6 +136592,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedUpdateManyWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUncheckedUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
     standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
   }
@@ -134647,6 +136603,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -134815,6 +136772,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -134833,6 +136791,7 @@ export namespace Prisma {
     batchCode?: string | null
     productId: string
     grnNumber?: string | null
+    lotNumber?: string | null
     dateOfProduction: Date | string
     bestBeforeDate: Date | string
     sampleAnalysisStarted?: Date | string | null
@@ -134851,6 +136810,8 @@ export namespace Prisma {
     batchCode?: string | null
     productId?: string | null
     grnNumber?: string | null
+    lotNumber?: string | null
+    seedWastageQty?: number | null
     dateOfProduction?: Date | string | null
     bestBeforeDate?: Date | string | null
     sampleAnalysisStarted?: Date | string | null
@@ -135494,6 +137455,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -135508,6 +137470,7 @@ export namespace Prisma {
     Product?: ProductUpdateOneRequiredWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUpdateManyWithoutBatchesNestedInput
     standards?: StandardUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUpdateManyWithoutBatchesNestedInput
@@ -135519,6 +137482,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -135532,6 +137496,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedUpdateManyWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUncheckedUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
     standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
@@ -135543,6 +137508,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -135560,6 +137526,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -135574,6 +137541,7 @@ export namespace Prisma {
     Product?: ProductUpdateOneRequiredWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUpdateManyWithoutBatchesNestedInput
     standards?: StandardUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUpdateManyWithoutBatchesNestedInput
@@ -135585,6 +137553,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -135598,6 +137567,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedUpdateManyWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUncheckedUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
     standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
@@ -135609,6 +137579,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -135627,6 +137598,8 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -135645,6 +137618,8 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -135663,6 +137638,8 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     dateOfProduction?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     bestBeforeDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -136582,6 +138559,7 @@ export namespace Prisma {
     batchNumber?: StringFieldUpdateOperationsInput | string
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -136597,6 +138575,7 @@ export namespace Prisma {
     Product?: ProductUpdateOneRequiredWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUpdateManyWithoutBatchesNestedInput
   }
@@ -136607,6 +138586,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -136621,6 +138601,7 @@ export namespace Prisma {
     ActivityLog?: ActivityLogUncheckedUpdateManyWithoutBatchNestedInput
     parameterValues?: BatchParameterValueUncheckedUpdateManyWithoutBatchNestedInput
     Notification?: NotificationUncheckedUpdateManyWithoutBatchNestedInput
+    seedWastageRecords?: SeedWastageRecordUncheckedUpdateManyWithoutBatchNestedInput
     methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
   }
@@ -136631,6 +138612,7 @@ export namespace Prisma {
     batchCode?: NullableStringFieldUpdateOperationsInput | string | null
     productId?: StringFieldUpdateOperationsInput | string
     grnNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    lotNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfProduction?: DateTimeFieldUpdateOperationsInput | Date | string
     bestBeforeDate?: DateTimeFieldUpdateOperationsInput | Date | string
     sampleAnalysisStarted?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null

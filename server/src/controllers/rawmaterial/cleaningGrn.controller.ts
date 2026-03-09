@@ -11,6 +11,13 @@ export class CleaningGrnController {
     static async getGRNsForCleaning(req: Request, res: Response): Promise<void> {
         try {
             const grns = await prisma.gRNbyPo.findMany({
+                where: {
+                    purchaseOrderItem: {
+                        rawMaterial: {
+                            subcategory: 'Spice',
+                        },
+                    },
+                },
                 include: {
                     purchaseOrder: { include: { vendor: true } },
                     purchaseOrderItem: {

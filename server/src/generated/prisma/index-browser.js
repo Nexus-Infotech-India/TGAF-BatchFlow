@@ -136,6 +136,7 @@ exports.Prisma.BatchScalarFieldEnum = {
   batchCode: 'batchCode',
   productId: 'productId',
   grnNumber: 'grnNumber',
+  lotNumber: 'lotNumber',
   dateOfProduction: 'dateOfProduction',
   bestBeforeDate: 'bestBeforeDate',
   sampleAnalysisStarted: 'sampleAnalysisStarted',
@@ -234,6 +235,8 @@ exports.Prisma.BatchDraftScalarFieldEnum = {
   batchCode: 'batchCode',
   productId: 'productId',
   grnNumber: 'grnNumber',
+  lotNumber: 'lotNumber',
+  seedWastageQty: 'seedWastageQty',
   dateOfProduction: 'dateOfProduction',
   bestBeforeDate: 'bestBeforeDate',
   sampleAnalysisStarted: 'sampleAnalysisStarted',
@@ -911,6 +914,17 @@ exports.Prisma.BOMItemScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.SeedWastageRecordScalarFieldEnum = {
+  id: 'id',
+  batchId: 'batchId',
+  lotNumber: 'lotNumber',
+  grnNumber: 'grnNumber',
+  skuCode: 'skuCode',
+  quantity: 'quantity',
+  unit: 'unit',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1141,7 +1155,8 @@ exports.Prisma.ModelName = {
   CleaningLot: 'CleaningLot',
   ProcessingBatchLot: 'ProcessingBatchLot',
   BillOfMaterial: 'BillOfMaterial',
-  BOMItem: 'BOMItem'
+  BOMItem: 'BOMItem',
+  SeedWastageRecord: 'SeedWastageRecord'
 };
 
 /**

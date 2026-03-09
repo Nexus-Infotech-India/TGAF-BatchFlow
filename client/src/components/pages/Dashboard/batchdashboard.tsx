@@ -31,6 +31,7 @@ import {
   Filler
 } from 'chart.js';
 import api, { API_ROUTES } from '../../../utils/api';
+import SeedWastageDashboard from './seedWastageDashboard';
 
 // Register ChartJS components
 ChartJS.register(
@@ -425,6 +426,11 @@ const Dashboard: React.FC = () => {
               <span style={{ color: 'var(--primary)' }} className="font-semibold">{overviewData?.standards || 0}</span>
             </div>
           </div>
+        </div>
+
+        {/* Seed Wastage Section */}
+        <div style={{ background: 'var(--card)', color: 'var(--foreground)', borderColor: 'var(--secondary)' }} className="border rounded-lg p-6 mt-8">
+          <SeedWastageDashboard />
         </div>
       </div>
     </div>

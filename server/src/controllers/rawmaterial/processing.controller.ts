@@ -258,7 +258,11 @@ export class ProcessingJobController {
           finishedGoods: { include: { warehouse: true } },
           processingBatchLots: {
             include: {
-              cleaningLot: true,
+              cleaningLot: {
+                include: {
+                  cleaningJob: { select: { id: true, quantity: true } },
+                },
+              },
             },
           },
         },
@@ -279,7 +283,13 @@ export class ProcessingJobController {
           inputRawMaterial: true,
           warehouse: true,
           processingBatchLots: {
-            include: { cleaningLot: true },
+            include: {
+              cleaningLot: {
+                include: {
+                  cleaningJob: { select: { id: true, quantity: true } },
+                },
+              },
+            },
           },
         },
       });
