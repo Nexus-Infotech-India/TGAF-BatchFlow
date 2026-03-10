@@ -923,6 +923,7 @@ exports.Prisma.SeedWastageRecordScalarFieldEnum = {
   skuCode: 'skuCode',
   quantity: 'quantity',
   unit: 'unit',
+  source: 'source',
   createdAt: 'createdAt'
 };
 

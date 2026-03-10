@@ -1234,13 +1234,14 @@ model BOMItem {
 
 model SeedWastageRecord {
   id        String   @id @default(uuid())
-  batchId   String
+  batchId   String?
   lotNumber String
   grnNumber String
   skuCode   String
   quantity  Float
   unit      String   @default("kg")
+  source    String   @default("batch") // "cleaning" or "batch"
   createdAt DateTime @default(now())
 
-  batch Batch @relation(fields: [batchId], references: [id])
+  batch Batch? @relation(fields: [batchId], references: [id])
 }

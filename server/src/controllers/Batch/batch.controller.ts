@@ -200,6 +200,7 @@ export class BatchController {
               skuCode: seedWastageSku,
               quantity: parseFloat(batchData.seedWastageQty),
               unit: 'kg',
+              source: 'batch',
             },
           });
 
@@ -1993,22 +1994,34 @@ export class BatchController {
         orderBy: { createdAt: 'desc' },
       });
 
+      // Look up the dedicated Seed Wastage SKU from Material Master
+      const seedWastageProduct = await prisma.rawMaterialProduct.findFirst({
+        where: {
+          OR: [
+            { name: { contains: 'Seed Wastage', mode: 'insensitive' } },
+            { name: { contains: 'seed wastage', mode: 'insensitive' } },
+          ]
+        },
+        select: { skuCode: true }
+      });
+      const seedWastageSku = seedWastageProduct?.skuCode || 'SEED-WASTAGE';
+
       // Look up raw material names for each lot to build full traceability
       const lotNumbers = [...new Set(records.map(r => r.lotNumber).filter(Boolean))];
       const lotDetails = lotNumbers.length > 0
         ? await prisma.cleaningLot.findMany({
-            where: { lotNumber: { in: lotNumbers } },
-            select: {
-              lotNumber: true,
-              rawMaterial: { select: { name: true, skuCode: true } },
-              grn: { select: { grnNumber: true, supplier: true } },
-            },
-          })
+          where: { lotNumber: { in: lotNumbers } },
+          select: {
+            lotNumber: true,
+            rawMaterial: { select: { name: true, skuCode: true } },
+            grn: { select: { grnNumber: true, supplier: true } },
+          },
+        })
         : [];
       const lotMap = new Map(
         lotDetails.map(l => [l.lotNumber, {
           rawMaterialName: l.rawMaterial?.name || '',
-          rawMaterialSku: l.rawMaterial?.skuCode || '',
+          rawMaterialSkuCode: l.rawMaterial?.skuCode || '',
           supplier: l.grn?.supplier || '',
           sourceGrn: l.grn?.grnNumber || '',
         }])
@@ -2017,23 +2030,25 @@ export class BatchController {
       // Calculate total seed wastage
       const totalWastage = records.reduce((sum, r) => sum + r.quantity, 0);
 
-      // Get unique SKU codes
-      const uniqueSkus = [...new Set(records.map(r => r.skuCode))];
+      // Always use the live Material Master SKU so updates to the product are reflected immediately
+      const uniqueSkus = [seedWastageSku];
+
 
       const formattedRecords = records.map(r => {
         const lot = lotMap.get(r.lotNumber);
         return {
           id: r.id,
-          skuCode: r.skuCode,
+          skuCode: seedWastageSku,
+          rawMaterialSkuCode: lot?.rawMaterialSkuCode || '',
           quantity: r.quantity,
           unit: r.unit,
+          source: (r as any).source || 'batch',
           grnNumber: r.grnNumber || lot?.sourceGrn || '',
           lotNumber: r.lotNumber,
-          batchId: r.batchId,
+          batchId: r.batchId || null,
           batchNumber: r.batch?.batchNumber || '',
           productName: r.batch?.Product?.name || '',
           rawMaterialName: lot?.rawMaterialName || '',
-          rawMaterialSku: lot?.rawMaterialSku || '',
           supplier: lot?.supplier || '',
           dateOfGeneration: r.createdAt,
           dateOfProduction: r.batch?.dateOfProduction || null,

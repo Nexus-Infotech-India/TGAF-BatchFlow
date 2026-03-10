@@ -327,7 +327,13 @@ export class CleaningGrnController {
 
             const cleaningJob = await prisma.cleaningJob.findUnique({
                 where: { id },
-                include: { cleaningLots: true },
+                include: {
+                    cleaningLots: {
+                        include: {
+                            grn: { select: { grnNumber: true } },
+                        },
+                    },
+                },
             });
 
             if (!cleaningJob) {
@@ -339,6 +345,23 @@ export class CleaningGrnController {
             const parsedStoneWastageUnit = stoneWastageUnit || 'kg';
             const parsedSeedWastageQty = seedWastageQty ? parseFloat(seedWastageQty) : 0;
             const parsedSeedWastageUnit = seedWastageUnit || 'kg';
+
+            // Look up the dedicated Seed Wastage SKU from Material Master
+            let seedWastageSku = 'SEED-WASTAGE';
+            if (parsedSeedWastageQty > 0) {
+                const seedWastageProduct = await prisma.rawMaterialProduct.findFirst({
+                    where: {
+                        OR: [
+                            { name: { contains: 'Seed Wastage', mode: 'insensitive' } },
+                            { name: { contains: 'seed wastage', mode: 'insensitive' } },
+                        ]
+                    },
+                    select: { skuCode: true }
+                });
+                if (seedWastageProduct) {
+                    seedWastageSku = seedWastageProduct.skuCode;
+                }
+            }
 
             await prisma.$transaction(async (tx) => {
                 // Update cleaning job status + persist stone & seed wastage fields
@@ -371,6 +394,20 @@ export class CleaningGrnController {
                             seedWastageUnit: parsedSeedWastageUnit,
                         },
                     });
+
+                    // Create SeedWastageRecord for each lot if seed wastage > 0
+                    if (parsedSeedWastageQty > 0) {
+                        await tx.seedWastageRecord.create({
+                            data: {
+                                lotNumber: lot.lotNumber,
+                                grnNumber: lot.grn?.grnNumber || '',
+                                skuCode: seedWastageSku,
+                                quantity: parsedSeedWastageQty,
+                                unit: parsedSeedWastageUnit,
+                                source: 'cleaning',
+                            },
+                        });
+                    }
                 }
 
                 // Create transaction log

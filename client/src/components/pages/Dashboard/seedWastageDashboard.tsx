@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Leaf, Package, Hash, CalendarDays, FileText, ArrowRight, Loader2, ChevronDown, ChevronUp, Layers } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Leaf, Package, Hash, CalendarDays, FileText, Loader2 } from 'lucide-react';
 import axios from 'axios';
 import { API_ROUTES } from '../../../utils/api';
 
 interface SeedWastageRecord {
     id: string;
     skuCode: string;
+    rawMaterialSkuCode: string;
     quantity: number;
     unit: string;
+    source: 'cleaning' | 'batch';
     grnNumber: string;
     lotNumber: string;
-    batchId: string;
+    batchId: string | null;
     batchNumber: string;
     productName: string;
     rawMaterialName: string;
-    rawMaterialSku: string;
     supplier: string;
     dateOfGeneration: string;
     dateOfProduction: string | null;
@@ -27,7 +28,6 @@ const SeedWastageDashboard: React.FC = () => {
     const [uniqueSkus, setUniqueSkus] = useState<string[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [expandedRow, setExpandedRow] = useState<string | null>(null);
     const authToken = localStorage.getItem('authToken');
 
     useEffect(() => {
@@ -161,172 +161,78 @@ const SeedWastageDashboard: React.FC = () => {
                     <div className="px-4 py-3 border-b border-border flex items-center gap-2">
                         <FileText size={14} className="text-primary" />
                         <h3 className="text-sm font-semibold text-foreground">
-                            Wastage History & Traceability
+                            Seed Wastage Records
                         </h3>
                     </div>
 
                     {/* Table Header */}
                     <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-muted/50 border-b border-border text-xs font-medium text-muted-foreground uppercase tracking-wide">
                         <div className="col-span-2 flex items-center gap-1">
-                            <Package size={11} /> SKU
-                        </div>
-                        <div className="col-span-1 flex items-center gap-1">
-                            Qty (kg)
+                            <Package size={11} /> Raw Material SKU
                         </div>
                         <div className="col-span-2 flex items-center gap-1">
-                            Source GRN
+                            Raw Material
                         </div>
                         <div className="col-span-2 flex items-center gap-1">
-                            Lot Number
+                            Seed Wastage Qty
                         </div>
                         <div className="col-span-2 flex items-center gap-1">
-                            Batch
+                            Seed Wastage SKU
+                        </div>
+                        <div className="col-span-2 flex items-center gap-1">
+                            Cleaning Lot
                         </div>
                         <div className="col-span-2 flex items-center gap-1">
                             <CalendarDays size={11} /> Date
-                        </div>
-                        <div className="col-span-1 flex items-center justify-center">
-                            <Layers size={11} />
                         </div>
                     </div>
 
                     {/* Table Rows */}
                     {records.map((record, index) => (
-                        <div key={record.id}>
-                            <motion.div
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.03 * Math.min(index, 20) }}
-                                className="grid grid-cols-12 gap-2 px-4 py-3 border-b border-border hover:bg-muted/30 transition-colors items-center text-sm cursor-pointer"
-                                onClick={() => setExpandedRow(expandedRow === record.id ? null : record.id)}
-                            >
-                                <div className="col-span-2">
-                                    <span className="inline-flex items-center px-2 py-0.5 bg-amber-500/10 text-amber-700 text-xs font-medium rounded">
-                                        {record.skuCode}
-                                    </span>
-                                </div>
-                                <div className="col-span-1 font-semibold text-foreground">
-                                    {record.quantity.toFixed(2)}
-                                </div>
-                                <div className="col-span-2 text-muted-foreground text-xs">
-                                    {record.grnNumber || '-'}
-                                </div>
-                                <div className="col-span-2">
-                                    <span className="text-xs font-mono bg-primary/10 text-primary px-1.5 py-0.5 rounded">
-                                        {record.lotNumber || '-'}
-                                    </span>
-                                </div>
-                                <div className="col-span-2 text-muted-foreground text-xs">
-                                    {record.batchNumber || '-'}
-                                </div>
-                                <div className="col-span-2 text-muted-foreground text-xs">
-                                    {new Date(record.dateOfGeneration).toLocaleDateString('en-IN', {
-                                        day: '2-digit',
-                                        month: 'short',
-                                        year: 'numeric',
-                                    })}
-                                </div>
-                                <div className="col-span-1 flex justify-center">
-                                    {expandedRow === record.id
-                                        ? <ChevronUp size={14} className="text-muted-foreground" />
-                                        : <ChevronDown size={14} className="text-muted-foreground" />
-                                    }
-                                </div>
-                            </motion.div>
-
-                            {/* Expanded Traceability Row */}
-                            <AnimatePresence>
-                                {expandedRow === record.id && (
-                                    <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.2 }}
-                                        className="overflow-hidden border-b border-border"
-                                    >
-                                        <div className="px-6 py-4 bg-muted/20">
-                                            {/* Full Traceability Chain */}
-                                            <div className="mb-3">
-                                                <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                                                    Full Traceability Chain
-                                                </span>
-                                            </div>
-                                            <div className="flex items-center gap-2 flex-wrap">
-                                                {/* GRN */}
-                                                <div className="flex items-center gap-1.5 bg-blue-500/10 border border-blue-500/20 rounded-lg px-3 py-2">
-                                                    <div className="w-2 h-2 rounded-full bg-blue-500" />
-                                                    <div>
-                                                        <div className="text-[10px] text-blue-600 font-medium uppercase">GRN</div>
-                                                        <div className="text-xs font-semibold text-foreground">{record.grnNumber || '-'}</div>
-                                                        {record.supplier && (
-                                                            <div className="text-[10px] text-muted-foreground">{record.supplier}</div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <ArrowRight size={14} className="text-muted-foreground flex-shrink-0" />
-                                                {/* Lot */}
-                                                <div className="flex items-center gap-1.5 bg-purple-500/10 border border-purple-500/20 rounded-lg px-3 py-2">
-                                                    <div className="w-2 h-2 rounded-full bg-purple-500" />
-                                                    <div>
-                                                        <div className="text-[10px] text-purple-600 font-medium uppercase">Cleaning Lot</div>
-                                                        <div className="text-xs font-semibold text-foreground">{record.lotNumber || '-'}</div>
-                                                        {record.rawMaterialName && (
-                                                            <div className="text-[10px] text-muted-foreground">{record.rawMaterialName}</div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <ArrowRight size={14} className="text-muted-foreground flex-shrink-0" />
-                                                {/* Batch */}
-                                                <div className="flex items-center gap-1.5 bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2">
-                                                    <div className="w-2 h-2 rounded-full bg-green-500" />
-                                                    <div>
-                                                        <div className="text-[10px] text-green-600 font-medium uppercase">Batch</div>
-                                                        <div className="text-xs font-semibold text-foreground">{record.batchNumber || '-'}</div>
-                                                        {record.productName && (
-                                                            <div className="text-[10px] text-muted-foreground">{record.productName}</div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <ArrowRight size={14} className="text-muted-foreground flex-shrink-0" />
-                                                {/* Wastage */}
-                                                <div className="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
-                                                    <div className="w-2 h-2 rounded-full bg-amber-500" />
-                                                    <div>
-                                                        <div className="text-[10px] text-amber-600 font-medium uppercase">Seed Wastage</div>
-                                                        <div className="text-xs font-semibold text-foreground">{record.quantity.toFixed(2)} {record.unit}</div>
-                                                        <div className="text-[10px] text-muted-foreground">SKU: {record.skuCode}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
+                        <motion.div
+                            key={record.id}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.03 * Math.min(index, 20) }}
+                            className="grid grid-cols-12 gap-2 px-4 py-3 border-b border-border hover:bg-muted/30 transition-colors items-center text-sm"
+                        >
+                            <div className="col-span-2">
+                                <span className="inline-flex items-center px-2 py-0.5 bg-blue-500/10 text-blue-700 text-xs font-medium rounded">
+                                    {record.rawMaterialSkuCode || '-'}
+                                </span>
+                            </div>
+                            <div className="col-span-2 text-foreground text-xs">
+                                {record.rawMaterialName || '-'}
+                            </div>
+                            <div className="col-span-2 font-semibold text-foreground">
+                                {record.quantity.toFixed(2)}
+                                <span className="text-xs font-normal text-muted-foreground ml-1">{record.unit}</span>
+                            </div>
+                            <div className="col-span-2">
+                                <span className="inline-flex items-center px-2 py-0.5 bg-amber-500/10 text-amber-700 text-xs font-medium rounded">
+                                    {record.skuCode}
+                                </span>
+                            </div>
+                            <div className="col-span-2">
+                                <span className="text-xs font-mono bg-primary/10 text-primary px-1.5 py-0.5 rounded">
+                                    {record.lotNumber || '-'}
+                                </span>
+                            </div>
+                            <div className="col-span-2 text-muted-foreground text-xs">
+                                {new Date(record.dateOfGeneration).toLocaleDateString('en-IN', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric',
+                                })}
+                            </div>
+                        </motion.div>
                     ))}
-
-                    {/* Traceability Legend */}
-                    <div className="px-4 py-3 bg-muted/30 border-t border-border">
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
-                            <span className="font-medium">Traceability Chain:</span>
-                            <span className="inline-flex items-center gap-1">
-                                <span className="w-2 h-2 rounded-full bg-blue-500" /> GRN
-                                <ArrowRight size={10} />
-                                <span className="w-2 h-2 rounded-full bg-purple-500" /> Lot
-                                <ArrowRight size={10} />
-                                <span className="w-2 h-2 rounded-full bg-green-500" /> Batch
-                                <ArrowRight size={10} />
-                                <span className="w-2 h-2 rounded-full bg-amber-500" /> Wastage
-                            </span>
-                            <span className="ml-auto text-muted-foreground/60">Click a row to expand</span>
-                        </div>
-                    </div>
                 </motion.div>
             ) : (
                 <div className="bg-muted/30 border border-border rounded-xl p-8 text-center">
                     <Leaf size={32} className="text-muted-foreground mx-auto mb-3 opacity-50" />
                     <p className="text-sm text-muted-foreground">
-                        No seed wastage records found. Seed wastage will appear here once recorded during batch creation.
+                        No seed wastage records found. Seed wastage will appear here once recorded during cleaning or batch creation.
                     </p>
                 </div>
             )}
