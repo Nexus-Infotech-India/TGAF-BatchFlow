@@ -403,6 +403,8 @@ export class CleaningGrnController {
                                 grnNumber: lot.grn?.grnNumber || '',
                                 skuCode: seedWastageSku,
                                 quantity: parsedSeedWastageQty,
+                                allocatedQuantity: 0,
+                                restWastage: parsedSeedWastageQty,
                                 unit: parsedSeedWastageUnit,
                                 source: 'cleaning',
                             },

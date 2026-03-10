@@ -84071,10 +84071,12 @@ export namespace Prisma {
 
   export type ProcessingBatchLotAvgAggregateOutputType = {
     allocatedQuantity: number | null
+    seedWastageAllocated: number | null
   }
 
   export type ProcessingBatchLotSumAggregateOutputType = {
     allocatedQuantity: number | null
+    seedWastageAllocated: number | null
   }
 
   export type ProcessingBatchLotMinAggregateOutputType = {
@@ -84082,6 +84084,7 @@ export namespace Prisma {
     processingJobId: string | null
     cleaningLotId: string | null
     allocatedQuantity: number | null
+    seedWastageAllocated: number | null
     createdAt: Date | null
   }
 
@@ -84090,6 +84093,7 @@ export namespace Prisma {
     processingJobId: string | null
     cleaningLotId: string | null
     allocatedQuantity: number | null
+    seedWastageAllocated: number | null
     createdAt: Date | null
   }
 
@@ -84098,6 +84102,7 @@ export namespace Prisma {
     processingJobId: number
     cleaningLotId: number
     allocatedQuantity: number
+    seedWastageAllocated: number
     createdAt: number
     _all: number
   }
@@ -84105,10 +84110,12 @@ export namespace Prisma {
 
   export type ProcessingBatchLotAvgAggregateInputType = {
     allocatedQuantity?: true
+    seedWastageAllocated?: true
   }
 
   export type ProcessingBatchLotSumAggregateInputType = {
     allocatedQuantity?: true
+    seedWastageAllocated?: true
   }
 
   export type ProcessingBatchLotMinAggregateInputType = {
@@ -84116,6 +84123,7 @@ export namespace Prisma {
     processingJobId?: true
     cleaningLotId?: true
     allocatedQuantity?: true
+    seedWastageAllocated?: true
     createdAt?: true
   }
 
@@ -84124,6 +84132,7 @@ export namespace Prisma {
     processingJobId?: true
     cleaningLotId?: true
     allocatedQuantity?: true
+    seedWastageAllocated?: true
     createdAt?: true
   }
 
@@ -84132,6 +84141,7 @@ export namespace Prisma {
     processingJobId?: true
     cleaningLotId?: true
     allocatedQuantity?: true
+    seedWastageAllocated?: true
     createdAt?: true
     _all?: true
   }
@@ -84227,6 +84237,7 @@ export namespace Prisma {
     processingJobId: string
     cleaningLotId: string
     allocatedQuantity: number
+    seedWastageAllocated: number
     createdAt: Date
     _count: ProcessingBatchLotCountAggregateOutputType | null
     _avg: ProcessingBatchLotAvgAggregateOutputType | null
@@ -84254,6 +84265,7 @@ export namespace Prisma {
     processingJobId?: boolean
     cleaningLotId?: boolean
     allocatedQuantity?: boolean
+    seedWastageAllocated?: boolean
     createdAt?: boolean
     processingJob?: boolean | ProcessingJobDefaultArgs<ExtArgs>
     cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
@@ -84264,6 +84276,7 @@ export namespace Prisma {
     processingJobId?: boolean
     cleaningLotId?: boolean
     allocatedQuantity?: boolean
+    seedWastageAllocated?: boolean
     createdAt?: boolean
     processingJob?: boolean | ProcessingJobDefaultArgs<ExtArgs>
     cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
@@ -84274,6 +84287,7 @@ export namespace Prisma {
     processingJobId?: boolean
     cleaningLotId?: boolean
     allocatedQuantity?: boolean
+    seedWastageAllocated?: boolean
     createdAt?: boolean
     processingJob?: boolean | ProcessingJobDefaultArgs<ExtArgs>
     cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
@@ -84284,10 +84298,11 @@ export namespace Prisma {
     processingJobId?: boolean
     cleaningLotId?: boolean
     allocatedQuantity?: boolean
+    seedWastageAllocated?: boolean
     createdAt?: boolean
   }
 
-  export type ProcessingBatchLotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "processingJobId" | "cleaningLotId" | "allocatedQuantity" | "createdAt", ExtArgs["result"]["processingBatchLot"]>
+  export type ProcessingBatchLotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "processingJobId" | "cleaningLotId" | "allocatedQuantity" | "seedWastageAllocated" | "createdAt", ExtArgs["result"]["processingBatchLot"]>
   export type ProcessingBatchLotInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     processingJob?: boolean | ProcessingJobDefaultArgs<ExtArgs>
     cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
@@ -84312,6 +84327,7 @@ export namespace Prisma {
       processingJobId: string
       cleaningLotId: string
       allocatedQuantity: number
+      seedWastageAllocated: number
       createdAt: Date
     }, ExtArgs["result"]["processingBatchLot"]>
     composites: {}
@@ -84742,6 +84758,7 @@ export namespace Prisma {
     readonly processingJobId: FieldRef<"ProcessingBatchLot", 'String'>
     readonly cleaningLotId: FieldRef<"ProcessingBatchLot", 'String'>
     readonly allocatedQuantity: FieldRef<"ProcessingBatchLot", 'Float'>
+    readonly seedWastageAllocated: FieldRef<"ProcessingBatchLot", 'Float'>
     readonly createdAt: FieldRef<"ProcessingBatchLot", 'DateTime'>
   }
     
@@ -87479,10 +87496,14 @@ export namespace Prisma {
 
   export type SeedWastageRecordAvgAggregateOutputType = {
     quantity: number | null
+    allocatedQuantity: number | null
+    restWastage: number | null
   }
 
   export type SeedWastageRecordSumAggregateOutputType = {
     quantity: number | null
+    allocatedQuantity: number | null
+    restWastage: number | null
   }
 
   export type SeedWastageRecordMinAggregateOutputType = {
@@ -87492,6 +87513,8 @@ export namespace Prisma {
     grnNumber: string | null
     skuCode: string | null
     quantity: number | null
+    allocatedQuantity: number | null
+    restWastage: number | null
     unit: string | null
     source: string | null
     createdAt: Date | null
@@ -87504,6 +87527,8 @@ export namespace Prisma {
     grnNumber: string | null
     skuCode: string | null
     quantity: number | null
+    allocatedQuantity: number | null
+    restWastage: number | null
     unit: string | null
     source: string | null
     createdAt: Date | null
@@ -87516,6 +87541,8 @@ export namespace Prisma {
     grnNumber: number
     skuCode: number
     quantity: number
+    allocatedQuantity: number
+    restWastage: number
     unit: number
     source: number
     createdAt: number
@@ -87525,10 +87552,14 @@ export namespace Prisma {
 
   export type SeedWastageRecordAvgAggregateInputType = {
     quantity?: true
+    allocatedQuantity?: true
+    restWastage?: true
   }
 
   export type SeedWastageRecordSumAggregateInputType = {
     quantity?: true
+    allocatedQuantity?: true
+    restWastage?: true
   }
 
   export type SeedWastageRecordMinAggregateInputType = {
@@ -87538,6 +87569,8 @@ export namespace Prisma {
     grnNumber?: true
     skuCode?: true
     quantity?: true
+    allocatedQuantity?: true
+    restWastage?: true
     unit?: true
     source?: true
     createdAt?: true
@@ -87550,6 +87583,8 @@ export namespace Prisma {
     grnNumber?: true
     skuCode?: true
     quantity?: true
+    allocatedQuantity?: true
+    restWastage?: true
     unit?: true
     source?: true
     createdAt?: true
@@ -87562,6 +87597,8 @@ export namespace Prisma {
     grnNumber?: true
     skuCode?: true
     quantity?: true
+    allocatedQuantity?: true
+    restWastage?: true
     unit?: true
     source?: true
     createdAt?: true
@@ -87661,6 +87698,8 @@ export namespace Prisma {
     grnNumber: string
     skuCode: string
     quantity: number
+    allocatedQuantity: number
+    restWastage: number
     unit: string
     source: string
     createdAt: Date
@@ -87692,6 +87731,8 @@ export namespace Prisma {
     grnNumber?: boolean
     skuCode?: boolean
     quantity?: boolean
+    allocatedQuantity?: boolean
+    restWastage?: boolean
     unit?: boolean
     source?: boolean
     createdAt?: boolean
@@ -87705,6 +87746,8 @@ export namespace Prisma {
     grnNumber?: boolean
     skuCode?: boolean
     quantity?: boolean
+    allocatedQuantity?: boolean
+    restWastage?: boolean
     unit?: boolean
     source?: boolean
     createdAt?: boolean
@@ -87718,6 +87761,8 @@ export namespace Prisma {
     grnNumber?: boolean
     skuCode?: boolean
     quantity?: boolean
+    allocatedQuantity?: boolean
+    restWastage?: boolean
     unit?: boolean
     source?: boolean
     createdAt?: boolean
@@ -87731,12 +87776,14 @@ export namespace Prisma {
     grnNumber?: boolean
     skuCode?: boolean
     quantity?: boolean
+    allocatedQuantity?: boolean
+    restWastage?: boolean
     unit?: boolean
     source?: boolean
     createdAt?: boolean
   }
 
-  export type SeedWastageRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "lotNumber" | "grnNumber" | "skuCode" | "quantity" | "unit" | "source" | "createdAt", ExtArgs["result"]["seedWastageRecord"]>
+  export type SeedWastageRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchId" | "lotNumber" | "grnNumber" | "skuCode" | "quantity" | "allocatedQuantity" | "restWastage" | "unit" | "source" | "createdAt", ExtArgs["result"]["seedWastageRecord"]>
   export type SeedWastageRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     batch?: boolean | SeedWastageRecord$batchArgs<ExtArgs>
   }
@@ -87759,6 +87806,8 @@ export namespace Prisma {
       grnNumber: string
       skuCode: string
       quantity: number
+      allocatedQuantity: number
+      restWastage: number
       unit: string
       source: string
       createdAt: Date
@@ -88192,6 +88241,8 @@ export namespace Prisma {
     readonly grnNumber: FieldRef<"SeedWastageRecord", 'String'>
     readonly skuCode: FieldRef<"SeedWastageRecord", 'String'>
     readonly quantity: FieldRef<"SeedWastageRecord", 'Float'>
+    readonly allocatedQuantity: FieldRef<"SeedWastageRecord", 'Float'>
+    readonly restWastage: FieldRef<"SeedWastageRecord", 'Float'>
     readonly unit: FieldRef<"SeedWastageRecord", 'String'>
     readonly source: FieldRef<"SeedWastageRecord", 'String'>
     readonly createdAt: FieldRef<"SeedWastageRecord", 'DateTime'>
@@ -89598,6 +89649,7 @@ export namespace Prisma {
     processingJobId: 'processingJobId',
     cleaningLotId: 'cleaningLotId',
     allocatedQuantity: 'allocatedQuantity',
+    seedWastageAllocated: 'seedWastageAllocated',
     createdAt: 'createdAt'
   };
 
@@ -89641,6 +89693,8 @@ export namespace Prisma {
     grnNumber: 'grnNumber',
     skuCode: 'skuCode',
     quantity: 'quantity',
+    allocatedQuantity: 'allocatedQuantity',
+    restWastage: 'restWastage',
     unit: 'unit',
     source: 'source',
     createdAt: 'createdAt'
@@ -95400,6 +95454,7 @@ export namespace Prisma {
     processingJobId?: StringFilter<"ProcessingBatchLot"> | string
     cleaningLotId?: StringFilter<"ProcessingBatchLot"> | string
     allocatedQuantity?: FloatFilter<"ProcessingBatchLot"> | number
+    seedWastageAllocated?: FloatFilter<"ProcessingBatchLot"> | number
     createdAt?: DateTimeFilter<"ProcessingBatchLot"> | Date | string
     processingJob?: XOR<ProcessingJobScalarRelationFilter, ProcessingJobWhereInput>
     cleaningLot?: XOR<CleaningLotScalarRelationFilter, CleaningLotWhereInput>
@@ -95410,6 +95465,7 @@ export namespace Prisma {
     processingJobId?: SortOrder
     cleaningLotId?: SortOrder
     allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
     createdAt?: SortOrder
     processingJob?: ProcessingJobOrderByWithRelationInput
     cleaningLot?: CleaningLotOrderByWithRelationInput
@@ -95423,6 +95479,7 @@ export namespace Prisma {
     processingJobId?: StringFilter<"ProcessingBatchLot"> | string
     cleaningLotId?: StringFilter<"ProcessingBatchLot"> | string
     allocatedQuantity?: FloatFilter<"ProcessingBatchLot"> | number
+    seedWastageAllocated?: FloatFilter<"ProcessingBatchLot"> | number
     createdAt?: DateTimeFilter<"ProcessingBatchLot"> | Date | string
     processingJob?: XOR<ProcessingJobScalarRelationFilter, ProcessingJobWhereInput>
     cleaningLot?: XOR<CleaningLotScalarRelationFilter, CleaningLotWhereInput>
@@ -95433,6 +95490,7 @@ export namespace Prisma {
     processingJobId?: SortOrder
     cleaningLotId?: SortOrder
     allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
     createdAt?: SortOrder
     _count?: ProcessingBatchLotCountOrderByAggregateInput
     _avg?: ProcessingBatchLotAvgOrderByAggregateInput
@@ -95449,6 +95507,7 @@ export namespace Prisma {
     processingJobId?: StringWithAggregatesFilter<"ProcessingBatchLot"> | string
     cleaningLotId?: StringWithAggregatesFilter<"ProcessingBatchLot"> | string
     allocatedQuantity?: FloatWithAggregatesFilter<"ProcessingBatchLot"> | number
+    seedWastageAllocated?: FloatWithAggregatesFilter<"ProcessingBatchLot"> | number
     createdAt?: DateTimeWithAggregatesFilter<"ProcessingBatchLot"> | Date | string
   }
 
@@ -95620,6 +95679,8 @@ export namespace Prisma {
     grnNumber?: StringFilter<"SeedWastageRecord"> | string
     skuCode?: StringFilter<"SeedWastageRecord"> | string
     quantity?: FloatFilter<"SeedWastageRecord"> | number
+    allocatedQuantity?: FloatFilter<"SeedWastageRecord"> | number
+    restWastage?: FloatFilter<"SeedWastageRecord"> | number
     unit?: StringFilter<"SeedWastageRecord"> | string
     source?: StringFilter<"SeedWastageRecord"> | string
     createdAt?: DateTimeFilter<"SeedWastageRecord"> | Date | string
@@ -95633,6 +95694,8 @@ export namespace Prisma {
     grnNumber?: SortOrder
     skuCode?: SortOrder
     quantity?: SortOrder
+    allocatedQuantity?: SortOrder
+    restWastage?: SortOrder
     unit?: SortOrder
     source?: SortOrder
     createdAt?: SortOrder
@@ -95649,6 +95712,8 @@ export namespace Prisma {
     grnNumber?: StringFilter<"SeedWastageRecord"> | string
     skuCode?: StringFilter<"SeedWastageRecord"> | string
     quantity?: FloatFilter<"SeedWastageRecord"> | number
+    allocatedQuantity?: FloatFilter<"SeedWastageRecord"> | number
+    restWastage?: FloatFilter<"SeedWastageRecord"> | number
     unit?: StringFilter<"SeedWastageRecord"> | string
     source?: StringFilter<"SeedWastageRecord"> | string
     createdAt?: DateTimeFilter<"SeedWastageRecord"> | Date | string
@@ -95662,6 +95727,8 @@ export namespace Prisma {
     grnNumber?: SortOrder
     skuCode?: SortOrder
     quantity?: SortOrder
+    allocatedQuantity?: SortOrder
+    restWastage?: SortOrder
     unit?: SortOrder
     source?: SortOrder
     createdAt?: SortOrder
@@ -95682,6 +95749,8 @@ export namespace Prisma {
     grnNumber?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
     skuCode?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
     quantity?: FloatWithAggregatesFilter<"SeedWastageRecord"> | number
+    allocatedQuantity?: FloatWithAggregatesFilter<"SeedWastageRecord"> | number
+    restWastage?: FloatWithAggregatesFilter<"SeedWastageRecord"> | number
     unit?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
     source?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
     createdAt?: DateTimeWithAggregatesFilter<"SeedWastageRecord"> | Date | string
@@ -101433,6 +101502,7 @@ export namespace Prisma {
   export type ProcessingBatchLotCreateInput = {
     id?: string
     allocatedQuantity: number
+    seedWastageAllocated?: number
     createdAt?: Date | string
     processingJob: ProcessingJobCreateNestedOneWithoutProcessingBatchLotsInput
     cleaningLot: CleaningLotCreateNestedOneWithoutProcessingBatchLotsInput
@@ -101443,12 +101513,14 @@ export namespace Prisma {
     processingJobId: string
     cleaningLotId: string
     allocatedQuantity: number
+    seedWastageAllocated?: number
     createdAt?: Date | string
   }
 
   export type ProcessingBatchLotUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingJob?: ProcessingJobUpdateOneRequiredWithoutProcessingBatchLotsNestedInput
     cleaningLot?: CleaningLotUpdateOneRequiredWithoutProcessingBatchLotsNestedInput
@@ -101459,6 +101531,7 @@ export namespace Prisma {
     processingJobId?: StringFieldUpdateOperationsInput | string
     cleaningLotId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -101467,12 +101540,14 @@ export namespace Prisma {
     processingJobId: string
     cleaningLotId: string
     allocatedQuantity: number
+    seedWastageAllocated?: number
     createdAt?: Date | string
   }
 
   export type ProcessingBatchLotUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -101481,6 +101556,7 @@ export namespace Prisma {
     processingJobId?: StringFieldUpdateOperationsInput | string
     cleaningLotId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -101660,6 +101736,8 @@ export namespace Prisma {
     grnNumber: string
     skuCode: string
     quantity: number
+    allocatedQuantity?: number
+    restWastage?: number
     unit?: string
     source?: string
     createdAt?: Date | string
@@ -101673,6 +101751,8 @@ export namespace Prisma {
     grnNumber: string
     skuCode: string
     quantity: number
+    allocatedQuantity?: number
+    restWastage?: number
     unit?: string
     source?: string
     createdAt?: Date | string
@@ -101684,6 +101764,8 @@ export namespace Prisma {
     grnNumber?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    restWastage?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -101697,6 +101779,8 @@ export namespace Prisma {
     grnNumber?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    restWastage?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -101709,6 +101793,8 @@ export namespace Prisma {
     grnNumber: string
     skuCode: string
     quantity: number
+    allocatedQuantity?: number
+    restWastage?: number
     unit?: string
     source?: string
     createdAt?: Date | string
@@ -101720,6 +101806,8 @@ export namespace Prisma {
     grnNumber?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    restWastage?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -101732,6 +101820,8 @@ export namespace Prisma {
     grnNumber?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    restWastage?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -105629,11 +105719,13 @@ export namespace Prisma {
     processingJobId?: SortOrder
     cleaningLotId?: SortOrder
     allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
     createdAt?: SortOrder
   }
 
   export type ProcessingBatchLotAvgOrderByAggregateInput = {
     allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
   }
 
   export type ProcessingBatchLotMaxOrderByAggregateInput = {
@@ -105641,6 +105733,7 @@ export namespace Prisma {
     processingJobId?: SortOrder
     cleaningLotId?: SortOrder
     allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -105649,11 +105742,13 @@ export namespace Prisma {
     processingJobId?: SortOrder
     cleaningLotId?: SortOrder
     allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
     createdAt?: SortOrder
   }
 
   export type ProcessingBatchLotSumOrderByAggregateInput = {
     allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
   }
 
   export type EnumBOMStatusFilter<$PrismaModel = never> = {
@@ -105778,6 +105873,8 @@ export namespace Prisma {
     grnNumber?: SortOrder
     skuCode?: SortOrder
     quantity?: SortOrder
+    allocatedQuantity?: SortOrder
+    restWastage?: SortOrder
     unit?: SortOrder
     source?: SortOrder
     createdAt?: SortOrder
@@ -105785,6 +105882,8 @@ export namespace Prisma {
 
   export type SeedWastageRecordAvgOrderByAggregateInput = {
     quantity?: SortOrder
+    allocatedQuantity?: SortOrder
+    restWastage?: SortOrder
   }
 
   export type SeedWastageRecordMaxOrderByAggregateInput = {
@@ -105794,6 +105893,8 @@ export namespace Prisma {
     grnNumber?: SortOrder
     skuCode?: SortOrder
     quantity?: SortOrder
+    allocatedQuantity?: SortOrder
+    restWastage?: SortOrder
     unit?: SortOrder
     source?: SortOrder
     createdAt?: SortOrder
@@ -105806,6 +105907,8 @@ export namespace Prisma {
     grnNumber?: SortOrder
     skuCode?: SortOrder
     quantity?: SortOrder
+    allocatedQuantity?: SortOrder
+    restWastage?: SortOrder
     unit?: SortOrder
     source?: SortOrder
     createdAt?: SortOrder
@@ -105813,6 +105916,8 @@ export namespace Prisma {
 
   export type SeedWastageRecordSumOrderByAggregateInput = {
     quantity?: SortOrder
+    allocatedQuantity?: SortOrder
+    restWastage?: SortOrder
   }
 
   export type BatchCreateNestedOneWithoutActivityLogInput = {
@@ -114381,6 +114486,8 @@ export namespace Prisma {
     grnNumber: string
     skuCode: string
     quantity: number
+    allocatedQuantity?: number
+    restWastage?: number
     unit?: string
     source?: string
     createdAt?: Date | string
@@ -114392,6 +114499,8 @@ export namespace Prisma {
     grnNumber: string
     skuCode: string
     quantity: number
+    allocatedQuantity?: number
+    restWastage?: number
     unit?: string
     source?: string
     createdAt?: Date | string
@@ -114846,6 +114955,8 @@ export namespace Prisma {
     grnNumber?: StringFilter<"SeedWastageRecord"> | string
     skuCode?: StringFilter<"SeedWastageRecord"> | string
     quantity?: FloatFilter<"SeedWastageRecord"> | number
+    allocatedQuantity?: FloatFilter<"SeedWastageRecord"> | number
+    restWastage?: FloatFilter<"SeedWastageRecord"> | number
     unit?: StringFilter<"SeedWastageRecord"> | string
     source?: StringFilter<"SeedWastageRecord"> | string
     createdAt?: DateTimeFilter<"SeedWastageRecord"> | Date | string
@@ -132796,6 +132907,7 @@ export namespace Prisma {
   export type ProcessingBatchLotCreateWithoutProcessingJobInput = {
     id?: string
     allocatedQuantity: number
+    seedWastageAllocated?: number
     createdAt?: Date | string
     cleaningLot: CleaningLotCreateNestedOneWithoutProcessingBatchLotsInput
   }
@@ -132804,6 +132916,7 @@ export namespace Prisma {
     id?: string
     cleaningLotId: string
     allocatedQuantity: number
+    seedWastageAllocated?: number
     createdAt?: Date | string
   }
 
@@ -132963,6 +133076,7 @@ export namespace Prisma {
     processingJobId?: StringFilter<"ProcessingBatchLot"> | string
     cleaningLotId?: StringFilter<"ProcessingBatchLot"> | string
     allocatedQuantity?: FloatFilter<"ProcessingBatchLot"> | number
+    seedWastageAllocated?: FloatFilter<"ProcessingBatchLot"> | number
     createdAt?: DateTimeFilter<"ProcessingBatchLot"> | Date | string
   }
 
@@ -134984,6 +135098,7 @@ export namespace Prisma {
   export type ProcessingBatchLotCreateWithoutCleaningLotInput = {
     id?: string
     allocatedQuantity: number
+    seedWastageAllocated?: number
     createdAt?: Date | string
     processingJob: ProcessingJobCreateNestedOneWithoutProcessingBatchLotsInput
   }
@@ -134992,6 +135107,7 @@ export namespace Prisma {
     id?: string
     processingJobId: string
     allocatedQuantity: number
+    seedWastageAllocated?: number
     createdAt?: Date | string
   }
 
@@ -135744,6 +135860,8 @@ export namespace Prisma {
     grnNumber: string
     skuCode: string
     quantity: number
+    allocatedQuantity?: number
+    restWastage?: number
     unit?: string
     source?: string
     createdAt?: Date | string
@@ -135854,6 +135972,8 @@ export namespace Prisma {
     grnNumber?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    restWastage?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -135865,6 +135985,8 @@ export namespace Prisma {
     grnNumber?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    restWastage?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -135876,6 +135998,8 @@ export namespace Prisma {
     grnNumber?: StringFieldUpdateOperationsInput | string
     skuCode?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    restWastage?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     source?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142072,6 +142196,7 @@ export namespace Prisma {
     id?: string
     cleaningLotId: string
     allocatedQuantity: number
+    seedWastageAllocated?: number
     createdAt?: Date | string
   }
 
@@ -142144,6 +142269,7 @@ export namespace Prisma {
   export type ProcessingBatchLotUpdateWithoutProcessingJobInput = {
     id?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningLot?: CleaningLotUpdateOneRequiredWithoutProcessingBatchLotsNestedInput
   }
@@ -142152,6 +142278,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     cleaningLotId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -142159,6 +142286,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     cleaningLotId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -142336,12 +142464,14 @@ export namespace Prisma {
     id?: string
     processingJobId: string
     allocatedQuantity: number
+    seedWastageAllocated?: number
     createdAt?: Date | string
   }
 
   export type ProcessingBatchLotUpdateWithoutCleaningLotInput = {
     id?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingJob?: ProcessingJobUpdateOneRequiredWithoutProcessingBatchLotsNestedInput
   }
@@ -142350,6 +142480,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     processingJobId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -142357,6 +142488,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     processingJobId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

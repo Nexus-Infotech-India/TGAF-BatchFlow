@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export class ProcessingJobController {
   /**
    * Create a processing batch from selected cleaning lots.
-   * Accepts: warehouseId, inputRawMaterialId, lots: [{lotId, allocatedQuantity}]
+   * Accepts: warehouseId, inputRawMaterialId, lots: [{lotId, allocatedQuantity, seedWastageAllocated?}]
    * Auto-generates batchNumber and processing job ID.
    */
   static async createProcessingBatch(req: Request, res: Response) {
@@ -14,7 +14,7 @@ export class ProcessingJobController {
       const {
         warehouseId,
         inputRawMaterialId,
-        lots, // Array of { lotId: string, allocatedQuantity: number }
+        lots, // Array of { lotId: string, allocatedQuantity: number, seedWastageAllocated?: number }
       } = req.body;
 
       if (!warehouseId || !inputRawMaterialId || !Array.isArray(lots) || lots.length === 0) {
@@ -34,7 +34,7 @@ export class ProcessingJobController {
 
       // Validate each lot and compute total quantity
       let totalQuantity = 0;
-      const validatedLots: { lotId: string; allocatedQuantity: number }[] = [];
+      const validatedLots: { lotId: string; allocatedQuantity: number; seedWastageAllocated: number; lotNumber: string }[] = [];
 
       for (const lotEntry of lots) {
         const lot = await prisma.cleaningLot.findUnique({
@@ -48,16 +48,57 @@ export class ProcessingJobController {
           res.status(400).json({ error: `Lot ${lot.lotNumber} does not belong to selected material` });
           return;
         }
-        // Check available cleaned quantity (cleanedQuantity tracks remaining after wastage & prior allocations)
-        const availableQty = lot.cleanedQuantity ?? 0;
-        if (lotEntry.allocatedQuantity <= 0 || lotEntry.allocatedQuantity > availableQty) {
+
+        const allocatedQuantity = lotEntry.allocatedQuantity ? parseFloat(lotEntry.allocatedQuantity) : 0;
+        const seedWastageAllocated = lotEntry.seedWastageAllocated ? parseFloat(lotEntry.seedWastageAllocated) : 0;
+
+        // At least one allocation type must be > 0
+        if (allocatedQuantity <= 0 && seedWastageAllocated <= 0) {
           res.status(400).json({
-            error: `Invalid allocated quantity for lot ${lot.lotNumber}. Available: ${availableQty}`,
+            error: `Lot ${lot.lotNumber}: either cleaned quantity or seed wastage allocation must be > 0`,
           });
           return;
         }
-        validatedLots.push({ lotId: lot.id, allocatedQuantity: lotEntry.allocatedQuantity });
-        totalQuantity += lotEntry.allocatedQuantity;
+
+        // Validate cleaned quantity allocation (only if > 0)
+        if (allocatedQuantity > 0) {
+          const availableQty = lot.cleanedQuantity ?? 0;
+          if (allocatedQuantity > availableQty) {
+            res.status(400).json({
+              error: `Invalid allocated quantity for lot ${lot.lotNumber}. Available: ${availableQty}`,
+            });
+            return;
+          }
+        }
+
+        // Validate seed wastage allocation against available seed wastage (only if > 0)
+        if (seedWastageAllocated > 0) {
+          const seedWastageRecord = await prisma.seedWastageRecord.findFirst({
+            where: { lotNumber: lot.lotNumber, source: 'cleaning' },
+          });
+          if (seedWastageRecord) {
+            const availableSeedWastage = seedWastageRecord.quantity - seedWastageRecord.allocatedQuantity;
+            if (seedWastageAllocated > availableSeedWastage) {
+              res.status(400).json({
+                error: `Seed wastage allocation (${seedWastageAllocated}) exceeds available seed wastage (${availableSeedWastage}) for lot ${lot.lotNumber}`,
+              });
+              return;
+            }
+          } else {
+            res.status(400).json({
+              error: `No seed wastage record found for lot ${lot.lotNumber}`,
+            });
+            return;
+          }
+        }
+
+        validatedLots.push({
+          lotId: lot.id,
+          allocatedQuantity,
+          seedWastageAllocated,
+          lotNumber: lot.lotNumber,
+        });
+        totalQuantity += allocatedQuantity + seedWastageAllocated;
       }
 
       // Generate processing job ID (PJ00001)
@@ -86,7 +127,7 @@ export class ProcessingJobController {
       }
       const batchNumber = `${batchPrefix}${String(batchSeq).padStart(4, '0')}`;
 
-      // Transaction: create processing job, batch lots, update lot statuses
+      // Transaction: create processing job, batch lots, update lot statuses, update seed wastage
       const result = await prisma.$transaction(async (tx) => {
         // Create processing job
         const processingJob = await tx.processingJob.create({
@@ -108,22 +149,43 @@ export class ProcessingJobController {
               processingJobId: processingJob.id,
               cleaningLotId: lotEntry.lotId,
               allocatedQuantity: lotEntry.allocatedQuantity,
+              seedWastageAllocated: lotEntry.seedWastageAllocated,
             },
           });
 
-          // Mark cleaning lot as InProcessing
-          const updatedLot = await tx.cleaningLot.update({
-            where: { id: lotEntry.lotId },
-            data: {
-              cleanedQuantity: { decrement: lotEntry.allocatedQuantity },
-            },
-          });
-          // If fully allocated, mark as InProcessing
-          if ((updatedLot.cleanedQuantity ?? 0) <= 0) {
-            await tx.cleaningLot.update({
+          // Only decrement cleanedQuantity and update status if cleaned qty was allocated
+          if (lotEntry.allocatedQuantity > 0) {
+            const updatedLot = await tx.cleaningLot.update({
               where: { id: lotEntry.lotId },
-              data: { status: 'InProcessing' },
+              data: {
+                cleanedQuantity: { decrement: lotEntry.allocatedQuantity },
+              },
             });
+            // If fully allocated, mark as InProcessing
+            if ((updatedLot.cleanedQuantity ?? 0) <= 0) {
+              await tx.cleaningLot.update({
+                where: { id: lotEntry.lotId },
+                data: { status: 'InProcessing' },
+              });
+            }
+          }
+
+          // Update SeedWastageRecord if seed wastage was allocated for this lot
+          if (lotEntry.seedWastageAllocated > 0) {
+            const seedRecord = await tx.seedWastageRecord.findFirst({
+              where: { lotNumber: lotEntry.lotNumber, source: 'cleaning' },
+            });
+            if (seedRecord) {
+              const newAllocated = seedRecord.allocatedQuantity + lotEntry.seedWastageAllocated;
+              const newRestWastage = seedRecord.quantity - newAllocated;
+              await tx.seedWastageRecord.update({
+                where: { id: seedRecord.id },
+                data: {
+                  allocatedQuantity: newAllocated,
+                  restWastage: Math.max(0, newRestWastage),
+                },
+              });
+            }
           }
         }
 
@@ -151,13 +213,76 @@ export class ProcessingJobController {
 
   /**
    * Get cleaning lots available for batch creation.
-   * Query params: warehouseId (optional), rawMaterialId (optional)
-   * Returns lots with status 'Active' that haven't been allocated to a processing batch yet.
+   * Query params: warehouseId (optional), rawMaterialId (optional), type (optional: 'cleaned' | 'seedWastage')
+   * type=cleaned (default): lots with cleanedQuantity > 0
+   * type=seedWastage: lots that have SeedWastageRecord with restWastage > 0 (regardless of cleanedQuantity)
    */
   static async getAvailableLots(req: Request, res: Response) {
     try {
-      const { warehouseId, rawMaterialId } = req.query;
+      const { warehouseId, rawMaterialId, type } = req.query;
 
+      if (type === 'seedWastage') {
+        // Return lots that have available seed wastage, regardless of cleanedQuantity
+        const seedWastageWhere: any = {
+          source: 'cleaning',
+          restWastage: { gt: 0 },
+        };
+
+        const seedWastageRecords = await prisma.seedWastageRecord.findMany({
+          where: seedWastageWhere,
+        });
+
+        if (seedWastageRecords.length === 0) {
+          res.json([]);
+          return;
+        }
+
+        const lotNumbers = seedWastageRecords.map(r => r.lotNumber);
+        const seedWastageMap = new Map(
+          seedWastageRecords.map(r => [r.lotNumber, r])
+        );
+
+        const lotWhere: any = {
+          lotNumber: { in: lotNumbers },
+        };
+        if (warehouseId) lotWhere.warehouseId = warehouseId;
+        if (rawMaterialId) lotWhere.rawMaterialId = rawMaterialId;
+
+        const lots = await prisma.cleaningLot.findMany({
+          where: lotWhere,
+          include: {
+            rawMaterial: true,
+            warehouse: true,
+            grn: true,
+            cleaningJob: {
+              include: {
+                fromWarehouse: true,
+                toWarehouse: true,
+              },
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+        });
+
+        const lotsWithSeedWastage = lots.map(lot => ({
+          ...lot,
+          seedWastageRecord: seedWastageMap.get(lot.lotNumber) || null,
+          availableSeedWastage: (() => {
+            const record = seedWastageMap.get(lot.lotNumber);
+            if (!record) return 0;
+            return Math.max(0, record.quantity - record.allocatedQuantity);
+          })(),
+          totalSeedWastage: (() => {
+            const record = seedWastageMap.get(lot.lotNumber);
+            return record?.quantity || 0;
+          })(),
+        }));
+
+        res.json(lotsWithSeedWastage);
+        return;
+      }
+
+      // Default: type=cleaned — lots with cleanedQuantity > 0
       const where: any = {
         status: { in: ['Active', 'Cleaned'] },
         cleanedQuantity: { gt: 0 },

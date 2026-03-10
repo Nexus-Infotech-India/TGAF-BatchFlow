@@ -192,13 +192,16 @@ export class BatchController {
             }
           }
 
+          const seedWastageQtyParsed = parseFloat(batchData.seedWastageQty);
           await prisma.seedWastageRecord.create({
             data: {
               batchId,
               lotNumber: batchData.lotNumber || '',
               grnNumber: wastageGrnNumber,
               skuCode: seedWastageSku,
-              quantity: parseFloat(batchData.seedWastageQty),
+              quantity: seedWastageQtyParsed,
+              allocatedQuantity: 0,
+              restWastage: seedWastageQtyParsed,
               unit: 'kg',
               source: 'batch',
             },
@@ -2015,6 +2018,7 @@ export class BatchController {
             lotNumber: true,
             rawMaterial: { select: { name: true, skuCode: true } },
             grn: { select: { grnNumber: true, supplier: true } },
+            cleaningJobId: true,
           },
         })
         : [];
@@ -2024,6 +2028,7 @@ export class BatchController {
           rawMaterialSkuCode: l.rawMaterial?.skuCode || '',
           supplier: l.grn?.supplier || '',
           sourceGrn: l.grn?.grnNumber || '',
+          cleaningJobId: l.cleaningJobId || '',
         }])
       );
 
@@ -2045,6 +2050,7 @@ export class BatchController {
           source: (r as any).source || 'batch',
           grnNumber: r.grnNumber || lot?.sourceGrn || '',
           lotNumber: r.lotNumber,
+          cleaningJobId: lot?.cleaningJobId || '',
           batchId: r.batchId || null,
           batchNumber: r.batch?.batchNumber || '',
           productName: r.batch?.Product?.name || '',

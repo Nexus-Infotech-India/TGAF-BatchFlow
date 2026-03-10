@@ -1182,11 +1182,12 @@ model CleaningLot {
 }
 
 model ProcessingBatchLot {
-  id                String   @id @default(uuid())
-  processingJobId   String
-  cleaningLotId     String
-  allocatedQuantity Float
-  createdAt         DateTime @default(now())
+  id                     String   @id @default(uuid())
+  processingJobId        String
+  cleaningLotId          String
+  allocatedQuantity      Float
+  seedWastageAllocated   Float    @default(0)
+  createdAt              DateTime @default(now())
 
   processingJob ProcessingJob @relation(fields: [processingJobId], references: [id])
   cleaningLot   CleaningLot   @relation(fields: [cleaningLotId], references: [id])
@@ -1233,15 +1234,17 @@ model BOMItem {
 // ==================== SEED WASTAGE TRACKING ====================
 
 model SeedWastageRecord {
-  id        String   @id @default(uuid())
-  batchId   String?
-  lotNumber String
-  grnNumber String
-  skuCode   String
-  quantity  Float
-  unit      String   @default("kg")
-  source    String   @default("batch") // "cleaning" or "batch"
-  createdAt DateTime @default(now())
+  id                String   @id @default(uuid())
+  batchId           String?
+  lotNumber         String
+  grnNumber         String
+  skuCode           String
+  quantity          Float
+  allocatedQuantity Float    @default(0)
+  restWastage       Float    @default(0)
+  unit              String   @default("kg")
+  source            String   @default("batch") // "cleaning" or "batch"
+  createdAt         DateTime @default(now())
 
   batch Batch? @relation(fields: [batchId], references: [id])
 }

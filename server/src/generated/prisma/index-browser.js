@@ -888,6 +888,7 @@ exports.Prisma.ProcessingBatchLotScalarFieldEnum = {
   processingJobId: 'processingJobId',
   cleaningLotId: 'cleaningLotId',
   allocatedQuantity: 'allocatedQuantity',
+  seedWastageAllocated: 'seedWastageAllocated',
   createdAt: 'createdAt'
 };
 
@@ -922,6 +923,8 @@ exports.Prisma.SeedWastageRecordScalarFieldEnum = {
   grnNumber: 'grnNumber',
   skuCode: 'skuCode',
   quantity: 'quantity',
+  allocatedQuantity: 'allocatedQuantity',
+  restWastage: 'restWastage',
   unit: 'unit',
   source: 'source',
   createdAt: 'createdAt'

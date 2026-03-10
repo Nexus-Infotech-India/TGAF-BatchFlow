@@ -13,6 +13,7 @@ interface SeedWastageRecord {
     source: 'cleaning' | 'batch';
     grnNumber: string;
     lotNumber: string;
+    cleaningJobId?: string;
     batchId: string | null;
     batchNumber: string;
     productName: string;
@@ -168,19 +169,16 @@ const SeedWastageDashboard: React.FC = () => {
                     {/* Table Header */}
                     <div className="grid grid-cols-12 gap-2 px-4 py-2.5 bg-muted/50 border-b border-border text-xs font-medium text-muted-foreground uppercase tracking-wide">
                         <div className="col-span-2 flex items-center gap-1">
-                            <Package size={11} /> Raw Material SKU
+                            <Package size={11} /> Seed Wastage SKU
                         </div>
-                        <div className="col-span-2 flex items-center gap-1">
+                        <div className="col-span-3 flex items-center gap-1">
                             Raw Material
                         </div>
                         <div className="col-span-2 flex items-center gap-1">
                             Seed Wastage Qty
                         </div>
-                        <div className="col-span-2 flex items-center gap-1">
-                            Seed Wastage SKU
-                        </div>
-                        <div className="col-span-2 flex items-center gap-1">
-                            Cleaning Lot
+                        <div className="col-span-3 flex items-center gap-1">
+                            Cleaning Job ID
                         </div>
                         <div className="col-span-2 flex items-center gap-1">
                             <CalendarDays size={11} /> Date
@@ -197,26 +195,31 @@ const SeedWastageDashboard: React.FC = () => {
                             className="grid grid-cols-12 gap-2 px-4 py-3 border-b border-border hover:bg-muted/30 transition-colors items-center text-sm"
                         >
                             <div className="col-span-2">
-                                <span className="inline-flex items-center px-2 py-0.5 bg-blue-500/10 text-blue-700 text-xs font-medium rounded">
-                                    {record.rawMaterialSkuCode || '-'}
+                                <span className="inline-flex items-center px-2 py-0.5 bg-amber-500/10 text-amber-700 text-xs font-medium rounded">
+                                    {record.skuCode}
                                 </span>
                             </div>
-                            <div className="col-span-2 text-foreground text-xs">
+                            <div className="col-span-3 text-foreground text-xs font-medium">
                                 {record.rawMaterialName || '-'}
                             </div>
                             <div className="col-span-2 font-semibold text-foreground">
                                 {record.quantity.toFixed(2)}
                                 <span className="text-xs font-normal text-muted-foreground ml-1">{record.unit}</span>
                             </div>
-                            <div className="col-span-2">
-                                <span className="inline-flex items-center px-2 py-0.5 bg-amber-500/10 text-amber-700 text-xs font-medium rounded">
-                                    {record.skuCode}
-                                </span>
-                            </div>
-                            <div className="col-span-2">
-                                <span className="text-xs font-mono bg-primary/10 text-primary px-1.5 py-0.5 rounded">
-                                    {record.lotNumber || '-'}
-                                </span>
+                            <div className="col-span-3 flex items-center gap-3">
+                                <div className="flex items-center justify-center w-8 h-8 rounded-lg border border-border bg-card text-primary shadow-sm">
+                                    <Package size={16} />
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="font-bold text-foreground text-sm">
+                                        {record.cleaningJobId ? `LOT-${record.cleaningJobId}` : record.lotNumber || '-'}
+                                    </span>
+                                    {record.source === 'cleaning' && (
+                                        <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full" style={{ background: 'color-mix(in srgb, #10b981 14%, transparent)', color: '#059669' }}>
+                                            Cleaned
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                             <div className="col-span-2 text-muted-foreground text-xs">
                                 {new Date(record.dateOfGeneration).toLocaleDateString('en-IN', {
