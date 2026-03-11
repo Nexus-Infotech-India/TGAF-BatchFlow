@@ -5,6 +5,7 @@ const MATERIAL_CATEGORIES = [
   { value: 'RAW_MATERIAL', label: 'Raw Material' },
   { value: 'SEMI_FINISHED_GOOD', label: 'Semi-Finished Good' },
   { value: 'FINISHED_GOOD', label: 'Finished Good' },
+  { value: 'PACKAGING_MATERIAL', label: 'Packaging Material' },
 ] as const;
 
 type RawMaterial = {
@@ -158,7 +159,7 @@ const CreateRawMaterialPage: React.FC = () => {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight" style={{ color: 'var(--foreground)' }}>
-            Materials
+              Materials
             </h1>
             <p className="text-sm mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
               Manage your material inventory &middot; <span className="font-medium" style={{ color: 'var(--primary)' }}>{materials.length}</span> material{materials.length !== 1 ? 's' : ''}

@@ -20,6 +20,7 @@ enum MaterialCategory {
   RAW_MATERIAL
   SEMI_FINISHED_GOOD
   FINISHED_GOOD
+  PACKAGING_MATERIAL
 }
 
 model RawMaterialProduct {

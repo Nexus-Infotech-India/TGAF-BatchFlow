@@ -356,7 +356,8 @@ export namespace $Enums {
   export const MaterialCategory: {
   RAW_MATERIAL: 'RAW_MATERIAL',
   SEMI_FINISHED_GOOD: 'SEMI_FINISHED_GOOD',
-  FINISHED_GOOD: 'FINISHED_GOOD'
+  FINISHED_GOOD: 'FINISHED_GOOD',
+  PACKAGING_MATERIAL: 'PACKAGING_MATERIAL'
 };
 
 export type MaterialCategory = (typeof MaterialCategory)[keyof typeof MaterialCategory]

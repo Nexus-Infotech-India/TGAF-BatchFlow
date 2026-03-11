@@ -997,6 +997,7 @@ enum MaterialCategory {
   RAW_MATERIAL
   SEMI_FINISHED_GOOD
   FINISHED_GOOD
+  PACKAGING_MATERIAL
 }
 
 enum BatchStatus {
@@ -1182,12 +1183,12 @@ model CleaningLot {
 }
 
 model ProcessingBatchLot {
-  id                     String   @id @default(uuid())
-  processingJobId        String
-  cleaningLotId          String
-  allocatedQuantity      Float
-  seedWastageAllocated   Float    @default(0)
-  createdAt              DateTime @default(now())
+  id                   String   @id @default(uuid())
+  processingJobId      String
+  cleaningLotId        String
+  allocatedQuantity    Float
+  seedWastageAllocated Float    @default(0)
+  createdAt            DateTime @default(now())
 
   processingJob ProcessingJob @relation(fields: [processingJobId], references: [id])
   cleaningLot   CleaningLot   @relation(fields: [cleaningLotId], references: [id])

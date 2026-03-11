@@ -89,6 +89,7 @@ const PurchaseOrder = () => {
     { value: 'RAW_MATERIAL', label: 'Raw Material' },
     { value: 'SEMI_FINISHED_GOOD', label: 'Semi-Finished Good' },
     { value: 'FINISHED_GOOD', label: 'Finished Good' },
+    { value: 'PACKAGING_MATERIAL', label: 'Packaging Material' },
   ];
   const [vendorId, setVendorId] = useState('');
   const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
@@ -335,14 +336,14 @@ const PurchaseOrder = () => {
                   type="button"
                   onClick={() => setVendorModalOpen(true)}
                   className={`w-full text-left border rounded-xl px-4 py-3 transition-all duration-200 flex items-center gap-3 ${selectedVendor
-                      ? 'bg-primary/5 border-primary/30 hover:bg-primary/10'
-                      : 'bg-background border-input hover:bg-accent hover:border-primary/30'
+                    ? 'bg-primary/5 border-primary/30 hover:bg-primary/10'
+                    : 'bg-background border-input hover:bg-accent hover:border-primary/30'
                     }`}
                 >
                   <div
                     className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${selectedVendor
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted text-muted-foreground'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-muted-foreground'
                       }`}
                   >
                     {selectedVendor ? (
@@ -481,14 +482,14 @@ const PurchaseOrder = () => {
                           setRawMaterialModalOpen(true);
                         }}
                         className={`w-full text-left border rounded-xl px-4 py-2.5 transition-all duration-200 flex items-center gap-3 ${selectedRawMaterials[idx]
-                            ? 'bg-primary/5 border-primary/30 hover:bg-primary/10'
-                            : 'bg-card border-border hover:bg-accent hover:border-primary/30'
+                          ? 'bg-primary/5 border-primary/30 hover:bg-primary/10'
+                          : 'bg-card border-border hover:bg-accent hover:border-primary/30'
                           }`}
                       >
                         <div
                           className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${selectedRawMaterials[idx]
-                              ? 'bg-primary text-primary-foreground'
-                              : 'bg-muted text-muted-foreground'
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-muted text-muted-foreground'
                             }`}
                         >
                           {selectedRawMaterials[idx] ? (
