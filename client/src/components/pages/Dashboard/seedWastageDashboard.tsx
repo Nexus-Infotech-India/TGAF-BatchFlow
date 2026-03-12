@@ -30,6 +30,8 @@ const SeedWastageDashboard: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const authToken = localStorage.getItem('authToken');
+    const [currentPage, setCurrentPage] = useState(1);
+    const ITEMS_PER_PAGE = 5;
 
     useEffect(() => {
         const fetchSeedWastage = async () => {
@@ -186,7 +188,7 @@ const SeedWastageDashboard: React.FC = () => {
                     </div>
 
                     {/* Table Rows */}
-                    {records.map((record, index) => (
+                    {records.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE).map((record, index) => (
                         <motion.div
                             key={record.id}
                             initial={{ opacity: 0, x: -10 }}
@@ -230,6 +232,50 @@ const SeedWastageDashboard: React.FC = () => {
                             </div>
                         </motion.div>
                     ))}
+
+                    {/* Pagination Controls */}
+                    {records.length > 0 && (
+                        <div
+                            className="px-5 py-3 flex items-center justify-between"
+                            style={{ borderTop: '1px solid var(--border)', background: 'var(--muted)' }}
+                        >
+                            <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
+                                Showing {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, records.length)}–{Math.min(currentPage * ITEMS_PER_PAGE, records.length)} of {records.length}
+                            </span>
+                            <div className="flex items-center gap-1.5">
+                                <button
+                                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                                    disabled={currentPage === 1}
+                                    className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95 disabled:opacity-40"
+                                    style={{ background: 'var(--card)', color: 'var(--foreground)', border: '1px solid var(--border)' }}
+                                >
+                                    ← Prev
+                                </button>
+                                {Array.from({ length: Math.ceil(records.length / ITEMS_PER_PAGE) }, (_, i) => i + 1).map((page) => (
+                                    <button
+                                        key={page}
+                                        onClick={() => setCurrentPage(page)}
+                                        className="w-8 h-8 rounded-lg text-xs font-bold transition-all active:scale-95"
+                                        style={{
+                                            background: page === currentPage ? 'var(--primary)' : 'var(--card)',
+                                            color: page === currentPage ? 'var(--primary-foreground)' : 'var(--muted-foreground)',
+                                            border: page === currentPage ? 'none' : '1px solid var(--border)',
+                                        }}
+                                    >
+                                        {page}
+                                    </button>
+                                ))}
+                                <button
+                                    onClick={() => setCurrentPage((p) => Math.min(Math.ceil(records.length / ITEMS_PER_PAGE), p + 1))}
+                                    disabled={currentPage === Math.ceil(records.length / ITEMS_PER_PAGE)}
+                                    className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95 disabled:opacity-40"
+                                    style={{ background: 'var(--card)', color: 'var(--foreground)', border: '1px solid var(--border)' }}
+                                >
+                                    Next →
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </motion.div>
             ) : (
                 <div className="bg-muted/30 border border-border rounded-xl p-8 text-center">
