@@ -523,3 +523,204 @@ const addTableData = (
 };
 
 export default generatePDF;
+
+// --- Cleaning History PDF Report ---
+
+interface CleaningHistoryPDFConfig {
+  grnNumber: string;
+  rawMaterialName: string;
+  variety: string;
+  supplier: string;
+  unit: string;
+  totalReceived: number;
+  totalTransferred: number;
+  leftQuantity: number;
+  allJobsFinished: boolean;
+  cleaningJobs: {
+    id: string;
+    quantity: number;
+    status: string;
+    startedAt: string;
+    finishedAt?: string;
+    stoneWastageQty?: number;
+    stoneWastageUnit?: string;
+    seedWastageQty?: number;
+    seedWastageUnit?: string;
+    wastagePercentage?: number;
+    wastageType?: string;
+    fromWarehouse: { name: string };
+    toWarehouse: { name: string };
+    cleaningLots: {
+      lotNumber: string;
+      quantity: number;
+      cleanedQuantity?: number;
+      status: string;
+      stoneWastageQty?: number;
+      seedWastageQty?: number;
+      wastagePercentage?: number;
+      wastageType?: string;
+    }[];
+  }[];
+}
+
+export const generateCleaningHistoryPDF = (config: CleaningHistoryPDFConfig): void => {
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 15;
+  const contentWidth = pageWidth - margin * 2;
+  let yPos = margin;
+  const rowH = 9;
+
+  const checkPage = (needed: number) => {
+    if (yPos + needed > pageHeight - 20) { doc.addPage(); yPos = margin; }
+  };
+
+  const hLine = (y: number) => {
+    doc.setDrawColor(190, 190, 200); doc.setLineWidth(0.3);
+    doc.line(margin, y, margin + contentWidth, y);
+  };
+
+  const vLines = (widths: number[], y: number, h: number) => {
+    doc.setDrawColor(190, 190, 200); doc.setLineWidth(0.3);
+    let x = margin;
+    doc.line(x, y, x, y + h);
+    widths.forEach(w => { x += w; doc.line(x, y, x, y + h); });
+  };
+
+  type CellDef = { text: string; w: number; bold?: boolean; color?: number[]; align?: string };
+
+  const drawRow = (cells: CellDef[], y: number, header = false, stripe = false) => {
+    if (header) { doc.setFillColor(50, 50, 68); doc.rect(margin, y, contentWidth, rowH, 'F'); }
+    else if (stripe) { doc.setFillColor(245, 246, 252); doc.rect(margin, y, contentWidth, rowH, 'F'); }
+    let x = margin;
+    const textY = y + rowH / 2 + 1.2;
+    cells.forEach(c => {
+      doc.setFont('helvetica', header ? 'bold' : c.bold ? 'bold' : 'normal');
+      doc.setFontSize(header ? 8 : 8.5);
+      const col = header ? [255, 255, 255] : c.color || [40, 40, 55];
+      doc.setTextColor(col[0], col[1], col[2]);
+      const tx = c.align === 'center' ? x + c.w / 2 : c.align === 'right' ? x + c.w - 4 : x + 4;
+      doc.text(c.text, tx, textY, { align: (c.align as any) || 'left' });
+      x += c.w;
+    });
+    hLine(y + rowH);
+    vLines(cells.map(c => c.w), y, rowH);
+  };
+
+  // 1. TITLE
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.setTextColor(35, 35, 50);
+  doc.text('Cleaning History Report', pageWidth / 2, yPos + 7, { align: 'center' });
+  yPos += 12;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(130, 130, 145);
+  doc.text(`Generated: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}`, pageWidth / 2, yPos + 3, { align: 'center' });
+  yPos += 8;
+  hLine(yPos); yPos += 8;
+
+  // 2. GRN INFO TABLE
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(35, 35, 50);
+  doc.text('GRN Information', margin, yPos + 5); yPos += 10;
+
+  const lw = 42;
+  const vw = contentWidth / 2 - lw;
+  const hw = contentWidth / 2;
+  const kvRows: string[][][] = [
+    [['GRN Number', config.grnNumber], ['Supplier', config.supplier]],
+    [['Material', config.rawMaterialName], ['Variety', config.variety || '-']],
+    [['Total Received', `${config.totalReceived} ${config.unit}`], ['Transferred', `${config.totalTransferred} ${config.unit}`]],
+    [['Remaining', `${config.leftQuantity} ${config.unit}`], ['Overall Status', config.allJobsFinished ? 'All Cleaned' : 'In Progress']],
+  ];
+
+  doc.setFillColor(50, 50, 68); doc.rect(margin, yPos, contentWidth, rowH, 'F');
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(255, 255, 255);
+  const kvTextY = yPos + rowH / 2 + 1.2;
+  doc.text('Field', margin + 4, kvTextY);
+  doc.text('Value', margin + lw + 4, kvTextY);
+  doc.text('Field', margin + hw + 4, kvTextY);
+  doc.text('Value', margin + hw + lw + 4, kvTextY);
+  hLine(yPos + rowH); vLines([lw, vw, lw, vw], yPos, rowH); yPos += rowH;
+
+  kvRows.forEach((row, i) => {
+    const stripe = i % 2 === 0;
+    if (stripe) { doc.setFillColor(245, 246, 252); doc.rect(margin, yPos, contentWidth, rowH, 'F'); }
+    const ty = yPos + rowH / 2 + 1.2;
+    doc.setFontSize(8.5);
+    doc.setFont('helvetica', 'bold'); doc.setTextColor(90, 90, 110);
+    doc.text(row[0][0], margin + 4, ty);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(35, 35, 50);
+    doc.text(row[0][1], margin + lw + 4, ty);
+    doc.setFont('helvetica', 'bold'); doc.setTextColor(90, 90, 110);
+    doc.text(row[1][0], margin + hw + 4, ty);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(35, 35, 50);
+    doc.text(row[1][1], margin + hw + lw + 4, ty);
+    hLine(yPos + rowH); vLines([lw, vw, lw, vw], yPos, rowH); yPos += rowH;
+  });
+  yPos += 14;
+
+  // 3. CLEANING JOBS SUMMARY TABLE
+  checkPage(40);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(35, 35, 50);
+  doc.text('Cleaning Jobs Summary', margin, yPos + 5); yPos += 10;
+
+  const jc = [
+    { h: 'Job ID',       w: contentWidth * 0.10 },
+    { h: 'Route',        w: contentWidth * 0.14 },
+    { h: 'Started',      w: contentWidth * 0.09 },
+    { h: 'Completed',    w: contentWidth * 0.09 },
+    { h: 'Transfer Qty', w: contentWidth * 0.09 },
+    { h: 'Stone Loss',   w: contentWidth * 0.08 },
+    { h: 'Seed Loss',    w: contentWidth * 0.08 },
+    { h: 'Cleaned Qty',  w: contentWidth * 0.09 },
+    { h: 'Wastage %',    w: contentWidth * 0.08 },
+    { h: 'Loss Type',    w: contentWidth * 0.09 },
+    { h: 'Status',       w: contentWidth * 0.07 },
+  ];
+
+  drawRow(jc.map(c => ({ text: c.h, w: c.w, align: 'center' })), yPos, true); yPos += rowH;
+
+  config.cleaningJobs.forEach((job, i) => {
+    checkPage(rowH + 2);
+    const tw = (job.stoneWastageQty || 0) + (job.seedWastageQty || 0);
+    const net = Math.max(0, job.quantity - tw);
+    const wp = job.wastagePercentage ?? (job.quantity ? parseFloat(((tw / job.quantity) * 100).toFixed(2)) : 0);
+    const wt = job.wastageType ?? (wp > 3 ? 'Abnormal Loss' : 'Normal Loss');
+    const done = job.status === 'Cleaned';
+    const bad = wt === 'Abnormal Loss';
+    const wColor = done ? (bad ? [210, 38, 38] : [5, 140, 100]) : [120, 120, 135];
+    const sColor = done ? [5, 140, 100] : [200, 120, 0];
+    const fmtD = (d?: string) => d ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' }) : '--';
+
+    drawRow([
+      { text: `LOT-${job.id}`, w: jc[0].w, bold: true },
+      { text: `${job.fromWarehouse.name} > ${job.toWarehouse.name}`, w: jc[1].w },
+      { text: fmtD(job.startedAt), w: jc[2].w, align: 'center' },
+      { text: fmtD(job.finishedAt), w: jc[3].w, align: 'center' },
+      { text: `${job.quantity} ${config.unit}`, w: jc[4].w, align: 'center' },
+      { text: done ? `${job.stoneWastageQty || 0}` : '--', w: jc[5].w, align: 'center' },
+      { text: done ? `${job.seedWastageQty || 0}` : '--', w: jc[6].w, align: 'center' },
+      { text: done ? `${net} ${config.unit}` : '--', w: jc[7].w, align: 'center' },
+      { text: done ? `${wp}%` : '--', w: jc[8].w, align: 'center', bold: true, color: wColor },
+      { text: done ? wt : '--', w: jc[9].w, align: 'center', bold: true, color: wColor },
+      { text: job.status, w: jc[10].w, align: 'center', bold: true, color: sColor },
+    ], yPos, false, i % 2 === 0);
+    yPos += rowH;
+  });
+
+  // Fallback
+  if (config.cleaningJobs.length === 0) {
+    doc.setFont('helvetica', 'italic'); doc.setFontSize(10); doc.setTextColor(150, 150, 160);
+    doc.text('No cleaning records found for this GRN.', pageWidth / 2, yPos + 15, { align: 'center' });
+  }
+
+  // Page numbers
+  const np = doc.getNumberOfPages();
+  for (let i = 1; i <= np; i++) {
+    doc.setPage(i);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(160, 160, 170);
+    doc.text(`Page ${i} of ${np}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+    doc.text('BatchFlow - Cleaning History Report', margin, pageHeight - 8);
+  }
+
+  doc.save(`Cleaning_History_${config.grnNumber.replace(/[^A-Za-z0-9]/g, '_')}.pdf`);
+};

@@ -346,6 +346,13 @@ export class CleaningGrnController {
             const parsedSeedWastageQty = seedWastageQty ? parseFloat(seedWastageQty) : 0;
             const parsedSeedWastageUnit = seedWastageUnit || 'kg';
 
+            // Calculate wastage percentage and type
+            const totalWastage = parsedStoneWastageQty + parsedSeedWastageQty;
+            const transferQty = cleaningJob.quantity || 1; // avoid division by zero
+            const wastagePercentage = parseFloat(((totalWastage / transferQty) * 100).toFixed(2));
+            // ≤3% => Normal Loss, >3% => Abnormal Loss
+            const wastageType = wastagePercentage > 3 ? 'Abnormal Loss' : 'Normal Loss';
+
             // Look up the dedicated Seed Wastage SKU from Material Master
             let seedWastageSku = 'SEED-WASTAGE';
             if (parsedSeedWastageQty > 0) {
@@ -364,7 +371,7 @@ export class CleaningGrnController {
             }
 
             await prisma.$transaction(async (tx) => {
-                // Update cleaning job status + persist stone & seed wastage fields
+                // Update cleaning job status + persist stone & seed wastage fields + wastage %
                 await tx.cleaningJob.update({
                     where: { id },
                     data: {
@@ -374,6 +381,8 @@ export class CleaningGrnController {
                         stoneWastageUnit: parsedStoneWastageUnit,
                         seedWastageQty: parsedSeedWastageQty,
                         seedWastageUnit: parsedSeedWastageUnit,
+                        wastagePercentage,
+                        wastageType,
                     },
                 });
 
@@ -382,6 +391,11 @@ export class CleaningGrnController {
                 for (const lot of cleaningJob.cleaningLots) {
                     const lotQty = lot.quantity || 0;
                     const cleanedQty = Math.max(0, lotQty - parsedStoneWastageQty - parsedSeedWastageQty);
+
+                    // Calculate lot-level wastage percentage
+                    const lotTotalWastage = parsedStoneWastageQty + parsedSeedWastageQty;
+                    const lotWastagePercentage = parseFloat(((lotTotalWastage / (lotQty || 1)) * 100).toFixed(2));
+                    const lotWastageType = lotWastagePercentage > 3 ? 'Abnormal Loss' : 'Normal Loss';
 
                     await tx.cleaningLot.update({
                         where: { id: lot.id },
@@ -392,6 +406,8 @@ export class CleaningGrnController {
                             stoneWastageUnit: parsedStoneWastageUnit,
                             seedWastageQty: parsedSeedWastageQty,
                             seedWastageUnit: parsedSeedWastageUnit,
+                            wastagePercentage: lotWastagePercentage,
+                            wastageType: lotWastageType,
                         },
                     });
 

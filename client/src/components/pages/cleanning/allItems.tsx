@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
+import { generateCleaningHistoryPDF } from '../../../utils/exportPdf';
 import { Modal, Select, message, InputNumber } from 'antd';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -19,6 +20,10 @@ import {
   MapPin,
   Mountain,
   Sprout,
+  AlertTriangle,
+  Download,
+  XCircle,
+  Loader2,
 } from 'lucide-react';
 
 const { Option } = Select;
@@ -37,16 +42,213 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.2 } },
 };
 
+// ─── Processing Overlay ──────────────────────────────────────────────────
+type OverlayPhase = 'processing' | 'success' | 'error';
+type OverlayMode = 'transfer' | 'cleaning';
+
+const overlayConfig = {
+  transfer: {
+    processingTitle: 'Transferring Material',
+    processingSubtitle: 'Creating lot & updating inventory...',
+    successTitle: 'Transfer Complete!',
+    successSubtitle: 'Lot generated successfully',
+    gradientFrom: 'hsl(220, 70%, 55%)',
+    gradientTo: 'hsl(250, 65%, 50%)',
+    accentRing: 'hsl(220, 80%, 60%)',
+  },
+  cleaning: {
+    processingTitle: 'Finishing Cleaning',
+    processingSubtitle: 'Recording wastage & updating quantities...',
+    successTitle: 'Cleaning Complete!',
+    successSubtitle: 'All records updated',
+    gradientFrom: 'hsl(155, 70%, 38%)',
+    gradientTo: 'hsl(170, 60%, 35%)',
+    accentRing: 'hsl(155, 80%, 42%)',
+  },
+};
+
+const ProcessingOverlay: React.FC<{
+  visible: boolean;
+  phase: OverlayPhase;
+  mode: OverlayMode;
+  errorMessage?: string;
+}> = ({ visible, phase, mode, errorMessage }) => {
+  const cfg = overlayConfig[mode];
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.35 } }}
+          className="fixed inset-0 z-[9999] flex items-center justify-center"
+          style={{ backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.45)' }} />
+
+          {/* Content Card */}
+          <motion.div
+            initial={{ scale: 0.85, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0, transition: { type: 'spring', stiffness: 260, damping: 22 } }}
+            exit={{ scale: 0.9, opacity: 0, y: 10, transition: { duration: 0.25 } }}
+            className="relative z-10 flex flex-col items-center px-12 py-10 rounded-3xl shadow-2xl"
+            style={{ background: 'var(--card)', border: '1px solid var(--border)', minWidth: 340 }}
+          >
+            {/* Animated ring behind icon */}
+            <div className="relative flex items-center justify-center mb-6" style={{ width: 80, height: 80 }}>
+              {phase === 'processing' && (
+                <>
+                  {/* Spinning ring */}
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ repeat: Infinity, duration: 2.5, ease: 'linear' }}
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      border: '3px solid transparent',
+                      borderTopColor: cfg.accentRing,
+                      borderRightColor: cfg.accentRing,
+                      opacity: 0.7,
+                    }}
+                  />
+                  {/* Pulsing glow */}
+                  <motion.div
+                    animate={{ scale: [1, 1.25, 1], opacity: [0.15, 0.3, 0.15] }}
+                    transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+                    className="absolute inset-0 rounded-full"
+                    style={{ background: `radial-gradient(circle, ${cfg.gradientFrom}33, transparent 70%)` }}
+                  />
+                </>
+              )}
+
+              {phase === 'success' && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: [0, 1.2, 1] }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  className="absolute inset-0 rounded-full"
+                  style={{ background: `radial-gradient(circle, hsl(155,60%,45%)22, transparent 70%)` }}
+                />
+              )}
+
+              {phase === 'error' && (
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: [0, 1.2, 1] }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                  className="absolute inset-0 rounded-full"
+                  style={{ background: 'radial-gradient(circle, hsl(0,60%,50%)22, transparent 70%)' }}
+                />
+              )}
+
+              {/* Center Icon */}
+              <motion.div
+                className="relative z-10 flex items-center justify-center w-12 h-12 rounded-2xl shadow-lg"
+                style={{
+                  background: phase === 'error'
+                    ? 'linear-gradient(135deg, #ef4444, #dc2626)'
+                    : phase === 'success'
+                    ? 'linear-gradient(135deg, #10b981, #059669)'
+                    : `linear-gradient(135deg, ${cfg.gradientFrom}, ${cfg.gradientTo})`,
+                  color: '#fff',
+                }}
+                animate={phase === 'processing' ? { y: [0, -4, 0] } : {}}
+                transition={phase === 'processing' ? { repeat: Infinity, duration: 1.5, ease: 'easeInOut' } : {}}
+              >
+                {phase === 'processing' && (
+                  mode === 'transfer'
+                    ? <ArrowRight size={20} strokeWidth={2.5} />
+                    : <Sparkles size={20} strokeWidth={2.5} />
+                )}
+                {phase === 'success' && (
+                  <motion.div initial={{ scale: 0, rotate: -90 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 300 }}>
+                    <CheckCircle size={24} strokeWidth={2.5} />
+                  </motion.div>
+                )}
+                {phase === 'error' && (
+                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 300 }}>
+                    <XCircle size={24} strokeWidth={2.5} />
+                  </motion.div>
+                )}
+              </motion.div>
+            </div>
+
+            {/* Title */}
+            <motion.h3
+              key={phase}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-lg font-bold mb-1"
+              style={{ color: 'var(--foreground)' }}
+            >
+              {phase === 'processing' && cfg.processingTitle}
+              {phase === 'success' && cfg.successTitle}
+              {phase === 'error' && 'Something went wrong'}
+            </motion.h3>
+
+            {/* Subtitle */}
+            <motion.p
+              key={`sub-${phase}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { delay: 0.1 } }}
+              className="text-sm text-center max-w-xs"
+              style={{ color: 'var(--muted-foreground)' }}
+            >
+              {phase === 'processing' && cfg.processingSubtitle}
+              {phase === 'success' && cfg.successSubtitle}
+              {phase === 'error' && (errorMessage || 'Please try again')}
+            </motion.p>
+
+            {/* Animated dots for processing */}
+            {phase === 'processing' && (
+              <div className="flex items-center gap-1.5 mt-5">
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={i}
+                    animate={{ scale: [1, 1.4, 1], opacity: [0.4, 1, 0.4] }}
+                    transition={{ repeat: Infinity, duration: 1.2, delay: i * 0.2, ease: 'easeInOut' }}
+                    className="w-2 h-2 rounded-full"
+                    style={{ background: cfg.gradientFrom }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Floating particles for success */}
+            {phase === 'success' && (
+              <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 60, x: 170 + (Math.random() - 0.5) * 80 }}
+                    animate={{ opacity: [0, 1, 0], y: [60, -30], x: 170 + (Math.random() - 0.5) * 160 }}
+                    transition={{ duration: 1.2, delay: i * 0.08, ease: 'easeOut' }}
+                    className="absolute w-1.5 h-1.5 rounded-full"
+                    style={{ background: i % 2 === 0 ? '#10b981' : '#fbbf24' }}
+                  />
+                ))}
+              </div>
+            )}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 // ─── Types ───────────────────────────────────────────────────────────────
 interface CleaningLotItem {
   id: string;
   lotNumber: string;
   quantity: number;
+  cleanedQuantity?: number;
   status: string;
   stoneWastageQty?: number;
   stoneWastageUnit?: string;
   seedWastageQty?: number;
   seedWastageUnit?: string;
+  wastagePercentage?: number;
+  wastageType?: string;
   createdAt: string;
   warehouse: { name: string };
   cleaningJob?: { id: string; quantity: number };
@@ -62,6 +264,8 @@ interface CleaningJobItem {
   stoneWastageUnit?: string;
   seedWastageQty?: number;
   seedWastageUnit?: string;
+  wastagePercentage?: number;
+  wastageType?: string;
   fromWarehouse: { name: string };
   toWarehouse: { name: string };
   cleaningLots: CleaningLotItem[];
@@ -103,7 +307,7 @@ const CleaningRawMaterialList: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 6;
+  const ITEMS_PER_PAGE = 5;
 
   // Transfer Modal
   const [transferModalOpen, setTransferModalOpen] = useState(false);
@@ -120,6 +324,12 @@ const CleaningRawMaterialList: React.FC = () => {
   const [seedWastageQty, setSeedWastageQty] = useState<number>(0);
   const [seedWastageUnit, setSeedWastageUnit] = useState<string>('kg');
   const [finishing, setFinishing] = useState(false);
+
+  // Processing Overlay
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  const [overlayPhase, setOverlayPhase] = useState<OverlayPhase>('processing');
+  const [overlayMode, setOverlayMode] = useState<OverlayMode>('transfer');
+  const [overlayError, setOverlayError] = useState('');
 
   // Cleaning History Modal (Eye icon)
   const [historyModalOpen, setHistoryModalOpen] = useState(false);
@@ -189,6 +399,19 @@ const CleaningRawMaterialList: React.FC = () => {
     setTransferModalOpen(true);
   };
 
+  const showOverlay = useCallback((mode: OverlayMode) => {
+    setOverlayMode(mode);
+    setOverlayPhase('processing');
+    setOverlayError('');
+    setOverlayVisible(true);
+  }, []);
+
+  const finishOverlay = useCallback((success: boolean, errMsg?: string) => {
+    setOverlayPhase(success ? 'success' : 'error');
+    if (errMsg) setOverlayError(errMsg);
+    setTimeout(() => setOverlayVisible(false), success ? 1600 : 2200);
+  }, []);
+
   const handleTransfer = async () => {
     if (!selectedGrn || !toWarehouseId || transferQty <= 0) {
       message.warning('Please fill all fields correctly');
@@ -199,23 +422,22 @@ const CleaningRawMaterialList: React.FC = () => {
       return;
     }
     setTransferring(true);
-    const transferKey = `transfer_${selectedGrn?.id || Date.now()}`;
-    message.loading({ content: 'Transferring...', key: transferKey, duration: 0 });
+    setTransferModalOpen(false);
+    showOverlay('transfer');
     try {
       const authToken = localStorage.getItem('authToken');
-      const res = await api.post(API_ROUTES.RAW.CREATE_GRN_CLEANING_TRANSFER, {
+      await api.post(API_ROUTES.RAW.CREATE_GRN_CLEANING_TRANSFER, {
         grnId: selectedGrn.id,
         toWarehouseId,
         quantity: transferQty,
       }, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
-      message.success({ content: res.data?.message || 'Transfer created successfully!', key: transferKey, duration: 2 });
-      setTransferModalOpen(false);
+      finishOverlay(true);
       fetchGRNs();
     } catch (err: any) {
       console.error('Transfer failed:', err);
-      message.error({ content: err?.response?.data?.error || 'Transfer failed', key: transferKey, duration: 2 });
+      finishOverlay(false, err?.response?.data?.error || 'Transfer failed');
     }
     setTransferring(false);
   };
@@ -233,11 +455,11 @@ const CleaningRawMaterialList: React.FC = () => {
   const handleFinishCleaning = async () => {
     if (!selectedJobId) return;
     setFinishing(true);
-    const finishKey = `finish_${selectedJobId || Date.now()}`;
-    message.loading({ content: 'Finishing...', key: finishKey, duration: 0 });
+    setFinishModalOpen(false);
+    showOverlay('cleaning');
     try {
       const authToken = localStorage.getItem('authToken');
-      const res = await api.put(API_ROUTES.RAW.FINISH_CLEANING_JOB(selectedJobId), {
+      await api.put(API_ROUTES.RAW.FINISH_CLEANING_JOB(selectedJobId), {
         stoneWastageQty,
         stoneWastageUnit,
         seedWastageQty,
@@ -245,12 +467,11 @@ const CleaningRawMaterialList: React.FC = () => {
       }, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
-      message.success({ content: res.data?.message || 'Cleaning finished!', key: finishKey, duration: 2 });
-      setFinishModalOpen(false);
+      finishOverlay(true);
       fetchGRNs();
     } catch (err: any) {
       console.error('Finish cleaning failed:', err);
-      message.error({ content: err?.response?.data?.error || 'Failed to finish cleaning', key: finishKey, duration: 2 });
+      finishOverlay(false, err?.response?.data?.error || 'Failed to finish cleaning');
     }
     setFinishing(false);
   };
@@ -259,6 +480,27 @@ const CleaningRawMaterialList: React.FC = () => {
   const handleViewHistory = (grn: GRNItem) => {
     setHistoryGrn(grn);
     setHistoryModalOpen(true);
+  };
+
+  // ─── Export Cleaning History PDF ───────────────────────────────────
+  const handleExportPDF = () => {
+    if (!historyGrn) return;
+    const unit = historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
+    generateCleaningHistoryPDF({
+      grnNumber: historyGrn.grnNumber,
+      rawMaterialName: historyGrn.rawMaterialName,
+      variety: historyGrn.variety,
+      supplier: historyGrn.supplier,
+      unit,
+      totalReceived: historyGrn.totalReceived,
+      totalTransferred: historyGrn.totalTransferred,
+      leftQuantity: historyGrn.leftQuantity,
+      allJobsFinished: historyGrn.allJobsFinished,
+      cleaningJobs: historyGrn.cleaningJobs.map((job) => ({
+        ...job,
+        cleaningLots: job.cleaningLots || [],
+      })),
+    });
   };
 
   // ─── Status helpers ────────────────────────────────────────────────
@@ -497,13 +739,13 @@ const CleaningRawMaterialList: React.FC = () => {
           </div>
 
           {/* ─── Pagination Controls ─────────────────────────────── */}
-          {filteredGrns.length > ITEMS_PER_PAGE && (
+          {filteredGrns.length > 0 && (
             <div
               className="px-5 py-3 flex items-center justify-between"
               style={{ borderTop: '1px solid var(--border)', background: 'var(--muted)' }}
             >
               <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
-                Showing {(currentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(currentPage * ITEMS_PER_PAGE, filteredGrns.length)} of {filteredGrns.length}
+                Showing {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, filteredGrns.length)}–{Math.min(currentPage * ITEMS_PER_PAGE, filteredGrns.length)} of {filteredGrns.length}
               </span>
               <div className="flex items-center gap-1.5">
                 <button
@@ -710,18 +952,33 @@ const CleaningRawMaterialList: React.FC = () => {
       {/* ─── Cleaning History Modal (Eye Icon) ──────────────────── */}
       <Modal
         title={
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-9 h-9 rounded-xl" style={{ background: 'var(--secondary)', color: '#fff' }}>
-              <Eye size={16} />
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-9 h-9 rounded-xl" style={{ background: 'var(--secondary)', color: '#fff' }}>
+                <Eye size={16} />
+              </div>
+              <div>
+                <span className="text-base font-bold block" style={{ color: 'var(--foreground)' }}>
+                  Cleaning History
+                </span>
+                <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
+                  {historyGrn?.grnNumber} - {historyGrn?.rawMaterialName}
+                </span>
+              </div>
             </div>
-            <div>
-              <span className="text-base font-bold block" style={{ color: 'var(--foreground)' }}>
-                Cleaning History
-              </span>
-              <span className="text-xs" style={{ color: 'var(--muted-foreground)' }}>
-                {historyGrn?.grnNumber} - {historyGrn?.rawMaterialName}
-              </span>
-            </div>
+            <button
+              onClick={handleExportPDF}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 active:scale-95 mr-6"
+              style={{
+                background: 'color-mix(in srgb, var(--primary) 10%, transparent)',
+                color: 'var(--primary)',
+                border: '1px solid color-mix(in srgb, var(--primary) 25%, var(--border))',
+              }}
+              title="Export as PDF"
+            >
+              <Download size={14} />
+              Export PDF
+            </button>
           </div>
         }
         open={historyModalOpen}
@@ -867,36 +1124,93 @@ const CleaningRawMaterialList: React.FC = () => {
                           {/* Column 2: Timeline & Logs */}
                           <div className="flex flex-col h-full">
                             <div className="flex-1 space-y-5">
-                              <div className="flex gap-4">
-                                <div className="flex flex-col items-center pt-1">
-                                  <div className="w-2.5 h-2.5 rounded-full border-2 border-primary bg-white shadow-sm" />
-                                  <div className="w-0.5 flex-1 bg-border border-dashed my-1" />
-                                  <div className={`w-2.5 h-2.5 rounded-full border-2 ${job.finishedAt ? 'border-emerald-500 bg-emerald-50' : 'border-muted bg-muted'}`} />
-                                </div>
-                                <div className="space-y-6">
-                                  <div>
-                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">Job Initialized</div>
-                                    <div className="flex items-center gap-2 mt-1.5">
-                                      <Clock size={14} className="text-muted-foreground opacity-60" />
-                                      <span className="text-xs font-bold text-foreground">
-                                        {new Date(job.startedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                                      </span>
+                              {(() => {
+                                const totalWaste = (job.stoneWastageQty || 0) + (job.seedWastageQty || 0);
+                                const wastPct = job.wastagePercentage ?? (job.quantity ? parseFloat(((totalWaste / job.quantity) * 100).toFixed(2)) : 0);
+                                const wastType = job.wastageType ?? (wastPct > 3 ? 'Abnormal Loss' : 'Normal Loss');
+                                const isAbnormal = wastType === 'Abnormal Loss';
+                                const showWastage = job.status === 'Cleaned';
+
+                                return (
+                                  <div className="flex gap-4">
+                                    {/* Timeline dots */}
+                                    <div className="flex flex-col items-center pt-1">
+                                      <div className="w-2.5 h-2.5 rounded-full border-2 border-primary bg-white shadow-sm" />
+                                      <div className="w-0.5 flex-1 bg-border border-dashed my-1" />
+                                      <div className={`w-2.5 h-2.5 rounded-full border-2 ${job.finishedAt ? 'border-emerald-500 bg-emerald-50' : 'border-muted bg-muted'}`} />
+                                      {showWastage && (
+                                        <>
+                                          <div className="w-0.5 flex-1 my-1" style={{ background: isAbnormal ? '#fca5a5' : '#6ee7b7' }} />
+                                          <div
+                                            className="w-3 h-3 rounded-full border-2 shadow-sm"
+                                            style={{
+                                              borderColor: isAbnormal ? '#ef4444' : '#10b981',
+                                              background: isAbnormal ? '#fef2f2' : '#ecfdf5',
+                                            }}
+                                          />
+                                        </>
+                                      )}
+                                    </div>
+
+                                    {/* Timeline content */}
+                                    <div className="space-y-6">
+                                      <div>
+                                        <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">Job Initialized</div>
+                                        <div className="flex items-center gap-2 mt-1.5">
+                                          <Clock size={14} className="text-muted-foreground opacity-60" />
+                                          <span className="text-xs font-bold text-foreground">
+                                            {new Date(job.startedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">Process Completed</div>
+                                        <div className="flex items-center gap-2 mt-1.5">
+                                          <CheckCircle size={14} className={`${job.finishedAt ? 'text-emerald-500' : 'text-muted-foreground opacity-40'}`} />
+                                          <span className={`text-xs font-bold ${job.finishedAt ? 'text-foreground' : 'text-muted-foreground italic font-medium'}`}>
+                                            {job.finishedAt
+                                              ? new Date(job.finishedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                                              : 'Still in progress...'
+                                            }
+                                          </span>
+                                        </div>
+                                      </div>
+
+                                      {/* Wastage % — as a timeline entry */}
+                                      {showWastage && (
+                                        <div>
+                                          <div
+                                            className="text-[10px] font-bold uppercase tracking-widest leading-none"
+                                            style={{ color: isAbnormal ? '#dc2626' : '#059669' }}
+                                          >
+                                            Wastage Analysis
+                                          </div>
+                                          <div className="flex items-center gap-2.5 mt-1.5">
+                                            {isAbnormal
+                                              ? <AlertTriangle size={14} className="text-red-500" />
+                                              : <CheckCircle size={14} className="text-emerald-500" />}
+                                            <span className="text-sm font-extrabold" style={{ color: 'var(--foreground)' }}>
+                                              {wastPct}%
+                                            </span>
+                                            <span
+                                              className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full"
+                                              style={{
+                                                background: isAbnormal
+                                                  ? 'color-mix(in srgb, #ef4444 14%, transparent)'
+                                                  : 'color-mix(in srgb, #10b981 14%, transparent)',
+                                                color: isAbnormal ? '#dc2626' : '#059669',
+                                              }}
+                                            >
+                                              {isAbnormal && <AlertTriangle size={9} className="mr-1" />}
+                                              {wastType}
+                                            </span>
+                                          </div>
+                                        </div>
+                                      )}
                                     </div>
                                   </div>
-                                  <div>
-                                    <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest leading-none">Process Completed</div>
-                                    <div className="flex items-center gap-2 mt-1.5">
-                                      <CheckCircle size={14} className={`${job.finishedAt ? 'text-emerald-500' : 'text-muted-foreground opacity-40'}`} />
-                                      <span className={`text-xs font-bold ${job.finishedAt ? 'text-foreground' : 'text-muted-foreground italic font-medium'}`}>
-                                        {job.finishedAt
-                                          ? new Date(job.finishedAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-                                          : 'Still in progress...'
-                                        }
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
+                                );
+                              })()}
                             </div>
                           </div>
                         </div>
@@ -917,6 +1231,14 @@ const CleaningRawMaterialList: React.FC = () => {
           </div>
         )}
       </Modal>
+
+      {/* ─── Processing Overlay ────────────────────────────────── */}
+      <ProcessingOverlay
+        visible={overlayVisible}
+        phase={overlayPhase}
+        mode={overlayMode}
+        errorMessage={overlayError}
+      />
     </motion.div>
   );
 };

@@ -68733,12 +68733,14 @@ export namespace Prisma {
     quantity: number | null
     stoneWastageQty: number | null
     seedWastageQty: number | null
+    wastagePercentage: number | null
   }
 
   export type CleaningJobSumAggregateOutputType = {
     quantity: number | null
     stoneWastageQty: number | null
     seedWastageQty: number | null
+    wastagePercentage: number | null
   }
 
   export type CleaningJobMinAggregateOutputType = {
@@ -68755,6 +68757,8 @@ export namespace Prisma {
     stoneWastageUnit: string | null
     seedWastageQty: number | null
     seedWastageUnit: string | null
+    wastagePercentage: number | null
+    wastageType: string | null
   }
 
   export type CleaningJobMaxAggregateOutputType = {
@@ -68771,6 +68775,8 @@ export namespace Prisma {
     stoneWastageUnit: string | null
     seedWastageQty: number | null
     seedWastageUnit: string | null
+    wastagePercentage: number | null
+    wastageType: string | null
   }
 
   export type CleaningJobCountAggregateOutputType = {
@@ -68787,6 +68793,8 @@ export namespace Prisma {
     stoneWastageUnit: number
     seedWastageQty: number
     seedWastageUnit: number
+    wastagePercentage: number
+    wastageType: number
     _all: number
   }
 
@@ -68795,12 +68803,14 @@ export namespace Prisma {
     quantity?: true
     stoneWastageQty?: true
     seedWastageQty?: true
+    wastagePercentage?: true
   }
 
   export type CleaningJobSumAggregateInputType = {
     quantity?: true
     stoneWastageQty?: true
     seedWastageQty?: true
+    wastagePercentage?: true
   }
 
   export type CleaningJobMinAggregateInputType = {
@@ -68817,6 +68827,8 @@ export namespace Prisma {
     stoneWastageUnit?: true
     seedWastageQty?: true
     seedWastageUnit?: true
+    wastagePercentage?: true
+    wastageType?: true
   }
 
   export type CleaningJobMaxAggregateInputType = {
@@ -68833,6 +68845,8 @@ export namespace Prisma {
     stoneWastageUnit?: true
     seedWastageQty?: true
     seedWastageUnit?: true
+    wastagePercentage?: true
+    wastageType?: true
   }
 
   export type CleaningJobCountAggregateInputType = {
@@ -68849,6 +68863,8 @@ export namespace Prisma {
     stoneWastageUnit?: true
     seedWastageQty?: true
     seedWastageUnit?: true
+    wastagePercentage?: true
+    wastageType?: true
     _all?: true
   }
 
@@ -68952,6 +68968,8 @@ export namespace Prisma {
     stoneWastageUnit: string | null
     seedWastageQty: number | null
     seedWastageUnit: string | null
+    wastagePercentage: number | null
+    wastageType: string | null
     _count: CleaningJobCountAggregateOutputType | null
     _avg: CleaningJobAvgAggregateOutputType | null
     _sum: CleaningJobSumAggregateOutputType | null
@@ -68987,6 +69005,8 @@ export namespace Prisma {
     stoneWastageUnit?: boolean
     seedWastageQty?: boolean
     seedWastageUnit?: boolean
+    wastagePercentage?: boolean
+    wastageType?: boolean
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
@@ -69010,6 +69030,8 @@ export namespace Prisma {
     stoneWastageUnit?: boolean
     seedWastageQty?: boolean
     seedWastageUnit?: boolean
+    wastagePercentage?: boolean
+    wastageType?: boolean
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
@@ -69030,6 +69052,8 @@ export namespace Prisma {
     stoneWastageUnit?: boolean
     seedWastageQty?: boolean
     seedWastageUnit?: boolean
+    wastagePercentage?: boolean
+    wastageType?: boolean
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     toWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
@@ -69050,9 +69074,11 @@ export namespace Prisma {
     stoneWastageUnit?: boolean
     seedWastageQty?: boolean
     seedWastageUnit?: boolean
+    wastagePercentage?: boolean
+    wastageType?: boolean
   }
 
-  export type CleaningJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rawMaterialId" | "fromWarehouseId" | "toWarehouseId" | "quantity" | "status" | "startedAt" | "finishedAt" | "grnId" | "stoneWastageQty" | "stoneWastageUnit" | "seedWastageQty" | "seedWastageUnit", ExtArgs["result"]["cleaningJob"]>
+  export type CleaningJobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rawMaterialId" | "fromWarehouseId" | "toWarehouseId" | "quantity" | "status" | "startedAt" | "finishedAt" | "grnId" | "stoneWastageQty" | "stoneWastageUnit" | "seedWastageQty" | "seedWastageUnit" | "wastagePercentage" | "wastageType", ExtArgs["result"]["cleaningJob"]>
   export type CleaningJobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fromWarehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
@@ -69099,6 +69125,8 @@ export namespace Prisma {
       stoneWastageUnit: string | null
       seedWastageQty: number | null
       seedWastageUnit: string | null
+      wastagePercentage: number | null
+      wastageType: string | null
     }, ExtArgs["result"]["cleaningJob"]>
     composites: {}
   }
@@ -69541,6 +69569,8 @@ export namespace Prisma {
     readonly stoneWastageUnit: FieldRef<"CleaningJob", 'String'>
     readonly seedWastageQty: FieldRef<"CleaningJob", 'Float'>
     readonly seedWastageUnit: FieldRef<"CleaningJob", 'String'>
+    readonly wastagePercentage: FieldRef<"CleaningJob", 'Float'>
+    readonly wastageType: FieldRef<"CleaningJob", 'String'>
   }
     
 
@@ -82787,6 +82817,7 @@ export namespace Prisma {
     cleanedQuantity: number | null
     stoneWastageQty: number | null
     seedWastageQty: number | null
+    wastagePercentage: number | null
   }
 
   export type CleaningLotSumAggregateOutputType = {
@@ -82794,6 +82825,7 @@ export namespace Prisma {
     cleanedQuantity: number | null
     stoneWastageQty: number | null
     seedWastageQty: number | null
+    wastagePercentage: number | null
   }
 
   export type CleaningLotMinAggregateOutputType = {
@@ -82810,6 +82842,8 @@ export namespace Prisma {
     stoneWastageUnit: string | null
     seedWastageQty: number | null
     seedWastageUnit: string | null
+    wastagePercentage: number | null
+    wastageType: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -82828,6 +82862,8 @@ export namespace Prisma {
     stoneWastageUnit: string | null
     seedWastageQty: number | null
     seedWastageUnit: string | null
+    wastagePercentage: number | null
+    wastageType: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -82846,6 +82882,8 @@ export namespace Prisma {
     stoneWastageUnit: number
     seedWastageQty: number
     seedWastageUnit: number
+    wastagePercentage: number
+    wastageType: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -82857,6 +82895,7 @@ export namespace Prisma {
     cleanedQuantity?: true
     stoneWastageQty?: true
     seedWastageQty?: true
+    wastagePercentage?: true
   }
 
   export type CleaningLotSumAggregateInputType = {
@@ -82864,6 +82903,7 @@ export namespace Prisma {
     cleanedQuantity?: true
     stoneWastageQty?: true
     seedWastageQty?: true
+    wastagePercentage?: true
   }
 
   export type CleaningLotMinAggregateInputType = {
@@ -82880,6 +82920,8 @@ export namespace Prisma {
     stoneWastageUnit?: true
     seedWastageQty?: true
     seedWastageUnit?: true
+    wastagePercentage?: true
+    wastageType?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -82898,6 +82940,8 @@ export namespace Prisma {
     stoneWastageUnit?: true
     seedWastageQty?: true
     seedWastageUnit?: true
+    wastagePercentage?: true
+    wastageType?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -82916,6 +82960,8 @@ export namespace Prisma {
     stoneWastageUnit?: true
     seedWastageQty?: true
     seedWastageUnit?: true
+    wastagePercentage?: true
+    wastageType?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -83021,6 +83067,8 @@ export namespace Prisma {
     stoneWastageUnit: string | null
     seedWastageQty: number | null
     seedWastageUnit: string | null
+    wastagePercentage: number | null
+    wastageType: string | null
     createdAt: Date
     updatedAt: Date
     _count: CleaningLotCountAggregateOutputType | null
@@ -83058,6 +83106,8 @@ export namespace Prisma {
     stoneWastageUnit?: boolean
     seedWastageQty?: boolean
     seedWastageUnit?: boolean
+    wastagePercentage?: boolean
+    wastageType?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
@@ -83082,6 +83132,8 @@ export namespace Prisma {
     stoneWastageUnit?: boolean
     seedWastageQty?: boolean
     seedWastageUnit?: boolean
+    wastagePercentage?: boolean
+    wastageType?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
@@ -83104,6 +83156,8 @@ export namespace Prisma {
     stoneWastageUnit?: boolean
     seedWastageQty?: boolean
     seedWastageUnit?: boolean
+    wastagePercentage?: boolean
+    wastageType?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
@@ -83126,11 +83180,13 @@ export namespace Prisma {
     stoneWastageUnit?: boolean
     seedWastageQty?: boolean
     seedWastageUnit?: boolean
+    wastagePercentage?: boolean
+    wastageType?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type CleaningLotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lotNumber" | "cleaningJobId" | "grnId" | "rawMaterialId" | "warehouseId" | "quantity" | "cleanedQuantity" | "status" | "stoneWastageQty" | "stoneWastageUnit" | "seedWastageQty" | "seedWastageUnit" | "createdAt" | "updatedAt", ExtArgs["result"]["cleaningLot"]>
+  export type CleaningLotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lotNumber" | "cleaningJobId" | "grnId" | "rawMaterialId" | "warehouseId" | "quantity" | "cleanedQuantity" | "status" | "stoneWastageQty" | "stoneWastageUnit" | "seedWastageQty" | "seedWastageUnit" | "wastagePercentage" | "wastageType" | "createdAt" | "updatedAt", ExtArgs["result"]["cleaningLot"]>
   export type CleaningLotInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     cleaningJob?: boolean | CleaningJobDefaultArgs<ExtArgs>
     grn?: boolean | GRNbyPoDefaultArgs<ExtArgs>
@@ -83175,6 +83231,8 @@ export namespace Prisma {
       stoneWastageUnit: string | null
       seedWastageQty: number | null
       seedWastageUnit: string | null
+      wastagePercentage: number | null
+      wastageType: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["cleaningLot"]>
@@ -83618,6 +83676,8 @@ export namespace Prisma {
     readonly stoneWastageUnit: FieldRef<"CleaningLot", 'String'>
     readonly seedWastageQty: FieldRef<"CleaningLot", 'Float'>
     readonly seedWastageUnit: FieldRef<"CleaningLot", 'String'>
+    readonly wastagePercentage: FieldRef<"CleaningLot", 'Float'>
+    readonly wastageType: FieldRef<"CleaningLot", 'String'>
     readonly createdAt: FieldRef<"CleaningLot", 'DateTime'>
     readonly updatedAt: FieldRef<"CleaningLot", 'DateTime'>
   }
@@ -89455,7 +89515,9 @@ export namespace Prisma {
     stoneWastageQty: 'stoneWastageQty',
     stoneWastageUnit: 'stoneWastageUnit',
     seedWastageQty: 'seedWastageQty',
-    seedWastageUnit: 'seedWastageUnit'
+    seedWastageUnit: 'seedWastageUnit',
+    wastagePercentage: 'wastagePercentage',
+    wastageType: 'wastageType'
   };
 
   export type CleaningJobScalarFieldEnum = (typeof CleaningJobScalarFieldEnum)[keyof typeof CleaningJobScalarFieldEnum]
@@ -89638,6 +89700,8 @@ export namespace Prisma {
     stoneWastageUnit: 'stoneWastageUnit',
     seedWastageQty: 'seedWastageQty',
     seedWastageUnit: 'seedWastageUnit',
+    wastagePercentage: 'wastagePercentage',
+    wastageType: 'wastageType',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -94355,6 +94419,8 @@ export namespace Prisma {
     stoneWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
     seedWastageQty?: FloatNullableFilter<"CleaningJob"> | number | null
     seedWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
+    wastagePercentage?: FloatNullableFilter<"CleaningJob"> | number | null
+    wastageType?: StringNullableFilter<"CleaningJob"> | string | null
     fromWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     toWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
@@ -94377,6 +94443,8 @@ export namespace Prisma {
     stoneWastageUnit?: SortOrderInput | SortOrder
     seedWastageQty?: SortOrderInput | SortOrder
     seedWastageUnit?: SortOrderInput | SortOrder
+    wastagePercentage?: SortOrderInput | SortOrder
+    wastageType?: SortOrderInput | SortOrder
     fromWarehouse?: WarehouseOrderByWithRelationInput
     rawMaterial?: RawMaterialProductOrderByWithRelationInput
     toWarehouse?: WarehouseOrderByWithRelationInput
@@ -94402,6 +94470,8 @@ export namespace Prisma {
     stoneWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
     seedWastageQty?: FloatNullableFilter<"CleaningJob"> | number | null
     seedWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
+    wastagePercentage?: FloatNullableFilter<"CleaningJob"> | number | null
+    wastageType?: StringNullableFilter<"CleaningJob"> | string | null
     fromWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     toWarehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
@@ -94424,6 +94494,8 @@ export namespace Prisma {
     stoneWastageUnit?: SortOrderInput | SortOrder
     seedWastageQty?: SortOrderInput | SortOrder
     seedWastageUnit?: SortOrderInput | SortOrder
+    wastagePercentage?: SortOrderInput | SortOrder
+    wastageType?: SortOrderInput | SortOrder
     _count?: CleaningJobCountOrderByAggregateInput
     _avg?: CleaningJobAvgOrderByAggregateInput
     _max?: CleaningJobMaxOrderByAggregateInput
@@ -94448,6 +94520,8 @@ export namespace Prisma {
     stoneWastageUnit?: StringNullableWithAggregatesFilter<"CleaningJob"> | string | null
     seedWastageQty?: FloatNullableWithAggregatesFilter<"CleaningJob"> | number | null
     seedWastageUnit?: StringNullableWithAggregatesFilter<"CleaningJob"> | string | null
+    wastagePercentage?: FloatNullableWithAggregatesFilter<"CleaningJob"> | number | null
+    wastageType?: StringNullableWithAggregatesFilter<"CleaningJob"> | string | null
   }
 
   export type CleaningLogWhereInput = {
@@ -95345,6 +95419,8 @@ export namespace Prisma {
     stoneWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
     seedWastageQty?: FloatNullableFilter<"CleaningLot"> | number | null
     seedWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
+    wastagePercentage?: FloatNullableFilter<"CleaningLot"> | number | null
+    wastageType?: StringNullableFilter<"CleaningLot"> | string | null
     createdAt?: DateTimeFilter<"CleaningLot"> | Date | string
     updatedAt?: DateTimeFilter<"CleaningLot"> | Date | string
     cleaningJob?: XOR<CleaningJobScalarRelationFilter, CleaningJobWhereInput>
@@ -95368,6 +95444,8 @@ export namespace Prisma {
     stoneWastageUnit?: SortOrderInput | SortOrder
     seedWastageQty?: SortOrderInput | SortOrder
     seedWastageUnit?: SortOrderInput | SortOrder
+    wastagePercentage?: SortOrderInput | SortOrder
+    wastageType?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     cleaningJob?: CleaningJobOrderByWithRelationInput
@@ -95394,6 +95472,8 @@ export namespace Prisma {
     stoneWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
     seedWastageQty?: FloatNullableFilter<"CleaningLot"> | number | null
     seedWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
+    wastagePercentage?: FloatNullableFilter<"CleaningLot"> | number | null
+    wastageType?: StringNullableFilter<"CleaningLot"> | string | null
     createdAt?: DateTimeFilter<"CleaningLot"> | Date | string
     updatedAt?: DateTimeFilter<"CleaningLot"> | Date | string
     cleaningJob?: XOR<CleaningJobScalarRelationFilter, CleaningJobWhereInput>
@@ -95417,6 +95497,8 @@ export namespace Prisma {
     stoneWastageUnit?: SortOrderInput | SortOrder
     seedWastageQty?: SortOrderInput | SortOrder
     seedWastageUnit?: SortOrderInput | SortOrder
+    wastagePercentage?: SortOrderInput | SortOrder
+    wastageType?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: CleaningLotCountOrderByAggregateInput
@@ -95443,6 +95525,8 @@ export namespace Prisma {
     stoneWastageUnit?: StringNullableWithAggregatesFilter<"CleaningLot"> | string | null
     seedWastageQty?: FloatNullableWithAggregatesFilter<"CleaningLot"> | number | null
     seedWastageUnit?: StringNullableWithAggregatesFilter<"CleaningLot"> | string | null
+    wastagePercentage?: FloatNullableWithAggregatesFilter<"CleaningLot"> | number | null
+    wastageType?: StringNullableWithAggregatesFilter<"CleaningLot"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"CleaningLot"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"CleaningLot"> | Date | string
   }
@@ -100350,6 +100434,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
@@ -100372,6 +100458,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
@@ -100386,6 +100474,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
@@ -100408,6 +100498,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
@@ -100426,6 +100518,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
   }
 
   export type CleaningJobUpdateManyMutationInput = {
@@ -100438,6 +100532,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningJobUncheckedUpdateManyInput = {
@@ -100454,6 +100550,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningLogCreateInput = {
@@ -101384,6 +101482,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
@@ -101407,6 +101507,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
@@ -101422,6 +101524,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -101445,6 +101549,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
@@ -101464,6 +101570,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -101478,6 +101586,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -101496,6 +101606,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -105090,12 +105202,15 @@ export namespace Prisma {
     stoneWastageUnit?: SortOrder
     seedWastageQty?: SortOrder
     seedWastageUnit?: SortOrder
+    wastagePercentage?: SortOrder
+    wastageType?: SortOrder
   }
 
   export type CleaningJobAvgOrderByAggregateInput = {
     quantity?: SortOrder
     stoneWastageQty?: SortOrder
     seedWastageQty?: SortOrder
+    wastagePercentage?: SortOrder
   }
 
   export type CleaningJobMaxOrderByAggregateInput = {
@@ -105112,6 +105227,8 @@ export namespace Prisma {
     stoneWastageUnit?: SortOrder
     seedWastageQty?: SortOrder
     seedWastageUnit?: SortOrder
+    wastagePercentage?: SortOrder
+    wastageType?: SortOrder
   }
 
   export type CleaningJobMinOrderByAggregateInput = {
@@ -105128,12 +105245,15 @@ export namespace Prisma {
     stoneWastageUnit?: SortOrder
     seedWastageQty?: SortOrder
     seedWastageUnit?: SortOrder
+    wastagePercentage?: SortOrder
+    wastageType?: SortOrder
   }
 
   export type CleaningJobSumOrderByAggregateInput = {
     quantity?: SortOrder
     stoneWastageQty?: SortOrder
     seedWastageQty?: SortOrder
+    wastagePercentage?: SortOrder
   }
 
   export type CleaningJobScalarRelationFilter = {
@@ -105656,6 +105776,8 @@ export namespace Prisma {
     stoneWastageUnit?: SortOrder
     seedWastageQty?: SortOrder
     seedWastageUnit?: SortOrder
+    wastagePercentage?: SortOrder
+    wastageType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -105665,6 +105787,7 @@ export namespace Prisma {
     cleanedQuantity?: SortOrder
     stoneWastageQty?: SortOrder
     seedWastageQty?: SortOrder
+    wastagePercentage?: SortOrder
   }
 
   export type CleaningLotMaxOrderByAggregateInput = {
@@ -105681,6 +105804,8 @@ export namespace Prisma {
     stoneWastageUnit?: SortOrder
     seedWastageQty?: SortOrder
     seedWastageUnit?: SortOrder
+    wastagePercentage?: SortOrder
+    wastageType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -105699,6 +105824,8 @@ export namespace Prisma {
     stoneWastageUnit?: SortOrder
     seedWastageQty?: SortOrder
     seedWastageUnit?: SortOrder
+    wastagePercentage?: SortOrder
+    wastageType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -105708,6 +105835,7 @@ export namespace Prisma {
     cleanedQuantity?: SortOrder
     stoneWastageQty?: SortOrder
     seedWastageQty?: SortOrder
+    wastagePercentage?: SortOrder
   }
 
   export type CleaningLotScalarRelationFilter = {
@@ -129771,6 +129899,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
     grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
@@ -129791,6 +129921,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
@@ -129815,6 +129947,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
@@ -129836,6 +129970,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
@@ -130081,6 +130217,8 @@ export namespace Prisma {
     stoneWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
     seedWastageQty?: FloatNullableFilter<"CleaningJob"> | number | null
     seedWastageUnit?: StringNullableFilter<"CleaningJob"> | string | null
+    wastagePercentage?: FloatNullableFilter<"CleaningJob"> | number | null
+    wastageType?: StringNullableFilter<"CleaningJob"> | string | null
   }
 
   export type CleaningLotUpsertWithWhereUniqueWithoutRawMaterialInput = {
@@ -130116,6 +130254,8 @@ export namespace Prisma {
     stoneWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
     seedWastageQty?: FloatNullableFilter<"CleaningLot"> | number | null
     seedWastageUnit?: StringNullableFilter<"CleaningLot"> | string | null
+    wastagePercentage?: FloatNullableFilter<"CleaningLot"> | number | null
+    wastageType?: StringNullableFilter<"CleaningLot"> | string | null
     createdAt?: DateTimeFilter<"CleaningLot"> | Date | string
     updatedAt?: DateTimeFilter<"CleaningLot"> | Date | string
   }
@@ -131289,6 +131429,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
     grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
@@ -131309,6 +131451,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
@@ -131333,6 +131477,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     grn?: GRNbyPoCreateNestedOneWithoutCleaningJobsInput
@@ -131353,6 +131499,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
@@ -131441,6 +131589,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
@@ -131462,6 +131612,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
@@ -132197,6 +132349,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     grn: GRNbyPoCreateNestedOneWithoutCleaningLotsInput
@@ -132218,6 +132372,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
@@ -132479,6 +132635,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
@@ -132500,6 +132658,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
 
@@ -132619,6 +132779,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
@@ -132640,6 +132802,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
 
@@ -134602,6 +134766,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
@@ -134622,6 +134788,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
     cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutCleaningJobInput
   }
@@ -134646,6 +134814,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
@@ -134667,6 +134837,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
@@ -134932,6 +135104,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     fromWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsFromInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningJobsInput
     toWarehouse: WarehouseCreateNestedOneWithoutCleaningJobsToInput
@@ -134953,6 +135127,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     cleaningLogs?: CleaningLogUncheckedCreateNestedManyWithoutCleaningJobInput
   }
 
@@ -135143,6 +135319,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
@@ -135164,6 +135342,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
 
@@ -135377,6 +135557,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
@@ -135399,6 +135581,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -135466,6 +135650,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -135488,6 +135674,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -140862,6 +141050,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
   }
 
   export type CleaningLotCreateManyRawMaterialInput = {
@@ -140877,6 +141067,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -140940,6 +141132,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
     grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
@@ -140960,6 +141154,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
@@ -140977,6 +141173,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningLotUpdateWithoutRawMaterialInput = {
@@ -140989,6 +141187,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -141010,6 +141210,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
@@ -141028,6 +141230,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -141466,6 +141670,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
   }
 
   export type CleaningJobCreateManyToWarehouseInput = {
@@ -141481,6 +141687,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
   }
 
   export type CleaningLogCreateManyFromWarehouseInput = {
@@ -141518,6 +141726,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -141632,6 +141842,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
     grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
@@ -141652,6 +141864,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
@@ -141669,6 +141883,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningJobUpdateWithoutToWarehouseInput = {
@@ -141681,6 +141897,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     grn?: GRNbyPoUpdateOneWithoutCleaningJobsNestedInput
@@ -141701,6 +141919,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
@@ -141718,6 +141938,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningLogUpdateWithoutFromWarehouseInput = {
@@ -141796,6 +142018,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -141817,6 +142041,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
@@ -141835,6 +142061,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -142081,6 +142309,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -142128,6 +142358,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     grn?: GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -142149,6 +142381,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
@@ -142167,6 +142401,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -142340,6 +142576,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
   }
 
   export type CleaningLotCreateManyGrnInput = {
@@ -142355,6 +142593,8 @@ export namespace Prisma {
     stoneWastageUnit?: string | null
     seedWastageQty?: number | null
     seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -142369,6 +142609,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     fromWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsFromNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningJobsNestedInput
     toWarehouse?: WarehouseUpdateOneRequiredWithoutCleaningJobsToNestedInput
@@ -142389,6 +142631,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLogs?: CleaningLogUncheckedUpdateManyWithoutCleaningJobNestedInput
     cleaningLots?: CleaningLotUncheckedUpdateManyWithoutCleaningJobNestedInput
   }
@@ -142406,6 +142650,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type CleaningLotUpdateWithoutGrnInput = {
@@ -142418,6 +142664,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
@@ -142439,6 +142687,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
@@ -142457,6 +142707,8 @@ export namespace Prisma {
     stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
     seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
     seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

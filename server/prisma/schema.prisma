@@ -847,10 +847,12 @@ model CleaningJob {
   startedAt        DateTime
   finishedAt       DateTime?
   grnId            String?
-  stoneWastageQty  Float?             @default(0)
-  stoneWastageUnit String?            @default("kg")
-  seedWastageQty   Float?             @default(0)
-  seedWastageUnit  String?            @default("kg")
+  stoneWastageQty   Float?             @default(0)
+  stoneWastageUnit  String?            @default("kg")
+  seedWastageQty    Float?             @default(0)
+  seedWastageUnit   String?            @default("kg")
+  wastagePercentage Float?             @default(0)
+  wastageType       String?
   fromWarehouse    Warehouse          @relation("CleaningFromWarehouse", fields: [fromWarehouseId], references: [id])
   rawMaterial      RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
   toWarehouse      Warehouse          @relation("CleaningToWarehouse", fields: [toWarehouseId], references: [id])
@@ -1168,10 +1170,12 @@ model CleaningLot {
   quantity         Float
   cleanedQuantity  Float?   @default(0)
   status           String   @default("Active")
-  stoneWastageQty  Float?   @default(0)
-  stoneWastageUnit String?  @default("kg")
-  seedWastageQty   Float?   @default(0)
-  seedWastageUnit  String?  @default("kg")
+  stoneWastageQty   Float?   @default(0)
+  stoneWastageUnit  String?  @default("kg")
+  seedWastageQty    Float?   @default(0)
+  seedWastageUnit   String?  @default("kg")
+  wastagePercentage Float?   @default(0)
+  wastageType       String?
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 

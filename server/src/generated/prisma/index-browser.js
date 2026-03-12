@@ -732,7 +732,9 @@ exports.Prisma.CleaningJobScalarFieldEnum = {
   stoneWastageQty: 'stoneWastageQty',
   stoneWastageUnit: 'stoneWastageUnit',
   seedWastageQty: 'seedWastageQty',
-  seedWastageUnit: 'seedWastageUnit'
+  seedWastageUnit: 'seedWastageUnit',
+  wastagePercentage: 'wastagePercentage',
+  wastageType: 'wastageType'
 };
 
 exports.Prisma.CleaningLogScalarFieldEnum = {
@@ -879,6 +881,8 @@ exports.Prisma.CleaningLotScalarFieldEnum = {
   stoneWastageUnit: 'stoneWastageUnit',
   seedWastageQty: 'seedWastageQty',
   seedWastageUnit: 'seedWastageUnit',
+  wastagePercentage: 'wastagePercentage',
+  wastageType: 'wastageType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
