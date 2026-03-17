@@ -67,6 +67,15 @@ const IconSearch = () => (
 
 const EMPTY_ITEM: BOMItemType = { rawMaterialId: '', quantity: 0, unitOfMeasurement: '', notes: '' };
 
+const CATEGORY_LABELS: Record<string, string> = {
+    RAW_MATERIAL: 'Raw Materials',
+    SEMI_FINISHED_GOOD: 'Semi-Finished Goods',
+    FINISHED_GOOD: 'Finished Goods',
+    PACKAGING_MATERIAL: 'Packaging Materials',
+    BYPRODUCT: 'Byproducts',
+    WASTAGE: 'Wastage',
+};
+
 /* ────── Main Component ────── */
 const CreateBOMPage: React.FC = () => {
     // ── State ──
@@ -124,10 +133,27 @@ const CreateBOMPage: React.FC = () => {
         [rawMaterials]
     );
 
-    const rawMaterialItems = useMemo(() =>
-        rawMaterials.filter(rm => rm.category === 'RAW_MATERIAL'),
-        [rawMaterials]
+    const selectedProduct = useMemo(() =>
+        finishedGoods.find(fg => fg.name === form.productName),
+        [finishedGoods, form.productName]
     );
+
+    const rawMaterialItems = useMemo(() => {
+        let allowedCategories = ['RAW_MATERIAL'];
+
+        if (selectedProduct) {
+            if (selectedProduct.category === 'FINISHED_GOOD') {
+                allowedCategories = ['RAW_MATERIAL', 'SEMI_FINISHED_GOOD', 'PACKAGING_MATERIAL', 'BYPRODUCT'];
+            } else if (selectedProduct.category === 'SEMI_FINISHED_GOOD') {
+                allowedCategories = ['RAW_MATERIAL', 'PACKAGING_MATERIAL', 'BYPRODUCT'];
+            }
+        } else {
+            // Default when no product is selected yet
+            allowedCategories = ['RAW_MATERIAL', 'SEMI_FINISHED_GOOD', 'PACKAGING_MATERIAL', 'BYPRODUCT'];
+        }
+
+        return rawMaterials.filter(rm => allowedCategories.includes(rm.category));
+    }, [rawMaterials, selectedProduct]);
 
     // ── Filtered BOMs ──
     const filteredBOMs = useMemo(() => {
@@ -389,10 +415,17 @@ const CreateBOMPage: React.FC = () => {
                                     <select name="productName" value={form.productName} onChange={handleChange} required
                                         className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200 cursor-pointer"
                                         style={{ ...inputStyle, color: form.productName ? 'var(--foreground)' : 'var(--muted-foreground)' }} {...focusHandlers}>
-                                        <option value="">-- Select Finished Good --</option>
-                                        {finishedGoods.map(fg => (
-                                            <option key={fg.id} value={fg.name}>{fg.name} ({fg.skuCode})</option>
-                                        ))}
+                                        <option value="">-- Select Output Product --</option>
+                                        <optgroup label="Finished Goods">
+                                            {finishedGoods.filter(fg => fg.category === 'FINISHED_GOOD').map(fg => (
+                                                <option key={fg.id} value={fg.name}>{fg.name} ({fg.skuCode})</option>
+                                            ))}
+                                        </optgroup>
+                                        <optgroup label="Semi-Finished Goods">
+                                            {finishedGoods.filter(fg => fg.category === 'SEMI_FINISHED_GOOD').map(fg => (
+                                                <option key={fg.id} value={fg.name}>{fg.name} ({fg.skuCode})</option>
+                                            ))}
+                                        </optgroup>
                                     </select>
                                 </div>
                                 <div>
@@ -432,7 +465,7 @@ const CreateBOMPage: React.FC = () => {
                             <div className="flex items-center justify-between mb-3">
                                 <h3 className="text-xs font-bold uppercase tracking-wider flex items-center gap-2" style={{ color: 'var(--secondary)' }}>
                                     <span className="w-5 h-0.5 rounded-full" style={{ background: 'var(--secondary)' }} />
-                                    Raw Material Items
+                                    Input Materials
                                 </h3>
                                 <button type="button" onClick={addItemRow}
                                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 hover:shadow-sm active:scale-[0.97]"
@@ -446,7 +479,7 @@ const CreateBOMPage: React.FC = () => {
                                 <table className="w-full table-auto">
                                     <thead>
                                         <tr style={{ background: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
-                                            {['#', 'Raw Material *', 'Quantity *', 'Unit', 'Notes', ''].map(h => (
+                                            {['#', 'Material *', 'Quantity *', 'Unit', 'Notes', ''].map(h => (
                                                 <th key={h} className="px-4 py-2.5 text-left text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>{h}</th>
                                             ))}
                                         </tr>
@@ -462,10 +495,18 @@ const CreateBOMPage: React.FC = () => {
                                                         className="w-full rounded-lg px-2.5 py-2 text-sm outline-none transition-all duration-200 cursor-pointer"
                                                         style={inputStyle} {...focusHandlers}
                                                     >
-                                                        <option value="">-- Select Raw Material --</option>
-                                                        {rawMaterialItems.map(rm => (
-                                                            <option key={rm.id} value={rm.id}>{rm.name} ({rm.skuCode})</option>
-                                                        ))}
+                                                        <option value="">-- Select Material --</option>
+                                                        {['RAW_MATERIAL', 'SEMI_FINISHED_GOOD', 'PACKAGING_MATERIAL', 'BYPRODUCT'].map(cat => {
+                                                            const itemsInCategory = rawMaterialItems.filter(rm => rm.category === cat);
+                                                            if (itemsInCategory.length === 0) return null;
+                                                            return (
+                                                                <optgroup key={cat} label={CATEGORY_LABELS[cat] || cat}>
+                                                                    {itemsInCategory.map(rm => (
+                                                                        <option key={rm.id} value={rm.id}>{rm.name} ({rm.skuCode})</option>
+                                                                    ))}
+                                                                </optgroup>
+                                                            );
+                                                        })}
                                                     </select>
                                                 </td>
                                                 <td className="px-4 py-2.5">
