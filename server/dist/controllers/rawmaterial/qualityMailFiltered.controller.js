@@ -12,7 +12,7 @@ class RMQualityMailFilteredController {
     // Mail filtered RM Quality Reports with Excel attachment
     static async mailFilteredQualityReports(req, res) {
         try {
-            const { email, supplier, grn, fromDate, toDate } = req.body;
+            const { email, supplier, grn, fromDate, toDate, ids } = req.body;
             const recipientEmail = email || process.env.CLIENT_EMAIL;
             if (!recipientEmail) {
                 res.status(400).json({
@@ -23,6 +23,10 @@ class RMQualityMailFilteredController {
             }
             // Build filter object
             const where = {};
+            // If specific report IDs are provided (user selected rows), filter by those
+            if (ids && Array.isArray(ids) && ids.length > 0) {
+                where.id = { in: ids };
+            }
             if (supplier)
                 where.supplier = supplier;
             if (grn)

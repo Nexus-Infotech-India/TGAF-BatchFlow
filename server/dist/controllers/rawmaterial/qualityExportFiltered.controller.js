@@ -11,9 +11,13 @@ class RMQualityExportFilteredController {
     // Export filtered RM Quality Reports as Excel
     static async exportFilteredQualityReports(req, res) {
         try {
-            const { supplier, grn, fromDate, toDate } = req.body;
+            const { supplier, grn, fromDate, toDate, ids } = req.body;
             // Build filter object
             const where = {};
+            // If specific ids provided, export only those
+            if (Array.isArray(ids) && ids.length > 0) {
+                where.id = { in: ids };
+            }
             if (supplier)
                 where.supplier = supplier;
             if (grn)
@@ -57,9 +61,8 @@ class RMQualityExportFilteredController {
             const workbook = new exceljs_1.default.Workbook();
             const worksheet = workbook.addWorksheet('Filtered RM Quality Reports');
             worksheet.columns = [
-                { header: 'GRN', key: 'grn', width: 15 },
-                { header: 'Raw Material', key: 'rawMaterial', width: 18 },
-                { header: 'Variety', key: 'variety', width: 15 },
+                { header: 'Raw Material', key: 'rawMaterial', width: 20 },
+                { header: 'Variety', key: 'variety', width: 18 },
                 { header: 'Supplier', key: 'supplier', width: 18 },
                 { header: 'Date', key: 'date', width: 15 },
                 ...parametersList.flatMap(param => [
@@ -70,7 +73,7 @@ class RMQualityExportFilteredController {
             // Style for title
             const titleRow = worksheet.addRow({});
             titleRow.height = 30;
-            worksheet.mergeCells(`A1:${String.fromCharCode(64 + 5 + parametersList.length * 2)}1`);
+            worksheet.mergeCells(`A1:${String.fromCharCode(64 + 4 + parametersList.length * 2)}1`);
             const titleCell = titleRow.getCell(1);
             titleCell.value = 'Filtered RM Quality Reports';
             titleCell.font = { bold: true, size: 16, color: { argb: 'FFFFFF' } };
@@ -82,7 +85,7 @@ class RMQualityExportFilteredController {
             titleCell.alignment = { vertical: 'middle', horizontal: 'center' };
             // Add date row
             const dateRow = worksheet.addRow({});
-            worksheet.mergeCells(`A2:${String.fromCharCode(64 + 5 + parametersList.length * 2)}2`);
+            worksheet.mergeCells(`A2:${String.fromCharCode(64 + 4 + parametersList.length * 2)}2`);
             const dateCell = dateRow.getCell(1);
             dateCell.value = `Generated on ${new Date().toLocaleDateString('en-IN')}`;
             dateCell.font = { italic: true, size: 11, color: { argb: '666666' } };
@@ -90,7 +93,6 @@ class RMQualityExportFilteredController {
             worksheet.addRow({});
             // Add header row (Row 4)
             const headerRow = worksheet.addRow([
-                'GRN',
                 'Raw Material',
                 'Variety',
                 'Supplier',
@@ -115,7 +117,6 @@ class RMQualityExportFilteredController {
             // Add data rows
             reports.forEach((report, index) => {
                 const rowData = [
-                    report.grn,
                     report.rawMaterialName,
                     report.variety,
                     report.supplier,
@@ -145,18 +146,22 @@ class RMQualityExportFilteredController {
                         right: { style: 'thin', color: { argb: borderColor } }
                     };
                     if (colNumber === 1) {
+                        // Raw Material column
                         cell.font = { bold: true, color: { argb: '2C3E50' } };
                         cell.alignment = { horizontal: 'left', vertical: 'middle' };
                     }
-                    else if (colNumber <= 5) {
+                    else if (colNumber <= 4) {
+                        // Variety / Supplier / Date
                         cell.font = { color: { argb: '2C3E50' } };
                         cell.alignment = { horizontal: 'left', vertical: 'middle' };
                     }
-                    else if ((colNumber - 5) % 2 === 1) {
+                    else if ((colNumber - 4) % 2 === 1) {
+                        // Standard columns
                         cell.font = { color: { argb: '16A085' } };
                         cell.alignment = { horizontal: 'center', vertical: 'middle' };
                     }
                     else {
+                        // Result columns
                         cell.font = { color: { argb: 'C0392B' } };
                         cell.alignment = { horizontal: 'center', vertical: 'middle' };
                     }

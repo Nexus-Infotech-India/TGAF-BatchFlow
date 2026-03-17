@@ -29,7 +29,7 @@ class DashboardController {
             // Find all purchase order items whose status is not 'Received'
             const pendingItems = await prisma.purchaseOrderItem.findMany({
                 where: {
-                    status: { not: 'Received' },
+                    status: { not: 'RECEIVED' },
                 },
                 include: {
                     purchaseOrder: {

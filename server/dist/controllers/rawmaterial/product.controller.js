@@ -7,12 +7,14 @@ class RawMaterialProductController {
     // Create a new raw material product
     static async createRawMaterialProduct(req, res) {
         try {
-            const { skuCode, name, category, unitOfMeasurement, minReorderLevel, vendorId, } = req.body;
+            const { skuCode, name, category, subcategory, variety, unitOfMeasurement, minReorderLevel, vendorId, } = req.body;
             const product = await prisma.rawMaterialProduct.create({
                 data: {
                     skuCode,
                     name,
                     category,
+                    subcategory: subcategory || null,
+                    variety: variety || null,
                     unitOfMeasurement,
                     minReorderLevel,
                     vendorId: vendorId || null,
@@ -67,13 +69,15 @@ class RawMaterialProductController {
     static async updateRawMaterialProduct(req, res) {
         try {
             const { id } = req.params;
-            const { skuCode, name, category, unitOfMeasurement, minReorderLevel, vendorId, } = req.body;
+            const { skuCode, name, category, subcategory, variety, unitOfMeasurement, minReorderLevel, vendorId, } = req.body;
             const product = await prisma.rawMaterialProduct.update({
                 where: { id },
                 data: {
                     skuCode,
                     name,
                     category,
+                    subcategory: subcategory || null,
+                    variety: variety || null,
                     unitOfMeasurement,
                     minReorderLevel,
                     vendorId: vendorId || null,

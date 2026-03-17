@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const cleaning_controller_1 = require("../controllers/rawmaterial/cleaning.controller");
+const cleaningGrn_controller_1 = require("../controllers/rawmaterial/cleaningGrn.controller");
 const processing_controller_1 = require("../controllers/rawmaterial/processing.controller");
 const product_controller_1 = require("../controllers/rawmaterial/product.controller");
 const purchase_controller_1 = require("../controllers/rawmaterial/purchase.controller");
@@ -18,6 +19,8 @@ const qualityMail_controller_1 = require("../controllers/rawmaterial/qualityMail
 const qualityMailFiltered_controller_1 = require("../controllers/rawmaterial/qualityMailFiltered.controller");
 const qualityExportFiltered_controller_1 = require("../controllers/rawmaterial/qualityExportFiltered.controller");
 const sendPurchaseOrderMail_controller_1 = require("../controllers/rawmaterial/sendPurchaseOrderMail.controller");
+const grn_controller_1 = require("../controllers/rawmaterial/grn.controller");
+const bom_controller_1 = require("../controllers/rawmaterial/bom.controller");
 const router = (0, express_1.Router)();
 // Apply authentication middleware to all routes below
 router.use(authMiddleware_1.authenticate);
@@ -28,6 +31,8 @@ router.get('/cleaning/:id', cleaning_controller_1.CleaningJobController.getClean
 router.put('/cleaning/:id', cleaning_controller_1.CleaningJobController.updateCleaningJob);
 // Processing Jobs
 router.post('/processing', processing_controller_1.ProcessingJobController.createProcessingJob);
+router.post('/processing/batch', processing_controller_1.ProcessingJobController.createProcessingBatch);
+router.get('/processing/available-lots', processing_controller_1.ProcessingJobController.getAvailableLots);
 router.get('/processing', processing_controller_1.ProcessingJobController.getProcessingJobs);
 router.get('/processing/:id', processing_controller_1.ProcessingJobController.getProcessingJobById);
 router.put('/processing/:id', processing_controller_1.ProcessingJobController.updateProcessingJob);
@@ -41,11 +46,13 @@ router.delete('/product/:id', product_controller_1.RawMaterialProductController.
 router.post('/purchase', purchase_controller_1.PurchaseOrderController.createPurchaseOrder);
 router.get('/purchase', purchase_controller_1.PurchaseOrderController.getPurchaseOrders);
 router.get('/purchase/send-mail', sendPurchaseOrderMail_controller_1.sendPurchaseOrderMail);
-router.get('/purchase/:id', purchase_controller_1.PurchaseOrderController.getPurchaseOrderById);
-router.put('/purchase/:id', purchase_controller_1.PurchaseOrderController.updatePurchaseOrder);
-router.put('/purchase/item/:itemId', purchase_controller_1.PurchaseOrderController.updatePurchaseOrderItem);
 router.get('/purchase/received/raw-materials', purchase_controller_1.PurchaseOrderController.getReceivedRawMaterials);
 router.get('/purchase/received/vendors', purchase_controller_1.PurchaseOrderController.getVendorsFromReceivedOrders);
+router.put('/purchase/item/:itemId', purchase_controller_1.PurchaseOrderController.updatePurchaseOrderItem);
+router.get('/purchase/item/:itemId/receivals', purchase_controller_1.PurchaseOrderController.getReceivalHistory);
+router.get('/purchase/:id', purchase_controller_1.PurchaseOrderController.getPurchaseOrderById);
+router.put('/purchase/:id', purchase_controller_1.PurchaseOrderController.updatePurchaseOrder);
+router.delete('/purchase/:id', purchase_controller_1.PurchaseOrderController.deletePurchaseOrder);
 // Stock Entries
 router.post('/stock', stock_controller_1.StockEntryController.createStockEntry);
 router.get('/stock', stock_controller_1.StockEntryController.getStockEntries);
@@ -89,6 +96,8 @@ router.get('/dashboard/product-wise-conversion', Dashboard_controller_1.Dashboar
 // RM Quality Reports
 router.post('/quality-report', quality_controller_1.RMQualityController.createQualityReport);
 router.get('/quality-report', quality_controller_1.RMQualityController.getQualityReports);
+router.get('/quality-report/without-grn', quality_controller_1.RMQualityController.getReportsWithoutGRN);
+router.get('/quality-report/for-grn-page', quality_controller_1.RMQualityController.getReportsForGRNPage);
 router.get('/quality-report/export/all', quality_controller_1.RMQualityController.exportAllQualityReports);
 router.get('/quality-report/mail/all', qualityMail_controller_1.RMQualityMailController.mailAllQualityReports);
 router.post('/quality-report/mail/filtered', qualityMailFiltered_controller_1.RMQualityMailFilteredController.mailFilteredQualityReports);
@@ -97,4 +106,24 @@ router.get('/quality-report/:id', quality_controller_1.RMQualityController.getQu
 router.put('/quality-report/:id', quality_controller_1.RMQualityController.updateQualityReport);
 router.delete('/quality-report/:id', quality_controller_1.RMQualityController.deleteQualityReport);
 router.get('/quality-report/:id/export', quality_controller_1.RMQualityController.exportQualityReport);
+// GRN by PO
+router.post('/grn', grn_controller_1.GRNController.createGRN);
+router.post('/grn/from-report', grn_controller_1.GRNController.generateGRNForReport);
+router.get('/grn', grn_controller_1.GRNController.getGRNs);
+router.get('/grn/received-pos', grn_controller_1.GRNController.getReceivedPOs);
+router.get('/grn/po/:poId', grn_controller_1.GRNController.getGRNsByPO);
+router.get('/grn/:id', grn_controller_1.GRNController.getGRNById);
+router.delete('/grn/:id', grn_controller_1.GRNController.deleteGRN);
+// GRN-wise Cleaning
+router.get('/cleaning-grn', cleaningGrn_controller_1.CleaningGrnController.getGRNsForCleaning);
+router.get('/cleaning-grn/lots', cleaningGrn_controller_1.CleaningGrnController.getCleaningLots);
+router.get('/cleaning-grn/:grnNumber', cleaningGrn_controller_1.CleaningGrnController.getGRNMaterialsByGrnNumber);
+router.post('/cleaning-grn/transfer', cleaningGrn_controller_1.CleaningGrnController.createGRNCleaningTransfer);
+router.put('/cleaning-grn/finish/:id', cleaningGrn_controller_1.CleaningGrnController.finishCleaning);
+// Bill of Material (BOM)
+router.post('/bom', bom_controller_1.BOMController.createBOM);
+router.get('/bom', bom_controller_1.BOMController.getBOMs);
+router.get('/bom/:id', bom_controller_1.BOMController.getBOMById);
+router.put('/bom/:id', bom_controller_1.BOMController.updateBOM);
+router.delete('/bom/:id', bom_controller_1.BOMController.deleteBOM);
 exports.default = router;

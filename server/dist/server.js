@@ -50,8 +50,9 @@ app.use('/draft', draft_route_1.default);
 //     console.error('Failed to run audit status update job:', err);
 //   }
 // });
-// Also run once at server startup to ensure statuses are updated immediately
-(async () => {
+// Run audit status update after a short delay to let the server start first
+// This prevents database cold-start issues from blocking server startup
+setTimeout(async () => {
     console.log('Running initial audit status update job at server startup...');
     try {
         const result = await (0, updateauditstatus_1.updateAuditStatuses)();
@@ -60,7 +61,7 @@ app.use('/draft', draft_route_1.default);
     catch (err) {
         console.error('Failed to run initial audit status update job:', err);
     }
-})();
+}, 5000);
 // Schedule mail job - Runs every 1 minute (FOR TESTING)
 // TODO: Change back to '0 9 * * 1' for production (Monday at 9 AM)
 // cron.schedule('*/1 * * * *', async () => {

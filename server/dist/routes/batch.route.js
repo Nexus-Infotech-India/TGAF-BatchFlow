@@ -29,6 +29,8 @@ router.post('/batches/mail/filtered', authMiddleware_1.authenticate, batchMailFi
 router.get('/logs', authMiddleware_1.authenticate, batch_controller_1.default.getActivityLogs);
 router.get('/batches-with-drafts', authMiddleware_1.authenticate, batch_controller_1.default.getBatchesWithDrafts);
 router.get('/grn-numbers', authMiddleware_1.authenticate, batch_controller_1.default.getAvailableGRNNumbers);
+router.get('/lot-numbers', authMiddleware_1.authenticate, batch_controller_1.default.getAvailableLotNumbers);
+router.get('/seed-wastage', authMiddleware_1.authenticate, batch_controller_1.default.getSeedWastageRecords);
 // Add the Certificate of Analysis route
 router.get('/batches/:id/certificate', authMiddleware_1.authenticate, batch_controller_1.default.generateCertificateOfAnalysis);
 router.get('/parameters/product/:productId', batch_controller_1.default.getParametersByProductId);

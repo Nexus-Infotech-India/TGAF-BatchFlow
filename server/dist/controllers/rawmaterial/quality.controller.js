@@ -8,24 +8,58 @@ const prisma_1 = require("../../generated/prisma");
 const exceljs_1 = __importDefault(require("exceljs"));
 const prisma = new prisma_1.PrismaClient();
 class RMQualityController {
-    // Create RM Quality Report
+    // Generate Report Number: RPT-YYYYMMDD-XXXX
+    static async generateReportNumber() {
+        const today = new Date();
+        const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
+        const prefix = `RPT-${dateStr}-`;
+        const lastReport = await prisma.rMQualityReport.findFirst({
+            where: { reportNumber: { startsWith: prefix } },
+            orderBy: { reportNumber: 'desc' },
+        });
+        let seq = 1;
+        if (lastReport?.reportNumber) {
+            const lastSeq = parseInt(lastReport.reportNumber.replace(prefix, ''), 10);
+            if (!isNaN(lastSeq))
+                seq = lastSeq + 1;
+        }
+        return `${prefix}${String(seq).padStart(4, '0')}`;
+    }
+    // Create RM Quality Report (with auto-generated Report Number)
     static async createQualityReport(req, res) {
         try {
-            const { rawMaterialName, variety, supplier, grn, parameters } = req.body;
+            const { rawMaterialName, variety, supplier, purchaseOrderId, purchaseOrderItemId, parameters } = req.body;
             const userId = req.user?.id;
             if (!userId) {
                 res.status(401).json({ error: 'User not authenticated' });
                 return;
             }
+            if (!rawMaterialName || !supplier) {
+                res.status(400).json({ error: 'Missing required fields' });
+                return;
+            }
+            // Prevent creating multiple reports for the same Purchase Order Item
+            if (purchaseOrderItemId) {
+                const existingReport = await prisma.rMQualityReport.findFirst({
+                    where: { purchaseOrderItemId },
+                });
+                if (existingReport) {
+                    res.status(400).json({ error: 'A quality report already exists for this Purchase Order Item' });
+                    return;
+                }
+            }
+            const reportNumber = await RMQualityController.generateReportNumber();
             const qualityReport = await prisma.rMQualityReport.create({
                 data: {
+                    reportNumber,
                     rawMaterialName,
-                    variety,
+                    variety: variety || '',
                     supplier,
-                    grn,
+                    purchaseOrderId: purchaseOrderId || null,
+                    purchaseOrderItemId: purchaseOrderItemId || null,
                     createdById: userId,
                     parameters: {
-                        create: parameters.map((param) => ({
+                        create: (parameters || []).map((param) => ({
                             parameter: param.parameter,
                             standard: param.standard,
                             result: param.result,
@@ -57,6 +91,84 @@ class RMQualityController {
             });
         }
     }
+    // Get reports that don't have a GRN generated yet
+    static async getReportsWithoutGRN(req, res) {
+        try {
+            const reports = await prisma.rMQualityReport.findMany({
+                where: {
+                    grn_entry: null,
+                    reportNumber: { not: null },
+                },
+                include: {
+                    parameters: true,
+                    createdBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                        },
+                    },
+                },
+                orderBy: { createdAt: 'desc' },
+            });
+            res.json({ success: true, data: reports });
+        }
+        catch (error) {
+            console.error('Error fetching reports without GRN:', error);
+            res.status(500).json({ success: false, error: 'Failed to fetch reports' });
+        }
+    }
+    // Get all reports with their GRN status and PO data (enriched)
+    static async getReportsForGRNPage(req, res) {
+        try {
+            const reports = await prisma.rMQualityReport.findMany({
+                where: {
+                    reportNumber: { not: null },
+                },
+                include: {
+                    parameters: true,
+                    grn_entry: true,
+                    createdBy: {
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                        },
+                    },
+                },
+                orderBy: { createdAt: 'desc' },
+            });
+            // Batch fetch PO data for enrichment
+            const poIds = [...new Set(reports.map(r => r.purchaseOrderId).filter(Boolean))];
+            const poItemIds = [...new Set(reports.map(r => r.purchaseOrderItemId).filter(Boolean))];
+            const [pos, poItems] = await Promise.all([
+                poIds.length > 0
+                    ? prisma.purchaseOrder.findMany({
+                        where: { id: { in: poIds } },
+                        include: { vendor: true },
+                    })
+                    : [],
+                poItemIds.length > 0
+                    ? prisma.purchaseOrderItem.findMany({
+                        where: { id: { in: poItemIds } },
+                        include: { rawMaterial: true },
+                    })
+                    : [],
+            ]);
+            const poMap = Object.fromEntries(pos.map(p => [p.id, p]));
+            const poItemMap = Object.fromEntries(poItems.map(p => [p.id, p]));
+            const enriched = reports.map(r => ({
+                ...r,
+                purchaseOrder: r.purchaseOrderId ? poMap[r.purchaseOrderId] || null : null,
+                purchaseOrderItem: r.purchaseOrderItemId ? poItemMap[r.purchaseOrderItemId] || null : null,
+            }));
+            res.json({ success: true, data: enriched });
+        }
+        catch (error) {
+            console.error('Error fetching reports for GRN page:', error);
+            res.status(500).json({ success: false, error: 'Failed to fetch reports' });
+        }
+    }
     // Get all RM Quality Reports
     static async getQualityReports(req, res) {
         try {
@@ -69,6 +181,7 @@ class RMQualityController {
                         { variety: { contains: search, mode: prisma_1.Prisma.QueryMode.insensitive } },
                         { supplier: { contains: search, mode: prisma_1.Prisma.QueryMode.insensitive } },
                         { grn: { contains: search, mode: prisma_1.Prisma.QueryMode.insensitive } },
+                        { reportNumber: { contains: search, mode: prisma_1.Prisma.QueryMode.insensitive } },
                     ],
                 }
                 : {};

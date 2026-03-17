@@ -6,6 +6,8 @@ const MATERIAL_CATEGORIES = [
   { value: 'SEMI_FINISHED_GOOD', label: 'Semi-Finished Good' },
   { value: 'FINISHED_GOOD', label: 'Finished Good' },
   { value: 'PACKAGING_MATERIAL', label: 'Packaging Material' },
+  { value: 'BYPRODUCT', label: 'Byproduct' },
+  { value: 'WASTAGE', label: 'Wastage' },
 ] as const;
 
 type RawMaterial = {

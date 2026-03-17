@@ -1079,7 +1079,9 @@ exports.MaterialCategory = exports.$Enums.MaterialCategory = {
   RAW_MATERIAL: 'RAW_MATERIAL',
   SEMI_FINISHED_GOOD: 'SEMI_FINISHED_GOOD',
   FINISHED_GOOD: 'FINISHED_GOOD',
-  PACKAGING_MATERIAL: 'PACKAGING_MATERIAL'
+  PACKAGING_MATERIAL: 'PACKAGING_MATERIAL',
+  BYPRODUCT: 'BYPRODUCT',
+  WASTAGE: 'WASTAGE'
 };
 
 exports.PurchaseOrderItemStatus = exports.$Enums.PurchaseOrderItemStatus = {

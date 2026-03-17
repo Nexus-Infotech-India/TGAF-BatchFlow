@@ -36,7 +36,7 @@ const getPurchaseOrdersByProduct = async (req, res) => {
                 };
             }
             poMap[po.id].totalQuantity += item.quantityOrdered;
-            poMap[po.id].receivedQuantity += item.quantityReceived;
+            poMap[po.id].receivedQuantity += item.totalReceived;
         });
         res.json(Object.values(poMap));
     }
@@ -175,7 +175,7 @@ const getPurchaseOrderTimeline = async (req, res) => {
                     items: po.items.map((item) => ({
                         rawMaterial: { id: item.rawMaterial.id, name: item.rawMaterial.name },
                         orderedQuantity: item.quantityOrdered,
-                        receivedQuantity: item.quantityReceived,
+                        receivedQuantity: item.totalReceived,
                         warehouse: null // You can fetch warehouse if needed
                     }))
                 },

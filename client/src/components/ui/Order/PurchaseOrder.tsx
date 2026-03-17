@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus,
   AlertCircle,
-  Info,
   Trash2,
   Building2,
   Package,
@@ -90,6 +89,8 @@ const PurchaseOrder = () => {
     { value: 'SEMI_FINISHED_GOOD', label: 'Semi-Finished Good' },
     { value: 'FINISHED_GOOD', label: 'Finished Good' },
     { value: 'PACKAGING_MATERIAL', label: 'Packaging Material' },
+    { value: 'BYPRODUCT', label: 'Byproduct' },
+    { value: 'WASTAGE', label: 'Wastage' },
   ];
   const [vendorId, setVendorId] = useState('');
   const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);

@@ -357,7 +357,9 @@ export namespace $Enums {
   RAW_MATERIAL: 'RAW_MATERIAL',
   SEMI_FINISHED_GOOD: 'SEMI_FINISHED_GOOD',
   FINISHED_GOOD: 'FINISHED_GOOD',
-  PACKAGING_MATERIAL: 'PACKAGING_MATERIAL'
+  PACKAGING_MATERIAL: 'PACKAGING_MATERIAL',
+  BYPRODUCT: 'BYPRODUCT',
+  WASTAGE: 'WASTAGE'
 };
 
 export type MaterialCategory = (typeof MaterialCategory)[keyof typeof MaterialCategory]

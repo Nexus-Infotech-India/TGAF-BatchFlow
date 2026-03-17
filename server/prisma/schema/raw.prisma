@@ -21,6 +21,8 @@ enum MaterialCategory {
   SEMI_FINISHED_GOOD
   FINISHED_GOOD
   PACKAGING_MATERIAL
+  BYPRODUCT
+  WASTAGE
 }
 
 model RawMaterialProduct {

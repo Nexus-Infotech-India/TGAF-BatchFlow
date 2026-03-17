@@ -100,8 +100,7 @@ class CleaningJobController {
     static async updateCleaningJob(req, res) {
         try {
             const { id } = req.params;
-            const { quantity, status, startedAt, finishedAt, leftoverQuantity, // <-- Add these to destructure from req.body
-            reasonCode, isReusable, } = req.body;
+            const { quantity, status, startedAt, finishedAt, stoneWastageQty, stoneWastageUnit, seedWastageQty, seedWastageUnit, } = req.body;
             const cleaningJob = await prisma.cleaningJob.update({
                 where: { id },
                 data: {
@@ -109,33 +108,12 @@ class CleaningJobController {
                     status,
                     startedAt: startedAt ? new Date(startedAt) : undefined,
                     finishedAt: finishedAt ? new Date(finishedAt) : undefined,
+                    stoneWastageQty: stoneWastageQty ? parseFloat(stoneWastageQty) : undefined,
+                    stoneWastageUnit: stoneWastageUnit || undefined,
+                    seedWastageQty: seedWastageQty ? parseFloat(seedWastageQty) : undefined,
+                    seedWastageUnit: seedWastageUnit || undefined,
                 },
             });
-            // Handle leftover/unusable stock if job is marked as Cleaned/Finished
-            if ((status === 'Cleaned' || status === 'Finished') &&
-                leftoverQuantity > 0) {
-                const unfinishedSku = `${cleaningJob.rawMaterialId}-UNF-${Date.now()}`;
-                await prisma.unfinishedStock.create({
-                    data: {
-                        cleaningJobId: cleaningJob.id,
-                        skuCode: unfinishedSku,
-                        quantity: leftoverQuantity,
-                        reasonCode,
-                        warehouseId: cleaningJob.toWarehouseId,
-                    },
-                });
-                if (isReusable) {
-                    await prisma.reusableStock.create({
-                        data: {
-                            cleaningJobId: cleaningJob.id,
-                            skuCode: unfinishedSku,
-                            quantity: leftoverQuantity,
-                            warehouseId: cleaningJob.toWarehouseId,
-                            createdAt: new Date(),
-                        },
-                    });
-                }
-            }
             res.json(cleaningJob);
         }
         catch (error) {

@@ -100,9 +100,7 @@ const GenerateGRN: React.FC = () => {
     costCenter: '',
     receivedBagsPacks: '',
     remarks: '',
-  });
-
-  const authToken = localStorage.getItem('authToken');
+    });
 
   const fetchReports = async () => {
     setLoading(true);

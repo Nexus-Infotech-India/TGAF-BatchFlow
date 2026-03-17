@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     X,
@@ -10,11 +10,7 @@ import {
 } from "lucide-react";
 import api, { API_ROUTES } from "../../../utils/api";
 
-type Vendor = {
-    id: string;
-    vendorCode: string;
-    name: string;
-};
+
 
 type RawMaterialCreateModalProps = {
     isOpen: boolean;
@@ -35,31 +31,9 @@ const RawMaterialCreateModal: React.FC<RawMaterialCreateModalProps> = ({
         minReorderLevel: "",
         vendorId: "",
     });
-    const [vendors, setVendors] = useState<Vendor[]>([]);
-    const [vendorSearch, setVendorSearch] = useState("");
-    const [showVendorPicker, setShowVendorPicker] = useState(false);
-    const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
-
-    useEffect(() => {
-        if (isOpen) {
-            const fetchVendors = async () => {
-                try {
-                    const res = await api.get(API_ROUTES.RAW.GET_VENDORS, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-                        },
-                    });
-                    setVendors(res.data);
-                } catch {
-                    setVendors([]);
-                }
-            };
-            fetchVendors();
-        }
-    }, [isOpen]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -74,9 +48,6 @@ const RawMaterialCreateModal: React.FC<RawMaterialCreateModalProps> = ({
             minReorderLevel: "",
             vendorId: "",
         });
-        setSelectedVendor(null);
-        setVendorSearch("");
-        setShowVendorPicker(false);
         setError("");
         setSuccess(false);
     };
@@ -244,14 +215,21 @@ const RawMaterialCreateModal: React.FC<RawMaterialCreateModalProps> = ({
                                     <label className="block text-sm font-medium text-foreground mb-1.5">
                                         Category <span className="text-destructive">*</span>
                                     </label>
-                                    <input
+                                    <select
                                         name="category"
-                                        placeholder="e.g. Chemicals"
                                         className="w-full bg-background border border-input rounded-xl px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring placeholder:text-muted-foreground"
                                         value={form.category}
-                                        onChange={handleChange}
+                                        onChange={handleChange as any}
                                         required
-                                    />
+                                    >
+                                        <option value="" disabled>Select category</option>
+                                        <option value="RAW_MATERIAL">Raw Material</option>
+                                        <option value="SEMI_FINISHED_GOOD">Semi-Finished Good</option>
+                                        <option value="FINISHED_GOOD">Finished Good</option>
+                                        <option value="PACKAGING_MATERIAL">Packaging Material</option>
+                                        <option value="BYPRODUCT">Byproduct</option>
+                                        <option value="WASTAGE">Wastage</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-medium text-foreground mb-1.5">

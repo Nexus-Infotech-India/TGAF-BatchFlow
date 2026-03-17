@@ -8,7 +8,6 @@ import {
   CheckCircle,
   Layers,
   ArrowRight,
-  Hash,
   FileText,
   Sparkles,
   ClipboardCheck,
@@ -23,7 +22,6 @@ import {
   AlertTriangle,
   Download,
   XCircle,
-  Loader2,
 } from 'lucide-react';
 
 const { Option } = Select;
