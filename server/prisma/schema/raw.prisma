@@ -42,6 +42,7 @@ model RawMaterialProduct {
   processingJobs     ProcessingJob[]
   purchaseOrderItems PurchaseOrderItem[]
   currentStocks      CurrentStock[]
+  grindingDispatches GrindingDispatch[]
 }
 
 model PurchaseOrder {
@@ -267,4 +268,46 @@ model ProcessingBatchLot {
   createdAt         DateTime @default(now())
 
   processingJob ProcessingJob @relation(fields: [processingJobId], references: [id])
+}
+
+// ==================== GRINDING DISPATCH (Transfer with Approval) ====================
+
+enum GrindingDispatchStatus {
+  SENT
+  ACCEPTED
+  REJECTED
+}
+
+model GrindingDispatch {
+  id                 String                  @id @default(uuid())
+  batchNumber        String                  @unique
+  inputRawMaterialId String
+  fromLocationId     String
+  toLocationId       String
+  totalQuantity      Float
+  status             GrindingDispatchStatus  @default(SENT)
+  sentAt             DateTime                @default(now())
+  acceptedAt         DateTime?
+  rejectedAt         DateTime?
+  rejectionReason    String?
+  notes              String?
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+
+  inputRawMaterial RawMaterialProduct   @relation(fields: [inputRawMaterialId], references: [id])
+  fromLocation     Location             @relation("DispatchFromLocation", fields: [fromLocationId], references: [id])
+  toLocation       Location             @relation("DispatchToLocation", fields: [toLocationId], references: [id])
+  lots             GrindingDispatchLot[]
+}
+
+model GrindingDispatchLot {
+  id                   String   @id @default(uuid())
+  dispatchId           String
+  cleaningLotId        String
+  allocatedQuantity    Float
+  seedWastageAllocated Float    @default(0)
+  createdAt            DateTime @default(now())
+
+  dispatch    GrindingDispatch @relation(fields: [dispatchId], references: [id], onDelete: Cascade)
+  cleaningLot CleaningLot      @relation(fields: [cleaningLotId], references: [id])
 }

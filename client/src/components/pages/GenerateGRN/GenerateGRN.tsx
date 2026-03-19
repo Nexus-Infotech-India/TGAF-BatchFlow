@@ -58,7 +58,11 @@ interface ReportEntry {
     quantityOrdered: number;
     quantityReceived: number;
     totalReceived?: number;
-    receivals?: any[];
+    receivals?: Array<{
+      id: string;
+      location?: { id: string; name: string } | null;
+      warehouse?: { id: string; name: string; location?: string | null } | null;
+    }>;
   } | null;
   parameters: any[];
   grn_entry?: {
@@ -102,6 +106,15 @@ const GenerateGRN: React.FC = () => {
     remarks: '',
     });
 
+  const getAutoDeliveryLocation = (report: ReportEntry): string => {
+    const latestReceival = report.purchaseOrderItem?.receivals?.[0];
+    if (!latestReceival) return '';
+
+    if (latestReceival.location?.name) return latestReceival.location.name;
+    if (latestReceival.warehouse?.name) return latestReceival.warehouse.name;
+    return '';
+  };
+
   const fetchReports = async () => {
     setLoading(true);
     try {
@@ -121,10 +134,11 @@ const GenerateGRN: React.FC = () => {
   }, []);
 
   const openGRNForm = (report: ReportEntry) => {
+    const autoDeliveryLocation = getAutoDeliveryLocation(report);
     setGrnFormReport(report);
     setGrnFormData({
       truckNumber: '',
-      deliveryLocation: '',
+      deliveryLocation: autoDeliveryLocation,
       costCenter: '',
       receivedBagsPacks: '',
       remarks: '',
@@ -662,7 +676,6 @@ const GenerateGRN: React.FC = () => {
                   <div className="grid grid-cols-2 gap-3">
                     {[
                       { icon: Truck, label: 'Truck Number', key: 'truckNumber' as const, placeholder: 'e.g. MH 12 AB 1234' },
-                      { icon: MapPin, label: 'Delivery Location', key: 'deliveryLocation' as const, placeholder: 'e.g. Main Warehouse' },
                       { icon: Building, label: 'Cost Center', key: 'costCenter' as const, placeholder: 'e.g. RM Store' },
                       { icon: Boxes, label: 'Received Bags/Packs', key: 'receivedBagsPacks' as const, placeholder: 'e.g. 8 Bags' },
                     ].map(({ icon: Icon, label, key, placeholder }) => (
@@ -687,6 +700,29 @@ const GenerateGRN: React.FC = () => {
                         />
                       </div>
                     ))}
+                    <div className="space-y-1">
+                      <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
+                        <MapPin size={12} style={{ color: 'var(--primary)' }} />
+                        Delivery Location
+                      </label>
+                      <input
+                        type="text"
+                        value={grnFormData.deliveryLocation}
+                        readOnly
+                        className="w-full rounded-xl px-3.5 py-2.5 text-sm"
+                        style={{
+                          background: 'var(--muted)',
+                          border: '1px solid var(--border)',
+                          color: 'var(--foreground)',
+                          cursor: 'not-allowed',
+                        }}
+                      />
+                      {!grnFormData.deliveryLocation && (
+                        <p className="text-[11px]" style={{ color: '#d97706' }}>
+                          Delivery location not found from receival data.
+                        </p>
+                      )}
+                    </div>
                     <div className="col-span-2 space-y-1">
                       <label className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
                         <MessageSquare size={12} style={{ color: 'var(--primary)' }} />

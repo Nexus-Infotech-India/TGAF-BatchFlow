@@ -264,6 +264,8 @@ interface CleaningJobItem {
   seedWastageUnit?: string;
   wastagePercentage?: number;
   wastageType?: string;
+  fromLocation?: { id: string; name: string | null } | null;
+  toLocation?: { id: string; name: string | null } | null;
   fromWarehouse: { name: string };
   toWarehouse: { name: string };
   cleaningLots: CleaningLotItem[];
@@ -281,7 +283,13 @@ interface GRNItem {
     rawMaterialId: string;
     rawMaterial: { name: string; skuCode: string; unitOfMeasurement: string; category: string };
     totalReceived: number;
-    receivals: { warehouseId: string; warehouse: { name: string } }[];
+    receivals: {
+      warehouseId?: string;
+      warehouse?: { name: string; location?: string | null };
+      locationId?: string;
+      location?: { name: string };
+      fromLocation?: { id: string; name: string | null } | null;
+    }[];
   };
   qualityReport?: { id: string; parameters: { parameter: string; standard: string; result: string }[] };
   cleaningJobs: CleaningJobItem[];
@@ -292,16 +300,19 @@ interface GRNItem {
   allJobsFinished: boolean;
 }
 
-interface WarehouseItem {
+interface LocationItem {
   id: string;
+  code: string;
   name: string;
+  type: string;
+  enabled?: boolean;
 }
 
 // ─── Main Component ─────────────────────────────────────────────────────
 const CleaningRawMaterialList: React.FC = () => {
   const [grns, setGrns] = useState<GRNItem[]>([]);
   const [filteredGrns, setFilteredGrns] = useState<GRNItem[]>([]);
-  const [warehouses, setWarehouses] = useState<WarehouseItem[]>([]);
+  const [locations, setLocations] = useState<LocationItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -311,7 +322,7 @@ const CleaningRawMaterialList: React.FC = () => {
   const [transferModalOpen, setTransferModalOpen] = useState(false);
   const [selectedGrn, setSelectedGrn] = useState<GRNItem | null>(null);
   const [transferQty, setTransferQty] = useState<number>(0);
-  const [toWarehouseId, setToWarehouseId] = useState('');
+  const [toLocationId, setToLocationId] = useState('');
   const [transferring, setTransferring] = useState(false);
 
   // Finish Cleaning Modal
@@ -351,23 +362,25 @@ const CleaningRawMaterialList: React.FC = () => {
     setLoading(false);
   };
 
-  const fetchWarehouses = async () => {
+  const fetchLocations = async () => {
     try {
       const authToken = localStorage.getItem('authToken');
-      const res = await api.get(API_ROUTES.RAW.GET_WAREHOUSES, {
+      const res = await api.get(API_ROUTES.RAW.GET_LOCATIONS, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       // Handle both { data: [...] } and direct array response
       const data = res.data?.data || res.data || [];
-      setWarehouses(Array.isArray(data) ? data : []);
+      const safeData = Array.isArray(data) ? data : [];
+      const enabledLocations = safeData.filter((l: LocationItem) => l.enabled !== false);
+      setLocations(enabledLocations);
     } catch (err) {
-      console.error('Failed to fetch warehouses:', err);
+      console.error('Failed to fetch locations:', err);
     }
   };
 
   useEffect(() => {
     fetchGRNs();
-    fetchWarehouses();
+    fetchLocations();
   }, []);
 
   // ─── Search / Filter ──────────────────────────────────────────────
@@ -393,7 +406,7 @@ const CleaningRawMaterialList: React.FC = () => {
   const handleOpenTransfer = (grn: GRNItem) => {
     setSelectedGrn(grn);
     setTransferQty(0);
-    setToWarehouseId('');
+    setToLocationId('');
     setTransferModalOpen(true);
   };
 
@@ -411,7 +424,7 @@ const CleaningRawMaterialList: React.FC = () => {
   }, []);
 
   const handleTransfer = async () => {
-    if (!selectedGrn || !toWarehouseId || transferQty <= 0) {
+    if (!selectedGrn || !toLocationId || transferQty <= 0) {
       message.warning('Please fill all fields correctly');
       return;
     }
@@ -426,7 +439,7 @@ const CleaningRawMaterialList: React.FC = () => {
       const authToken = localStorage.getItem('authToken');
       await api.post(API_ROUTES.RAW.CREATE_GRN_CLEANING_TRANSFER, {
         grnId: selectedGrn.id,
-        toWarehouseId,
+        toLocationId,
         quantity: transferQty,
       }, {
         headers: { Authorization: `Bearer ${authToken}` },
@@ -822,16 +835,31 @@ const CleaningRawMaterialList: React.FC = () => {
 
             <div className="space-y-1.5">
               <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
-                Destination Warehouse <span style={{ color: 'var(--destructive)' }}>*</span>
+                From Location
+              </label>
+              <div
+                className="w-full rounded-lg px-3 py-2.5 text-sm"
+                style={{ background: 'var(--muted)', color: 'var(--foreground)', border: '1px solid var(--border)' }}
+              >
+                {selectedGrn.purchaseOrderItem?.receivals?.[0]?.fromLocation?.name
+                  || selectedGrn.purchaseOrderItem?.receivals?.[0]?.location?.name
+                  || selectedGrn.purchaseOrderItem?.receivals?.[0]?.warehouse?.name
+                  || '-'}
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
+                To Location <span style={{ color: 'var(--destructive)' }}>*</span>
               </label>
               <Select
                 className="w-full"
-                placeholder="Select warehouse"
-                value={toWarehouseId || undefined}
-                onChange={(v) => setToWarehouseId(v)}
+                placeholder="Select destination location"
+                value={toLocationId || undefined}
+                onChange={(v) => setToLocationId(v)}
               >
-                {warehouses.map((w) => (
-                  <Option key={w.id} value={w.id}>{w.name}</Option>
+                {locations.map((l) => (
+                  <Option key={l.id} value={l.id}>{l.name} ({l.code})</Option>
                 ))}
               </Select>
             </div>
@@ -846,7 +874,7 @@ const CleaningRawMaterialList: React.FC = () => {
               </button>
               <button
                 onClick={handleTransfer}
-                disabled={!toWarehouseId || transferQty <= 0 || transferring}
+                disabled={!toLocationId || transferQty <= 0 || transferring}
                 className="flex-1 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all active:scale-95 disabled:opacity-50"
                 style={{ background: 'var(--primary)', color: 'var(--primary-foreground)' }}
               >
@@ -1045,10 +1073,10 @@ const CleaningRawMaterialList: React.FC = () => {
                               </div>
                               <div className="flex items-center gap-1.5 text-xs font-medium mt-0.5" style={{ color: 'var(--muted-foreground)' }}>
                                 <MapPin size={12} className="text-primary" />
-                                <span>{job.fromWarehouse?.name}</span>
+                                <span>{job.fromLocation?.name || job.fromWarehouse?.name || '-'}</span>
                                 <ArrowRight size={10} className="mx-1 text-muted-foreground" />
                                 <MapPin size={12} className="text-secondary" />
-                                <span>{job.toWarehouse?.name}</span>
+                                <span>{job.toLocation?.name || job.toWarehouse?.name || '-'}</span>
                               </div>
                             </div>
                           </div>

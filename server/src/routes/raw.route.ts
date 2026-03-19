@@ -19,6 +19,10 @@ import { RMQualityExportFilteredController } from '../controllers/rawmaterial/qu
 import { sendPurchaseOrderMail } from '../controllers/rawmaterial/sendPurchaseOrderMail.controller';
 import { GRNController } from '../controllers/rawmaterial/grn.controller';
 import { BOMController } from '../controllers/rawmaterial/bom.controller';
+import { LocationController } from '../controllers/rawmaterial/location.controller';
+import { TransferController } from '../controllers/rawmaterial/transfer.controller';
+import { ProductionController } from '../controllers/rawmaterial/production.controller';
+import { GrindingDispatchController } from '../controllers/rawmaterial/grindingDispatch.controller';
 
 const router = Router();
 
@@ -84,6 +88,26 @@ router.get('/warehouse/:id', WarehouseController.getWarehouseById);
 router.put('/warehouse/:id', WarehouseController.updateWarehouse);
 router.delete('/warehouse/:id', WarehouseController.deleteWarehouse);
 
+// Locations
+router.post('/location', LocationController.createLocation);
+router.get('/location', LocationController.getLocations);
+router.get('/location/:id', LocationController.getLocationById);
+router.put('/location/:id', LocationController.updateLocation);
+router.patch('/location/:id/status', LocationController.setLocationStatus);
+
+// Material Transfers
+router.post('/transfers', TransferController.createTransfer);
+router.get('/transfers', TransferController.getTransfers);
+router.post('/transfers/outbound', TransferController.createOutboundTransfer);
+router.get('/transfers/:id', TransferController.getTransferById);
+router.put('/transfers/:id/accept', TransferController.acceptTransfer);
+router.put('/transfers/:id/reject', TransferController.rejectTransfer);
+
+// Production Posting
+router.post('/production/post', ProductionController.postProduction);
+router.get('/production/postings', ProductionController.getPostings);
+router.get('/production/postings/:id', ProductionController.getPostingById);
+
 router.get('/stock', StockEntryController.getCurrentStockDistribution);
 router.get('/purchase-order-items', PurchaseOrderController.getAllPurchaseOrderItems);
 router.get('/transaction-logs', TransactionLogController.getAllTransactionLogs);
@@ -139,8 +163,16 @@ router.put('/cleaning-grn/finish/:id', CleaningGrnController.finishCleaning);
 // Bill of Material (BOM)
 router.post('/bom', BOMController.createBOM);
 router.get('/bom', BOMController.getBOMs);
+router.get('/bom/by-sfg/:productId', BOMController.getBOMBySFG);
 router.get('/bom/:id', BOMController.getBOMById);
 router.put('/bom/:id', BOMController.updateBOM);
 router.delete('/bom/:id', BOMController.deleteBOM);
+
+// Grinding Dispatch (Transfer with Approval)
+router.post('/grinding/dispatch', GrindingDispatchController.createDispatch);
+router.get('/grinding/dispatches', GrindingDispatchController.getDispatches);
+router.get('/grinding/dispatch/:id', GrindingDispatchController.getDispatchById);
+router.put('/grinding/dispatch/:id/accept', GrindingDispatchController.acceptDispatch);
+router.put('/grinding/dispatch/:id/reject', GrindingDispatchController.rejectDispatch);
 
 export default router;

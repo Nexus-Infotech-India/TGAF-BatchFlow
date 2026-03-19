@@ -359,8 +359,36 @@ export const API_ROUTES = {
     CREATE_BOM: `${BASE_URL}/raw/bom`,
     GET_BOMS: `${BASE_URL}/raw/bom`,
     GET_BOM_BY_ID: (id: string) => `${BASE_URL}/raw/bom/${id}`,
+    GET_BOM_BY_SFG: (productId: string) => `${BASE_URL}/raw/bom/by-sfg/${productId}`,
     UPDATE_BOM: (id: string) => `${BASE_URL}/raw/bom/${id}`,
     DELETE_BOM: (id: string) => `${BASE_URL}/raw/bom/${id}`,
+
+    // Locations
+    CREATE_LOCATION: `${BASE_URL}/raw/location`,
+    GET_LOCATIONS: `${BASE_URL}/raw/location`,
+    GET_LOCATION_BY_ID: (id: string) => `${BASE_URL}/raw/location/${id}`,
+    UPDATE_LOCATION: (id: string) => `${BASE_URL}/raw/location/${id}`,
+    SET_LOCATION_STATUS: (id: string) => `${BASE_URL}/raw/location/${id}/status`,
+
+    // Material Transfers
+    CREATE_TRANSFER: `${BASE_URL}/raw/transfers`,
+    GET_TRANSFERS: `${BASE_URL}/raw/transfers`,
+    CREATE_OUTBOUND_TRANSFER: `${BASE_URL}/raw/transfers/outbound`,
+    GET_TRANSFER_BY_ID: (id: string) => `${BASE_URL}/raw/transfers/${id}`,
+    ACCEPT_TRANSFER: (id: string) => `${BASE_URL}/raw/transfers/${id}/accept`,
+    REJECT_TRANSFER: (id: string) => `${BASE_URL}/raw/transfers/${id}/reject`,
+
+    // Production Posting
+    POST_PRODUCTION: `${BASE_URL}/raw/production/post`,
+    GET_PRODUCTION_POSTINGS: `${BASE_URL}/raw/production/postings`,
+    GET_PRODUCTION_POSTING_BY_ID: (id: string) => `${BASE_URL}/raw/production/postings/${id}`,
+
+    // Grinding Dispatch (Transfer with Approval)
+    CREATE_GRINDING_DISPATCH: `${BASE_URL}/raw/grinding/dispatch`,
+    GET_GRINDING_DISPATCHES: `${BASE_URL}/raw/grinding/dispatches`,
+    GET_GRINDING_DISPATCH_BY_ID: (id: string) => `${BASE_URL}/raw/grinding/dispatch/${id}`,
+    ACCEPT_GRINDING_DISPATCH: (id: string) => `${BASE_URL}/raw/grinding/dispatch/${id}/accept`,
+    REJECT_GRINDING_DISPATCH: (id: string) => `${BASE_URL}/raw/grinding/dispatch/${id}/reject`,
   },
 
   DRAFT: {

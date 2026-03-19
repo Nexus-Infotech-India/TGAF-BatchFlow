@@ -18,7 +18,12 @@ import {
   ClipboardEdit,
   SwitchCamera,
   FileText,
-  Hash
+  Hash,
+  MapPin,
+  ArrowDownToLine,
+  Layers,
+  Factory,
+  ArrowUpFromLine
 } from "lucide-react";
 import { usePermissions } from "../../hooks/permission";
 
@@ -181,6 +186,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "Bill of Material",
           icon: <ClipboardEdit className="sidebar-icon" size={18} />,
           permissionKey: "manage_bom"
+        },
+        {
+          path: "/masters/locations/create",
+          name: "Location Master",
+          icon: <MapPin className="sidebar-icon" size={18} />,
+          permissionKey: "manage_locations"
         }
       ]
     },
@@ -220,12 +231,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           icon: <ClipboardEdit className="sidebar-icon" size={18} />,
           permissionKey: "manage_purchase_order"
         },
-        {
-          path: "/raw/processing-list",
-          name: "Processing",
-          icon: <SwitchCamera className="sidebar-icon" size={18} />,
-          permissionKey: "manage_purchase_order"
-        },
 
         {
           path: "/stock-distribution",
@@ -236,7 +241,31 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
       ]
     },
 
-
+    {
+      key: "grinding-production",
+      name: "Grinding & Production",
+      icon: <Factory className="sidebar-icon" size={20} />,
+      children: [
+        {
+          path: "/grinding/dispatch",
+          name: "Dispatch to Grinding",
+          icon: <ArrowDownToLine className="sidebar-icon" size={18} />,
+          permissionKey: "send_cleaned_to_grinding"
+        },
+        {
+          path: "/grinding/sfg-processing",
+          name: "SFG Processing",
+          icon: <Layers className="sidebar-icon" size={18} />,
+          permissionKey: "manage_processing_list"
+        },
+        {
+          path: "/grinding/outbound-sfg",
+          name: "Outbound to SFG WH",
+          icon: <ArrowUpFromLine className="sidebar-icon" size={18} />,
+          permissionKey: "dispatch_to_sfg"
+        }
+      ]
+    },
 
     {
       key: "batch-management",

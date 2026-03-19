@@ -11,8 +11,10 @@ type Vendor = { id: string; name: string };
 type ReceivalBag = { bagNo: number; bagWeight: number };
 type ReceivalEntry = {
     id: string;
-    warehouseId: string;
-    warehouse: { name: string };
+    warehouseId?: string;
+    locationId?: string;
+    warehouse?: { name: string };
+    location?: { name: string };
     weightMode: 'INDIVIDUAL' | 'TOTAL';
     totalWeight: number;
     bags: ReceivalBag[];
@@ -434,7 +436,7 @@ const PurchaseOrderList: React.FC = () => {
                                                                         <thead>
                                                                             <tr className="text-left text-xs text-muted-foreground border-b border-border/20">
                                                                                 <th className="px-3 py-2">Received Quantity</th>
-                                                                                <th className="px-3 py-2">Warehouse</th>
+                                                                                <th className="px-3 py-2">Location</th>
                                                                                 <th className="px-3 py-2">Bags/Weight(No./KG)</th>
                                                                                 <th className="px-3 py-2">Notes</th>
                                                                                 <th className="px-3 py-2">Received Date</th>
@@ -446,7 +448,7 @@ const PurchaseOrderList: React.FC = () => {
                                                                                     <td className="px-3 py-3 text-sm font-medium">
                                                                                         {r.totalWeight}{item.rawMaterial?.unitOfMeasurement ? ` ${item.rawMaterial.unitOfMeasurement}` : ''}
                                                                                     </td>
-                                                                                    <td className="px-3 py-3 text-sm text-foreground/80">{r.warehouse?.name || '-'}</td>
+                                                                                    <td className="px-3 py-3 text-sm text-foreground/80">{r.location?.name || r.warehouse?.name || '-'}</td>
                                                                                     <td className="px-3 py-3 text-sm text-muted-foreground">
                                                                                         {r.bags && r.bags.length > 0 ? (
                                                                                             <div className="flex flex-col gap-1">

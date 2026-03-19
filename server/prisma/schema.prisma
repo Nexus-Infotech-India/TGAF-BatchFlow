@@ -749,6 +749,8 @@ model RawMaterialProduct {
   vendor             Vendor?             @relation(fields: [vendorId], references: [id])
   stockEntries       StockEntry[]
   bomItems           BOMItem[]
+  bomsAsSfg          BillOfMaterial[]    @relation("BOMSfgProduct")
+  grindingDispatches GrindingDispatch[]
 }
 
 model PurchaseOrder {
@@ -782,14 +784,16 @@ model PurchaseOrderItem {
 model ReceivalEntry {
   id                  String            @id @default(uuid())
   purchaseOrderItemId String
-  warehouseId         String
+  locationId          String?
+  warehouseId         String?
   weightMode          WeightMode        @default(INDIVIDUAL)
   totalWeight         Float
   notes               String?
   receivedDate        DateTime          @default(now())
   bags                ReceivalBag[]
   purchaseOrderItem   PurchaseOrderItem @relation(fields: [purchaseOrderItemId], references: [id])
-  warehouse           Warehouse         @relation(fields: [warehouseId], references: [id])
+  location            Location?         @relation(fields: [locationId], references: [id])
+  warehouse           Warehouse?        @relation(fields: [warehouseId], references: [id])
 }
 
 model ReceivalBag {
@@ -835,6 +839,142 @@ model Warehouse {
   stockEntries     StockEntry[]
   unfinishedStocks UnfinishedStock[]
   processingJobs   ProcessingJob[]
+}
+
+// ==================== LOCATION MASTER ====================
+
+enum LocationType {
+  WAREHOUSE
+  CLEANING
+  GRINDING
+  SFG_WAREHOUSE
+  OTHER
+}
+
+model Location {
+  id          String       @id @default(uuid())
+  code        String       @unique
+  name        String
+  type        LocationType
+  address     String?
+  description String?
+  enabled     Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  receivalEntries ReceivalEntry[]
+  transfersFrom MaterialTransfer[] @relation("TransferFromLocation")
+  transfersTo   MaterialTransfer[] @relation("TransferToLocation")
+  dispatchesFrom GrindingDispatch[] @relation("DispatchFromLocation")
+  dispatchesTo   GrindingDispatch[] @relation("DispatchToLocation")
+}
+
+// ==================== MATERIAL TRANSFER ====================
+
+enum TransferStatus {
+  SENT
+  ACCEPTED
+  REJECTED
+}
+
+enum TransferDirection {
+  INBOUND_TO_GRINDING
+  OUTBOUND_FROM_GRINDING
+}
+
+enum TransferLineType {
+  RAW_MATERIAL
+  SFG
+  BYPRODUCT
+  SCRAP
+}
+
+model MaterialTransfer {
+  id              String            @id @default(uuid())
+  transferNumber  String            @unique
+  direction       TransferDirection
+  fromLocationId  String
+  toLocationId    String
+  status          TransferStatus    @default(SENT)
+  sentById        String
+  sentAt          DateTime          @default(now())
+  acceptedById    String?
+  acceptedAt      DateTime?
+  rejectionReason String?
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  fromLocation Location               @relation("TransferFromLocation", fields: [fromLocationId], references: [id])
+  toLocation   Location               @relation("TransferToLocation", fields: [toLocationId], references: [id])
+  lines        MaterialTransferLine[]
+}
+
+model MaterialTransferLine {
+  id                String           @id @default(uuid())
+  transferId        String
+  lineType          TransferLineType
+  rawMaterialId     String?
+  productName       String?
+  skuCode           String?
+  quantity          Float
+  unitOfMeasurement String
+  batchNumber       String?
+  cleaningLotId     String?
+  createdAt         DateTime         @default(now())
+
+  transfer MaterialTransfer @relation(fields: [transferId], references: [id], onDelete: Cascade)
+}
+
+// ==================== PRODUCTION POSTING ====================
+
+enum OutputType {
+  SFG
+  BYPRODUCT
+  SCRAP
+}
+
+model ProductionPosting {
+  id            String               @id @default(uuid())
+  postingNumber String               @unique
+  sfgProductId  String
+  bomId         String
+  locationId    String
+  shiftDate     DateTime
+  notes         String?
+  postedById    String
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  consumptions ProductionConsumption[]
+  outputs      ProductionOutput[]
+}
+
+model ProductionConsumption {
+  id               String   @id @default(uuid())
+  postingId        String
+  rawMaterialId    String
+  expectedQuantity Float
+  actualQuantity   Float
+  batchNumber      String?
+  cleaningLotId    String?
+  createdAt        DateTime @default(now())
+
+  posting ProductionPosting @relation(fields: [postingId], references: [id], onDelete: Cascade)
+}
+
+model ProductionOutput {
+  id          String     @id @default(uuid())
+  postingId   String
+  outputType  OutputType
+  productName String
+  skuCode     String?
+  quantity    Float
+  unit        String
+  batchNumber String?
+  createdAt   DateTime   @default(now())
+
+  posting ProductionPosting @relation(fields: [postingId], references: [id], onDelete: Cascade)
 }
 
 model CleaningJob {
@@ -1185,7 +1325,8 @@ model CleaningLot {
   grn                 GRNbyPo              @relation(fields: [grnId], references: [id])
   rawMaterial         RawMaterialProduct   @relation(fields: [rawMaterialId], references: [id])
   warehouse           Warehouse            @relation(fields: [warehouseId], references: [id])
-  processingBatchLots ProcessingBatchLot[]
+  processingBatchLots  ProcessingBatchLot[]
+  grindingDispatchLots GrindingDispatchLot[]
 }
 
 model ProcessingBatchLot {
@@ -1209,17 +1350,19 @@ enum BOMStatus {
 }
 
 model BillOfMaterial {
-  id                String    @id @default(uuid())
-  bomCode           String    @unique
+  id                String              @id @default(uuid())
+  bomCode           String              @unique
   productName       String
   productCode       String?
+  sfgProductId      String?
   unitOfMeasurement String
-  outputQuantity    Float     @default(1)
+  outputQuantity    Float               @default(1)
   description       String?
-  status            BOMStatus @default(DRAFT)
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  status            BOMStatus           @default(DRAFT)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
   items             BOMItem[]
+  sfgProduct        RawMaterialProduct? @relation("BOMSfgProduct", fields: [sfgProductId], references: [id])
 }
 
 model BOMItem {
@@ -1254,4 +1397,46 @@ model SeedWastageRecord {
   createdAt         DateTime @default(now())
 
   batch Batch? @relation(fields: [batchId], references: [id])
+}
+
+// ==================== GRINDING DISPATCH (Transfer with Approval) ====================
+
+enum GrindingDispatchStatus {
+  SENT
+  ACCEPTED
+  REJECTED
+}
+
+model GrindingDispatch {
+  id                 String                  @id @default(uuid())
+  batchNumber        String                  @unique
+  inputRawMaterialId String
+  fromLocationId     String
+  toLocationId       String
+  totalQuantity      Float
+  status             GrindingDispatchStatus  @default(SENT)
+  sentAt             DateTime                @default(now())
+  acceptedAt         DateTime?
+  rejectedAt         DateTime?
+  rejectionReason    String?
+  notes              String?
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+
+  inputRawMaterial RawMaterialProduct   @relation(fields: [inputRawMaterialId], references: [id])
+  fromLocation     Location             @relation("DispatchFromLocation", fields: [fromLocationId], references: [id])
+  toLocation       Location             @relation("DispatchToLocation", fields: [toLocationId], references: [id])
+  lots             GrindingDispatchLot[]
+}
+
+model GrindingDispatchLot {
+  id                   String   @id @default(uuid())
+  dispatchId           String
+  cleaningLotId        String
+  allocatedQuantity    Float
+  seedWastageAllocated Float    @default(0)
+  createdAt            DateTime @default(now())
+
+  dispatch    GrindingDispatch @relation(fields: [dispatchId], references: [id], onDelete: Cascade)
+  cleaningLot CleaningLot      @relation(fields: [cleaningLotId], references: [id])
 }

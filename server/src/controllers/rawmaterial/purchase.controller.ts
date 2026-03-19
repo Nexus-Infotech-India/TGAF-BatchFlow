@@ -3,6 +3,69 @@ import { PrismaClient } from '../../generated/prisma';
 const prisma = new PrismaClient();
 
 export class PurchaseOrderController {
+  private static async resolveWarehouseIdFromLocationId(locationId: string): Promise<string | null> {
+    const location = await prisma.location.findUnique({ where: { id: locationId } });
+    if (!location) return null;
+
+    const locationMarker = `LOC:${location.id}`;
+    const existingWarehouse = await prisma.warehouse.findFirst({
+      where: { location: locationMarker },
+      select: { id: true },
+    });
+
+    if (existingWarehouse) return existingWarehouse.id;
+
+    const createdWarehouse = await prisma.warehouse.create({
+      data: {
+        name: location.name,
+        location: locationMarker,
+      },
+      select: { id: true },
+    });
+
+    return createdWarehouse.id;
+  }
+
+  private static async resolveLocationIdFromInput(locationId?: string, warehouseId?: string): Promise<string | null> {
+    if (locationId) {
+      const location = await prisma.location.findUnique({ where: { id: locationId } });
+      return location && location.enabled ? location.id : null;
+    }
+
+    if (!warehouseId) return null;
+
+    const warehouse = await prisma.warehouse.findUnique({
+      where: { id: warehouseId },
+      select: { id: true, name: true, location: true },
+    });
+
+    if (!warehouse) return null;
+
+    if (warehouse.location?.startsWith('LOC:')) {
+      const mappedLocationId = warehouse.location.replace('LOC:', '');
+      const mappedLocation = await prisma.location.findUnique({ where: { id: mappedLocationId } });
+      if (mappedLocation) return mappedLocation.id;
+    }
+
+    const code = `LOC-${Date.now()}`;
+    const createdLocation = await prisma.location.create({
+      data: {
+        code,
+        name: warehouse.name,
+        type: 'WAREHOUSE',
+        enabled: true,
+      },
+      select: { id: true },
+    });
+
+    await prisma.warehouse.update({
+      where: { id: warehouse.id },
+      data: { location: `LOC:${createdLocation.id}` },
+    });
+
+    return createdLocation.id;
+  }
+
   // Create a new purchase order with items
   static async createPurchaseOrder(req: Request, res: Response) {
     try {
@@ -165,6 +228,7 @@ export class PurchaseOrderController {
       const { itemId } = req.params;
       const {
         warehouseId,
+        locationId,
         weightMode,
         bags,
         totalWeight,
@@ -229,8 +293,17 @@ export class PurchaseOrderController {
           return;
         }
 
-        if (!warehouseId) {
-          res.status(400).json({ error: 'warehouseId is required' });
+        const effectiveLocationId = await PurchaseOrderController.resolveLocationIdFromInput(locationId, warehouseId);
+
+        if (!effectiveLocationId) {
+          res.status(400).json({ error: 'locationId or a valid warehouseId is required' });
+          return;
+        }
+
+        const effectiveWarehouseId = await PurchaseOrderController.resolveWarehouseIdFromLocationId(effectiveLocationId);
+
+        if (!effectiveWarehouseId) {
+          res.status(400).json({ error: 'Unable to resolve warehouse mapping for selected location' });
           return;
         }
 
@@ -280,14 +353,15 @@ export class PurchaseOrderController {
         const receivalEntry = await tx.receivalEntry.create({
           data: {
             purchaseOrderItemId: itemId,
-            warehouseId,
+            locationId: effectiveLocationId,
+            warehouseId: effectiveWarehouseId,
             weightMode: weightMode === 'INDIVIDUAL' ? 'INDIVIDUAL' : 'TOTAL',
             totalWeight: receivalWeight,
             notes,
             bags: bagData.length > 0
               ? { create: bagData }
               : undefined,
-          },
+          } as any,
           include: { bags: true, warehouse: true },
         });
 
@@ -311,7 +385,7 @@ export class PurchaseOrderController {
           where: {
             rawMaterialId_warehouseId: {
               rawMaterialId: item.rawMaterialId,
-              warehouseId,
+              warehouseId: effectiveWarehouseId,
             },
           },
         });
@@ -321,7 +395,7 @@ export class PurchaseOrderController {
             where: {
               rawMaterialId_warehouseId: {
                 rawMaterialId: item.rawMaterialId,
-                warehouseId,
+                warehouseId: effectiveWarehouseId,
               },
             },
             data: {
@@ -332,7 +406,7 @@ export class PurchaseOrderController {
           await tx.currentStock.create({
             data: {
               rawMaterialId: item.rawMaterialId,
-              warehouseId,
+              warehouseId: effectiveWarehouseId,
               currentQuantity: receivalWeight,
             },
           });
@@ -341,7 +415,7 @@ export class PurchaseOrderController {
         await tx.stockEntry.create({
           data: {
             rawMaterialId: item.rawMaterialId,
-            warehouseId,
+            warehouseId: effectiveWarehouseId,
             quantity: receivalWeight,
             entryType: 'IN',
             referenceId: receivalEntry.id,

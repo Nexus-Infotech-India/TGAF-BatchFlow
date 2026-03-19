@@ -37,11 +37,14 @@ import CreateRawMaterialPage from './components/pages/Masters/CreateRawMaterial'
 import Stock from './components/pages/Stock/Stock';
 import CleaningRawMaterialList from './components/pages/cleanning/allItems';
 import TransactionalLog from './components/pages/Order/TransactionalLog';
-import ProcessingList from './components/pages/processing/processingList';
+import DispatchToGrinding from './components/pages/processing/DispatchToGrinding';
+import SFGProcessingPage from './components/pages/processing/SFGProcessingPage';
+import OutboundToSFGPage from './components/pages/processing/OutboundToSFGPage';
 import RawDashboard from './components/pages/Dashboard/rawDashboard';
 import RMQualityReport from './components/pages/QualityReport/RMQualityReport';
 import GenerateGRN from './components/pages/GenerateGRN/GenerateGRN';
 import CreateBOMPage from './components/pages/Masters/CreateBOM';
+import CreateLocationPage from './components/pages/Masters/CreateLocation';
 
 const App = () => {
   // Pre-register permissioned routes so they appear in the permission selector
@@ -90,7 +93,11 @@ const App = () => {
     { path: '/raw/transaction-logs', name: 'Transactional Logs', description: 'View all transactional logs in the system', permissionKey: 'view_activity_logs' },
     { path: '/raw-dashboard', name: 'Raw Dashboard', description: 'View all cleaned raw materials ready for processing', permissionKey: 'manage_raw_dashboard' },
     { path: '/raw/processing-list', name: 'Processing List', description: 'View all processing raw materials ready for processing', permissionKey: 'process_raw_materials' },
+    { path: '/grinding/dispatch', name: 'Dispatch to Grinding', description: 'Send cleaned RM batches to grinding unit', permissionKey: 'send_cleaned_to_grinding' },
+    { path: '/grinding/sfg-processing', name: 'SFG Processing', description: 'Manage processing batches and production entries', permissionKey: 'manage_processing_list' },
+    { path: '/grinding/outbound-sfg', name: 'Outbound to SFG WH', description: 'Dispatch SFG output to warehouse', permissionKey: 'dispatch_to_sfg' },
     { path: '/masters/bom/create', name: 'Bill of Material', description: 'Create and manage Bill of Materials', permissionKey: 'manage_bom' },
+    { path: '/masters/locations/create', name: 'Location Master', description: 'Manage physical locations (warehouses, cleaning, grinding)', permissionKey: 'manage_locations' },
   ];
 
   staticRoutes.forEach(r => registerRoute({ ...r, element: <></>, resource: 'page' }));
@@ -874,13 +881,87 @@ const App = () => {
                   path="/raw/processing-list"
                   element={
                     <SecureRoute
-                      element={<ProcessingList />}
+                      element={<SFGProcessingPage />}
                       permissionKey="manage_processing_list"
                     />
                   }
                   name="Processing List"
                   description="View all processing raw materials ready for processing"
                   permissionKey="process_raw_materials"
+                />
+              }
+            />
+
+            {/* ==================== GRINDING & PRODUCTION ROUTES ==================== */}
+
+            <Route
+              path="/grinding/dispatch"
+              element={
+                <PermissionedRoute
+                  path="/grinding/dispatch"
+                  element={
+                    <SecureRoute
+                      element={<DispatchToGrinding />}
+                      permissionKey="send_cleaned_to_grinding"
+                    />
+                  }
+                  name="Dispatch to Grinding"
+                  description="Send cleaned RM batches to grinding unit"
+                  permissionKey="send_cleaned_to_grinding"
+                />
+              }
+            />
+
+            <Route
+              path="/grinding/sfg-processing"
+              element={
+                <PermissionedRoute
+                  path="/grinding/sfg-processing"
+                  element={
+                    <SecureRoute
+                      element={<SFGProcessingPage />}
+                      permissionKey="manage_processing_list"
+                    />
+                  }
+                  name="SFG Processing"
+                  description="Manage processing batches and production entries"
+                  permissionKey="manage_processing_list"
+                />
+              }
+            />
+
+            <Route
+              path="/grinding/outbound-sfg"
+              element={
+                <PermissionedRoute
+                  path="/grinding/outbound-sfg"
+                  element={
+                    <SecureRoute
+                      element={<OutboundToSFGPage />}
+                      permissionKey="dispatch_to_sfg"
+                    />
+                  }
+                  name="Outbound to SFG WH"
+                  description="Dispatch SFG output to warehouse"
+                  permissionKey="dispatch_to_sfg"
+                />
+              }
+            />
+
+            <Route
+              path="/masters/locations/create"
+              element={
+                <PermissionedRoute
+                  path="/masters/locations/create"
+                  element={
+                    <SecureRoute
+                      element={<CreateLocationPage />}
+                      permissionKey="manage_locations"
+                    />
+                  }
+                  name="Location Master"
+                  description="Manage physical locations"
+                  permissionKey="manage_locations"
                 />
               }
             />

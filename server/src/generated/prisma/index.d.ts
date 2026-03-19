@@ -264,6 +264,36 @@ export type StockEntry = $Result.DefaultSelection<Prisma.$StockEntryPayload>
  */
 export type Warehouse = $Result.DefaultSelection<Prisma.$WarehousePayload>
 /**
+ * Model Location
+ * 
+ */
+export type Location = $Result.DefaultSelection<Prisma.$LocationPayload>
+/**
+ * Model MaterialTransfer
+ * 
+ */
+export type MaterialTransfer = $Result.DefaultSelection<Prisma.$MaterialTransferPayload>
+/**
+ * Model MaterialTransferLine
+ * 
+ */
+export type MaterialTransferLine = $Result.DefaultSelection<Prisma.$MaterialTransferLinePayload>
+/**
+ * Model ProductionPosting
+ * 
+ */
+export type ProductionPosting = $Result.DefaultSelection<Prisma.$ProductionPostingPayload>
+/**
+ * Model ProductionConsumption
+ * 
+ */
+export type ProductionConsumption = $Result.DefaultSelection<Prisma.$ProductionConsumptionPayload>
+/**
+ * Model ProductionOutput
+ * 
+ */
+export type ProductionOutput = $Result.DefaultSelection<Prisma.$ProductionOutputPayload>
+/**
  * Model CleaningJob
  * 
  */
@@ -348,12 +378,69 @@ export type BOMItem = $Result.DefaultSelection<Prisma.$BOMItemPayload>
  * 
  */
 export type SeedWastageRecord = $Result.DefaultSelection<Prisma.$SeedWastageRecordPayload>
+/**
+ * Model GrindingDispatch
+ * 
+ */
+export type GrindingDispatch = $Result.DefaultSelection<Prisma.$GrindingDispatchPayload>
+/**
+ * Model GrindingDispatchLot
+ * 
+ */
+export type GrindingDispatchLot = $Result.DefaultSelection<Prisma.$GrindingDispatchLotPayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const MaterialCategory: {
+  export const LocationType: {
+  WAREHOUSE: 'WAREHOUSE',
+  CLEANING: 'CLEANING',
+  GRINDING: 'GRINDING',
+  SFG_WAREHOUSE: 'SFG_WAREHOUSE',
+  OTHER: 'OTHER'
+};
+
+export type LocationType = (typeof LocationType)[keyof typeof LocationType]
+
+
+export const TransferStatus: {
+  SENT: 'SENT',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+};
+
+export type TransferStatus = (typeof TransferStatus)[keyof typeof TransferStatus]
+
+
+export const TransferDirection: {
+  INBOUND_TO_GRINDING: 'INBOUND_TO_GRINDING',
+  OUTBOUND_FROM_GRINDING: 'OUTBOUND_FROM_GRINDING'
+};
+
+export type TransferDirection = (typeof TransferDirection)[keyof typeof TransferDirection]
+
+
+export const TransferLineType: {
+  RAW_MATERIAL: 'RAW_MATERIAL',
+  SFG: 'SFG',
+  BYPRODUCT: 'BYPRODUCT',
+  SCRAP: 'SCRAP'
+};
+
+export type TransferLineType = (typeof TransferLineType)[keyof typeof TransferLineType]
+
+
+export const OutputType: {
+  SFG: 'SFG',
+  BYPRODUCT: 'BYPRODUCT',
+  SCRAP: 'SCRAP'
+};
+
+export type OutputType = (typeof OutputType)[keyof typeof OutputType]
+
+
+export const MaterialCategory: {
   RAW_MATERIAL: 'RAW_MATERIAL',
   SEMI_FINISHED_GOOD: 'SEMI_FINISHED_GOOD',
   FINISHED_GOOD: 'FINISHED_GOOD',
@@ -559,7 +646,36 @@ export const BOMStatus: {
 
 export type BOMStatus = (typeof BOMStatus)[keyof typeof BOMStatus]
 
+
+export const GrindingDispatchStatus: {
+  SENT: 'SENT',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+};
+
+export type GrindingDispatchStatus = (typeof GrindingDispatchStatus)[keyof typeof GrindingDispatchStatus]
+
 }
+
+export type LocationType = $Enums.LocationType
+
+export const LocationType: typeof $Enums.LocationType
+
+export type TransferStatus = $Enums.TransferStatus
+
+export const TransferStatus: typeof $Enums.TransferStatus
+
+export type TransferDirection = $Enums.TransferDirection
+
+export const TransferDirection: typeof $Enums.TransferDirection
+
+export type TransferLineType = $Enums.TransferLineType
+
+export const TransferLineType: typeof $Enums.TransferLineType
+
+export type OutputType = $Enums.OutputType
+
+export const OutputType: typeof $Enums.OutputType
 
 export type MaterialCategory = $Enums.MaterialCategory
 
@@ -640,6 +756,10 @@ export const WeightMode: typeof $Enums.WeightMode
 export type BOMStatus = $Enums.BOMStatus
 
 export const BOMStatus: typeof $Enums.BOMStatus
+
+export type GrindingDispatchStatus = $Enums.GrindingDispatchStatus
+
+export const GrindingDispatchStatus: typeof $Enums.GrindingDispatchStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1260,6 +1380,66 @@ export class PrismaClient<
   get warehouse(): Prisma.WarehouseDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.location`: Exposes CRUD operations for the **Location** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Locations
+    * const locations = await prisma.location.findMany()
+    * ```
+    */
+  get location(): Prisma.LocationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.materialTransfer`: Exposes CRUD operations for the **MaterialTransfer** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MaterialTransfers
+    * const materialTransfers = await prisma.materialTransfer.findMany()
+    * ```
+    */
+  get materialTransfer(): Prisma.MaterialTransferDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.materialTransferLine`: Exposes CRUD operations for the **MaterialTransferLine** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more MaterialTransferLines
+    * const materialTransferLines = await prisma.materialTransferLine.findMany()
+    * ```
+    */
+  get materialTransferLine(): Prisma.MaterialTransferLineDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.productionPosting`: Exposes CRUD operations for the **ProductionPosting** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductionPostings
+    * const productionPostings = await prisma.productionPosting.findMany()
+    * ```
+    */
+  get productionPosting(): Prisma.ProductionPostingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.productionConsumption`: Exposes CRUD operations for the **ProductionConsumption** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductionConsumptions
+    * const productionConsumptions = await prisma.productionConsumption.findMany()
+    * ```
+    */
+  get productionConsumption(): Prisma.ProductionConsumptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.productionOutput`: Exposes CRUD operations for the **ProductionOutput** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProductionOutputs
+    * const productionOutputs = await prisma.productionOutput.findMany()
+    * ```
+    */
+  get productionOutput(): Prisma.ProductionOutputDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.cleaningJob`: Exposes CRUD operations for the **CleaningJob** model.
     * Example usage:
     * ```ts
@@ -1428,6 +1608,26 @@ export class PrismaClient<
     * ```
     */
   get seedWastageRecord(): Prisma.SeedWastageRecordDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.grindingDispatch`: Exposes CRUD operations for the **GrindingDispatch** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GrindingDispatches
+    * const grindingDispatches = await prisma.grindingDispatch.findMany()
+    * ```
+    */
+  get grindingDispatch(): Prisma.GrindingDispatchDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.grindingDispatchLot`: Exposes CRUD operations for the **GrindingDispatchLot** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more GrindingDispatchLots
+    * const grindingDispatchLots = await prisma.grindingDispatchLot.findMany()
+    * ```
+    */
+  get grindingDispatchLot(): Prisma.GrindingDispatchLotDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1919,6 +2119,12 @@ export namespace Prisma {
     ReceivalBag: 'ReceivalBag',
     StockEntry: 'StockEntry',
     Warehouse: 'Warehouse',
+    Location: 'Location',
+    MaterialTransfer: 'MaterialTransfer',
+    MaterialTransferLine: 'MaterialTransferLine',
+    ProductionPosting: 'ProductionPosting',
+    ProductionConsumption: 'ProductionConsumption',
+    ProductionOutput: 'ProductionOutput',
     CleaningJob: 'CleaningJob',
     CleaningLog: 'CleaningLog',
     UnfinishedStock: 'UnfinishedStock',
@@ -1935,7 +2141,9 @@ export namespace Prisma {
     ProcessingBatchLot: 'ProcessingBatchLot',
     BillOfMaterial: 'BillOfMaterial',
     BOMItem: 'BOMItem',
-    SeedWastageRecord: 'SeedWastageRecord'
+    SeedWastageRecord: 'SeedWastageRecord',
+    GrindingDispatch: 'GrindingDispatch',
+    GrindingDispatchLot: 'GrindingDispatchLot'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1954,7 +2162,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5658,6 +5866,450 @@ export namespace Prisma {
           }
         }
       }
+      Location: {
+        payload: Prisma.$LocationPayload<ExtArgs>
+        fields: Prisma.LocationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LocationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LocationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+          }
+          findFirst: {
+            args: Prisma.LocationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LocationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+          }
+          findMany: {
+            args: Prisma.LocationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>[]
+          }
+          create: {
+            args: Prisma.LocationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+          }
+          createMany: {
+            args: Prisma.LocationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LocationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>[]
+          }
+          delete: {
+            args: Prisma.LocationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+          }
+          update: {
+            args: Prisma.LocationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+          }
+          deleteMany: {
+            args: Prisma.LocationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LocationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LocationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>[]
+          }
+          upsert: {
+            args: Prisma.LocationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LocationPayload>
+          }
+          aggregate: {
+            args: Prisma.LocationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLocation>
+          }
+          groupBy: {
+            args: Prisma.LocationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LocationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LocationCountArgs<ExtArgs>
+            result: $Utils.Optional<LocationCountAggregateOutputType> | number
+          }
+        }
+      }
+      MaterialTransfer: {
+        payload: Prisma.$MaterialTransferPayload<ExtArgs>
+        fields: Prisma.MaterialTransferFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MaterialTransferFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MaterialTransferFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload>
+          }
+          findFirst: {
+            args: Prisma.MaterialTransferFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MaterialTransferFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload>
+          }
+          findMany: {
+            args: Prisma.MaterialTransferFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload>[]
+          }
+          create: {
+            args: Prisma.MaterialTransferCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload>
+          }
+          createMany: {
+            args: Prisma.MaterialTransferCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MaterialTransferCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload>[]
+          }
+          delete: {
+            args: Prisma.MaterialTransferDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload>
+          }
+          update: {
+            args: Prisma.MaterialTransferUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload>
+          }
+          deleteMany: {
+            args: Prisma.MaterialTransferDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MaterialTransferUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MaterialTransferUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload>[]
+          }
+          upsert: {
+            args: Prisma.MaterialTransferUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferPayload>
+          }
+          aggregate: {
+            args: Prisma.MaterialTransferAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMaterialTransfer>
+          }
+          groupBy: {
+            args: Prisma.MaterialTransferGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MaterialTransferGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MaterialTransferCountArgs<ExtArgs>
+            result: $Utils.Optional<MaterialTransferCountAggregateOutputType> | number
+          }
+        }
+      }
+      MaterialTransferLine: {
+        payload: Prisma.$MaterialTransferLinePayload<ExtArgs>
+        fields: Prisma.MaterialTransferLineFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MaterialTransferLineFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MaterialTransferLineFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload>
+          }
+          findFirst: {
+            args: Prisma.MaterialTransferLineFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MaterialTransferLineFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload>
+          }
+          findMany: {
+            args: Prisma.MaterialTransferLineFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload>[]
+          }
+          create: {
+            args: Prisma.MaterialTransferLineCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload>
+          }
+          createMany: {
+            args: Prisma.MaterialTransferLineCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MaterialTransferLineCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload>[]
+          }
+          delete: {
+            args: Prisma.MaterialTransferLineDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload>
+          }
+          update: {
+            args: Prisma.MaterialTransferLineUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload>
+          }
+          deleteMany: {
+            args: Prisma.MaterialTransferLineDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MaterialTransferLineUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MaterialTransferLineUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload>[]
+          }
+          upsert: {
+            args: Prisma.MaterialTransferLineUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaterialTransferLinePayload>
+          }
+          aggregate: {
+            args: Prisma.MaterialTransferLineAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMaterialTransferLine>
+          }
+          groupBy: {
+            args: Prisma.MaterialTransferLineGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MaterialTransferLineGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MaterialTransferLineCountArgs<ExtArgs>
+            result: $Utils.Optional<MaterialTransferLineCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProductionPosting: {
+        payload: Prisma.$ProductionPostingPayload<ExtArgs>
+        fields: Prisma.ProductionPostingFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductionPostingFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductionPostingFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductionPostingFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductionPostingFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload>
+          }
+          findMany: {
+            args: Prisma.ProductionPostingFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload>[]
+          }
+          create: {
+            args: Prisma.ProductionPostingCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload>
+          }
+          createMany: {
+            args: Prisma.ProductionPostingCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductionPostingCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductionPostingDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload>
+          }
+          update: {
+            args: Prisma.ProductionPostingUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductionPostingDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductionPostingUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductionPostingUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductionPostingUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionPostingPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductionPostingAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductionPosting>
+          }
+          groupBy: {
+            args: Prisma.ProductionPostingGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductionPostingGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductionPostingCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductionPostingCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProductionConsumption: {
+        payload: Prisma.$ProductionConsumptionPayload<ExtArgs>
+        fields: Prisma.ProductionConsumptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductionConsumptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductionConsumptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductionConsumptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductionConsumptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload>
+          }
+          findMany: {
+            args: Prisma.ProductionConsumptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload>[]
+          }
+          create: {
+            args: Prisma.ProductionConsumptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload>
+          }
+          createMany: {
+            args: Prisma.ProductionConsumptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductionConsumptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductionConsumptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload>
+          }
+          update: {
+            args: Prisma.ProductionConsumptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductionConsumptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductionConsumptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductionConsumptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductionConsumptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionConsumptionPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductionConsumptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductionConsumption>
+          }
+          groupBy: {
+            args: Prisma.ProductionConsumptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductionConsumptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductionConsumptionCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductionConsumptionCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProductionOutput: {
+        payload: Prisma.$ProductionOutputPayload<ExtArgs>
+        fields: Prisma.ProductionOutputFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProductionOutputFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProductionOutputFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload>
+          }
+          findFirst: {
+            args: Prisma.ProductionOutputFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProductionOutputFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload>
+          }
+          findMany: {
+            args: Prisma.ProductionOutputFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload>[]
+          }
+          create: {
+            args: Prisma.ProductionOutputCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload>
+          }
+          createMany: {
+            args: Prisma.ProductionOutputCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProductionOutputCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload>[]
+          }
+          delete: {
+            args: Prisma.ProductionOutputDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload>
+          }
+          update: {
+            args: Prisma.ProductionOutputUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProductionOutputDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProductionOutputUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProductionOutputUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProductionOutputUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProductionOutputPayload>
+          }
+          aggregate: {
+            args: Prisma.ProductionOutputAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProductionOutput>
+          }
+          groupBy: {
+            args: Prisma.ProductionOutputGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProductionOutputGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProductionOutputCountArgs<ExtArgs>
+            result: $Utils.Optional<ProductionOutputCountAggregateOutputType> | number
+          }
+        }
+      }
       CleaningJob: {
         payload: Prisma.$CleaningJobPayload<ExtArgs>
         fields: Prisma.CleaningJobFieldRefs
@@ -6916,6 +7568,154 @@ export namespace Prisma {
           }
         }
       }
+      GrindingDispatch: {
+        payload: Prisma.$GrindingDispatchPayload<ExtArgs>
+        fields: Prisma.GrindingDispatchFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GrindingDispatchFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GrindingDispatchFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload>
+          }
+          findFirst: {
+            args: Prisma.GrindingDispatchFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GrindingDispatchFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload>
+          }
+          findMany: {
+            args: Prisma.GrindingDispatchFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload>[]
+          }
+          create: {
+            args: Prisma.GrindingDispatchCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload>
+          }
+          createMany: {
+            args: Prisma.GrindingDispatchCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GrindingDispatchCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload>[]
+          }
+          delete: {
+            args: Prisma.GrindingDispatchDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload>
+          }
+          update: {
+            args: Prisma.GrindingDispatchUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload>
+          }
+          deleteMany: {
+            args: Prisma.GrindingDispatchDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GrindingDispatchUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GrindingDispatchUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload>[]
+          }
+          upsert: {
+            args: Prisma.GrindingDispatchUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchPayload>
+          }
+          aggregate: {
+            args: Prisma.GrindingDispatchAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGrindingDispatch>
+          }
+          groupBy: {
+            args: Prisma.GrindingDispatchGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GrindingDispatchGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GrindingDispatchCountArgs<ExtArgs>
+            result: $Utils.Optional<GrindingDispatchCountAggregateOutputType> | number
+          }
+        }
+      }
+      GrindingDispatchLot: {
+        payload: Prisma.$GrindingDispatchLotPayload<ExtArgs>
+        fields: Prisma.GrindingDispatchLotFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.GrindingDispatchLotFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.GrindingDispatchLotFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload>
+          }
+          findFirst: {
+            args: Prisma.GrindingDispatchLotFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.GrindingDispatchLotFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload>
+          }
+          findMany: {
+            args: Prisma.GrindingDispatchLotFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload>[]
+          }
+          create: {
+            args: Prisma.GrindingDispatchLotCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload>
+          }
+          createMany: {
+            args: Prisma.GrindingDispatchLotCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.GrindingDispatchLotCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload>[]
+          }
+          delete: {
+            args: Prisma.GrindingDispatchLotDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload>
+          }
+          update: {
+            args: Prisma.GrindingDispatchLotUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload>
+          }
+          deleteMany: {
+            args: Prisma.GrindingDispatchLotDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.GrindingDispatchLotUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.GrindingDispatchLotUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload>[]
+          }
+          upsert: {
+            args: Prisma.GrindingDispatchLotUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GrindingDispatchLotPayload>
+          }
+          aggregate: {
+            args: Prisma.GrindingDispatchLotAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGrindingDispatchLot>
+          }
+          groupBy: {
+            args: Prisma.GrindingDispatchLotGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GrindingDispatchLotGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.GrindingDispatchLotCountArgs<ExtArgs>
+            result: $Utils.Optional<GrindingDispatchLotCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -7062,6 +7862,12 @@ export namespace Prisma {
     receivalBag?: ReceivalBagOmit
     stockEntry?: StockEntryOmit
     warehouse?: WarehouseOmit
+    location?: LocationOmit
+    materialTransfer?: MaterialTransferOmit
+    materialTransferLine?: MaterialTransferLineOmit
+    productionPosting?: ProductionPostingOmit
+    productionConsumption?: ProductionConsumptionOmit
+    productionOutput?: ProductionOutputOmit
     cleaningJob?: CleaningJobOmit
     cleaningLog?: CleaningLogOmit
     unfinishedStock?: UnfinishedStockOmit
@@ -7079,6 +7885,8 @@ export namespace Prisma {
     billOfMaterial?: BillOfMaterialOmit
     bOMItem?: BOMItemOmit
     seedWastageRecord?: SeedWastageRecordOmit
+    grindingDispatch?: GrindingDispatchOmit
+    grindingDispatchLot?: GrindingDispatchLotOmit
   }
 
   /* Types for Logging */
@@ -8439,6 +9247,8 @@ export namespace Prisma {
     purchaseOrderItems: number
     stockEntries: number
     bomItems: number
+    bomsAsSfg: number
+    grindingDispatches: number
   }
 
   export type RawMaterialProductCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8449,6 +9259,8 @@ export namespace Prisma {
     purchaseOrderItems?: boolean | RawMaterialProductCountOutputTypeCountPurchaseOrderItemsArgs
     stockEntries?: boolean | RawMaterialProductCountOutputTypeCountStockEntriesArgs
     bomItems?: boolean | RawMaterialProductCountOutputTypeCountBomItemsArgs
+    bomsAsSfg?: boolean | RawMaterialProductCountOutputTypeCountBomsAsSfgArgs
+    grindingDispatches?: boolean | RawMaterialProductCountOutputTypeCountGrindingDispatchesArgs
   }
 
   // Custom InputTypes
@@ -8509,6 +9321,20 @@ export namespace Prisma {
    */
   export type RawMaterialProductCountOutputTypeCountBomItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BOMItemWhereInput
+  }
+
+  /**
+   * RawMaterialProductCountOutputType without action
+   */
+  export type RawMaterialProductCountOutputTypeCountBomsAsSfgArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BillOfMaterialWhereInput
+  }
+
+  /**
+   * RawMaterialProductCountOutputType without action
+   */
+  export type RawMaterialProductCountOutputTypeCountGrindingDispatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GrindingDispatchWhereInput
   }
 
 
@@ -8763,6 +9589,144 @@ export namespace Prisma {
 
 
   /**
+   * Count Type LocationCountOutputType
+   */
+
+  export type LocationCountOutputType = {
+    receivalEntries: number
+    transfersFrom: number
+    transfersTo: number
+    dispatchesFrom: number
+    dispatchesTo: number
+  }
+
+  export type LocationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    receivalEntries?: boolean | LocationCountOutputTypeCountReceivalEntriesArgs
+    transfersFrom?: boolean | LocationCountOutputTypeCountTransfersFromArgs
+    transfersTo?: boolean | LocationCountOutputTypeCountTransfersToArgs
+    dispatchesFrom?: boolean | LocationCountOutputTypeCountDispatchesFromArgs
+    dispatchesTo?: boolean | LocationCountOutputTypeCountDispatchesToArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LocationCountOutputType
+     */
+    select?: LocationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeCountReceivalEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReceivalEntryWhereInput
+  }
+
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeCountTransfersFromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialTransferWhereInput
+  }
+
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeCountTransfersToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialTransferWhereInput
+  }
+
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeCountDispatchesFromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GrindingDispatchWhereInput
+  }
+
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeCountDispatchesToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GrindingDispatchWhereInput
+  }
+
+
+  /**
+   * Count Type MaterialTransferCountOutputType
+   */
+
+  export type MaterialTransferCountOutputType = {
+    lines: number
+  }
+
+  export type MaterialTransferCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lines?: boolean | MaterialTransferCountOutputTypeCountLinesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MaterialTransferCountOutputType without action
+   */
+  export type MaterialTransferCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferCountOutputType
+     */
+    select?: MaterialTransferCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MaterialTransferCountOutputType without action
+   */
+  export type MaterialTransferCountOutputTypeCountLinesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialTransferLineWhereInput
+  }
+
+
+  /**
+   * Count Type ProductionPostingCountOutputType
+   */
+
+  export type ProductionPostingCountOutputType = {
+    consumptions: number
+    outputs: number
+  }
+
+  export type ProductionPostingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    consumptions?: boolean | ProductionPostingCountOutputTypeCountConsumptionsArgs
+    outputs?: boolean | ProductionPostingCountOutputTypeCountOutputsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ProductionPostingCountOutputType without action
+   */
+  export type ProductionPostingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPostingCountOutputType
+     */
+    select?: ProductionPostingCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProductionPostingCountOutputType without action
+   */
+  export type ProductionPostingCountOutputTypeCountConsumptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductionConsumptionWhereInput
+  }
+
+  /**
+   * ProductionPostingCountOutputType without action
+   */
+  export type ProductionPostingCountOutputTypeCountOutputsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductionOutputWhereInput
+  }
+
+
+  /**
    * Count Type CleaningJobCountOutputType
    */
 
@@ -8928,10 +9892,12 @@ export namespace Prisma {
 
   export type CleaningLotCountOutputType = {
     processingBatchLots: number
+    grindingDispatchLots: number
   }
 
   export type CleaningLotCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     processingBatchLots?: boolean | CleaningLotCountOutputTypeCountProcessingBatchLotsArgs
+    grindingDispatchLots?: boolean | CleaningLotCountOutputTypeCountGrindingDispatchLotsArgs
   }
 
   // Custom InputTypes
@@ -8950,6 +9916,13 @@ export namespace Prisma {
    */
   export type CleaningLotCountOutputTypeCountProcessingBatchLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProcessingBatchLotWhereInput
+  }
+
+  /**
+   * CleaningLotCountOutputType without action
+   */
+  export type CleaningLotCountOutputTypeCountGrindingDispatchLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GrindingDispatchLotWhereInput
   }
 
 
@@ -8981,6 +9954,37 @@ export namespace Prisma {
    */
   export type BillOfMaterialCountOutputTypeCountItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: BOMItemWhereInput
+  }
+
+
+  /**
+   * Count Type GrindingDispatchCountOutputType
+   */
+
+  export type GrindingDispatchCountOutputType = {
+    lots: number
+  }
+
+  export type GrindingDispatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    lots?: boolean | GrindingDispatchCountOutputTypeCountLotsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * GrindingDispatchCountOutputType without action
+   */
+  export type GrindingDispatchCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchCountOutputType
+     */
+    select?: GrindingDispatchCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * GrindingDispatchCountOutputType without action
+   */
+  export type GrindingDispatchCountOutputTypeCountLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GrindingDispatchLotWhereInput
   }
 
 
@@ -60416,6 +61420,8 @@ export namespace Prisma {
     vendor?: boolean | RawMaterialProduct$vendorArgs<ExtArgs>
     stockEntries?: boolean | RawMaterialProduct$stockEntriesArgs<ExtArgs>
     bomItems?: boolean | RawMaterialProduct$bomItemsArgs<ExtArgs>
+    bomsAsSfg?: boolean | RawMaterialProduct$bomsAsSfgArgs<ExtArgs>
+    grindingDispatches?: boolean | RawMaterialProduct$grindingDispatchesArgs<ExtArgs>
     _count?: boolean | RawMaterialProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["rawMaterialProduct"]>
 
@@ -60473,6 +61479,8 @@ export namespace Prisma {
     vendor?: boolean | RawMaterialProduct$vendorArgs<ExtArgs>
     stockEntries?: boolean | RawMaterialProduct$stockEntriesArgs<ExtArgs>
     bomItems?: boolean | RawMaterialProduct$bomItemsArgs<ExtArgs>
+    bomsAsSfg?: boolean | RawMaterialProduct$bomsAsSfgArgs<ExtArgs>
+    grindingDispatches?: boolean | RawMaterialProduct$grindingDispatchesArgs<ExtArgs>
     _count?: boolean | RawMaterialProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RawMaterialProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -60493,6 +61501,8 @@ export namespace Prisma {
       vendor: Prisma.$VendorPayload<ExtArgs> | null
       stockEntries: Prisma.$StockEntryPayload<ExtArgs>[]
       bomItems: Prisma.$BOMItemPayload<ExtArgs>[]
+      bomsAsSfg: Prisma.$BillOfMaterialPayload<ExtArgs>[]
+      grindingDispatches: Prisma.$GrindingDispatchPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -60908,6 +61918,8 @@ export namespace Prisma {
     vendor<T extends RawMaterialProduct$vendorArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$vendorArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     stockEntries<T extends RawMaterialProduct$stockEntriesArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$stockEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StockEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bomItems<T extends RawMaterialProduct$bomItemsArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$bomItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    bomsAsSfg<T extends RawMaterialProduct$bomsAsSfgArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$bomsAsSfgArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    grindingDispatches<T extends RawMaterialProduct$grindingDispatchesArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$grindingDispatchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -61528,6 +62540,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BOMItemScalarFieldEnum | BOMItemScalarFieldEnum[]
+  }
+
+  /**
+   * RawMaterialProduct.bomsAsSfg
+   */
+  export type RawMaterialProduct$bomsAsSfgArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BillOfMaterial
+     */
+    select?: BillOfMaterialSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BillOfMaterial
+     */
+    omit?: BillOfMaterialOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialInclude<ExtArgs> | null
+    where?: BillOfMaterialWhereInput
+    orderBy?: BillOfMaterialOrderByWithRelationInput | BillOfMaterialOrderByWithRelationInput[]
+    cursor?: BillOfMaterialWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BillOfMaterialScalarFieldEnum | BillOfMaterialScalarFieldEnum[]
+  }
+
+  /**
+   * RawMaterialProduct.grindingDispatches
+   */
+  export type RawMaterialProduct$grindingDispatchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    where?: GrindingDispatchWhereInput
+    orderBy?: GrindingDispatchOrderByWithRelationInput | GrindingDispatchOrderByWithRelationInput[]
+    cursor?: GrindingDispatchWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GrindingDispatchScalarFieldEnum | GrindingDispatchScalarFieldEnum[]
   }
 
   /**
@@ -63919,6 +64979,7 @@ export namespace Prisma {
   export type ReceivalEntryMinAggregateOutputType = {
     id: string | null
     purchaseOrderItemId: string | null
+    locationId: string | null
     warehouseId: string | null
     weightMode: $Enums.WeightMode | null
     totalWeight: number | null
@@ -63929,6 +64990,7 @@ export namespace Prisma {
   export type ReceivalEntryMaxAggregateOutputType = {
     id: string | null
     purchaseOrderItemId: string | null
+    locationId: string | null
     warehouseId: string | null
     weightMode: $Enums.WeightMode | null
     totalWeight: number | null
@@ -63939,6 +65001,7 @@ export namespace Prisma {
   export type ReceivalEntryCountAggregateOutputType = {
     id: number
     purchaseOrderItemId: number
+    locationId: number
     warehouseId: number
     weightMode: number
     totalWeight: number
@@ -63959,6 +65022,7 @@ export namespace Prisma {
   export type ReceivalEntryMinAggregateInputType = {
     id?: true
     purchaseOrderItemId?: true
+    locationId?: true
     warehouseId?: true
     weightMode?: true
     totalWeight?: true
@@ -63969,6 +65033,7 @@ export namespace Prisma {
   export type ReceivalEntryMaxAggregateInputType = {
     id?: true
     purchaseOrderItemId?: true
+    locationId?: true
     warehouseId?: true
     weightMode?: true
     totalWeight?: true
@@ -63979,6 +65044,7 @@ export namespace Prisma {
   export type ReceivalEntryCountAggregateInputType = {
     id?: true
     purchaseOrderItemId?: true
+    locationId?: true
     warehouseId?: true
     weightMode?: true
     totalWeight?: true
@@ -64076,7 +65142,8 @@ export namespace Prisma {
   export type ReceivalEntryGroupByOutputType = {
     id: string
     purchaseOrderItemId: string
-    warehouseId: string
+    locationId: string | null
+    warehouseId: string | null
     weightMode: $Enums.WeightMode
     totalWeight: number
     notes: string | null
@@ -64105,6 +65172,7 @@ export namespace Prisma {
   export type ReceivalEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     purchaseOrderItemId?: boolean
+    locationId?: boolean
     warehouseId?: boolean
     weightMode?: boolean
     totalWeight?: boolean
@@ -64112,37 +65180,43 @@ export namespace Prisma {
     receivedDate?: boolean
     bags?: boolean | ReceivalEntry$bagsArgs<ExtArgs>
     purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
-    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    location?: boolean | ReceivalEntry$locationArgs<ExtArgs>
+    warehouse?: boolean | ReceivalEntry$warehouseArgs<ExtArgs>
     _count?: boolean | ReceivalEntryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["receivalEntry"]>
 
   export type ReceivalEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     purchaseOrderItemId?: boolean
+    locationId?: boolean
     warehouseId?: boolean
     weightMode?: boolean
     totalWeight?: boolean
     notes?: boolean
     receivedDate?: boolean
     purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
-    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    location?: boolean | ReceivalEntry$locationArgs<ExtArgs>
+    warehouse?: boolean | ReceivalEntry$warehouseArgs<ExtArgs>
   }, ExtArgs["result"]["receivalEntry"]>
 
   export type ReceivalEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     purchaseOrderItemId?: boolean
+    locationId?: boolean
     warehouseId?: boolean
     weightMode?: boolean
     totalWeight?: boolean
     notes?: boolean
     receivedDate?: boolean
     purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
-    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    location?: boolean | ReceivalEntry$locationArgs<ExtArgs>
+    warehouse?: boolean | ReceivalEntry$warehouseArgs<ExtArgs>
   }, ExtArgs["result"]["receivalEntry"]>
 
   export type ReceivalEntrySelectScalar = {
     id?: boolean
     purchaseOrderItemId?: boolean
+    locationId?: boolean
     warehouseId?: boolean
     weightMode?: boolean
     totalWeight?: boolean
@@ -64150,20 +65224,23 @@ export namespace Prisma {
     receivedDate?: boolean
   }
 
-  export type ReceivalEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "purchaseOrderItemId" | "warehouseId" | "weightMode" | "totalWeight" | "notes" | "receivedDate", ExtArgs["result"]["receivalEntry"]>
+  export type ReceivalEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "purchaseOrderItemId" | "locationId" | "warehouseId" | "weightMode" | "totalWeight" | "notes" | "receivedDate", ExtArgs["result"]["receivalEntry"]>
   export type ReceivalEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     bags?: boolean | ReceivalEntry$bagsArgs<ExtArgs>
     purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
-    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    location?: boolean | ReceivalEntry$locationArgs<ExtArgs>
+    warehouse?: boolean | ReceivalEntry$warehouseArgs<ExtArgs>
     _count?: boolean | ReceivalEntryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ReceivalEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
-    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    location?: boolean | ReceivalEntry$locationArgs<ExtArgs>
+    warehouse?: boolean | ReceivalEntry$warehouseArgs<ExtArgs>
   }
   export type ReceivalEntryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     purchaseOrderItem?: boolean | PurchaseOrderItemDefaultArgs<ExtArgs>
-    warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
+    location?: boolean | ReceivalEntry$locationArgs<ExtArgs>
+    warehouse?: boolean | ReceivalEntry$warehouseArgs<ExtArgs>
   }
 
   export type $ReceivalEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -64171,12 +65248,14 @@ export namespace Prisma {
     objects: {
       bags: Prisma.$ReceivalBagPayload<ExtArgs>[]
       purchaseOrderItem: Prisma.$PurchaseOrderItemPayload<ExtArgs>
-      warehouse: Prisma.$WarehousePayload<ExtArgs>
+      location: Prisma.$LocationPayload<ExtArgs> | null
+      warehouse: Prisma.$WarehousePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       purchaseOrderItemId: string
-      warehouseId: string
+      locationId: string | null
+      warehouseId: string | null
       weightMode: $Enums.WeightMode
       totalWeight: number
       notes: string | null
@@ -64577,7 +65656,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     bags<T extends ReceivalEntry$bagsArgs<ExtArgs> = {}>(args?: Subset<T, ReceivalEntry$bagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivalBagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     purchaseOrderItem<T extends PurchaseOrderItemDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PurchaseOrderItemDefaultArgs<ExtArgs>>): Prisma__PurchaseOrderItemClient<$Result.GetResult<Prisma.$PurchaseOrderItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    warehouse<T extends WarehouseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WarehouseDefaultArgs<ExtArgs>>): Prisma__WarehouseClient<$Result.GetResult<Prisma.$WarehousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    location<T extends ReceivalEntry$locationArgs<ExtArgs> = {}>(args?: Subset<T, ReceivalEntry$locationArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    warehouse<T extends ReceivalEntry$warehouseArgs<ExtArgs> = {}>(args?: Subset<T, ReceivalEntry$warehouseArgs<ExtArgs>>): Prisma__WarehouseClient<$Result.GetResult<Prisma.$WarehousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -64609,6 +65689,7 @@ export namespace Prisma {
   interface ReceivalEntryFieldRefs {
     readonly id: FieldRef<"ReceivalEntry", 'String'>
     readonly purchaseOrderItemId: FieldRef<"ReceivalEntry", 'String'>
+    readonly locationId: FieldRef<"ReceivalEntry", 'String'>
     readonly warehouseId: FieldRef<"ReceivalEntry", 'String'>
     readonly weightMode: FieldRef<"ReceivalEntry", 'WeightMode'>
     readonly totalWeight: FieldRef<"ReceivalEntry", 'Float'>
@@ -65031,6 +66112,44 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ReceivalBagScalarFieldEnum | ReceivalBagScalarFieldEnum[]
+  }
+
+  /**
+   * ReceivalEntry.location
+   */
+  export type ReceivalEntry$locationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    where?: LocationWhereInput
+  }
+
+  /**
+   * ReceivalEntry.warehouse
+   */
+  export type ReceivalEntry$warehouseArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Warehouse
+     */
+    select?: WarehouseSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Warehouse
+     */
+    omit?: WarehouseOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WarehouseInclude<ExtArgs> | null
+    where?: WarehouseWhereInput
   }
 
   /**
@@ -68716,6 +69835,7065 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: WarehouseInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Location
+   */
+
+  export type AggregateLocation = {
+    _count: LocationCountAggregateOutputType | null
+    _min: LocationMinAggregateOutputType | null
+    _max: LocationMaxAggregateOutputType | null
+  }
+
+  export type LocationMinAggregateOutputType = {
+    id: string | null
+    code: string | null
+    name: string | null
+    type: $Enums.LocationType | null
+    address: string | null
+    description: string | null
+    enabled: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LocationMaxAggregateOutputType = {
+    id: string | null
+    code: string | null
+    name: string | null
+    type: $Enums.LocationType | null
+    address: string | null
+    description: string | null
+    enabled: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type LocationCountAggregateOutputType = {
+    id: number
+    code: number
+    name: number
+    type: number
+    address: number
+    description: number
+    enabled: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type LocationMinAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    type?: true
+    address?: true
+    description?: true
+    enabled?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LocationMaxAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    type?: true
+    address?: true
+    description?: true
+    enabled?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type LocationCountAggregateInputType = {
+    id?: true
+    code?: true
+    name?: true
+    type?: true
+    address?: true
+    description?: true
+    enabled?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type LocationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Location to aggregate.
+     */
+    where?: LocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Locations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Locations
+    **/
+    _count?: true | LocationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LocationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LocationMaxAggregateInputType
+  }
+
+  export type GetLocationAggregateType<T extends LocationAggregateArgs> = {
+        [P in keyof T & keyof AggregateLocation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLocation[P]>
+      : GetScalarType<T[P], AggregateLocation[P]>
+  }
+
+
+
+
+  export type LocationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LocationWhereInput
+    orderBy?: LocationOrderByWithAggregationInput | LocationOrderByWithAggregationInput[]
+    by: LocationScalarFieldEnum[] | LocationScalarFieldEnum
+    having?: LocationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LocationCountAggregateInputType | true
+    _min?: LocationMinAggregateInputType
+    _max?: LocationMaxAggregateInputType
+  }
+
+  export type LocationGroupByOutputType = {
+    id: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address: string | null
+    description: string | null
+    enabled: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: LocationCountAggregateOutputType | null
+    _min: LocationMinAggregateOutputType | null
+    _max: LocationMaxAggregateOutputType | null
+  }
+
+  type GetLocationGroupByPayload<T extends LocationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LocationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LocationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LocationGroupByOutputType[P]>
+            : GetScalarType<T[P], LocationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LocationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    type?: boolean
+    address?: boolean
+    description?: boolean
+    enabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    receivalEntries?: boolean | Location$receivalEntriesArgs<ExtArgs>
+    transfersFrom?: boolean | Location$transfersFromArgs<ExtArgs>
+    transfersTo?: boolean | Location$transfersToArgs<ExtArgs>
+    dispatchesFrom?: boolean | Location$dispatchesFromArgs<ExtArgs>
+    dispatchesTo?: boolean | Location$dispatchesToArgs<ExtArgs>
+    _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["location"]>
+
+  export type LocationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    type?: boolean
+    address?: boolean
+    description?: boolean
+    enabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["location"]>
+
+  export type LocationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    type?: boolean
+    address?: boolean
+    description?: boolean
+    enabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["location"]>
+
+  export type LocationSelectScalar = {
+    id?: boolean
+    code?: boolean
+    name?: boolean
+    type?: boolean
+    address?: boolean
+    description?: boolean
+    enabled?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type LocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "code" | "name" | "type" | "address" | "description" | "enabled" | "createdAt" | "updatedAt", ExtArgs["result"]["location"]>
+  export type LocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    receivalEntries?: boolean | Location$receivalEntriesArgs<ExtArgs>
+    transfersFrom?: boolean | Location$transfersFromArgs<ExtArgs>
+    transfersTo?: boolean | Location$transfersToArgs<ExtArgs>
+    dispatchesFrom?: boolean | Location$dispatchesFromArgs<ExtArgs>
+    dispatchesTo?: boolean | Location$dispatchesToArgs<ExtArgs>
+    _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type LocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type LocationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $LocationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Location"
+    objects: {
+      receivalEntries: Prisma.$ReceivalEntryPayload<ExtArgs>[]
+      transfersFrom: Prisma.$MaterialTransferPayload<ExtArgs>[]
+      transfersTo: Prisma.$MaterialTransferPayload<ExtArgs>[]
+      dispatchesFrom: Prisma.$GrindingDispatchPayload<ExtArgs>[]
+      dispatchesTo: Prisma.$GrindingDispatchPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      code: string
+      name: string
+      type: $Enums.LocationType
+      address: string | null
+      description: string | null
+      enabled: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["location"]>
+    composites: {}
+  }
+
+  type LocationGetPayload<S extends boolean | null | undefined | LocationDefaultArgs> = $Result.GetResult<Prisma.$LocationPayload, S>
+
+  type LocationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LocationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LocationCountAggregateInputType | true
+    }
+
+  export interface LocationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Location'], meta: { name: 'Location' } }
+    /**
+     * Find zero or one Location that matches the filter.
+     * @param {LocationFindUniqueArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LocationFindUniqueArgs>(args: SelectSubset<T, LocationFindUniqueArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Location that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LocationFindUniqueOrThrowArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LocationFindUniqueOrThrowArgs>(args: SelectSubset<T, LocationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Location that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationFindFirstArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LocationFindFirstArgs>(args?: SelectSubset<T, LocationFindFirstArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Location that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationFindFirstOrThrowArgs} args - Arguments to find a Location
+     * @example
+     * // Get one Location
+     * const location = await prisma.location.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LocationFindFirstOrThrowArgs>(args?: SelectSubset<T, LocationFindFirstOrThrowArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Locations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Locations
+     * const locations = await prisma.location.findMany()
+     * 
+     * // Get first 10 Locations
+     * const locations = await prisma.location.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const locationWithIdOnly = await prisma.location.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LocationFindManyArgs>(args?: SelectSubset<T, LocationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Location.
+     * @param {LocationCreateArgs} args - Arguments to create a Location.
+     * @example
+     * // Create one Location
+     * const Location = await prisma.location.create({
+     *   data: {
+     *     // ... data to create a Location
+     *   }
+     * })
+     * 
+     */
+    create<T extends LocationCreateArgs>(args: SelectSubset<T, LocationCreateArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Locations.
+     * @param {LocationCreateManyArgs} args - Arguments to create many Locations.
+     * @example
+     * // Create many Locations
+     * const location = await prisma.location.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LocationCreateManyArgs>(args?: SelectSubset<T, LocationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Locations and returns the data saved in the database.
+     * @param {LocationCreateManyAndReturnArgs} args - Arguments to create many Locations.
+     * @example
+     * // Create many Locations
+     * const location = await prisma.location.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Locations and only return the `id`
+     * const locationWithIdOnly = await prisma.location.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LocationCreateManyAndReturnArgs>(args?: SelectSubset<T, LocationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Location.
+     * @param {LocationDeleteArgs} args - Arguments to delete one Location.
+     * @example
+     * // Delete one Location
+     * const Location = await prisma.location.delete({
+     *   where: {
+     *     // ... filter to delete one Location
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LocationDeleteArgs>(args: SelectSubset<T, LocationDeleteArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Location.
+     * @param {LocationUpdateArgs} args - Arguments to update one Location.
+     * @example
+     * // Update one Location
+     * const location = await prisma.location.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LocationUpdateArgs>(args: SelectSubset<T, LocationUpdateArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Locations.
+     * @param {LocationDeleteManyArgs} args - Arguments to filter Locations to delete.
+     * @example
+     * // Delete a few Locations
+     * const { count } = await prisma.location.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LocationDeleteManyArgs>(args?: SelectSubset<T, LocationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Locations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Locations
+     * const location = await prisma.location.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LocationUpdateManyArgs>(args: SelectSubset<T, LocationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Locations and returns the data updated in the database.
+     * @param {LocationUpdateManyAndReturnArgs} args - Arguments to update many Locations.
+     * @example
+     * // Update many Locations
+     * const location = await prisma.location.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Locations and only return the `id`
+     * const locationWithIdOnly = await prisma.location.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LocationUpdateManyAndReturnArgs>(args: SelectSubset<T, LocationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Location.
+     * @param {LocationUpsertArgs} args - Arguments to update or create a Location.
+     * @example
+     * // Update or create a Location
+     * const location = await prisma.location.upsert({
+     *   create: {
+     *     // ... data to create a Location
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Location we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LocationUpsertArgs>(args: SelectSubset<T, LocationUpsertArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Locations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationCountArgs} args - Arguments to filter Locations to count.
+     * @example
+     * // Count the number of Locations
+     * const count = await prisma.location.count({
+     *   where: {
+     *     // ... the filter for the Locations we want to count
+     *   }
+     * })
+    **/
+    count<T extends LocationCountArgs>(
+      args?: Subset<T, LocationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LocationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Location.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LocationAggregateArgs>(args: Subset<T, LocationAggregateArgs>): Prisma.PrismaPromise<GetLocationAggregateType<T>>
+
+    /**
+     * Group by Location.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LocationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LocationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LocationGroupByArgs['orderBy'] }
+        : { orderBy?: LocationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LocationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLocationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Location model
+   */
+  readonly fields: LocationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Location.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LocationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    receivalEntries<T extends Location$receivalEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Location$receivalEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReceivalEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transfersFrom<T extends Location$transfersFromArgs<ExtArgs> = {}>(args?: Subset<T, Location$transfersFromArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    transfersTo<T extends Location$transfersToArgs<ExtArgs> = {}>(args?: Subset<T, Location$transfersToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dispatchesFrom<T extends Location$dispatchesFromArgs<ExtArgs> = {}>(args?: Subset<T, Location$dispatchesFromArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    dispatchesTo<T extends Location$dispatchesToArgs<ExtArgs> = {}>(args?: Subset<T, Location$dispatchesToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Location model
+   */
+  interface LocationFieldRefs {
+    readonly id: FieldRef<"Location", 'String'>
+    readonly code: FieldRef<"Location", 'String'>
+    readonly name: FieldRef<"Location", 'String'>
+    readonly type: FieldRef<"Location", 'LocationType'>
+    readonly address: FieldRef<"Location", 'String'>
+    readonly description: FieldRef<"Location", 'String'>
+    readonly enabled: FieldRef<"Location", 'Boolean'>
+    readonly createdAt: FieldRef<"Location", 'DateTime'>
+    readonly updatedAt: FieldRef<"Location", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Location findUnique
+   */
+  export type LocationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter, which Location to fetch.
+     */
+    where: LocationWhereUniqueInput
+  }
+
+  /**
+   * Location findUniqueOrThrow
+   */
+  export type LocationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter, which Location to fetch.
+     */
+    where: LocationWhereUniqueInput
+  }
+
+  /**
+   * Location findFirst
+   */
+  export type LocationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter, which Location to fetch.
+     */
+    where?: LocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Locations.
+     */
+    cursor?: LocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Locations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Locations.
+     */
+    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
+  }
+
+  /**
+   * Location findFirstOrThrow
+   */
+  export type LocationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter, which Location to fetch.
+     */
+    where?: LocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Locations.
+     */
+    cursor?: LocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Locations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Locations.
+     */
+    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
+  }
+
+  /**
+   * Location findMany
+   */
+  export type LocationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter, which Locations to fetch.
+     */
+    where?: LocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Locations to fetch.
+     */
+    orderBy?: LocationOrderByWithRelationInput | LocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Locations.
+     */
+    cursor?: LocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Locations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Locations.
+     */
+    skip?: number
+    distinct?: LocationScalarFieldEnum | LocationScalarFieldEnum[]
+  }
+
+  /**
+   * Location create
+   */
+  export type LocationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Location.
+     */
+    data: XOR<LocationCreateInput, LocationUncheckedCreateInput>
+  }
+
+  /**
+   * Location createMany
+   */
+  export type LocationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Locations.
+     */
+    data: LocationCreateManyInput | LocationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Location createManyAndReturn
+   */
+  export type LocationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * The data used to create many Locations.
+     */
+    data: LocationCreateManyInput | LocationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Location update
+   */
+  export type LocationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Location.
+     */
+    data: XOR<LocationUpdateInput, LocationUncheckedUpdateInput>
+    /**
+     * Choose, which Location to update.
+     */
+    where: LocationWhereUniqueInput
+  }
+
+  /**
+   * Location updateMany
+   */
+  export type LocationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Locations.
+     */
+    data: XOR<LocationUpdateManyMutationInput, LocationUncheckedUpdateManyInput>
+    /**
+     * Filter which Locations to update
+     */
+    where?: LocationWhereInput
+    /**
+     * Limit how many Locations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Location updateManyAndReturn
+   */
+  export type LocationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * The data used to update Locations.
+     */
+    data: XOR<LocationUpdateManyMutationInput, LocationUncheckedUpdateManyInput>
+    /**
+     * Filter which Locations to update
+     */
+    where?: LocationWhereInput
+    /**
+     * Limit how many Locations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Location upsert
+   */
+  export type LocationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Location to update in case it exists.
+     */
+    where: LocationWhereUniqueInput
+    /**
+     * In case the Location found by the `where` argument doesn't exist, create a new Location with this data.
+     */
+    create: XOR<LocationCreateInput, LocationUncheckedCreateInput>
+    /**
+     * In case the Location was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LocationUpdateInput, LocationUncheckedUpdateInput>
+  }
+
+  /**
+   * Location delete
+   */
+  export type LocationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+    /**
+     * Filter which Location to delete.
+     */
+    where: LocationWhereUniqueInput
+  }
+
+  /**
+   * Location deleteMany
+   */
+  export type LocationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Locations to delete
+     */
+    where?: LocationWhereInput
+    /**
+     * Limit how many Locations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Location.receivalEntries
+   */
+  export type Location$receivalEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReceivalEntry
+     */
+    select?: ReceivalEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReceivalEntry
+     */
+    omit?: ReceivalEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReceivalEntryInclude<ExtArgs> | null
+    where?: ReceivalEntryWhereInput
+    orderBy?: ReceivalEntryOrderByWithRelationInput | ReceivalEntryOrderByWithRelationInput[]
+    cursor?: ReceivalEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ReceivalEntryScalarFieldEnum | ReceivalEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Location.transfersFrom
+   */
+  export type Location$transfersFromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    where?: MaterialTransferWhereInput
+    orderBy?: MaterialTransferOrderByWithRelationInput | MaterialTransferOrderByWithRelationInput[]
+    cursor?: MaterialTransferWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MaterialTransferScalarFieldEnum | MaterialTransferScalarFieldEnum[]
+  }
+
+  /**
+   * Location.transfersTo
+   */
+  export type Location$transfersToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    where?: MaterialTransferWhereInput
+    orderBy?: MaterialTransferOrderByWithRelationInput | MaterialTransferOrderByWithRelationInput[]
+    cursor?: MaterialTransferWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MaterialTransferScalarFieldEnum | MaterialTransferScalarFieldEnum[]
+  }
+
+  /**
+   * Location.dispatchesFrom
+   */
+  export type Location$dispatchesFromArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    where?: GrindingDispatchWhereInput
+    orderBy?: GrindingDispatchOrderByWithRelationInput | GrindingDispatchOrderByWithRelationInput[]
+    cursor?: GrindingDispatchWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GrindingDispatchScalarFieldEnum | GrindingDispatchScalarFieldEnum[]
+  }
+
+  /**
+   * Location.dispatchesTo
+   */
+  export type Location$dispatchesToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    where?: GrindingDispatchWhereInput
+    orderBy?: GrindingDispatchOrderByWithRelationInput | GrindingDispatchOrderByWithRelationInput[]
+    cursor?: GrindingDispatchWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GrindingDispatchScalarFieldEnum | GrindingDispatchScalarFieldEnum[]
+  }
+
+  /**
+   * Location without action
+   */
+  export type LocationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Location
+     */
+    select?: LocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Location
+     */
+    omit?: LocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LocationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MaterialTransfer
+   */
+
+  export type AggregateMaterialTransfer = {
+    _count: MaterialTransferCountAggregateOutputType | null
+    _min: MaterialTransferMinAggregateOutputType | null
+    _max: MaterialTransferMaxAggregateOutputType | null
+  }
+
+  export type MaterialTransferMinAggregateOutputType = {
+    id: string | null
+    transferNumber: string | null
+    direction: $Enums.TransferDirection | null
+    fromLocationId: string | null
+    toLocationId: string | null
+    status: $Enums.TransferStatus | null
+    sentById: string | null
+    sentAt: Date | null
+    acceptedById: string | null
+    acceptedAt: Date | null
+    rejectionReason: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MaterialTransferMaxAggregateOutputType = {
+    id: string | null
+    transferNumber: string | null
+    direction: $Enums.TransferDirection | null
+    fromLocationId: string | null
+    toLocationId: string | null
+    status: $Enums.TransferStatus | null
+    sentById: string | null
+    sentAt: Date | null
+    acceptedById: string | null
+    acceptedAt: Date | null
+    rejectionReason: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MaterialTransferCountAggregateOutputType = {
+    id: number
+    transferNumber: number
+    direction: number
+    fromLocationId: number
+    toLocationId: number
+    status: number
+    sentById: number
+    sentAt: number
+    acceptedById: number
+    acceptedAt: number
+    rejectionReason: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MaterialTransferMinAggregateInputType = {
+    id?: true
+    transferNumber?: true
+    direction?: true
+    fromLocationId?: true
+    toLocationId?: true
+    status?: true
+    sentById?: true
+    sentAt?: true
+    acceptedById?: true
+    acceptedAt?: true
+    rejectionReason?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MaterialTransferMaxAggregateInputType = {
+    id?: true
+    transferNumber?: true
+    direction?: true
+    fromLocationId?: true
+    toLocationId?: true
+    status?: true
+    sentById?: true
+    sentAt?: true
+    acceptedById?: true
+    acceptedAt?: true
+    rejectionReason?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MaterialTransferCountAggregateInputType = {
+    id?: true
+    transferNumber?: true
+    direction?: true
+    fromLocationId?: true
+    toLocationId?: true
+    status?: true
+    sentById?: true
+    sentAt?: true
+    acceptedById?: true
+    acceptedAt?: true
+    rejectionReason?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MaterialTransferAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MaterialTransfer to aggregate.
+     */
+    where?: MaterialTransferWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialTransfers to fetch.
+     */
+    orderBy?: MaterialTransferOrderByWithRelationInput | MaterialTransferOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MaterialTransferWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialTransfers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialTransfers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MaterialTransfers
+    **/
+    _count?: true | MaterialTransferCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MaterialTransferMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MaterialTransferMaxAggregateInputType
+  }
+
+  export type GetMaterialTransferAggregateType<T extends MaterialTransferAggregateArgs> = {
+        [P in keyof T & keyof AggregateMaterialTransfer]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaterialTransfer[P]>
+      : GetScalarType<T[P], AggregateMaterialTransfer[P]>
+  }
+
+
+
+
+  export type MaterialTransferGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialTransferWhereInput
+    orderBy?: MaterialTransferOrderByWithAggregationInput | MaterialTransferOrderByWithAggregationInput[]
+    by: MaterialTransferScalarFieldEnum[] | MaterialTransferScalarFieldEnum
+    having?: MaterialTransferScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MaterialTransferCountAggregateInputType | true
+    _min?: MaterialTransferMinAggregateInputType
+    _max?: MaterialTransferMaxAggregateInputType
+  }
+
+  export type MaterialTransferGroupByOutputType = {
+    id: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    fromLocationId: string
+    toLocationId: string
+    status: $Enums.TransferStatus
+    sentById: string
+    sentAt: Date
+    acceptedById: string | null
+    acceptedAt: Date | null
+    rejectionReason: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: MaterialTransferCountAggregateOutputType | null
+    _min: MaterialTransferMinAggregateOutputType | null
+    _max: MaterialTransferMaxAggregateOutputType | null
+  }
+
+  type GetMaterialTransferGroupByPayload<T extends MaterialTransferGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MaterialTransferGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MaterialTransferGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MaterialTransferGroupByOutputType[P]>
+            : GetScalarType<T[P], MaterialTransferGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MaterialTransferSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transferNumber?: boolean
+    direction?: boolean
+    fromLocationId?: boolean
+    toLocationId?: boolean
+    status?: boolean
+    sentById?: boolean
+    sentAt?: boolean
+    acceptedById?: boolean
+    acceptedAt?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    lines?: boolean | MaterialTransfer$linesArgs<ExtArgs>
+    _count?: boolean | MaterialTransferCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["materialTransfer"]>
+
+  export type MaterialTransferSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transferNumber?: boolean
+    direction?: boolean
+    fromLocationId?: boolean
+    toLocationId?: boolean
+    status?: boolean
+    sentById?: boolean
+    sentAt?: boolean
+    acceptedById?: boolean
+    acceptedAt?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["materialTransfer"]>
+
+  export type MaterialTransferSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transferNumber?: boolean
+    direction?: boolean
+    fromLocationId?: boolean
+    toLocationId?: boolean
+    status?: boolean
+    sentById?: boolean
+    sentAt?: boolean
+    acceptedById?: boolean
+    acceptedAt?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["materialTransfer"]>
+
+  export type MaterialTransferSelectScalar = {
+    id?: boolean
+    transferNumber?: boolean
+    direction?: boolean
+    fromLocationId?: boolean
+    toLocationId?: boolean
+    status?: boolean
+    sentById?: boolean
+    sentAt?: boolean
+    acceptedById?: boolean
+    acceptedAt?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MaterialTransferOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transferNumber" | "direction" | "fromLocationId" | "toLocationId" | "status" | "sentById" | "sentAt" | "acceptedById" | "acceptedAt" | "rejectionReason" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["materialTransfer"]>
+  export type MaterialTransferInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    lines?: boolean | MaterialTransfer$linesArgs<ExtArgs>
+    _count?: boolean | MaterialTransferCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MaterialTransferIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+  }
+  export type MaterialTransferIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+  }
+
+  export type $MaterialTransferPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MaterialTransfer"
+    objects: {
+      fromLocation: Prisma.$LocationPayload<ExtArgs>
+      toLocation: Prisma.$LocationPayload<ExtArgs>
+      lines: Prisma.$MaterialTransferLinePayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      transferNumber: string
+      direction: $Enums.TransferDirection
+      fromLocationId: string
+      toLocationId: string
+      status: $Enums.TransferStatus
+      sentById: string
+      sentAt: Date
+      acceptedById: string | null
+      acceptedAt: Date | null
+      rejectionReason: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["materialTransfer"]>
+    composites: {}
+  }
+
+  type MaterialTransferGetPayload<S extends boolean | null | undefined | MaterialTransferDefaultArgs> = $Result.GetResult<Prisma.$MaterialTransferPayload, S>
+
+  type MaterialTransferCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MaterialTransferFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MaterialTransferCountAggregateInputType | true
+    }
+
+  export interface MaterialTransferDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MaterialTransfer'], meta: { name: 'MaterialTransfer' } }
+    /**
+     * Find zero or one MaterialTransfer that matches the filter.
+     * @param {MaterialTransferFindUniqueArgs} args - Arguments to find a MaterialTransfer
+     * @example
+     * // Get one MaterialTransfer
+     * const materialTransfer = await prisma.materialTransfer.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaterialTransferFindUniqueArgs>(args: SelectSubset<T, MaterialTransferFindUniqueArgs<ExtArgs>>): Prisma__MaterialTransferClient<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MaterialTransfer that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MaterialTransferFindUniqueOrThrowArgs} args - Arguments to find a MaterialTransfer
+     * @example
+     * // Get one MaterialTransfer
+     * const materialTransfer = await prisma.materialTransfer.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaterialTransferFindUniqueOrThrowArgs>(args: SelectSubset<T, MaterialTransferFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MaterialTransferClient<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MaterialTransfer that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferFindFirstArgs} args - Arguments to find a MaterialTransfer
+     * @example
+     * // Get one MaterialTransfer
+     * const materialTransfer = await prisma.materialTransfer.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaterialTransferFindFirstArgs>(args?: SelectSubset<T, MaterialTransferFindFirstArgs<ExtArgs>>): Prisma__MaterialTransferClient<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MaterialTransfer that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferFindFirstOrThrowArgs} args - Arguments to find a MaterialTransfer
+     * @example
+     * // Get one MaterialTransfer
+     * const materialTransfer = await prisma.materialTransfer.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaterialTransferFindFirstOrThrowArgs>(args?: SelectSubset<T, MaterialTransferFindFirstOrThrowArgs<ExtArgs>>): Prisma__MaterialTransferClient<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MaterialTransfers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MaterialTransfers
+     * const materialTransfers = await prisma.materialTransfer.findMany()
+     * 
+     * // Get first 10 MaterialTransfers
+     * const materialTransfers = await prisma.materialTransfer.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const materialTransferWithIdOnly = await prisma.materialTransfer.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MaterialTransferFindManyArgs>(args?: SelectSubset<T, MaterialTransferFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MaterialTransfer.
+     * @param {MaterialTransferCreateArgs} args - Arguments to create a MaterialTransfer.
+     * @example
+     * // Create one MaterialTransfer
+     * const MaterialTransfer = await prisma.materialTransfer.create({
+     *   data: {
+     *     // ... data to create a MaterialTransfer
+     *   }
+     * })
+     * 
+     */
+    create<T extends MaterialTransferCreateArgs>(args: SelectSubset<T, MaterialTransferCreateArgs<ExtArgs>>): Prisma__MaterialTransferClient<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MaterialTransfers.
+     * @param {MaterialTransferCreateManyArgs} args - Arguments to create many MaterialTransfers.
+     * @example
+     * // Create many MaterialTransfers
+     * const materialTransfer = await prisma.materialTransfer.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MaterialTransferCreateManyArgs>(args?: SelectSubset<T, MaterialTransferCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MaterialTransfers and returns the data saved in the database.
+     * @param {MaterialTransferCreateManyAndReturnArgs} args - Arguments to create many MaterialTransfers.
+     * @example
+     * // Create many MaterialTransfers
+     * const materialTransfer = await prisma.materialTransfer.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MaterialTransfers and only return the `id`
+     * const materialTransferWithIdOnly = await prisma.materialTransfer.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MaterialTransferCreateManyAndReturnArgs>(args?: SelectSubset<T, MaterialTransferCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MaterialTransfer.
+     * @param {MaterialTransferDeleteArgs} args - Arguments to delete one MaterialTransfer.
+     * @example
+     * // Delete one MaterialTransfer
+     * const MaterialTransfer = await prisma.materialTransfer.delete({
+     *   where: {
+     *     // ... filter to delete one MaterialTransfer
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MaterialTransferDeleteArgs>(args: SelectSubset<T, MaterialTransferDeleteArgs<ExtArgs>>): Prisma__MaterialTransferClient<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MaterialTransfer.
+     * @param {MaterialTransferUpdateArgs} args - Arguments to update one MaterialTransfer.
+     * @example
+     * // Update one MaterialTransfer
+     * const materialTransfer = await prisma.materialTransfer.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MaterialTransferUpdateArgs>(args: SelectSubset<T, MaterialTransferUpdateArgs<ExtArgs>>): Prisma__MaterialTransferClient<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MaterialTransfers.
+     * @param {MaterialTransferDeleteManyArgs} args - Arguments to filter MaterialTransfers to delete.
+     * @example
+     * // Delete a few MaterialTransfers
+     * const { count } = await prisma.materialTransfer.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MaterialTransferDeleteManyArgs>(args?: SelectSubset<T, MaterialTransferDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaterialTransfers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MaterialTransfers
+     * const materialTransfer = await prisma.materialTransfer.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MaterialTransferUpdateManyArgs>(args: SelectSubset<T, MaterialTransferUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaterialTransfers and returns the data updated in the database.
+     * @param {MaterialTransferUpdateManyAndReturnArgs} args - Arguments to update many MaterialTransfers.
+     * @example
+     * // Update many MaterialTransfers
+     * const materialTransfer = await prisma.materialTransfer.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MaterialTransfers and only return the `id`
+     * const materialTransferWithIdOnly = await prisma.materialTransfer.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MaterialTransferUpdateManyAndReturnArgs>(args: SelectSubset<T, MaterialTransferUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MaterialTransfer.
+     * @param {MaterialTransferUpsertArgs} args - Arguments to update or create a MaterialTransfer.
+     * @example
+     * // Update or create a MaterialTransfer
+     * const materialTransfer = await prisma.materialTransfer.upsert({
+     *   create: {
+     *     // ... data to create a MaterialTransfer
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MaterialTransfer we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaterialTransferUpsertArgs>(args: SelectSubset<T, MaterialTransferUpsertArgs<ExtArgs>>): Prisma__MaterialTransferClient<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MaterialTransfers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferCountArgs} args - Arguments to filter MaterialTransfers to count.
+     * @example
+     * // Count the number of MaterialTransfers
+     * const count = await prisma.materialTransfer.count({
+     *   where: {
+     *     // ... the filter for the MaterialTransfers we want to count
+     *   }
+     * })
+    **/
+    count<T extends MaterialTransferCountArgs>(
+      args?: Subset<T, MaterialTransferCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MaterialTransferCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MaterialTransfer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MaterialTransferAggregateArgs>(args: Subset<T, MaterialTransferAggregateArgs>): Prisma.PrismaPromise<GetMaterialTransferAggregateType<T>>
+
+    /**
+     * Group by MaterialTransfer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MaterialTransferGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaterialTransferGroupByArgs['orderBy'] }
+        : { orderBy?: MaterialTransferGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MaterialTransferGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMaterialTransferGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MaterialTransfer model
+   */
+  readonly fields: MaterialTransferFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MaterialTransfer.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaterialTransferClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    fromLocation<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    toLocation<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    lines<T extends MaterialTransfer$linesArgs<ExtArgs> = {}>(args?: Subset<T, MaterialTransfer$linesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MaterialTransfer model
+   */
+  interface MaterialTransferFieldRefs {
+    readonly id: FieldRef<"MaterialTransfer", 'String'>
+    readonly transferNumber: FieldRef<"MaterialTransfer", 'String'>
+    readonly direction: FieldRef<"MaterialTransfer", 'TransferDirection'>
+    readonly fromLocationId: FieldRef<"MaterialTransfer", 'String'>
+    readonly toLocationId: FieldRef<"MaterialTransfer", 'String'>
+    readonly status: FieldRef<"MaterialTransfer", 'TransferStatus'>
+    readonly sentById: FieldRef<"MaterialTransfer", 'String'>
+    readonly sentAt: FieldRef<"MaterialTransfer", 'DateTime'>
+    readonly acceptedById: FieldRef<"MaterialTransfer", 'String'>
+    readonly acceptedAt: FieldRef<"MaterialTransfer", 'DateTime'>
+    readonly rejectionReason: FieldRef<"MaterialTransfer", 'String'>
+    readonly notes: FieldRef<"MaterialTransfer", 'String'>
+    readonly createdAt: FieldRef<"MaterialTransfer", 'DateTime'>
+    readonly updatedAt: FieldRef<"MaterialTransfer", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MaterialTransfer findUnique
+   */
+  export type MaterialTransferFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialTransfer to fetch.
+     */
+    where: MaterialTransferWhereUniqueInput
+  }
+
+  /**
+   * MaterialTransfer findUniqueOrThrow
+   */
+  export type MaterialTransferFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialTransfer to fetch.
+     */
+    where: MaterialTransferWhereUniqueInput
+  }
+
+  /**
+   * MaterialTransfer findFirst
+   */
+  export type MaterialTransferFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialTransfer to fetch.
+     */
+    where?: MaterialTransferWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialTransfers to fetch.
+     */
+    orderBy?: MaterialTransferOrderByWithRelationInput | MaterialTransferOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MaterialTransfers.
+     */
+    cursor?: MaterialTransferWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialTransfers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialTransfers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MaterialTransfers.
+     */
+    distinct?: MaterialTransferScalarFieldEnum | MaterialTransferScalarFieldEnum[]
+  }
+
+  /**
+   * MaterialTransfer findFirstOrThrow
+   */
+  export type MaterialTransferFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialTransfer to fetch.
+     */
+    where?: MaterialTransferWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialTransfers to fetch.
+     */
+    orderBy?: MaterialTransferOrderByWithRelationInput | MaterialTransferOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MaterialTransfers.
+     */
+    cursor?: MaterialTransferWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialTransfers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialTransfers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MaterialTransfers.
+     */
+    distinct?: MaterialTransferScalarFieldEnum | MaterialTransferScalarFieldEnum[]
+  }
+
+  /**
+   * MaterialTransfer findMany
+   */
+  export type MaterialTransferFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialTransfers to fetch.
+     */
+    where?: MaterialTransferWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialTransfers to fetch.
+     */
+    orderBy?: MaterialTransferOrderByWithRelationInput | MaterialTransferOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MaterialTransfers.
+     */
+    cursor?: MaterialTransferWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialTransfers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialTransfers.
+     */
+    skip?: number
+    distinct?: MaterialTransferScalarFieldEnum | MaterialTransferScalarFieldEnum[]
+  }
+
+  /**
+   * MaterialTransfer create
+   */
+  export type MaterialTransferCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MaterialTransfer.
+     */
+    data: XOR<MaterialTransferCreateInput, MaterialTransferUncheckedCreateInput>
+  }
+
+  /**
+   * MaterialTransfer createMany
+   */
+  export type MaterialTransferCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MaterialTransfers.
+     */
+    data: MaterialTransferCreateManyInput | MaterialTransferCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MaterialTransfer createManyAndReturn
+   */
+  export type MaterialTransferCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * The data used to create many MaterialTransfers.
+     */
+    data: MaterialTransferCreateManyInput | MaterialTransferCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaterialTransfer update
+   */
+  export type MaterialTransferUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MaterialTransfer.
+     */
+    data: XOR<MaterialTransferUpdateInput, MaterialTransferUncheckedUpdateInput>
+    /**
+     * Choose, which MaterialTransfer to update.
+     */
+    where: MaterialTransferWhereUniqueInput
+  }
+
+  /**
+   * MaterialTransfer updateMany
+   */
+  export type MaterialTransferUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MaterialTransfers.
+     */
+    data: XOR<MaterialTransferUpdateManyMutationInput, MaterialTransferUncheckedUpdateManyInput>
+    /**
+     * Filter which MaterialTransfers to update
+     */
+    where?: MaterialTransferWhereInput
+    /**
+     * Limit how many MaterialTransfers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaterialTransfer updateManyAndReturn
+   */
+  export type MaterialTransferUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * The data used to update MaterialTransfers.
+     */
+    data: XOR<MaterialTransferUpdateManyMutationInput, MaterialTransferUncheckedUpdateManyInput>
+    /**
+     * Filter which MaterialTransfers to update
+     */
+    where?: MaterialTransferWhereInput
+    /**
+     * Limit how many MaterialTransfers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaterialTransfer upsert
+   */
+  export type MaterialTransferUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MaterialTransfer to update in case it exists.
+     */
+    where: MaterialTransferWhereUniqueInput
+    /**
+     * In case the MaterialTransfer found by the `where` argument doesn't exist, create a new MaterialTransfer with this data.
+     */
+    create: XOR<MaterialTransferCreateInput, MaterialTransferUncheckedCreateInput>
+    /**
+     * In case the MaterialTransfer was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MaterialTransferUpdateInput, MaterialTransferUncheckedUpdateInput>
+  }
+
+  /**
+   * MaterialTransfer delete
+   */
+  export type MaterialTransferDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+    /**
+     * Filter which MaterialTransfer to delete.
+     */
+    where: MaterialTransferWhereUniqueInput
+  }
+
+  /**
+   * MaterialTransfer deleteMany
+   */
+  export type MaterialTransferDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MaterialTransfers to delete
+     */
+    where?: MaterialTransferWhereInput
+    /**
+     * Limit how many MaterialTransfers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaterialTransfer.lines
+   */
+  export type MaterialTransfer$linesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+    where?: MaterialTransferLineWhereInput
+    orderBy?: MaterialTransferLineOrderByWithRelationInput | MaterialTransferLineOrderByWithRelationInput[]
+    cursor?: MaterialTransferLineWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MaterialTransferLineScalarFieldEnum | MaterialTransferLineScalarFieldEnum[]
+  }
+
+  /**
+   * MaterialTransfer without action
+   */
+  export type MaterialTransferDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransfer
+     */
+    select?: MaterialTransferSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransfer
+     */
+    omit?: MaterialTransferOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model MaterialTransferLine
+   */
+
+  export type AggregateMaterialTransferLine = {
+    _count: MaterialTransferLineCountAggregateOutputType | null
+    _avg: MaterialTransferLineAvgAggregateOutputType | null
+    _sum: MaterialTransferLineSumAggregateOutputType | null
+    _min: MaterialTransferLineMinAggregateOutputType | null
+    _max: MaterialTransferLineMaxAggregateOutputType | null
+  }
+
+  export type MaterialTransferLineAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type MaterialTransferLineSumAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type MaterialTransferLineMinAggregateOutputType = {
+    id: string | null
+    transferId: string | null
+    lineType: $Enums.TransferLineType | null
+    rawMaterialId: string | null
+    productName: string | null
+    skuCode: string | null
+    quantity: number | null
+    unitOfMeasurement: string | null
+    batchNumber: string | null
+    cleaningLotId: string | null
+    createdAt: Date | null
+  }
+
+  export type MaterialTransferLineMaxAggregateOutputType = {
+    id: string | null
+    transferId: string | null
+    lineType: $Enums.TransferLineType | null
+    rawMaterialId: string | null
+    productName: string | null
+    skuCode: string | null
+    quantity: number | null
+    unitOfMeasurement: string | null
+    batchNumber: string | null
+    cleaningLotId: string | null
+    createdAt: Date | null
+  }
+
+  export type MaterialTransferLineCountAggregateOutputType = {
+    id: number
+    transferId: number
+    lineType: number
+    rawMaterialId: number
+    productName: number
+    skuCode: number
+    quantity: number
+    unitOfMeasurement: number
+    batchNumber: number
+    cleaningLotId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type MaterialTransferLineAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type MaterialTransferLineSumAggregateInputType = {
+    quantity?: true
+  }
+
+  export type MaterialTransferLineMinAggregateInputType = {
+    id?: true
+    transferId?: true
+    lineType?: true
+    rawMaterialId?: true
+    productName?: true
+    skuCode?: true
+    quantity?: true
+    unitOfMeasurement?: true
+    batchNumber?: true
+    cleaningLotId?: true
+    createdAt?: true
+  }
+
+  export type MaterialTransferLineMaxAggregateInputType = {
+    id?: true
+    transferId?: true
+    lineType?: true
+    rawMaterialId?: true
+    productName?: true
+    skuCode?: true
+    quantity?: true
+    unitOfMeasurement?: true
+    batchNumber?: true
+    cleaningLotId?: true
+    createdAt?: true
+  }
+
+  export type MaterialTransferLineCountAggregateInputType = {
+    id?: true
+    transferId?: true
+    lineType?: true
+    rawMaterialId?: true
+    productName?: true
+    skuCode?: true
+    quantity?: true
+    unitOfMeasurement?: true
+    batchNumber?: true
+    cleaningLotId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type MaterialTransferLineAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MaterialTransferLine to aggregate.
+     */
+    where?: MaterialTransferLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialTransferLines to fetch.
+     */
+    orderBy?: MaterialTransferLineOrderByWithRelationInput | MaterialTransferLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MaterialTransferLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialTransferLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialTransferLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned MaterialTransferLines
+    **/
+    _count?: true | MaterialTransferLineCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MaterialTransferLineAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MaterialTransferLineSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MaterialTransferLineMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MaterialTransferLineMaxAggregateInputType
+  }
+
+  export type GetMaterialTransferLineAggregateType<T extends MaterialTransferLineAggregateArgs> = {
+        [P in keyof T & keyof AggregateMaterialTransferLine]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaterialTransferLine[P]>
+      : GetScalarType<T[P], AggregateMaterialTransferLine[P]>
+  }
+
+
+
+
+  export type MaterialTransferLineGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MaterialTransferLineWhereInput
+    orderBy?: MaterialTransferLineOrderByWithAggregationInput | MaterialTransferLineOrderByWithAggregationInput[]
+    by: MaterialTransferLineScalarFieldEnum[] | MaterialTransferLineScalarFieldEnum
+    having?: MaterialTransferLineScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MaterialTransferLineCountAggregateInputType | true
+    _avg?: MaterialTransferLineAvgAggregateInputType
+    _sum?: MaterialTransferLineSumAggregateInputType
+    _min?: MaterialTransferLineMinAggregateInputType
+    _max?: MaterialTransferLineMaxAggregateInputType
+  }
+
+  export type MaterialTransferLineGroupByOutputType = {
+    id: string
+    transferId: string
+    lineType: $Enums.TransferLineType
+    rawMaterialId: string | null
+    productName: string | null
+    skuCode: string | null
+    quantity: number
+    unitOfMeasurement: string
+    batchNumber: string | null
+    cleaningLotId: string | null
+    createdAt: Date
+    _count: MaterialTransferLineCountAggregateOutputType | null
+    _avg: MaterialTransferLineAvgAggregateOutputType | null
+    _sum: MaterialTransferLineSumAggregateOutputType | null
+    _min: MaterialTransferLineMinAggregateOutputType | null
+    _max: MaterialTransferLineMaxAggregateOutputType | null
+  }
+
+  type GetMaterialTransferLineGroupByPayload<T extends MaterialTransferLineGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MaterialTransferLineGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MaterialTransferLineGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MaterialTransferLineGroupByOutputType[P]>
+            : GetScalarType<T[P], MaterialTransferLineGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MaterialTransferLineSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transferId?: boolean
+    lineType?: boolean
+    rawMaterialId?: boolean
+    productName?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unitOfMeasurement?: boolean
+    batchNumber?: boolean
+    cleaningLotId?: boolean
+    createdAt?: boolean
+    transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["materialTransferLine"]>
+
+  export type MaterialTransferLineSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transferId?: boolean
+    lineType?: boolean
+    rawMaterialId?: boolean
+    productName?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unitOfMeasurement?: boolean
+    batchNumber?: boolean
+    cleaningLotId?: boolean
+    createdAt?: boolean
+    transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["materialTransferLine"]>
+
+  export type MaterialTransferLineSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transferId?: boolean
+    lineType?: boolean
+    rawMaterialId?: boolean
+    productName?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unitOfMeasurement?: boolean
+    batchNumber?: boolean
+    cleaningLotId?: boolean
+    createdAt?: boolean
+    transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["materialTransferLine"]>
+
+  export type MaterialTransferLineSelectScalar = {
+    id?: boolean
+    transferId?: boolean
+    lineType?: boolean
+    rawMaterialId?: boolean
+    productName?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unitOfMeasurement?: boolean
+    batchNumber?: boolean
+    cleaningLotId?: boolean
+    createdAt?: boolean
+  }
+
+  export type MaterialTransferLineOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transferId" | "lineType" | "rawMaterialId" | "productName" | "skuCode" | "quantity" | "unitOfMeasurement" | "batchNumber" | "cleaningLotId" | "createdAt", ExtArgs["result"]["materialTransferLine"]>
+  export type MaterialTransferLineInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
+  }
+  export type MaterialTransferLineIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
+  }
+  export type MaterialTransferLineIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
+  }
+
+  export type $MaterialTransferLinePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MaterialTransferLine"
+    objects: {
+      transfer: Prisma.$MaterialTransferPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      transferId: string
+      lineType: $Enums.TransferLineType
+      rawMaterialId: string | null
+      productName: string | null
+      skuCode: string | null
+      quantity: number
+      unitOfMeasurement: string
+      batchNumber: string | null
+      cleaningLotId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["materialTransferLine"]>
+    composites: {}
+  }
+
+  type MaterialTransferLineGetPayload<S extends boolean | null | undefined | MaterialTransferLineDefaultArgs> = $Result.GetResult<Prisma.$MaterialTransferLinePayload, S>
+
+  type MaterialTransferLineCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MaterialTransferLineFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MaterialTransferLineCountAggregateInputType | true
+    }
+
+  export interface MaterialTransferLineDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MaterialTransferLine'], meta: { name: 'MaterialTransferLine' } }
+    /**
+     * Find zero or one MaterialTransferLine that matches the filter.
+     * @param {MaterialTransferLineFindUniqueArgs} args - Arguments to find a MaterialTransferLine
+     * @example
+     * // Get one MaterialTransferLine
+     * const materialTransferLine = await prisma.materialTransferLine.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaterialTransferLineFindUniqueArgs>(args: SelectSubset<T, MaterialTransferLineFindUniqueArgs<ExtArgs>>): Prisma__MaterialTransferLineClient<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one MaterialTransferLine that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MaterialTransferLineFindUniqueOrThrowArgs} args - Arguments to find a MaterialTransferLine
+     * @example
+     * // Get one MaterialTransferLine
+     * const materialTransferLine = await prisma.materialTransferLine.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaterialTransferLineFindUniqueOrThrowArgs>(args: SelectSubset<T, MaterialTransferLineFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MaterialTransferLineClient<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MaterialTransferLine that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferLineFindFirstArgs} args - Arguments to find a MaterialTransferLine
+     * @example
+     * // Get one MaterialTransferLine
+     * const materialTransferLine = await prisma.materialTransferLine.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaterialTransferLineFindFirstArgs>(args?: SelectSubset<T, MaterialTransferLineFindFirstArgs<ExtArgs>>): Prisma__MaterialTransferLineClient<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first MaterialTransferLine that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferLineFindFirstOrThrowArgs} args - Arguments to find a MaterialTransferLine
+     * @example
+     * // Get one MaterialTransferLine
+     * const materialTransferLine = await prisma.materialTransferLine.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaterialTransferLineFindFirstOrThrowArgs>(args?: SelectSubset<T, MaterialTransferLineFindFirstOrThrowArgs<ExtArgs>>): Prisma__MaterialTransferLineClient<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more MaterialTransferLines that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferLineFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MaterialTransferLines
+     * const materialTransferLines = await prisma.materialTransferLine.findMany()
+     * 
+     * // Get first 10 MaterialTransferLines
+     * const materialTransferLines = await prisma.materialTransferLine.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const materialTransferLineWithIdOnly = await prisma.materialTransferLine.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MaterialTransferLineFindManyArgs>(args?: SelectSubset<T, MaterialTransferLineFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a MaterialTransferLine.
+     * @param {MaterialTransferLineCreateArgs} args - Arguments to create a MaterialTransferLine.
+     * @example
+     * // Create one MaterialTransferLine
+     * const MaterialTransferLine = await prisma.materialTransferLine.create({
+     *   data: {
+     *     // ... data to create a MaterialTransferLine
+     *   }
+     * })
+     * 
+     */
+    create<T extends MaterialTransferLineCreateArgs>(args: SelectSubset<T, MaterialTransferLineCreateArgs<ExtArgs>>): Prisma__MaterialTransferLineClient<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many MaterialTransferLines.
+     * @param {MaterialTransferLineCreateManyArgs} args - Arguments to create many MaterialTransferLines.
+     * @example
+     * // Create many MaterialTransferLines
+     * const materialTransferLine = await prisma.materialTransferLine.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MaterialTransferLineCreateManyArgs>(args?: SelectSubset<T, MaterialTransferLineCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MaterialTransferLines and returns the data saved in the database.
+     * @param {MaterialTransferLineCreateManyAndReturnArgs} args - Arguments to create many MaterialTransferLines.
+     * @example
+     * // Create many MaterialTransferLines
+     * const materialTransferLine = await prisma.materialTransferLine.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many MaterialTransferLines and only return the `id`
+     * const materialTransferLineWithIdOnly = await prisma.materialTransferLine.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MaterialTransferLineCreateManyAndReturnArgs>(args?: SelectSubset<T, MaterialTransferLineCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a MaterialTransferLine.
+     * @param {MaterialTransferLineDeleteArgs} args - Arguments to delete one MaterialTransferLine.
+     * @example
+     * // Delete one MaterialTransferLine
+     * const MaterialTransferLine = await prisma.materialTransferLine.delete({
+     *   where: {
+     *     // ... filter to delete one MaterialTransferLine
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MaterialTransferLineDeleteArgs>(args: SelectSubset<T, MaterialTransferLineDeleteArgs<ExtArgs>>): Prisma__MaterialTransferLineClient<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one MaterialTransferLine.
+     * @param {MaterialTransferLineUpdateArgs} args - Arguments to update one MaterialTransferLine.
+     * @example
+     * // Update one MaterialTransferLine
+     * const materialTransferLine = await prisma.materialTransferLine.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MaterialTransferLineUpdateArgs>(args: SelectSubset<T, MaterialTransferLineUpdateArgs<ExtArgs>>): Prisma__MaterialTransferLineClient<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more MaterialTransferLines.
+     * @param {MaterialTransferLineDeleteManyArgs} args - Arguments to filter MaterialTransferLines to delete.
+     * @example
+     * // Delete a few MaterialTransferLines
+     * const { count } = await prisma.materialTransferLine.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MaterialTransferLineDeleteManyArgs>(args?: SelectSubset<T, MaterialTransferLineDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaterialTransferLines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferLineUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MaterialTransferLines
+     * const materialTransferLine = await prisma.materialTransferLine.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MaterialTransferLineUpdateManyArgs>(args: SelectSubset<T, MaterialTransferLineUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaterialTransferLines and returns the data updated in the database.
+     * @param {MaterialTransferLineUpdateManyAndReturnArgs} args - Arguments to update many MaterialTransferLines.
+     * @example
+     * // Update many MaterialTransferLines
+     * const materialTransferLine = await prisma.materialTransferLine.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more MaterialTransferLines and only return the `id`
+     * const materialTransferLineWithIdOnly = await prisma.materialTransferLine.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MaterialTransferLineUpdateManyAndReturnArgs>(args: SelectSubset<T, MaterialTransferLineUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one MaterialTransferLine.
+     * @param {MaterialTransferLineUpsertArgs} args - Arguments to update or create a MaterialTransferLine.
+     * @example
+     * // Update or create a MaterialTransferLine
+     * const materialTransferLine = await prisma.materialTransferLine.upsert({
+     *   create: {
+     *     // ... data to create a MaterialTransferLine
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MaterialTransferLine we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaterialTransferLineUpsertArgs>(args: SelectSubset<T, MaterialTransferLineUpsertArgs<ExtArgs>>): Prisma__MaterialTransferLineClient<$Result.GetResult<Prisma.$MaterialTransferLinePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of MaterialTransferLines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferLineCountArgs} args - Arguments to filter MaterialTransferLines to count.
+     * @example
+     * // Count the number of MaterialTransferLines
+     * const count = await prisma.materialTransferLine.count({
+     *   where: {
+     *     // ... the filter for the MaterialTransferLines we want to count
+     *   }
+     * })
+    **/
+    count<T extends MaterialTransferLineCountArgs>(
+      args?: Subset<T, MaterialTransferLineCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MaterialTransferLineCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MaterialTransferLine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferLineAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MaterialTransferLineAggregateArgs>(args: Subset<T, MaterialTransferLineAggregateArgs>): Prisma.PrismaPromise<GetMaterialTransferLineAggregateType<T>>
+
+    /**
+     * Group by MaterialTransferLine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaterialTransferLineGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MaterialTransferLineGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaterialTransferLineGroupByArgs['orderBy'] }
+        : { orderBy?: MaterialTransferLineGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MaterialTransferLineGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMaterialTransferLineGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the MaterialTransferLine model
+   */
+  readonly fields: MaterialTransferLineFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MaterialTransferLine.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaterialTransferLineClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    transfer<T extends MaterialTransferDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MaterialTransferDefaultArgs<ExtArgs>>): Prisma__MaterialTransferClient<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the MaterialTransferLine model
+   */
+  interface MaterialTransferLineFieldRefs {
+    readonly id: FieldRef<"MaterialTransferLine", 'String'>
+    readonly transferId: FieldRef<"MaterialTransferLine", 'String'>
+    readonly lineType: FieldRef<"MaterialTransferLine", 'TransferLineType'>
+    readonly rawMaterialId: FieldRef<"MaterialTransferLine", 'String'>
+    readonly productName: FieldRef<"MaterialTransferLine", 'String'>
+    readonly skuCode: FieldRef<"MaterialTransferLine", 'String'>
+    readonly quantity: FieldRef<"MaterialTransferLine", 'Float'>
+    readonly unitOfMeasurement: FieldRef<"MaterialTransferLine", 'String'>
+    readonly batchNumber: FieldRef<"MaterialTransferLine", 'String'>
+    readonly cleaningLotId: FieldRef<"MaterialTransferLine", 'String'>
+    readonly createdAt: FieldRef<"MaterialTransferLine", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * MaterialTransferLine findUnique
+   */
+  export type MaterialTransferLineFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialTransferLine to fetch.
+     */
+    where: MaterialTransferLineWhereUniqueInput
+  }
+
+  /**
+   * MaterialTransferLine findUniqueOrThrow
+   */
+  export type MaterialTransferLineFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialTransferLine to fetch.
+     */
+    where: MaterialTransferLineWhereUniqueInput
+  }
+
+  /**
+   * MaterialTransferLine findFirst
+   */
+  export type MaterialTransferLineFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialTransferLine to fetch.
+     */
+    where?: MaterialTransferLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialTransferLines to fetch.
+     */
+    orderBy?: MaterialTransferLineOrderByWithRelationInput | MaterialTransferLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MaterialTransferLines.
+     */
+    cursor?: MaterialTransferLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialTransferLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialTransferLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MaterialTransferLines.
+     */
+    distinct?: MaterialTransferLineScalarFieldEnum | MaterialTransferLineScalarFieldEnum[]
+  }
+
+  /**
+   * MaterialTransferLine findFirstOrThrow
+   */
+  export type MaterialTransferLineFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialTransferLine to fetch.
+     */
+    where?: MaterialTransferLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialTransferLines to fetch.
+     */
+    orderBy?: MaterialTransferLineOrderByWithRelationInput | MaterialTransferLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for MaterialTransferLines.
+     */
+    cursor?: MaterialTransferLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialTransferLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialTransferLines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of MaterialTransferLines.
+     */
+    distinct?: MaterialTransferLineScalarFieldEnum | MaterialTransferLineScalarFieldEnum[]
+  }
+
+  /**
+   * MaterialTransferLine findMany
+   */
+  export type MaterialTransferLineFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+    /**
+     * Filter, which MaterialTransferLines to fetch.
+     */
+    where?: MaterialTransferLineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of MaterialTransferLines to fetch.
+     */
+    orderBy?: MaterialTransferLineOrderByWithRelationInput | MaterialTransferLineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing MaterialTransferLines.
+     */
+    cursor?: MaterialTransferLineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` MaterialTransferLines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` MaterialTransferLines.
+     */
+    skip?: number
+    distinct?: MaterialTransferLineScalarFieldEnum | MaterialTransferLineScalarFieldEnum[]
+  }
+
+  /**
+   * MaterialTransferLine create
+   */
+  export type MaterialTransferLineCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MaterialTransferLine.
+     */
+    data: XOR<MaterialTransferLineCreateInput, MaterialTransferLineUncheckedCreateInput>
+  }
+
+  /**
+   * MaterialTransferLine createMany
+   */
+  export type MaterialTransferLineCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many MaterialTransferLines.
+     */
+    data: MaterialTransferLineCreateManyInput | MaterialTransferLineCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MaterialTransferLine createManyAndReturn
+   */
+  export type MaterialTransferLineCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * The data used to create many MaterialTransferLines.
+     */
+    data: MaterialTransferLineCreateManyInput | MaterialTransferLineCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaterialTransferLine update
+   */
+  export type MaterialTransferLineUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MaterialTransferLine.
+     */
+    data: XOR<MaterialTransferLineUpdateInput, MaterialTransferLineUncheckedUpdateInput>
+    /**
+     * Choose, which MaterialTransferLine to update.
+     */
+    where: MaterialTransferLineWhereUniqueInput
+  }
+
+  /**
+   * MaterialTransferLine updateMany
+   */
+  export type MaterialTransferLineUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update MaterialTransferLines.
+     */
+    data: XOR<MaterialTransferLineUpdateManyMutationInput, MaterialTransferLineUncheckedUpdateManyInput>
+    /**
+     * Filter which MaterialTransferLines to update
+     */
+    where?: MaterialTransferLineWhereInput
+    /**
+     * Limit how many MaterialTransferLines to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaterialTransferLine updateManyAndReturn
+   */
+  export type MaterialTransferLineUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * The data used to update MaterialTransferLines.
+     */
+    data: XOR<MaterialTransferLineUpdateManyMutationInput, MaterialTransferLineUncheckedUpdateManyInput>
+    /**
+     * Filter which MaterialTransferLines to update
+     */
+    where?: MaterialTransferLineWhereInput
+    /**
+     * Limit how many MaterialTransferLines to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaterialTransferLine upsert
+   */
+  export type MaterialTransferLineUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MaterialTransferLine to update in case it exists.
+     */
+    where: MaterialTransferLineWhereUniqueInput
+    /**
+     * In case the MaterialTransferLine found by the `where` argument doesn't exist, create a new MaterialTransferLine with this data.
+     */
+    create: XOR<MaterialTransferLineCreateInput, MaterialTransferLineUncheckedCreateInput>
+    /**
+     * In case the MaterialTransferLine was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MaterialTransferLineUpdateInput, MaterialTransferLineUncheckedUpdateInput>
+  }
+
+  /**
+   * MaterialTransferLine delete
+   */
+  export type MaterialTransferLineDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+    /**
+     * Filter which MaterialTransferLine to delete.
+     */
+    where: MaterialTransferLineWhereUniqueInput
+  }
+
+  /**
+   * MaterialTransferLine deleteMany
+   */
+  export type MaterialTransferLineDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which MaterialTransferLines to delete
+     */
+    where?: MaterialTransferLineWhereInput
+    /**
+     * Limit how many MaterialTransferLines to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaterialTransferLine without action
+   */
+  export type MaterialTransferLineDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MaterialTransferLine
+     */
+    select?: MaterialTransferLineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaterialTransferLine
+     */
+    omit?: MaterialTransferLineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaterialTransferLineInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProductionPosting
+   */
+
+  export type AggregateProductionPosting = {
+    _count: ProductionPostingCountAggregateOutputType | null
+    _min: ProductionPostingMinAggregateOutputType | null
+    _max: ProductionPostingMaxAggregateOutputType | null
+  }
+
+  export type ProductionPostingMinAggregateOutputType = {
+    id: string | null
+    postingNumber: string | null
+    sfgProductId: string | null
+    bomId: string | null
+    locationId: string | null
+    shiftDate: Date | null
+    notes: string | null
+    postedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductionPostingMaxAggregateOutputType = {
+    id: string | null
+    postingNumber: string | null
+    sfgProductId: string | null
+    bomId: string | null
+    locationId: string | null
+    shiftDate: Date | null
+    notes: string | null
+    postedById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProductionPostingCountAggregateOutputType = {
+    id: number
+    postingNumber: number
+    sfgProductId: number
+    bomId: number
+    locationId: number
+    shiftDate: number
+    notes: number
+    postedById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProductionPostingMinAggregateInputType = {
+    id?: true
+    postingNumber?: true
+    sfgProductId?: true
+    bomId?: true
+    locationId?: true
+    shiftDate?: true
+    notes?: true
+    postedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductionPostingMaxAggregateInputType = {
+    id?: true
+    postingNumber?: true
+    sfgProductId?: true
+    bomId?: true
+    locationId?: true
+    shiftDate?: true
+    notes?: true
+    postedById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProductionPostingCountAggregateInputType = {
+    id?: true
+    postingNumber?: true
+    sfgProductId?: true
+    bomId?: true
+    locationId?: true
+    shiftDate?: true
+    notes?: true
+    postedById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProductionPostingAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductionPosting to aggregate.
+     */
+    where?: ProductionPostingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionPostings to fetch.
+     */
+    orderBy?: ProductionPostingOrderByWithRelationInput | ProductionPostingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductionPostingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionPostings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionPostings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductionPostings
+    **/
+    _count?: true | ProductionPostingCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductionPostingMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductionPostingMaxAggregateInputType
+  }
+
+  export type GetProductionPostingAggregateType<T extends ProductionPostingAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductionPosting]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductionPosting[P]>
+      : GetScalarType<T[P], AggregateProductionPosting[P]>
+  }
+
+
+
+
+  export type ProductionPostingGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductionPostingWhereInput
+    orderBy?: ProductionPostingOrderByWithAggregationInput | ProductionPostingOrderByWithAggregationInput[]
+    by: ProductionPostingScalarFieldEnum[] | ProductionPostingScalarFieldEnum
+    having?: ProductionPostingScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductionPostingCountAggregateInputType | true
+    _min?: ProductionPostingMinAggregateInputType
+    _max?: ProductionPostingMaxAggregateInputType
+  }
+
+  export type ProductionPostingGroupByOutputType = {
+    id: string
+    postingNumber: string
+    sfgProductId: string
+    bomId: string
+    locationId: string
+    shiftDate: Date
+    notes: string | null
+    postedById: string
+    createdAt: Date
+    updatedAt: Date
+    _count: ProductionPostingCountAggregateOutputType | null
+    _min: ProductionPostingMinAggregateOutputType | null
+    _max: ProductionPostingMaxAggregateOutputType | null
+  }
+
+  type GetProductionPostingGroupByPayload<T extends ProductionPostingGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductionPostingGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductionPostingGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductionPostingGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductionPostingGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductionPostingSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postingNumber?: boolean
+    sfgProductId?: boolean
+    bomId?: boolean
+    locationId?: boolean
+    shiftDate?: boolean
+    notes?: boolean
+    postedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    consumptions?: boolean | ProductionPosting$consumptionsArgs<ExtArgs>
+    outputs?: boolean | ProductionPosting$outputsArgs<ExtArgs>
+    _count?: boolean | ProductionPostingCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productionPosting"]>
+
+  export type ProductionPostingSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postingNumber?: boolean
+    sfgProductId?: boolean
+    bomId?: boolean
+    locationId?: boolean
+    shiftDate?: boolean
+    notes?: boolean
+    postedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["productionPosting"]>
+
+  export type ProductionPostingSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postingNumber?: boolean
+    sfgProductId?: boolean
+    bomId?: boolean
+    locationId?: boolean
+    shiftDate?: boolean
+    notes?: boolean
+    postedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["productionPosting"]>
+
+  export type ProductionPostingSelectScalar = {
+    id?: boolean
+    postingNumber?: boolean
+    sfgProductId?: boolean
+    bomId?: boolean
+    locationId?: boolean
+    shiftDate?: boolean
+    notes?: boolean
+    postedById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProductionPostingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postingNumber" | "sfgProductId" | "bomId" | "locationId" | "shiftDate" | "notes" | "postedById" | "createdAt" | "updatedAt", ExtArgs["result"]["productionPosting"]>
+  export type ProductionPostingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    consumptions?: boolean | ProductionPosting$consumptionsArgs<ExtArgs>
+    outputs?: boolean | ProductionPosting$outputsArgs<ExtArgs>
+    _count?: boolean | ProductionPostingCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ProductionPostingIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type ProductionPostingIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $ProductionPostingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductionPosting"
+    objects: {
+      consumptions: Prisma.$ProductionConsumptionPayload<ExtArgs>[]
+      outputs: Prisma.$ProductionOutputPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      postingNumber: string
+      sfgProductId: string
+      bomId: string
+      locationId: string
+      shiftDate: Date
+      notes: string | null
+      postedById: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["productionPosting"]>
+    composites: {}
+  }
+
+  type ProductionPostingGetPayload<S extends boolean | null | undefined | ProductionPostingDefaultArgs> = $Result.GetResult<Prisma.$ProductionPostingPayload, S>
+
+  type ProductionPostingCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProductionPostingFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProductionPostingCountAggregateInputType | true
+    }
+
+  export interface ProductionPostingDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductionPosting'], meta: { name: 'ProductionPosting' } }
+    /**
+     * Find zero or one ProductionPosting that matches the filter.
+     * @param {ProductionPostingFindUniqueArgs} args - Arguments to find a ProductionPosting
+     * @example
+     * // Get one ProductionPosting
+     * const productionPosting = await prisma.productionPosting.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductionPostingFindUniqueArgs>(args: SelectSubset<T, ProductionPostingFindUniqueArgs<ExtArgs>>): Prisma__ProductionPostingClient<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProductionPosting that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductionPostingFindUniqueOrThrowArgs} args - Arguments to find a ProductionPosting
+     * @example
+     * // Get one ProductionPosting
+     * const productionPosting = await prisma.productionPosting.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductionPostingFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductionPostingFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductionPostingClient<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductionPosting that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionPostingFindFirstArgs} args - Arguments to find a ProductionPosting
+     * @example
+     * // Get one ProductionPosting
+     * const productionPosting = await prisma.productionPosting.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductionPostingFindFirstArgs>(args?: SelectSubset<T, ProductionPostingFindFirstArgs<ExtArgs>>): Prisma__ProductionPostingClient<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductionPosting that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionPostingFindFirstOrThrowArgs} args - Arguments to find a ProductionPosting
+     * @example
+     * // Get one ProductionPosting
+     * const productionPosting = await prisma.productionPosting.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductionPostingFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductionPostingFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductionPostingClient<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProductionPostings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionPostingFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductionPostings
+     * const productionPostings = await prisma.productionPosting.findMany()
+     * 
+     * // Get first 10 ProductionPostings
+     * const productionPostings = await prisma.productionPosting.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productionPostingWithIdOnly = await prisma.productionPosting.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductionPostingFindManyArgs>(args?: SelectSubset<T, ProductionPostingFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProductionPosting.
+     * @param {ProductionPostingCreateArgs} args - Arguments to create a ProductionPosting.
+     * @example
+     * // Create one ProductionPosting
+     * const ProductionPosting = await prisma.productionPosting.create({
+     *   data: {
+     *     // ... data to create a ProductionPosting
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductionPostingCreateArgs>(args: SelectSubset<T, ProductionPostingCreateArgs<ExtArgs>>): Prisma__ProductionPostingClient<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProductionPostings.
+     * @param {ProductionPostingCreateManyArgs} args - Arguments to create many ProductionPostings.
+     * @example
+     * // Create many ProductionPostings
+     * const productionPosting = await prisma.productionPosting.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductionPostingCreateManyArgs>(args?: SelectSubset<T, ProductionPostingCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductionPostings and returns the data saved in the database.
+     * @param {ProductionPostingCreateManyAndReturnArgs} args - Arguments to create many ProductionPostings.
+     * @example
+     * // Create many ProductionPostings
+     * const productionPosting = await prisma.productionPosting.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductionPostings and only return the `id`
+     * const productionPostingWithIdOnly = await prisma.productionPosting.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductionPostingCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductionPostingCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProductionPosting.
+     * @param {ProductionPostingDeleteArgs} args - Arguments to delete one ProductionPosting.
+     * @example
+     * // Delete one ProductionPosting
+     * const ProductionPosting = await prisma.productionPosting.delete({
+     *   where: {
+     *     // ... filter to delete one ProductionPosting
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductionPostingDeleteArgs>(args: SelectSubset<T, ProductionPostingDeleteArgs<ExtArgs>>): Prisma__ProductionPostingClient<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProductionPosting.
+     * @param {ProductionPostingUpdateArgs} args - Arguments to update one ProductionPosting.
+     * @example
+     * // Update one ProductionPosting
+     * const productionPosting = await prisma.productionPosting.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductionPostingUpdateArgs>(args: SelectSubset<T, ProductionPostingUpdateArgs<ExtArgs>>): Prisma__ProductionPostingClient<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProductionPostings.
+     * @param {ProductionPostingDeleteManyArgs} args - Arguments to filter ProductionPostings to delete.
+     * @example
+     * // Delete a few ProductionPostings
+     * const { count } = await prisma.productionPosting.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductionPostingDeleteManyArgs>(args?: SelectSubset<T, ProductionPostingDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductionPostings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionPostingUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductionPostings
+     * const productionPosting = await prisma.productionPosting.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductionPostingUpdateManyArgs>(args: SelectSubset<T, ProductionPostingUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductionPostings and returns the data updated in the database.
+     * @param {ProductionPostingUpdateManyAndReturnArgs} args - Arguments to update many ProductionPostings.
+     * @example
+     * // Update many ProductionPostings
+     * const productionPosting = await prisma.productionPosting.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProductionPostings and only return the `id`
+     * const productionPostingWithIdOnly = await prisma.productionPosting.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProductionPostingUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductionPostingUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProductionPosting.
+     * @param {ProductionPostingUpsertArgs} args - Arguments to update or create a ProductionPosting.
+     * @example
+     * // Update or create a ProductionPosting
+     * const productionPosting = await prisma.productionPosting.upsert({
+     *   create: {
+     *     // ... data to create a ProductionPosting
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductionPosting we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductionPostingUpsertArgs>(args: SelectSubset<T, ProductionPostingUpsertArgs<ExtArgs>>): Prisma__ProductionPostingClient<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProductionPostings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionPostingCountArgs} args - Arguments to filter ProductionPostings to count.
+     * @example
+     * // Count the number of ProductionPostings
+     * const count = await prisma.productionPosting.count({
+     *   where: {
+     *     // ... the filter for the ProductionPostings we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductionPostingCountArgs>(
+      args?: Subset<T, ProductionPostingCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductionPostingCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductionPosting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionPostingAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductionPostingAggregateArgs>(args: Subset<T, ProductionPostingAggregateArgs>): Prisma.PrismaPromise<GetProductionPostingAggregateType<T>>
+
+    /**
+     * Group by ProductionPosting.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionPostingGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductionPostingGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductionPostingGroupByArgs['orderBy'] }
+        : { orderBy?: ProductionPostingGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductionPostingGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductionPostingGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductionPosting model
+   */
+  readonly fields: ProductionPostingFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductionPosting.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductionPostingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    consumptions<T extends ProductionPosting$consumptionsArgs<ExtArgs> = {}>(args?: Subset<T, ProductionPosting$consumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    outputs<T extends ProductionPosting$outputsArgs<ExtArgs> = {}>(args?: Subset<T, ProductionPosting$outputsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductionPosting model
+   */
+  interface ProductionPostingFieldRefs {
+    readonly id: FieldRef<"ProductionPosting", 'String'>
+    readonly postingNumber: FieldRef<"ProductionPosting", 'String'>
+    readonly sfgProductId: FieldRef<"ProductionPosting", 'String'>
+    readonly bomId: FieldRef<"ProductionPosting", 'String'>
+    readonly locationId: FieldRef<"ProductionPosting", 'String'>
+    readonly shiftDate: FieldRef<"ProductionPosting", 'DateTime'>
+    readonly notes: FieldRef<"ProductionPosting", 'String'>
+    readonly postedById: FieldRef<"ProductionPosting", 'String'>
+    readonly createdAt: FieldRef<"ProductionPosting", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProductionPosting", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductionPosting findUnique
+   */
+  export type ProductionPostingFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionPostingInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionPosting to fetch.
+     */
+    where: ProductionPostingWhereUniqueInput
+  }
+
+  /**
+   * ProductionPosting findUniqueOrThrow
+   */
+  export type ProductionPostingFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionPostingInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionPosting to fetch.
+     */
+    where: ProductionPostingWhereUniqueInput
+  }
+
+  /**
+   * ProductionPosting findFirst
+   */
+  export type ProductionPostingFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionPostingInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionPosting to fetch.
+     */
+    where?: ProductionPostingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionPostings to fetch.
+     */
+    orderBy?: ProductionPostingOrderByWithRelationInput | ProductionPostingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductionPostings.
+     */
+    cursor?: ProductionPostingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionPostings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionPostings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductionPostings.
+     */
+    distinct?: ProductionPostingScalarFieldEnum | ProductionPostingScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionPosting findFirstOrThrow
+   */
+  export type ProductionPostingFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionPostingInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionPosting to fetch.
+     */
+    where?: ProductionPostingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionPostings to fetch.
+     */
+    orderBy?: ProductionPostingOrderByWithRelationInput | ProductionPostingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductionPostings.
+     */
+    cursor?: ProductionPostingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionPostings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionPostings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductionPostings.
+     */
+    distinct?: ProductionPostingScalarFieldEnum | ProductionPostingScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionPosting findMany
+   */
+  export type ProductionPostingFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionPostingInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionPostings to fetch.
+     */
+    where?: ProductionPostingWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionPostings to fetch.
+     */
+    orderBy?: ProductionPostingOrderByWithRelationInput | ProductionPostingOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductionPostings.
+     */
+    cursor?: ProductionPostingWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionPostings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionPostings.
+     */
+    skip?: number
+    distinct?: ProductionPostingScalarFieldEnum | ProductionPostingScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionPosting create
+   */
+  export type ProductionPostingCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionPostingInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductionPosting.
+     */
+    data: XOR<ProductionPostingCreateInput, ProductionPostingUncheckedCreateInput>
+  }
+
+  /**
+   * ProductionPosting createMany
+   */
+  export type ProductionPostingCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductionPostings.
+     */
+    data: ProductionPostingCreateManyInput | ProductionPostingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductionPosting createManyAndReturn
+   */
+  export type ProductionPostingCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProductionPostings.
+     */
+    data: ProductionPostingCreateManyInput | ProductionPostingCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductionPosting update
+   */
+  export type ProductionPostingUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionPostingInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductionPosting.
+     */
+    data: XOR<ProductionPostingUpdateInput, ProductionPostingUncheckedUpdateInput>
+    /**
+     * Choose, which ProductionPosting to update.
+     */
+    where: ProductionPostingWhereUniqueInput
+  }
+
+  /**
+   * ProductionPosting updateMany
+   */
+  export type ProductionPostingUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductionPostings.
+     */
+    data: XOR<ProductionPostingUpdateManyMutationInput, ProductionPostingUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductionPostings to update
+     */
+    where?: ProductionPostingWhereInput
+    /**
+     * Limit how many ProductionPostings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductionPosting updateManyAndReturn
+   */
+  export type ProductionPostingUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * The data used to update ProductionPostings.
+     */
+    data: XOR<ProductionPostingUpdateManyMutationInput, ProductionPostingUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductionPostings to update
+     */
+    where?: ProductionPostingWhereInput
+    /**
+     * Limit how many ProductionPostings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductionPosting upsert
+   */
+  export type ProductionPostingUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionPostingInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductionPosting to update in case it exists.
+     */
+    where: ProductionPostingWhereUniqueInput
+    /**
+     * In case the ProductionPosting found by the `where` argument doesn't exist, create a new ProductionPosting with this data.
+     */
+    create: XOR<ProductionPostingCreateInput, ProductionPostingUncheckedCreateInput>
+    /**
+     * In case the ProductionPosting was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductionPostingUpdateInput, ProductionPostingUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductionPosting delete
+   */
+  export type ProductionPostingDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionPostingInclude<ExtArgs> | null
+    /**
+     * Filter which ProductionPosting to delete.
+     */
+    where: ProductionPostingWhereUniqueInput
+  }
+
+  /**
+   * ProductionPosting deleteMany
+   */
+  export type ProductionPostingDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductionPostings to delete
+     */
+    where?: ProductionPostingWhereInput
+    /**
+     * Limit how many ProductionPostings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductionPosting.consumptions
+   */
+  export type ProductionPosting$consumptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+    where?: ProductionConsumptionWhereInput
+    orderBy?: ProductionConsumptionOrderByWithRelationInput | ProductionConsumptionOrderByWithRelationInput[]
+    cursor?: ProductionConsumptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductionConsumptionScalarFieldEnum | ProductionConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionPosting.outputs
+   */
+  export type ProductionPosting$outputsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
+    where?: ProductionOutputWhereInput
+    orderBy?: ProductionOutputOrderByWithRelationInput | ProductionOutputOrderByWithRelationInput[]
+    cursor?: ProductionOutputWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductionOutputScalarFieldEnum | ProductionOutputScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionPosting without action
+   */
+  export type ProductionPostingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionPosting
+     */
+    select?: ProductionPostingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionPosting
+     */
+    omit?: ProductionPostingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionPostingInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProductionConsumption
+   */
+
+  export type AggregateProductionConsumption = {
+    _count: ProductionConsumptionCountAggregateOutputType | null
+    _avg: ProductionConsumptionAvgAggregateOutputType | null
+    _sum: ProductionConsumptionSumAggregateOutputType | null
+    _min: ProductionConsumptionMinAggregateOutputType | null
+    _max: ProductionConsumptionMaxAggregateOutputType | null
+  }
+
+  export type ProductionConsumptionAvgAggregateOutputType = {
+    expectedQuantity: number | null
+    actualQuantity: number | null
+  }
+
+  export type ProductionConsumptionSumAggregateOutputType = {
+    expectedQuantity: number | null
+    actualQuantity: number | null
+  }
+
+  export type ProductionConsumptionMinAggregateOutputType = {
+    id: string | null
+    postingId: string | null
+    rawMaterialId: string | null
+    expectedQuantity: number | null
+    actualQuantity: number | null
+    batchNumber: string | null
+    cleaningLotId: string | null
+    createdAt: Date | null
+  }
+
+  export type ProductionConsumptionMaxAggregateOutputType = {
+    id: string | null
+    postingId: string | null
+    rawMaterialId: string | null
+    expectedQuantity: number | null
+    actualQuantity: number | null
+    batchNumber: string | null
+    cleaningLotId: string | null
+    createdAt: Date | null
+  }
+
+  export type ProductionConsumptionCountAggregateOutputType = {
+    id: number
+    postingId: number
+    rawMaterialId: number
+    expectedQuantity: number
+    actualQuantity: number
+    batchNumber: number
+    cleaningLotId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ProductionConsumptionAvgAggregateInputType = {
+    expectedQuantity?: true
+    actualQuantity?: true
+  }
+
+  export type ProductionConsumptionSumAggregateInputType = {
+    expectedQuantity?: true
+    actualQuantity?: true
+  }
+
+  export type ProductionConsumptionMinAggregateInputType = {
+    id?: true
+    postingId?: true
+    rawMaterialId?: true
+    expectedQuantity?: true
+    actualQuantity?: true
+    batchNumber?: true
+    cleaningLotId?: true
+    createdAt?: true
+  }
+
+  export type ProductionConsumptionMaxAggregateInputType = {
+    id?: true
+    postingId?: true
+    rawMaterialId?: true
+    expectedQuantity?: true
+    actualQuantity?: true
+    batchNumber?: true
+    cleaningLotId?: true
+    createdAt?: true
+  }
+
+  export type ProductionConsumptionCountAggregateInputType = {
+    id?: true
+    postingId?: true
+    rawMaterialId?: true
+    expectedQuantity?: true
+    actualQuantity?: true
+    batchNumber?: true
+    cleaningLotId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ProductionConsumptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductionConsumption to aggregate.
+     */
+    where?: ProductionConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionConsumptions to fetch.
+     */
+    orderBy?: ProductionConsumptionOrderByWithRelationInput | ProductionConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductionConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionConsumptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductionConsumptions
+    **/
+    _count?: true | ProductionConsumptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProductionConsumptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductionConsumptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductionConsumptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductionConsumptionMaxAggregateInputType
+  }
+
+  export type GetProductionConsumptionAggregateType<T extends ProductionConsumptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductionConsumption]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductionConsumption[P]>
+      : GetScalarType<T[P], AggregateProductionConsumption[P]>
+  }
+
+
+
+
+  export type ProductionConsumptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductionConsumptionWhereInput
+    orderBy?: ProductionConsumptionOrderByWithAggregationInput | ProductionConsumptionOrderByWithAggregationInput[]
+    by: ProductionConsumptionScalarFieldEnum[] | ProductionConsumptionScalarFieldEnum
+    having?: ProductionConsumptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductionConsumptionCountAggregateInputType | true
+    _avg?: ProductionConsumptionAvgAggregateInputType
+    _sum?: ProductionConsumptionSumAggregateInputType
+    _min?: ProductionConsumptionMinAggregateInputType
+    _max?: ProductionConsumptionMaxAggregateInputType
+  }
+
+  export type ProductionConsumptionGroupByOutputType = {
+    id: string
+    postingId: string
+    rawMaterialId: string
+    expectedQuantity: number
+    actualQuantity: number
+    batchNumber: string | null
+    cleaningLotId: string | null
+    createdAt: Date
+    _count: ProductionConsumptionCountAggregateOutputType | null
+    _avg: ProductionConsumptionAvgAggregateOutputType | null
+    _sum: ProductionConsumptionSumAggregateOutputType | null
+    _min: ProductionConsumptionMinAggregateOutputType | null
+    _max: ProductionConsumptionMaxAggregateOutputType | null
+  }
+
+  type GetProductionConsumptionGroupByPayload<T extends ProductionConsumptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductionConsumptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductionConsumptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductionConsumptionGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductionConsumptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductionConsumptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postingId?: boolean
+    rawMaterialId?: boolean
+    expectedQuantity?: boolean
+    actualQuantity?: boolean
+    batchNumber?: boolean
+    cleaningLotId?: boolean
+    createdAt?: boolean
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productionConsumption"]>
+
+  export type ProductionConsumptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postingId?: boolean
+    rawMaterialId?: boolean
+    expectedQuantity?: boolean
+    actualQuantity?: boolean
+    batchNumber?: boolean
+    cleaningLotId?: boolean
+    createdAt?: boolean
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productionConsumption"]>
+
+  export type ProductionConsumptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postingId?: boolean
+    rawMaterialId?: boolean
+    expectedQuantity?: boolean
+    actualQuantity?: boolean
+    batchNumber?: boolean
+    cleaningLotId?: boolean
+    createdAt?: boolean
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productionConsumption"]>
+
+  export type ProductionConsumptionSelectScalar = {
+    id?: boolean
+    postingId?: boolean
+    rawMaterialId?: boolean
+    expectedQuantity?: boolean
+    actualQuantity?: boolean
+    batchNumber?: boolean
+    cleaningLotId?: boolean
+    createdAt?: boolean
+  }
+
+  export type ProductionConsumptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postingId" | "rawMaterialId" | "expectedQuantity" | "actualQuantity" | "batchNumber" | "cleaningLotId" | "createdAt", ExtArgs["result"]["productionConsumption"]>
+  export type ProductionConsumptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }
+  export type ProductionConsumptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }
+  export type ProductionConsumptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductionConsumptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductionConsumption"
+    objects: {
+      posting: Prisma.$ProductionPostingPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      postingId: string
+      rawMaterialId: string
+      expectedQuantity: number
+      actualQuantity: number
+      batchNumber: string | null
+      cleaningLotId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["productionConsumption"]>
+    composites: {}
+  }
+
+  type ProductionConsumptionGetPayload<S extends boolean | null | undefined | ProductionConsumptionDefaultArgs> = $Result.GetResult<Prisma.$ProductionConsumptionPayload, S>
+
+  type ProductionConsumptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProductionConsumptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProductionConsumptionCountAggregateInputType | true
+    }
+
+  export interface ProductionConsumptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductionConsumption'], meta: { name: 'ProductionConsumption' } }
+    /**
+     * Find zero or one ProductionConsumption that matches the filter.
+     * @param {ProductionConsumptionFindUniqueArgs} args - Arguments to find a ProductionConsumption
+     * @example
+     * // Get one ProductionConsumption
+     * const productionConsumption = await prisma.productionConsumption.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductionConsumptionFindUniqueArgs>(args: SelectSubset<T, ProductionConsumptionFindUniqueArgs<ExtArgs>>): Prisma__ProductionConsumptionClient<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProductionConsumption that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductionConsumptionFindUniqueOrThrowArgs} args - Arguments to find a ProductionConsumption
+     * @example
+     * // Get one ProductionConsumption
+     * const productionConsumption = await prisma.productionConsumption.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductionConsumptionFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductionConsumptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductionConsumptionClient<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductionConsumption that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionConsumptionFindFirstArgs} args - Arguments to find a ProductionConsumption
+     * @example
+     * // Get one ProductionConsumption
+     * const productionConsumption = await prisma.productionConsumption.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductionConsumptionFindFirstArgs>(args?: SelectSubset<T, ProductionConsumptionFindFirstArgs<ExtArgs>>): Prisma__ProductionConsumptionClient<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductionConsumption that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionConsumptionFindFirstOrThrowArgs} args - Arguments to find a ProductionConsumption
+     * @example
+     * // Get one ProductionConsumption
+     * const productionConsumption = await prisma.productionConsumption.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductionConsumptionFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductionConsumptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductionConsumptionClient<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProductionConsumptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionConsumptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductionConsumptions
+     * const productionConsumptions = await prisma.productionConsumption.findMany()
+     * 
+     * // Get first 10 ProductionConsumptions
+     * const productionConsumptions = await prisma.productionConsumption.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productionConsumptionWithIdOnly = await prisma.productionConsumption.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductionConsumptionFindManyArgs>(args?: SelectSubset<T, ProductionConsumptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProductionConsumption.
+     * @param {ProductionConsumptionCreateArgs} args - Arguments to create a ProductionConsumption.
+     * @example
+     * // Create one ProductionConsumption
+     * const ProductionConsumption = await prisma.productionConsumption.create({
+     *   data: {
+     *     // ... data to create a ProductionConsumption
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductionConsumptionCreateArgs>(args: SelectSubset<T, ProductionConsumptionCreateArgs<ExtArgs>>): Prisma__ProductionConsumptionClient<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProductionConsumptions.
+     * @param {ProductionConsumptionCreateManyArgs} args - Arguments to create many ProductionConsumptions.
+     * @example
+     * // Create many ProductionConsumptions
+     * const productionConsumption = await prisma.productionConsumption.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductionConsumptionCreateManyArgs>(args?: SelectSubset<T, ProductionConsumptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductionConsumptions and returns the data saved in the database.
+     * @param {ProductionConsumptionCreateManyAndReturnArgs} args - Arguments to create many ProductionConsumptions.
+     * @example
+     * // Create many ProductionConsumptions
+     * const productionConsumption = await prisma.productionConsumption.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductionConsumptions and only return the `id`
+     * const productionConsumptionWithIdOnly = await prisma.productionConsumption.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductionConsumptionCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductionConsumptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProductionConsumption.
+     * @param {ProductionConsumptionDeleteArgs} args - Arguments to delete one ProductionConsumption.
+     * @example
+     * // Delete one ProductionConsumption
+     * const ProductionConsumption = await prisma.productionConsumption.delete({
+     *   where: {
+     *     // ... filter to delete one ProductionConsumption
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductionConsumptionDeleteArgs>(args: SelectSubset<T, ProductionConsumptionDeleteArgs<ExtArgs>>): Prisma__ProductionConsumptionClient<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProductionConsumption.
+     * @param {ProductionConsumptionUpdateArgs} args - Arguments to update one ProductionConsumption.
+     * @example
+     * // Update one ProductionConsumption
+     * const productionConsumption = await prisma.productionConsumption.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductionConsumptionUpdateArgs>(args: SelectSubset<T, ProductionConsumptionUpdateArgs<ExtArgs>>): Prisma__ProductionConsumptionClient<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProductionConsumptions.
+     * @param {ProductionConsumptionDeleteManyArgs} args - Arguments to filter ProductionConsumptions to delete.
+     * @example
+     * // Delete a few ProductionConsumptions
+     * const { count } = await prisma.productionConsumption.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductionConsumptionDeleteManyArgs>(args?: SelectSubset<T, ProductionConsumptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductionConsumptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionConsumptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductionConsumptions
+     * const productionConsumption = await prisma.productionConsumption.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductionConsumptionUpdateManyArgs>(args: SelectSubset<T, ProductionConsumptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductionConsumptions and returns the data updated in the database.
+     * @param {ProductionConsumptionUpdateManyAndReturnArgs} args - Arguments to update many ProductionConsumptions.
+     * @example
+     * // Update many ProductionConsumptions
+     * const productionConsumption = await prisma.productionConsumption.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProductionConsumptions and only return the `id`
+     * const productionConsumptionWithIdOnly = await prisma.productionConsumption.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProductionConsumptionUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductionConsumptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProductionConsumption.
+     * @param {ProductionConsumptionUpsertArgs} args - Arguments to update or create a ProductionConsumption.
+     * @example
+     * // Update or create a ProductionConsumption
+     * const productionConsumption = await prisma.productionConsumption.upsert({
+     *   create: {
+     *     // ... data to create a ProductionConsumption
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductionConsumption we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductionConsumptionUpsertArgs>(args: SelectSubset<T, ProductionConsumptionUpsertArgs<ExtArgs>>): Prisma__ProductionConsumptionClient<$Result.GetResult<Prisma.$ProductionConsumptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProductionConsumptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionConsumptionCountArgs} args - Arguments to filter ProductionConsumptions to count.
+     * @example
+     * // Count the number of ProductionConsumptions
+     * const count = await prisma.productionConsumption.count({
+     *   where: {
+     *     // ... the filter for the ProductionConsumptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductionConsumptionCountArgs>(
+      args?: Subset<T, ProductionConsumptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductionConsumptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductionConsumption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionConsumptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductionConsumptionAggregateArgs>(args: Subset<T, ProductionConsumptionAggregateArgs>): Prisma.PrismaPromise<GetProductionConsumptionAggregateType<T>>
+
+    /**
+     * Group by ProductionConsumption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionConsumptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductionConsumptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductionConsumptionGroupByArgs['orderBy'] }
+        : { orderBy?: ProductionConsumptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductionConsumptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductionConsumptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductionConsumption model
+   */
+  readonly fields: ProductionConsumptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductionConsumption.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductionConsumptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    posting<T extends ProductionPostingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductionPostingDefaultArgs<ExtArgs>>): Prisma__ProductionPostingClient<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductionConsumption model
+   */
+  interface ProductionConsumptionFieldRefs {
+    readonly id: FieldRef<"ProductionConsumption", 'String'>
+    readonly postingId: FieldRef<"ProductionConsumption", 'String'>
+    readonly rawMaterialId: FieldRef<"ProductionConsumption", 'String'>
+    readonly expectedQuantity: FieldRef<"ProductionConsumption", 'Float'>
+    readonly actualQuantity: FieldRef<"ProductionConsumption", 'Float'>
+    readonly batchNumber: FieldRef<"ProductionConsumption", 'String'>
+    readonly cleaningLotId: FieldRef<"ProductionConsumption", 'String'>
+    readonly createdAt: FieldRef<"ProductionConsumption", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductionConsumption findUnique
+   */
+  export type ProductionConsumptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionConsumption to fetch.
+     */
+    where: ProductionConsumptionWhereUniqueInput
+  }
+
+  /**
+   * ProductionConsumption findUniqueOrThrow
+   */
+  export type ProductionConsumptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionConsumption to fetch.
+     */
+    where: ProductionConsumptionWhereUniqueInput
+  }
+
+  /**
+   * ProductionConsumption findFirst
+   */
+  export type ProductionConsumptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionConsumption to fetch.
+     */
+    where?: ProductionConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionConsumptions to fetch.
+     */
+    orderBy?: ProductionConsumptionOrderByWithRelationInput | ProductionConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductionConsumptions.
+     */
+    cursor?: ProductionConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionConsumptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductionConsumptions.
+     */
+    distinct?: ProductionConsumptionScalarFieldEnum | ProductionConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionConsumption findFirstOrThrow
+   */
+  export type ProductionConsumptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionConsumption to fetch.
+     */
+    where?: ProductionConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionConsumptions to fetch.
+     */
+    orderBy?: ProductionConsumptionOrderByWithRelationInput | ProductionConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductionConsumptions.
+     */
+    cursor?: ProductionConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionConsumptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductionConsumptions.
+     */
+    distinct?: ProductionConsumptionScalarFieldEnum | ProductionConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionConsumption findMany
+   */
+  export type ProductionConsumptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionConsumptions to fetch.
+     */
+    where?: ProductionConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionConsumptions to fetch.
+     */
+    orderBy?: ProductionConsumptionOrderByWithRelationInput | ProductionConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductionConsumptions.
+     */
+    cursor?: ProductionConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionConsumptions.
+     */
+    skip?: number
+    distinct?: ProductionConsumptionScalarFieldEnum | ProductionConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionConsumption create
+   */
+  export type ProductionConsumptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductionConsumption.
+     */
+    data: XOR<ProductionConsumptionCreateInput, ProductionConsumptionUncheckedCreateInput>
+  }
+
+  /**
+   * ProductionConsumption createMany
+   */
+  export type ProductionConsumptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductionConsumptions.
+     */
+    data: ProductionConsumptionCreateManyInput | ProductionConsumptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductionConsumption createManyAndReturn
+   */
+  export type ProductionConsumptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProductionConsumptions.
+     */
+    data: ProductionConsumptionCreateManyInput | ProductionConsumptionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductionConsumption update
+   */
+  export type ProductionConsumptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductionConsumption.
+     */
+    data: XOR<ProductionConsumptionUpdateInput, ProductionConsumptionUncheckedUpdateInput>
+    /**
+     * Choose, which ProductionConsumption to update.
+     */
+    where: ProductionConsumptionWhereUniqueInput
+  }
+
+  /**
+   * ProductionConsumption updateMany
+   */
+  export type ProductionConsumptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductionConsumptions.
+     */
+    data: XOR<ProductionConsumptionUpdateManyMutationInput, ProductionConsumptionUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductionConsumptions to update
+     */
+    where?: ProductionConsumptionWhereInput
+    /**
+     * Limit how many ProductionConsumptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductionConsumption updateManyAndReturn
+   */
+  export type ProductionConsumptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * The data used to update ProductionConsumptions.
+     */
+    data: XOR<ProductionConsumptionUpdateManyMutationInput, ProductionConsumptionUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductionConsumptions to update
+     */
+    where?: ProductionConsumptionWhereInput
+    /**
+     * Limit how many ProductionConsumptions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductionConsumption upsert
+   */
+  export type ProductionConsumptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductionConsumption to update in case it exists.
+     */
+    where: ProductionConsumptionWhereUniqueInput
+    /**
+     * In case the ProductionConsumption found by the `where` argument doesn't exist, create a new ProductionConsumption with this data.
+     */
+    create: XOR<ProductionConsumptionCreateInput, ProductionConsumptionUncheckedCreateInput>
+    /**
+     * In case the ProductionConsumption was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductionConsumptionUpdateInput, ProductionConsumptionUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductionConsumption delete
+   */
+  export type ProductionConsumptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter which ProductionConsumption to delete.
+     */
+    where: ProductionConsumptionWhereUniqueInput
+  }
+
+  /**
+   * ProductionConsumption deleteMany
+   */
+  export type ProductionConsumptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductionConsumptions to delete
+     */
+    where?: ProductionConsumptionWhereInput
+    /**
+     * Limit how many ProductionConsumptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductionConsumption without action
+   */
+  export type ProductionConsumptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionConsumption
+     */
+    select?: ProductionConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionConsumption
+     */
+    omit?: ProductionConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionConsumptionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProductionOutput
+   */
+
+  export type AggregateProductionOutput = {
+    _count: ProductionOutputCountAggregateOutputType | null
+    _avg: ProductionOutputAvgAggregateOutputType | null
+    _sum: ProductionOutputSumAggregateOutputType | null
+    _min: ProductionOutputMinAggregateOutputType | null
+    _max: ProductionOutputMaxAggregateOutputType | null
+  }
+
+  export type ProductionOutputAvgAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type ProductionOutputSumAggregateOutputType = {
+    quantity: number | null
+  }
+
+  export type ProductionOutputMinAggregateOutputType = {
+    id: string | null
+    postingId: string | null
+    outputType: $Enums.OutputType | null
+    productName: string | null
+    skuCode: string | null
+    quantity: number | null
+    unit: string | null
+    batchNumber: string | null
+    createdAt: Date | null
+  }
+
+  export type ProductionOutputMaxAggregateOutputType = {
+    id: string | null
+    postingId: string | null
+    outputType: $Enums.OutputType | null
+    productName: string | null
+    skuCode: string | null
+    quantity: number | null
+    unit: string | null
+    batchNumber: string | null
+    createdAt: Date | null
+  }
+
+  export type ProductionOutputCountAggregateOutputType = {
+    id: number
+    postingId: number
+    outputType: number
+    productName: number
+    skuCode: number
+    quantity: number
+    unit: number
+    batchNumber: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type ProductionOutputAvgAggregateInputType = {
+    quantity?: true
+  }
+
+  export type ProductionOutputSumAggregateInputType = {
+    quantity?: true
+  }
+
+  export type ProductionOutputMinAggregateInputType = {
+    id?: true
+    postingId?: true
+    outputType?: true
+    productName?: true
+    skuCode?: true
+    quantity?: true
+    unit?: true
+    batchNumber?: true
+    createdAt?: true
+  }
+
+  export type ProductionOutputMaxAggregateInputType = {
+    id?: true
+    postingId?: true
+    outputType?: true
+    productName?: true
+    skuCode?: true
+    quantity?: true
+    unit?: true
+    batchNumber?: true
+    createdAt?: true
+  }
+
+  export type ProductionOutputCountAggregateInputType = {
+    id?: true
+    postingId?: true
+    outputType?: true
+    productName?: true
+    skuCode?: true
+    quantity?: true
+    unit?: true
+    batchNumber?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type ProductionOutputAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductionOutput to aggregate.
+     */
+    where?: ProductionOutputWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionOutputs to fetch.
+     */
+    orderBy?: ProductionOutputOrderByWithRelationInput | ProductionOutputOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProductionOutputWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionOutputs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionOutputs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProductionOutputs
+    **/
+    _count?: true | ProductionOutputCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProductionOutputAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductionOutputSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProductionOutputMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProductionOutputMaxAggregateInputType
+  }
+
+  export type GetProductionOutputAggregateType<T extends ProductionOutputAggregateArgs> = {
+        [P in keyof T & keyof AggregateProductionOutput]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProductionOutput[P]>
+      : GetScalarType<T[P], AggregateProductionOutput[P]>
+  }
+
+
+
+
+  export type ProductionOutputGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductionOutputWhereInput
+    orderBy?: ProductionOutputOrderByWithAggregationInput | ProductionOutputOrderByWithAggregationInput[]
+    by: ProductionOutputScalarFieldEnum[] | ProductionOutputScalarFieldEnum
+    having?: ProductionOutputScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProductionOutputCountAggregateInputType | true
+    _avg?: ProductionOutputAvgAggregateInputType
+    _sum?: ProductionOutputSumAggregateInputType
+    _min?: ProductionOutputMinAggregateInputType
+    _max?: ProductionOutputMaxAggregateInputType
+  }
+
+  export type ProductionOutputGroupByOutputType = {
+    id: string
+    postingId: string
+    outputType: $Enums.OutputType
+    productName: string
+    skuCode: string | null
+    quantity: number
+    unit: string
+    batchNumber: string | null
+    createdAt: Date
+    _count: ProductionOutputCountAggregateOutputType | null
+    _avg: ProductionOutputAvgAggregateOutputType | null
+    _sum: ProductionOutputSumAggregateOutputType | null
+    _min: ProductionOutputMinAggregateOutputType | null
+    _max: ProductionOutputMaxAggregateOutputType | null
+  }
+
+  type GetProductionOutputGroupByPayload<T extends ProductionOutputGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProductionOutputGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProductionOutputGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProductionOutputGroupByOutputType[P]>
+            : GetScalarType<T[P], ProductionOutputGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProductionOutputSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postingId?: boolean
+    outputType?: boolean
+    productName?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unit?: boolean
+    batchNumber?: boolean
+    createdAt?: boolean
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productionOutput"]>
+
+  export type ProductionOutputSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postingId?: boolean
+    outputType?: boolean
+    productName?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unit?: boolean
+    batchNumber?: boolean
+    createdAt?: boolean
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productionOutput"]>
+
+  export type ProductionOutputSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    postingId?: boolean
+    outputType?: boolean
+    productName?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unit?: boolean
+    batchNumber?: boolean
+    createdAt?: boolean
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["productionOutput"]>
+
+  export type ProductionOutputSelectScalar = {
+    id?: boolean
+    postingId?: boolean
+    outputType?: boolean
+    productName?: boolean
+    skuCode?: boolean
+    quantity?: boolean
+    unit?: boolean
+    batchNumber?: boolean
+    createdAt?: boolean
+  }
+
+  export type ProductionOutputOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postingId" | "outputType" | "productName" | "skuCode" | "quantity" | "unit" | "batchNumber" | "createdAt", ExtArgs["result"]["productionOutput"]>
+  export type ProductionOutputInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }
+  export type ProductionOutputIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }
+  export type ProductionOutputIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
+  }
+
+  export type $ProductionOutputPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProductionOutput"
+    objects: {
+      posting: Prisma.$ProductionPostingPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      postingId: string
+      outputType: $Enums.OutputType
+      productName: string
+      skuCode: string | null
+      quantity: number
+      unit: string
+      batchNumber: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["productionOutput"]>
+    composites: {}
+  }
+
+  type ProductionOutputGetPayload<S extends boolean | null | undefined | ProductionOutputDefaultArgs> = $Result.GetResult<Prisma.$ProductionOutputPayload, S>
+
+  type ProductionOutputCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProductionOutputFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProductionOutputCountAggregateInputType | true
+    }
+
+  export interface ProductionOutputDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProductionOutput'], meta: { name: 'ProductionOutput' } }
+    /**
+     * Find zero or one ProductionOutput that matches the filter.
+     * @param {ProductionOutputFindUniqueArgs} args - Arguments to find a ProductionOutput
+     * @example
+     * // Get one ProductionOutput
+     * const productionOutput = await prisma.productionOutput.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProductionOutputFindUniqueArgs>(args: SelectSubset<T, ProductionOutputFindUniqueArgs<ExtArgs>>): Prisma__ProductionOutputClient<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProductionOutput that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProductionOutputFindUniqueOrThrowArgs} args - Arguments to find a ProductionOutput
+     * @example
+     * // Get one ProductionOutput
+     * const productionOutput = await prisma.productionOutput.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProductionOutputFindUniqueOrThrowArgs>(args: SelectSubset<T, ProductionOutputFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProductionOutputClient<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductionOutput that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionOutputFindFirstArgs} args - Arguments to find a ProductionOutput
+     * @example
+     * // Get one ProductionOutput
+     * const productionOutput = await prisma.productionOutput.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProductionOutputFindFirstArgs>(args?: SelectSubset<T, ProductionOutputFindFirstArgs<ExtArgs>>): Prisma__ProductionOutputClient<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProductionOutput that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionOutputFindFirstOrThrowArgs} args - Arguments to find a ProductionOutput
+     * @example
+     * // Get one ProductionOutput
+     * const productionOutput = await prisma.productionOutput.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProductionOutputFindFirstOrThrowArgs>(args?: SelectSubset<T, ProductionOutputFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProductionOutputClient<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProductionOutputs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionOutputFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProductionOutputs
+     * const productionOutputs = await prisma.productionOutput.findMany()
+     * 
+     * // Get first 10 ProductionOutputs
+     * const productionOutputs = await prisma.productionOutput.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const productionOutputWithIdOnly = await prisma.productionOutput.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProductionOutputFindManyArgs>(args?: SelectSubset<T, ProductionOutputFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProductionOutput.
+     * @param {ProductionOutputCreateArgs} args - Arguments to create a ProductionOutput.
+     * @example
+     * // Create one ProductionOutput
+     * const ProductionOutput = await prisma.productionOutput.create({
+     *   data: {
+     *     // ... data to create a ProductionOutput
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProductionOutputCreateArgs>(args: SelectSubset<T, ProductionOutputCreateArgs<ExtArgs>>): Prisma__ProductionOutputClient<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProductionOutputs.
+     * @param {ProductionOutputCreateManyArgs} args - Arguments to create many ProductionOutputs.
+     * @example
+     * // Create many ProductionOutputs
+     * const productionOutput = await prisma.productionOutput.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProductionOutputCreateManyArgs>(args?: SelectSubset<T, ProductionOutputCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProductionOutputs and returns the data saved in the database.
+     * @param {ProductionOutputCreateManyAndReturnArgs} args - Arguments to create many ProductionOutputs.
+     * @example
+     * // Create many ProductionOutputs
+     * const productionOutput = await prisma.productionOutput.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProductionOutputs and only return the `id`
+     * const productionOutputWithIdOnly = await prisma.productionOutput.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProductionOutputCreateManyAndReturnArgs>(args?: SelectSubset<T, ProductionOutputCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProductionOutput.
+     * @param {ProductionOutputDeleteArgs} args - Arguments to delete one ProductionOutput.
+     * @example
+     * // Delete one ProductionOutput
+     * const ProductionOutput = await prisma.productionOutput.delete({
+     *   where: {
+     *     // ... filter to delete one ProductionOutput
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProductionOutputDeleteArgs>(args: SelectSubset<T, ProductionOutputDeleteArgs<ExtArgs>>): Prisma__ProductionOutputClient<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProductionOutput.
+     * @param {ProductionOutputUpdateArgs} args - Arguments to update one ProductionOutput.
+     * @example
+     * // Update one ProductionOutput
+     * const productionOutput = await prisma.productionOutput.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProductionOutputUpdateArgs>(args: SelectSubset<T, ProductionOutputUpdateArgs<ExtArgs>>): Prisma__ProductionOutputClient<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProductionOutputs.
+     * @param {ProductionOutputDeleteManyArgs} args - Arguments to filter ProductionOutputs to delete.
+     * @example
+     * // Delete a few ProductionOutputs
+     * const { count } = await prisma.productionOutput.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProductionOutputDeleteManyArgs>(args?: SelectSubset<T, ProductionOutputDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductionOutputs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionOutputUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProductionOutputs
+     * const productionOutput = await prisma.productionOutput.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProductionOutputUpdateManyArgs>(args: SelectSubset<T, ProductionOutputUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProductionOutputs and returns the data updated in the database.
+     * @param {ProductionOutputUpdateManyAndReturnArgs} args - Arguments to update many ProductionOutputs.
+     * @example
+     * // Update many ProductionOutputs
+     * const productionOutput = await prisma.productionOutput.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProductionOutputs and only return the `id`
+     * const productionOutputWithIdOnly = await prisma.productionOutput.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProductionOutputUpdateManyAndReturnArgs>(args: SelectSubset<T, ProductionOutputUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProductionOutput.
+     * @param {ProductionOutputUpsertArgs} args - Arguments to update or create a ProductionOutput.
+     * @example
+     * // Update or create a ProductionOutput
+     * const productionOutput = await prisma.productionOutput.upsert({
+     *   create: {
+     *     // ... data to create a ProductionOutput
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProductionOutput we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProductionOutputUpsertArgs>(args: SelectSubset<T, ProductionOutputUpsertArgs<ExtArgs>>): Prisma__ProductionOutputClient<$Result.GetResult<Prisma.$ProductionOutputPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProductionOutputs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionOutputCountArgs} args - Arguments to filter ProductionOutputs to count.
+     * @example
+     * // Count the number of ProductionOutputs
+     * const count = await prisma.productionOutput.count({
+     *   where: {
+     *     // ... the filter for the ProductionOutputs we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProductionOutputCountArgs>(
+      args?: Subset<T, ProductionOutputCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProductionOutputCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProductionOutput.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionOutputAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProductionOutputAggregateArgs>(args: Subset<T, ProductionOutputAggregateArgs>): Prisma.PrismaPromise<GetProductionOutputAggregateType<T>>
+
+    /**
+     * Group by ProductionOutput.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProductionOutputGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProductionOutputGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProductionOutputGroupByArgs['orderBy'] }
+        : { orderBy?: ProductionOutputGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProductionOutputGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProductionOutputGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProductionOutput model
+   */
+  readonly fields: ProductionOutputFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProductionOutput.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProductionOutputClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    posting<T extends ProductionPostingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProductionPostingDefaultArgs<ExtArgs>>): Prisma__ProductionPostingClient<$Result.GetResult<Prisma.$ProductionPostingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProductionOutput model
+   */
+  interface ProductionOutputFieldRefs {
+    readonly id: FieldRef<"ProductionOutput", 'String'>
+    readonly postingId: FieldRef<"ProductionOutput", 'String'>
+    readonly outputType: FieldRef<"ProductionOutput", 'OutputType'>
+    readonly productName: FieldRef<"ProductionOutput", 'String'>
+    readonly skuCode: FieldRef<"ProductionOutput", 'String'>
+    readonly quantity: FieldRef<"ProductionOutput", 'Float'>
+    readonly unit: FieldRef<"ProductionOutput", 'String'>
+    readonly batchNumber: FieldRef<"ProductionOutput", 'String'>
+    readonly createdAt: FieldRef<"ProductionOutput", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProductionOutput findUnique
+   */
+  export type ProductionOutputFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionOutput to fetch.
+     */
+    where: ProductionOutputWhereUniqueInput
+  }
+
+  /**
+   * ProductionOutput findUniqueOrThrow
+   */
+  export type ProductionOutputFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionOutput to fetch.
+     */
+    where: ProductionOutputWhereUniqueInput
+  }
+
+  /**
+   * ProductionOutput findFirst
+   */
+  export type ProductionOutputFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionOutput to fetch.
+     */
+    where?: ProductionOutputWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionOutputs to fetch.
+     */
+    orderBy?: ProductionOutputOrderByWithRelationInput | ProductionOutputOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductionOutputs.
+     */
+    cursor?: ProductionOutputWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionOutputs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionOutputs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductionOutputs.
+     */
+    distinct?: ProductionOutputScalarFieldEnum | ProductionOutputScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionOutput findFirstOrThrow
+   */
+  export type ProductionOutputFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionOutput to fetch.
+     */
+    where?: ProductionOutputWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionOutputs to fetch.
+     */
+    orderBy?: ProductionOutputOrderByWithRelationInput | ProductionOutputOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProductionOutputs.
+     */
+    cursor?: ProductionOutputWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionOutputs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionOutputs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProductionOutputs.
+     */
+    distinct?: ProductionOutputScalarFieldEnum | ProductionOutputScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionOutput findMany
+   */
+  export type ProductionOutputFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
+    /**
+     * Filter, which ProductionOutputs to fetch.
+     */
+    where?: ProductionOutputWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProductionOutputs to fetch.
+     */
+    orderBy?: ProductionOutputOrderByWithRelationInput | ProductionOutputOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProductionOutputs.
+     */
+    cursor?: ProductionOutputWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProductionOutputs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProductionOutputs.
+     */
+    skip?: number
+    distinct?: ProductionOutputScalarFieldEnum | ProductionOutputScalarFieldEnum[]
+  }
+
+  /**
+   * ProductionOutput create
+   */
+  export type ProductionOutputCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProductionOutput.
+     */
+    data: XOR<ProductionOutputCreateInput, ProductionOutputUncheckedCreateInput>
+  }
+
+  /**
+   * ProductionOutput createMany
+   */
+  export type ProductionOutputCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProductionOutputs.
+     */
+    data: ProductionOutputCreateManyInput | ProductionOutputCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProductionOutput createManyAndReturn
+   */
+  export type ProductionOutputCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProductionOutputs.
+     */
+    data: ProductionOutputCreateManyInput | ProductionOutputCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductionOutput update
+   */
+  export type ProductionOutputUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProductionOutput.
+     */
+    data: XOR<ProductionOutputUpdateInput, ProductionOutputUncheckedUpdateInput>
+    /**
+     * Choose, which ProductionOutput to update.
+     */
+    where: ProductionOutputWhereUniqueInput
+  }
+
+  /**
+   * ProductionOutput updateMany
+   */
+  export type ProductionOutputUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProductionOutputs.
+     */
+    data: XOR<ProductionOutputUpdateManyMutationInput, ProductionOutputUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductionOutputs to update
+     */
+    where?: ProductionOutputWhereInput
+    /**
+     * Limit how many ProductionOutputs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductionOutput updateManyAndReturn
+   */
+  export type ProductionOutputUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * The data used to update ProductionOutputs.
+     */
+    data: XOR<ProductionOutputUpdateManyMutationInput, ProductionOutputUncheckedUpdateManyInput>
+    /**
+     * Filter which ProductionOutputs to update
+     */
+    where?: ProductionOutputWhereInput
+    /**
+     * Limit how many ProductionOutputs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProductionOutput upsert
+   */
+  export type ProductionOutputUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProductionOutput to update in case it exists.
+     */
+    where: ProductionOutputWhereUniqueInput
+    /**
+     * In case the ProductionOutput found by the `where` argument doesn't exist, create a new ProductionOutput with this data.
+     */
+    create: XOR<ProductionOutputCreateInput, ProductionOutputUncheckedCreateInput>
+    /**
+     * In case the ProductionOutput was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProductionOutputUpdateInput, ProductionOutputUncheckedUpdateInput>
+  }
+
+  /**
+   * ProductionOutput delete
+   */
+  export type ProductionOutputDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
+    /**
+     * Filter which ProductionOutput to delete.
+     */
+    where: ProductionOutputWhereUniqueInput
+  }
+
+  /**
+   * ProductionOutput deleteMany
+   */
+  export type ProductionOutputDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProductionOutputs to delete
+     */
+    where?: ProductionOutputWhereInput
+    /**
+     * Limit how many ProductionOutputs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProductionOutput without action
+   */
+  export type ProductionOutputDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProductionOutput
+     */
+    select?: ProductionOutputSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProductionOutput
+     */
+    omit?: ProductionOutputOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductionOutputInclude<ExtArgs> | null
   }
 
 
@@ -83117,6 +91295,7 @@ export namespace Prisma {
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     processingBatchLots?: boolean | CleaningLot$processingBatchLotsArgs<ExtArgs>
+    grindingDispatchLots?: boolean | CleaningLot$grindingDispatchLotsArgs<ExtArgs>
     _count?: boolean | CleaningLotCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cleaningLot"]>
 
@@ -83195,6 +91374,7 @@ export namespace Prisma {
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
     processingBatchLots?: boolean | CleaningLot$processingBatchLotsArgs<ExtArgs>
+    grindingDispatchLots?: boolean | CleaningLot$grindingDispatchLotsArgs<ExtArgs>
     _count?: boolean | CleaningLotCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CleaningLotIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -83218,6 +91398,7 @@ export namespace Prisma {
       rawMaterial: Prisma.$RawMaterialProductPayload<ExtArgs>
       warehouse: Prisma.$WarehousePayload<ExtArgs>
       processingBatchLots: Prisma.$ProcessingBatchLotPayload<ExtArgs>[]
+      grindingDispatchLots: Prisma.$GrindingDispatchLotPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -83636,6 +91817,7 @@ export namespace Prisma {
     rawMaterial<T extends RawMaterialProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProductDefaultArgs<ExtArgs>>): Prisma__RawMaterialProductClient<$Result.GetResult<Prisma.$RawMaterialProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     warehouse<T extends WarehouseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, WarehouseDefaultArgs<ExtArgs>>): Prisma__WarehouseClient<$Result.GetResult<Prisma.$WarehousePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     processingBatchLots<T extends CleaningLot$processingBatchLotsArgs<ExtArgs> = {}>(args?: Subset<T, CleaningLot$processingBatchLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProcessingBatchLotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    grindingDispatchLots<T extends CleaningLot$grindingDispatchLotsArgs<ExtArgs> = {}>(args?: Subset<T, CleaningLot$grindingDispatchLotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -84099,6 +92281,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProcessingBatchLotScalarFieldEnum | ProcessingBatchLotScalarFieldEnum[]
+  }
+
+  /**
+   * CleaningLot.grindingDispatchLots
+   */
+  export type CleaningLot$grindingDispatchLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    where?: GrindingDispatchLotWhereInput
+    orderBy?: GrindingDispatchLotOrderByWithRelationInput | GrindingDispatchLotOrderByWithRelationInput[]
+    cursor?: GrindingDispatchLotWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GrindingDispatchLotScalarFieldEnum | GrindingDispatchLotScalarFieldEnum[]
   }
 
   /**
@@ -85262,6 +93468,7 @@ export namespace Prisma {
     bomCode: string | null
     productName: string | null
     productCode: string | null
+    sfgProductId: string | null
     unitOfMeasurement: string | null
     outputQuantity: number | null
     description: string | null
@@ -85275,6 +93482,7 @@ export namespace Prisma {
     bomCode: string | null
     productName: string | null
     productCode: string | null
+    sfgProductId: string | null
     unitOfMeasurement: string | null
     outputQuantity: number | null
     description: string | null
@@ -85288,6 +93496,7 @@ export namespace Prisma {
     bomCode: number
     productName: number
     productCode: number
+    sfgProductId: number
     unitOfMeasurement: number
     outputQuantity: number
     description: number
@@ -85311,6 +93520,7 @@ export namespace Prisma {
     bomCode?: true
     productName?: true
     productCode?: true
+    sfgProductId?: true
     unitOfMeasurement?: true
     outputQuantity?: true
     description?: true
@@ -85324,6 +93534,7 @@ export namespace Prisma {
     bomCode?: true
     productName?: true
     productCode?: true
+    sfgProductId?: true
     unitOfMeasurement?: true
     outputQuantity?: true
     description?: true
@@ -85337,6 +93548,7 @@ export namespace Prisma {
     bomCode?: true
     productName?: true
     productCode?: true
+    sfgProductId?: true
     unitOfMeasurement?: true
     outputQuantity?: true
     description?: true
@@ -85437,6 +93649,7 @@ export namespace Prisma {
     bomCode: string
     productName: string
     productCode: string | null
+    sfgProductId: string | null
     unitOfMeasurement: string
     outputQuantity: number
     description: string | null
@@ -85469,6 +93682,7 @@ export namespace Prisma {
     bomCode?: boolean
     productName?: boolean
     productCode?: boolean
+    sfgProductId?: boolean
     unitOfMeasurement?: boolean
     outputQuantity?: boolean
     description?: boolean
@@ -85476,6 +93690,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     items?: boolean | BillOfMaterial$itemsArgs<ExtArgs>
+    sfgProduct?: boolean | BillOfMaterial$sfgProductArgs<ExtArgs>
     _count?: boolean | BillOfMaterialCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["billOfMaterial"]>
 
@@ -85484,12 +93699,14 @@ export namespace Prisma {
     bomCode?: boolean
     productName?: boolean
     productCode?: boolean
+    sfgProductId?: boolean
     unitOfMeasurement?: boolean
     outputQuantity?: boolean
     description?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    sfgProduct?: boolean | BillOfMaterial$sfgProductArgs<ExtArgs>
   }, ExtArgs["result"]["billOfMaterial"]>
 
   export type BillOfMaterialSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -85497,12 +93714,14 @@ export namespace Prisma {
     bomCode?: boolean
     productName?: boolean
     productCode?: boolean
+    sfgProductId?: boolean
     unitOfMeasurement?: boolean
     outputQuantity?: boolean
     description?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    sfgProduct?: boolean | BillOfMaterial$sfgProductArgs<ExtArgs>
   }, ExtArgs["result"]["billOfMaterial"]>
 
   export type BillOfMaterialSelectScalar = {
@@ -85510,6 +93729,7 @@ export namespace Prisma {
     bomCode?: boolean
     productName?: boolean
     productCode?: boolean
+    sfgProductId?: boolean
     unitOfMeasurement?: boolean
     outputQuantity?: boolean
     description?: boolean
@@ -85518,24 +93738,31 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type BillOfMaterialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bomCode" | "productName" | "productCode" | "unitOfMeasurement" | "outputQuantity" | "description" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["billOfMaterial"]>
+  export type BillOfMaterialOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "bomCode" | "productName" | "productCode" | "sfgProductId" | "unitOfMeasurement" | "outputQuantity" | "description" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["billOfMaterial"]>
   export type BillOfMaterialInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     items?: boolean | BillOfMaterial$itemsArgs<ExtArgs>
+    sfgProduct?: boolean | BillOfMaterial$sfgProductArgs<ExtArgs>
     _count?: boolean | BillOfMaterialCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type BillOfMaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type BillOfMaterialIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type BillOfMaterialIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sfgProduct?: boolean | BillOfMaterial$sfgProductArgs<ExtArgs>
+  }
+  export type BillOfMaterialIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    sfgProduct?: boolean | BillOfMaterial$sfgProductArgs<ExtArgs>
+  }
 
   export type $BillOfMaterialPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "BillOfMaterial"
     objects: {
       items: Prisma.$BOMItemPayload<ExtArgs>[]
+      sfgProduct: Prisma.$RawMaterialProductPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       bomCode: string
       productName: string
       productCode: string | null
+      sfgProductId: string | null
       unitOfMeasurement: string
       outputQuantity: number
       description: string | null
@@ -85937,6 +94164,7 @@ export namespace Prisma {
   export interface Prisma__BillOfMaterialClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     items<T extends BillOfMaterial$itemsArgs<ExtArgs> = {}>(args?: Subset<T, BillOfMaterial$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    sfgProduct<T extends BillOfMaterial$sfgProductArgs<ExtArgs> = {}>(args?: Subset<T, BillOfMaterial$sfgProductArgs<ExtArgs>>): Prisma__RawMaterialProductClient<$Result.GetResult<Prisma.$RawMaterialProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -85970,6 +94198,7 @@ export namespace Prisma {
     readonly bomCode: FieldRef<"BillOfMaterial", 'String'>
     readonly productName: FieldRef<"BillOfMaterial", 'String'>
     readonly productCode: FieldRef<"BillOfMaterial", 'String'>
+    readonly sfgProductId: FieldRef<"BillOfMaterial", 'String'>
     readonly unitOfMeasurement: FieldRef<"BillOfMaterial", 'String'>
     readonly outputQuantity: FieldRef<"BillOfMaterial", 'Float'>
     readonly description: FieldRef<"BillOfMaterial", 'String'>
@@ -86225,6 +94454,10 @@ export namespace Prisma {
      */
     data: BillOfMaterialCreateManyInput | BillOfMaterialCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -86295,6 +94528,10 @@ export namespace Prisma {
      * Limit how many BillOfMaterials to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BillOfMaterialIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -86385,6 +94622,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: BOMItemScalarFieldEnum | BOMItemScalarFieldEnum[]
+  }
+
+  /**
+   * BillOfMaterial.sfgProduct
+   */
+  export type BillOfMaterial$sfgProductArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RawMaterialProduct
+     */
+    select?: RawMaterialProductSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RawMaterialProduct
+     */
+    omit?: RawMaterialProductOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RawMaterialProductInclude<ExtArgs> | null
+    where?: RawMaterialProductWhereInput
   }
 
   /**
@@ -88743,6 +96999,2378 @@ export namespace Prisma {
 
 
   /**
+   * Model GrindingDispatch
+   */
+
+  export type AggregateGrindingDispatch = {
+    _count: GrindingDispatchCountAggregateOutputType | null
+    _avg: GrindingDispatchAvgAggregateOutputType | null
+    _sum: GrindingDispatchSumAggregateOutputType | null
+    _min: GrindingDispatchMinAggregateOutputType | null
+    _max: GrindingDispatchMaxAggregateOutputType | null
+  }
+
+  export type GrindingDispatchAvgAggregateOutputType = {
+    totalQuantity: number | null
+  }
+
+  export type GrindingDispatchSumAggregateOutputType = {
+    totalQuantity: number | null
+  }
+
+  export type GrindingDispatchMinAggregateOutputType = {
+    id: string | null
+    batchNumber: string | null
+    inputRawMaterialId: string | null
+    fromLocationId: string | null
+    toLocationId: string | null
+    totalQuantity: number | null
+    status: $Enums.GrindingDispatchStatus | null
+    sentAt: Date | null
+    acceptedAt: Date | null
+    rejectedAt: Date | null
+    rejectionReason: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GrindingDispatchMaxAggregateOutputType = {
+    id: string | null
+    batchNumber: string | null
+    inputRawMaterialId: string | null
+    fromLocationId: string | null
+    toLocationId: string | null
+    totalQuantity: number | null
+    status: $Enums.GrindingDispatchStatus | null
+    sentAt: Date | null
+    acceptedAt: Date | null
+    rejectedAt: Date | null
+    rejectionReason: string | null
+    notes: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type GrindingDispatchCountAggregateOutputType = {
+    id: number
+    batchNumber: number
+    inputRawMaterialId: number
+    fromLocationId: number
+    toLocationId: number
+    totalQuantity: number
+    status: number
+    sentAt: number
+    acceptedAt: number
+    rejectedAt: number
+    rejectionReason: number
+    notes: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type GrindingDispatchAvgAggregateInputType = {
+    totalQuantity?: true
+  }
+
+  export type GrindingDispatchSumAggregateInputType = {
+    totalQuantity?: true
+  }
+
+  export type GrindingDispatchMinAggregateInputType = {
+    id?: true
+    batchNumber?: true
+    inputRawMaterialId?: true
+    fromLocationId?: true
+    toLocationId?: true
+    totalQuantity?: true
+    status?: true
+    sentAt?: true
+    acceptedAt?: true
+    rejectedAt?: true
+    rejectionReason?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GrindingDispatchMaxAggregateInputType = {
+    id?: true
+    batchNumber?: true
+    inputRawMaterialId?: true
+    fromLocationId?: true
+    toLocationId?: true
+    totalQuantity?: true
+    status?: true
+    sentAt?: true
+    acceptedAt?: true
+    rejectedAt?: true
+    rejectionReason?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type GrindingDispatchCountAggregateInputType = {
+    id?: true
+    batchNumber?: true
+    inputRawMaterialId?: true
+    fromLocationId?: true
+    toLocationId?: true
+    totalQuantity?: true
+    status?: true
+    sentAt?: true
+    acceptedAt?: true
+    rejectedAt?: true
+    rejectionReason?: true
+    notes?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type GrindingDispatchAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GrindingDispatch to aggregate.
+     */
+    where?: GrindingDispatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GrindingDispatches to fetch.
+     */
+    orderBy?: GrindingDispatchOrderByWithRelationInput | GrindingDispatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GrindingDispatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GrindingDispatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GrindingDispatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GrindingDispatches
+    **/
+    _count?: true | GrindingDispatchCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GrindingDispatchAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GrindingDispatchSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GrindingDispatchMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GrindingDispatchMaxAggregateInputType
+  }
+
+  export type GetGrindingDispatchAggregateType<T extends GrindingDispatchAggregateArgs> = {
+        [P in keyof T & keyof AggregateGrindingDispatch]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGrindingDispatch[P]>
+      : GetScalarType<T[P], AggregateGrindingDispatch[P]>
+  }
+
+
+
+
+  export type GrindingDispatchGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GrindingDispatchWhereInput
+    orderBy?: GrindingDispatchOrderByWithAggregationInput | GrindingDispatchOrderByWithAggregationInput[]
+    by: GrindingDispatchScalarFieldEnum[] | GrindingDispatchScalarFieldEnum
+    having?: GrindingDispatchScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GrindingDispatchCountAggregateInputType | true
+    _avg?: GrindingDispatchAvgAggregateInputType
+    _sum?: GrindingDispatchSumAggregateInputType
+    _min?: GrindingDispatchMinAggregateInputType
+    _max?: GrindingDispatchMaxAggregateInputType
+  }
+
+  export type GrindingDispatchGroupByOutputType = {
+    id: string
+    batchNumber: string
+    inputRawMaterialId: string
+    fromLocationId: string
+    toLocationId: string
+    totalQuantity: number
+    status: $Enums.GrindingDispatchStatus
+    sentAt: Date
+    acceptedAt: Date | null
+    rejectedAt: Date | null
+    rejectionReason: string | null
+    notes: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: GrindingDispatchCountAggregateOutputType | null
+    _avg: GrindingDispatchAvgAggregateOutputType | null
+    _sum: GrindingDispatchSumAggregateOutputType | null
+    _min: GrindingDispatchMinAggregateOutputType | null
+    _max: GrindingDispatchMaxAggregateOutputType | null
+  }
+
+  type GetGrindingDispatchGroupByPayload<T extends GrindingDispatchGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GrindingDispatchGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GrindingDispatchGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GrindingDispatchGroupByOutputType[P]>
+            : GetScalarType<T[P], GrindingDispatchGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GrindingDispatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchNumber?: boolean
+    inputRawMaterialId?: boolean
+    fromLocationId?: boolean
+    toLocationId?: boolean
+    totalQuantity?: boolean
+    status?: boolean
+    sentAt?: boolean
+    acceptedAt?: boolean
+    rejectedAt?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    inputRawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    lots?: boolean | GrindingDispatch$lotsArgs<ExtArgs>
+    _count?: boolean | GrindingDispatchCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["grindingDispatch"]>
+
+  export type GrindingDispatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchNumber?: boolean
+    inputRawMaterialId?: boolean
+    fromLocationId?: boolean
+    toLocationId?: boolean
+    totalQuantity?: boolean
+    status?: boolean
+    sentAt?: boolean
+    acceptedAt?: boolean
+    rejectedAt?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    inputRawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["grindingDispatch"]>
+
+  export type GrindingDispatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchNumber?: boolean
+    inputRawMaterialId?: boolean
+    fromLocationId?: boolean
+    toLocationId?: boolean
+    totalQuantity?: boolean
+    status?: boolean
+    sentAt?: boolean
+    acceptedAt?: boolean
+    rejectedAt?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    inputRawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["grindingDispatch"]>
+
+  export type GrindingDispatchSelectScalar = {
+    id?: boolean
+    batchNumber?: boolean
+    inputRawMaterialId?: boolean
+    fromLocationId?: boolean
+    toLocationId?: boolean
+    totalQuantity?: boolean
+    status?: boolean
+    sentAt?: boolean
+    acceptedAt?: boolean
+    rejectedAt?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type GrindingDispatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "inputRawMaterialId" | "fromLocationId" | "toLocationId" | "totalQuantity" | "status" | "sentAt" | "acceptedAt" | "rejectedAt" | "rejectionReason" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["grindingDispatch"]>
+  export type GrindingDispatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    inputRawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    lots?: boolean | GrindingDispatch$lotsArgs<ExtArgs>
+    _count?: boolean | GrindingDispatchCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type GrindingDispatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    inputRawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+  }
+  export type GrindingDispatchIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    inputRawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+    fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
+    toLocation?: boolean | LocationDefaultArgs<ExtArgs>
+  }
+
+  export type $GrindingDispatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GrindingDispatch"
+    objects: {
+      inputRawMaterial: Prisma.$RawMaterialProductPayload<ExtArgs>
+      fromLocation: Prisma.$LocationPayload<ExtArgs>
+      toLocation: Prisma.$LocationPayload<ExtArgs>
+      lots: Prisma.$GrindingDispatchLotPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      batchNumber: string
+      inputRawMaterialId: string
+      fromLocationId: string
+      toLocationId: string
+      totalQuantity: number
+      status: $Enums.GrindingDispatchStatus
+      sentAt: Date
+      acceptedAt: Date | null
+      rejectedAt: Date | null
+      rejectionReason: string | null
+      notes: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["grindingDispatch"]>
+    composites: {}
+  }
+
+  type GrindingDispatchGetPayload<S extends boolean | null | undefined | GrindingDispatchDefaultArgs> = $Result.GetResult<Prisma.$GrindingDispatchPayload, S>
+
+  type GrindingDispatchCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GrindingDispatchFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GrindingDispatchCountAggregateInputType | true
+    }
+
+  export interface GrindingDispatchDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GrindingDispatch'], meta: { name: 'GrindingDispatch' } }
+    /**
+     * Find zero or one GrindingDispatch that matches the filter.
+     * @param {GrindingDispatchFindUniqueArgs} args - Arguments to find a GrindingDispatch
+     * @example
+     * // Get one GrindingDispatch
+     * const grindingDispatch = await prisma.grindingDispatch.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GrindingDispatchFindUniqueArgs>(args: SelectSubset<T, GrindingDispatchFindUniqueArgs<ExtArgs>>): Prisma__GrindingDispatchClient<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GrindingDispatch that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GrindingDispatchFindUniqueOrThrowArgs} args - Arguments to find a GrindingDispatch
+     * @example
+     * // Get one GrindingDispatch
+     * const grindingDispatch = await prisma.grindingDispatch.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GrindingDispatchFindUniqueOrThrowArgs>(args: SelectSubset<T, GrindingDispatchFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GrindingDispatchClient<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GrindingDispatch that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchFindFirstArgs} args - Arguments to find a GrindingDispatch
+     * @example
+     * // Get one GrindingDispatch
+     * const grindingDispatch = await prisma.grindingDispatch.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GrindingDispatchFindFirstArgs>(args?: SelectSubset<T, GrindingDispatchFindFirstArgs<ExtArgs>>): Prisma__GrindingDispatchClient<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GrindingDispatch that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchFindFirstOrThrowArgs} args - Arguments to find a GrindingDispatch
+     * @example
+     * // Get one GrindingDispatch
+     * const grindingDispatch = await prisma.grindingDispatch.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GrindingDispatchFindFirstOrThrowArgs>(args?: SelectSubset<T, GrindingDispatchFindFirstOrThrowArgs<ExtArgs>>): Prisma__GrindingDispatchClient<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GrindingDispatches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GrindingDispatches
+     * const grindingDispatches = await prisma.grindingDispatch.findMany()
+     * 
+     * // Get first 10 GrindingDispatches
+     * const grindingDispatches = await prisma.grindingDispatch.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const grindingDispatchWithIdOnly = await prisma.grindingDispatch.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GrindingDispatchFindManyArgs>(args?: SelectSubset<T, GrindingDispatchFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GrindingDispatch.
+     * @param {GrindingDispatchCreateArgs} args - Arguments to create a GrindingDispatch.
+     * @example
+     * // Create one GrindingDispatch
+     * const GrindingDispatch = await prisma.grindingDispatch.create({
+     *   data: {
+     *     // ... data to create a GrindingDispatch
+     *   }
+     * })
+     * 
+     */
+    create<T extends GrindingDispatchCreateArgs>(args: SelectSubset<T, GrindingDispatchCreateArgs<ExtArgs>>): Prisma__GrindingDispatchClient<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GrindingDispatches.
+     * @param {GrindingDispatchCreateManyArgs} args - Arguments to create many GrindingDispatches.
+     * @example
+     * // Create many GrindingDispatches
+     * const grindingDispatch = await prisma.grindingDispatch.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GrindingDispatchCreateManyArgs>(args?: SelectSubset<T, GrindingDispatchCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GrindingDispatches and returns the data saved in the database.
+     * @param {GrindingDispatchCreateManyAndReturnArgs} args - Arguments to create many GrindingDispatches.
+     * @example
+     * // Create many GrindingDispatches
+     * const grindingDispatch = await prisma.grindingDispatch.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GrindingDispatches and only return the `id`
+     * const grindingDispatchWithIdOnly = await prisma.grindingDispatch.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GrindingDispatchCreateManyAndReturnArgs>(args?: SelectSubset<T, GrindingDispatchCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GrindingDispatch.
+     * @param {GrindingDispatchDeleteArgs} args - Arguments to delete one GrindingDispatch.
+     * @example
+     * // Delete one GrindingDispatch
+     * const GrindingDispatch = await prisma.grindingDispatch.delete({
+     *   where: {
+     *     // ... filter to delete one GrindingDispatch
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GrindingDispatchDeleteArgs>(args: SelectSubset<T, GrindingDispatchDeleteArgs<ExtArgs>>): Prisma__GrindingDispatchClient<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GrindingDispatch.
+     * @param {GrindingDispatchUpdateArgs} args - Arguments to update one GrindingDispatch.
+     * @example
+     * // Update one GrindingDispatch
+     * const grindingDispatch = await prisma.grindingDispatch.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GrindingDispatchUpdateArgs>(args: SelectSubset<T, GrindingDispatchUpdateArgs<ExtArgs>>): Prisma__GrindingDispatchClient<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GrindingDispatches.
+     * @param {GrindingDispatchDeleteManyArgs} args - Arguments to filter GrindingDispatches to delete.
+     * @example
+     * // Delete a few GrindingDispatches
+     * const { count } = await prisma.grindingDispatch.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GrindingDispatchDeleteManyArgs>(args?: SelectSubset<T, GrindingDispatchDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GrindingDispatches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GrindingDispatches
+     * const grindingDispatch = await prisma.grindingDispatch.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GrindingDispatchUpdateManyArgs>(args: SelectSubset<T, GrindingDispatchUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GrindingDispatches and returns the data updated in the database.
+     * @param {GrindingDispatchUpdateManyAndReturnArgs} args - Arguments to update many GrindingDispatches.
+     * @example
+     * // Update many GrindingDispatches
+     * const grindingDispatch = await prisma.grindingDispatch.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GrindingDispatches and only return the `id`
+     * const grindingDispatchWithIdOnly = await prisma.grindingDispatch.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GrindingDispatchUpdateManyAndReturnArgs>(args: SelectSubset<T, GrindingDispatchUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GrindingDispatch.
+     * @param {GrindingDispatchUpsertArgs} args - Arguments to update or create a GrindingDispatch.
+     * @example
+     * // Update or create a GrindingDispatch
+     * const grindingDispatch = await prisma.grindingDispatch.upsert({
+     *   create: {
+     *     // ... data to create a GrindingDispatch
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GrindingDispatch we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GrindingDispatchUpsertArgs>(args: SelectSubset<T, GrindingDispatchUpsertArgs<ExtArgs>>): Prisma__GrindingDispatchClient<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GrindingDispatches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchCountArgs} args - Arguments to filter GrindingDispatches to count.
+     * @example
+     * // Count the number of GrindingDispatches
+     * const count = await prisma.grindingDispatch.count({
+     *   where: {
+     *     // ... the filter for the GrindingDispatches we want to count
+     *   }
+     * })
+    **/
+    count<T extends GrindingDispatchCountArgs>(
+      args?: Subset<T, GrindingDispatchCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GrindingDispatchCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GrindingDispatch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GrindingDispatchAggregateArgs>(args: Subset<T, GrindingDispatchAggregateArgs>): Prisma.PrismaPromise<GetGrindingDispatchAggregateType<T>>
+
+    /**
+     * Group by GrindingDispatch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GrindingDispatchGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GrindingDispatchGroupByArgs['orderBy'] }
+        : { orderBy?: GrindingDispatchGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GrindingDispatchGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGrindingDispatchGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GrindingDispatch model
+   */
+  readonly fields: GrindingDispatchFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GrindingDispatch.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GrindingDispatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    inputRawMaterial<T extends RawMaterialProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProductDefaultArgs<ExtArgs>>): Prisma__RawMaterialProductClient<$Result.GetResult<Prisma.$RawMaterialProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    fromLocation<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    toLocation<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    lots<T extends GrindingDispatch$lotsArgs<ExtArgs> = {}>(args?: Subset<T, GrindingDispatch$lotsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GrindingDispatch model
+   */
+  interface GrindingDispatchFieldRefs {
+    readonly id: FieldRef<"GrindingDispatch", 'String'>
+    readonly batchNumber: FieldRef<"GrindingDispatch", 'String'>
+    readonly inputRawMaterialId: FieldRef<"GrindingDispatch", 'String'>
+    readonly fromLocationId: FieldRef<"GrindingDispatch", 'String'>
+    readonly toLocationId: FieldRef<"GrindingDispatch", 'String'>
+    readonly totalQuantity: FieldRef<"GrindingDispatch", 'Float'>
+    readonly status: FieldRef<"GrindingDispatch", 'GrindingDispatchStatus'>
+    readonly sentAt: FieldRef<"GrindingDispatch", 'DateTime'>
+    readonly acceptedAt: FieldRef<"GrindingDispatch", 'DateTime'>
+    readonly rejectedAt: FieldRef<"GrindingDispatch", 'DateTime'>
+    readonly rejectionReason: FieldRef<"GrindingDispatch", 'String'>
+    readonly notes: FieldRef<"GrindingDispatch", 'String'>
+    readonly createdAt: FieldRef<"GrindingDispatch", 'DateTime'>
+    readonly updatedAt: FieldRef<"GrindingDispatch", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GrindingDispatch findUnique
+   */
+  export type GrindingDispatchFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    /**
+     * Filter, which GrindingDispatch to fetch.
+     */
+    where: GrindingDispatchWhereUniqueInput
+  }
+
+  /**
+   * GrindingDispatch findUniqueOrThrow
+   */
+  export type GrindingDispatchFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    /**
+     * Filter, which GrindingDispatch to fetch.
+     */
+    where: GrindingDispatchWhereUniqueInput
+  }
+
+  /**
+   * GrindingDispatch findFirst
+   */
+  export type GrindingDispatchFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    /**
+     * Filter, which GrindingDispatch to fetch.
+     */
+    where?: GrindingDispatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GrindingDispatches to fetch.
+     */
+    orderBy?: GrindingDispatchOrderByWithRelationInput | GrindingDispatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GrindingDispatches.
+     */
+    cursor?: GrindingDispatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GrindingDispatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GrindingDispatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GrindingDispatches.
+     */
+    distinct?: GrindingDispatchScalarFieldEnum | GrindingDispatchScalarFieldEnum[]
+  }
+
+  /**
+   * GrindingDispatch findFirstOrThrow
+   */
+  export type GrindingDispatchFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    /**
+     * Filter, which GrindingDispatch to fetch.
+     */
+    where?: GrindingDispatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GrindingDispatches to fetch.
+     */
+    orderBy?: GrindingDispatchOrderByWithRelationInput | GrindingDispatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GrindingDispatches.
+     */
+    cursor?: GrindingDispatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GrindingDispatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GrindingDispatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GrindingDispatches.
+     */
+    distinct?: GrindingDispatchScalarFieldEnum | GrindingDispatchScalarFieldEnum[]
+  }
+
+  /**
+   * GrindingDispatch findMany
+   */
+  export type GrindingDispatchFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    /**
+     * Filter, which GrindingDispatches to fetch.
+     */
+    where?: GrindingDispatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GrindingDispatches to fetch.
+     */
+    orderBy?: GrindingDispatchOrderByWithRelationInput | GrindingDispatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GrindingDispatches.
+     */
+    cursor?: GrindingDispatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GrindingDispatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GrindingDispatches.
+     */
+    skip?: number
+    distinct?: GrindingDispatchScalarFieldEnum | GrindingDispatchScalarFieldEnum[]
+  }
+
+  /**
+   * GrindingDispatch create
+   */
+  export type GrindingDispatchCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GrindingDispatch.
+     */
+    data: XOR<GrindingDispatchCreateInput, GrindingDispatchUncheckedCreateInput>
+  }
+
+  /**
+   * GrindingDispatch createMany
+   */
+  export type GrindingDispatchCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GrindingDispatches.
+     */
+    data: GrindingDispatchCreateManyInput | GrindingDispatchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GrindingDispatch createManyAndReturn
+   */
+  export type GrindingDispatchCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * The data used to create many GrindingDispatches.
+     */
+    data: GrindingDispatchCreateManyInput | GrindingDispatchCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GrindingDispatch update
+   */
+  export type GrindingDispatchUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GrindingDispatch.
+     */
+    data: XOR<GrindingDispatchUpdateInput, GrindingDispatchUncheckedUpdateInput>
+    /**
+     * Choose, which GrindingDispatch to update.
+     */
+    where: GrindingDispatchWhereUniqueInput
+  }
+
+  /**
+   * GrindingDispatch updateMany
+   */
+  export type GrindingDispatchUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GrindingDispatches.
+     */
+    data: XOR<GrindingDispatchUpdateManyMutationInput, GrindingDispatchUncheckedUpdateManyInput>
+    /**
+     * Filter which GrindingDispatches to update
+     */
+    where?: GrindingDispatchWhereInput
+    /**
+     * Limit how many GrindingDispatches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GrindingDispatch updateManyAndReturn
+   */
+  export type GrindingDispatchUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * The data used to update GrindingDispatches.
+     */
+    data: XOR<GrindingDispatchUpdateManyMutationInput, GrindingDispatchUncheckedUpdateManyInput>
+    /**
+     * Filter which GrindingDispatches to update
+     */
+    where?: GrindingDispatchWhereInput
+    /**
+     * Limit how many GrindingDispatches to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GrindingDispatch upsert
+   */
+  export type GrindingDispatchUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GrindingDispatch to update in case it exists.
+     */
+    where: GrindingDispatchWhereUniqueInput
+    /**
+     * In case the GrindingDispatch found by the `where` argument doesn't exist, create a new GrindingDispatch with this data.
+     */
+    create: XOR<GrindingDispatchCreateInput, GrindingDispatchUncheckedCreateInput>
+    /**
+     * In case the GrindingDispatch was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GrindingDispatchUpdateInput, GrindingDispatchUncheckedUpdateInput>
+  }
+
+  /**
+   * GrindingDispatch delete
+   */
+  export type GrindingDispatchDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+    /**
+     * Filter which GrindingDispatch to delete.
+     */
+    where: GrindingDispatchWhereUniqueInput
+  }
+
+  /**
+   * GrindingDispatch deleteMany
+   */
+  export type GrindingDispatchDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GrindingDispatches to delete
+     */
+    where?: GrindingDispatchWhereInput
+    /**
+     * Limit how many GrindingDispatches to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GrindingDispatch.lots
+   */
+  export type GrindingDispatch$lotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    where?: GrindingDispatchLotWhereInput
+    orderBy?: GrindingDispatchLotOrderByWithRelationInput | GrindingDispatchLotOrderByWithRelationInput[]
+    cursor?: GrindingDispatchLotWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: GrindingDispatchLotScalarFieldEnum | GrindingDispatchLotScalarFieldEnum[]
+  }
+
+  /**
+   * GrindingDispatch without action
+   */
+  export type GrindingDispatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatch
+     */
+    select?: GrindingDispatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatch
+     */
+    omit?: GrindingDispatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model GrindingDispatchLot
+   */
+
+  export type AggregateGrindingDispatchLot = {
+    _count: GrindingDispatchLotCountAggregateOutputType | null
+    _avg: GrindingDispatchLotAvgAggregateOutputType | null
+    _sum: GrindingDispatchLotSumAggregateOutputType | null
+    _min: GrindingDispatchLotMinAggregateOutputType | null
+    _max: GrindingDispatchLotMaxAggregateOutputType | null
+  }
+
+  export type GrindingDispatchLotAvgAggregateOutputType = {
+    allocatedQuantity: number | null
+    seedWastageAllocated: number | null
+  }
+
+  export type GrindingDispatchLotSumAggregateOutputType = {
+    allocatedQuantity: number | null
+    seedWastageAllocated: number | null
+  }
+
+  export type GrindingDispatchLotMinAggregateOutputType = {
+    id: string | null
+    dispatchId: string | null
+    cleaningLotId: string | null
+    allocatedQuantity: number | null
+    seedWastageAllocated: number | null
+    createdAt: Date | null
+  }
+
+  export type GrindingDispatchLotMaxAggregateOutputType = {
+    id: string | null
+    dispatchId: string | null
+    cleaningLotId: string | null
+    allocatedQuantity: number | null
+    seedWastageAllocated: number | null
+    createdAt: Date | null
+  }
+
+  export type GrindingDispatchLotCountAggregateOutputType = {
+    id: number
+    dispatchId: number
+    cleaningLotId: number
+    allocatedQuantity: number
+    seedWastageAllocated: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type GrindingDispatchLotAvgAggregateInputType = {
+    allocatedQuantity?: true
+    seedWastageAllocated?: true
+  }
+
+  export type GrindingDispatchLotSumAggregateInputType = {
+    allocatedQuantity?: true
+    seedWastageAllocated?: true
+  }
+
+  export type GrindingDispatchLotMinAggregateInputType = {
+    id?: true
+    dispatchId?: true
+    cleaningLotId?: true
+    allocatedQuantity?: true
+    seedWastageAllocated?: true
+    createdAt?: true
+  }
+
+  export type GrindingDispatchLotMaxAggregateInputType = {
+    id?: true
+    dispatchId?: true
+    cleaningLotId?: true
+    allocatedQuantity?: true
+    seedWastageAllocated?: true
+    createdAt?: true
+  }
+
+  export type GrindingDispatchLotCountAggregateInputType = {
+    id?: true
+    dispatchId?: true
+    cleaningLotId?: true
+    allocatedQuantity?: true
+    seedWastageAllocated?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type GrindingDispatchLotAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GrindingDispatchLot to aggregate.
+     */
+    where?: GrindingDispatchLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GrindingDispatchLots to fetch.
+     */
+    orderBy?: GrindingDispatchLotOrderByWithRelationInput | GrindingDispatchLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: GrindingDispatchLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GrindingDispatchLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GrindingDispatchLots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned GrindingDispatchLots
+    **/
+    _count?: true | GrindingDispatchLotCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: GrindingDispatchLotAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: GrindingDispatchLotSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: GrindingDispatchLotMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: GrindingDispatchLotMaxAggregateInputType
+  }
+
+  export type GetGrindingDispatchLotAggregateType<T extends GrindingDispatchLotAggregateArgs> = {
+        [P in keyof T & keyof AggregateGrindingDispatchLot]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGrindingDispatchLot[P]>
+      : GetScalarType<T[P], AggregateGrindingDispatchLot[P]>
+  }
+
+
+
+
+  export type GrindingDispatchLotGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GrindingDispatchLotWhereInput
+    orderBy?: GrindingDispatchLotOrderByWithAggregationInput | GrindingDispatchLotOrderByWithAggregationInput[]
+    by: GrindingDispatchLotScalarFieldEnum[] | GrindingDispatchLotScalarFieldEnum
+    having?: GrindingDispatchLotScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: GrindingDispatchLotCountAggregateInputType | true
+    _avg?: GrindingDispatchLotAvgAggregateInputType
+    _sum?: GrindingDispatchLotSumAggregateInputType
+    _min?: GrindingDispatchLotMinAggregateInputType
+    _max?: GrindingDispatchLotMaxAggregateInputType
+  }
+
+  export type GrindingDispatchLotGroupByOutputType = {
+    id: string
+    dispatchId: string
+    cleaningLotId: string
+    allocatedQuantity: number
+    seedWastageAllocated: number
+    createdAt: Date
+    _count: GrindingDispatchLotCountAggregateOutputType | null
+    _avg: GrindingDispatchLotAvgAggregateOutputType | null
+    _sum: GrindingDispatchLotSumAggregateOutputType | null
+    _min: GrindingDispatchLotMinAggregateOutputType | null
+    _max: GrindingDispatchLotMaxAggregateOutputType | null
+  }
+
+  type GetGrindingDispatchLotGroupByPayload<T extends GrindingDispatchLotGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<GrindingDispatchLotGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof GrindingDispatchLotGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], GrindingDispatchLotGroupByOutputType[P]>
+            : GetScalarType<T[P], GrindingDispatchLotGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type GrindingDispatchLotSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dispatchId?: boolean
+    cleaningLotId?: boolean
+    allocatedQuantity?: boolean
+    seedWastageAllocated?: boolean
+    createdAt?: boolean
+    dispatch?: boolean | GrindingDispatchDefaultArgs<ExtArgs>
+    cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["grindingDispatchLot"]>
+
+  export type GrindingDispatchLotSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dispatchId?: boolean
+    cleaningLotId?: boolean
+    allocatedQuantity?: boolean
+    seedWastageAllocated?: boolean
+    createdAt?: boolean
+    dispatch?: boolean | GrindingDispatchDefaultArgs<ExtArgs>
+    cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["grindingDispatchLot"]>
+
+  export type GrindingDispatchLotSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    dispatchId?: boolean
+    cleaningLotId?: boolean
+    allocatedQuantity?: boolean
+    seedWastageAllocated?: boolean
+    createdAt?: boolean
+    dispatch?: boolean | GrindingDispatchDefaultArgs<ExtArgs>
+    cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["grindingDispatchLot"]>
+
+  export type GrindingDispatchLotSelectScalar = {
+    id?: boolean
+    dispatchId?: boolean
+    cleaningLotId?: boolean
+    allocatedQuantity?: boolean
+    seedWastageAllocated?: boolean
+    createdAt?: boolean
+  }
+
+  export type GrindingDispatchLotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dispatchId" | "cleaningLotId" | "allocatedQuantity" | "seedWastageAllocated" | "createdAt", ExtArgs["result"]["grindingDispatchLot"]>
+  export type GrindingDispatchLotInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dispatch?: boolean | GrindingDispatchDefaultArgs<ExtArgs>
+    cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
+  }
+  export type GrindingDispatchLotIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dispatch?: boolean | GrindingDispatchDefaultArgs<ExtArgs>
+    cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
+  }
+  export type GrindingDispatchLotIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    dispatch?: boolean | GrindingDispatchDefaultArgs<ExtArgs>
+    cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
+  }
+
+  export type $GrindingDispatchLotPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GrindingDispatchLot"
+    objects: {
+      dispatch: Prisma.$GrindingDispatchPayload<ExtArgs>
+      cleaningLot: Prisma.$CleaningLotPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      dispatchId: string
+      cleaningLotId: string
+      allocatedQuantity: number
+      seedWastageAllocated: number
+      createdAt: Date
+    }, ExtArgs["result"]["grindingDispatchLot"]>
+    composites: {}
+  }
+
+  type GrindingDispatchLotGetPayload<S extends boolean | null | undefined | GrindingDispatchLotDefaultArgs> = $Result.GetResult<Prisma.$GrindingDispatchLotPayload, S>
+
+  type GrindingDispatchLotCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GrindingDispatchLotFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GrindingDispatchLotCountAggregateInputType | true
+    }
+
+  export interface GrindingDispatchLotDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GrindingDispatchLot'], meta: { name: 'GrindingDispatchLot' } }
+    /**
+     * Find zero or one GrindingDispatchLot that matches the filter.
+     * @param {GrindingDispatchLotFindUniqueArgs} args - Arguments to find a GrindingDispatchLot
+     * @example
+     * // Get one GrindingDispatchLot
+     * const grindingDispatchLot = await prisma.grindingDispatchLot.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends GrindingDispatchLotFindUniqueArgs>(args: SelectSubset<T, GrindingDispatchLotFindUniqueArgs<ExtArgs>>): Prisma__GrindingDispatchLotClient<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one GrindingDispatchLot that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {GrindingDispatchLotFindUniqueOrThrowArgs} args - Arguments to find a GrindingDispatchLot
+     * @example
+     * // Get one GrindingDispatchLot
+     * const grindingDispatchLot = await prisma.grindingDispatchLot.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends GrindingDispatchLotFindUniqueOrThrowArgs>(args: SelectSubset<T, GrindingDispatchLotFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GrindingDispatchLotClient<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GrindingDispatchLot that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchLotFindFirstArgs} args - Arguments to find a GrindingDispatchLot
+     * @example
+     * // Get one GrindingDispatchLot
+     * const grindingDispatchLot = await prisma.grindingDispatchLot.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends GrindingDispatchLotFindFirstArgs>(args?: SelectSubset<T, GrindingDispatchLotFindFirstArgs<ExtArgs>>): Prisma__GrindingDispatchLotClient<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first GrindingDispatchLot that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchLotFindFirstOrThrowArgs} args - Arguments to find a GrindingDispatchLot
+     * @example
+     * // Get one GrindingDispatchLot
+     * const grindingDispatchLot = await prisma.grindingDispatchLot.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends GrindingDispatchLotFindFirstOrThrowArgs>(args?: SelectSubset<T, GrindingDispatchLotFindFirstOrThrowArgs<ExtArgs>>): Prisma__GrindingDispatchLotClient<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more GrindingDispatchLots that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchLotFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all GrindingDispatchLots
+     * const grindingDispatchLots = await prisma.grindingDispatchLot.findMany()
+     * 
+     * // Get first 10 GrindingDispatchLots
+     * const grindingDispatchLots = await prisma.grindingDispatchLot.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const grindingDispatchLotWithIdOnly = await prisma.grindingDispatchLot.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends GrindingDispatchLotFindManyArgs>(args?: SelectSubset<T, GrindingDispatchLotFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a GrindingDispatchLot.
+     * @param {GrindingDispatchLotCreateArgs} args - Arguments to create a GrindingDispatchLot.
+     * @example
+     * // Create one GrindingDispatchLot
+     * const GrindingDispatchLot = await prisma.grindingDispatchLot.create({
+     *   data: {
+     *     // ... data to create a GrindingDispatchLot
+     *   }
+     * })
+     * 
+     */
+    create<T extends GrindingDispatchLotCreateArgs>(args: SelectSubset<T, GrindingDispatchLotCreateArgs<ExtArgs>>): Prisma__GrindingDispatchLotClient<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many GrindingDispatchLots.
+     * @param {GrindingDispatchLotCreateManyArgs} args - Arguments to create many GrindingDispatchLots.
+     * @example
+     * // Create many GrindingDispatchLots
+     * const grindingDispatchLot = await prisma.grindingDispatchLot.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends GrindingDispatchLotCreateManyArgs>(args?: SelectSubset<T, GrindingDispatchLotCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many GrindingDispatchLots and returns the data saved in the database.
+     * @param {GrindingDispatchLotCreateManyAndReturnArgs} args - Arguments to create many GrindingDispatchLots.
+     * @example
+     * // Create many GrindingDispatchLots
+     * const grindingDispatchLot = await prisma.grindingDispatchLot.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many GrindingDispatchLots and only return the `id`
+     * const grindingDispatchLotWithIdOnly = await prisma.grindingDispatchLot.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends GrindingDispatchLotCreateManyAndReturnArgs>(args?: SelectSubset<T, GrindingDispatchLotCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a GrindingDispatchLot.
+     * @param {GrindingDispatchLotDeleteArgs} args - Arguments to delete one GrindingDispatchLot.
+     * @example
+     * // Delete one GrindingDispatchLot
+     * const GrindingDispatchLot = await prisma.grindingDispatchLot.delete({
+     *   where: {
+     *     // ... filter to delete one GrindingDispatchLot
+     *   }
+     * })
+     * 
+     */
+    delete<T extends GrindingDispatchLotDeleteArgs>(args: SelectSubset<T, GrindingDispatchLotDeleteArgs<ExtArgs>>): Prisma__GrindingDispatchLotClient<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one GrindingDispatchLot.
+     * @param {GrindingDispatchLotUpdateArgs} args - Arguments to update one GrindingDispatchLot.
+     * @example
+     * // Update one GrindingDispatchLot
+     * const grindingDispatchLot = await prisma.grindingDispatchLot.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends GrindingDispatchLotUpdateArgs>(args: SelectSubset<T, GrindingDispatchLotUpdateArgs<ExtArgs>>): Prisma__GrindingDispatchLotClient<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more GrindingDispatchLots.
+     * @param {GrindingDispatchLotDeleteManyArgs} args - Arguments to filter GrindingDispatchLots to delete.
+     * @example
+     * // Delete a few GrindingDispatchLots
+     * const { count } = await prisma.grindingDispatchLot.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends GrindingDispatchLotDeleteManyArgs>(args?: SelectSubset<T, GrindingDispatchLotDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GrindingDispatchLots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchLotUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many GrindingDispatchLots
+     * const grindingDispatchLot = await prisma.grindingDispatchLot.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends GrindingDispatchLotUpdateManyArgs>(args: SelectSubset<T, GrindingDispatchLotUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more GrindingDispatchLots and returns the data updated in the database.
+     * @param {GrindingDispatchLotUpdateManyAndReturnArgs} args - Arguments to update many GrindingDispatchLots.
+     * @example
+     * // Update many GrindingDispatchLots
+     * const grindingDispatchLot = await prisma.grindingDispatchLot.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more GrindingDispatchLots and only return the `id`
+     * const grindingDispatchLotWithIdOnly = await prisma.grindingDispatchLot.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends GrindingDispatchLotUpdateManyAndReturnArgs>(args: SelectSubset<T, GrindingDispatchLotUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one GrindingDispatchLot.
+     * @param {GrindingDispatchLotUpsertArgs} args - Arguments to update or create a GrindingDispatchLot.
+     * @example
+     * // Update or create a GrindingDispatchLot
+     * const grindingDispatchLot = await prisma.grindingDispatchLot.upsert({
+     *   create: {
+     *     // ... data to create a GrindingDispatchLot
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the GrindingDispatchLot we want to update
+     *   }
+     * })
+     */
+    upsert<T extends GrindingDispatchLotUpsertArgs>(args: SelectSubset<T, GrindingDispatchLotUpsertArgs<ExtArgs>>): Prisma__GrindingDispatchLotClient<$Result.GetResult<Prisma.$GrindingDispatchLotPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of GrindingDispatchLots.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchLotCountArgs} args - Arguments to filter GrindingDispatchLots to count.
+     * @example
+     * // Count the number of GrindingDispatchLots
+     * const count = await prisma.grindingDispatchLot.count({
+     *   where: {
+     *     // ... the filter for the GrindingDispatchLots we want to count
+     *   }
+     * })
+    **/
+    count<T extends GrindingDispatchLotCountArgs>(
+      args?: Subset<T, GrindingDispatchLotCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], GrindingDispatchLotCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a GrindingDispatchLot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchLotAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends GrindingDispatchLotAggregateArgs>(args: Subset<T, GrindingDispatchLotAggregateArgs>): Prisma.PrismaPromise<GetGrindingDispatchLotAggregateType<T>>
+
+    /**
+     * Group by GrindingDispatchLot.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {GrindingDispatchLotGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends GrindingDispatchLotGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: GrindingDispatchLotGroupByArgs['orderBy'] }
+        : { orderBy?: GrindingDispatchLotGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, GrindingDispatchLotGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGrindingDispatchLotGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the GrindingDispatchLot model
+   */
+  readonly fields: GrindingDispatchLotFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for GrindingDispatchLot.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__GrindingDispatchLotClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    dispatch<T extends GrindingDispatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GrindingDispatchDefaultArgs<ExtArgs>>): Prisma__GrindingDispatchClient<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    cleaningLot<T extends CleaningLotDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CleaningLotDefaultArgs<ExtArgs>>): Prisma__CleaningLotClient<$Result.GetResult<Prisma.$CleaningLotPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the GrindingDispatchLot model
+   */
+  interface GrindingDispatchLotFieldRefs {
+    readonly id: FieldRef<"GrindingDispatchLot", 'String'>
+    readonly dispatchId: FieldRef<"GrindingDispatchLot", 'String'>
+    readonly cleaningLotId: FieldRef<"GrindingDispatchLot", 'String'>
+    readonly allocatedQuantity: FieldRef<"GrindingDispatchLot", 'Float'>
+    readonly seedWastageAllocated: FieldRef<"GrindingDispatchLot", 'Float'>
+    readonly createdAt: FieldRef<"GrindingDispatchLot", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * GrindingDispatchLot findUnique
+   */
+  export type GrindingDispatchLotFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    /**
+     * Filter, which GrindingDispatchLot to fetch.
+     */
+    where: GrindingDispatchLotWhereUniqueInput
+  }
+
+  /**
+   * GrindingDispatchLot findUniqueOrThrow
+   */
+  export type GrindingDispatchLotFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    /**
+     * Filter, which GrindingDispatchLot to fetch.
+     */
+    where: GrindingDispatchLotWhereUniqueInput
+  }
+
+  /**
+   * GrindingDispatchLot findFirst
+   */
+  export type GrindingDispatchLotFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    /**
+     * Filter, which GrindingDispatchLot to fetch.
+     */
+    where?: GrindingDispatchLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GrindingDispatchLots to fetch.
+     */
+    orderBy?: GrindingDispatchLotOrderByWithRelationInput | GrindingDispatchLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GrindingDispatchLots.
+     */
+    cursor?: GrindingDispatchLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GrindingDispatchLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GrindingDispatchLots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GrindingDispatchLots.
+     */
+    distinct?: GrindingDispatchLotScalarFieldEnum | GrindingDispatchLotScalarFieldEnum[]
+  }
+
+  /**
+   * GrindingDispatchLot findFirstOrThrow
+   */
+  export type GrindingDispatchLotFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    /**
+     * Filter, which GrindingDispatchLot to fetch.
+     */
+    where?: GrindingDispatchLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GrindingDispatchLots to fetch.
+     */
+    orderBy?: GrindingDispatchLotOrderByWithRelationInput | GrindingDispatchLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for GrindingDispatchLots.
+     */
+    cursor?: GrindingDispatchLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GrindingDispatchLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GrindingDispatchLots.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of GrindingDispatchLots.
+     */
+    distinct?: GrindingDispatchLotScalarFieldEnum | GrindingDispatchLotScalarFieldEnum[]
+  }
+
+  /**
+   * GrindingDispatchLot findMany
+   */
+  export type GrindingDispatchLotFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    /**
+     * Filter, which GrindingDispatchLots to fetch.
+     */
+    where?: GrindingDispatchLotWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of GrindingDispatchLots to fetch.
+     */
+    orderBy?: GrindingDispatchLotOrderByWithRelationInput | GrindingDispatchLotOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing GrindingDispatchLots.
+     */
+    cursor?: GrindingDispatchLotWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` GrindingDispatchLots from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` GrindingDispatchLots.
+     */
+    skip?: number
+    distinct?: GrindingDispatchLotScalarFieldEnum | GrindingDispatchLotScalarFieldEnum[]
+  }
+
+  /**
+   * GrindingDispatchLot create
+   */
+  export type GrindingDispatchLotCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    /**
+     * The data needed to create a GrindingDispatchLot.
+     */
+    data: XOR<GrindingDispatchLotCreateInput, GrindingDispatchLotUncheckedCreateInput>
+  }
+
+  /**
+   * GrindingDispatchLot createMany
+   */
+  export type GrindingDispatchLotCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many GrindingDispatchLots.
+     */
+    data: GrindingDispatchLotCreateManyInput | GrindingDispatchLotCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * GrindingDispatchLot createManyAndReturn
+   */
+  export type GrindingDispatchLotCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * The data used to create many GrindingDispatchLots.
+     */
+    data: GrindingDispatchLotCreateManyInput | GrindingDispatchLotCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GrindingDispatchLot update
+   */
+  export type GrindingDispatchLotUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    /**
+     * The data needed to update a GrindingDispatchLot.
+     */
+    data: XOR<GrindingDispatchLotUpdateInput, GrindingDispatchLotUncheckedUpdateInput>
+    /**
+     * Choose, which GrindingDispatchLot to update.
+     */
+    where: GrindingDispatchLotWhereUniqueInput
+  }
+
+  /**
+   * GrindingDispatchLot updateMany
+   */
+  export type GrindingDispatchLotUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update GrindingDispatchLots.
+     */
+    data: XOR<GrindingDispatchLotUpdateManyMutationInput, GrindingDispatchLotUncheckedUpdateManyInput>
+    /**
+     * Filter which GrindingDispatchLots to update
+     */
+    where?: GrindingDispatchLotWhereInput
+    /**
+     * Limit how many GrindingDispatchLots to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * GrindingDispatchLot updateManyAndReturn
+   */
+  export type GrindingDispatchLotUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * The data used to update GrindingDispatchLots.
+     */
+    data: XOR<GrindingDispatchLotUpdateManyMutationInput, GrindingDispatchLotUncheckedUpdateManyInput>
+    /**
+     * Filter which GrindingDispatchLots to update
+     */
+    where?: GrindingDispatchLotWhereInput
+    /**
+     * Limit how many GrindingDispatchLots to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * GrindingDispatchLot upsert
+   */
+  export type GrindingDispatchLotUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    /**
+     * The filter to search for the GrindingDispatchLot to update in case it exists.
+     */
+    where: GrindingDispatchLotWhereUniqueInput
+    /**
+     * In case the GrindingDispatchLot found by the `where` argument doesn't exist, create a new GrindingDispatchLot with this data.
+     */
+    create: XOR<GrindingDispatchLotCreateInput, GrindingDispatchLotUncheckedCreateInput>
+    /**
+     * In case the GrindingDispatchLot was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<GrindingDispatchLotUpdateInput, GrindingDispatchLotUncheckedUpdateInput>
+  }
+
+  /**
+   * GrindingDispatchLot delete
+   */
+  export type GrindingDispatchLotDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+    /**
+     * Filter which GrindingDispatchLot to delete.
+     */
+    where: GrindingDispatchLotWhereUniqueInput
+  }
+
+  /**
+   * GrindingDispatchLot deleteMany
+   */
+  export type GrindingDispatchLotDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which GrindingDispatchLots to delete
+     */
+    where?: GrindingDispatchLotWhereInput
+    /**
+     * Limit how many GrindingDispatchLots to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * GrindingDispatchLot without action
+   */
+  export type GrindingDispatchLotDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GrindingDispatchLot
+     */
+    select?: GrindingDispatchLotSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GrindingDispatchLot
+     */
+    omit?: GrindingDispatchLotOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GrindingDispatchLotInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -89456,6 +100084,7 @@ export namespace Prisma {
   export const ReceivalEntryScalarFieldEnum: {
     id: 'id',
     purchaseOrderItemId: 'purchaseOrderItemId',
+    locationId: 'locationId',
     warehouseId: 'warehouseId',
     weightMode: 'weightMode',
     totalWeight: 'totalWeight',
@@ -89502,6 +100131,103 @@ export namespace Prisma {
   };
 
   export type WarehouseScalarFieldEnum = (typeof WarehouseScalarFieldEnum)[keyof typeof WarehouseScalarFieldEnum]
+
+
+  export const LocationScalarFieldEnum: {
+    id: 'id',
+    code: 'code',
+    name: 'name',
+    type: 'type',
+    address: 'address',
+    description: 'description',
+    enabled: 'enabled',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
+
+
+  export const MaterialTransferScalarFieldEnum: {
+    id: 'id',
+    transferNumber: 'transferNumber',
+    direction: 'direction',
+    fromLocationId: 'fromLocationId',
+    toLocationId: 'toLocationId',
+    status: 'status',
+    sentById: 'sentById',
+    sentAt: 'sentAt',
+    acceptedById: 'acceptedById',
+    acceptedAt: 'acceptedAt',
+    rejectionReason: 'rejectionReason',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MaterialTransferScalarFieldEnum = (typeof MaterialTransferScalarFieldEnum)[keyof typeof MaterialTransferScalarFieldEnum]
+
+
+  export const MaterialTransferLineScalarFieldEnum: {
+    id: 'id',
+    transferId: 'transferId',
+    lineType: 'lineType',
+    rawMaterialId: 'rawMaterialId',
+    productName: 'productName',
+    skuCode: 'skuCode',
+    quantity: 'quantity',
+    unitOfMeasurement: 'unitOfMeasurement',
+    batchNumber: 'batchNumber',
+    cleaningLotId: 'cleaningLotId',
+    createdAt: 'createdAt'
+  };
+
+  export type MaterialTransferLineScalarFieldEnum = (typeof MaterialTransferLineScalarFieldEnum)[keyof typeof MaterialTransferLineScalarFieldEnum]
+
+
+  export const ProductionPostingScalarFieldEnum: {
+    id: 'id',
+    postingNumber: 'postingNumber',
+    sfgProductId: 'sfgProductId',
+    bomId: 'bomId',
+    locationId: 'locationId',
+    shiftDate: 'shiftDate',
+    notes: 'notes',
+    postedById: 'postedById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProductionPostingScalarFieldEnum = (typeof ProductionPostingScalarFieldEnum)[keyof typeof ProductionPostingScalarFieldEnum]
+
+
+  export const ProductionConsumptionScalarFieldEnum: {
+    id: 'id',
+    postingId: 'postingId',
+    rawMaterialId: 'rawMaterialId',
+    expectedQuantity: 'expectedQuantity',
+    actualQuantity: 'actualQuantity',
+    batchNumber: 'batchNumber',
+    cleaningLotId: 'cleaningLotId',
+    createdAt: 'createdAt'
+  };
+
+  export type ProductionConsumptionScalarFieldEnum = (typeof ProductionConsumptionScalarFieldEnum)[keyof typeof ProductionConsumptionScalarFieldEnum]
+
+
+  export const ProductionOutputScalarFieldEnum: {
+    id: 'id',
+    postingId: 'postingId',
+    outputType: 'outputType',
+    productName: 'productName',
+    skuCode: 'skuCode',
+    quantity: 'quantity',
+    unit: 'unit',
+    batchNumber: 'batchNumber',
+    createdAt: 'createdAt'
+  };
+
+  export type ProductionOutputScalarFieldEnum = (typeof ProductionOutputScalarFieldEnum)[keyof typeof ProductionOutputScalarFieldEnum]
 
 
   export const CleaningJobScalarFieldEnum: {
@@ -89728,6 +100454,7 @@ export namespace Prisma {
     bomCode: 'bomCode',
     productName: 'productName',
     productCode: 'productCode',
+    sfgProductId: 'sfgProductId',
     unitOfMeasurement: 'unitOfMeasurement',
     outputQuantity: 'outputQuantity',
     description: 'description',
@@ -89768,6 +100495,38 @@ export namespace Prisma {
   };
 
   export type SeedWastageRecordScalarFieldEnum = (typeof SeedWastageRecordScalarFieldEnum)[keyof typeof SeedWastageRecordScalarFieldEnum]
+
+
+  export const GrindingDispatchScalarFieldEnum: {
+    id: 'id',
+    batchNumber: 'batchNumber',
+    inputRawMaterialId: 'inputRawMaterialId',
+    fromLocationId: 'fromLocationId',
+    toLocationId: 'toLocationId',
+    totalQuantity: 'totalQuantity',
+    status: 'status',
+    sentAt: 'sentAt',
+    acceptedAt: 'acceptedAt',
+    rejectedAt: 'rejectedAt',
+    rejectionReason: 'rejectionReason',
+    notes: 'notes',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GrindingDispatchScalarFieldEnum = (typeof GrindingDispatchScalarFieldEnum)[keyof typeof GrindingDispatchScalarFieldEnum]
+
+
+  export const GrindingDispatchLotScalarFieldEnum: {
+    id: 'id',
+    dispatchId: 'dispatchId',
+    cleaningLotId: 'cleaningLotId',
+    allocatedQuantity: 'allocatedQuantity',
+    seedWastageAllocated: 'seedWastageAllocated',
+    createdAt: 'createdAt'
+  };
+
+  export type GrindingDispatchLotScalarFieldEnum = (typeof GrindingDispatchLotScalarFieldEnum)[keyof typeof GrindingDispatchLotScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -90146,6 +100905,76 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'LocationType'
+   */
+  export type EnumLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LocationType'>
+    
+
+
+  /**
+   * Reference to a field of type 'LocationType[]'
+   */
+  export type ListEnumLocationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LocationType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransferDirection'
+   */
+  export type EnumTransferDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferDirection'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransferDirection[]'
+   */
+  export type ListEnumTransferDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferDirection[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransferStatus'
+   */
+  export type EnumTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransferStatus[]'
+   */
+  export type ListEnumTransferStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransferLineType'
+   */
+  export type EnumTransferLineTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferLineType'>
+    
+
+
+  /**
+   * Reference to a field of type 'TransferLineType[]'
+   */
+  export type ListEnumTransferLineTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransferLineType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'OutputType'
+   */
+  export type EnumOutputTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OutputType'>
+    
+
+
+  /**
+   * Reference to a field of type 'OutputType[]'
+   */
+  export type ListEnumOutputTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OutputType[]'>
+    
+
+
+  /**
    * Reference to a field of type 'BOMStatus'
    */
   export type EnumBOMStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BOMStatus'>
@@ -90156,6 +100985,20 @@ export namespace Prisma {
    * Reference to a field of type 'BOMStatus[]'
    */
   export type ListEnumBOMStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BOMStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'GrindingDispatchStatus'
+   */
+  export type EnumGrindingDispatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GrindingDispatchStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'GrindingDispatchStatus[]'
+   */
+  export type ListEnumGrindingDispatchStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GrindingDispatchStatus[]'>
     
   /**
    * Deep Input Types
@@ -93861,6 +104704,8 @@ export namespace Prisma {
     vendor?: XOR<VendorNullableScalarRelationFilter, VendorWhereInput> | null
     stockEntries?: StockEntryListRelationFilter
     bomItems?: BOMItemListRelationFilter
+    bomsAsSfg?: BillOfMaterialListRelationFilter
+    grindingDispatches?: GrindingDispatchListRelationFilter
   }
 
   export type RawMaterialProductOrderByWithRelationInput = {
@@ -93883,6 +104728,8 @@ export namespace Prisma {
     vendor?: VendorOrderByWithRelationInput
     stockEntries?: StockEntryOrderByRelationAggregateInput
     bomItems?: BOMItemOrderByRelationAggregateInput
+    bomsAsSfg?: BillOfMaterialOrderByRelationAggregateInput
+    grindingDispatches?: GrindingDispatchOrderByRelationAggregateInput
   }
 
   export type RawMaterialProductWhereUniqueInput = Prisma.AtLeast<{
@@ -93908,6 +104755,8 @@ export namespace Prisma {
     vendor?: XOR<VendorNullableScalarRelationFilter, VendorWhereInput> | null
     stockEntries?: StockEntryListRelationFilter
     bomItems?: BOMItemListRelationFilter
+    bomsAsSfg?: BillOfMaterialListRelationFilter
+    grindingDispatches?: GrindingDispatchListRelationFilter
   }, "id" | "skuCode">
 
   export type RawMaterialProductOrderByWithAggregationInput = {
@@ -94104,26 +104953,30 @@ export namespace Prisma {
     NOT?: ReceivalEntryWhereInput | ReceivalEntryWhereInput[]
     id?: StringFilter<"ReceivalEntry"> | string
     purchaseOrderItemId?: StringFilter<"ReceivalEntry"> | string
-    warehouseId?: StringFilter<"ReceivalEntry"> | string
+    locationId?: StringNullableFilter<"ReceivalEntry"> | string | null
+    warehouseId?: StringNullableFilter<"ReceivalEntry"> | string | null
     weightMode?: EnumWeightModeFilter<"ReceivalEntry"> | $Enums.WeightMode
     totalWeight?: FloatFilter<"ReceivalEntry"> | number
     notes?: StringNullableFilter<"ReceivalEntry"> | string | null
     receivedDate?: DateTimeFilter<"ReceivalEntry"> | Date | string
     bags?: ReceivalBagListRelationFilter
     purchaseOrderItem?: XOR<PurchaseOrderItemScalarRelationFilter, PurchaseOrderItemWhereInput>
-    warehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
+    location?: XOR<LocationNullableScalarRelationFilter, LocationWhereInput> | null
+    warehouse?: XOR<WarehouseNullableScalarRelationFilter, WarehouseWhereInput> | null
   }
 
   export type ReceivalEntryOrderByWithRelationInput = {
     id?: SortOrder
     purchaseOrderItemId?: SortOrder
-    warehouseId?: SortOrder
+    locationId?: SortOrderInput | SortOrder
+    warehouseId?: SortOrderInput | SortOrder
     weightMode?: SortOrder
     totalWeight?: SortOrder
     notes?: SortOrderInput | SortOrder
     receivedDate?: SortOrder
     bags?: ReceivalBagOrderByRelationAggregateInput
     purchaseOrderItem?: PurchaseOrderItemOrderByWithRelationInput
+    location?: LocationOrderByWithRelationInput
     warehouse?: WarehouseOrderByWithRelationInput
   }
 
@@ -94133,20 +104986,23 @@ export namespace Prisma {
     OR?: ReceivalEntryWhereInput[]
     NOT?: ReceivalEntryWhereInput | ReceivalEntryWhereInput[]
     purchaseOrderItemId?: StringFilter<"ReceivalEntry"> | string
-    warehouseId?: StringFilter<"ReceivalEntry"> | string
+    locationId?: StringNullableFilter<"ReceivalEntry"> | string | null
+    warehouseId?: StringNullableFilter<"ReceivalEntry"> | string | null
     weightMode?: EnumWeightModeFilter<"ReceivalEntry"> | $Enums.WeightMode
     totalWeight?: FloatFilter<"ReceivalEntry"> | number
     notes?: StringNullableFilter<"ReceivalEntry"> | string | null
     receivedDate?: DateTimeFilter<"ReceivalEntry"> | Date | string
     bags?: ReceivalBagListRelationFilter
     purchaseOrderItem?: XOR<PurchaseOrderItemScalarRelationFilter, PurchaseOrderItemWhereInput>
-    warehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
+    location?: XOR<LocationNullableScalarRelationFilter, LocationWhereInput> | null
+    warehouse?: XOR<WarehouseNullableScalarRelationFilter, WarehouseWhereInput> | null
   }, "id">
 
   export type ReceivalEntryOrderByWithAggregationInput = {
     id?: SortOrder
     purchaseOrderItemId?: SortOrder
-    warehouseId?: SortOrder
+    locationId?: SortOrderInput | SortOrder
+    warehouseId?: SortOrderInput | SortOrder
     weightMode?: SortOrder
     totalWeight?: SortOrder
     notes?: SortOrderInput | SortOrder
@@ -94164,7 +105020,8 @@ export namespace Prisma {
     NOT?: ReceivalEntryScalarWhereWithAggregatesInput | ReceivalEntryScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"ReceivalEntry"> | string
     purchaseOrderItemId?: StringWithAggregatesFilter<"ReceivalEntry"> | string
-    warehouseId?: StringWithAggregatesFilter<"ReceivalEntry"> | string
+    locationId?: StringNullableWithAggregatesFilter<"ReceivalEntry"> | string | null
+    warehouseId?: StringNullableWithAggregatesFilter<"ReceivalEntry"> | string | null
     weightMode?: EnumWeightModeWithAggregatesFilter<"ReceivalEntry"> | $Enums.WeightMode
     totalWeight?: FloatWithAggregatesFilter<"ReceivalEntry"> | number
     notes?: StringNullableWithAggregatesFilter<"ReceivalEntry"> | string | null
@@ -94402,6 +105259,518 @@ export namespace Prisma {
     location?: StringWithAggregatesFilter<"Warehouse"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Warehouse"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Warehouse"> | Date | string
+  }
+
+  export type LocationWhereInput = {
+    AND?: LocationWhereInput | LocationWhereInput[]
+    OR?: LocationWhereInput[]
+    NOT?: LocationWhereInput | LocationWhereInput[]
+    id?: StringFilter<"Location"> | string
+    code?: StringFilter<"Location"> | string
+    name?: StringFilter<"Location"> | string
+    type?: EnumLocationTypeFilter<"Location"> | $Enums.LocationType
+    address?: StringNullableFilter<"Location"> | string | null
+    description?: StringNullableFilter<"Location"> | string | null
+    enabled?: BoolFilter<"Location"> | boolean
+    createdAt?: DateTimeFilter<"Location"> | Date | string
+    updatedAt?: DateTimeFilter<"Location"> | Date | string
+    receivalEntries?: ReceivalEntryListRelationFilter
+    transfersFrom?: MaterialTransferListRelationFilter
+    transfersTo?: MaterialTransferListRelationFilter
+    dispatchesFrom?: GrindingDispatchListRelationFilter
+    dispatchesTo?: GrindingDispatchListRelationFilter
+  }
+
+  export type LocationOrderByWithRelationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    address?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    enabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    receivalEntries?: ReceivalEntryOrderByRelationAggregateInput
+    transfersFrom?: MaterialTransferOrderByRelationAggregateInput
+    transfersTo?: MaterialTransferOrderByRelationAggregateInput
+    dispatchesFrom?: GrindingDispatchOrderByRelationAggregateInput
+    dispatchesTo?: GrindingDispatchOrderByRelationAggregateInput
+  }
+
+  export type LocationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: LocationWhereInput | LocationWhereInput[]
+    OR?: LocationWhereInput[]
+    NOT?: LocationWhereInput | LocationWhereInput[]
+    name?: StringFilter<"Location"> | string
+    type?: EnumLocationTypeFilter<"Location"> | $Enums.LocationType
+    address?: StringNullableFilter<"Location"> | string | null
+    description?: StringNullableFilter<"Location"> | string | null
+    enabled?: BoolFilter<"Location"> | boolean
+    createdAt?: DateTimeFilter<"Location"> | Date | string
+    updatedAt?: DateTimeFilter<"Location"> | Date | string
+    receivalEntries?: ReceivalEntryListRelationFilter
+    transfersFrom?: MaterialTransferListRelationFilter
+    transfersTo?: MaterialTransferListRelationFilter
+    dispatchesFrom?: GrindingDispatchListRelationFilter
+    dispatchesTo?: GrindingDispatchListRelationFilter
+  }, "id" | "code">
+
+  export type LocationOrderByWithAggregationInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    address?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    enabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: LocationCountOrderByAggregateInput
+    _max?: LocationMaxOrderByAggregateInput
+    _min?: LocationMinOrderByAggregateInput
+  }
+
+  export type LocationScalarWhereWithAggregatesInput = {
+    AND?: LocationScalarWhereWithAggregatesInput | LocationScalarWhereWithAggregatesInput[]
+    OR?: LocationScalarWhereWithAggregatesInput[]
+    NOT?: LocationScalarWhereWithAggregatesInput | LocationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Location"> | string
+    code?: StringWithAggregatesFilter<"Location"> | string
+    name?: StringWithAggregatesFilter<"Location"> | string
+    type?: EnumLocationTypeWithAggregatesFilter<"Location"> | $Enums.LocationType
+    address?: StringNullableWithAggregatesFilter<"Location"> | string | null
+    description?: StringNullableWithAggregatesFilter<"Location"> | string | null
+    enabled?: BoolWithAggregatesFilter<"Location"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Location"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Location"> | Date | string
+  }
+
+  export type MaterialTransferWhereInput = {
+    AND?: MaterialTransferWhereInput | MaterialTransferWhereInput[]
+    OR?: MaterialTransferWhereInput[]
+    NOT?: MaterialTransferWhereInput | MaterialTransferWhereInput[]
+    id?: StringFilter<"MaterialTransfer"> | string
+    transferNumber?: StringFilter<"MaterialTransfer"> | string
+    direction?: EnumTransferDirectionFilter<"MaterialTransfer"> | $Enums.TransferDirection
+    fromLocationId?: StringFilter<"MaterialTransfer"> | string
+    toLocationId?: StringFilter<"MaterialTransfer"> | string
+    status?: EnumTransferStatusFilter<"MaterialTransfer"> | $Enums.TransferStatus
+    sentById?: StringFilter<"MaterialTransfer"> | string
+    sentAt?: DateTimeFilter<"MaterialTransfer"> | Date | string
+    acceptedById?: StringNullableFilter<"MaterialTransfer"> | string | null
+    acceptedAt?: DateTimeNullableFilter<"MaterialTransfer"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"MaterialTransfer"> | string | null
+    notes?: StringNullableFilter<"MaterialTransfer"> | string | null
+    createdAt?: DateTimeFilter<"MaterialTransfer"> | Date | string
+    updatedAt?: DateTimeFilter<"MaterialTransfer"> | Date | string
+    fromLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    toLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    lines?: MaterialTransferLineListRelationFilter
+  }
+
+  export type MaterialTransferOrderByWithRelationInput = {
+    id?: SortOrder
+    transferNumber?: SortOrder
+    direction?: SortOrder
+    fromLocationId?: SortOrder
+    toLocationId?: SortOrder
+    status?: SortOrder
+    sentById?: SortOrder
+    sentAt?: SortOrder
+    acceptedById?: SortOrderInput | SortOrder
+    acceptedAt?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    fromLocation?: LocationOrderByWithRelationInput
+    toLocation?: LocationOrderByWithRelationInput
+    lines?: MaterialTransferLineOrderByRelationAggregateInput
+  }
+
+  export type MaterialTransferWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    transferNumber?: string
+    AND?: MaterialTransferWhereInput | MaterialTransferWhereInput[]
+    OR?: MaterialTransferWhereInput[]
+    NOT?: MaterialTransferWhereInput | MaterialTransferWhereInput[]
+    direction?: EnumTransferDirectionFilter<"MaterialTransfer"> | $Enums.TransferDirection
+    fromLocationId?: StringFilter<"MaterialTransfer"> | string
+    toLocationId?: StringFilter<"MaterialTransfer"> | string
+    status?: EnumTransferStatusFilter<"MaterialTransfer"> | $Enums.TransferStatus
+    sentById?: StringFilter<"MaterialTransfer"> | string
+    sentAt?: DateTimeFilter<"MaterialTransfer"> | Date | string
+    acceptedById?: StringNullableFilter<"MaterialTransfer"> | string | null
+    acceptedAt?: DateTimeNullableFilter<"MaterialTransfer"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"MaterialTransfer"> | string | null
+    notes?: StringNullableFilter<"MaterialTransfer"> | string | null
+    createdAt?: DateTimeFilter<"MaterialTransfer"> | Date | string
+    updatedAt?: DateTimeFilter<"MaterialTransfer"> | Date | string
+    fromLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    toLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    lines?: MaterialTransferLineListRelationFilter
+  }, "id" | "transferNumber">
+
+  export type MaterialTransferOrderByWithAggregationInput = {
+    id?: SortOrder
+    transferNumber?: SortOrder
+    direction?: SortOrder
+    fromLocationId?: SortOrder
+    toLocationId?: SortOrder
+    status?: SortOrder
+    sentById?: SortOrder
+    sentAt?: SortOrder
+    acceptedById?: SortOrderInput | SortOrder
+    acceptedAt?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MaterialTransferCountOrderByAggregateInput
+    _max?: MaterialTransferMaxOrderByAggregateInput
+    _min?: MaterialTransferMinOrderByAggregateInput
+  }
+
+  export type MaterialTransferScalarWhereWithAggregatesInput = {
+    AND?: MaterialTransferScalarWhereWithAggregatesInput | MaterialTransferScalarWhereWithAggregatesInput[]
+    OR?: MaterialTransferScalarWhereWithAggregatesInput[]
+    NOT?: MaterialTransferScalarWhereWithAggregatesInput | MaterialTransferScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MaterialTransfer"> | string
+    transferNumber?: StringWithAggregatesFilter<"MaterialTransfer"> | string
+    direction?: EnumTransferDirectionWithAggregatesFilter<"MaterialTransfer"> | $Enums.TransferDirection
+    fromLocationId?: StringWithAggregatesFilter<"MaterialTransfer"> | string
+    toLocationId?: StringWithAggregatesFilter<"MaterialTransfer"> | string
+    status?: EnumTransferStatusWithAggregatesFilter<"MaterialTransfer"> | $Enums.TransferStatus
+    sentById?: StringWithAggregatesFilter<"MaterialTransfer"> | string
+    sentAt?: DateTimeWithAggregatesFilter<"MaterialTransfer"> | Date | string
+    acceptedById?: StringNullableWithAggregatesFilter<"MaterialTransfer"> | string | null
+    acceptedAt?: DateTimeNullableWithAggregatesFilter<"MaterialTransfer"> | Date | string | null
+    rejectionReason?: StringNullableWithAggregatesFilter<"MaterialTransfer"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"MaterialTransfer"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"MaterialTransfer"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MaterialTransfer"> | Date | string
+  }
+
+  export type MaterialTransferLineWhereInput = {
+    AND?: MaterialTransferLineWhereInput | MaterialTransferLineWhereInput[]
+    OR?: MaterialTransferLineWhereInput[]
+    NOT?: MaterialTransferLineWhereInput | MaterialTransferLineWhereInput[]
+    id?: StringFilter<"MaterialTransferLine"> | string
+    transferId?: StringFilter<"MaterialTransferLine"> | string
+    lineType?: EnumTransferLineTypeFilter<"MaterialTransferLine"> | $Enums.TransferLineType
+    rawMaterialId?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    productName?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    skuCode?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    quantity?: FloatFilter<"MaterialTransferLine"> | number
+    unitOfMeasurement?: StringFilter<"MaterialTransferLine"> | string
+    batchNumber?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    cleaningLotId?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    createdAt?: DateTimeFilter<"MaterialTransferLine"> | Date | string
+    transfer?: XOR<MaterialTransferScalarRelationFilter, MaterialTransferWhereInput>
+  }
+
+  export type MaterialTransferLineOrderByWithRelationInput = {
+    id?: SortOrder
+    transferId?: SortOrder
+    lineType?: SortOrder
+    rawMaterialId?: SortOrderInput | SortOrder
+    productName?: SortOrderInput | SortOrder
+    skuCode?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    unitOfMeasurement?: SortOrder
+    batchNumber?: SortOrderInput | SortOrder
+    cleaningLotId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    transfer?: MaterialTransferOrderByWithRelationInput
+  }
+
+  export type MaterialTransferLineWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: MaterialTransferLineWhereInput | MaterialTransferLineWhereInput[]
+    OR?: MaterialTransferLineWhereInput[]
+    NOT?: MaterialTransferLineWhereInput | MaterialTransferLineWhereInput[]
+    transferId?: StringFilter<"MaterialTransferLine"> | string
+    lineType?: EnumTransferLineTypeFilter<"MaterialTransferLine"> | $Enums.TransferLineType
+    rawMaterialId?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    productName?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    skuCode?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    quantity?: FloatFilter<"MaterialTransferLine"> | number
+    unitOfMeasurement?: StringFilter<"MaterialTransferLine"> | string
+    batchNumber?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    cleaningLotId?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    createdAt?: DateTimeFilter<"MaterialTransferLine"> | Date | string
+    transfer?: XOR<MaterialTransferScalarRelationFilter, MaterialTransferWhereInput>
+  }, "id">
+
+  export type MaterialTransferLineOrderByWithAggregationInput = {
+    id?: SortOrder
+    transferId?: SortOrder
+    lineType?: SortOrder
+    rawMaterialId?: SortOrderInput | SortOrder
+    productName?: SortOrderInput | SortOrder
+    skuCode?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    unitOfMeasurement?: SortOrder
+    batchNumber?: SortOrderInput | SortOrder
+    cleaningLotId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: MaterialTransferLineCountOrderByAggregateInput
+    _avg?: MaterialTransferLineAvgOrderByAggregateInput
+    _max?: MaterialTransferLineMaxOrderByAggregateInput
+    _min?: MaterialTransferLineMinOrderByAggregateInput
+    _sum?: MaterialTransferLineSumOrderByAggregateInput
+  }
+
+  export type MaterialTransferLineScalarWhereWithAggregatesInput = {
+    AND?: MaterialTransferLineScalarWhereWithAggregatesInput | MaterialTransferLineScalarWhereWithAggregatesInput[]
+    OR?: MaterialTransferLineScalarWhereWithAggregatesInput[]
+    NOT?: MaterialTransferLineScalarWhereWithAggregatesInput | MaterialTransferLineScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MaterialTransferLine"> | string
+    transferId?: StringWithAggregatesFilter<"MaterialTransferLine"> | string
+    lineType?: EnumTransferLineTypeWithAggregatesFilter<"MaterialTransferLine"> | $Enums.TransferLineType
+    rawMaterialId?: StringNullableWithAggregatesFilter<"MaterialTransferLine"> | string | null
+    productName?: StringNullableWithAggregatesFilter<"MaterialTransferLine"> | string | null
+    skuCode?: StringNullableWithAggregatesFilter<"MaterialTransferLine"> | string | null
+    quantity?: FloatWithAggregatesFilter<"MaterialTransferLine"> | number
+    unitOfMeasurement?: StringWithAggregatesFilter<"MaterialTransferLine"> | string
+    batchNumber?: StringNullableWithAggregatesFilter<"MaterialTransferLine"> | string | null
+    cleaningLotId?: StringNullableWithAggregatesFilter<"MaterialTransferLine"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"MaterialTransferLine"> | Date | string
+  }
+
+  export type ProductionPostingWhereInput = {
+    AND?: ProductionPostingWhereInput | ProductionPostingWhereInput[]
+    OR?: ProductionPostingWhereInput[]
+    NOT?: ProductionPostingWhereInput | ProductionPostingWhereInput[]
+    id?: StringFilter<"ProductionPosting"> | string
+    postingNumber?: StringFilter<"ProductionPosting"> | string
+    sfgProductId?: StringFilter<"ProductionPosting"> | string
+    bomId?: StringFilter<"ProductionPosting"> | string
+    locationId?: StringFilter<"ProductionPosting"> | string
+    shiftDate?: DateTimeFilter<"ProductionPosting"> | Date | string
+    notes?: StringNullableFilter<"ProductionPosting"> | string | null
+    postedById?: StringFilter<"ProductionPosting"> | string
+    createdAt?: DateTimeFilter<"ProductionPosting"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductionPosting"> | Date | string
+    consumptions?: ProductionConsumptionListRelationFilter
+    outputs?: ProductionOutputListRelationFilter
+  }
+
+  export type ProductionPostingOrderByWithRelationInput = {
+    id?: SortOrder
+    postingNumber?: SortOrder
+    sfgProductId?: SortOrder
+    bomId?: SortOrder
+    locationId?: SortOrder
+    shiftDate?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    postedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    consumptions?: ProductionConsumptionOrderByRelationAggregateInput
+    outputs?: ProductionOutputOrderByRelationAggregateInput
+  }
+
+  export type ProductionPostingWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    postingNumber?: string
+    AND?: ProductionPostingWhereInput | ProductionPostingWhereInput[]
+    OR?: ProductionPostingWhereInput[]
+    NOT?: ProductionPostingWhereInput | ProductionPostingWhereInput[]
+    sfgProductId?: StringFilter<"ProductionPosting"> | string
+    bomId?: StringFilter<"ProductionPosting"> | string
+    locationId?: StringFilter<"ProductionPosting"> | string
+    shiftDate?: DateTimeFilter<"ProductionPosting"> | Date | string
+    notes?: StringNullableFilter<"ProductionPosting"> | string | null
+    postedById?: StringFilter<"ProductionPosting"> | string
+    createdAt?: DateTimeFilter<"ProductionPosting"> | Date | string
+    updatedAt?: DateTimeFilter<"ProductionPosting"> | Date | string
+    consumptions?: ProductionConsumptionListRelationFilter
+    outputs?: ProductionOutputListRelationFilter
+  }, "id" | "postingNumber">
+
+  export type ProductionPostingOrderByWithAggregationInput = {
+    id?: SortOrder
+    postingNumber?: SortOrder
+    sfgProductId?: SortOrder
+    bomId?: SortOrder
+    locationId?: SortOrder
+    shiftDate?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    postedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProductionPostingCountOrderByAggregateInput
+    _max?: ProductionPostingMaxOrderByAggregateInput
+    _min?: ProductionPostingMinOrderByAggregateInput
+  }
+
+  export type ProductionPostingScalarWhereWithAggregatesInput = {
+    AND?: ProductionPostingScalarWhereWithAggregatesInput | ProductionPostingScalarWhereWithAggregatesInput[]
+    OR?: ProductionPostingScalarWhereWithAggregatesInput[]
+    NOT?: ProductionPostingScalarWhereWithAggregatesInput | ProductionPostingScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProductionPosting"> | string
+    postingNumber?: StringWithAggregatesFilter<"ProductionPosting"> | string
+    sfgProductId?: StringWithAggregatesFilter<"ProductionPosting"> | string
+    bomId?: StringWithAggregatesFilter<"ProductionPosting"> | string
+    locationId?: StringWithAggregatesFilter<"ProductionPosting"> | string
+    shiftDate?: DateTimeWithAggregatesFilter<"ProductionPosting"> | Date | string
+    notes?: StringNullableWithAggregatesFilter<"ProductionPosting"> | string | null
+    postedById?: StringWithAggregatesFilter<"ProductionPosting"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProductionPosting"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProductionPosting"> | Date | string
+  }
+
+  export type ProductionConsumptionWhereInput = {
+    AND?: ProductionConsumptionWhereInput | ProductionConsumptionWhereInput[]
+    OR?: ProductionConsumptionWhereInput[]
+    NOT?: ProductionConsumptionWhereInput | ProductionConsumptionWhereInput[]
+    id?: StringFilter<"ProductionConsumption"> | string
+    postingId?: StringFilter<"ProductionConsumption"> | string
+    rawMaterialId?: StringFilter<"ProductionConsumption"> | string
+    expectedQuantity?: FloatFilter<"ProductionConsumption"> | number
+    actualQuantity?: FloatFilter<"ProductionConsumption"> | number
+    batchNumber?: StringNullableFilter<"ProductionConsumption"> | string | null
+    cleaningLotId?: StringNullableFilter<"ProductionConsumption"> | string | null
+    createdAt?: DateTimeFilter<"ProductionConsumption"> | Date | string
+    posting?: XOR<ProductionPostingScalarRelationFilter, ProductionPostingWhereInput>
+  }
+
+  export type ProductionConsumptionOrderByWithRelationInput = {
+    id?: SortOrder
+    postingId?: SortOrder
+    rawMaterialId?: SortOrder
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+    batchNumber?: SortOrderInput | SortOrder
+    cleaningLotId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    posting?: ProductionPostingOrderByWithRelationInput
+  }
+
+  export type ProductionConsumptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductionConsumptionWhereInput | ProductionConsumptionWhereInput[]
+    OR?: ProductionConsumptionWhereInput[]
+    NOT?: ProductionConsumptionWhereInput | ProductionConsumptionWhereInput[]
+    postingId?: StringFilter<"ProductionConsumption"> | string
+    rawMaterialId?: StringFilter<"ProductionConsumption"> | string
+    expectedQuantity?: FloatFilter<"ProductionConsumption"> | number
+    actualQuantity?: FloatFilter<"ProductionConsumption"> | number
+    batchNumber?: StringNullableFilter<"ProductionConsumption"> | string | null
+    cleaningLotId?: StringNullableFilter<"ProductionConsumption"> | string | null
+    createdAt?: DateTimeFilter<"ProductionConsumption"> | Date | string
+    posting?: XOR<ProductionPostingScalarRelationFilter, ProductionPostingWhereInput>
+  }, "id">
+
+  export type ProductionConsumptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    postingId?: SortOrder
+    rawMaterialId?: SortOrder
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+    batchNumber?: SortOrderInput | SortOrder
+    cleaningLotId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: ProductionConsumptionCountOrderByAggregateInput
+    _avg?: ProductionConsumptionAvgOrderByAggregateInput
+    _max?: ProductionConsumptionMaxOrderByAggregateInput
+    _min?: ProductionConsumptionMinOrderByAggregateInput
+    _sum?: ProductionConsumptionSumOrderByAggregateInput
+  }
+
+  export type ProductionConsumptionScalarWhereWithAggregatesInput = {
+    AND?: ProductionConsumptionScalarWhereWithAggregatesInput | ProductionConsumptionScalarWhereWithAggregatesInput[]
+    OR?: ProductionConsumptionScalarWhereWithAggregatesInput[]
+    NOT?: ProductionConsumptionScalarWhereWithAggregatesInput | ProductionConsumptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProductionConsumption"> | string
+    postingId?: StringWithAggregatesFilter<"ProductionConsumption"> | string
+    rawMaterialId?: StringWithAggregatesFilter<"ProductionConsumption"> | string
+    expectedQuantity?: FloatWithAggregatesFilter<"ProductionConsumption"> | number
+    actualQuantity?: FloatWithAggregatesFilter<"ProductionConsumption"> | number
+    batchNumber?: StringNullableWithAggregatesFilter<"ProductionConsumption"> | string | null
+    cleaningLotId?: StringNullableWithAggregatesFilter<"ProductionConsumption"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ProductionConsumption"> | Date | string
+  }
+
+  export type ProductionOutputWhereInput = {
+    AND?: ProductionOutputWhereInput | ProductionOutputWhereInput[]
+    OR?: ProductionOutputWhereInput[]
+    NOT?: ProductionOutputWhereInput | ProductionOutputWhereInput[]
+    id?: StringFilter<"ProductionOutput"> | string
+    postingId?: StringFilter<"ProductionOutput"> | string
+    outputType?: EnumOutputTypeFilter<"ProductionOutput"> | $Enums.OutputType
+    productName?: StringFilter<"ProductionOutput"> | string
+    skuCode?: StringNullableFilter<"ProductionOutput"> | string | null
+    quantity?: FloatFilter<"ProductionOutput"> | number
+    unit?: StringFilter<"ProductionOutput"> | string
+    batchNumber?: StringNullableFilter<"ProductionOutput"> | string | null
+    createdAt?: DateTimeFilter<"ProductionOutput"> | Date | string
+    posting?: XOR<ProductionPostingScalarRelationFilter, ProductionPostingWhereInput>
+  }
+
+  export type ProductionOutputOrderByWithRelationInput = {
+    id?: SortOrder
+    postingId?: SortOrder
+    outputType?: SortOrder
+    productName?: SortOrder
+    skuCode?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    batchNumber?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    posting?: ProductionPostingOrderByWithRelationInput
+  }
+
+  export type ProductionOutputWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProductionOutputWhereInput | ProductionOutputWhereInput[]
+    OR?: ProductionOutputWhereInput[]
+    NOT?: ProductionOutputWhereInput | ProductionOutputWhereInput[]
+    postingId?: StringFilter<"ProductionOutput"> | string
+    outputType?: EnumOutputTypeFilter<"ProductionOutput"> | $Enums.OutputType
+    productName?: StringFilter<"ProductionOutput"> | string
+    skuCode?: StringNullableFilter<"ProductionOutput"> | string | null
+    quantity?: FloatFilter<"ProductionOutput"> | number
+    unit?: StringFilter<"ProductionOutput"> | string
+    batchNumber?: StringNullableFilter<"ProductionOutput"> | string | null
+    createdAt?: DateTimeFilter<"ProductionOutput"> | Date | string
+    posting?: XOR<ProductionPostingScalarRelationFilter, ProductionPostingWhereInput>
+  }, "id">
+
+  export type ProductionOutputOrderByWithAggregationInput = {
+    id?: SortOrder
+    postingId?: SortOrder
+    outputType?: SortOrder
+    productName?: SortOrder
+    skuCode?: SortOrderInput | SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    batchNumber?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: ProductionOutputCountOrderByAggregateInput
+    _avg?: ProductionOutputAvgOrderByAggregateInput
+    _max?: ProductionOutputMaxOrderByAggregateInput
+    _min?: ProductionOutputMinOrderByAggregateInput
+    _sum?: ProductionOutputSumOrderByAggregateInput
+  }
+
+  export type ProductionOutputScalarWhereWithAggregatesInput = {
+    AND?: ProductionOutputScalarWhereWithAggregatesInput | ProductionOutputScalarWhereWithAggregatesInput[]
+    OR?: ProductionOutputScalarWhereWithAggregatesInput[]
+    NOT?: ProductionOutputScalarWhereWithAggregatesInput | ProductionOutputScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProductionOutput"> | string
+    postingId?: StringWithAggregatesFilter<"ProductionOutput"> | string
+    outputType?: EnumOutputTypeWithAggregatesFilter<"ProductionOutput"> | $Enums.OutputType
+    productName?: StringWithAggregatesFilter<"ProductionOutput"> | string
+    skuCode?: StringNullableWithAggregatesFilter<"ProductionOutput"> | string | null
+    quantity?: FloatWithAggregatesFilter<"ProductionOutput"> | number
+    unit?: StringWithAggregatesFilter<"ProductionOutput"> | string
+    batchNumber?: StringNullableWithAggregatesFilter<"ProductionOutput"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ProductionOutput"> | Date | string
   }
 
   export type CleaningJobWhereInput = {
@@ -95430,6 +106799,7 @@ export namespace Prisma {
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     warehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
     processingBatchLots?: ProcessingBatchLotListRelationFilter
+    grindingDispatchLots?: GrindingDispatchLotListRelationFilter
   }
 
   export type CleaningLotOrderByWithRelationInput = {
@@ -95455,6 +106825,7 @@ export namespace Prisma {
     rawMaterial?: RawMaterialProductOrderByWithRelationInput
     warehouse?: WarehouseOrderByWithRelationInput
     processingBatchLots?: ProcessingBatchLotOrderByRelationAggregateInput
+    grindingDispatchLots?: GrindingDispatchLotOrderByRelationAggregateInput
   }
 
   export type CleaningLotWhereUniqueInput = Prisma.AtLeast<{
@@ -95483,6 +106854,7 @@ export namespace Prisma {
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     warehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
     processingBatchLots?: ProcessingBatchLotListRelationFilter
+    grindingDispatchLots?: GrindingDispatchLotListRelationFilter
   }, "id" | "lotNumber">
 
   export type CleaningLotOrderByWithAggregationInput = {
@@ -95606,6 +106978,7 @@ export namespace Prisma {
     bomCode?: StringFilter<"BillOfMaterial"> | string
     productName?: StringFilter<"BillOfMaterial"> | string
     productCode?: StringNullableFilter<"BillOfMaterial"> | string | null
+    sfgProductId?: StringNullableFilter<"BillOfMaterial"> | string | null
     unitOfMeasurement?: StringFilter<"BillOfMaterial"> | string
     outputQuantity?: FloatFilter<"BillOfMaterial"> | number
     description?: StringNullableFilter<"BillOfMaterial"> | string | null
@@ -95613,6 +106986,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"BillOfMaterial"> | Date | string
     updatedAt?: DateTimeFilter<"BillOfMaterial"> | Date | string
     items?: BOMItemListRelationFilter
+    sfgProduct?: XOR<RawMaterialProductNullableScalarRelationFilter, RawMaterialProductWhereInput> | null
   }
 
   export type BillOfMaterialOrderByWithRelationInput = {
@@ -95620,6 +106994,7 @@ export namespace Prisma {
     bomCode?: SortOrder
     productName?: SortOrder
     productCode?: SortOrderInput | SortOrder
+    sfgProductId?: SortOrderInput | SortOrder
     unitOfMeasurement?: SortOrder
     outputQuantity?: SortOrder
     description?: SortOrderInput | SortOrder
@@ -95627,6 +107002,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     items?: BOMItemOrderByRelationAggregateInput
+    sfgProduct?: RawMaterialProductOrderByWithRelationInput
   }
 
   export type BillOfMaterialWhereUniqueInput = Prisma.AtLeast<{
@@ -95637,6 +107013,7 @@ export namespace Prisma {
     NOT?: BillOfMaterialWhereInput | BillOfMaterialWhereInput[]
     productName?: StringFilter<"BillOfMaterial"> | string
     productCode?: StringNullableFilter<"BillOfMaterial"> | string | null
+    sfgProductId?: StringNullableFilter<"BillOfMaterial"> | string | null
     unitOfMeasurement?: StringFilter<"BillOfMaterial"> | string
     outputQuantity?: FloatFilter<"BillOfMaterial"> | number
     description?: StringNullableFilter<"BillOfMaterial"> | string | null
@@ -95644,6 +107021,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"BillOfMaterial"> | Date | string
     updatedAt?: DateTimeFilter<"BillOfMaterial"> | Date | string
     items?: BOMItemListRelationFilter
+    sfgProduct?: XOR<RawMaterialProductNullableScalarRelationFilter, RawMaterialProductWhereInput> | null
   }, "id" | "bomCode">
 
   export type BillOfMaterialOrderByWithAggregationInput = {
@@ -95651,6 +107029,7 @@ export namespace Prisma {
     bomCode?: SortOrder
     productName?: SortOrder
     productCode?: SortOrderInput | SortOrder
+    sfgProductId?: SortOrderInput | SortOrder
     unitOfMeasurement?: SortOrder
     outputQuantity?: SortOrder
     description?: SortOrderInput | SortOrder
@@ -95672,6 +107051,7 @@ export namespace Prisma {
     bomCode?: StringWithAggregatesFilter<"BillOfMaterial"> | string
     productName?: StringWithAggregatesFilter<"BillOfMaterial"> | string
     productCode?: StringNullableWithAggregatesFilter<"BillOfMaterial"> | string | null
+    sfgProductId?: StringNullableWithAggregatesFilter<"BillOfMaterial"> | string | null
     unitOfMeasurement?: StringWithAggregatesFilter<"BillOfMaterial"> | string
     outputQuantity?: FloatWithAggregatesFilter<"BillOfMaterial"> | number
     description?: StringNullableWithAggregatesFilter<"BillOfMaterial"> | string | null
@@ -95841,6 +107221,182 @@ export namespace Prisma {
     unit?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
     source?: StringWithAggregatesFilter<"SeedWastageRecord"> | string
     createdAt?: DateTimeWithAggregatesFilter<"SeedWastageRecord"> | Date | string
+  }
+
+  export type GrindingDispatchWhereInput = {
+    AND?: GrindingDispatchWhereInput | GrindingDispatchWhereInput[]
+    OR?: GrindingDispatchWhereInput[]
+    NOT?: GrindingDispatchWhereInput | GrindingDispatchWhereInput[]
+    id?: StringFilter<"GrindingDispatch"> | string
+    batchNumber?: StringFilter<"GrindingDispatch"> | string
+    inputRawMaterialId?: StringFilter<"GrindingDispatch"> | string
+    fromLocationId?: StringFilter<"GrindingDispatch"> | string
+    toLocationId?: StringFilter<"GrindingDispatch"> | string
+    totalQuantity?: FloatFilter<"GrindingDispatch"> | number
+    status?: EnumGrindingDispatchStatusFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
+    acceptedAt?: DateTimeNullableFilter<"GrindingDispatch"> | Date | string | null
+    rejectedAt?: DateTimeNullableFilter<"GrindingDispatch"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"GrindingDispatch"> | string | null
+    notes?: StringNullableFilter<"GrindingDispatch"> | string | null
+    createdAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
+    updatedAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
+    inputRawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
+    fromLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    toLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    lots?: GrindingDispatchLotListRelationFilter
+  }
+
+  export type GrindingDispatchOrderByWithRelationInput = {
+    id?: SortOrder
+    batchNumber?: SortOrder
+    inputRawMaterialId?: SortOrder
+    fromLocationId?: SortOrder
+    toLocationId?: SortOrder
+    totalQuantity?: SortOrder
+    status?: SortOrder
+    sentAt?: SortOrder
+    acceptedAt?: SortOrderInput | SortOrder
+    rejectedAt?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    inputRawMaterial?: RawMaterialProductOrderByWithRelationInput
+    fromLocation?: LocationOrderByWithRelationInput
+    toLocation?: LocationOrderByWithRelationInput
+    lots?: GrindingDispatchLotOrderByRelationAggregateInput
+  }
+
+  export type GrindingDispatchWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    batchNumber?: string
+    AND?: GrindingDispatchWhereInput | GrindingDispatchWhereInput[]
+    OR?: GrindingDispatchWhereInput[]
+    NOT?: GrindingDispatchWhereInput | GrindingDispatchWhereInput[]
+    inputRawMaterialId?: StringFilter<"GrindingDispatch"> | string
+    fromLocationId?: StringFilter<"GrindingDispatch"> | string
+    toLocationId?: StringFilter<"GrindingDispatch"> | string
+    totalQuantity?: FloatFilter<"GrindingDispatch"> | number
+    status?: EnumGrindingDispatchStatusFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
+    acceptedAt?: DateTimeNullableFilter<"GrindingDispatch"> | Date | string | null
+    rejectedAt?: DateTimeNullableFilter<"GrindingDispatch"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"GrindingDispatch"> | string | null
+    notes?: StringNullableFilter<"GrindingDispatch"> | string | null
+    createdAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
+    updatedAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
+    inputRawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
+    fromLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    toLocation?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+    lots?: GrindingDispatchLotListRelationFilter
+  }, "id" | "batchNumber">
+
+  export type GrindingDispatchOrderByWithAggregationInput = {
+    id?: SortOrder
+    batchNumber?: SortOrder
+    inputRawMaterialId?: SortOrder
+    fromLocationId?: SortOrder
+    toLocationId?: SortOrder
+    totalQuantity?: SortOrder
+    status?: SortOrder
+    sentAt?: SortOrder
+    acceptedAt?: SortOrderInput | SortOrder
+    rejectedAt?: SortOrderInput | SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GrindingDispatchCountOrderByAggregateInput
+    _avg?: GrindingDispatchAvgOrderByAggregateInput
+    _max?: GrindingDispatchMaxOrderByAggregateInput
+    _min?: GrindingDispatchMinOrderByAggregateInput
+    _sum?: GrindingDispatchSumOrderByAggregateInput
+  }
+
+  export type GrindingDispatchScalarWhereWithAggregatesInput = {
+    AND?: GrindingDispatchScalarWhereWithAggregatesInput | GrindingDispatchScalarWhereWithAggregatesInput[]
+    OR?: GrindingDispatchScalarWhereWithAggregatesInput[]
+    NOT?: GrindingDispatchScalarWhereWithAggregatesInput | GrindingDispatchScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GrindingDispatch"> | string
+    batchNumber?: StringWithAggregatesFilter<"GrindingDispatch"> | string
+    inputRawMaterialId?: StringWithAggregatesFilter<"GrindingDispatch"> | string
+    fromLocationId?: StringWithAggregatesFilter<"GrindingDispatch"> | string
+    toLocationId?: StringWithAggregatesFilter<"GrindingDispatch"> | string
+    totalQuantity?: FloatWithAggregatesFilter<"GrindingDispatch"> | number
+    status?: EnumGrindingDispatchStatusWithAggregatesFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeWithAggregatesFilter<"GrindingDispatch"> | Date | string
+    acceptedAt?: DateTimeNullableWithAggregatesFilter<"GrindingDispatch"> | Date | string | null
+    rejectedAt?: DateTimeNullableWithAggregatesFilter<"GrindingDispatch"> | Date | string | null
+    rejectionReason?: StringNullableWithAggregatesFilter<"GrindingDispatch"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"GrindingDispatch"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"GrindingDispatch"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GrindingDispatch"> | Date | string
+  }
+
+  export type GrindingDispatchLotWhereInput = {
+    AND?: GrindingDispatchLotWhereInput | GrindingDispatchLotWhereInput[]
+    OR?: GrindingDispatchLotWhereInput[]
+    NOT?: GrindingDispatchLotWhereInput | GrindingDispatchLotWhereInput[]
+    id?: StringFilter<"GrindingDispatchLot"> | string
+    dispatchId?: StringFilter<"GrindingDispatchLot"> | string
+    cleaningLotId?: StringFilter<"GrindingDispatchLot"> | string
+    allocatedQuantity?: FloatFilter<"GrindingDispatchLot"> | number
+    seedWastageAllocated?: FloatFilter<"GrindingDispatchLot"> | number
+    createdAt?: DateTimeFilter<"GrindingDispatchLot"> | Date | string
+    dispatch?: XOR<GrindingDispatchScalarRelationFilter, GrindingDispatchWhereInput>
+    cleaningLot?: XOR<CleaningLotScalarRelationFilter, CleaningLotWhereInput>
+  }
+
+  export type GrindingDispatchLotOrderByWithRelationInput = {
+    id?: SortOrder
+    dispatchId?: SortOrder
+    cleaningLotId?: SortOrder
+    allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
+    createdAt?: SortOrder
+    dispatch?: GrindingDispatchOrderByWithRelationInput
+    cleaningLot?: CleaningLotOrderByWithRelationInput
+  }
+
+  export type GrindingDispatchLotWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: GrindingDispatchLotWhereInput | GrindingDispatchLotWhereInput[]
+    OR?: GrindingDispatchLotWhereInput[]
+    NOT?: GrindingDispatchLotWhereInput | GrindingDispatchLotWhereInput[]
+    dispatchId?: StringFilter<"GrindingDispatchLot"> | string
+    cleaningLotId?: StringFilter<"GrindingDispatchLot"> | string
+    allocatedQuantity?: FloatFilter<"GrindingDispatchLot"> | number
+    seedWastageAllocated?: FloatFilter<"GrindingDispatchLot"> | number
+    createdAt?: DateTimeFilter<"GrindingDispatchLot"> | Date | string
+    dispatch?: XOR<GrindingDispatchScalarRelationFilter, GrindingDispatchWhereInput>
+    cleaningLot?: XOR<CleaningLotScalarRelationFilter, CleaningLotWhereInput>
+  }, "id">
+
+  export type GrindingDispatchLotOrderByWithAggregationInput = {
+    id?: SortOrder
+    dispatchId?: SortOrder
+    cleaningLotId?: SortOrder
+    allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
+    createdAt?: SortOrder
+    _count?: GrindingDispatchLotCountOrderByAggregateInput
+    _avg?: GrindingDispatchLotAvgOrderByAggregateInput
+    _max?: GrindingDispatchLotMaxOrderByAggregateInput
+    _min?: GrindingDispatchLotMinOrderByAggregateInput
+    _sum?: GrindingDispatchLotSumOrderByAggregateInput
+  }
+
+  export type GrindingDispatchLotScalarWhereWithAggregatesInput = {
+    AND?: GrindingDispatchLotScalarWhereWithAggregatesInput | GrindingDispatchLotScalarWhereWithAggregatesInput[]
+    OR?: GrindingDispatchLotScalarWhereWithAggregatesInput[]
+    NOT?: GrindingDispatchLotScalarWhereWithAggregatesInput | GrindingDispatchLotScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"GrindingDispatchLot"> | string
+    dispatchId?: StringWithAggregatesFilter<"GrindingDispatchLot"> | string
+    cleaningLotId?: StringWithAggregatesFilter<"GrindingDispatchLot"> | string
+    allocatedQuantity?: FloatWithAggregatesFilter<"GrindingDispatchLot"> | number
+    seedWastageAllocated?: FloatWithAggregatesFilter<"GrindingDispatchLot"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"GrindingDispatchLot"> | Date | string
   }
 
   export type ActivityLogCreateInput = {
@@ -99836,6 +111392,8 @@ export namespace Prisma {
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateInput = {
@@ -99857,6 +111415,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductUpdateInput = {
@@ -99878,6 +111438,8 @@ export namespace Prisma {
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateInput = {
@@ -99899,6 +111461,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductCreateManyInput = {
@@ -100110,13 +111674,15 @@ export namespace Prisma {
     receivedDate?: Date | string
     bags?: ReceivalBagCreateNestedManyWithoutReceivalEntryInput
     purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutReceivalsInput
-    warehouse: WarehouseCreateNestedOneWithoutReceivalEntriesInput
+    location?: LocationCreateNestedOneWithoutReceivalEntriesInput
+    warehouse?: WarehouseCreateNestedOneWithoutReceivalEntriesInput
   }
 
   export type ReceivalEntryUncheckedCreateInput = {
     id?: string
     purchaseOrderItemId: string
-    warehouseId: string
+    locationId?: string | null
+    warehouseId?: string | null
     weightMode?: $Enums.WeightMode
     totalWeight: number
     notes?: string | null
@@ -100132,13 +111698,15 @@ export namespace Prisma {
     receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     bags?: ReceivalBagUpdateManyWithoutReceivalEntryNestedInput
     purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutReceivalsNestedInput
-    warehouse?: WarehouseUpdateOneRequiredWithoutReceivalEntriesNestedInput
+    location?: LocationUpdateOneWithoutReceivalEntriesNestedInput
+    warehouse?: WarehouseUpdateOneWithoutReceivalEntriesNestedInput
   }
 
   export type ReceivalEntryUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
-    warehouseId?: StringFieldUpdateOperationsInput | string
+    locationId?: NullableStringFieldUpdateOperationsInput | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
     weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
     totalWeight?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -100149,7 +111717,8 @@ export namespace Prisma {
   export type ReceivalEntryCreateManyInput = {
     id?: string
     purchaseOrderItemId: string
-    warehouseId: string
+    locationId?: string | null
+    warehouseId?: string | null
     weightMode?: $Enums.WeightMode
     totalWeight: number
     notes?: string | null
@@ -100167,7 +111736,8 @@ export namespace Prisma {
   export type ReceivalEntryUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
-    warehouseId?: StringFieldUpdateOperationsInput | string
+    locationId?: NullableStringFieldUpdateOperationsInput | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
     weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
     totalWeight?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -100424,6 +111994,586 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LocationCreateInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryCreateNestedManyWithoutLocationInput
+    transfersFrom?: MaterialTransferCreateNestedManyWithoutFromLocationInput
+    transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
+    dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
+    dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationUncheckedCreateInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutLocationInput
+    transfersFrom?: MaterialTransferUncheckedCreateNestedManyWithoutFromLocationInput
+    transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
+    dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
+    dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUpdateManyWithoutLocationNestedInput
+    transfersFrom?: MaterialTransferUpdateManyWithoutFromLocationNestedInput
+    transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
+    dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutLocationNestedInput
+    transfersFrom?: MaterialTransferUncheckedUpdateManyWithoutFromLocationNestedInput
+    transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
+    dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+  }
+
+  export type LocationCreateManyInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LocationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LocationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialTransferCreateInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fromLocation: LocationCreateNestedOneWithoutTransfersFromInput
+    toLocation: LocationCreateNestedOneWithoutTransfersToInput
+    lines?: MaterialTransferLineCreateNestedManyWithoutTransferInput
+  }
+
+  export type MaterialTransferUncheckedCreateInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    fromLocationId: string
+    toLocationId: string
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lines?: MaterialTransferLineUncheckedCreateNestedManyWithoutTransferInput
+  }
+
+  export type MaterialTransferUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromLocation?: LocationUpdateOneRequiredWithoutTransfersFromNestedInput
+    toLocation?: LocationUpdateOneRequiredWithoutTransfersToNestedInput
+    lines?: MaterialTransferLineUpdateManyWithoutTransferNestedInput
+  }
+
+  export type MaterialTransferUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lines?: MaterialTransferLineUncheckedUpdateManyWithoutTransferNestedInput
+  }
+
+  export type MaterialTransferCreateManyInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    fromLocationId: string
+    toLocationId: string
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialTransferUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialTransferUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialTransferLineCreateInput = {
+    id?: string
+    lineType: $Enums.TransferLineType
+    rawMaterialId?: string | null
+    productName?: string | null
+    skuCode?: string | null
+    quantity: number
+    unitOfMeasurement: string
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+    transfer: MaterialTransferCreateNestedOneWithoutLinesInput
+  }
+
+  export type MaterialTransferLineUncheckedCreateInput = {
+    id?: string
+    transferId: string
+    lineType: $Enums.TransferLineType
+    rawMaterialId?: string | null
+    productName?: string | null
+    skuCode?: string | null
+    quantity: number
+    unitOfMeasurement: string
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MaterialTransferLineUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineType?: EnumTransferLineTypeFieldUpdateOperationsInput | $Enums.TransferLineType
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transfer?: MaterialTransferUpdateOneRequiredWithoutLinesNestedInput
+  }
+
+  export type MaterialTransferLineUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferId?: StringFieldUpdateOperationsInput | string
+    lineType?: EnumTransferLineTypeFieldUpdateOperationsInput | $Enums.TransferLineType
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialTransferLineCreateManyInput = {
+    id?: string
+    transferId: string
+    lineType: $Enums.TransferLineType
+    rawMaterialId?: string | null
+    productName?: string | null
+    skuCode?: string | null
+    quantity: number
+    unitOfMeasurement: string
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MaterialTransferLineUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineType?: EnumTransferLineTypeFieldUpdateOperationsInput | $Enums.TransferLineType
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialTransferLineUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferId?: StringFieldUpdateOperationsInput | string
+    lineType?: EnumTransferLineTypeFieldUpdateOperationsInput | $Enums.TransferLineType
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionPostingCreateInput = {
+    id?: string
+    postingNumber: string
+    sfgProductId: string
+    bomId: string
+    locationId: string
+    shiftDate: Date | string
+    notes?: string | null
+    postedById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consumptions?: ProductionConsumptionCreateNestedManyWithoutPostingInput
+    outputs?: ProductionOutputCreateNestedManyWithoutPostingInput
+  }
+
+  export type ProductionPostingUncheckedCreateInput = {
+    id?: string
+    postingNumber: string
+    sfgProductId: string
+    bomId: string
+    locationId: string
+    shiftDate: Date | string
+    notes?: string | null
+    postedById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consumptions?: ProductionConsumptionUncheckedCreateNestedManyWithoutPostingInput
+    outputs?: ProductionOutputUncheckedCreateNestedManyWithoutPostingInput
+  }
+
+  export type ProductionPostingUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingNumber?: StringFieldUpdateOperationsInput | string
+    sfgProductId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    postedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumptions?: ProductionConsumptionUpdateManyWithoutPostingNestedInput
+    outputs?: ProductionOutputUpdateManyWithoutPostingNestedInput
+  }
+
+  export type ProductionPostingUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingNumber?: StringFieldUpdateOperationsInput | string
+    sfgProductId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    postedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumptions?: ProductionConsumptionUncheckedUpdateManyWithoutPostingNestedInput
+    outputs?: ProductionOutputUncheckedUpdateManyWithoutPostingNestedInput
+  }
+
+  export type ProductionPostingCreateManyInput = {
+    id?: string
+    postingNumber: string
+    sfgProductId: string
+    bomId: string
+    locationId: string
+    shiftDate: Date | string
+    notes?: string | null
+    postedById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductionPostingUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingNumber?: StringFieldUpdateOperationsInput | string
+    sfgProductId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    postedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionPostingUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingNumber?: StringFieldUpdateOperationsInput | string
+    sfgProductId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    postedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionConsumptionCreateInput = {
+    id?: string
+    rawMaterialId: string
+    expectedQuantity: number
+    actualQuantity: number
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+    posting: ProductionPostingCreateNestedOneWithoutConsumptionsInput
+  }
+
+  export type ProductionConsumptionUncheckedCreateInput = {
+    id?: string
+    postingId: string
+    rawMaterialId: string
+    expectedQuantity: number
+    actualQuantity: number
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProductionConsumptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posting?: ProductionPostingUpdateOneRequiredWithoutConsumptionsNestedInput
+  }
+
+  export type ProductionConsumptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionConsumptionCreateManyInput = {
+    id?: string
+    postingId: string
+    rawMaterialId: string
+    expectedQuantity: number
+    actualQuantity: number
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProductionConsumptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionConsumptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionOutputCreateInput = {
+    id?: string
+    outputType: $Enums.OutputType
+    productName: string
+    skuCode?: string | null
+    quantity: number
+    unit: string
+    batchNumber?: string | null
+    createdAt?: Date | string
+    posting: ProductionPostingCreateNestedOneWithoutOutputsInput
+  }
+
+  export type ProductionOutputUncheckedCreateInput = {
+    id?: string
+    postingId: string
+    outputType: $Enums.OutputType
+    productName: string
+    skuCode?: string | null
+    quantity: number
+    unit: string
+    batchNumber?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProductionOutputUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    outputType?: EnumOutputTypeFieldUpdateOperationsInput | $Enums.OutputType
+    productName?: StringFieldUpdateOperationsInput | string
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posting?: ProductionPostingUpdateOneRequiredWithoutOutputsNestedInput
+  }
+
+  export type ProductionOutputUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingId?: StringFieldUpdateOperationsInput | string
+    outputType?: EnumOutputTypeFieldUpdateOperationsInput | $Enums.OutputType
+    productName?: StringFieldUpdateOperationsInput | string
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionOutputCreateManyInput = {
+    id?: string
+    postingId: string
+    outputType: $Enums.OutputType
+    productName: string
+    skuCode?: string | null
+    quantity: number
+    unit: string
+    batchNumber?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProductionOutputUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    outputType?: EnumOutputTypeFieldUpdateOperationsInput | $Enums.OutputType
+    productName?: StringFieldUpdateOperationsInput | string
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionOutputUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingId?: StringFieldUpdateOperationsInput | string
+    outputType?: EnumOutputTypeFieldUpdateOperationsInput | $Enums.OutputType
+    productName?: StringFieldUpdateOperationsInput | string
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type CleaningJobCreateInput = {
@@ -101493,6 +113643,7 @@ export namespace Prisma {
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningLotsInput
     warehouse: WarehouseCreateNestedOneWithoutCleaningLotsInput
     processingBatchLots?: ProcessingBatchLotCreateNestedManyWithoutCleaningLotInput
+    grindingDispatchLots?: GrindingDispatchLotCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotUncheckedCreateInput = {
@@ -101514,6 +113665,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
+    grindingDispatchLots?: GrindingDispatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotUpdateInput = {
@@ -101535,6 +113687,7 @@ export namespace Prisma {
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput
     warehouse?: WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput
     processingBatchLots?: ProcessingBatchLotUpdateManyWithoutCleaningLotNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotUncheckedUpdateInput = {
@@ -101556,6 +113709,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotCreateManyInput = {
@@ -101687,6 +113841,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     items?: BOMItemCreateNestedManyWithoutBomInput
+    sfgProduct?: RawMaterialProductCreateNestedOneWithoutBomsAsSfgInput
   }
 
   export type BillOfMaterialUncheckedCreateInput = {
@@ -101694,6 +113849,7 @@ export namespace Prisma {
     bomCode: string
     productName: string
     productCode?: string | null
+    sfgProductId?: string | null
     unitOfMeasurement: string
     outputQuantity?: number
     description?: string | null
@@ -101715,6 +113871,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     items?: BOMItemUpdateManyWithoutBomNestedInput
+    sfgProduct?: RawMaterialProductUpdateOneWithoutBomsAsSfgNestedInput
   }
 
   export type BillOfMaterialUncheckedUpdateInput = {
@@ -101722,6 +113879,7 @@ export namespace Prisma {
     bomCode?: StringFieldUpdateOperationsInput | string
     productName?: StringFieldUpdateOperationsInput | string
     productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgProductId?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     outputQuantity?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -101736,6 +113894,7 @@ export namespace Prisma {
     bomCode: string
     productName: string
     productCode?: string | null
+    sfgProductId?: string | null
     unitOfMeasurement: string
     outputQuantity?: number
     description?: string | null
@@ -101762,6 +113921,7 @@ export namespace Prisma {
     bomCode?: StringFieldUpdateOperationsInput | string
     productName?: StringFieldUpdateOperationsInput | string
     productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgProductId?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     outputQuantity?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -101939,6 +114099,187 @@ export namespace Prisma {
     restWastage?: FloatFieldUpdateOperationsInput | number
     unit?: StringFieldUpdateOperationsInput | string
     source?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchCreateInput = {
+    id?: string
+    batchNumber: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    inputRawMaterial: RawMaterialProductCreateNestedOneWithoutGrindingDispatchesInput
+    fromLocation: LocationCreateNestedOneWithoutDispatchesFromInput
+    toLocation: LocationCreateNestedOneWithoutDispatchesToInput
+    lots?: GrindingDispatchLotCreateNestedManyWithoutDispatchInput
+  }
+
+  export type GrindingDispatchUncheckedCreateInput = {
+    id?: string
+    batchNumber: string
+    inputRawMaterialId: string
+    fromLocationId: string
+    toLocationId: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lots?: GrindingDispatchLotUncheckedCreateNestedManyWithoutDispatchInput
+  }
+
+  export type GrindingDispatchUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inputRawMaterial?: RawMaterialProductUpdateOneRequiredWithoutGrindingDispatchesNestedInput
+    fromLocation?: LocationUpdateOneRequiredWithoutDispatchesFromNestedInput
+    toLocation?: LocationUpdateOneRequiredWithoutDispatchesToNestedInput
+    lots?: GrindingDispatchLotUpdateManyWithoutDispatchNestedInput
+  }
+
+  export type GrindingDispatchUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    inputRawMaterialId?: StringFieldUpdateOperationsInput | string
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lots?: GrindingDispatchLotUncheckedUpdateManyWithoutDispatchNestedInput
+  }
+
+  export type GrindingDispatchCreateManyInput = {
+    id?: string
+    batchNumber: string
+    inputRawMaterialId: string
+    fromLocationId: string
+    toLocationId: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GrindingDispatchUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    inputRawMaterialId?: StringFieldUpdateOperationsInput | string
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchLotCreateInput = {
+    id?: string
+    allocatedQuantity: number
+    seedWastageAllocated?: number
+    createdAt?: Date | string
+    dispatch: GrindingDispatchCreateNestedOneWithoutLotsInput
+    cleaningLot: CleaningLotCreateNestedOneWithoutGrindingDispatchLotsInput
+  }
+
+  export type GrindingDispatchLotUncheckedCreateInput = {
+    id?: string
+    dispatchId: string
+    cleaningLotId: string
+    allocatedQuantity: number
+    seedWastageAllocated?: number
+    createdAt?: Date | string
+  }
+
+  export type GrindingDispatchLotUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dispatch?: GrindingDispatchUpdateOneRequiredWithoutLotsNestedInput
+    cleaningLot?: CleaningLotUpdateOneRequiredWithoutGrindingDispatchLotsNestedInput
+  }
+
+  export type GrindingDispatchLotUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dispatchId?: StringFieldUpdateOperationsInput | string
+    cleaningLotId?: StringFieldUpdateOperationsInput | string
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchLotCreateManyInput = {
+    id?: string
+    dispatchId: string
+    cleaningLotId: string
+    allocatedQuantity: number
+    seedWastageAllocated?: number
+    createdAt?: Date | string
+  }
+
+  export type GrindingDispatchLotUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchLotUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dispatchId?: StringFieldUpdateOperationsInput | string
+    cleaningLotId?: StringFieldUpdateOperationsInput | string
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -104718,6 +117059,18 @@ export namespace Prisma {
     none?: BOMItemWhereInput
   }
 
+  export type BillOfMaterialListRelationFilter = {
+    every?: BillOfMaterialWhereInput
+    some?: BillOfMaterialWhereInput
+    none?: BillOfMaterialWhereInput
+  }
+
+  export type GrindingDispatchListRelationFilter = {
+    every?: GrindingDispatchWhereInput
+    some?: GrindingDispatchWhereInput
+    none?: GrindingDispatchWhereInput
+  }
+
   export type CleaningJobOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -104743,6 +117096,14 @@ export namespace Prisma {
   }
 
   export type BOMItemOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type BillOfMaterialOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GrindingDispatchOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -104968,9 +117329,14 @@ export namespace Prisma {
     isNot?: PurchaseOrderItemWhereInput
   }
 
-  export type WarehouseScalarRelationFilter = {
-    is?: WarehouseWhereInput
-    isNot?: WarehouseWhereInput
+  export type LocationNullableScalarRelationFilter = {
+    is?: LocationWhereInput | null
+    isNot?: LocationWhereInput | null
+  }
+
+  export type WarehouseNullableScalarRelationFilter = {
+    is?: WarehouseWhereInput | null
+    isNot?: WarehouseWhereInput | null
   }
 
   export type ReceivalBagOrderByRelationAggregateInput = {
@@ -104980,6 +117346,7 @@ export namespace Prisma {
   export type ReceivalEntryCountOrderByAggregateInput = {
     id?: SortOrder
     purchaseOrderItemId?: SortOrder
+    locationId?: SortOrder
     warehouseId?: SortOrder
     weightMode?: SortOrder
     totalWeight?: SortOrder
@@ -104994,6 +117361,7 @@ export namespace Prisma {
   export type ReceivalEntryMaxOrderByAggregateInput = {
     id?: SortOrder
     purchaseOrderItemId?: SortOrder
+    locationId?: SortOrder
     warehouseId?: SortOrder
     weightMode?: SortOrder
     totalWeight?: SortOrder
@@ -105004,6 +117372,7 @@ export namespace Prisma {
   export type ReceivalEntryMinOrderByAggregateInput = {
     id?: SortOrder
     purchaseOrderItemId?: SortOrder
+    locationId?: SortOrder
     warehouseId?: SortOrder
     weightMode?: SortOrder
     totalWeight?: SortOrder
@@ -105059,6 +117428,11 @@ export namespace Prisma {
   export type ReceivalBagSumOrderByAggregateInput = {
     bagNo?: SortOrder
     bagWeight?: SortOrder
+  }
+
+  export type WarehouseScalarRelationFilter = {
+    is?: WarehouseWhereInput
+    isNot?: WarehouseWhereInput
   }
 
   export type StockEntryCountOrderByAggregateInput = {
@@ -105183,6 +117557,409 @@ export namespace Prisma {
     location?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumLocationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.LocationType | EnumLocationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LocationType[] | ListEnumLocationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LocationType[] | ListEnumLocationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLocationTypeFilter<$PrismaModel> | $Enums.LocationType
+  }
+
+  export type MaterialTransferListRelationFilter = {
+    every?: MaterialTransferWhereInput
+    some?: MaterialTransferWhereInput
+    none?: MaterialTransferWhereInput
+  }
+
+  export type MaterialTransferOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LocationCountOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    address?: SortOrder
+    description?: SortOrder
+    enabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LocationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    address?: SortOrder
+    description?: SortOrder
+    enabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type LocationMinOrderByAggregateInput = {
+    id?: SortOrder
+    code?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    address?: SortOrder
+    description?: SortOrder
+    enabled?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumLocationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LocationType | EnumLocationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LocationType[] | ListEnumLocationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LocationType[] | ListEnumLocationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLocationTypeWithAggregatesFilter<$PrismaModel> | $Enums.LocationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLocationTypeFilter<$PrismaModel>
+    _max?: NestedEnumLocationTypeFilter<$PrismaModel>
+  }
+
+  export type EnumTransferDirectionFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferDirection | EnumTransferDirectionFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferDirection[] | ListEnumTransferDirectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferDirection[] | ListEnumTransferDirectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferDirectionFilter<$PrismaModel> | $Enums.TransferDirection
+  }
+
+  export type EnumTransferStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferStatus | EnumTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferStatus[] | ListEnumTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferStatus[] | ListEnumTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferStatusFilter<$PrismaModel> | $Enums.TransferStatus
+  }
+
+  export type LocationScalarRelationFilter = {
+    is?: LocationWhereInput
+    isNot?: LocationWhereInput
+  }
+
+  export type MaterialTransferLineListRelationFilter = {
+    every?: MaterialTransferLineWhereInput
+    some?: MaterialTransferLineWhereInput
+    none?: MaterialTransferLineWhereInput
+  }
+
+  export type MaterialTransferLineOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MaterialTransferCountOrderByAggregateInput = {
+    id?: SortOrder
+    transferNumber?: SortOrder
+    direction?: SortOrder
+    fromLocationId?: SortOrder
+    toLocationId?: SortOrder
+    status?: SortOrder
+    sentById?: SortOrder
+    sentAt?: SortOrder
+    acceptedById?: SortOrder
+    acceptedAt?: SortOrder
+    rejectionReason?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaterialTransferMaxOrderByAggregateInput = {
+    id?: SortOrder
+    transferNumber?: SortOrder
+    direction?: SortOrder
+    fromLocationId?: SortOrder
+    toLocationId?: SortOrder
+    status?: SortOrder
+    sentById?: SortOrder
+    sentAt?: SortOrder
+    acceptedById?: SortOrder
+    acceptedAt?: SortOrder
+    rejectionReason?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaterialTransferMinOrderByAggregateInput = {
+    id?: SortOrder
+    transferNumber?: SortOrder
+    direction?: SortOrder
+    fromLocationId?: SortOrder
+    toLocationId?: SortOrder
+    status?: SortOrder
+    sentById?: SortOrder
+    sentAt?: SortOrder
+    acceptedById?: SortOrder
+    acceptedAt?: SortOrder
+    rejectionReason?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumTransferDirectionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferDirection | EnumTransferDirectionFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferDirection[] | ListEnumTransferDirectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferDirection[] | ListEnumTransferDirectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferDirectionWithAggregatesFilter<$PrismaModel> | $Enums.TransferDirection
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransferDirectionFilter<$PrismaModel>
+    _max?: NestedEnumTransferDirectionFilter<$PrismaModel>
+  }
+
+  export type EnumTransferStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferStatus | EnumTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferStatus[] | ListEnumTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferStatus[] | ListEnumTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferStatusWithAggregatesFilter<$PrismaModel> | $Enums.TransferStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransferStatusFilter<$PrismaModel>
+    _max?: NestedEnumTransferStatusFilter<$PrismaModel>
+  }
+
+  export type EnumTransferLineTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferLineType | EnumTransferLineTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferLineType[] | ListEnumTransferLineTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferLineType[] | ListEnumTransferLineTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferLineTypeFilter<$PrismaModel> | $Enums.TransferLineType
+  }
+
+  export type MaterialTransferScalarRelationFilter = {
+    is?: MaterialTransferWhereInput
+    isNot?: MaterialTransferWhereInput
+  }
+
+  export type MaterialTransferLineCountOrderByAggregateInput = {
+    id?: SortOrder
+    transferId?: SortOrder
+    lineType?: SortOrder
+    rawMaterialId?: SortOrder
+    productName?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasurement?: SortOrder
+    batchNumber?: SortOrder
+    cleaningLotId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaterialTransferLineAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type MaterialTransferLineMaxOrderByAggregateInput = {
+    id?: SortOrder
+    transferId?: SortOrder
+    lineType?: SortOrder
+    rawMaterialId?: SortOrder
+    productName?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasurement?: SortOrder
+    batchNumber?: SortOrder
+    cleaningLotId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaterialTransferLineMinOrderByAggregateInput = {
+    id?: SortOrder
+    transferId?: SortOrder
+    lineType?: SortOrder
+    rawMaterialId?: SortOrder
+    productName?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unitOfMeasurement?: SortOrder
+    batchNumber?: SortOrder
+    cleaningLotId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaterialTransferLineSumOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type EnumTransferLineTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferLineType | EnumTransferLineTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferLineType[] | ListEnumTransferLineTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferLineType[] | ListEnumTransferLineTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferLineTypeWithAggregatesFilter<$PrismaModel> | $Enums.TransferLineType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransferLineTypeFilter<$PrismaModel>
+    _max?: NestedEnumTransferLineTypeFilter<$PrismaModel>
+  }
+
+  export type ProductionConsumptionListRelationFilter = {
+    every?: ProductionConsumptionWhereInput
+    some?: ProductionConsumptionWhereInput
+    none?: ProductionConsumptionWhereInput
+  }
+
+  export type ProductionOutputListRelationFilter = {
+    every?: ProductionOutputWhereInput
+    some?: ProductionOutputWhereInput
+    none?: ProductionOutputWhereInput
+  }
+
+  export type ProductionConsumptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductionOutputOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProductionPostingCountOrderByAggregateInput = {
+    id?: SortOrder
+    postingNumber?: SortOrder
+    sfgProductId?: SortOrder
+    bomId?: SortOrder
+    locationId?: SortOrder
+    shiftDate?: SortOrder
+    notes?: SortOrder
+    postedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductionPostingMaxOrderByAggregateInput = {
+    id?: SortOrder
+    postingNumber?: SortOrder
+    sfgProductId?: SortOrder
+    bomId?: SortOrder
+    locationId?: SortOrder
+    shiftDate?: SortOrder
+    notes?: SortOrder
+    postedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductionPostingMinOrderByAggregateInput = {
+    id?: SortOrder
+    postingNumber?: SortOrder
+    sfgProductId?: SortOrder
+    bomId?: SortOrder
+    locationId?: SortOrder
+    shiftDate?: SortOrder
+    notes?: SortOrder
+    postedById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProductionPostingScalarRelationFilter = {
+    is?: ProductionPostingWhereInput
+    isNot?: ProductionPostingWhereInput
+  }
+
+  export type ProductionConsumptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    postingId?: SortOrder
+    rawMaterialId?: SortOrder
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+    batchNumber?: SortOrder
+    cleaningLotId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProductionConsumptionAvgOrderByAggregateInput = {
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+  }
+
+  export type ProductionConsumptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    postingId?: SortOrder
+    rawMaterialId?: SortOrder
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+    batchNumber?: SortOrder
+    cleaningLotId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProductionConsumptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    postingId?: SortOrder
+    rawMaterialId?: SortOrder
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+    batchNumber?: SortOrder
+    cleaningLotId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProductionConsumptionSumOrderByAggregateInput = {
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+  }
+
+  export type EnumOutputTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.OutputType | EnumOutputTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OutputType[] | ListEnumOutputTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OutputType[] | ListEnumOutputTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOutputTypeFilter<$PrismaModel> | $Enums.OutputType
+  }
+
+  export type ProductionOutputCountOrderByAggregateInput = {
+    id?: SortOrder
+    postingId?: SortOrder
+    outputType?: SortOrder
+    productName?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    batchNumber?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProductionOutputAvgOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type ProductionOutputMaxOrderByAggregateInput = {
+    id?: SortOrder
+    postingId?: SortOrder
+    outputType?: SortOrder
+    productName?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    batchNumber?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProductionOutputMinOrderByAggregateInput = {
+    id?: SortOrder
+    postingId?: SortOrder
+    outputType?: SortOrder
+    productName?: SortOrder
+    skuCode?: SortOrder
+    quantity?: SortOrder
+    unit?: SortOrder
+    batchNumber?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type ProductionOutputSumOrderByAggregateInput = {
+    quantity?: SortOrder
+  }
+
+  export type EnumOutputTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OutputType | EnumOutputTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OutputType[] | ListEnumOutputTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OutputType[] | ListEnumOutputTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOutputTypeWithAggregatesFilter<$PrismaModel> | $Enums.OutputType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOutputTypeFilter<$PrismaModel>
+    _max?: NestedEnumOutputTypeFilter<$PrismaModel>
   }
 
   export type GRNbyPoNullableScalarRelationFilter = {
@@ -105352,11 +118129,6 @@ export namespace Prisma {
     every?: ProcessingBatchLotWhereInput
     some?: ProcessingBatchLotWhereInput
     none?: ProcessingBatchLotWhereInput
-  }
-
-  export type WarehouseNullableScalarRelationFilter = {
-    is?: WarehouseWhereInput | null
-    isNot?: WarehouseWhereInput | null
   }
 
   export type ProcessingBatchLotOrderByRelationAggregateInput = {
@@ -105764,6 +118536,16 @@ export namespace Prisma {
     isNot?: GRNbyPoWhereInput
   }
 
+  export type GrindingDispatchLotListRelationFilter = {
+    every?: GrindingDispatchLotWhereInput
+    some?: GrindingDispatchLotWhereInput
+    none?: GrindingDispatchLotWhereInput
+  }
+
+  export type GrindingDispatchLotOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type CleaningLotCountOrderByAggregateInput = {
     id?: SortOrder
     lotNumber?: SortOrder
@@ -105889,11 +118671,17 @@ export namespace Prisma {
     not?: NestedEnumBOMStatusFilter<$PrismaModel> | $Enums.BOMStatus
   }
 
+  export type RawMaterialProductNullableScalarRelationFilter = {
+    is?: RawMaterialProductWhereInput | null
+    isNot?: RawMaterialProductWhereInput | null
+  }
+
   export type BillOfMaterialCountOrderByAggregateInput = {
     id?: SortOrder
     bomCode?: SortOrder
     productName?: SortOrder
     productCode?: SortOrder
+    sfgProductId?: SortOrder
     unitOfMeasurement?: SortOrder
     outputQuantity?: SortOrder
     description?: SortOrder
@@ -105911,6 +118699,7 @@ export namespace Prisma {
     bomCode?: SortOrder
     productName?: SortOrder
     productCode?: SortOrder
+    sfgProductId?: SortOrder
     unitOfMeasurement?: SortOrder
     outputQuantity?: SortOrder
     description?: SortOrder
@@ -105924,6 +118713,7 @@ export namespace Prisma {
     bomCode?: SortOrder
     productName?: SortOrder
     productCode?: SortOrder
+    sfgProductId?: SortOrder
     unitOfMeasurement?: SortOrder
     outputQuantity?: SortOrder
     description?: SortOrder
@@ -106049,6 +118839,124 @@ export namespace Prisma {
     quantity?: SortOrder
     allocatedQuantity?: SortOrder
     restWastage?: SortOrder
+  }
+
+  export type EnumGrindingDispatchStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.GrindingDispatchStatus | EnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.GrindingDispatchStatus[] | ListEnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GrindingDispatchStatus[] | ListEnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumGrindingDispatchStatusFilter<$PrismaModel> | $Enums.GrindingDispatchStatus
+  }
+
+  export type GrindingDispatchCountOrderByAggregateInput = {
+    id?: SortOrder
+    batchNumber?: SortOrder
+    inputRawMaterialId?: SortOrder
+    fromLocationId?: SortOrder
+    toLocationId?: SortOrder
+    totalQuantity?: SortOrder
+    status?: SortOrder
+    sentAt?: SortOrder
+    acceptedAt?: SortOrder
+    rejectedAt?: SortOrder
+    rejectionReason?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GrindingDispatchAvgOrderByAggregateInput = {
+    totalQuantity?: SortOrder
+  }
+
+  export type GrindingDispatchMaxOrderByAggregateInput = {
+    id?: SortOrder
+    batchNumber?: SortOrder
+    inputRawMaterialId?: SortOrder
+    fromLocationId?: SortOrder
+    toLocationId?: SortOrder
+    totalQuantity?: SortOrder
+    status?: SortOrder
+    sentAt?: SortOrder
+    acceptedAt?: SortOrder
+    rejectedAt?: SortOrder
+    rejectionReason?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GrindingDispatchMinOrderByAggregateInput = {
+    id?: SortOrder
+    batchNumber?: SortOrder
+    inputRawMaterialId?: SortOrder
+    fromLocationId?: SortOrder
+    toLocationId?: SortOrder
+    totalQuantity?: SortOrder
+    status?: SortOrder
+    sentAt?: SortOrder
+    acceptedAt?: SortOrder
+    rejectedAt?: SortOrder
+    rejectionReason?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GrindingDispatchSumOrderByAggregateInput = {
+    totalQuantity?: SortOrder
+  }
+
+  export type EnumGrindingDispatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GrindingDispatchStatus | EnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.GrindingDispatchStatus[] | ListEnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GrindingDispatchStatus[] | ListEnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumGrindingDispatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.GrindingDispatchStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGrindingDispatchStatusFilter<$PrismaModel>
+    _max?: NestedEnumGrindingDispatchStatusFilter<$PrismaModel>
+  }
+
+  export type GrindingDispatchScalarRelationFilter = {
+    is?: GrindingDispatchWhereInput
+    isNot?: GrindingDispatchWhereInput
+  }
+
+  export type GrindingDispatchLotCountOrderByAggregateInput = {
+    id?: SortOrder
+    dispatchId?: SortOrder
+    cleaningLotId?: SortOrder
+    allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type GrindingDispatchLotAvgOrderByAggregateInput = {
+    allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
+  }
+
+  export type GrindingDispatchLotMaxOrderByAggregateInput = {
+    id?: SortOrder
+    dispatchId?: SortOrder
+    cleaningLotId?: SortOrder
+    allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type GrindingDispatchLotMinOrderByAggregateInput = {
+    id?: SortOrder
+    dispatchId?: SortOrder
+    cleaningLotId?: SortOrder
+    allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type GrindingDispatchLotSumOrderByAggregateInput = {
+    allocatedQuantity?: SortOrder
+    seedWastageAllocated?: SortOrder
   }
 
   export type BatchCreateNestedOneWithoutActivityLogInput = {
@@ -111320,6 +124228,20 @@ export namespace Prisma {
     connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
   }
 
+  export type BillOfMaterialCreateNestedManyWithoutSfgProductInput = {
+    create?: XOR<BillOfMaterialCreateWithoutSfgProductInput, BillOfMaterialUncheckedCreateWithoutSfgProductInput> | BillOfMaterialCreateWithoutSfgProductInput[] | BillOfMaterialUncheckedCreateWithoutSfgProductInput[]
+    connectOrCreate?: BillOfMaterialCreateOrConnectWithoutSfgProductInput | BillOfMaterialCreateOrConnectWithoutSfgProductInput[]
+    createMany?: BillOfMaterialCreateManySfgProductInputEnvelope
+    connect?: BillOfMaterialWhereUniqueInput | BillOfMaterialWhereUniqueInput[]
+  }
+
+  export type GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput = {
+    create?: XOR<GrindingDispatchCreateWithoutInputRawMaterialInput, GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput> | GrindingDispatchCreateWithoutInputRawMaterialInput[] | GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput | GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput[]
+    createMany?: GrindingDispatchCreateManyInputRawMaterialInputEnvelope
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+  }
+
   export type CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput = {
     create?: XOR<CleaningJobCreateWithoutRawMaterialInput, CleaningJobUncheckedCreateWithoutRawMaterialInput> | CleaningJobCreateWithoutRawMaterialInput[] | CleaningJobUncheckedCreateWithoutRawMaterialInput[]
     connectOrCreate?: CleaningJobCreateOrConnectWithoutRawMaterialInput | CleaningJobCreateOrConnectWithoutRawMaterialInput[]
@@ -111367,6 +124289,20 @@ export namespace Prisma {
     connectOrCreate?: BOMItemCreateOrConnectWithoutRawMaterialInput | BOMItemCreateOrConnectWithoutRawMaterialInput[]
     createMany?: BOMItemCreateManyRawMaterialInputEnvelope
     connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
+  }
+
+  export type BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput = {
+    create?: XOR<BillOfMaterialCreateWithoutSfgProductInput, BillOfMaterialUncheckedCreateWithoutSfgProductInput> | BillOfMaterialCreateWithoutSfgProductInput[] | BillOfMaterialUncheckedCreateWithoutSfgProductInput[]
+    connectOrCreate?: BillOfMaterialCreateOrConnectWithoutSfgProductInput | BillOfMaterialCreateOrConnectWithoutSfgProductInput[]
+    createMany?: BillOfMaterialCreateManySfgProductInputEnvelope
+    connect?: BillOfMaterialWhereUniqueInput | BillOfMaterialWhereUniqueInput[]
+  }
+
+  export type GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput = {
+    create?: XOR<GrindingDispatchCreateWithoutInputRawMaterialInput, GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput> | GrindingDispatchCreateWithoutInputRawMaterialInput[] | GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput | GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput[]
+    createMany?: GrindingDispatchCreateManyInputRawMaterialInputEnvelope
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
   }
 
   export type EnumMaterialCategoryFieldUpdateOperationsInput = {
@@ -111481,6 +124417,34 @@ export namespace Prisma {
     deleteMany?: BOMItemScalarWhereInput | BOMItemScalarWhereInput[]
   }
 
+  export type BillOfMaterialUpdateManyWithoutSfgProductNestedInput = {
+    create?: XOR<BillOfMaterialCreateWithoutSfgProductInput, BillOfMaterialUncheckedCreateWithoutSfgProductInput> | BillOfMaterialCreateWithoutSfgProductInput[] | BillOfMaterialUncheckedCreateWithoutSfgProductInput[]
+    connectOrCreate?: BillOfMaterialCreateOrConnectWithoutSfgProductInput | BillOfMaterialCreateOrConnectWithoutSfgProductInput[]
+    upsert?: BillOfMaterialUpsertWithWhereUniqueWithoutSfgProductInput | BillOfMaterialUpsertWithWhereUniqueWithoutSfgProductInput[]
+    createMany?: BillOfMaterialCreateManySfgProductInputEnvelope
+    set?: BillOfMaterialWhereUniqueInput | BillOfMaterialWhereUniqueInput[]
+    disconnect?: BillOfMaterialWhereUniqueInput | BillOfMaterialWhereUniqueInput[]
+    delete?: BillOfMaterialWhereUniqueInput | BillOfMaterialWhereUniqueInput[]
+    connect?: BillOfMaterialWhereUniqueInput | BillOfMaterialWhereUniqueInput[]
+    update?: BillOfMaterialUpdateWithWhereUniqueWithoutSfgProductInput | BillOfMaterialUpdateWithWhereUniqueWithoutSfgProductInput[]
+    updateMany?: BillOfMaterialUpdateManyWithWhereWithoutSfgProductInput | BillOfMaterialUpdateManyWithWhereWithoutSfgProductInput[]
+    deleteMany?: BillOfMaterialScalarWhereInput | BillOfMaterialScalarWhereInput[]
+  }
+
+  export type GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput = {
+    create?: XOR<GrindingDispatchCreateWithoutInputRawMaterialInput, GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput> | GrindingDispatchCreateWithoutInputRawMaterialInput[] | GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput | GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput[]
+    upsert?: GrindingDispatchUpsertWithWhereUniqueWithoutInputRawMaterialInput | GrindingDispatchUpsertWithWhereUniqueWithoutInputRawMaterialInput[]
+    createMany?: GrindingDispatchCreateManyInputRawMaterialInputEnvelope
+    set?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    disconnect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    delete?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    update?: GrindingDispatchUpdateWithWhereUniqueWithoutInputRawMaterialInput | GrindingDispatchUpdateWithWhereUniqueWithoutInputRawMaterialInput[]
+    updateMany?: GrindingDispatchUpdateManyWithWhereWithoutInputRawMaterialInput | GrindingDispatchUpdateManyWithWhereWithoutInputRawMaterialInput[]
+    deleteMany?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
+  }
+
   export type CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput = {
     create?: XOR<CleaningJobCreateWithoutRawMaterialInput, CleaningJobUncheckedCreateWithoutRawMaterialInput> | CleaningJobCreateWithoutRawMaterialInput[] | CleaningJobUncheckedCreateWithoutRawMaterialInput[]
     connectOrCreate?: CleaningJobCreateOrConnectWithoutRawMaterialInput | CleaningJobCreateOrConnectWithoutRawMaterialInput[]
@@ -111577,6 +124541,34 @@ export namespace Prisma {
     update?: BOMItemUpdateWithWhereUniqueWithoutRawMaterialInput | BOMItemUpdateWithWhereUniqueWithoutRawMaterialInput[]
     updateMany?: BOMItemUpdateManyWithWhereWithoutRawMaterialInput | BOMItemUpdateManyWithWhereWithoutRawMaterialInput[]
     deleteMany?: BOMItemScalarWhereInput | BOMItemScalarWhereInput[]
+  }
+
+  export type BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput = {
+    create?: XOR<BillOfMaterialCreateWithoutSfgProductInput, BillOfMaterialUncheckedCreateWithoutSfgProductInput> | BillOfMaterialCreateWithoutSfgProductInput[] | BillOfMaterialUncheckedCreateWithoutSfgProductInput[]
+    connectOrCreate?: BillOfMaterialCreateOrConnectWithoutSfgProductInput | BillOfMaterialCreateOrConnectWithoutSfgProductInput[]
+    upsert?: BillOfMaterialUpsertWithWhereUniqueWithoutSfgProductInput | BillOfMaterialUpsertWithWhereUniqueWithoutSfgProductInput[]
+    createMany?: BillOfMaterialCreateManySfgProductInputEnvelope
+    set?: BillOfMaterialWhereUniqueInput | BillOfMaterialWhereUniqueInput[]
+    disconnect?: BillOfMaterialWhereUniqueInput | BillOfMaterialWhereUniqueInput[]
+    delete?: BillOfMaterialWhereUniqueInput | BillOfMaterialWhereUniqueInput[]
+    connect?: BillOfMaterialWhereUniqueInput | BillOfMaterialWhereUniqueInput[]
+    update?: BillOfMaterialUpdateWithWhereUniqueWithoutSfgProductInput | BillOfMaterialUpdateWithWhereUniqueWithoutSfgProductInput[]
+    updateMany?: BillOfMaterialUpdateManyWithWhereWithoutSfgProductInput | BillOfMaterialUpdateManyWithWhereWithoutSfgProductInput[]
+    deleteMany?: BillOfMaterialScalarWhereInput | BillOfMaterialScalarWhereInput[]
+  }
+
+  export type GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput = {
+    create?: XOR<GrindingDispatchCreateWithoutInputRawMaterialInput, GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput> | GrindingDispatchCreateWithoutInputRawMaterialInput[] | GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput | GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput[]
+    upsert?: GrindingDispatchUpsertWithWhereUniqueWithoutInputRawMaterialInput | GrindingDispatchUpsertWithWhereUniqueWithoutInputRawMaterialInput[]
+    createMany?: GrindingDispatchCreateManyInputRawMaterialInputEnvelope
+    set?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    disconnect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    delete?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    update?: GrindingDispatchUpdateWithWhereUniqueWithoutInputRawMaterialInput | GrindingDispatchUpdateWithWhereUniqueWithoutInputRawMaterialInput[]
+    updateMany?: GrindingDispatchUpdateManyWithWhereWithoutInputRawMaterialInput | GrindingDispatchUpdateManyWithWhereWithoutInputRawMaterialInput[]
+    deleteMany?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
   }
 
   export type VendorCreateNestedOneWithoutPurchaseOrdersInput = {
@@ -111814,6 +124806,12 @@ export namespace Prisma {
     connect?: PurchaseOrderItemWhereUniqueInput
   }
 
+  export type LocationCreateNestedOneWithoutReceivalEntriesInput = {
+    create?: XOR<LocationCreateWithoutReceivalEntriesInput, LocationUncheckedCreateWithoutReceivalEntriesInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutReceivalEntriesInput
+    connect?: LocationWhereUniqueInput
+  }
+
   export type WarehouseCreateNestedOneWithoutReceivalEntriesInput = {
     create?: XOR<WarehouseCreateWithoutReceivalEntriesInput, WarehouseUncheckedCreateWithoutReceivalEntriesInput>
     connectOrCreate?: WarehouseCreateOrConnectWithoutReceivalEntriesInput
@@ -111853,10 +124851,22 @@ export namespace Prisma {
     update?: XOR<XOR<PurchaseOrderItemUpdateToOneWithWhereWithoutReceivalsInput, PurchaseOrderItemUpdateWithoutReceivalsInput>, PurchaseOrderItemUncheckedUpdateWithoutReceivalsInput>
   }
 
-  export type WarehouseUpdateOneRequiredWithoutReceivalEntriesNestedInput = {
+  export type LocationUpdateOneWithoutReceivalEntriesNestedInput = {
+    create?: XOR<LocationCreateWithoutReceivalEntriesInput, LocationUncheckedCreateWithoutReceivalEntriesInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutReceivalEntriesInput
+    upsert?: LocationUpsertWithoutReceivalEntriesInput
+    disconnect?: LocationWhereInput | boolean
+    delete?: LocationWhereInput | boolean
+    connect?: LocationWhereUniqueInput
+    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutReceivalEntriesInput, LocationUpdateWithoutReceivalEntriesInput>, LocationUncheckedUpdateWithoutReceivalEntriesInput>
+  }
+
+  export type WarehouseUpdateOneWithoutReceivalEntriesNestedInput = {
     create?: XOR<WarehouseCreateWithoutReceivalEntriesInput, WarehouseUncheckedCreateWithoutReceivalEntriesInput>
     connectOrCreate?: WarehouseCreateOrConnectWithoutReceivalEntriesInput
     upsert?: WarehouseUpsertWithoutReceivalEntriesInput
+    disconnect?: WarehouseWhereInput | boolean
+    delete?: WarehouseWhereInput | boolean
     connect?: WarehouseWhereUniqueInput
     update?: XOR<XOR<WarehouseUpdateToOneWithWhereWithoutReceivalEntriesInput, WarehouseUpdateWithoutReceivalEntriesInput>, WarehouseUncheckedUpdateWithoutReceivalEntriesInput>
   }
@@ -112461,6 +125471,432 @@ export namespace Prisma {
     update?: ProcessingJobUpdateWithWhereUniqueWithoutWarehouseInput | ProcessingJobUpdateWithWhereUniqueWithoutWarehouseInput[]
     updateMany?: ProcessingJobUpdateManyWithWhereWithoutWarehouseInput | ProcessingJobUpdateManyWithWhereWithoutWarehouseInput[]
     deleteMany?: ProcessingJobScalarWhereInput | ProcessingJobScalarWhereInput[]
+  }
+
+  export type ReceivalEntryCreateNestedManyWithoutLocationInput = {
+    create?: XOR<ReceivalEntryCreateWithoutLocationInput, ReceivalEntryUncheckedCreateWithoutLocationInput> | ReceivalEntryCreateWithoutLocationInput[] | ReceivalEntryUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: ReceivalEntryCreateOrConnectWithoutLocationInput | ReceivalEntryCreateOrConnectWithoutLocationInput[]
+    createMany?: ReceivalEntryCreateManyLocationInputEnvelope
+    connect?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+  }
+
+  export type MaterialTransferCreateNestedManyWithoutFromLocationInput = {
+    create?: XOR<MaterialTransferCreateWithoutFromLocationInput, MaterialTransferUncheckedCreateWithoutFromLocationInput> | MaterialTransferCreateWithoutFromLocationInput[] | MaterialTransferUncheckedCreateWithoutFromLocationInput[]
+    connectOrCreate?: MaterialTransferCreateOrConnectWithoutFromLocationInput | MaterialTransferCreateOrConnectWithoutFromLocationInput[]
+    createMany?: MaterialTransferCreateManyFromLocationInputEnvelope
+    connect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+  }
+
+  export type MaterialTransferCreateNestedManyWithoutToLocationInput = {
+    create?: XOR<MaterialTransferCreateWithoutToLocationInput, MaterialTransferUncheckedCreateWithoutToLocationInput> | MaterialTransferCreateWithoutToLocationInput[] | MaterialTransferUncheckedCreateWithoutToLocationInput[]
+    connectOrCreate?: MaterialTransferCreateOrConnectWithoutToLocationInput | MaterialTransferCreateOrConnectWithoutToLocationInput[]
+    createMany?: MaterialTransferCreateManyToLocationInputEnvelope
+    connect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+  }
+
+  export type GrindingDispatchCreateNestedManyWithoutFromLocationInput = {
+    create?: XOR<GrindingDispatchCreateWithoutFromLocationInput, GrindingDispatchUncheckedCreateWithoutFromLocationInput> | GrindingDispatchCreateWithoutFromLocationInput[] | GrindingDispatchUncheckedCreateWithoutFromLocationInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutFromLocationInput | GrindingDispatchCreateOrConnectWithoutFromLocationInput[]
+    createMany?: GrindingDispatchCreateManyFromLocationInputEnvelope
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+  }
+
+  export type GrindingDispatchCreateNestedManyWithoutToLocationInput = {
+    create?: XOR<GrindingDispatchCreateWithoutToLocationInput, GrindingDispatchUncheckedCreateWithoutToLocationInput> | GrindingDispatchCreateWithoutToLocationInput[] | GrindingDispatchUncheckedCreateWithoutToLocationInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutToLocationInput | GrindingDispatchCreateOrConnectWithoutToLocationInput[]
+    createMany?: GrindingDispatchCreateManyToLocationInputEnvelope
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+  }
+
+  export type ReceivalEntryUncheckedCreateNestedManyWithoutLocationInput = {
+    create?: XOR<ReceivalEntryCreateWithoutLocationInput, ReceivalEntryUncheckedCreateWithoutLocationInput> | ReceivalEntryCreateWithoutLocationInput[] | ReceivalEntryUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: ReceivalEntryCreateOrConnectWithoutLocationInput | ReceivalEntryCreateOrConnectWithoutLocationInput[]
+    createMany?: ReceivalEntryCreateManyLocationInputEnvelope
+    connect?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+  }
+
+  export type MaterialTransferUncheckedCreateNestedManyWithoutFromLocationInput = {
+    create?: XOR<MaterialTransferCreateWithoutFromLocationInput, MaterialTransferUncheckedCreateWithoutFromLocationInput> | MaterialTransferCreateWithoutFromLocationInput[] | MaterialTransferUncheckedCreateWithoutFromLocationInput[]
+    connectOrCreate?: MaterialTransferCreateOrConnectWithoutFromLocationInput | MaterialTransferCreateOrConnectWithoutFromLocationInput[]
+    createMany?: MaterialTransferCreateManyFromLocationInputEnvelope
+    connect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+  }
+
+  export type MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput = {
+    create?: XOR<MaterialTransferCreateWithoutToLocationInput, MaterialTransferUncheckedCreateWithoutToLocationInput> | MaterialTransferCreateWithoutToLocationInput[] | MaterialTransferUncheckedCreateWithoutToLocationInput[]
+    connectOrCreate?: MaterialTransferCreateOrConnectWithoutToLocationInput | MaterialTransferCreateOrConnectWithoutToLocationInput[]
+    createMany?: MaterialTransferCreateManyToLocationInputEnvelope
+    connect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+  }
+
+  export type GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput = {
+    create?: XOR<GrindingDispatchCreateWithoutFromLocationInput, GrindingDispatchUncheckedCreateWithoutFromLocationInput> | GrindingDispatchCreateWithoutFromLocationInput[] | GrindingDispatchUncheckedCreateWithoutFromLocationInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutFromLocationInput | GrindingDispatchCreateOrConnectWithoutFromLocationInput[]
+    createMany?: GrindingDispatchCreateManyFromLocationInputEnvelope
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+  }
+
+  export type GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput = {
+    create?: XOR<GrindingDispatchCreateWithoutToLocationInput, GrindingDispatchUncheckedCreateWithoutToLocationInput> | GrindingDispatchCreateWithoutToLocationInput[] | GrindingDispatchUncheckedCreateWithoutToLocationInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutToLocationInput | GrindingDispatchCreateOrConnectWithoutToLocationInput[]
+    createMany?: GrindingDispatchCreateManyToLocationInputEnvelope
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+  }
+
+  export type EnumLocationTypeFieldUpdateOperationsInput = {
+    set?: $Enums.LocationType
+  }
+
+  export type ReceivalEntryUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<ReceivalEntryCreateWithoutLocationInput, ReceivalEntryUncheckedCreateWithoutLocationInput> | ReceivalEntryCreateWithoutLocationInput[] | ReceivalEntryUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: ReceivalEntryCreateOrConnectWithoutLocationInput | ReceivalEntryCreateOrConnectWithoutLocationInput[]
+    upsert?: ReceivalEntryUpsertWithWhereUniqueWithoutLocationInput | ReceivalEntryUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: ReceivalEntryCreateManyLocationInputEnvelope
+    set?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+    disconnect?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+    delete?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+    connect?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+    update?: ReceivalEntryUpdateWithWhereUniqueWithoutLocationInput | ReceivalEntryUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: ReceivalEntryUpdateManyWithWhereWithoutLocationInput | ReceivalEntryUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: ReceivalEntryScalarWhereInput | ReceivalEntryScalarWhereInput[]
+  }
+
+  export type MaterialTransferUpdateManyWithoutFromLocationNestedInput = {
+    create?: XOR<MaterialTransferCreateWithoutFromLocationInput, MaterialTransferUncheckedCreateWithoutFromLocationInput> | MaterialTransferCreateWithoutFromLocationInput[] | MaterialTransferUncheckedCreateWithoutFromLocationInput[]
+    connectOrCreate?: MaterialTransferCreateOrConnectWithoutFromLocationInput | MaterialTransferCreateOrConnectWithoutFromLocationInput[]
+    upsert?: MaterialTransferUpsertWithWhereUniqueWithoutFromLocationInput | MaterialTransferUpsertWithWhereUniqueWithoutFromLocationInput[]
+    createMany?: MaterialTransferCreateManyFromLocationInputEnvelope
+    set?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    disconnect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    delete?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    connect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    update?: MaterialTransferUpdateWithWhereUniqueWithoutFromLocationInput | MaterialTransferUpdateWithWhereUniqueWithoutFromLocationInput[]
+    updateMany?: MaterialTransferUpdateManyWithWhereWithoutFromLocationInput | MaterialTransferUpdateManyWithWhereWithoutFromLocationInput[]
+    deleteMany?: MaterialTransferScalarWhereInput | MaterialTransferScalarWhereInput[]
+  }
+
+  export type MaterialTransferUpdateManyWithoutToLocationNestedInput = {
+    create?: XOR<MaterialTransferCreateWithoutToLocationInput, MaterialTransferUncheckedCreateWithoutToLocationInput> | MaterialTransferCreateWithoutToLocationInput[] | MaterialTransferUncheckedCreateWithoutToLocationInput[]
+    connectOrCreate?: MaterialTransferCreateOrConnectWithoutToLocationInput | MaterialTransferCreateOrConnectWithoutToLocationInput[]
+    upsert?: MaterialTransferUpsertWithWhereUniqueWithoutToLocationInput | MaterialTransferUpsertWithWhereUniqueWithoutToLocationInput[]
+    createMany?: MaterialTransferCreateManyToLocationInputEnvelope
+    set?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    disconnect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    delete?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    connect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    update?: MaterialTransferUpdateWithWhereUniqueWithoutToLocationInput | MaterialTransferUpdateWithWhereUniqueWithoutToLocationInput[]
+    updateMany?: MaterialTransferUpdateManyWithWhereWithoutToLocationInput | MaterialTransferUpdateManyWithWhereWithoutToLocationInput[]
+    deleteMany?: MaterialTransferScalarWhereInput | MaterialTransferScalarWhereInput[]
+  }
+
+  export type GrindingDispatchUpdateManyWithoutFromLocationNestedInput = {
+    create?: XOR<GrindingDispatchCreateWithoutFromLocationInput, GrindingDispatchUncheckedCreateWithoutFromLocationInput> | GrindingDispatchCreateWithoutFromLocationInput[] | GrindingDispatchUncheckedCreateWithoutFromLocationInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutFromLocationInput | GrindingDispatchCreateOrConnectWithoutFromLocationInput[]
+    upsert?: GrindingDispatchUpsertWithWhereUniqueWithoutFromLocationInput | GrindingDispatchUpsertWithWhereUniqueWithoutFromLocationInput[]
+    createMany?: GrindingDispatchCreateManyFromLocationInputEnvelope
+    set?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    disconnect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    delete?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    update?: GrindingDispatchUpdateWithWhereUniqueWithoutFromLocationInput | GrindingDispatchUpdateWithWhereUniqueWithoutFromLocationInput[]
+    updateMany?: GrindingDispatchUpdateManyWithWhereWithoutFromLocationInput | GrindingDispatchUpdateManyWithWhereWithoutFromLocationInput[]
+    deleteMany?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
+  }
+
+  export type GrindingDispatchUpdateManyWithoutToLocationNestedInput = {
+    create?: XOR<GrindingDispatchCreateWithoutToLocationInput, GrindingDispatchUncheckedCreateWithoutToLocationInput> | GrindingDispatchCreateWithoutToLocationInput[] | GrindingDispatchUncheckedCreateWithoutToLocationInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutToLocationInput | GrindingDispatchCreateOrConnectWithoutToLocationInput[]
+    upsert?: GrindingDispatchUpsertWithWhereUniqueWithoutToLocationInput | GrindingDispatchUpsertWithWhereUniqueWithoutToLocationInput[]
+    createMany?: GrindingDispatchCreateManyToLocationInputEnvelope
+    set?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    disconnect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    delete?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    update?: GrindingDispatchUpdateWithWhereUniqueWithoutToLocationInput | GrindingDispatchUpdateWithWhereUniqueWithoutToLocationInput[]
+    updateMany?: GrindingDispatchUpdateManyWithWhereWithoutToLocationInput | GrindingDispatchUpdateManyWithWhereWithoutToLocationInput[]
+    deleteMany?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
+  }
+
+  export type ReceivalEntryUncheckedUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<ReceivalEntryCreateWithoutLocationInput, ReceivalEntryUncheckedCreateWithoutLocationInput> | ReceivalEntryCreateWithoutLocationInput[] | ReceivalEntryUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: ReceivalEntryCreateOrConnectWithoutLocationInput | ReceivalEntryCreateOrConnectWithoutLocationInput[]
+    upsert?: ReceivalEntryUpsertWithWhereUniqueWithoutLocationInput | ReceivalEntryUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: ReceivalEntryCreateManyLocationInputEnvelope
+    set?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+    disconnect?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+    delete?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+    connect?: ReceivalEntryWhereUniqueInput | ReceivalEntryWhereUniqueInput[]
+    update?: ReceivalEntryUpdateWithWhereUniqueWithoutLocationInput | ReceivalEntryUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: ReceivalEntryUpdateManyWithWhereWithoutLocationInput | ReceivalEntryUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: ReceivalEntryScalarWhereInput | ReceivalEntryScalarWhereInput[]
+  }
+
+  export type MaterialTransferUncheckedUpdateManyWithoutFromLocationNestedInput = {
+    create?: XOR<MaterialTransferCreateWithoutFromLocationInput, MaterialTransferUncheckedCreateWithoutFromLocationInput> | MaterialTransferCreateWithoutFromLocationInput[] | MaterialTransferUncheckedCreateWithoutFromLocationInput[]
+    connectOrCreate?: MaterialTransferCreateOrConnectWithoutFromLocationInput | MaterialTransferCreateOrConnectWithoutFromLocationInput[]
+    upsert?: MaterialTransferUpsertWithWhereUniqueWithoutFromLocationInput | MaterialTransferUpsertWithWhereUniqueWithoutFromLocationInput[]
+    createMany?: MaterialTransferCreateManyFromLocationInputEnvelope
+    set?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    disconnect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    delete?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    connect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    update?: MaterialTransferUpdateWithWhereUniqueWithoutFromLocationInput | MaterialTransferUpdateWithWhereUniqueWithoutFromLocationInput[]
+    updateMany?: MaterialTransferUpdateManyWithWhereWithoutFromLocationInput | MaterialTransferUpdateManyWithWhereWithoutFromLocationInput[]
+    deleteMany?: MaterialTransferScalarWhereInput | MaterialTransferScalarWhereInput[]
+  }
+
+  export type MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput = {
+    create?: XOR<MaterialTransferCreateWithoutToLocationInput, MaterialTransferUncheckedCreateWithoutToLocationInput> | MaterialTransferCreateWithoutToLocationInput[] | MaterialTransferUncheckedCreateWithoutToLocationInput[]
+    connectOrCreate?: MaterialTransferCreateOrConnectWithoutToLocationInput | MaterialTransferCreateOrConnectWithoutToLocationInput[]
+    upsert?: MaterialTransferUpsertWithWhereUniqueWithoutToLocationInput | MaterialTransferUpsertWithWhereUniqueWithoutToLocationInput[]
+    createMany?: MaterialTransferCreateManyToLocationInputEnvelope
+    set?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    disconnect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    delete?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    connect?: MaterialTransferWhereUniqueInput | MaterialTransferWhereUniqueInput[]
+    update?: MaterialTransferUpdateWithWhereUniqueWithoutToLocationInput | MaterialTransferUpdateWithWhereUniqueWithoutToLocationInput[]
+    updateMany?: MaterialTransferUpdateManyWithWhereWithoutToLocationInput | MaterialTransferUpdateManyWithWhereWithoutToLocationInput[]
+    deleteMany?: MaterialTransferScalarWhereInput | MaterialTransferScalarWhereInput[]
+  }
+
+  export type GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput = {
+    create?: XOR<GrindingDispatchCreateWithoutFromLocationInput, GrindingDispatchUncheckedCreateWithoutFromLocationInput> | GrindingDispatchCreateWithoutFromLocationInput[] | GrindingDispatchUncheckedCreateWithoutFromLocationInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutFromLocationInput | GrindingDispatchCreateOrConnectWithoutFromLocationInput[]
+    upsert?: GrindingDispatchUpsertWithWhereUniqueWithoutFromLocationInput | GrindingDispatchUpsertWithWhereUniqueWithoutFromLocationInput[]
+    createMany?: GrindingDispatchCreateManyFromLocationInputEnvelope
+    set?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    disconnect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    delete?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    update?: GrindingDispatchUpdateWithWhereUniqueWithoutFromLocationInput | GrindingDispatchUpdateWithWhereUniqueWithoutFromLocationInput[]
+    updateMany?: GrindingDispatchUpdateManyWithWhereWithoutFromLocationInput | GrindingDispatchUpdateManyWithWhereWithoutFromLocationInput[]
+    deleteMany?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
+  }
+
+  export type GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput = {
+    create?: XOR<GrindingDispatchCreateWithoutToLocationInput, GrindingDispatchUncheckedCreateWithoutToLocationInput> | GrindingDispatchCreateWithoutToLocationInput[] | GrindingDispatchUncheckedCreateWithoutToLocationInput[]
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutToLocationInput | GrindingDispatchCreateOrConnectWithoutToLocationInput[]
+    upsert?: GrindingDispatchUpsertWithWhereUniqueWithoutToLocationInput | GrindingDispatchUpsertWithWhereUniqueWithoutToLocationInput[]
+    createMany?: GrindingDispatchCreateManyToLocationInputEnvelope
+    set?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    disconnect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    delete?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+    update?: GrindingDispatchUpdateWithWhereUniqueWithoutToLocationInput | GrindingDispatchUpdateWithWhereUniqueWithoutToLocationInput[]
+    updateMany?: GrindingDispatchUpdateManyWithWhereWithoutToLocationInput | GrindingDispatchUpdateManyWithWhereWithoutToLocationInput[]
+    deleteMany?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
+  }
+
+  export type LocationCreateNestedOneWithoutTransfersFromInput = {
+    create?: XOR<LocationCreateWithoutTransfersFromInput, LocationUncheckedCreateWithoutTransfersFromInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutTransfersFromInput
+    connect?: LocationWhereUniqueInput
+  }
+
+  export type LocationCreateNestedOneWithoutTransfersToInput = {
+    create?: XOR<LocationCreateWithoutTransfersToInput, LocationUncheckedCreateWithoutTransfersToInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutTransfersToInput
+    connect?: LocationWhereUniqueInput
+  }
+
+  export type MaterialTransferLineCreateNestedManyWithoutTransferInput = {
+    create?: XOR<MaterialTransferLineCreateWithoutTransferInput, MaterialTransferLineUncheckedCreateWithoutTransferInput> | MaterialTransferLineCreateWithoutTransferInput[] | MaterialTransferLineUncheckedCreateWithoutTransferInput[]
+    connectOrCreate?: MaterialTransferLineCreateOrConnectWithoutTransferInput | MaterialTransferLineCreateOrConnectWithoutTransferInput[]
+    createMany?: MaterialTransferLineCreateManyTransferInputEnvelope
+    connect?: MaterialTransferLineWhereUniqueInput | MaterialTransferLineWhereUniqueInput[]
+  }
+
+  export type MaterialTransferLineUncheckedCreateNestedManyWithoutTransferInput = {
+    create?: XOR<MaterialTransferLineCreateWithoutTransferInput, MaterialTransferLineUncheckedCreateWithoutTransferInput> | MaterialTransferLineCreateWithoutTransferInput[] | MaterialTransferLineUncheckedCreateWithoutTransferInput[]
+    connectOrCreate?: MaterialTransferLineCreateOrConnectWithoutTransferInput | MaterialTransferLineCreateOrConnectWithoutTransferInput[]
+    createMany?: MaterialTransferLineCreateManyTransferInputEnvelope
+    connect?: MaterialTransferLineWhereUniqueInput | MaterialTransferLineWhereUniqueInput[]
+  }
+
+  export type EnumTransferDirectionFieldUpdateOperationsInput = {
+    set?: $Enums.TransferDirection
+  }
+
+  export type EnumTransferStatusFieldUpdateOperationsInput = {
+    set?: $Enums.TransferStatus
+  }
+
+  export type LocationUpdateOneRequiredWithoutTransfersFromNestedInput = {
+    create?: XOR<LocationCreateWithoutTransfersFromInput, LocationUncheckedCreateWithoutTransfersFromInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutTransfersFromInput
+    upsert?: LocationUpsertWithoutTransfersFromInput
+    connect?: LocationWhereUniqueInput
+    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutTransfersFromInput, LocationUpdateWithoutTransfersFromInput>, LocationUncheckedUpdateWithoutTransfersFromInput>
+  }
+
+  export type LocationUpdateOneRequiredWithoutTransfersToNestedInput = {
+    create?: XOR<LocationCreateWithoutTransfersToInput, LocationUncheckedCreateWithoutTransfersToInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutTransfersToInput
+    upsert?: LocationUpsertWithoutTransfersToInput
+    connect?: LocationWhereUniqueInput
+    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutTransfersToInput, LocationUpdateWithoutTransfersToInput>, LocationUncheckedUpdateWithoutTransfersToInput>
+  }
+
+  export type MaterialTransferLineUpdateManyWithoutTransferNestedInput = {
+    create?: XOR<MaterialTransferLineCreateWithoutTransferInput, MaterialTransferLineUncheckedCreateWithoutTransferInput> | MaterialTransferLineCreateWithoutTransferInput[] | MaterialTransferLineUncheckedCreateWithoutTransferInput[]
+    connectOrCreate?: MaterialTransferLineCreateOrConnectWithoutTransferInput | MaterialTransferLineCreateOrConnectWithoutTransferInput[]
+    upsert?: MaterialTransferLineUpsertWithWhereUniqueWithoutTransferInput | MaterialTransferLineUpsertWithWhereUniqueWithoutTransferInput[]
+    createMany?: MaterialTransferLineCreateManyTransferInputEnvelope
+    set?: MaterialTransferLineWhereUniqueInput | MaterialTransferLineWhereUniqueInput[]
+    disconnect?: MaterialTransferLineWhereUniqueInput | MaterialTransferLineWhereUniqueInput[]
+    delete?: MaterialTransferLineWhereUniqueInput | MaterialTransferLineWhereUniqueInput[]
+    connect?: MaterialTransferLineWhereUniqueInput | MaterialTransferLineWhereUniqueInput[]
+    update?: MaterialTransferLineUpdateWithWhereUniqueWithoutTransferInput | MaterialTransferLineUpdateWithWhereUniqueWithoutTransferInput[]
+    updateMany?: MaterialTransferLineUpdateManyWithWhereWithoutTransferInput | MaterialTransferLineUpdateManyWithWhereWithoutTransferInput[]
+    deleteMany?: MaterialTransferLineScalarWhereInput | MaterialTransferLineScalarWhereInput[]
+  }
+
+  export type MaterialTransferLineUncheckedUpdateManyWithoutTransferNestedInput = {
+    create?: XOR<MaterialTransferLineCreateWithoutTransferInput, MaterialTransferLineUncheckedCreateWithoutTransferInput> | MaterialTransferLineCreateWithoutTransferInput[] | MaterialTransferLineUncheckedCreateWithoutTransferInput[]
+    connectOrCreate?: MaterialTransferLineCreateOrConnectWithoutTransferInput | MaterialTransferLineCreateOrConnectWithoutTransferInput[]
+    upsert?: MaterialTransferLineUpsertWithWhereUniqueWithoutTransferInput | MaterialTransferLineUpsertWithWhereUniqueWithoutTransferInput[]
+    createMany?: MaterialTransferLineCreateManyTransferInputEnvelope
+    set?: MaterialTransferLineWhereUniqueInput | MaterialTransferLineWhereUniqueInput[]
+    disconnect?: MaterialTransferLineWhereUniqueInput | MaterialTransferLineWhereUniqueInput[]
+    delete?: MaterialTransferLineWhereUniqueInput | MaterialTransferLineWhereUniqueInput[]
+    connect?: MaterialTransferLineWhereUniqueInput | MaterialTransferLineWhereUniqueInput[]
+    update?: MaterialTransferLineUpdateWithWhereUniqueWithoutTransferInput | MaterialTransferLineUpdateWithWhereUniqueWithoutTransferInput[]
+    updateMany?: MaterialTransferLineUpdateManyWithWhereWithoutTransferInput | MaterialTransferLineUpdateManyWithWhereWithoutTransferInput[]
+    deleteMany?: MaterialTransferLineScalarWhereInput | MaterialTransferLineScalarWhereInput[]
+  }
+
+  export type MaterialTransferCreateNestedOneWithoutLinesInput = {
+    create?: XOR<MaterialTransferCreateWithoutLinesInput, MaterialTransferUncheckedCreateWithoutLinesInput>
+    connectOrCreate?: MaterialTransferCreateOrConnectWithoutLinesInput
+    connect?: MaterialTransferWhereUniqueInput
+  }
+
+  export type EnumTransferLineTypeFieldUpdateOperationsInput = {
+    set?: $Enums.TransferLineType
+  }
+
+  export type MaterialTransferUpdateOneRequiredWithoutLinesNestedInput = {
+    create?: XOR<MaterialTransferCreateWithoutLinesInput, MaterialTransferUncheckedCreateWithoutLinesInput>
+    connectOrCreate?: MaterialTransferCreateOrConnectWithoutLinesInput
+    upsert?: MaterialTransferUpsertWithoutLinesInput
+    connect?: MaterialTransferWhereUniqueInput
+    update?: XOR<XOR<MaterialTransferUpdateToOneWithWhereWithoutLinesInput, MaterialTransferUpdateWithoutLinesInput>, MaterialTransferUncheckedUpdateWithoutLinesInput>
+  }
+
+  export type ProductionConsumptionCreateNestedManyWithoutPostingInput = {
+    create?: XOR<ProductionConsumptionCreateWithoutPostingInput, ProductionConsumptionUncheckedCreateWithoutPostingInput> | ProductionConsumptionCreateWithoutPostingInput[] | ProductionConsumptionUncheckedCreateWithoutPostingInput[]
+    connectOrCreate?: ProductionConsumptionCreateOrConnectWithoutPostingInput | ProductionConsumptionCreateOrConnectWithoutPostingInput[]
+    createMany?: ProductionConsumptionCreateManyPostingInputEnvelope
+    connect?: ProductionConsumptionWhereUniqueInput | ProductionConsumptionWhereUniqueInput[]
+  }
+
+  export type ProductionOutputCreateNestedManyWithoutPostingInput = {
+    create?: XOR<ProductionOutputCreateWithoutPostingInput, ProductionOutputUncheckedCreateWithoutPostingInput> | ProductionOutputCreateWithoutPostingInput[] | ProductionOutputUncheckedCreateWithoutPostingInput[]
+    connectOrCreate?: ProductionOutputCreateOrConnectWithoutPostingInput | ProductionOutputCreateOrConnectWithoutPostingInput[]
+    createMany?: ProductionOutputCreateManyPostingInputEnvelope
+    connect?: ProductionOutputWhereUniqueInput | ProductionOutputWhereUniqueInput[]
+  }
+
+  export type ProductionConsumptionUncheckedCreateNestedManyWithoutPostingInput = {
+    create?: XOR<ProductionConsumptionCreateWithoutPostingInput, ProductionConsumptionUncheckedCreateWithoutPostingInput> | ProductionConsumptionCreateWithoutPostingInput[] | ProductionConsumptionUncheckedCreateWithoutPostingInput[]
+    connectOrCreate?: ProductionConsumptionCreateOrConnectWithoutPostingInput | ProductionConsumptionCreateOrConnectWithoutPostingInput[]
+    createMany?: ProductionConsumptionCreateManyPostingInputEnvelope
+    connect?: ProductionConsumptionWhereUniqueInput | ProductionConsumptionWhereUniqueInput[]
+  }
+
+  export type ProductionOutputUncheckedCreateNestedManyWithoutPostingInput = {
+    create?: XOR<ProductionOutputCreateWithoutPostingInput, ProductionOutputUncheckedCreateWithoutPostingInput> | ProductionOutputCreateWithoutPostingInput[] | ProductionOutputUncheckedCreateWithoutPostingInput[]
+    connectOrCreate?: ProductionOutputCreateOrConnectWithoutPostingInput | ProductionOutputCreateOrConnectWithoutPostingInput[]
+    createMany?: ProductionOutputCreateManyPostingInputEnvelope
+    connect?: ProductionOutputWhereUniqueInput | ProductionOutputWhereUniqueInput[]
+  }
+
+  export type ProductionConsumptionUpdateManyWithoutPostingNestedInput = {
+    create?: XOR<ProductionConsumptionCreateWithoutPostingInput, ProductionConsumptionUncheckedCreateWithoutPostingInput> | ProductionConsumptionCreateWithoutPostingInput[] | ProductionConsumptionUncheckedCreateWithoutPostingInput[]
+    connectOrCreate?: ProductionConsumptionCreateOrConnectWithoutPostingInput | ProductionConsumptionCreateOrConnectWithoutPostingInput[]
+    upsert?: ProductionConsumptionUpsertWithWhereUniqueWithoutPostingInput | ProductionConsumptionUpsertWithWhereUniqueWithoutPostingInput[]
+    createMany?: ProductionConsumptionCreateManyPostingInputEnvelope
+    set?: ProductionConsumptionWhereUniqueInput | ProductionConsumptionWhereUniqueInput[]
+    disconnect?: ProductionConsumptionWhereUniqueInput | ProductionConsumptionWhereUniqueInput[]
+    delete?: ProductionConsumptionWhereUniqueInput | ProductionConsumptionWhereUniqueInput[]
+    connect?: ProductionConsumptionWhereUniqueInput | ProductionConsumptionWhereUniqueInput[]
+    update?: ProductionConsumptionUpdateWithWhereUniqueWithoutPostingInput | ProductionConsumptionUpdateWithWhereUniqueWithoutPostingInput[]
+    updateMany?: ProductionConsumptionUpdateManyWithWhereWithoutPostingInput | ProductionConsumptionUpdateManyWithWhereWithoutPostingInput[]
+    deleteMany?: ProductionConsumptionScalarWhereInput | ProductionConsumptionScalarWhereInput[]
+  }
+
+  export type ProductionOutputUpdateManyWithoutPostingNestedInput = {
+    create?: XOR<ProductionOutputCreateWithoutPostingInput, ProductionOutputUncheckedCreateWithoutPostingInput> | ProductionOutputCreateWithoutPostingInput[] | ProductionOutputUncheckedCreateWithoutPostingInput[]
+    connectOrCreate?: ProductionOutputCreateOrConnectWithoutPostingInput | ProductionOutputCreateOrConnectWithoutPostingInput[]
+    upsert?: ProductionOutputUpsertWithWhereUniqueWithoutPostingInput | ProductionOutputUpsertWithWhereUniqueWithoutPostingInput[]
+    createMany?: ProductionOutputCreateManyPostingInputEnvelope
+    set?: ProductionOutputWhereUniqueInput | ProductionOutputWhereUniqueInput[]
+    disconnect?: ProductionOutputWhereUniqueInput | ProductionOutputWhereUniqueInput[]
+    delete?: ProductionOutputWhereUniqueInput | ProductionOutputWhereUniqueInput[]
+    connect?: ProductionOutputWhereUniqueInput | ProductionOutputWhereUniqueInput[]
+    update?: ProductionOutputUpdateWithWhereUniqueWithoutPostingInput | ProductionOutputUpdateWithWhereUniqueWithoutPostingInput[]
+    updateMany?: ProductionOutputUpdateManyWithWhereWithoutPostingInput | ProductionOutputUpdateManyWithWhereWithoutPostingInput[]
+    deleteMany?: ProductionOutputScalarWhereInput | ProductionOutputScalarWhereInput[]
+  }
+
+  export type ProductionConsumptionUncheckedUpdateManyWithoutPostingNestedInput = {
+    create?: XOR<ProductionConsumptionCreateWithoutPostingInput, ProductionConsumptionUncheckedCreateWithoutPostingInput> | ProductionConsumptionCreateWithoutPostingInput[] | ProductionConsumptionUncheckedCreateWithoutPostingInput[]
+    connectOrCreate?: ProductionConsumptionCreateOrConnectWithoutPostingInput | ProductionConsumptionCreateOrConnectWithoutPostingInput[]
+    upsert?: ProductionConsumptionUpsertWithWhereUniqueWithoutPostingInput | ProductionConsumptionUpsertWithWhereUniqueWithoutPostingInput[]
+    createMany?: ProductionConsumptionCreateManyPostingInputEnvelope
+    set?: ProductionConsumptionWhereUniqueInput | ProductionConsumptionWhereUniqueInput[]
+    disconnect?: ProductionConsumptionWhereUniqueInput | ProductionConsumptionWhereUniqueInput[]
+    delete?: ProductionConsumptionWhereUniqueInput | ProductionConsumptionWhereUniqueInput[]
+    connect?: ProductionConsumptionWhereUniqueInput | ProductionConsumptionWhereUniqueInput[]
+    update?: ProductionConsumptionUpdateWithWhereUniqueWithoutPostingInput | ProductionConsumptionUpdateWithWhereUniqueWithoutPostingInput[]
+    updateMany?: ProductionConsumptionUpdateManyWithWhereWithoutPostingInput | ProductionConsumptionUpdateManyWithWhereWithoutPostingInput[]
+    deleteMany?: ProductionConsumptionScalarWhereInput | ProductionConsumptionScalarWhereInput[]
+  }
+
+  export type ProductionOutputUncheckedUpdateManyWithoutPostingNestedInput = {
+    create?: XOR<ProductionOutputCreateWithoutPostingInput, ProductionOutputUncheckedCreateWithoutPostingInput> | ProductionOutputCreateWithoutPostingInput[] | ProductionOutputUncheckedCreateWithoutPostingInput[]
+    connectOrCreate?: ProductionOutputCreateOrConnectWithoutPostingInput | ProductionOutputCreateOrConnectWithoutPostingInput[]
+    upsert?: ProductionOutputUpsertWithWhereUniqueWithoutPostingInput | ProductionOutputUpsertWithWhereUniqueWithoutPostingInput[]
+    createMany?: ProductionOutputCreateManyPostingInputEnvelope
+    set?: ProductionOutputWhereUniqueInput | ProductionOutputWhereUniqueInput[]
+    disconnect?: ProductionOutputWhereUniqueInput | ProductionOutputWhereUniqueInput[]
+    delete?: ProductionOutputWhereUniqueInput | ProductionOutputWhereUniqueInput[]
+    connect?: ProductionOutputWhereUniqueInput | ProductionOutputWhereUniqueInput[]
+    update?: ProductionOutputUpdateWithWhereUniqueWithoutPostingInput | ProductionOutputUpdateWithWhereUniqueWithoutPostingInput[]
+    updateMany?: ProductionOutputUpdateManyWithWhereWithoutPostingInput | ProductionOutputUpdateManyWithWhereWithoutPostingInput[]
+    deleteMany?: ProductionOutputScalarWhereInput | ProductionOutputScalarWhereInput[]
+  }
+
+  export type ProductionPostingCreateNestedOneWithoutConsumptionsInput = {
+    create?: XOR<ProductionPostingCreateWithoutConsumptionsInput, ProductionPostingUncheckedCreateWithoutConsumptionsInput>
+    connectOrCreate?: ProductionPostingCreateOrConnectWithoutConsumptionsInput
+    connect?: ProductionPostingWhereUniqueInput
+  }
+
+  export type ProductionPostingUpdateOneRequiredWithoutConsumptionsNestedInput = {
+    create?: XOR<ProductionPostingCreateWithoutConsumptionsInput, ProductionPostingUncheckedCreateWithoutConsumptionsInput>
+    connectOrCreate?: ProductionPostingCreateOrConnectWithoutConsumptionsInput
+    upsert?: ProductionPostingUpsertWithoutConsumptionsInput
+    connect?: ProductionPostingWhereUniqueInput
+    update?: XOR<XOR<ProductionPostingUpdateToOneWithWhereWithoutConsumptionsInput, ProductionPostingUpdateWithoutConsumptionsInput>, ProductionPostingUncheckedUpdateWithoutConsumptionsInput>
+  }
+
+  export type ProductionPostingCreateNestedOneWithoutOutputsInput = {
+    create?: XOR<ProductionPostingCreateWithoutOutputsInput, ProductionPostingUncheckedCreateWithoutOutputsInput>
+    connectOrCreate?: ProductionPostingCreateOrConnectWithoutOutputsInput
+    connect?: ProductionPostingWhereUniqueInput
+  }
+
+  export type EnumOutputTypeFieldUpdateOperationsInput = {
+    set?: $Enums.OutputType
+  }
+
+  export type ProductionPostingUpdateOneRequiredWithoutOutputsNestedInput = {
+    create?: XOR<ProductionPostingCreateWithoutOutputsInput, ProductionPostingUncheckedCreateWithoutOutputsInput>
+    connectOrCreate?: ProductionPostingCreateOrConnectWithoutOutputsInput
+    upsert?: ProductionPostingUpsertWithoutOutputsInput
+    connect?: ProductionPostingWhereUniqueInput
+    update?: XOR<XOR<ProductionPostingUpdateToOneWithWhereWithoutOutputsInput, ProductionPostingUpdateWithoutOutputsInput>, ProductionPostingUncheckedUpdateWithoutOutputsInput>
   }
 
   export type WarehouseCreateNestedOneWithoutCleaningJobsFromInput = {
@@ -113206,11 +126642,25 @@ export namespace Prisma {
     connect?: ProcessingBatchLotWhereUniqueInput | ProcessingBatchLotWhereUniqueInput[]
   }
 
+  export type GrindingDispatchLotCreateNestedManyWithoutCleaningLotInput = {
+    create?: XOR<GrindingDispatchLotCreateWithoutCleaningLotInput, GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput> | GrindingDispatchLotCreateWithoutCleaningLotInput[] | GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput[]
+    connectOrCreate?: GrindingDispatchLotCreateOrConnectWithoutCleaningLotInput | GrindingDispatchLotCreateOrConnectWithoutCleaningLotInput[]
+    createMany?: GrindingDispatchLotCreateManyCleaningLotInputEnvelope
+    connect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+  }
+
   export type ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput = {
     create?: XOR<ProcessingBatchLotCreateWithoutCleaningLotInput, ProcessingBatchLotUncheckedCreateWithoutCleaningLotInput> | ProcessingBatchLotCreateWithoutCleaningLotInput[] | ProcessingBatchLotUncheckedCreateWithoutCleaningLotInput[]
     connectOrCreate?: ProcessingBatchLotCreateOrConnectWithoutCleaningLotInput | ProcessingBatchLotCreateOrConnectWithoutCleaningLotInput[]
     createMany?: ProcessingBatchLotCreateManyCleaningLotInputEnvelope
     connect?: ProcessingBatchLotWhereUniqueInput | ProcessingBatchLotWhereUniqueInput[]
+  }
+
+  export type GrindingDispatchLotUncheckedCreateNestedManyWithoutCleaningLotInput = {
+    create?: XOR<GrindingDispatchLotCreateWithoutCleaningLotInput, GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput> | GrindingDispatchLotCreateWithoutCleaningLotInput[] | GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput[]
+    connectOrCreate?: GrindingDispatchLotCreateOrConnectWithoutCleaningLotInput | GrindingDispatchLotCreateOrConnectWithoutCleaningLotInput[]
+    createMany?: GrindingDispatchLotCreateManyCleaningLotInputEnvelope
+    connect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
   }
 
   export type CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput = {
@@ -113259,6 +126709,20 @@ export namespace Prisma {
     deleteMany?: ProcessingBatchLotScalarWhereInput | ProcessingBatchLotScalarWhereInput[]
   }
 
+  export type GrindingDispatchLotUpdateManyWithoutCleaningLotNestedInput = {
+    create?: XOR<GrindingDispatchLotCreateWithoutCleaningLotInput, GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput> | GrindingDispatchLotCreateWithoutCleaningLotInput[] | GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput[]
+    connectOrCreate?: GrindingDispatchLotCreateOrConnectWithoutCleaningLotInput | GrindingDispatchLotCreateOrConnectWithoutCleaningLotInput[]
+    upsert?: GrindingDispatchLotUpsertWithWhereUniqueWithoutCleaningLotInput | GrindingDispatchLotUpsertWithWhereUniqueWithoutCleaningLotInput[]
+    createMany?: GrindingDispatchLotCreateManyCleaningLotInputEnvelope
+    set?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    disconnect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    delete?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    connect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    update?: GrindingDispatchLotUpdateWithWhereUniqueWithoutCleaningLotInput | GrindingDispatchLotUpdateWithWhereUniqueWithoutCleaningLotInput[]
+    updateMany?: GrindingDispatchLotUpdateManyWithWhereWithoutCleaningLotInput | GrindingDispatchLotUpdateManyWithWhereWithoutCleaningLotInput[]
+    deleteMany?: GrindingDispatchLotScalarWhereInput | GrindingDispatchLotScalarWhereInput[]
+  }
+
   export type ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput = {
     create?: XOR<ProcessingBatchLotCreateWithoutCleaningLotInput, ProcessingBatchLotUncheckedCreateWithoutCleaningLotInput> | ProcessingBatchLotCreateWithoutCleaningLotInput[] | ProcessingBatchLotUncheckedCreateWithoutCleaningLotInput[]
     connectOrCreate?: ProcessingBatchLotCreateOrConnectWithoutCleaningLotInput | ProcessingBatchLotCreateOrConnectWithoutCleaningLotInput[]
@@ -113271,6 +126735,20 @@ export namespace Prisma {
     update?: ProcessingBatchLotUpdateWithWhereUniqueWithoutCleaningLotInput | ProcessingBatchLotUpdateWithWhereUniqueWithoutCleaningLotInput[]
     updateMany?: ProcessingBatchLotUpdateManyWithWhereWithoutCleaningLotInput | ProcessingBatchLotUpdateManyWithWhereWithoutCleaningLotInput[]
     deleteMany?: ProcessingBatchLotScalarWhereInput | ProcessingBatchLotScalarWhereInput[]
+  }
+
+  export type GrindingDispatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput = {
+    create?: XOR<GrindingDispatchLotCreateWithoutCleaningLotInput, GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput> | GrindingDispatchLotCreateWithoutCleaningLotInput[] | GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput[]
+    connectOrCreate?: GrindingDispatchLotCreateOrConnectWithoutCleaningLotInput | GrindingDispatchLotCreateOrConnectWithoutCleaningLotInput[]
+    upsert?: GrindingDispatchLotUpsertWithWhereUniqueWithoutCleaningLotInput | GrindingDispatchLotUpsertWithWhereUniqueWithoutCleaningLotInput[]
+    createMany?: GrindingDispatchLotCreateManyCleaningLotInputEnvelope
+    set?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    disconnect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    delete?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    connect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    update?: GrindingDispatchLotUpdateWithWhereUniqueWithoutCleaningLotInput | GrindingDispatchLotUpdateWithWhereUniqueWithoutCleaningLotInput[]
+    updateMany?: GrindingDispatchLotUpdateManyWithWhereWithoutCleaningLotInput | GrindingDispatchLotUpdateManyWithWhereWithoutCleaningLotInput[]
+    deleteMany?: GrindingDispatchLotScalarWhereInput | GrindingDispatchLotScalarWhereInput[]
   }
 
   export type ProcessingJobCreateNestedOneWithoutProcessingBatchLotsInput = {
@@ -113308,6 +126786,12 @@ export namespace Prisma {
     connect?: BOMItemWhereUniqueInput | BOMItemWhereUniqueInput[]
   }
 
+  export type RawMaterialProductCreateNestedOneWithoutBomsAsSfgInput = {
+    create?: XOR<RawMaterialProductCreateWithoutBomsAsSfgInput, RawMaterialProductUncheckedCreateWithoutBomsAsSfgInput>
+    connectOrCreate?: RawMaterialProductCreateOrConnectWithoutBomsAsSfgInput
+    connect?: RawMaterialProductWhereUniqueInput
+  }
+
   export type BOMItemUncheckedCreateNestedManyWithoutBomInput = {
     create?: XOR<BOMItemCreateWithoutBomInput, BOMItemUncheckedCreateWithoutBomInput> | BOMItemCreateWithoutBomInput[] | BOMItemUncheckedCreateWithoutBomInput[]
     connectOrCreate?: BOMItemCreateOrConnectWithoutBomInput | BOMItemCreateOrConnectWithoutBomInput[]
@@ -113331,6 +126815,16 @@ export namespace Prisma {
     update?: BOMItemUpdateWithWhereUniqueWithoutBomInput | BOMItemUpdateWithWhereUniqueWithoutBomInput[]
     updateMany?: BOMItemUpdateManyWithWhereWithoutBomInput | BOMItemUpdateManyWithWhereWithoutBomInput[]
     deleteMany?: BOMItemScalarWhereInput | BOMItemScalarWhereInput[]
+  }
+
+  export type RawMaterialProductUpdateOneWithoutBomsAsSfgNestedInput = {
+    create?: XOR<RawMaterialProductCreateWithoutBomsAsSfgInput, RawMaterialProductUncheckedCreateWithoutBomsAsSfgInput>
+    connectOrCreate?: RawMaterialProductCreateOrConnectWithoutBomsAsSfgInput
+    upsert?: RawMaterialProductUpsertWithoutBomsAsSfgInput
+    disconnect?: RawMaterialProductWhereInput | boolean
+    delete?: RawMaterialProductWhereInput | boolean
+    connect?: RawMaterialProductWhereUniqueInput
+    update?: XOR<XOR<RawMaterialProductUpdateToOneWithWhereWithoutBomsAsSfgInput, RawMaterialProductUpdateWithoutBomsAsSfgInput>, RawMaterialProductUncheckedUpdateWithoutBomsAsSfgInput>
   }
 
   export type BOMItemUncheckedUpdateManyWithoutBomNestedInput = {
@@ -113389,6 +126883,122 @@ export namespace Prisma {
     delete?: BatchWhereInput | boolean
     connect?: BatchWhereUniqueInput
     update?: XOR<XOR<BatchUpdateToOneWithWhereWithoutSeedWastageRecordsInput, BatchUpdateWithoutSeedWastageRecordsInput>, BatchUncheckedUpdateWithoutSeedWastageRecordsInput>
+  }
+
+  export type RawMaterialProductCreateNestedOneWithoutGrindingDispatchesInput = {
+    create?: XOR<RawMaterialProductCreateWithoutGrindingDispatchesInput, RawMaterialProductUncheckedCreateWithoutGrindingDispatchesInput>
+    connectOrCreate?: RawMaterialProductCreateOrConnectWithoutGrindingDispatchesInput
+    connect?: RawMaterialProductWhereUniqueInput
+  }
+
+  export type LocationCreateNestedOneWithoutDispatchesFromInput = {
+    create?: XOR<LocationCreateWithoutDispatchesFromInput, LocationUncheckedCreateWithoutDispatchesFromInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutDispatchesFromInput
+    connect?: LocationWhereUniqueInput
+  }
+
+  export type LocationCreateNestedOneWithoutDispatchesToInput = {
+    create?: XOR<LocationCreateWithoutDispatchesToInput, LocationUncheckedCreateWithoutDispatchesToInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutDispatchesToInput
+    connect?: LocationWhereUniqueInput
+  }
+
+  export type GrindingDispatchLotCreateNestedManyWithoutDispatchInput = {
+    create?: XOR<GrindingDispatchLotCreateWithoutDispatchInput, GrindingDispatchLotUncheckedCreateWithoutDispatchInput> | GrindingDispatchLotCreateWithoutDispatchInput[] | GrindingDispatchLotUncheckedCreateWithoutDispatchInput[]
+    connectOrCreate?: GrindingDispatchLotCreateOrConnectWithoutDispatchInput | GrindingDispatchLotCreateOrConnectWithoutDispatchInput[]
+    createMany?: GrindingDispatchLotCreateManyDispatchInputEnvelope
+    connect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+  }
+
+  export type GrindingDispatchLotUncheckedCreateNestedManyWithoutDispatchInput = {
+    create?: XOR<GrindingDispatchLotCreateWithoutDispatchInput, GrindingDispatchLotUncheckedCreateWithoutDispatchInput> | GrindingDispatchLotCreateWithoutDispatchInput[] | GrindingDispatchLotUncheckedCreateWithoutDispatchInput[]
+    connectOrCreate?: GrindingDispatchLotCreateOrConnectWithoutDispatchInput | GrindingDispatchLotCreateOrConnectWithoutDispatchInput[]
+    createMany?: GrindingDispatchLotCreateManyDispatchInputEnvelope
+    connect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+  }
+
+  export type EnumGrindingDispatchStatusFieldUpdateOperationsInput = {
+    set?: $Enums.GrindingDispatchStatus
+  }
+
+  export type RawMaterialProductUpdateOneRequiredWithoutGrindingDispatchesNestedInput = {
+    create?: XOR<RawMaterialProductCreateWithoutGrindingDispatchesInput, RawMaterialProductUncheckedCreateWithoutGrindingDispatchesInput>
+    connectOrCreate?: RawMaterialProductCreateOrConnectWithoutGrindingDispatchesInput
+    upsert?: RawMaterialProductUpsertWithoutGrindingDispatchesInput
+    connect?: RawMaterialProductWhereUniqueInput
+    update?: XOR<XOR<RawMaterialProductUpdateToOneWithWhereWithoutGrindingDispatchesInput, RawMaterialProductUpdateWithoutGrindingDispatchesInput>, RawMaterialProductUncheckedUpdateWithoutGrindingDispatchesInput>
+  }
+
+  export type LocationUpdateOneRequiredWithoutDispatchesFromNestedInput = {
+    create?: XOR<LocationCreateWithoutDispatchesFromInput, LocationUncheckedCreateWithoutDispatchesFromInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutDispatchesFromInput
+    upsert?: LocationUpsertWithoutDispatchesFromInput
+    connect?: LocationWhereUniqueInput
+    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutDispatchesFromInput, LocationUpdateWithoutDispatchesFromInput>, LocationUncheckedUpdateWithoutDispatchesFromInput>
+  }
+
+  export type LocationUpdateOneRequiredWithoutDispatchesToNestedInput = {
+    create?: XOR<LocationCreateWithoutDispatchesToInput, LocationUncheckedCreateWithoutDispatchesToInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutDispatchesToInput
+    upsert?: LocationUpsertWithoutDispatchesToInput
+    connect?: LocationWhereUniqueInput
+    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutDispatchesToInput, LocationUpdateWithoutDispatchesToInput>, LocationUncheckedUpdateWithoutDispatchesToInput>
+  }
+
+  export type GrindingDispatchLotUpdateManyWithoutDispatchNestedInput = {
+    create?: XOR<GrindingDispatchLotCreateWithoutDispatchInput, GrindingDispatchLotUncheckedCreateWithoutDispatchInput> | GrindingDispatchLotCreateWithoutDispatchInput[] | GrindingDispatchLotUncheckedCreateWithoutDispatchInput[]
+    connectOrCreate?: GrindingDispatchLotCreateOrConnectWithoutDispatchInput | GrindingDispatchLotCreateOrConnectWithoutDispatchInput[]
+    upsert?: GrindingDispatchLotUpsertWithWhereUniqueWithoutDispatchInput | GrindingDispatchLotUpsertWithWhereUniqueWithoutDispatchInput[]
+    createMany?: GrindingDispatchLotCreateManyDispatchInputEnvelope
+    set?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    disconnect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    delete?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    connect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    update?: GrindingDispatchLotUpdateWithWhereUniqueWithoutDispatchInput | GrindingDispatchLotUpdateWithWhereUniqueWithoutDispatchInput[]
+    updateMany?: GrindingDispatchLotUpdateManyWithWhereWithoutDispatchInput | GrindingDispatchLotUpdateManyWithWhereWithoutDispatchInput[]
+    deleteMany?: GrindingDispatchLotScalarWhereInput | GrindingDispatchLotScalarWhereInput[]
+  }
+
+  export type GrindingDispatchLotUncheckedUpdateManyWithoutDispatchNestedInput = {
+    create?: XOR<GrindingDispatchLotCreateWithoutDispatchInput, GrindingDispatchLotUncheckedCreateWithoutDispatchInput> | GrindingDispatchLotCreateWithoutDispatchInput[] | GrindingDispatchLotUncheckedCreateWithoutDispatchInput[]
+    connectOrCreate?: GrindingDispatchLotCreateOrConnectWithoutDispatchInput | GrindingDispatchLotCreateOrConnectWithoutDispatchInput[]
+    upsert?: GrindingDispatchLotUpsertWithWhereUniqueWithoutDispatchInput | GrindingDispatchLotUpsertWithWhereUniqueWithoutDispatchInput[]
+    createMany?: GrindingDispatchLotCreateManyDispatchInputEnvelope
+    set?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    disconnect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    delete?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    connect?: GrindingDispatchLotWhereUniqueInput | GrindingDispatchLotWhereUniqueInput[]
+    update?: GrindingDispatchLotUpdateWithWhereUniqueWithoutDispatchInput | GrindingDispatchLotUpdateWithWhereUniqueWithoutDispatchInput[]
+    updateMany?: GrindingDispatchLotUpdateManyWithWhereWithoutDispatchInput | GrindingDispatchLotUpdateManyWithWhereWithoutDispatchInput[]
+    deleteMany?: GrindingDispatchLotScalarWhereInput | GrindingDispatchLotScalarWhereInput[]
+  }
+
+  export type GrindingDispatchCreateNestedOneWithoutLotsInput = {
+    create?: XOR<GrindingDispatchCreateWithoutLotsInput, GrindingDispatchUncheckedCreateWithoutLotsInput>
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutLotsInput
+    connect?: GrindingDispatchWhereUniqueInput
+  }
+
+  export type CleaningLotCreateNestedOneWithoutGrindingDispatchLotsInput = {
+    create?: XOR<CleaningLotCreateWithoutGrindingDispatchLotsInput, CleaningLotUncheckedCreateWithoutGrindingDispatchLotsInput>
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutGrindingDispatchLotsInput
+    connect?: CleaningLotWhereUniqueInput
+  }
+
+  export type GrindingDispatchUpdateOneRequiredWithoutLotsNestedInput = {
+    create?: XOR<GrindingDispatchCreateWithoutLotsInput, GrindingDispatchUncheckedCreateWithoutLotsInput>
+    connectOrCreate?: GrindingDispatchCreateOrConnectWithoutLotsInput
+    upsert?: GrindingDispatchUpsertWithoutLotsInput
+    connect?: GrindingDispatchWhereUniqueInput
+    update?: XOR<XOR<GrindingDispatchUpdateToOneWithWhereWithoutLotsInput, GrindingDispatchUpdateWithoutLotsInput>, GrindingDispatchUncheckedUpdateWithoutLotsInput>
+  }
+
+  export type CleaningLotUpdateOneRequiredWithoutGrindingDispatchLotsNestedInput = {
+    create?: XOR<CleaningLotCreateWithoutGrindingDispatchLotsInput, CleaningLotUncheckedCreateWithoutGrindingDispatchLotsInput>
+    connectOrCreate?: CleaningLotCreateOrConnectWithoutGrindingDispatchLotsInput
+    upsert?: CleaningLotUpsertWithoutGrindingDispatchLotsInput
+    connect?: CleaningLotWhereUniqueInput
+    update?: XOR<XOR<CleaningLotUpdateToOneWithWhereWithoutGrindingDispatchLotsInput, CleaningLotUpdateWithoutGrindingDispatchLotsInput>, CleaningLotUncheckedUpdateWithoutGrindingDispatchLotsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -113983,6 +127593,91 @@ export namespace Prisma {
     _max?: NestedEnumWeightModeFilter<$PrismaModel>
   }
 
+  export type NestedEnumLocationTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.LocationType | EnumLocationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LocationType[] | ListEnumLocationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LocationType[] | ListEnumLocationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLocationTypeFilter<$PrismaModel> | $Enums.LocationType
+  }
+
+  export type NestedEnumLocationTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.LocationType | EnumLocationTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.LocationType[] | ListEnumLocationTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.LocationType[] | ListEnumLocationTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumLocationTypeWithAggregatesFilter<$PrismaModel> | $Enums.LocationType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumLocationTypeFilter<$PrismaModel>
+    _max?: NestedEnumLocationTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTransferDirectionFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferDirection | EnumTransferDirectionFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferDirection[] | ListEnumTransferDirectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferDirection[] | ListEnumTransferDirectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferDirectionFilter<$PrismaModel> | $Enums.TransferDirection
+  }
+
+  export type NestedEnumTransferStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferStatus | EnumTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferStatus[] | ListEnumTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferStatus[] | ListEnumTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferStatusFilter<$PrismaModel> | $Enums.TransferStatus
+  }
+
+  export type NestedEnumTransferDirectionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferDirection | EnumTransferDirectionFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferDirection[] | ListEnumTransferDirectionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferDirection[] | ListEnumTransferDirectionFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferDirectionWithAggregatesFilter<$PrismaModel> | $Enums.TransferDirection
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransferDirectionFilter<$PrismaModel>
+    _max?: NestedEnumTransferDirectionFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTransferStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferStatus | EnumTransferStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferStatus[] | ListEnumTransferStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferStatus[] | ListEnumTransferStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferStatusWithAggregatesFilter<$PrismaModel> | $Enums.TransferStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransferStatusFilter<$PrismaModel>
+    _max?: NestedEnumTransferStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumTransferLineTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferLineType | EnumTransferLineTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferLineType[] | ListEnumTransferLineTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferLineType[] | ListEnumTransferLineTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferLineTypeFilter<$PrismaModel> | $Enums.TransferLineType
+  }
+
+  export type NestedEnumTransferLineTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TransferLineType | EnumTransferLineTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.TransferLineType[] | ListEnumTransferLineTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TransferLineType[] | ListEnumTransferLineTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumTransferLineTypeWithAggregatesFilter<$PrismaModel> | $Enums.TransferLineType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTransferLineTypeFilter<$PrismaModel>
+    _max?: NestedEnumTransferLineTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumOutputTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.OutputType | EnumOutputTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OutputType[] | ListEnumOutputTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OutputType[] | ListEnumOutputTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOutputTypeFilter<$PrismaModel> | $Enums.OutputType
+  }
+
+  export type NestedEnumOutputTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.OutputType | EnumOutputTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.OutputType[] | ListEnumOutputTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.OutputType[] | ListEnumOutputTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumOutputTypeWithAggregatesFilter<$PrismaModel> | $Enums.OutputType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumOutputTypeFilter<$PrismaModel>
+    _max?: NestedEnumOutputTypeFilter<$PrismaModel>
+  }
+
   export type NestedEnumBOMStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.BOMStatus | EnumBOMStatusFieldRefInput<$PrismaModel>
     in?: $Enums.BOMStatus[] | ListEnumBOMStatusFieldRefInput<$PrismaModel>
@@ -113998,6 +127693,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumBOMStatusFilter<$PrismaModel>
     _max?: NestedEnumBOMStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGrindingDispatchStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.GrindingDispatchStatus | EnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.GrindingDispatchStatus[] | ListEnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GrindingDispatchStatus[] | ListEnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumGrindingDispatchStatusFilter<$PrismaModel> | $Enums.GrindingDispatchStatus
+  }
+
+  export type NestedEnumGrindingDispatchStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GrindingDispatchStatus | EnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.GrindingDispatchStatus[] | ListEnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.GrindingDispatchStatus[] | ListEnumGrindingDispatchStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumGrindingDispatchStatusWithAggregatesFilter<$PrismaModel> | $Enums.GrindingDispatchStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumGrindingDispatchStatusFilter<$PrismaModel>
+    _max?: NestedEnumGrindingDispatchStatusFilter<$PrismaModel>
   }
 
   export type BatchCreateWithoutActivityLogInput = {
@@ -129796,6 +143508,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutVendorInput = {
@@ -129816,6 +143530,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutVendorInput = {
@@ -129957,6 +143673,7 @@ export namespace Prisma {
     grn: GRNbyPoCreateNestedOneWithoutCleaningLotsInput
     warehouse: WarehouseCreateNestedOneWithoutCleaningLotsInput
     processingBatchLots?: ProcessingBatchLotCreateNestedManyWithoutCleaningLotInput
+    grindingDispatchLots?: GrindingDispatchLotCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotUncheckedCreateWithoutRawMaterialInput = {
@@ -129977,6 +143694,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
+    grindingDispatchLots?: GrindingDispatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotCreateOrConnectWithoutRawMaterialInput = {
@@ -130183,6 +143901,88 @@ export namespace Prisma {
 
   export type BOMItemCreateManyRawMaterialInputEnvelope = {
     data: BOMItemCreateManyRawMaterialInput | BOMItemCreateManyRawMaterialInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BillOfMaterialCreateWithoutSfgProductInput = {
+    id?: string
+    bomCode: string
+    productName: string
+    productCode?: string | null
+    unitOfMeasurement: string
+    outputQuantity?: number
+    description?: string | null
+    status?: $Enums.BOMStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: BOMItemCreateNestedManyWithoutBomInput
+  }
+
+  export type BillOfMaterialUncheckedCreateWithoutSfgProductInput = {
+    id?: string
+    bomCode: string
+    productName: string
+    productCode?: string | null
+    unitOfMeasurement: string
+    outputQuantity?: number
+    description?: string | null
+    status?: $Enums.BOMStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    items?: BOMItemUncheckedCreateNestedManyWithoutBomInput
+  }
+
+  export type BillOfMaterialCreateOrConnectWithoutSfgProductInput = {
+    where: BillOfMaterialWhereUniqueInput
+    create: XOR<BillOfMaterialCreateWithoutSfgProductInput, BillOfMaterialUncheckedCreateWithoutSfgProductInput>
+  }
+
+  export type BillOfMaterialCreateManySfgProductInputEnvelope = {
+    data: BillOfMaterialCreateManySfgProductInput | BillOfMaterialCreateManySfgProductInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GrindingDispatchCreateWithoutInputRawMaterialInput = {
+    id?: string
+    batchNumber: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fromLocation: LocationCreateNestedOneWithoutDispatchesFromInput
+    toLocation: LocationCreateNestedOneWithoutDispatchesToInput
+    lots?: GrindingDispatchLotCreateNestedManyWithoutDispatchInput
+  }
+
+  export type GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput = {
+    id?: string
+    batchNumber: string
+    fromLocationId: string
+    toLocationId: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lots?: GrindingDispatchLotUncheckedCreateNestedManyWithoutDispatchInput
+  }
+
+  export type GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput = {
+    where: GrindingDispatchWhereUniqueInput
+    create: XOR<GrindingDispatchCreateWithoutInputRawMaterialInput, GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput>
+  }
+
+  export type GrindingDispatchCreateManyInputRawMaterialInputEnvelope = {
+    data: GrindingDispatchCreateManyInputRawMaterialInput | GrindingDispatchCreateManyInputRawMaterialInput[]
     skipDuplicates?: boolean
   }
 
@@ -130456,6 +144256,75 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"BOMItem"> | Date | string
   }
 
+  export type BillOfMaterialUpsertWithWhereUniqueWithoutSfgProductInput = {
+    where: BillOfMaterialWhereUniqueInput
+    update: XOR<BillOfMaterialUpdateWithoutSfgProductInput, BillOfMaterialUncheckedUpdateWithoutSfgProductInput>
+    create: XOR<BillOfMaterialCreateWithoutSfgProductInput, BillOfMaterialUncheckedCreateWithoutSfgProductInput>
+  }
+
+  export type BillOfMaterialUpdateWithWhereUniqueWithoutSfgProductInput = {
+    where: BillOfMaterialWhereUniqueInput
+    data: XOR<BillOfMaterialUpdateWithoutSfgProductInput, BillOfMaterialUncheckedUpdateWithoutSfgProductInput>
+  }
+
+  export type BillOfMaterialUpdateManyWithWhereWithoutSfgProductInput = {
+    where: BillOfMaterialScalarWhereInput
+    data: XOR<BillOfMaterialUpdateManyMutationInput, BillOfMaterialUncheckedUpdateManyWithoutSfgProductInput>
+  }
+
+  export type BillOfMaterialScalarWhereInput = {
+    AND?: BillOfMaterialScalarWhereInput | BillOfMaterialScalarWhereInput[]
+    OR?: BillOfMaterialScalarWhereInput[]
+    NOT?: BillOfMaterialScalarWhereInput | BillOfMaterialScalarWhereInput[]
+    id?: StringFilter<"BillOfMaterial"> | string
+    bomCode?: StringFilter<"BillOfMaterial"> | string
+    productName?: StringFilter<"BillOfMaterial"> | string
+    productCode?: StringNullableFilter<"BillOfMaterial"> | string | null
+    sfgProductId?: StringNullableFilter<"BillOfMaterial"> | string | null
+    unitOfMeasurement?: StringFilter<"BillOfMaterial"> | string
+    outputQuantity?: FloatFilter<"BillOfMaterial"> | number
+    description?: StringNullableFilter<"BillOfMaterial"> | string | null
+    status?: EnumBOMStatusFilter<"BillOfMaterial"> | $Enums.BOMStatus
+    createdAt?: DateTimeFilter<"BillOfMaterial"> | Date | string
+    updatedAt?: DateTimeFilter<"BillOfMaterial"> | Date | string
+  }
+
+  export type GrindingDispatchUpsertWithWhereUniqueWithoutInputRawMaterialInput = {
+    where: GrindingDispatchWhereUniqueInput
+    update: XOR<GrindingDispatchUpdateWithoutInputRawMaterialInput, GrindingDispatchUncheckedUpdateWithoutInputRawMaterialInput>
+    create: XOR<GrindingDispatchCreateWithoutInputRawMaterialInput, GrindingDispatchUncheckedCreateWithoutInputRawMaterialInput>
+  }
+
+  export type GrindingDispatchUpdateWithWhereUniqueWithoutInputRawMaterialInput = {
+    where: GrindingDispatchWhereUniqueInput
+    data: XOR<GrindingDispatchUpdateWithoutInputRawMaterialInput, GrindingDispatchUncheckedUpdateWithoutInputRawMaterialInput>
+  }
+
+  export type GrindingDispatchUpdateManyWithWhereWithoutInputRawMaterialInput = {
+    where: GrindingDispatchScalarWhereInput
+    data: XOR<GrindingDispatchUpdateManyMutationInput, GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialInput>
+  }
+
+  export type GrindingDispatchScalarWhereInput = {
+    AND?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
+    OR?: GrindingDispatchScalarWhereInput[]
+    NOT?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
+    id?: StringFilter<"GrindingDispatch"> | string
+    batchNumber?: StringFilter<"GrindingDispatch"> | string
+    inputRawMaterialId?: StringFilter<"GrindingDispatch"> | string
+    fromLocationId?: StringFilter<"GrindingDispatch"> | string
+    toLocationId?: StringFilter<"GrindingDispatch"> | string
+    totalQuantity?: FloatFilter<"GrindingDispatch"> | number
+    status?: EnumGrindingDispatchStatusFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
+    acceptedAt?: DateTimeNullableFilter<"GrindingDispatch"> | Date | string | null
+    rejectedAt?: DateTimeNullableFilter<"GrindingDispatch"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"GrindingDispatch"> | string | null
+    notes?: StringNullableFilter<"GrindingDispatch"> | string | null
+    createdAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
+    updatedAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
+  }
+
   export type VendorCreateWithoutPurchaseOrdersInput = {
     id?: string
     vendorCode: string
@@ -130701,6 +144570,8 @@ export namespace Prisma {
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutPurchaseOrderItemsInput = {
@@ -130721,6 +144592,8 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutPurchaseOrderItemsInput = {
@@ -130735,12 +144608,14 @@ export namespace Prisma {
     notes?: string | null
     receivedDate?: Date | string
     bags?: ReceivalBagCreateNestedManyWithoutReceivalEntryInput
-    warehouse: WarehouseCreateNestedOneWithoutReceivalEntriesInput
+    location?: LocationCreateNestedOneWithoutReceivalEntriesInput
+    warehouse?: WarehouseCreateNestedOneWithoutReceivalEntriesInput
   }
 
   export type ReceivalEntryUncheckedCreateWithoutPurchaseOrderItemInput = {
     id?: string
-    warehouseId: string
+    locationId?: string | null
+    warehouseId?: string | null
     weightMode?: $Enums.WeightMode
     totalWeight: number
     notes?: string | null
@@ -130872,6 +144747,8 @@ export namespace Prisma {
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutPurchaseOrderItemsInput = {
@@ -130892,6 +144769,8 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type ReceivalEntryUpsertWithWhereUniqueWithoutPurchaseOrderItemInput = {
@@ -130916,7 +144795,8 @@ export namespace Prisma {
     NOT?: ReceivalEntryScalarWhereInput | ReceivalEntryScalarWhereInput[]
     id?: StringFilter<"ReceivalEntry"> | string
     purchaseOrderItemId?: StringFilter<"ReceivalEntry"> | string
-    warehouseId?: StringFilter<"ReceivalEntry"> | string
+    locationId?: StringNullableFilter<"ReceivalEntry"> | string | null
+    warehouseId?: StringNullableFilter<"ReceivalEntry"> | string | null
     weightMode?: EnumWeightModeFilter<"ReceivalEntry"> | $Enums.WeightMode
     totalWeight?: FloatFilter<"ReceivalEntry"> | number
     notes?: StringNullableFilter<"ReceivalEntry"> | string | null
@@ -130986,6 +144866,43 @@ export namespace Prisma {
   export type PurchaseOrderItemCreateOrConnectWithoutReceivalsInput = {
     where: PurchaseOrderItemWhereUniqueInput
     create: XOR<PurchaseOrderItemCreateWithoutReceivalsInput, PurchaseOrderItemUncheckedCreateWithoutReceivalsInput>
+  }
+
+  export type LocationCreateWithoutReceivalEntriesInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transfersFrom?: MaterialTransferCreateNestedManyWithoutFromLocationInput
+    transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
+    dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
+    dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationUncheckedCreateWithoutReceivalEntriesInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transfersFrom?: MaterialTransferUncheckedCreateNestedManyWithoutFromLocationInput
+    transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
+    dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
+    dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationCreateOrConnectWithoutReceivalEntriesInput = {
+    where: LocationWhereUniqueInput
+    create: XOR<LocationCreateWithoutReceivalEntriesInput, LocationUncheckedCreateWithoutReceivalEntriesInput>
   }
 
   export type WarehouseCreateWithoutReceivalEntriesInput = {
@@ -131092,6 +145009,49 @@ export namespace Prisma {
     grns?: GRNbyPoUncheckedUpdateManyWithoutPurchaseOrderItemNestedInput
   }
 
+  export type LocationUpsertWithoutReceivalEntriesInput = {
+    update: XOR<LocationUpdateWithoutReceivalEntriesInput, LocationUncheckedUpdateWithoutReceivalEntriesInput>
+    create: XOR<LocationCreateWithoutReceivalEntriesInput, LocationUncheckedCreateWithoutReceivalEntriesInput>
+    where?: LocationWhereInput
+  }
+
+  export type LocationUpdateToOneWithWhereWithoutReceivalEntriesInput = {
+    where?: LocationWhereInput
+    data: XOR<LocationUpdateWithoutReceivalEntriesInput, LocationUncheckedUpdateWithoutReceivalEntriesInput>
+  }
+
+  export type LocationUpdateWithoutReceivalEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transfersFrom?: MaterialTransferUpdateManyWithoutFromLocationNestedInput
+    transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
+    dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateWithoutReceivalEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transfersFrom?: MaterialTransferUncheckedUpdateManyWithoutFromLocationNestedInput
+    transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
+    dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+  }
+
   export type WarehouseUpsertWithoutReceivalEntriesInput = {
     update: XOR<WarehouseUpdateWithoutReceivalEntriesInput, WarehouseUncheckedUpdateWithoutReceivalEntriesInput>
     create: XOR<WarehouseCreateWithoutReceivalEntriesInput, WarehouseUncheckedCreateWithoutReceivalEntriesInput>
@@ -131150,13 +145110,15 @@ export namespace Prisma {
     notes?: string | null
     receivedDate?: Date | string
     purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutReceivalsInput
-    warehouse: WarehouseCreateNestedOneWithoutReceivalEntriesInput
+    location?: LocationCreateNestedOneWithoutReceivalEntriesInput
+    warehouse?: WarehouseCreateNestedOneWithoutReceivalEntriesInput
   }
 
   export type ReceivalEntryUncheckedCreateWithoutBagsInput = {
     id?: string
     purchaseOrderItemId: string
-    warehouseId: string
+    locationId?: string | null
+    warehouseId?: string | null
     weightMode?: $Enums.WeightMode
     totalWeight: number
     notes?: string | null
@@ -131186,13 +145148,15 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutReceivalsNestedInput
-    warehouse?: WarehouseUpdateOneRequiredWithoutReceivalEntriesNestedInput
+    location?: LocationUpdateOneWithoutReceivalEntriesNestedInput
+    warehouse?: WarehouseUpdateOneWithoutReceivalEntriesNestedInput
   }
 
   export type ReceivalEntryUncheckedUpdateWithoutBagsInput = {
     id?: StringFieldUpdateOperationsInput | string
     purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
-    warehouseId?: StringFieldUpdateOperationsInput | string
+    locationId?: NullableStringFieldUpdateOperationsInput | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
     weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
     totalWeight?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -131217,6 +145181,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutStockEntriesInput = {
@@ -131237,6 +145203,8 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutStockEntriesInput = {
@@ -131318,6 +145286,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutStockEntriesInput = {
@@ -131338,6 +145308,8 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutStockEntriesInput = {
@@ -131599,6 +145571,7 @@ export namespace Prisma {
     grn: GRNbyPoCreateNestedOneWithoutCleaningLotsInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningLotsInput
     processingBatchLots?: ProcessingBatchLotCreateNestedManyWithoutCleaningLotInput
+    grindingDispatchLots?: GrindingDispatchLotCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotUncheckedCreateWithoutWarehouseInput = {
@@ -131619,6 +145592,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
+    grindingDispatchLots?: GrindingDispatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotCreateOrConnectWithoutWarehouseInput = {
@@ -131697,11 +145671,13 @@ export namespace Prisma {
     receivedDate?: Date | string
     bags?: ReceivalBagCreateNestedManyWithoutReceivalEntryInput
     purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutReceivalsInput
+    location?: LocationCreateNestedOneWithoutReceivalEntriesInput
   }
 
   export type ReceivalEntryUncheckedCreateWithoutWarehouseInput = {
     id?: string
     purchaseOrderItemId: string
+    locationId?: string | null
     weightMode?: $Enums.WeightMode
     totalWeight: number
     notes?: string | null
@@ -132129,6 +146105,894 @@ export namespace Prisma {
     data: XOR<ProcessingJobUpdateManyMutationInput, ProcessingJobUncheckedUpdateManyWithoutWarehouseInput>
   }
 
+  export type ReceivalEntryCreateWithoutLocationInput = {
+    id?: string
+    weightMode?: $Enums.WeightMode
+    totalWeight: number
+    notes?: string | null
+    receivedDate?: Date | string
+    bags?: ReceivalBagCreateNestedManyWithoutReceivalEntryInput
+    purchaseOrderItem: PurchaseOrderItemCreateNestedOneWithoutReceivalsInput
+    warehouse?: WarehouseCreateNestedOneWithoutReceivalEntriesInput
+  }
+
+  export type ReceivalEntryUncheckedCreateWithoutLocationInput = {
+    id?: string
+    purchaseOrderItemId: string
+    warehouseId?: string | null
+    weightMode?: $Enums.WeightMode
+    totalWeight: number
+    notes?: string | null
+    receivedDate?: Date | string
+    bags?: ReceivalBagUncheckedCreateNestedManyWithoutReceivalEntryInput
+  }
+
+  export type ReceivalEntryCreateOrConnectWithoutLocationInput = {
+    where: ReceivalEntryWhereUniqueInput
+    create: XOR<ReceivalEntryCreateWithoutLocationInput, ReceivalEntryUncheckedCreateWithoutLocationInput>
+  }
+
+  export type ReceivalEntryCreateManyLocationInputEnvelope = {
+    data: ReceivalEntryCreateManyLocationInput | ReceivalEntryCreateManyLocationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MaterialTransferCreateWithoutFromLocationInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    toLocation: LocationCreateNestedOneWithoutTransfersToInput
+    lines?: MaterialTransferLineCreateNestedManyWithoutTransferInput
+  }
+
+  export type MaterialTransferUncheckedCreateWithoutFromLocationInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    toLocationId: string
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lines?: MaterialTransferLineUncheckedCreateNestedManyWithoutTransferInput
+  }
+
+  export type MaterialTransferCreateOrConnectWithoutFromLocationInput = {
+    where: MaterialTransferWhereUniqueInput
+    create: XOR<MaterialTransferCreateWithoutFromLocationInput, MaterialTransferUncheckedCreateWithoutFromLocationInput>
+  }
+
+  export type MaterialTransferCreateManyFromLocationInputEnvelope = {
+    data: MaterialTransferCreateManyFromLocationInput | MaterialTransferCreateManyFromLocationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MaterialTransferCreateWithoutToLocationInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fromLocation: LocationCreateNestedOneWithoutTransfersFromInput
+    lines?: MaterialTransferLineCreateNestedManyWithoutTransferInput
+  }
+
+  export type MaterialTransferUncheckedCreateWithoutToLocationInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    fromLocationId: string
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lines?: MaterialTransferLineUncheckedCreateNestedManyWithoutTransferInput
+  }
+
+  export type MaterialTransferCreateOrConnectWithoutToLocationInput = {
+    where: MaterialTransferWhereUniqueInput
+    create: XOR<MaterialTransferCreateWithoutToLocationInput, MaterialTransferUncheckedCreateWithoutToLocationInput>
+  }
+
+  export type MaterialTransferCreateManyToLocationInputEnvelope = {
+    data: MaterialTransferCreateManyToLocationInput | MaterialTransferCreateManyToLocationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GrindingDispatchCreateWithoutFromLocationInput = {
+    id?: string
+    batchNumber: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    inputRawMaterial: RawMaterialProductCreateNestedOneWithoutGrindingDispatchesInput
+    toLocation: LocationCreateNestedOneWithoutDispatchesToInput
+    lots?: GrindingDispatchLotCreateNestedManyWithoutDispatchInput
+  }
+
+  export type GrindingDispatchUncheckedCreateWithoutFromLocationInput = {
+    id?: string
+    batchNumber: string
+    inputRawMaterialId: string
+    toLocationId: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lots?: GrindingDispatchLotUncheckedCreateNestedManyWithoutDispatchInput
+  }
+
+  export type GrindingDispatchCreateOrConnectWithoutFromLocationInput = {
+    where: GrindingDispatchWhereUniqueInput
+    create: XOR<GrindingDispatchCreateWithoutFromLocationInput, GrindingDispatchUncheckedCreateWithoutFromLocationInput>
+  }
+
+  export type GrindingDispatchCreateManyFromLocationInputEnvelope = {
+    data: GrindingDispatchCreateManyFromLocationInput | GrindingDispatchCreateManyFromLocationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GrindingDispatchCreateWithoutToLocationInput = {
+    id?: string
+    batchNumber: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    inputRawMaterial: RawMaterialProductCreateNestedOneWithoutGrindingDispatchesInput
+    fromLocation: LocationCreateNestedOneWithoutDispatchesFromInput
+    lots?: GrindingDispatchLotCreateNestedManyWithoutDispatchInput
+  }
+
+  export type GrindingDispatchUncheckedCreateWithoutToLocationInput = {
+    id?: string
+    batchNumber: string
+    inputRawMaterialId: string
+    fromLocationId: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    lots?: GrindingDispatchLotUncheckedCreateNestedManyWithoutDispatchInput
+  }
+
+  export type GrindingDispatchCreateOrConnectWithoutToLocationInput = {
+    where: GrindingDispatchWhereUniqueInput
+    create: XOR<GrindingDispatchCreateWithoutToLocationInput, GrindingDispatchUncheckedCreateWithoutToLocationInput>
+  }
+
+  export type GrindingDispatchCreateManyToLocationInputEnvelope = {
+    data: GrindingDispatchCreateManyToLocationInput | GrindingDispatchCreateManyToLocationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ReceivalEntryUpsertWithWhereUniqueWithoutLocationInput = {
+    where: ReceivalEntryWhereUniqueInput
+    update: XOR<ReceivalEntryUpdateWithoutLocationInput, ReceivalEntryUncheckedUpdateWithoutLocationInput>
+    create: XOR<ReceivalEntryCreateWithoutLocationInput, ReceivalEntryUncheckedCreateWithoutLocationInput>
+  }
+
+  export type ReceivalEntryUpdateWithWhereUniqueWithoutLocationInput = {
+    where: ReceivalEntryWhereUniqueInput
+    data: XOR<ReceivalEntryUpdateWithoutLocationInput, ReceivalEntryUncheckedUpdateWithoutLocationInput>
+  }
+
+  export type ReceivalEntryUpdateManyWithWhereWithoutLocationInput = {
+    where: ReceivalEntryScalarWhereInput
+    data: XOR<ReceivalEntryUpdateManyMutationInput, ReceivalEntryUncheckedUpdateManyWithoutLocationInput>
+  }
+
+  export type MaterialTransferUpsertWithWhereUniqueWithoutFromLocationInput = {
+    where: MaterialTransferWhereUniqueInput
+    update: XOR<MaterialTransferUpdateWithoutFromLocationInput, MaterialTransferUncheckedUpdateWithoutFromLocationInput>
+    create: XOR<MaterialTransferCreateWithoutFromLocationInput, MaterialTransferUncheckedCreateWithoutFromLocationInput>
+  }
+
+  export type MaterialTransferUpdateWithWhereUniqueWithoutFromLocationInput = {
+    where: MaterialTransferWhereUniqueInput
+    data: XOR<MaterialTransferUpdateWithoutFromLocationInput, MaterialTransferUncheckedUpdateWithoutFromLocationInput>
+  }
+
+  export type MaterialTransferUpdateManyWithWhereWithoutFromLocationInput = {
+    where: MaterialTransferScalarWhereInput
+    data: XOR<MaterialTransferUpdateManyMutationInput, MaterialTransferUncheckedUpdateManyWithoutFromLocationInput>
+  }
+
+  export type MaterialTransferScalarWhereInput = {
+    AND?: MaterialTransferScalarWhereInput | MaterialTransferScalarWhereInput[]
+    OR?: MaterialTransferScalarWhereInput[]
+    NOT?: MaterialTransferScalarWhereInput | MaterialTransferScalarWhereInput[]
+    id?: StringFilter<"MaterialTransfer"> | string
+    transferNumber?: StringFilter<"MaterialTransfer"> | string
+    direction?: EnumTransferDirectionFilter<"MaterialTransfer"> | $Enums.TransferDirection
+    fromLocationId?: StringFilter<"MaterialTransfer"> | string
+    toLocationId?: StringFilter<"MaterialTransfer"> | string
+    status?: EnumTransferStatusFilter<"MaterialTransfer"> | $Enums.TransferStatus
+    sentById?: StringFilter<"MaterialTransfer"> | string
+    sentAt?: DateTimeFilter<"MaterialTransfer"> | Date | string
+    acceptedById?: StringNullableFilter<"MaterialTransfer"> | string | null
+    acceptedAt?: DateTimeNullableFilter<"MaterialTransfer"> | Date | string | null
+    rejectionReason?: StringNullableFilter<"MaterialTransfer"> | string | null
+    notes?: StringNullableFilter<"MaterialTransfer"> | string | null
+    createdAt?: DateTimeFilter<"MaterialTransfer"> | Date | string
+    updatedAt?: DateTimeFilter<"MaterialTransfer"> | Date | string
+  }
+
+  export type MaterialTransferUpsertWithWhereUniqueWithoutToLocationInput = {
+    where: MaterialTransferWhereUniqueInput
+    update: XOR<MaterialTransferUpdateWithoutToLocationInput, MaterialTransferUncheckedUpdateWithoutToLocationInput>
+    create: XOR<MaterialTransferCreateWithoutToLocationInput, MaterialTransferUncheckedCreateWithoutToLocationInput>
+  }
+
+  export type MaterialTransferUpdateWithWhereUniqueWithoutToLocationInput = {
+    where: MaterialTransferWhereUniqueInput
+    data: XOR<MaterialTransferUpdateWithoutToLocationInput, MaterialTransferUncheckedUpdateWithoutToLocationInput>
+  }
+
+  export type MaterialTransferUpdateManyWithWhereWithoutToLocationInput = {
+    where: MaterialTransferScalarWhereInput
+    data: XOR<MaterialTransferUpdateManyMutationInput, MaterialTransferUncheckedUpdateManyWithoutToLocationInput>
+  }
+
+  export type GrindingDispatchUpsertWithWhereUniqueWithoutFromLocationInput = {
+    where: GrindingDispatchWhereUniqueInput
+    update: XOR<GrindingDispatchUpdateWithoutFromLocationInput, GrindingDispatchUncheckedUpdateWithoutFromLocationInput>
+    create: XOR<GrindingDispatchCreateWithoutFromLocationInput, GrindingDispatchUncheckedCreateWithoutFromLocationInput>
+  }
+
+  export type GrindingDispatchUpdateWithWhereUniqueWithoutFromLocationInput = {
+    where: GrindingDispatchWhereUniqueInput
+    data: XOR<GrindingDispatchUpdateWithoutFromLocationInput, GrindingDispatchUncheckedUpdateWithoutFromLocationInput>
+  }
+
+  export type GrindingDispatchUpdateManyWithWhereWithoutFromLocationInput = {
+    where: GrindingDispatchScalarWhereInput
+    data: XOR<GrindingDispatchUpdateManyMutationInput, GrindingDispatchUncheckedUpdateManyWithoutFromLocationInput>
+  }
+
+  export type GrindingDispatchUpsertWithWhereUniqueWithoutToLocationInput = {
+    where: GrindingDispatchWhereUniqueInput
+    update: XOR<GrindingDispatchUpdateWithoutToLocationInput, GrindingDispatchUncheckedUpdateWithoutToLocationInput>
+    create: XOR<GrindingDispatchCreateWithoutToLocationInput, GrindingDispatchUncheckedCreateWithoutToLocationInput>
+  }
+
+  export type GrindingDispatchUpdateWithWhereUniqueWithoutToLocationInput = {
+    where: GrindingDispatchWhereUniqueInput
+    data: XOR<GrindingDispatchUpdateWithoutToLocationInput, GrindingDispatchUncheckedUpdateWithoutToLocationInput>
+  }
+
+  export type GrindingDispatchUpdateManyWithWhereWithoutToLocationInput = {
+    where: GrindingDispatchScalarWhereInput
+    data: XOR<GrindingDispatchUpdateManyMutationInput, GrindingDispatchUncheckedUpdateManyWithoutToLocationInput>
+  }
+
+  export type LocationCreateWithoutTransfersFromInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryCreateNestedManyWithoutLocationInput
+    transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
+    dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
+    dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationUncheckedCreateWithoutTransfersFromInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutLocationInput
+    transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
+    dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
+    dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationCreateOrConnectWithoutTransfersFromInput = {
+    where: LocationWhereUniqueInput
+    create: XOR<LocationCreateWithoutTransfersFromInput, LocationUncheckedCreateWithoutTransfersFromInput>
+  }
+
+  export type LocationCreateWithoutTransfersToInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryCreateNestedManyWithoutLocationInput
+    transfersFrom?: MaterialTransferCreateNestedManyWithoutFromLocationInput
+    dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
+    dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationUncheckedCreateWithoutTransfersToInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutLocationInput
+    transfersFrom?: MaterialTransferUncheckedCreateNestedManyWithoutFromLocationInput
+    dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
+    dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationCreateOrConnectWithoutTransfersToInput = {
+    where: LocationWhereUniqueInput
+    create: XOR<LocationCreateWithoutTransfersToInput, LocationUncheckedCreateWithoutTransfersToInput>
+  }
+
+  export type MaterialTransferLineCreateWithoutTransferInput = {
+    id?: string
+    lineType: $Enums.TransferLineType
+    rawMaterialId?: string | null
+    productName?: string | null
+    skuCode?: string | null
+    quantity: number
+    unitOfMeasurement: string
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MaterialTransferLineUncheckedCreateWithoutTransferInput = {
+    id?: string
+    lineType: $Enums.TransferLineType
+    rawMaterialId?: string | null
+    productName?: string | null
+    skuCode?: string | null
+    quantity: number
+    unitOfMeasurement: string
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MaterialTransferLineCreateOrConnectWithoutTransferInput = {
+    where: MaterialTransferLineWhereUniqueInput
+    create: XOR<MaterialTransferLineCreateWithoutTransferInput, MaterialTransferLineUncheckedCreateWithoutTransferInput>
+  }
+
+  export type MaterialTransferLineCreateManyTransferInputEnvelope = {
+    data: MaterialTransferLineCreateManyTransferInput | MaterialTransferLineCreateManyTransferInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type LocationUpsertWithoutTransfersFromInput = {
+    update: XOR<LocationUpdateWithoutTransfersFromInput, LocationUncheckedUpdateWithoutTransfersFromInput>
+    create: XOR<LocationCreateWithoutTransfersFromInput, LocationUncheckedCreateWithoutTransfersFromInput>
+    where?: LocationWhereInput
+  }
+
+  export type LocationUpdateToOneWithWhereWithoutTransfersFromInput = {
+    where?: LocationWhereInput
+    data: XOR<LocationUpdateWithoutTransfersFromInput, LocationUncheckedUpdateWithoutTransfersFromInput>
+  }
+
+  export type LocationUpdateWithoutTransfersFromInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUpdateManyWithoutLocationNestedInput
+    transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
+    dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateWithoutTransfersFromInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutLocationNestedInput
+    transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
+    dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+  }
+
+  export type LocationUpsertWithoutTransfersToInput = {
+    update: XOR<LocationUpdateWithoutTransfersToInput, LocationUncheckedUpdateWithoutTransfersToInput>
+    create: XOR<LocationCreateWithoutTransfersToInput, LocationUncheckedCreateWithoutTransfersToInput>
+    where?: LocationWhereInput
+  }
+
+  export type LocationUpdateToOneWithWhereWithoutTransfersToInput = {
+    where?: LocationWhereInput
+    data: XOR<LocationUpdateWithoutTransfersToInput, LocationUncheckedUpdateWithoutTransfersToInput>
+  }
+
+  export type LocationUpdateWithoutTransfersToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUpdateManyWithoutLocationNestedInput
+    transfersFrom?: MaterialTransferUpdateManyWithoutFromLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
+    dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateWithoutTransfersToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutLocationNestedInput
+    transfersFrom?: MaterialTransferUncheckedUpdateManyWithoutFromLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
+    dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+  }
+
+  export type MaterialTransferLineUpsertWithWhereUniqueWithoutTransferInput = {
+    where: MaterialTransferLineWhereUniqueInput
+    update: XOR<MaterialTransferLineUpdateWithoutTransferInput, MaterialTransferLineUncheckedUpdateWithoutTransferInput>
+    create: XOR<MaterialTransferLineCreateWithoutTransferInput, MaterialTransferLineUncheckedCreateWithoutTransferInput>
+  }
+
+  export type MaterialTransferLineUpdateWithWhereUniqueWithoutTransferInput = {
+    where: MaterialTransferLineWhereUniqueInput
+    data: XOR<MaterialTransferLineUpdateWithoutTransferInput, MaterialTransferLineUncheckedUpdateWithoutTransferInput>
+  }
+
+  export type MaterialTransferLineUpdateManyWithWhereWithoutTransferInput = {
+    where: MaterialTransferLineScalarWhereInput
+    data: XOR<MaterialTransferLineUpdateManyMutationInput, MaterialTransferLineUncheckedUpdateManyWithoutTransferInput>
+  }
+
+  export type MaterialTransferLineScalarWhereInput = {
+    AND?: MaterialTransferLineScalarWhereInput | MaterialTransferLineScalarWhereInput[]
+    OR?: MaterialTransferLineScalarWhereInput[]
+    NOT?: MaterialTransferLineScalarWhereInput | MaterialTransferLineScalarWhereInput[]
+    id?: StringFilter<"MaterialTransferLine"> | string
+    transferId?: StringFilter<"MaterialTransferLine"> | string
+    lineType?: EnumTransferLineTypeFilter<"MaterialTransferLine"> | $Enums.TransferLineType
+    rawMaterialId?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    productName?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    skuCode?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    quantity?: FloatFilter<"MaterialTransferLine"> | number
+    unitOfMeasurement?: StringFilter<"MaterialTransferLine"> | string
+    batchNumber?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    cleaningLotId?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    createdAt?: DateTimeFilter<"MaterialTransferLine"> | Date | string
+  }
+
+  export type MaterialTransferCreateWithoutLinesInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fromLocation: LocationCreateNestedOneWithoutTransfersFromInput
+    toLocation: LocationCreateNestedOneWithoutTransfersToInput
+  }
+
+  export type MaterialTransferUncheckedCreateWithoutLinesInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    fromLocationId: string
+    toLocationId: string
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialTransferCreateOrConnectWithoutLinesInput = {
+    where: MaterialTransferWhereUniqueInput
+    create: XOR<MaterialTransferCreateWithoutLinesInput, MaterialTransferUncheckedCreateWithoutLinesInput>
+  }
+
+  export type MaterialTransferUpsertWithoutLinesInput = {
+    update: XOR<MaterialTransferUpdateWithoutLinesInput, MaterialTransferUncheckedUpdateWithoutLinesInput>
+    create: XOR<MaterialTransferCreateWithoutLinesInput, MaterialTransferUncheckedCreateWithoutLinesInput>
+    where?: MaterialTransferWhereInput
+  }
+
+  export type MaterialTransferUpdateToOneWithWhereWithoutLinesInput = {
+    where?: MaterialTransferWhereInput
+    data: XOR<MaterialTransferUpdateWithoutLinesInput, MaterialTransferUncheckedUpdateWithoutLinesInput>
+  }
+
+  export type MaterialTransferUpdateWithoutLinesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromLocation?: LocationUpdateOneRequiredWithoutTransfersFromNestedInput
+    toLocation?: LocationUpdateOneRequiredWithoutTransfersToNestedInput
+  }
+
+  export type MaterialTransferUncheckedUpdateWithoutLinesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionConsumptionCreateWithoutPostingInput = {
+    id?: string
+    rawMaterialId: string
+    expectedQuantity: number
+    actualQuantity: number
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProductionConsumptionUncheckedCreateWithoutPostingInput = {
+    id?: string
+    rawMaterialId: string
+    expectedQuantity: number
+    actualQuantity: number
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProductionConsumptionCreateOrConnectWithoutPostingInput = {
+    where: ProductionConsumptionWhereUniqueInput
+    create: XOR<ProductionConsumptionCreateWithoutPostingInput, ProductionConsumptionUncheckedCreateWithoutPostingInput>
+  }
+
+  export type ProductionConsumptionCreateManyPostingInputEnvelope = {
+    data: ProductionConsumptionCreateManyPostingInput | ProductionConsumptionCreateManyPostingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductionOutputCreateWithoutPostingInput = {
+    id?: string
+    outputType: $Enums.OutputType
+    productName: string
+    skuCode?: string | null
+    quantity: number
+    unit: string
+    batchNumber?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProductionOutputUncheckedCreateWithoutPostingInput = {
+    id?: string
+    outputType: $Enums.OutputType
+    productName: string
+    skuCode?: string | null
+    quantity: number
+    unit: string
+    batchNumber?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProductionOutputCreateOrConnectWithoutPostingInput = {
+    where: ProductionOutputWhereUniqueInput
+    create: XOR<ProductionOutputCreateWithoutPostingInput, ProductionOutputUncheckedCreateWithoutPostingInput>
+  }
+
+  export type ProductionOutputCreateManyPostingInputEnvelope = {
+    data: ProductionOutputCreateManyPostingInput | ProductionOutputCreateManyPostingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductionConsumptionUpsertWithWhereUniqueWithoutPostingInput = {
+    where: ProductionConsumptionWhereUniqueInput
+    update: XOR<ProductionConsumptionUpdateWithoutPostingInput, ProductionConsumptionUncheckedUpdateWithoutPostingInput>
+    create: XOR<ProductionConsumptionCreateWithoutPostingInput, ProductionConsumptionUncheckedCreateWithoutPostingInput>
+  }
+
+  export type ProductionConsumptionUpdateWithWhereUniqueWithoutPostingInput = {
+    where: ProductionConsumptionWhereUniqueInput
+    data: XOR<ProductionConsumptionUpdateWithoutPostingInput, ProductionConsumptionUncheckedUpdateWithoutPostingInput>
+  }
+
+  export type ProductionConsumptionUpdateManyWithWhereWithoutPostingInput = {
+    where: ProductionConsumptionScalarWhereInput
+    data: XOR<ProductionConsumptionUpdateManyMutationInput, ProductionConsumptionUncheckedUpdateManyWithoutPostingInput>
+  }
+
+  export type ProductionConsumptionScalarWhereInput = {
+    AND?: ProductionConsumptionScalarWhereInput | ProductionConsumptionScalarWhereInput[]
+    OR?: ProductionConsumptionScalarWhereInput[]
+    NOT?: ProductionConsumptionScalarWhereInput | ProductionConsumptionScalarWhereInput[]
+    id?: StringFilter<"ProductionConsumption"> | string
+    postingId?: StringFilter<"ProductionConsumption"> | string
+    rawMaterialId?: StringFilter<"ProductionConsumption"> | string
+    expectedQuantity?: FloatFilter<"ProductionConsumption"> | number
+    actualQuantity?: FloatFilter<"ProductionConsumption"> | number
+    batchNumber?: StringNullableFilter<"ProductionConsumption"> | string | null
+    cleaningLotId?: StringNullableFilter<"ProductionConsumption"> | string | null
+    createdAt?: DateTimeFilter<"ProductionConsumption"> | Date | string
+  }
+
+  export type ProductionOutputUpsertWithWhereUniqueWithoutPostingInput = {
+    where: ProductionOutputWhereUniqueInput
+    update: XOR<ProductionOutputUpdateWithoutPostingInput, ProductionOutputUncheckedUpdateWithoutPostingInput>
+    create: XOR<ProductionOutputCreateWithoutPostingInput, ProductionOutputUncheckedCreateWithoutPostingInput>
+  }
+
+  export type ProductionOutputUpdateWithWhereUniqueWithoutPostingInput = {
+    where: ProductionOutputWhereUniqueInput
+    data: XOR<ProductionOutputUpdateWithoutPostingInput, ProductionOutputUncheckedUpdateWithoutPostingInput>
+  }
+
+  export type ProductionOutputUpdateManyWithWhereWithoutPostingInput = {
+    where: ProductionOutputScalarWhereInput
+    data: XOR<ProductionOutputUpdateManyMutationInput, ProductionOutputUncheckedUpdateManyWithoutPostingInput>
+  }
+
+  export type ProductionOutputScalarWhereInput = {
+    AND?: ProductionOutputScalarWhereInput | ProductionOutputScalarWhereInput[]
+    OR?: ProductionOutputScalarWhereInput[]
+    NOT?: ProductionOutputScalarWhereInput | ProductionOutputScalarWhereInput[]
+    id?: StringFilter<"ProductionOutput"> | string
+    postingId?: StringFilter<"ProductionOutput"> | string
+    outputType?: EnumOutputTypeFilter<"ProductionOutput"> | $Enums.OutputType
+    productName?: StringFilter<"ProductionOutput"> | string
+    skuCode?: StringNullableFilter<"ProductionOutput"> | string | null
+    quantity?: FloatFilter<"ProductionOutput"> | number
+    unit?: StringFilter<"ProductionOutput"> | string
+    batchNumber?: StringNullableFilter<"ProductionOutput"> | string | null
+    createdAt?: DateTimeFilter<"ProductionOutput"> | Date | string
+  }
+
+  export type ProductionPostingCreateWithoutConsumptionsInput = {
+    id?: string
+    postingNumber: string
+    sfgProductId: string
+    bomId: string
+    locationId: string
+    shiftDate: Date | string
+    notes?: string | null
+    postedById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    outputs?: ProductionOutputCreateNestedManyWithoutPostingInput
+  }
+
+  export type ProductionPostingUncheckedCreateWithoutConsumptionsInput = {
+    id?: string
+    postingNumber: string
+    sfgProductId: string
+    bomId: string
+    locationId: string
+    shiftDate: Date | string
+    notes?: string | null
+    postedById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    outputs?: ProductionOutputUncheckedCreateNestedManyWithoutPostingInput
+  }
+
+  export type ProductionPostingCreateOrConnectWithoutConsumptionsInput = {
+    where: ProductionPostingWhereUniqueInput
+    create: XOR<ProductionPostingCreateWithoutConsumptionsInput, ProductionPostingUncheckedCreateWithoutConsumptionsInput>
+  }
+
+  export type ProductionPostingUpsertWithoutConsumptionsInput = {
+    update: XOR<ProductionPostingUpdateWithoutConsumptionsInput, ProductionPostingUncheckedUpdateWithoutConsumptionsInput>
+    create: XOR<ProductionPostingCreateWithoutConsumptionsInput, ProductionPostingUncheckedCreateWithoutConsumptionsInput>
+    where?: ProductionPostingWhereInput
+  }
+
+  export type ProductionPostingUpdateToOneWithWhereWithoutConsumptionsInput = {
+    where?: ProductionPostingWhereInput
+    data: XOR<ProductionPostingUpdateWithoutConsumptionsInput, ProductionPostingUncheckedUpdateWithoutConsumptionsInput>
+  }
+
+  export type ProductionPostingUpdateWithoutConsumptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingNumber?: StringFieldUpdateOperationsInput | string
+    sfgProductId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    postedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    outputs?: ProductionOutputUpdateManyWithoutPostingNestedInput
+  }
+
+  export type ProductionPostingUncheckedUpdateWithoutConsumptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingNumber?: StringFieldUpdateOperationsInput | string
+    sfgProductId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    postedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    outputs?: ProductionOutputUncheckedUpdateManyWithoutPostingNestedInput
+  }
+
+  export type ProductionPostingCreateWithoutOutputsInput = {
+    id?: string
+    postingNumber: string
+    sfgProductId: string
+    bomId: string
+    locationId: string
+    shiftDate: Date | string
+    notes?: string | null
+    postedById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consumptions?: ProductionConsumptionCreateNestedManyWithoutPostingInput
+  }
+
+  export type ProductionPostingUncheckedCreateWithoutOutputsInput = {
+    id?: string
+    postingNumber: string
+    sfgProductId: string
+    bomId: string
+    locationId: string
+    shiftDate: Date | string
+    notes?: string | null
+    postedById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consumptions?: ProductionConsumptionUncheckedCreateNestedManyWithoutPostingInput
+  }
+
+  export type ProductionPostingCreateOrConnectWithoutOutputsInput = {
+    where: ProductionPostingWhereUniqueInput
+    create: XOR<ProductionPostingCreateWithoutOutputsInput, ProductionPostingUncheckedCreateWithoutOutputsInput>
+  }
+
+  export type ProductionPostingUpsertWithoutOutputsInput = {
+    update: XOR<ProductionPostingUpdateWithoutOutputsInput, ProductionPostingUncheckedUpdateWithoutOutputsInput>
+    create: XOR<ProductionPostingCreateWithoutOutputsInput, ProductionPostingUncheckedCreateWithoutOutputsInput>
+    where?: ProductionPostingWhereInput
+  }
+
+  export type ProductionPostingUpdateToOneWithWhereWithoutOutputsInput = {
+    where?: ProductionPostingWhereInput
+    data: XOR<ProductionPostingUpdateWithoutOutputsInput, ProductionPostingUncheckedUpdateWithoutOutputsInput>
+  }
+
+  export type ProductionPostingUpdateWithoutOutputsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingNumber?: StringFieldUpdateOperationsInput | string
+    sfgProductId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    postedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumptions?: ProductionConsumptionUpdateManyWithoutPostingNestedInput
+  }
+
+  export type ProductionPostingUncheckedUpdateWithoutOutputsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    postingNumber?: StringFieldUpdateOperationsInput | string
+    sfgProductId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    postedById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumptions?: ProductionConsumptionUncheckedUpdateManyWithoutPostingNestedInput
+  }
+
   export type WarehouseCreateWithoutCleaningJobsFromInput = {
     id?: string
     name: string
@@ -132192,6 +147056,8 @@ export namespace Prisma {
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutCleaningJobsInput = {
@@ -132212,6 +147078,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutCleaningJobsInput = {
@@ -132359,6 +147227,7 @@ export namespace Prisma {
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningLotsInput
     warehouse: WarehouseCreateNestedOneWithoutCleaningLotsInput
     processingBatchLots?: ProcessingBatchLotCreateNestedManyWithoutCleaningLotInput
+    grindingDispatchLots?: GrindingDispatchLotCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotUncheckedCreateWithoutCleaningJobInput = {
@@ -132379,6 +147248,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
+    grindingDispatchLots?: GrindingDispatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotCreateOrConnectWithoutCleaningJobInput = {
@@ -132471,6 +147341,8 @@ export namespace Prisma {
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutCleaningJobsInput = {
@@ -132491,6 +147363,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutCleaningJobsToInput = {
@@ -133115,6 +147989,8 @@ export namespace Prisma {
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutProcessingJobsInput = {
@@ -133135,6 +148011,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutProcessingJobsInput = {
@@ -133276,6 +148154,8 @@ export namespace Prisma {
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutProcessingJobsInput = {
@@ -133296,6 +148176,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutProcessingJobsInput = {
@@ -133695,6 +148577,8 @@ export namespace Prisma {
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutCurrentStocksInput = {
@@ -133715,6 +148599,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutCurrentStocksInput = {
@@ -133796,6 +148682,8 @@ export namespace Prisma {
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutCurrentStocksInput = {
@@ -133816,6 +148704,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutCurrentStocksInput = {
@@ -134824,6 +149714,7 @@ export namespace Prisma {
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningLotsInput
     warehouse: WarehouseCreateNestedOneWithoutCleaningLotsInput
     processingBatchLots?: ProcessingBatchLotCreateNestedManyWithoutCleaningLotInput
+    grindingDispatchLots?: GrindingDispatchLotCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotUncheckedCreateWithoutGrnInput = {
@@ -134844,6 +149735,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
+    grindingDispatchLots?: GrindingDispatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotCreateOrConnectWithoutGrnInput = {
@@ -135202,6 +150094,8 @@ export namespace Prisma {
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutCleaningLotsInput = {
@@ -135222,6 +150116,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutCleaningLotsInput = {
@@ -135297,6 +150193,32 @@ export namespace Prisma {
 
   export type ProcessingBatchLotCreateManyCleaningLotInputEnvelope = {
     data: ProcessingBatchLotCreateManyCleaningLotInput | ProcessingBatchLotCreateManyCleaningLotInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GrindingDispatchLotCreateWithoutCleaningLotInput = {
+    id?: string
+    allocatedQuantity: number
+    seedWastageAllocated?: number
+    createdAt?: Date | string
+    dispatch: GrindingDispatchCreateNestedOneWithoutLotsInput
+  }
+
+  export type GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput = {
+    id?: string
+    dispatchId: string
+    allocatedQuantity: number
+    seedWastageAllocated?: number
+    createdAt?: Date | string
+  }
+
+  export type GrindingDispatchLotCreateOrConnectWithoutCleaningLotInput = {
+    where: GrindingDispatchLotWhereUniqueInput
+    create: XOR<GrindingDispatchLotCreateWithoutCleaningLotInput, GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput>
+  }
+
+  export type GrindingDispatchLotCreateManyCleaningLotInputEnvelope = {
+    data: GrindingDispatchLotCreateManyCleaningLotInput | GrindingDispatchLotCreateManyCleaningLotInput[]
     skipDuplicates?: boolean
   }
 
@@ -135429,6 +150351,8 @@ export namespace Prisma {
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutCleaningLotsInput = {
@@ -135449,6 +150373,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutCleaningLotsInput = {
@@ -135518,6 +150444,34 @@ export namespace Prisma {
     data: XOR<ProcessingBatchLotUpdateManyMutationInput, ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotInput>
   }
 
+  export type GrindingDispatchLotUpsertWithWhereUniqueWithoutCleaningLotInput = {
+    where: GrindingDispatchLotWhereUniqueInput
+    update: XOR<GrindingDispatchLotUpdateWithoutCleaningLotInput, GrindingDispatchLotUncheckedUpdateWithoutCleaningLotInput>
+    create: XOR<GrindingDispatchLotCreateWithoutCleaningLotInput, GrindingDispatchLotUncheckedCreateWithoutCleaningLotInput>
+  }
+
+  export type GrindingDispatchLotUpdateWithWhereUniqueWithoutCleaningLotInput = {
+    where: GrindingDispatchLotWhereUniqueInput
+    data: XOR<GrindingDispatchLotUpdateWithoutCleaningLotInput, GrindingDispatchLotUncheckedUpdateWithoutCleaningLotInput>
+  }
+
+  export type GrindingDispatchLotUpdateManyWithWhereWithoutCleaningLotInput = {
+    where: GrindingDispatchLotScalarWhereInput
+    data: XOR<GrindingDispatchLotUpdateManyMutationInput, GrindingDispatchLotUncheckedUpdateManyWithoutCleaningLotInput>
+  }
+
+  export type GrindingDispatchLotScalarWhereInput = {
+    AND?: GrindingDispatchLotScalarWhereInput | GrindingDispatchLotScalarWhereInput[]
+    OR?: GrindingDispatchLotScalarWhereInput[]
+    NOT?: GrindingDispatchLotScalarWhereInput | GrindingDispatchLotScalarWhereInput[]
+    id?: StringFilter<"GrindingDispatchLot"> | string
+    dispatchId?: StringFilter<"GrindingDispatchLot"> | string
+    cleaningLotId?: StringFilter<"GrindingDispatchLot"> | string
+    allocatedQuantity?: FloatFilter<"GrindingDispatchLot"> | number
+    seedWastageAllocated?: FloatFilter<"GrindingDispatchLot"> | number
+    createdAt?: DateTimeFilter<"GrindingDispatchLot"> | Date | string
+  }
+
   export type ProcessingJobCreateWithoutProcessingBatchLotsInput = {
     id: string
     batchNumber?: string | null
@@ -135567,6 +150521,7 @@ export namespace Prisma {
     grn: GRNbyPoCreateNestedOneWithoutCleaningLotsInput
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningLotsInput
     warehouse: WarehouseCreateNestedOneWithoutCleaningLotsInput
+    grindingDispatchLots?: GrindingDispatchLotCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotUncheckedCreateWithoutProcessingBatchLotsInput = {
@@ -135587,6 +150542,7 @@ export namespace Prisma {
     wastageType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    grindingDispatchLots?: GrindingDispatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
   }
 
   export type CleaningLotCreateOrConnectWithoutProcessingBatchLotsInput = {
@@ -135660,6 +150616,7 @@ export namespace Prisma {
     grn?: GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput
     warehouse?: WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotUncheckedUpdateWithoutProcessingBatchLotsInput = {
@@ -135680,6 +150637,7 @@ export namespace Prisma {
     wastageType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    grindingDispatchLots?: GrindingDispatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type BOMItemCreateWithoutBomInput = {
@@ -135712,6 +150670,55 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RawMaterialProductCreateWithoutBomsAsSfgInput = {
+    id?: string
+    skuCode: string
+    name: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
+    variety?: string | null
+    unitOfMeasurement: string
+    minReorderLevel: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
+    currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
+    processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
+    vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
+    stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+  }
+
+  export type RawMaterialProductUncheckedCreateWithoutBomsAsSfgInput = {
+    id?: string
+    skuCode: string
+    name: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
+    variety?: string | null
+    unitOfMeasurement: string
+    minReorderLevel: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    vendorId?: string | null
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
+    currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
+    processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+  }
+
+  export type RawMaterialProductCreateOrConnectWithoutBomsAsSfgInput = {
+    where: RawMaterialProductWhereUniqueInput
+    create: XOR<RawMaterialProductCreateWithoutBomsAsSfgInput, RawMaterialProductUncheckedCreateWithoutBomsAsSfgInput>
+  }
+
   export type BOMItemUpsertWithWhereUniqueWithoutBomInput = {
     where: BOMItemWhereUniqueInput
     update: XOR<BOMItemUpdateWithoutBomInput, BOMItemUncheckedUpdateWithoutBomInput>
@@ -135728,6 +150735,61 @@ export namespace Prisma {
     data: XOR<BOMItemUpdateManyMutationInput, BOMItemUncheckedUpdateManyWithoutBomInput>
   }
 
+  export type RawMaterialProductUpsertWithoutBomsAsSfgInput = {
+    update: XOR<RawMaterialProductUpdateWithoutBomsAsSfgInput, RawMaterialProductUncheckedUpdateWithoutBomsAsSfgInput>
+    create: XOR<RawMaterialProductCreateWithoutBomsAsSfgInput, RawMaterialProductUncheckedCreateWithoutBomsAsSfgInput>
+    where?: RawMaterialProductWhereInput
+  }
+
+  export type RawMaterialProductUpdateToOneWithWhereWithoutBomsAsSfgInput = {
+    where?: RawMaterialProductWhereInput
+    data: XOR<RawMaterialProductUpdateWithoutBomsAsSfgInput, RawMaterialProductUncheckedUpdateWithoutBomsAsSfgInput>
+  }
+
+  export type RawMaterialProductUpdateWithoutBomsAsSfgInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    minReorderLevel?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
+    currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
+    processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
+    vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
+    stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+  }
+
+  export type RawMaterialProductUncheckedUpdateWithoutBomsAsSfgInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    minReorderLevel?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vendorId?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
+    currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
+    processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+  }
+
   export type BillOfMaterialCreateWithoutItemsInput = {
     id?: string
     bomCode: string
@@ -135739,6 +150801,7 @@ export namespace Prisma {
     status?: $Enums.BOMStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    sfgProduct?: RawMaterialProductCreateNestedOneWithoutBomsAsSfgInput
   }
 
   export type BillOfMaterialUncheckedCreateWithoutItemsInput = {
@@ -135746,6 +150809,7 @@ export namespace Prisma {
     bomCode: string
     productName: string
     productCode?: string | null
+    sfgProductId?: string | null
     unitOfMeasurement: string
     outputQuantity?: number
     description?: string | null
@@ -135777,6 +150841,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
     vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutBomItemsInput = {
@@ -135797,6 +150863,8 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutBomItemsInput = {
@@ -135826,6 +150894,7 @@ export namespace Prisma {
     status?: EnumBOMStatusFieldUpdateOperationsInput | $Enums.BOMStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    sfgProduct?: RawMaterialProductUpdateOneWithoutBomsAsSfgNestedInput
   }
 
   export type BillOfMaterialUncheckedUpdateWithoutItemsInput = {
@@ -135833,6 +150902,7 @@ export namespace Prisma {
     bomCode?: StringFieldUpdateOperationsInput | string
     productName?: StringFieldUpdateOperationsInput | string
     productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgProductId?: NullableStringFieldUpdateOperationsInput | string | null
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     outputQuantity?: FloatFieldUpdateOperationsInput | number
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -135870,6 +150940,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutBomItemsInput = {
@@ -135890,6 +150962,8 @@ export namespace Prisma {
     processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type BatchCreateWithoutSeedWastageRecordsInput = {
@@ -136010,6 +151084,496 @@ export namespace Prisma {
     methodologies?: MethodologyUncheckedUpdateManyWithoutBatchesNestedInput
     standards?: StandardUncheckedUpdateManyWithoutBatchesNestedInput
     unitOfMeasurements?: UnitOfMeasurementUncheckedUpdateManyWithoutBatchesNestedInput
+  }
+
+  export type RawMaterialProductCreateWithoutGrindingDispatchesInput = {
+    id?: string
+    skuCode: string
+    name: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
+    variety?: string | null
+    unitOfMeasurement: string
+    minReorderLevel: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
+    currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
+    processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
+    vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
+    stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+  }
+
+  export type RawMaterialProductUncheckedCreateWithoutGrindingDispatchesInput = {
+    id?: string
+    skuCode: string
+    name: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
+    variety?: string | null
+    unitOfMeasurement: string
+    minReorderLevel: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    vendorId?: string | null
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
+    currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
+    processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+  }
+
+  export type RawMaterialProductCreateOrConnectWithoutGrindingDispatchesInput = {
+    where: RawMaterialProductWhereUniqueInput
+    create: XOR<RawMaterialProductCreateWithoutGrindingDispatchesInput, RawMaterialProductUncheckedCreateWithoutGrindingDispatchesInput>
+  }
+
+  export type LocationCreateWithoutDispatchesFromInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryCreateNestedManyWithoutLocationInput
+    transfersFrom?: MaterialTransferCreateNestedManyWithoutFromLocationInput
+    transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
+    dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationUncheckedCreateWithoutDispatchesFromInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutLocationInput
+    transfersFrom?: MaterialTransferUncheckedCreateNestedManyWithoutFromLocationInput
+    transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
+    dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationCreateOrConnectWithoutDispatchesFromInput = {
+    where: LocationWhereUniqueInput
+    create: XOR<LocationCreateWithoutDispatchesFromInput, LocationUncheckedCreateWithoutDispatchesFromInput>
+  }
+
+  export type LocationCreateWithoutDispatchesToInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryCreateNestedManyWithoutLocationInput
+    transfersFrom?: MaterialTransferCreateNestedManyWithoutFromLocationInput
+    transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
+    dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
+  }
+
+  export type LocationUncheckedCreateWithoutDispatchesToInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutLocationInput
+    transfersFrom?: MaterialTransferUncheckedCreateNestedManyWithoutFromLocationInput
+    transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
+    dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
+  }
+
+  export type LocationCreateOrConnectWithoutDispatchesToInput = {
+    where: LocationWhereUniqueInput
+    create: XOR<LocationCreateWithoutDispatchesToInput, LocationUncheckedCreateWithoutDispatchesToInput>
+  }
+
+  export type GrindingDispatchLotCreateWithoutDispatchInput = {
+    id?: string
+    allocatedQuantity: number
+    seedWastageAllocated?: number
+    createdAt?: Date | string
+    cleaningLot: CleaningLotCreateNestedOneWithoutGrindingDispatchLotsInput
+  }
+
+  export type GrindingDispatchLotUncheckedCreateWithoutDispatchInput = {
+    id?: string
+    cleaningLotId: string
+    allocatedQuantity: number
+    seedWastageAllocated?: number
+    createdAt?: Date | string
+  }
+
+  export type GrindingDispatchLotCreateOrConnectWithoutDispatchInput = {
+    where: GrindingDispatchLotWhereUniqueInput
+    create: XOR<GrindingDispatchLotCreateWithoutDispatchInput, GrindingDispatchLotUncheckedCreateWithoutDispatchInput>
+  }
+
+  export type GrindingDispatchLotCreateManyDispatchInputEnvelope = {
+    data: GrindingDispatchLotCreateManyDispatchInput | GrindingDispatchLotCreateManyDispatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type RawMaterialProductUpsertWithoutGrindingDispatchesInput = {
+    update: XOR<RawMaterialProductUpdateWithoutGrindingDispatchesInput, RawMaterialProductUncheckedUpdateWithoutGrindingDispatchesInput>
+    create: XOR<RawMaterialProductCreateWithoutGrindingDispatchesInput, RawMaterialProductUncheckedCreateWithoutGrindingDispatchesInput>
+    where?: RawMaterialProductWhereInput
+  }
+
+  export type RawMaterialProductUpdateToOneWithWhereWithoutGrindingDispatchesInput = {
+    where?: RawMaterialProductWhereInput
+    data: XOR<RawMaterialProductUpdateWithoutGrindingDispatchesInput, RawMaterialProductUncheckedUpdateWithoutGrindingDispatchesInput>
+  }
+
+  export type RawMaterialProductUpdateWithoutGrindingDispatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    minReorderLevel?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
+    currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
+    processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
+    vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
+    stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+  }
+
+  export type RawMaterialProductUncheckedUpdateWithoutGrindingDispatchesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    minReorderLevel?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vendorId?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
+    currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
+    processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+  }
+
+  export type LocationUpsertWithoutDispatchesFromInput = {
+    update: XOR<LocationUpdateWithoutDispatchesFromInput, LocationUncheckedUpdateWithoutDispatchesFromInput>
+    create: XOR<LocationCreateWithoutDispatchesFromInput, LocationUncheckedCreateWithoutDispatchesFromInput>
+    where?: LocationWhereInput
+  }
+
+  export type LocationUpdateToOneWithWhereWithoutDispatchesFromInput = {
+    where?: LocationWhereInput
+    data: XOR<LocationUpdateWithoutDispatchesFromInput, LocationUncheckedUpdateWithoutDispatchesFromInput>
+  }
+
+  export type LocationUpdateWithoutDispatchesFromInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUpdateManyWithoutLocationNestedInput
+    transfersFrom?: MaterialTransferUpdateManyWithoutFromLocationNestedInput
+    transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
+    dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateWithoutDispatchesFromInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutLocationNestedInput
+    transfersFrom?: MaterialTransferUncheckedUpdateManyWithoutFromLocationNestedInput
+    transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
+    dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+  }
+
+  export type LocationUpsertWithoutDispatchesToInput = {
+    update: XOR<LocationUpdateWithoutDispatchesToInput, LocationUncheckedUpdateWithoutDispatchesToInput>
+    create: XOR<LocationCreateWithoutDispatchesToInput, LocationUncheckedCreateWithoutDispatchesToInput>
+    where?: LocationWhereInput
+  }
+
+  export type LocationUpdateToOneWithWhereWithoutDispatchesToInput = {
+    where?: LocationWhereInput
+    data: XOR<LocationUpdateWithoutDispatchesToInput, LocationUncheckedUpdateWithoutDispatchesToInput>
+  }
+
+  export type LocationUpdateWithoutDispatchesToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUpdateManyWithoutLocationNestedInput
+    transfersFrom?: MaterialTransferUpdateManyWithoutFromLocationNestedInput
+    transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateWithoutDispatchesToInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutLocationNestedInput
+    transfersFrom?: MaterialTransferUncheckedUpdateManyWithoutFromLocationNestedInput
+    transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
+  }
+
+  export type GrindingDispatchLotUpsertWithWhereUniqueWithoutDispatchInput = {
+    where: GrindingDispatchLotWhereUniqueInput
+    update: XOR<GrindingDispatchLotUpdateWithoutDispatchInput, GrindingDispatchLotUncheckedUpdateWithoutDispatchInput>
+    create: XOR<GrindingDispatchLotCreateWithoutDispatchInput, GrindingDispatchLotUncheckedCreateWithoutDispatchInput>
+  }
+
+  export type GrindingDispatchLotUpdateWithWhereUniqueWithoutDispatchInput = {
+    where: GrindingDispatchLotWhereUniqueInput
+    data: XOR<GrindingDispatchLotUpdateWithoutDispatchInput, GrindingDispatchLotUncheckedUpdateWithoutDispatchInput>
+  }
+
+  export type GrindingDispatchLotUpdateManyWithWhereWithoutDispatchInput = {
+    where: GrindingDispatchLotScalarWhereInput
+    data: XOR<GrindingDispatchLotUpdateManyMutationInput, GrindingDispatchLotUncheckedUpdateManyWithoutDispatchInput>
+  }
+
+  export type GrindingDispatchCreateWithoutLotsInput = {
+    id?: string
+    batchNumber: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    inputRawMaterial: RawMaterialProductCreateNestedOneWithoutGrindingDispatchesInput
+    fromLocation: LocationCreateNestedOneWithoutDispatchesFromInput
+    toLocation: LocationCreateNestedOneWithoutDispatchesToInput
+  }
+
+  export type GrindingDispatchUncheckedCreateWithoutLotsInput = {
+    id?: string
+    batchNumber: string
+    inputRawMaterialId: string
+    fromLocationId: string
+    toLocationId: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GrindingDispatchCreateOrConnectWithoutLotsInput = {
+    where: GrindingDispatchWhereUniqueInput
+    create: XOR<GrindingDispatchCreateWithoutLotsInput, GrindingDispatchUncheckedCreateWithoutLotsInput>
+  }
+
+  export type CleaningLotCreateWithoutGrindingDispatchLotsInput = {
+    id?: string
+    lotNumber: string
+    quantity: number
+    cleanedQuantity?: number | null
+    status?: string
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJob: CleaningJobCreateNestedOneWithoutCleaningLotsInput
+    grn: GRNbyPoCreateNestedOneWithoutCleaningLotsInput
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutCleaningLotsInput
+    warehouse: WarehouseCreateNestedOneWithoutCleaningLotsInput
+    processingBatchLots?: ProcessingBatchLotCreateNestedManyWithoutCleaningLotInput
+  }
+
+  export type CleaningLotUncheckedCreateWithoutGrindingDispatchLotsInput = {
+    id?: string
+    lotNumber: string
+    cleaningJobId: string
+    grnId: string
+    rawMaterialId: string
+    warehouseId: string
+    quantity: number
+    cleanedQuantity?: number | null
+    status?: string
+    stoneWastageQty?: number | null
+    stoneWastageUnit?: string | null
+    seedWastageQty?: number | null
+    seedWastageUnit?: string | null
+    wastagePercentage?: number | null
+    wastageType?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    processingBatchLots?: ProcessingBatchLotUncheckedCreateNestedManyWithoutCleaningLotInput
+  }
+
+  export type CleaningLotCreateOrConnectWithoutGrindingDispatchLotsInput = {
+    where: CleaningLotWhereUniqueInput
+    create: XOR<CleaningLotCreateWithoutGrindingDispatchLotsInput, CleaningLotUncheckedCreateWithoutGrindingDispatchLotsInput>
+  }
+
+  export type GrindingDispatchUpsertWithoutLotsInput = {
+    update: XOR<GrindingDispatchUpdateWithoutLotsInput, GrindingDispatchUncheckedUpdateWithoutLotsInput>
+    create: XOR<GrindingDispatchCreateWithoutLotsInput, GrindingDispatchUncheckedCreateWithoutLotsInput>
+    where?: GrindingDispatchWhereInput
+  }
+
+  export type GrindingDispatchUpdateToOneWithWhereWithoutLotsInput = {
+    where?: GrindingDispatchWhereInput
+    data: XOR<GrindingDispatchUpdateWithoutLotsInput, GrindingDispatchUncheckedUpdateWithoutLotsInput>
+  }
+
+  export type GrindingDispatchUpdateWithoutLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inputRawMaterial?: RawMaterialProductUpdateOneRequiredWithoutGrindingDispatchesNestedInput
+    fromLocation?: LocationUpdateOneRequiredWithoutDispatchesFromNestedInput
+    toLocation?: LocationUpdateOneRequiredWithoutDispatchesToNestedInput
+  }
+
+  export type GrindingDispatchUncheckedUpdateWithoutLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    inputRawMaterialId?: StringFieldUpdateOperationsInput | string
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type CleaningLotUpsertWithoutGrindingDispatchLotsInput = {
+    update: XOR<CleaningLotUpdateWithoutGrindingDispatchLotsInput, CleaningLotUncheckedUpdateWithoutGrindingDispatchLotsInput>
+    create: XOR<CleaningLotCreateWithoutGrindingDispatchLotsInput, CleaningLotUncheckedCreateWithoutGrindingDispatchLotsInput>
+    where?: CleaningLotWhereInput
+  }
+
+  export type CleaningLotUpdateToOneWithWhereWithoutGrindingDispatchLotsInput = {
+    where?: CleaningLotWhereInput
+    data: XOR<CleaningLotUpdateWithoutGrindingDispatchLotsInput, CleaningLotUncheckedUpdateWithoutGrindingDispatchLotsInput>
+  }
+
+  export type CleaningLotUpdateWithoutGrindingDispatchLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    cleanedQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJob?: CleaningJobUpdateOneRequiredWithoutCleaningLotsNestedInput
+    grn?: GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput
+    warehouse?: WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput
+    processingBatchLots?: ProcessingBatchLotUpdateManyWithoutCleaningLotNestedInput
+  }
+
+  export type CleaningLotUncheckedUpdateWithoutGrindingDispatchLotsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lotNumber?: StringFieldUpdateOperationsInput | string
+    cleaningJobId?: StringFieldUpdateOperationsInput | string
+    grnId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: StringFieldUpdateOperationsInput | string
+    quantity?: FloatFieldUpdateOperationsInput | number
+    cleanedQuantity?: NullableFloatFieldUpdateOperationsInput | number | null
+    status?: StringFieldUpdateOperationsInput | string
+    stoneWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    stoneWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    seedWastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    seedWastageUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastageType?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type ActivityLogCreateManyBatchInput = {
@@ -141004,6 +156568,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutVendorInput = {
@@ -141024,6 +156590,8 @@ export namespace Prisma {
     purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateManyWithoutVendorInput = {
@@ -141124,6 +156692,35 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type BillOfMaterialCreateManySfgProductInput = {
+    id?: string
+    bomCode: string
+    productName: string
+    productCode?: string | null
+    unitOfMeasurement: string
+    outputQuantity?: number
+    description?: string | null
+    status?: $Enums.BOMStatus
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GrindingDispatchCreateManyInputRawMaterialInput = {
+    id?: string
+    batchNumber: string
+    fromLocationId: string
+    toLocationId: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type CleaningJobUpdateWithoutRawMaterialInput = {
     id?: StringFieldUpdateOperationsInput | string
     quantity?: FloatFieldUpdateOperationsInput | number
@@ -141197,6 +156794,7 @@ export namespace Prisma {
     grn?: GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput
     warehouse?: WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput
     processingBatchLots?: ProcessingBatchLotUpdateManyWithoutCleaningLotNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotUncheckedUpdateWithoutRawMaterialInput = {
@@ -141217,6 +156815,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotUncheckedUpdateManyWithoutRawMaterialInput = {
@@ -141395,6 +156994,97 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BillOfMaterialUpdateWithoutSfgProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomCode?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    outputQuantity?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBOMStatusFieldUpdateOperationsInput | $Enums.BOMStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: BOMItemUpdateManyWithoutBomNestedInput
+  }
+
+  export type BillOfMaterialUncheckedUpdateWithoutSfgProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomCode?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    outputQuantity?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBOMStatusFieldUpdateOperationsInput | $Enums.BOMStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    items?: BOMItemUncheckedUpdateManyWithoutBomNestedInput
+  }
+
+  export type BillOfMaterialUncheckedUpdateManyWithoutSfgProductInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    bomCode?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    productCode?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    outputQuantity?: FloatFieldUpdateOperationsInput | number
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumBOMStatusFieldUpdateOperationsInput | $Enums.BOMStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchUpdateWithoutInputRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromLocation?: LocationUpdateOneRequiredWithoutDispatchesFromNestedInput
+    toLocation?: LocationUpdateOneRequiredWithoutDispatchesToNestedInput
+    lots?: GrindingDispatchLotUpdateManyWithoutDispatchNestedInput
+  }
+
+  export type GrindingDispatchUncheckedUpdateWithoutInputRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lots?: GrindingDispatchLotUncheckedUpdateManyWithoutDispatchNestedInput
+  }
+
+  export type GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type PurchaseOrderItemCreateManyPurchaseOrderInput = {
     id?: string
     rawMaterialId: string
@@ -141513,7 +157203,8 @@ export namespace Prisma {
 
   export type ReceivalEntryCreateManyPurchaseOrderItemInput = {
     id?: string
-    warehouseId: string
+    locationId?: string | null
+    warehouseId?: string | null
     weightMode?: $Enums.WeightMode
     totalWeight: number
     notes?: string | null
@@ -141545,12 +157236,14 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     bags?: ReceivalBagUpdateManyWithoutReceivalEntryNestedInput
-    warehouse?: WarehouseUpdateOneRequiredWithoutReceivalEntriesNestedInput
+    location?: LocationUpdateOneWithoutReceivalEntriesNestedInput
+    warehouse?: WarehouseUpdateOneWithoutReceivalEntriesNestedInput
   }
 
   export type ReceivalEntryUncheckedUpdateWithoutPurchaseOrderItemInput = {
     id?: StringFieldUpdateOperationsInput | string
-    warehouseId?: StringFieldUpdateOperationsInput | string
+    locationId?: NullableStringFieldUpdateOperationsInput | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
     weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
     totalWeight?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -141560,7 +157253,8 @@ export namespace Prisma {
 
   export type ReceivalEntryUncheckedUpdateManyWithoutPurchaseOrderItemInput = {
     id?: StringFieldUpdateOperationsInput | string
-    warehouseId?: StringFieldUpdateOperationsInput | string
+    locationId?: NullableStringFieldUpdateOperationsInput | string | null
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
     weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
     totalWeight?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -141756,6 +157450,7 @@ export namespace Prisma {
   export type ReceivalEntryCreateManyWarehouseInput = {
     id?: string
     purchaseOrderItemId: string
+    locationId?: string | null
     weightMode?: $Enums.WeightMode
     totalWeight: number
     notes?: string | null
@@ -142028,6 +157723,7 @@ export namespace Prisma {
     grn?: GRNbyPoUpdateOneRequiredWithoutCleaningLotsNestedInput
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput
     processingBatchLots?: ProcessingBatchLotUpdateManyWithoutCleaningLotNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotUncheckedUpdateWithoutWarehouseInput = {
@@ -142048,6 +157744,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotUncheckedUpdateManyWithoutWarehouseInput = {
@@ -142134,11 +157831,13 @@ export namespace Prisma {
     receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     bags?: ReceivalBagUpdateManyWithoutReceivalEntryNestedInput
     purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutReceivalsNestedInput
+    location?: LocationUpdateOneWithoutReceivalEntriesNestedInput
   }
 
   export type ReceivalEntryUncheckedUpdateWithoutWarehouseInput = {
     id?: StringFieldUpdateOperationsInput | string
     purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    locationId?: NullableStringFieldUpdateOperationsInput | string | null
     weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
     totalWeight?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -142149,6 +157848,7 @@ export namespace Prisma {
   export type ReceivalEntryUncheckedUpdateManyWithoutWarehouseInput = {
     id?: StringFieldUpdateOperationsInput | string
     purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    locationId?: NullableStringFieldUpdateOperationsInput | string | null
     weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
     totalWeight?: FloatFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
@@ -142287,6 +157987,448 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ReceivalEntryCreateManyLocationInput = {
+    id?: string
+    purchaseOrderItemId: string
+    warehouseId?: string | null
+    weightMode?: $Enums.WeightMode
+    totalWeight: number
+    notes?: string | null
+    receivedDate?: Date | string
+  }
+
+  export type MaterialTransferCreateManyFromLocationInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    toLocationId: string
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaterialTransferCreateManyToLocationInput = {
+    id?: string
+    transferNumber: string
+    direction: $Enums.TransferDirection
+    fromLocationId: string
+    status?: $Enums.TransferStatus
+    sentById: string
+    sentAt?: Date | string
+    acceptedById?: string | null
+    acceptedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GrindingDispatchCreateManyFromLocationInput = {
+    id?: string
+    batchNumber: string
+    inputRawMaterialId: string
+    toLocationId: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GrindingDispatchCreateManyToLocationInput = {
+    id?: string
+    batchNumber: string
+    inputRawMaterialId: string
+    fromLocationId: string
+    totalQuantity: number
+    status?: $Enums.GrindingDispatchStatus
+    sentAt?: Date | string
+    acceptedAt?: Date | string | null
+    rejectedAt?: Date | string | null
+    rejectionReason?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ReceivalEntryUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
+    totalWeight?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    bags?: ReceivalBagUpdateManyWithoutReceivalEntryNestedInput
+    purchaseOrderItem?: PurchaseOrderItemUpdateOneRequiredWithoutReceivalsNestedInput
+    warehouse?: WarehouseUpdateOneWithoutReceivalEntriesNestedInput
+  }
+
+  export type ReceivalEntryUncheckedUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
+    weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
+    totalWeight?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    bags?: ReceivalBagUncheckedUpdateManyWithoutReceivalEntryNestedInput
+  }
+
+  export type ReceivalEntryUncheckedUpdateManyWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    purchaseOrderItemId?: StringFieldUpdateOperationsInput | string
+    warehouseId?: NullableStringFieldUpdateOperationsInput | string | null
+    weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
+    totalWeight?: FloatFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    receivedDate?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialTransferUpdateWithoutFromLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    toLocation?: LocationUpdateOneRequiredWithoutTransfersToNestedInput
+    lines?: MaterialTransferLineUpdateManyWithoutTransferNestedInput
+  }
+
+  export type MaterialTransferUncheckedUpdateWithoutFromLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lines?: MaterialTransferLineUncheckedUpdateManyWithoutTransferNestedInput
+  }
+
+  export type MaterialTransferUncheckedUpdateManyWithoutFromLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialTransferUpdateWithoutToLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fromLocation?: LocationUpdateOneRequiredWithoutTransfersFromNestedInput
+    lines?: MaterialTransferLineUpdateManyWithoutTransferNestedInput
+  }
+
+  export type MaterialTransferUncheckedUpdateWithoutToLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lines?: MaterialTransferLineUncheckedUpdateManyWithoutTransferNestedInput
+  }
+
+  export type MaterialTransferUncheckedUpdateManyWithoutToLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transferNumber?: StringFieldUpdateOperationsInput | string
+    direction?: EnumTransferDirectionFieldUpdateOperationsInput | $Enums.TransferDirection
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    status?: EnumTransferStatusFieldUpdateOperationsInput | $Enums.TransferStatus
+    sentById?: StringFieldUpdateOperationsInput | string
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedById?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchUpdateWithoutFromLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inputRawMaterial?: RawMaterialProductUpdateOneRequiredWithoutGrindingDispatchesNestedInput
+    toLocation?: LocationUpdateOneRequiredWithoutDispatchesToNestedInput
+    lots?: GrindingDispatchLotUpdateManyWithoutDispatchNestedInput
+  }
+
+  export type GrindingDispatchUncheckedUpdateWithoutFromLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    inputRawMaterialId?: StringFieldUpdateOperationsInput | string
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lots?: GrindingDispatchLotUncheckedUpdateManyWithoutDispatchNestedInput
+  }
+
+  export type GrindingDispatchUncheckedUpdateManyWithoutFromLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    inputRawMaterialId?: StringFieldUpdateOperationsInput | string
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchUpdateWithoutToLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    inputRawMaterial?: RawMaterialProductUpdateOneRequiredWithoutGrindingDispatchesNestedInput
+    fromLocation?: LocationUpdateOneRequiredWithoutDispatchesFromNestedInput
+    lots?: GrindingDispatchLotUpdateManyWithoutDispatchNestedInput
+  }
+
+  export type GrindingDispatchUncheckedUpdateWithoutToLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    inputRawMaterialId?: StringFieldUpdateOperationsInput | string
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lots?: GrindingDispatchLotUncheckedUpdateManyWithoutDispatchNestedInput
+  }
+
+  export type GrindingDispatchUncheckedUpdateManyWithoutToLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    inputRawMaterialId?: StringFieldUpdateOperationsInput | string
+    fromLocationId?: StringFieldUpdateOperationsInput | string
+    totalQuantity?: FloatFieldUpdateOperationsInput | number
+    status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
+    sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialTransferLineCreateManyTransferInput = {
+    id?: string
+    lineType: $Enums.TransferLineType
+    rawMaterialId?: string | null
+    productName?: string | null
+    skuCode?: string | null
+    quantity: number
+    unitOfMeasurement: string
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type MaterialTransferLineUpdateWithoutTransferInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineType?: EnumTransferLineTypeFieldUpdateOperationsInput | $Enums.TransferLineType
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialTransferLineUncheckedUpdateWithoutTransferInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineType?: EnumTransferLineTypeFieldUpdateOperationsInput | $Enums.TransferLineType
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaterialTransferLineUncheckedUpdateManyWithoutTransferInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    lineType?: EnumTransferLineTypeFieldUpdateOperationsInput | $Enums.TransferLineType
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionConsumptionCreateManyPostingInput = {
+    id?: string
+    rawMaterialId: string
+    expectedQuantity: number
+    actualQuantity: number
+    batchNumber?: string | null
+    cleaningLotId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProductionOutputCreateManyPostingInput = {
+    id?: string
+    outputType: $Enums.OutputType
+    productName: string
+    skuCode?: string | null
+    quantity: number
+    unit: string
+    batchNumber?: string | null
+    createdAt?: Date | string
+  }
+
+  export type ProductionConsumptionUpdateWithoutPostingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionConsumptionUncheckedUpdateWithoutPostingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionConsumptionUncheckedUpdateManyWithoutPostingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionOutputUpdateWithoutPostingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    outputType?: EnumOutputTypeFieldUpdateOperationsInput | $Enums.OutputType
+    productName?: StringFieldUpdateOperationsInput | string
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionOutputUncheckedUpdateWithoutPostingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    outputType?: EnumOutputTypeFieldUpdateOperationsInput | $Enums.OutputType
+    productName?: StringFieldUpdateOperationsInput | string
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductionOutputUncheckedUpdateManyWithoutPostingInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    outputType?: EnumOutputTypeFieldUpdateOperationsInput | $Enums.OutputType
+    productName?: StringFieldUpdateOperationsInput | string
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    quantity?: FloatFieldUpdateOperationsInput | number
+    unit?: StringFieldUpdateOperationsInput | string
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type CleaningLogCreateManyCleaningJobInput = {
     id?: string
     from: string
@@ -142368,6 +158510,7 @@ export namespace Prisma {
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput
     warehouse?: WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput
     processingBatchLots?: ProcessingBatchLotUpdateManyWithoutCleaningLotNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotUncheckedUpdateWithoutCleaningJobInput = {
@@ -142388,6 +158531,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotUncheckedUpdateManyWithoutCleaningJobInput = {
@@ -142674,6 +158818,7 @@ export namespace Prisma {
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCleaningLotsNestedInput
     warehouse?: WarehouseUpdateOneRequiredWithoutCleaningLotsNestedInput
     processingBatchLots?: ProcessingBatchLotUpdateManyWithoutCleaningLotNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotUncheckedUpdateWithoutGrnInput = {
@@ -142694,6 +158839,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
+    grindingDispatchLots?: GrindingDispatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
   }
 
   export type CleaningLotUncheckedUpdateManyWithoutGrnInput = {
@@ -142723,6 +158869,14 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type GrindingDispatchLotCreateManyCleaningLotInput = {
+    id?: string
+    dispatchId: string
+    allocatedQuantity: number
+    seedWastageAllocated?: number
+    createdAt?: Date | string
+  }
+
   export type ProcessingBatchLotUpdateWithoutCleaningLotInput = {
     id?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
@@ -142742,6 +158896,30 @@ export namespace Prisma {
   export type ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotInput = {
     id?: StringFieldUpdateOperationsInput | string
     processingJobId?: StringFieldUpdateOperationsInput | string
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchLotUpdateWithoutCleaningLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    dispatch?: GrindingDispatchUpdateOneRequiredWithoutLotsNestedInput
+  }
+
+  export type GrindingDispatchLotUncheckedUpdateWithoutCleaningLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dispatchId?: StringFieldUpdateOperationsInput | string
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchLotUncheckedUpdateManyWithoutCleaningLotInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    dispatchId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -142785,6 +158963,38 @@ export namespace Prisma {
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchLotCreateManyDispatchInput = {
+    id?: string
+    cleaningLotId: string
+    allocatedQuantity: number
+    seedWastageAllocated?: number
+    createdAt?: Date | string
+  }
+
+  export type GrindingDispatchLotUpdateWithoutDispatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningLot?: CleaningLotUpdateOneRequiredWithoutGrindingDispatchLotsNestedInput
+  }
+
+  export type GrindingDispatchLotUncheckedUpdateWithoutDispatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cleaningLotId?: StringFieldUpdateOperationsInput | string
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GrindingDispatchLotUncheckedUpdateManyWithoutDispatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    cleaningLotId?: StringFieldUpdateOperationsInput | string
+    allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

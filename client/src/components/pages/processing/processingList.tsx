@@ -22,6 +22,9 @@ import {
   Leaf,
 } from 'lucide-react';
 import UnitSelect from '../../ui/Unitselect';
+import IncomingTransfers from './IncomingTransfers';
+import ProductionEntry from './ProductionEntry';
+import OutboundTransfers from './OutboundTransfers';
 
 const { Option } = Select;
 
@@ -109,6 +112,7 @@ const ProcessingList: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
   const [expandedJobId, setExpandedJobId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'incoming' | 'batches' | 'production' | 'outbound'>('incoming');
 
   const paginatedJobs = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -537,6 +541,45 @@ const ProcessingList: React.FC = () => {
             </div>
           </div>
 
+          {/* Tab Navigation */}
+          <div className="border-b border-border">
+            <div className="flex flex-wrap">
+              {[
+                { key: 'incoming' as const, label: 'Incoming to Grinding', sub: 'Step 1-2', color: '#6366f1' },
+                { key: 'batches' as const, label: 'Processing Batches', sub: 'Legacy', color: '#8b5cf6' },
+                { key: 'production' as const, label: 'Production Entry', sub: 'Step 3-5', color: '#10b981' },
+                { key: 'outbound' as const, label: 'Outbound to SFG WH', sub: 'Step 6-7', color: '#f59e0b' },
+              ].map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`relative px-5 py-3.5 text-sm font-medium transition-all duration-200 border-b-2 ${
+                    activeTab === tab.key
+                      ? 'border-current text-foreground'
+                      : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/40'
+                  }`}
+                  style={{
+                    color: activeTab === tab.key ? tab.color : undefined,
+                    borderColor: activeTab === tab.key ? tab.color : 'transparent',
+                  }}
+                >
+                  <span>{tab.label}</span>
+                  <span className="block text-[10px] font-normal opacity-60">{tab.sub}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tab: Incoming Transfers */}
+          {activeTab === 'incoming' && (
+            <div className="p-5">
+              <IncomingTransfers />
+            </div>
+          )}
+
+          {/* Tab: Processing Batches (existing) */}
+          {activeTab === 'batches' && (
+            <>
           {/* Stats Row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-muted/50">
             <div className="bg-card rounded-xl p-4 border border-border">
@@ -984,6 +1027,23 @@ const ProcessingList: React.FC = () => {
               </div>
             </div>
           )}
+          </>
+          )}
+
+          {/* Tab: Production Entry */}
+          {activeTab === 'production' && (
+            <div className="p-5">
+              <ProductionEntry />
+            </div>
+          )}
+
+          {/* Tab: Outbound Transfers */}
+          {activeTab === 'outbound' && (
+            <div className="p-5">
+              <OutboundTransfers />
+            </div>
+          )}
+
         </motion.div>
       </div>
 

@@ -162,7 +162,16 @@ export class RMQualityController {
                 poItemIds.length > 0
                     ? prisma.purchaseOrderItem.findMany({
                         where: { id: { in: poItemIds } },
-                        include: { rawMaterial: true },
+                        include: {
+                            rawMaterial: true,
+                            receivals: {
+                                include: {
+                                    location: true,
+                                    warehouse: true,
+                                },
+                                orderBy: { receivedDate: 'desc' },
+                            },
+                        },
                     })
                     : [],
             ]);

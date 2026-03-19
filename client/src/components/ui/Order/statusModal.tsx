@@ -8,6 +8,14 @@ type Warehouse = {
     location?: string;
 };
 
+type LocationOption = {
+    id: string;
+    code: string;
+    name: string;
+    type: string;
+    enabled: boolean;
+};
+
 type BagEntry = {
     bagNo: number;
     bagWeight: number;
@@ -15,8 +23,10 @@ type BagEntry = {
 
 type ReceivalEntry = {
     id: string;
-    warehouseId: string;
-    warehouse: { name: string };
+    warehouseId?: string;
+    locationId?: string;
+    warehouse?: { name: string };
+    location?: { name: string };
     weightMode: "INDIVIDUAL" | "TOTAL";
     totalWeight: number;
     bags: { bagNo: number; bagWeight: number }[];
@@ -29,6 +39,7 @@ type Props = {
     onClose: () => void;
     onConfirm: (data: {
         status?: string;
+        locationId?: string;
         warehouseId?: string;
         weightMode?: string;
         bags?: BagEntry[];
@@ -53,9 +64,8 @@ const ReceiveModal: React.FC<Props> = ({
     currentStatus = "PENDING",
     receivals = [],
 }) => {
-    const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
-    const [showForm, setShowForm] = useState(false);
-    const [selectedWarehouseId, setSelectedWarehouseId] = useState("");
+    const [locations, setLocations] = useState<LocationOption[]>([]);
+    const [selectedLocationId, setSelectedLocationId] = useState("");
     const [loading, setLoading] = useState(false);
     const [status, setStatus] = useState<"PARTIALLY_RECEIVED" | "RECEIVED">("PARTIALLY_RECEIVED");
     const [weightMode, setWeightMode] = useState<"INDIVIDUAL" | "TOTAL">("TOTAL");
@@ -70,9 +80,8 @@ const ReceiveModal: React.FC<Props> = ({
 
     useEffect(() => {
         if (open) {
-            fetchWarehouses();
-            setShowForm(false);
-            setSelectedWarehouseId("");
+            fetchLocations();
+            setSelectedLocationId("");
             setTotalWeight(0);
             setNumberOfBags(0);
             setBags([{ bagNo: 1, bagWeight: 0 }]);
@@ -84,15 +93,15 @@ const ReceiveModal: React.FC<Props> = ({
         }
     }, [open, defaultQuantity]);
 
-    const fetchWarehouses = async () => {
+    const fetchLocations = async () => {
         try {
             const authToken = localStorage.getItem("authToken");
-            const res = await api.get(API_ROUTES.RAW.GET_WAREHOUSES, {
+            const res = await api.get(API_ROUTES.RAW.GET_LOCATIONS, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
-            setWarehouses(res.data);
+            setLocations((res.data || []).filter((l: LocationOption) => l.enabled));
         } catch {
-            setWarehouses([]);
+            setLocations([]);
         }
     };
 
@@ -116,8 +125,8 @@ const ReceiveModal: React.FC<Props> = ({
     const computedTotalFromBags = bags.reduce((sum, b) => sum + (b.bagWeight || 0), 0);
 
     const handleConfirm = async () => {
-        if (!selectedWarehouseId) {
-            window.alert("Please select a warehouse.");
+        if (!selectedLocationId) {
+            window.alert("Please select a location.");
             return;
         }
 
@@ -137,7 +146,7 @@ const ReceiveModal: React.FC<Props> = ({
         try {
             await onConfirm({
                 status,
-                warehouseId: selectedWarehouseId,
+                locationId: selectedLocationId,
                 weightMode,
                 bags: weightMode === "INDIVIDUAL" ? bags : undefined,
                 totalWeight: weightMode === "TOTAL" ? totalWeight : undefined,
@@ -204,7 +213,7 @@ const ReceiveModal: React.FC<Props> = ({
                             Close
                         </button>
                     </div>
-                ) : !showForm ? (
+                ) : (
                     <div className="p-5 space-y-4">
                         {/* If there's some already received amount and remaining > 0, show choice prompt */}
                         {currentReceived > 0 && remaining > 0 && confirmFinishPrompt && (
@@ -262,32 +271,28 @@ const ReceiveModal: React.FC<Props> = ({
                             </p>
                         </div>
 
-                        {/* Warehouse Selection */}
+                        {/* Location Selection */}
                         <div>
                             <label className="block text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wider">
-                                Warehouse
+                                Storage Location
                             </label>
-                            <div className="flex gap-2">
-                                <select
-                                    className="flex-1 bg-muted/20 border border-border/30 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition"
-                                    value={selectedWarehouseId}
-                                    onChange={(e) => setSelectedWarehouseId(e.target.value)}
-                                >
-                                    <option value="">Choose warehouse</option>
-                                    {warehouses.map((w) => (
-                                        <option key={w.id} value={w.id}>
-                                            {w.name}
-                                        </option>
-                                    ))}
-                                </select>
-                                <button
-                                    className="px-3 py-2 bg-primary/8 text-primary rounded-lg text-xs font-medium hover:bg-primary/15 transition"
-                                    onClick={() => setShowForm(true)}
-                                    type="button"
-                                >
-                                    <Plus className="w-4 h-4" />
-                                </button>
-                            </div>
+                            <select
+                                className="w-full bg-muted/20 border border-border/30 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition"
+                                value={selectedLocationId}
+                                onChange={(e) => setSelectedLocationId(e.target.value)}
+                            >
+                                <option value="">Choose location</option>
+                                {locations.map((l) => (
+                                    <option key={l.id} value={l.id}>
+                                        {l.code} - {l.name}
+                                    </option>
+                                ))}
+                            </select>
+                            {locations.length === 0 && (
+                                <p className="mt-1 text-xs text-muted-foreground">
+                                    No enabled locations found in Location Master.
+                                </p>
+                            )}
                         </div>
 
                         {/* Weight Mode Toggle */}
@@ -451,17 +456,6 @@ const ReceiveModal: React.FC<Props> = ({
                             </button>
                         </div>
                     </div>
-                ) : (
-                    <div className="p-5">
-                        <WarehouseForm
-                            onCreated={(w) => {
-                                setWarehouses((ws) => [...ws, w]);
-                                setSelectedWarehouseId(w.id);
-                                setShowForm(false);
-                            }}
-                            onCancel={() => setShowForm(false)}
-                        />
-                    </div>
                 )}
             </div>
         </div>
@@ -485,7 +479,7 @@ const ReceivalHistory: React.FC<{ receivals: ReceivalEntry[] }> = ({ receivals }
                     </span>
                 </div>
                 <div className="text-muted-foreground">
-                    Warehouse: <span className="text-foreground/80">{r.warehouse?.name || '-'}</span>
+                    Location: <span className="text-foreground/80">{r.location?.name || r.warehouse?.name || '-'}</span>
                     {' · '}Mode: <span className="text-foreground/80">{r.weightMode}</span>
                     {r.bags && r.bags.length > 0 && (
                         <span> · {r.bags.length} bag(s)</span>
@@ -498,75 +492,6 @@ const ReceivalHistory: React.FC<{ receivals: ReceivalEntry[] }> = ({ receivals }
         ))}
     </div>
 );
-
-type WarehouseFormProps = {
-    onCreated: (w: Warehouse) => void;
-    onCancel: () => void;
-};
-
-const WarehouseForm: React.FC<WarehouseFormProps> = ({ onCreated, onCancel }) => {
-    const [name, setName] = useState("");
-    const [location, setLocation] = useState("");
-    const [loading, setLoading] = useState(false);
-
-    const handleCreate = async () => {
-        setLoading(true);
-        try {
-            const authToken = localStorage.getItem("authToken");
-            const res = await api.post(
-                API_ROUTES.RAW.CREATE_WAREHOUSE,
-                { name, location },
-                { headers: { Authorization: `Bearer ${authToken}` } }
-            );
-            onCreated(res.data);
-        } catch {
-            // handle error
-        }
-        setLoading(false);
-    };
-
-    return (
-        <div>
-            <h3 className="text-base font-semibold text-foreground mb-3">Add Warehouse</h3>
-            <div className="space-y-3">
-                <div>
-                    <label className="block text-xs font-medium text-muted-foreground mb-1">Name</label>
-                    <input
-                        className="w-full bg-muted/20 border border-border/30 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Warehouse name"
-                    />
-                </div>
-                <div>
-                    <label className="block text-xs font-medium text-muted-foreground mb-1">Location</label>
-                    <input
-                        className="w-full bg-muted/20 border border-border/30 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        placeholder="Location"
-                    />
-                </div>
-                <div className="flex justify-end gap-2 pt-1">
-                    <button
-                        className="px-4 py-2 rounded-lg bg-muted/30 text-muted-foreground hover:bg-muted/50 transition text-sm font-medium"
-                        onClick={onCancel}
-                        disabled={loading}
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        className="px-4 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition text-sm font-medium"
-                        onClick={handleCreate}
-                        disabled={!name || loading}
-                    >
-                        {loading ? "Adding..." : "Add"}
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 export default ReceiveModal;
 
