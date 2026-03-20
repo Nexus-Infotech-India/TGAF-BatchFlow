@@ -17,12 +17,15 @@ import {
 import { format } from "date-fns";
 import CreateUserModal from "./Modal/CreateUser";
 import CreateRoleModal from "./Modal/CreateRole";
+import EditRoleModal from "./Modal/EditRole";
+import EditUserModal from "./Modal/EditUser";
 
 interface User {
   id: string;
   name: string;
   email: string;
   role: {
+    id: string;
     name: string;
   };
   createdAt: string;
@@ -41,6 +44,10 @@ export default function UserManagement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false);
   const [isCreateRoleModalOpen, setIsCreateRoleModalOpen] = useState(false);
+  const [isEditRoleModalOpen, setIsEditRoleModalOpen] = useState(false);
+  const [editingRoleId, setEditingRoleId] = useState<string | null>(null);
+  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
   
   const authToken = localStorage.getItem("authToken");
 
@@ -344,6 +351,10 @@ const filteredRoles = Array.isArray(rolesData) ? rolesData.filter((role: Role) =
                                 <button 
                                   className="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg transition-colors"
                                   title="Edit User"
+                                  onClick={() => {
+                                    setEditingUser(user);
+                                    setIsEditUserModalOpen(true);
+                                  }}
                                 >
                                   <FileText className="h-4 w-4" />
                                 </button>
@@ -481,6 +492,10 @@ const filteredRoles = Array.isArray(rolesData) ? rolesData.filter((role: Role) =
                                 <button 
                                   className="text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 p-2 rounded-lg transition-colors"
                                   title="Edit Role"
+                                  onClick={() => {
+                                    setEditingRoleId(role.id);
+                                    setIsEditRoleModalOpen(true);
+                                  }}
                                 >
                                   <FileText className="h-4 w-4" />
                                 </button>
@@ -512,6 +527,31 @@ const filteredRoles = Array.isArray(rolesData) ? rolesData.filter((role: Role) =
         <CreateRoleModal 
           isOpen={isCreateRoleModalOpen}
           onClose={() => setIsCreateRoleModalOpen(false)}
+        />
+      </AnimatePresence>
+
+      {/* Edit Role Modal */}
+      <AnimatePresence>
+        <EditRoleModal 
+          isOpen={isEditRoleModalOpen}
+          onClose={() => {
+            setIsEditRoleModalOpen(false);
+            setEditingRoleId(null);
+          }}
+          roleId={editingRoleId}
+        />
+      </AnimatePresence>
+
+      {/* Edit User Modal */}
+      <AnimatePresence>
+        <EditUserModal 
+          isOpen={isEditUserModalOpen}
+          onClose={() => {
+            setIsEditUserModalOpen(false);
+            setEditingUser(null);
+          }}
+          roles={rolesData || []}
+          user={editingUser}
         />
       </AnimatePresence>
     </motion.div>

@@ -882,7 +882,7 @@ const App = () => {
                   element={
                     <SecureRoute
                       element={<SFGProcessingPage />}
-                      permissionKey="manage_processing_list"
+                      permissionKey="process_raw_materials"
                     />
                   }
                   name="Processing List"

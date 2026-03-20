@@ -781,163 +781,279 @@ const DispatchToGrinding: React.FC = () => {
       <Modal
         open={batchModal.visible}
         title={
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg" style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
-              <Send className="text-white" size={14} />
+          <div className="flex items-center gap-3 py-2">
+            <div className="p-2.5 rounded-xl shadow-sm" style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
+              <Send className="text-white" size={18} />
             </div>
-            <span className="text-lg font-semibold">Create Grinding Dispatch</span>
+            <div>
+              <h2 className="text-xl font-bold text-gray-800">Create Grinding Dispatch</h2>
+              <p className="text-xs text-muted-foreground font-normal">Transfer cleaned raw material to grinding unit</p>
+            </div>
           </div>
         }
         onCancel={closeBatchModal}
-        width={700}
+        width={850}
         footer={null}
+        centered
+        className="rounded-xl overflow-hidden"
       >
-        <div className="space-y-4 mt-4">
+        <div className="space-y-6 mt-4">
           {/* Step indicator */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center justify-center mb-8 bg-muted/20 p-4 rounded-xl border border-border/50">
             {['Locations', 'Material', 'Select Lots'].map((label, idx) => (
-              <div key={label} className="flex items-center gap-1">
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                  batchModal.step >= idx ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'
-                }`}>{idx + 1}</div>
-                <span className={`text-xs ${batchModal.step >= idx ? 'text-primary font-medium' : 'text-muted-foreground'}`}>{label}</span>
-                {idx < 2 && <div className="w-6 h-px bg-border" />}
-              </div>
+              <React.Fragment key={label}>
+                <div className="flex flex-col items-center gap-2">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-sm transition-all duration-300 ${
+                    batchModal.step >= idx 
+                      ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white scale-110 shadow-indigo-200' 
+                      : 'bg-white border-2 border-muted text-muted-foreground'
+                  }`}>
+                    {batchModal.step > idx ? <Check size={16} /> : idx + 1}
+                  </div>
+                  <span className={`text-xs font-semibold tracking-wide uppercase ${batchModal.step >= idx ? 'text-indigo-600' : 'text-muted-foreground'}`}>
+                    {label}
+                  </span>
+                </div>
+                {idx < 2 && (
+                  <div className={`w-24 h-1 mx-4 rounded-full transition-all duration-300 ${
+                    batchModal.step > idx ? 'bg-indigo-500' : 'bg-muted'
+                  }`} />
+                )}
+              </React.Fragment>
             ))}
           </div>
 
           {/* Step 0: From/To Location */}
           {batchModal.step === 0 && (
-            <div className="space-y-3">
-              <div>
-                <div className="text-xs text-muted-foreground mb-1 font-medium flex items-center gap-1">
-                  <MapPin className="w-3 h-3" /> From Location (Source)
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-5 rounded-xl border bg-gradient-to-b from-white to-gray-50/50 shadow-sm transition-hover hover:border-indigo-300 hover:shadow-md">
+                  <div className="flex items-center gap-2 text-sm text-indigo-700 mb-3 font-semibold pb-2 border-b border-indigo-100">
+                    <div className="p-1.5 bg-indigo-100 rounded-md"><MapPin className="w-4 h-4 text-indigo-600" /></div>
+                    From Location (Source)
+                  </div>
+                  <Select style={{ width: '100%' }} placeholder="Select source location" size="large" value={batchModal.fromLocationId || undefined}
+                    onChange={(val) => setBatchModal((prev) => ({ ...prev, fromLocationId: val }))}
+                    bordered={false} className="bg-white border border-gray-200 rounded-lg shadow-inner-sm"
+                    showSearch filterOption={(input, option) => (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())}
+                  >
+                    {locations.map((l) => <Option key={l.id} value={l.id}>{l.name} ({l.code}) - {l.type}</Option>)}
+                  </Select>
+                  <p className="text-xs text-muted-foreground mt-2 px-1">Where the cleaned materials currently reside.</p>
                 </div>
-                <Select style={{ width: '100%' }} placeholder="Select source location" value={batchModal.fromLocationId || undefined}
-                  onChange={(val) => setBatchModal((prev) => ({ ...prev, fromLocationId: val }))}
-                  showSearch filterOption={(input, option) => (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())}
-                >
-                  {locations.map((l) => <Option key={l.id} value={l.id}>{l.name} ({l.code}) - {l.type}</Option>)}
-                </Select>
-              </div>
-              <div>
-                <div className="text-xs text-muted-foreground mb-1 font-medium flex items-center gap-1">
-                  <MapPin className="w-3 h-3" /> To Location (Destination)
+                
+                <div className="p-5 rounded-xl border bg-gradient-to-b from-white to-emerald-50/30 shadow-sm transition-hover hover:border-emerald-300 hover:shadow-md">
+                  <div className="flex items-center gap-2 text-sm text-emerald-700 mb-3 font-semibold pb-2 border-b border-emerald-100">
+                    <div className="p-1.5 bg-emerald-100 rounded-md"><ArrowDownToLine className="w-4 h-4 text-emerald-600" /></div>
+                    To Location (Destination)
+                  </div>
+                  <Select style={{ width: '100%' }} placeholder="Select destination location" size="large" value={batchModal.toLocationId || undefined}
+                    onChange={(val) => setBatchModal((prev) => ({ ...prev, toLocationId: val }))}
+                    bordered={false} className="bg-white border border-gray-200 rounded-lg shadow-inner-sm"
+                    showSearch filterOption={(input, option) => (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())}
+                  >
+                    {locations.filter(l => l.id !== batchModal.fromLocationId).map((l) => <Option key={l.id} value={l.id}>{l.name} ({l.code}) - {l.type}</Option>)}
+                  </Select>
+                  <p className="text-xs text-muted-foreground mt-2 px-1">The grinding unit or processing area destination.</p>
                 </div>
-                <Select style={{ width: '100%' }} placeholder="Select destination location" value={batchModal.toLocationId || undefined}
-                  onChange={(val) => setBatchModal((prev) => ({ ...prev, toLocationId: val }))}
-                  showSearch filterOption={(input, option) => (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())}
-                >
-                  {locations.filter(l => l.id !== batchModal.fromLocationId).map((l) => <Option key={l.id} value={l.id}>{l.name} ({l.code}) - {l.type}</Option>)}
-                </Select>
               </div>
-            </div>
+            </motion.div>
           )}
 
           {/* Step 1: Material */}
           {batchModal.step === 1 && (
-            <div>
-              <div className="text-xs text-muted-foreground mb-1 font-medium">Select Raw Material</div>
-              <Select style={{ width: '100%' }} placeholder="Choose raw material" value={batchModal.rawMaterialId || undefined}
-                onChange={handleBatchMaterialSelect} showSearch
-                filterOption={(input, option) => (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())}>
-                {availableMaterials.map((m) => <Option key={m.id} value={m.id}>{m.name} ({m.skuCode})</Option>)}
-              </Select>
-            </div>
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="py-4">
+              <div className="max-w-md mx-auto p-6 rounded-2xl border bg-card shadow-sm">
+                <div className="flex justify-center mb-4">
+                  <div className="p-3 bg-blue-100 rounded-2xl text-blue-600">
+                    <Package size={28} />
+                  </div>
+                </div>
+                <div className="text-center mb-5">
+                  <h3 className="text-lg font-semibold text-foreground">Select Raw Material</h3>
+                  <p className="text-sm text-muted-foreground mt-1">Choose the material to dispatch</p>
+                </div>
+                <Select style={{ width: '100%' }} placeholder="Choose raw material" size="large" value={batchModal.rawMaterialId || undefined}
+                  onChange={handleBatchMaterialSelect} showSearch bordered={false} className="bg-muted/30 border border-border rounded-lg"
+                  filterOption={(input, option) => (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())}>
+                  {availableMaterials.map((m) => <Option key={m.id} value={m.id}>{m.name} <span className="text-muted-foreground ml-1">({m.skuCode})</span></Option>)}
+                </Select>
+              </div>
+            </motion.div>
           )}
 
           {/* Step 2: Lots */}
           {batchModal.step === 2 && (
-            <div className="space-y-3">
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-5">
               {filteredLots.length === 0 && filteredSeedWastageLots.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Boxes className="mx-auto mb-2 opacity-40" size={32} />
-                  <p className="text-sm">No available lots for selected material</p>
+                <div className="text-center py-12 px-4 rounded-xl border border-dashed border-border bg-muted/10">
+                  <Boxes className="mx-auto mb-3 text-muted-foreground/50" size={48} />
+                  <h3 className="text-base font-semibold text-foreground">No Available Lots</h3>
+                  <p className="text-sm text-muted-foreground mt-1">There are no cleaned lots available for the selected material at this location.</p>
                 </div>
               ) : (
                 <>
-                  {filteredLots.length > 0 && (
-                    <div>
-                      <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Cleaned Lots</div>
-                      {filteredLots.map((lot) => (
-                        <div key={lot.id}
-                          className={`flex items-center gap-3 p-3 rounded-lg border mb-2 cursor-pointer transition-all ${
-                            batchModal.selectedLots[lot.id] !== undefined ? 'border-primary bg-primary/5' : 'border-border hover:bg-muted/30'
-                          }`}
-                          onClick={() => toggleLotSelection(lot.id, lot)}>
-                          <div className="flex-1">
-                            <div className="text-sm font-mono text-primary">
-                              {lot.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot.lotNumber}
-                            </div>
-                            <div className="text-xs text-muted-foreground">Cleaned: {lot.cleanedQuantity ?? 0} {lot.rawMaterial?.unitOfMeasurement}</div>
-                          </div>
-                          {batchModal.selectedLots[lot.id] !== undefined && (
-                            <div className="w-24">
-                              <Input type="number" size="small" value={batchModal.selectedLots[lot.id]}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={(e) => updateLotQuantity(lot.id, Number(e.target.value))}
-                                min={0} max={lot.cleanedQuantity ?? 0} />
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                  <div className="bg-muted/20 p-3 rounded-xl flex items-center justify-between border border-border/50">
+                    <div className="text-sm text-muted-foreground font-medium flex items-center gap-2">
+                       <Scale className="w-4 h-4" /> Selected Quantity:
                     </div>
-                  )}
-                  {filteredSeedWastageLots.length > 0 && (
-                    <div>
-                      <div className="text-xs font-semibold text-amber-600 uppercase tracking-wider mb-2">Seed Wastage Lots</div>
-                      {filteredSeedWastageLots.map((lot) => (
-                        <div key={`sw-${lot.id}`}
-                          className={`flex items-center gap-3 p-3 rounded-lg border mb-2 cursor-pointer transition-all ${
-                            batchModal.seedWastageLots[lot.id] !== undefined ? 'border-amber-500 bg-amber-500/5' : 'border-border hover:bg-muted/30'
-                          }`}
-                          onClick={() => toggleSeedWastageLotSelection(lot.id, lot)}>
-                          <div className="flex-1">
-                            <div className="text-sm font-mono text-amber-600">
-                              {lot.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot.lotNumber}
-                            </div>
-                            <div className="text-xs text-muted-foreground">Available: {lot.availableSeedWastage ?? 0} {lot.rawMaterial?.unitOfMeasurement}</div>
-                          </div>
-                          {batchModal.seedWastageLots[lot.id] !== undefined && (
-                            <div className="w-24">
-                              <Input type="number" size="small" value={batchModal.seedWastageLots[lot.id]}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={(e) => updateSeedWastageQuantity(lot.id, Number(e.target.value))}
-                                min={0} max={lot.availableSeedWastage ?? 0} />
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                    <div className="text-lg font-bold text-indigo-600 bg-white px-4 py-1 rounded-lg border shadow-sm">
+                      {totalSelectedQuantity.toLocaleString()} {filteredLots[0]?.rawMaterial?.unitOfMeasurement || filteredSeedWastageLots[0]?.rawMaterial?.unitOfMeasurement || ''}
                     </div>
-                  )}
-
-                  {/* Notes */}
-                  <div>
-                    <div className="text-xs text-muted-foreground mb-1 font-medium">Notes (optional)</div>
-                    <TextArea rows={2} placeholder="Add any dispatch notes..."
-                      value={batchModal.notes}
-                      onChange={(e) => setBatchModal((prev) => ({ ...prev, notes: e.target.value }))} />
                   </div>
 
-                  <div className="text-sm font-semibold text-foreground pt-2 border-t border-border">
-                    Total Selected: {totalSelectedQuantity}
+                  <div className="max-h-[350px] overflow-y-auto pr-2 custom-scrollbar space-y-6">
+                    {filteredLots.length > 0 && (
+                      <div>
+                        <div className="flex items-center gap-2 mb-3">
+                          <Layers className="w-4 h-4 text-primary" />
+                          <h4 className="text-sm font-bold text-primary tracking-wide">CLEANED LOTS</h4>
+                          <div className="h-px bg-border flex-1 ml-2"></div>
+                        </div>
+                        <div className="flex flex-col gap-3">
+                          {filteredLots.map((lot) => (
+                            <div key={lot.id}
+                              className={`flex flex-col rounded-xl border transition-all duration-200 overflow-hidden ${
+                                batchModal.selectedLots[lot.id] !== undefined 
+                                  ? 'border-primary ring-1 ring-primary/20 bg-primary/[0.02] shadow-sm' 
+                                  : 'border-border bg-card hover:border-primary/40 hover:shadow-sm'
+                              }`}
+                            >
+                              <div 
+                                className="flex items-center justify-between p-4 cursor-pointer"
+                                onClick={() => toggleLotSelection(lot.id, lot)}
+                              >
+                                <div className="flex items-center gap-4 flex-1 pr-4">
+                                  <div className={`w-5 h-5 flex-shrink-0 rounded-full border flex items-center justify-center transition-colors ${
+                                    batchModal.selectedLots[lot.id] !== undefined ? 'bg-primary border-primary text-white' : 'border-gray-300 bg-white'
+                                  }`}>
+                                    {batchModal.selectedLots[lot.id] !== undefined && <Check size={12} strokeWidth={3} />}
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className="text-sm font-bold text-gray-800 break-words leading-tight">
+                                      {lot.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot.lotNumber}
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div className="text-right flex-shrink-0">
+                                  <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-1">Available Qty</div>
+                                  <div className="text-sm font-medium bg-muted/40 px-3 py-1 rounded-lg border border-border/50">
+                                    {lot.cleanedQuantity ?? 0} {lot.rawMaterial?.unitOfMeasurement}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <AnimatePresence>
+                                {batchModal.selectedLots[lot.id] !== undefined && (
+                                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+                                    <div className="px-4 pb-4 pt-3 border-t border-primary/10 bg-primary/5 flex items-center justify-between">
+                                      <span className="text-sm font-medium text-primary">Quantity to Allocate:</span>
+                                      <div className="w-32">
+                                        <Input type="number" size="large" value={batchModal.selectedLots[lot.id]}
+                                          onClick={(e) => e.stopPropagation()}
+                                          onChange={(e) => updateLotQuantity(lot.id, Number(e.target.value))}
+                                          min={0} max={lot.cleanedQuantity ?? 0} className="font-bold text-center text-primary shadow-inner-sm bg-white" />
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {filteredSeedWastageLots.length > 0 && (
+                      <div>
+                        <div className="flex items-center gap-2 mb-3">
+                          <Leaf className="w-4 h-4 text-amber-500" />
+                          <h4 className="text-sm font-bold text-amber-600 tracking-wide">SEED WASTAGE LOTS</h4>
+                          <div className="h-px bg-border flex-1 ml-2"></div>
+                        </div>
+                        <div className="flex flex-col gap-3">
+                          {filteredSeedWastageLots.map((lot) => (
+                            <div key={`sw-${lot.id}`}
+                              className={`flex flex-col rounded-xl border transition-all duration-200 overflow-hidden ${
+                                batchModal.seedWastageLots[lot.id] !== undefined 
+                                  ? 'border-amber-500 ring-1 ring-amber-500/20 bg-amber-500/[0.02] shadow-sm' 
+                                  : 'border-border bg-card hover:border-amber-500/40 hover:shadow-sm'
+                              }`}
+                            >
+                              <div 
+                                className="flex items-center justify-between p-4 cursor-pointer"
+                                onClick={() => toggleSeedWastageLotSelection(lot.id, lot)}
+                              >
+                                <div className="flex items-center gap-4 flex-1 pr-4">
+                                  <div className={`w-5 h-5 flex-shrink-0 rounded-full border flex items-center justify-center transition-colors ${
+                                    batchModal.seedWastageLots[lot.id] !== undefined ? 'bg-amber-500 border-amber-500 text-white' : 'border-gray-300 bg-white'
+                                  }`}>
+                                    {batchModal.seedWastageLots[lot.id] !== undefined && <Check size={12} strokeWidth={3} />}
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className="text-sm font-bold text-gray-800 break-words leading-tight">
+                                      {lot.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot.lotNumber}
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div className="text-right flex-shrink-0">
+                                  <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-1">Available Qty</div>
+                                  <div className="text-sm font-medium bg-amber-50 px-3 py-1 rounded-lg border border-amber-100 text-amber-700">
+                                    {lot.availableSeedWastage ?? 0} {lot.rawMaterial?.unitOfMeasurement}
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <AnimatePresence>
+                                {batchModal.seedWastageLots[lot.id] !== undefined && (
+                                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+                                    <div className="px-4 pb-4 pt-3 border-t border-amber-500/10 bg-amber-50 flex items-center justify-between">
+                                      <span className="text-sm font-medium text-amber-700">Quantity to Allocate:</span>
+                                      <div className="w-32">
+                                        <Input type="number" size="large" value={batchModal.seedWastageLots[lot.id]}
+                                          onClick={(e) => e.stopPropagation()}
+                                          onChange={(e) => updateSeedWastageQuantity(lot.id, Number(e.target.value))}
+                                          min={0} max={lot.availableSeedWastage ?? 0} className="font-bold text-center text-amber-600 shadow-inner-sm bg-white" />
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Notes */}
+                  <div className="pt-2">
+                    <div className="text-xs text-muted-foreground mb-1.5 font-medium flex items-center gap-1"><FileText className="w-3.5 h-3.5" /> Dispatch Notes (optional)</div>
+                    <TextArea rows={2} placeholder="Add any special instructions or notes for this dispatch..."
+                      value={batchModal.notes} className="rounded-lg resize-none"
+                      onChange={(e) => setBatchModal((prev) => ({ ...prev, notes: e.target.value }))} />
                   </div>
                 </>
               )}
-            </div>
+            </motion.div>
           )}
 
-          <div className="flex justify-between pt-3 border-t border-border">
-            <Button disabled={batchModal.step === 0} onClick={handleBatchPrevStep}>Back</Button>
-            <div className="flex gap-2">
-              <Button onClick={closeBatchModal}>Cancel</Button>
+          {/* Modal Footer */}
+          <div className="flex justify-between items-center pt-5 mt-2 border-t border-border/80">
+            <Button size="large" className="rounded-lg font-medium" disabled={batchModal.step === 0} onClick={handleBatchPrevStep}>Back</Button>
+            <div className="flex gap-3">
+              <Button size="large" className="rounded-lg text-muted-foreground hover:text-foreground border-border" onClick={closeBatchModal}>Cancel</Button>
               {batchModal.step < 2 ? (
-                <Button type="primary" onClick={handleBatchNextStep}
-                  style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', border: 'none' }}>Next</Button>
+                <Button size="large" type="primary" onClick={handleBatchNextStep} className="rounded-lg shadow-md font-semibold px-8"
+                  style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', border: 'none' }}>
+                  Next Step
+                </Button>
               ) : (
-                <Button type="primary" loading={batchModal.loading} onClick={handleCreateBatch}
-                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none', fontWeight: 600 }}>
-                  <Send className="w-3 h-3 mr-1 inline" /> Create Dispatch
+                <Button size="large" type="primary" loading={batchModal.loading} onClick={handleCreateBatch} className="rounded-lg shadow-md font-semibold px-6"
+                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none' }}>
+                  <Send className="w-4 h-4 mr-2 inline" /> Create Dispatch
                 </Button>
               )}
             </div>

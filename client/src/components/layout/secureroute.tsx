@@ -23,8 +23,10 @@ const SecureRoute: React.FC<SecureRouteProps> = ({ element, permissionKey }) => 
       return;
     }
     
-    // For non-admin users, check permissions when data is loaded
-    if (!isLoading && Object.keys(permissionMap).length > 0) {
+    // For non-admin users, check permissions once loading is done
+    // Don't require permissionMap to have entries - an empty map is valid
+    // (user may have a role with no permissions assigned)
+    if (!isLoading) {
       const access = hasPermission(permissionKey);
       console.log(`Permission check for ${permissionKey}: ${access}`);
       console.log('Available permissions:', permissionMap);

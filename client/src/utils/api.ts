@@ -37,6 +37,7 @@ export const API_ROUTES = {
     CURRENT_USER: `${BASE_URL}/auth/me`,
     CHANGE_PASSWORD: `${BASE_URL}/auth/change-password`,
     GET_ALL_USERS: `${BASE_URL}/auth/users`,
+    UPDATE_USER: (id: string) => `${BASE_URL}/auth/users/${id}`,
 
     // Role management endpoints
     CREATE_ROLE: `${BASE_URL}/auth/roles`,
@@ -47,7 +48,7 @@ export const API_ROUTES = {
 
     // Permission management endpoints
     GET_PERMISSIONS: `${BASE_URL}/auth/permissions`,
-    GET_PERMISSIONS_BY_ROLE: (roleName: string) => `${BASE_URL}/auth/permissions/${roleName}`,
+    GET_PERMISSIONS_BY_ROLE: (roleName: string) => `${BASE_URL}/auth/permissions/${encodeURIComponent(roleName.trim())}`,
     SYNC_PAGE_PERMISSIONS: `${BASE_URL}/auth/sync-page-permissions`,
   },
 

@@ -12,6 +12,7 @@ router.put('/change-password', authenticate, AuthController.changePassword); // 
 
 // User management routes
 router.get('/users', authenticate, AuthController.getAllUsers); // Get all users
+router.put('/users/:id', authenticate, AuthController.updateUser); // Update a user
 
 // Role management routes
 router.post('/roles', authenticate, AuthController.createRole); // Create a new role

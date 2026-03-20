@@ -35,7 +35,17 @@ export class AuthController {
       // Find user by email
       const user = await prisma.user.findUnique({
         where: { email },
-        include: { Role: true }
+        include: { 
+          Role: {
+            include: {
+              Permission: {
+                select: {
+                  action: true
+                }
+              }
+            }
+          } 
+        }
       });
 
       if (!user) {
@@ -77,7 +87,8 @@ export class AuthController {
           id: user.id,
           email: user.email,
           name: user.name,
-          role: user.Role.name
+          role: user.Role.name,
+          permissions: user.Role.Permission.map(p => p.action)
         }
       });
     } catch (error) {
@@ -380,16 +391,85 @@ export class AuthController {
   }
 
   /**
+   * Update an existing user (name, roleId)
+   */
+  async updateUser(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const { name, roleId } = req.body;
+
+      if (!req.user) {
+        res.status(401).json({ message: 'Unauthorized: User not authenticated' });
+        return;
+      }
+
+      // Verify user exists
+      const existingUser = await prisma.user.findUnique({ where: { id } });
+      if (!existingUser) {
+        res.status(404).json({ message: 'User not found' });
+        return;
+      }
+
+      // Build update data
+      const updateData: any = { updatedAt: new Date() };
+      if (name && name.trim() !== '') updateData.name = name.trim();
+      if (roleId) {
+        // Verify role exists
+        const role = await prisma.role.findUnique({ where: { id: roleId } });
+        if (!role) {
+          res.status(400).json({ message: 'Selected role does not exist' });
+          return;
+        }
+        updateData.roleId = roleId;
+      }
+
+      const updatedUser = await prisma.user.update({
+        where: { id },
+        data: updateData,
+        include: { Role: true }
+      });
+
+      // Log user update
+      await prisma.activityLog.create({
+        data: {
+          id: uuidv4(),
+          userId: req.user.id,
+          action: 'UPDATE_USER',
+          details: `Updated user: ${updatedUser.email}`
+        }
+      });
+
+      res.status(200).json({
+        message: 'User updated successfully',
+        user: {
+          id: updatedUser.id,
+          email: updatedUser.email,
+          name: updatedUser.name,
+          role: updatedUser.Role
+        }
+      });
+    } catch (error) {
+      console.error('Update user error:', error);
+      res.status(500).json({
+        message: 'Internal server error',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  }
+
+  /**
    * Create a new role with permissions
    */
   async createRole(req: Request, res: Response): Promise<void> {
     try {
-      const { name, description, permissions } = req.body;
-
-      if (!name) {
+      let { name, description, permissions } = req.body;
+      
+      if (!name || name.trim() === '') {
         res.status(400).json({ message: 'Role name is required' });
         return;
       }
+      
+      name = name.trim();
 
       // Check if role with this name already exists
       const existingRole = await prisma.role.findUnique({
@@ -480,7 +560,11 @@ export class AuthController {
   async updateRole(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const { name, description, permissions } = req.body;
+      let { name, description, permissions } = req.body;
+      
+      if (name) {
+        name = name.trim();
+      }
 
       if (!req.user) {
         res.status(401).json({ message: 'Unauthorized: User not authenticated' });
@@ -509,60 +593,28 @@ export class AuthController {
         }
       }
 
-      // Start a transaction for updating the role
-      const updatedRole = await prisma.$transaction(async (prisma) => {
-        // Update basic role details
-        const role = await prisma.role.update({
-          where: { id },
-          data: {
-            name: name || existingRole.name,
-            description: description !== undefined ? description : existingRole.description,
-            updatedAt: new Date()
-          }
-        });
-
-        // Update permissions if provided
-        if (Array.isArray(permissions)) {
-          // If permissions array is provided (even if empty), reset and set the new permissions
-
-          // First disconnect all existing permissions
-          await prisma.role.update({
-            where: { id },
-            data: {
-              Permission: {
-                set: [] // Disconnect all permissions
-              }
+      // Optimize to a single database call instead of an interactive transaction with multiple sequential updates
+      const updatedRole = await prisma.role.update({
+        where: { id },
+        data: {
+          name: name || existingRole.name,
+          description: description !== undefined ? description : existingRole.description,
+          updatedAt: new Date(),
+          ...(Array.isArray(permissions) ? {
+            Permission: {
+              set: permissions.map((p: any) => ({ id: p.id }))
             }
-          });
-
-          // Then connect new permissions if any
-          if (permissions.length > 0) {
-            const permissionIds = permissions.map(p => p.id);
-
-            await prisma.role.update({
-              where: { id },
-              data: {
-                Permission: {
-                  connect: permissionIds.map(id => ({ id }))
-                }
-              }
-            });
+          } : {})
+        },
+        include: {
+          Permission: {
+            select: {
+              id: true,
+              action: true,
+              resource: true
+            }
           }
         }
-
-        // Return updated role with its permissions
-        return prisma.role.findUnique({
-          where: { id },
-          include: {
-            Permission: {
-              select: {
-                id: true,
-                action: true,
-                resource: true
-              }
-            }
-          }
-        });
       });
 
       // Log role update

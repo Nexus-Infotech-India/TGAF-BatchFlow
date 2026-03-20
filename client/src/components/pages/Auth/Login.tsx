@@ -16,6 +16,7 @@ interface LoginResponse {
     email: string
     name: string
     role: string
+    permissions?: string[]
   }
 }
 
@@ -123,7 +124,49 @@ const Login = () => {
           localStorage.removeItem("rememberMe")
         }
 
-        window.location.href = "/raw-dashboard"
+        // Define a priority mapping of permission keys to landing pages
+        const permissionRouteMap: Record<string, string> = {
+          view_operation_dashboard: "/operation-dashboard",
+          manage_raw_dashboard: "/raw-dashboard",
+          manage_cleaning_rawmaterials: "/raw/cleaning-raw-materials",
+          send_cleaned_to_grinding: "/grinding/dispatch",
+          manage_processing_list: "/grinding/sfg-processing",
+          dispatch_to_sfg: "/grinding/outbound-sfg",
+          manage_trainings: "/trainings",
+          manage_audits: "/audits",
+          view_audit_dashboard: "/audit-dashboard",
+          view_training_dashboard: "/training-dashboard",
+          manage_purchase_history: "/raw/purchase-history",
+          manage_purchase_order: "/raw/purchase-order",
+          view_stock_distribution: "/stock-distribution",
+          view_batches: "/batches",
+          manage_users: "/access-control",
+        };
+
+        const role = (data.user.role || "").toLowerCase()
+        const permissions = data.user.permissions || [];
+        
+        // Default landing page
+        let landingPage = "/raw-dashboard"; 
+        
+        if (role === "admin") {
+          landingPage = "/raw-dashboard";
+        } else if (permissions.length > 0) {
+          // Iterate through our hard-coded priority map to find the most preferred matching UI route
+          const matchedPermission = Object.keys(permissionRouteMap).find(p => permissions.includes(p));
+          
+          if (matchedPermission) {
+            landingPage = permissionRouteMap[matchedPermission];
+          } else {
+            // Fallback if they have permissions but none match our route map highlights
+            landingPage = "/profile"; 
+          }
+        } else {
+          // If they have no permissions
+          landingPage = "/unauthorized";
+        }
+
+        window.location.href = landingPage
       }
     },
     onError: (err: LoginError) => {

@@ -229,7 +229,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           path: "/raw/cleaning-raw-materials",
           name: "Cleaning",
           icon: <ClipboardEdit className="sidebar-icon" size={18} />,
-          permissionKey: "manage_purchase_order"
+          permissionKey: "manage_cleaning_rawmaterials"
         },
 
         {
