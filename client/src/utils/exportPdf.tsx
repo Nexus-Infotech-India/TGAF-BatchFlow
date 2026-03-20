@@ -524,6 +524,204 @@ const addTableData = (
 
 export default generatePDF;
 
+// --- Grinding Dispatch PDF Report ---
+
+interface GrindingDispatchPDFConfig {
+  batchNumber: string;
+  rawMaterialName: string;
+  skuCode: string;
+  unit: string;
+  fromLocation: string;
+  toLocation: string;
+  totalQuantity: number;
+  status: string;
+  sentAt?: string;
+  acceptedAt?: string;
+  rejectedAt?: string;
+  rejectionReason?: string;
+  notes?: string;
+  lots: {
+    lotId: string;
+    material: string;
+    cleanedQty: number;
+    allocatedQty: number;
+    seedWastage: number;
+    unit: string;
+  }[];
+}
+
+export const generateGrindingDispatchPDF = (config: GrindingDispatchPDFConfig): void => {
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 15;
+  const contentWidth = pageWidth - margin * 2;
+  let yPos = margin;
+  const rowH = 9;
+
+  const hLine = (y: number) => {
+    doc.setDrawColor(190, 190, 200); doc.setLineWidth(0.3);
+    doc.line(margin, y, margin + contentWidth, y);
+  };
+
+  const vLines = (widths: number[], y: number, h: number) => {
+    doc.setDrawColor(190, 190, 200); doc.setLineWidth(0.3);
+    let x = margin;
+    doc.line(x, y, x, y + h);
+    widths.forEach(w => { x += w; doc.line(x, y, x, y + h); });
+  };
+
+  type CellDef = { text: string; w: number; bold?: boolean; color?: number[]; align?: string };
+
+  const drawRow = (cells: CellDef[], y: number, header = false, stripe = false) => {
+    if (header) { doc.setFillColor(50, 50, 68); doc.rect(margin, y, contentWidth, rowH, 'F'); }
+    else if (stripe) { doc.setFillColor(245, 246, 252); doc.rect(margin, y, contentWidth, rowH, 'F'); }
+    let x = margin;
+    const textY = y + rowH / 2 + 1.2;
+    cells.forEach(c => {
+      doc.setFont('helvetica', header ? 'bold' : c.bold ? 'bold' : 'normal');
+      doc.setFontSize(header ? 8 : 8.5);
+      const col = header ? [255, 255, 255] : c.color || [40, 40, 55];
+      doc.setTextColor(col[0], col[1], col[2]);
+      const tx = c.align === 'center' ? x + c.w / 2 : c.align === 'right' ? x + c.w - 4 : x + 4;
+      doc.text(c.text, tx, textY, { align: (c.align as any) || 'left' });
+      x += c.w;
+    });
+    hLine(y + rowH);
+    vLines(cells.map(c => c.w), y, rowH);
+  };
+
+  const fmtDate = (d?: string) => d && !isNaN(Date.parse(d))
+    ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+    : '--';
+
+  // 1. TITLE
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.setTextColor(35, 35, 50);
+  doc.text('Grinding Dispatch Report', pageWidth / 2, yPos + 7, { align: 'center' });
+  yPos += 12;
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(130, 130, 145);
+  doc.text(`Generated: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}`, pageWidth / 2, yPos + 3, { align: 'center' });
+  yPos += 8;
+  hLine(yPos); yPos += 8;
+
+  // 2. DISPATCH INFO TABLE
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(35, 35, 50);
+  doc.text('Dispatch Information', margin, yPos + 5); yPos += 10;
+
+  const lw = 42;
+  const vw = contentWidth / 2 - lw;
+  const hw = contentWidth / 2;
+
+  const statusColor = config.status === 'ACCEPTED' ? 'Accepted' : config.status === 'REJECTED' ? 'Rejected' : config.status === 'SENT' ? 'Sent' : config.status;
+
+  const kvRows: string[][][] = [
+    [['Batch Number', config.batchNumber], ['Status', statusColor]],
+    [['Raw Material', config.rawMaterialName], ['SKU Code', config.skuCode]],
+    [['From Location', config.fromLocation], ['To Location', config.toLocation]],
+    [['Total Quantity', `${config.totalQuantity} ${config.unit}`], ['Sent At', fmtDate(config.sentAt)]],
+  ];
+
+  if (config.acceptedAt) {
+    kvRows.push([['Accepted At', fmtDate(config.acceptedAt)], ['', '']]);
+  }
+  if (config.rejectedAt) {
+    kvRows.push([['Rejected At', fmtDate(config.rejectedAt)], ['Reason', config.rejectionReason || '-']]);
+  }
+
+  // Header row
+  doc.setFillColor(50, 50, 68); doc.rect(margin, yPos, contentWidth, rowH, 'F');
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(255, 255, 255);
+  const kvTextY = yPos + rowH / 2 + 1.2;
+  doc.text('Field', margin + 4, kvTextY);
+  doc.text('Value', margin + lw + 4, kvTextY);
+  doc.text('Field', margin + hw + 4, kvTextY);
+  doc.text('Value', margin + hw + lw + 4, kvTextY);
+  hLine(yPos + rowH); vLines([lw, vw, lw, vw], yPos, rowH); yPos += rowH;
+
+  kvRows.forEach((row, i) => {
+    const stripe = i % 2 === 0;
+    if (stripe) { doc.setFillColor(245, 246, 252); doc.rect(margin, yPos, contentWidth, rowH, 'F'); }
+    const ty = yPos + rowH / 2 + 1.2;
+    doc.setFontSize(8.5);
+    doc.setFont('helvetica', 'bold'); doc.setTextColor(90, 90, 110);
+    doc.text(row[0][0], margin + 4, ty);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(35, 35, 50);
+    doc.text(row[0][1], margin + lw + 4, ty);
+    doc.setFont('helvetica', 'bold'); doc.setTextColor(90, 90, 110);
+    doc.text(row[1][0], margin + hw + 4, ty);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(35, 35, 50);
+    doc.text(row[1][1], margin + hw + lw + 4, ty);
+    hLine(yPos + rowH); vLines([lw, vw, lw, vw], yPos, rowH); yPos += rowH;
+  });
+
+  // Notes
+  if (config.notes) {
+    yPos += 6;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(90, 90, 110);
+    doc.text('Notes:', margin, yPos + 3);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(35, 35, 50);
+    const noteLines = doc.splitTextToSize(config.notes, contentWidth - 20);
+    doc.text(noteLines, margin + 18, yPos + 3);
+    yPos += noteLines.length * 5 + 4;
+  }
+
+  yPos += 10;
+
+  // 3. LOT ALLOCATION TABLE
+  if (config.lots.length > 0) {
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(35, 35, 50);
+    doc.text('Lot Allocation Details', margin, yPos + 5); yPos += 10;
+
+    const lc = [
+      { h: 'Lot ID',          w: contentWidth * 0.25 },
+      { h: 'Material',        w: contentWidth * 0.25 },
+      { h: 'Allocated Qty',   w: contentWidth * 0.25 },
+      { h: 'Seed Wastage',    w: contentWidth * 0.25 },
+    ];
+
+    drawRow(lc.map(c => ({ text: c.h, w: c.w, align: 'center' })), yPos, true); yPos += rowH;
+
+    config.lots.forEach((lot, i) => {
+      if (yPos + rowH > pageHeight - 20) { doc.addPage(); yPos = margin; }
+
+      drawRow([
+        { text: lot.lotId, w: lc[0].w, bold: true },
+        { text: lot.material, w: lc[1].w },
+        { text: `${lot.allocatedQty} ${lot.unit}`, w: lc[2].w, align: 'center', bold: true },
+        { text: lot.seedWastage > 0 ? `${lot.seedWastage} ${lot.unit}` : '--', w: lc[3].w, align: 'center', color: lot.seedWastage > 0 ? [200, 120, 10] : [150, 150, 160] },
+      ], yPos, false, i % 2 === 0);
+      yPos += rowH;
+    });
+
+    // Totals row
+    const totalAllocated = config.lots.reduce((s, l) => s + l.allocatedQty, 0);
+    const totalSeedWastage = config.lots.reduce((s, l) => s + l.seedWastage, 0);
+    const unit = config.lots[0]?.unit || config.unit;
+
+    yPos += 2;
+    doc.setFillColor(235, 240, 250); doc.rect(margin, yPos, contentWidth, rowH, 'F');
+    drawRow([
+      { text: '', w: lc[0].w },
+      { text: 'Total', w: lc[1].w, bold: true, align: 'right' },
+      { text: `${totalAllocated} ${unit}`, w: lc[2].w, align: 'center', bold: true, color: [5, 100, 75] },
+      { text: totalSeedWastage > 0 ? `${totalSeedWastage} ${unit}` : '--', w: lc[3].w, align: 'center', bold: true, color: [200, 120, 10] },
+    ], yPos, false, false);
+    yPos += rowH;
+  }
+
+  // Page numbers
+  const np = doc.getNumberOfPages();
+  for (let i = 1; i <= np; i++) {
+    doc.setPage(i);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(160, 160, 170);
+    doc.text(`Page ${i} of ${np}`, pageWidth - margin, pageHeight - 8, { align: 'right' });
+    doc.text('BatchFlow - Grinding Dispatch Report', margin, pageHeight - 8);
+  }
+
+  doc.save(`Dispatch_${config.batchNumber.replace(/[^A-Za-z0-9]/g, '_')}.pdf`);
+};
+
 // --- Cleaning History PDF Report ---
 
 interface CleaningHistoryPDFConfig {

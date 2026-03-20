@@ -24,7 +24,9 @@ import {
   XCircle,
   Check,
   X,
+  Download,
 } from 'lucide-react';
+import { generateGrindingDispatchPDF } from '../../../utils/exportPdf';
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -159,17 +161,10 @@ const DispatchToGrinding: React.FC = () => {
     loading: false,
   });
 
-  // ── Reject Modal ──
-  const [rejectModal, setRejectModal] = useState<{
-    visible: boolean;
-    dispatch?: GrindingDispatch;
-    reason: string;
-    loading: boolean;
-  }>({
+  // ── View Detail Modal ──
+  const [viewModal, setViewModal] = useState<{ visible: boolean; dispatch?: GrindingDispatch }>({
     visible: false,
     dispatch: undefined,
-    reason: '',
-    loading: false,
   });
 
   /* ─── Fetchers ─── */
@@ -378,36 +373,35 @@ const DispatchToGrinding: React.FC = () => {
     }
   };
 
-  /* ─── Accept / Reject ─── */
-  const handleAcceptDispatch = async (dispatch: GrindingDispatch) => {
-    try {
-      await api.put(API_ROUTES.RAW.ACCEPT_GRINDING_DISPATCH(dispatch.id));
-      message.success(`Dispatch ${dispatch.batchNumber} accepted!`);
-      fetchDispatches();
-    } catch (err: any) {
-      message.error(err?.response?.data?.error || 'Failed to accept dispatch');
-    }
+  /* ─── View / Download PDF ─── */
+  const handleViewDispatch = (dispatch: GrindingDispatch) => {
+    setViewModal({ visible: true, dispatch });
   };
 
-  const openRejectModal = (dispatch: GrindingDispatch) => {
-    setRejectModal({ visible: true, dispatch, reason: '', loading: false });
-  };
-
-  const handleRejectDispatch = async () => {
-    if (!rejectModal.dispatch) return;
-    if (!rejectModal.reason.trim()) { message.error('Please enter a rejection reason'); return; }
-    setRejectModal((prev) => ({ ...prev, loading: true }));
-    try {
-      await api.put(API_ROUTES.RAW.REJECT_GRINDING_DISPATCH(rejectModal.dispatch.id), {
-        rejectionReason: rejectModal.reason,
-      });
-      message.success(`Dispatch ${rejectModal.dispatch.batchNumber} rejected. Quantities restored.`);
-      setRejectModal({ visible: false, dispatch: undefined, reason: '', loading: false });
-      fetchDispatches();
-    } catch (err: any) {
-      message.error(err?.response?.data?.error || 'Failed to reject dispatch');
-      setRejectModal((prev) => ({ ...prev, loading: false }));
-    }
+  const handleDownloadPDF = (dispatch: GrindingDispatch) => {
+    generateGrindingDispatchPDF({
+      batchNumber: dispatch.batchNumber,
+      rawMaterialName: dispatch.inputRawMaterial?.name || '-',
+      skuCode: dispatch.inputRawMaterial?.skuCode || '-',
+      unit: dispatch.inputRawMaterial?.unitOfMeasurement || '',
+      fromLocation: dispatch.fromLocation?.name || '-',
+      toLocation: dispatch.toLocation?.name || '-',
+      totalQuantity: dispatch.totalQuantity,
+      status: dispatch.status,
+      sentAt: dispatch.sentAt,
+      acceptedAt: dispatch.acceptedAt,
+      rejectedAt: dispatch.rejectedAt,
+      rejectionReason: dispatch.rejectionReason,
+      notes: dispatch.notes,
+      lots: (dispatch.lots || []).filter(l => l.allocatedQuantity > 0).map(l => ({
+        lotId: l.cleaningLot?.cleaningJobId ? `LOT-${l.cleaningLot.cleaningJobId}` : (l.cleaningLot?.lotNumber || l.cleaningLotId),
+        material: l.cleaningLot?.rawMaterial?.name || '-',
+        cleanedQty: l.cleaningLot?.cleanedQuantity ?? 0,
+        allocatedQty: l.allocatedQuantity,
+        seedWastage: l.seedWastageAllocated ?? 0,
+        unit: l.cleaningLot?.rawMaterial?.unitOfMeasurement || '',
+      })),
+    });
   };
 
   /* ─── Stats ─── */
@@ -605,23 +599,22 @@ const DispatchToGrinding: React.FC = () => {
                             )}
                           </td>
                           <td className="px-4 py-4 text-center">
-                            {dispatch.status === 'SENT' && (
-                              <div className="flex gap-1 justify-center">
-                                <Button type="primary" size="small"
-                                  icon={<Check className="w-3 h-3" />}
-                                  onClick={() => handleAcceptDispatch(dispatch)}
-                                  className="rounded-lg"
-                                  style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none' }}
-                                >Accept</Button>
-                                <Button size="small" danger
-                                  icon={<X className="w-3 h-3" />}
-                                  onClick={() => openRejectModal(dispatch)}
-                                  className="rounded-lg"
-                                >Reject</Button>
-                              </div>
-                            )}
+                            <div className="flex gap-1 justify-center">
+                              <Button type="text" size="small"
+                                icon={<Eye className="w-3.5 h-3.5" />}
+                                onClick={() => handleViewDispatch(dispatch)}
+                                className="rounded-lg text-primary hover:bg-primary/10"
+                                title="View Details"
+                              >View</Button>
+                              <Button type="text" size="small"
+                                icon={<Download className="w-3.5 h-3.5" />}
+                                onClick={() => handleDownloadPDF(dispatch)}
+                                className="rounded-lg text-emerald-600 hover:bg-emerald-500/10"
+                                title="Download PDF"
+                              >PDF</Button>
+                            </div>
                             {dispatch.status === 'REJECTED' && dispatch.rejectionReason && (
-                              <span className="text-xs text-red-500 italic" title={dispatch.rejectionReason}>
+                              <span className="text-xs text-red-500 italic block mt-1" title={dispatch.rejectionReason}>
                                 {dispatch.rejectionReason.length > 20 ? dispatch.rejectionReason.slice(0, 20) + '…' : dispatch.rejectionReason}
                               </span>
                             )}
@@ -666,91 +659,34 @@ const DispatchToGrinding: React.FC = () => {
                                   )}
                                 </div>
 
-                                {/* Cleaned Qty */}
-                                <div className="rounded-xl border border-border bg-card overflow-hidden">
-                                  <button type="button" className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors cursor-pointer"
-                                    onClick={() => toggleSection(dispatch.id, 'cleaned')}>
-                                    <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                                      <Layers className="w-4 h-4 text-primary" /> Cleaned Quantity Allocation
-                                    </h4>
-                                    {(expandedSections[dispatch.id]?.cleaned !== false)
-                                      ? <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                                      : <ChevronRight className="w-4 h-4 text-muted-foreground" />}
-                                  </button>
-                                  <AnimatePresence>
-                                    {(expandedSections[dispatch.id]?.cleaned !== false) && (
-                                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-                                        <div className="px-4 pb-4">
-                                          {(!dispatch.lots || dispatch.lots.length === 0) ? (
-                                            <p className="text-sm text-muted-foreground italic">No lot allocation data available.</p>
-                                          ) : (
-                                            <table className="min-w-full">
-                                              <thead><tr className="bg-muted/40">
-                                                <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Lot</th>
-                                                <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Material</th>
-                                                <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Cleaned Qty</th>
-                                                <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Allocated</th>
-                                              </tr></thead>
-                                              <tbody className="divide-y divide-border">
-                                                {dispatch.lots.filter((bl) => bl.allocatedQuantity > 0).map((bl) => (
-                                                  <tr key={bl.id} className="hover:bg-muted/30">
-                                                    <td className="px-3 py-2 text-sm font-mono text-primary">{bl.cleaningLot?.cleaningJobId ? `LOT-${bl.cleaningLot.cleaningJobId}` : (bl.cleaningLot?.lotNumber || bl.cleaningLotId)}</td>
-                                                    <td className="px-3 py-2 text-sm text-foreground">{bl.cleaningLot?.rawMaterial?.name || '-'}</td>
-                                                    <td className="px-3 py-2 text-sm text-right text-muted-foreground">{bl.cleaningLot?.cleanedQuantity ?? '-'} {bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
-                                                    <td className="px-3 py-2 text-sm text-right font-semibold text-foreground">{bl.allocatedQuantity} {bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
-                                                  </tr>
-                                                ))}
-                                              </tbody>
-                                            </table>
-                                          )}
-                                        </div>
-                                      </motion.div>
-                                    )}
-                                  </AnimatePresence>
-                                </div>
-
-                                {/* Seed Wastage */}
-                                <div className="rounded-xl border border-border bg-card overflow-hidden">
-                                  <button type="button" className="w-full flex items-center justify-between p-4 hover:bg-muted/30 transition-colors cursor-pointer"
-                                    onClick={() => toggleSection(dispatch.id, 'seedWastage')}>
-                                    <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                                      <Leaf className="w-4 h-4 text-amber-500" /> Seed Wastage Allocation
-                                    </h4>
-                                    {(expandedSections[dispatch.id]?.seedWastage !== false)
-                                      ? <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                                      : <ChevronRight className="w-4 h-4 text-muted-foreground" />}
-                                  </button>
-                                  <AnimatePresence>
-                                    {(expandedSections[dispatch.id]?.seedWastage !== false) && (
-                                      <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.2 }} className="overflow-hidden">
-                                        <div className="px-4 pb-4">
-                                          {(!dispatch.lots || dispatch.lots.filter(bl => bl.seedWastageAllocated > 0).length === 0) ? (
-                                            <p className="text-sm text-muted-foreground italic">No seed wastage allocated.</p>
-                                          ) : (
-                                            <table className="min-w-full">
-                                              <thead><tr className="bg-amber-500/5">
-                                                <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Lot</th>
-                                                <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Material</th>
-                                                <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Seed Wastage Allocated</th>
-                                              </tr></thead>
-                                              <tbody className="divide-y divide-border">
-                                                {dispatch.lots.filter((bl) => bl.seedWastageAllocated > 0).map((bl) => (
-                                                  <tr key={`sw-${bl.id}`} className="hover:bg-muted/30">
-                                                    <td className="px-3 py-2 text-sm font-mono text-amber-600">{bl.cleaningLot?.cleaningJobId ? `LOT-${bl.cleaningLot.cleaningJobId}` : (bl.cleaningLot?.lotNumber || bl.cleaningLotId)}</td>
-                                                    <td className="px-3 py-2 text-sm text-foreground">{bl.cleaningLot?.rawMaterial?.name || '-'}</td>
-                                                    <td className="px-3 py-2 text-sm text-right font-semibold text-amber-600">{bl.seedWastageAllocated} {bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
-                                                  </tr>
-                                                ))}
-                                              </tbody>
-                                            </table>
-                                          )}
-                                        </div>
-                                      </motion.div>
-                                    )}
-                                  </AnimatePresence>
-                                </div>
+                                {/* Lot Allocation Table */}
+                                  {dispatch.lots && dispatch.lots.filter(l => l.allocatedQuantity > 0).length > 0 && (
+                                    <div className="rounded-xl border border-border bg-card overflow-hidden">
+                                      <div className="p-3 border-b border-border">
+                                        <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                                          <Layers className="w-4 h-4 text-primary" /> Lot Allocation
+                                        </h4>
+                                      </div>
+                                      <table className="min-w-full">
+                                        <thead><tr className="bg-muted/40">
+                                          <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Lot</th>
+                                          <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Material</th>
+                                          <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Allocated</th>
+                                          <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Seed Wastage</th>
+                                        </tr></thead>
+                                        <tbody className="divide-y divide-border">
+                                          {dispatch.lots.filter(bl => bl.allocatedQuantity > 0).map(bl => (
+                                            <tr key={bl.id} className="hover:bg-muted/30">
+                                              <td className="px-3 py-2 text-sm font-mono text-primary">{bl.cleaningLot?.cleaningJobId ? `LOT-${bl.cleaningLot.cleaningJobId}` : (bl.cleaningLot?.lotNumber || bl.cleaningLotId)}</td>
+                                              <td className="px-3 py-2 text-sm text-foreground">{bl.cleaningLot?.rawMaterial?.name || '-'}</td>
+                                              <td className="px-3 py-2 text-sm text-right font-semibold text-foreground">{bl.allocatedQuantity} {bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
+                                              <td className="px-3 py-2 text-sm text-right text-amber-600">{bl.seedWastageAllocated > 0 ? `${bl.seedWastageAllocated} ${bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}` : '-'}</td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  )}
                               </td>
                             </motion.tr>
                           )}
@@ -1061,32 +997,130 @@ const DispatchToGrinding: React.FC = () => {
         </div>
       </Modal>
 
-      {/* ── Reject Modal ── */}
+      {/* ── View Details Modal ── */}
       <Modal
-        open={rejectModal.visible}
-        title={<div className="flex items-center gap-2"><XCircle className="text-red-500" size={18} /><span>Reject Dispatch</span></div>}
-        onCancel={() => setRejectModal((p) => ({ ...p, visible: false }))}
-        footer={null} width={450}
+        open={viewModal.visible}
+        title={
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 rounded-lg" style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>
+              <Eye className="text-white" size={14} />
+            </div>
+            <span className="text-lg font-semibold">Dispatch Details</span>
+          </div>
+        }
+        onCancel={() => setViewModal({ visible: false, dispatch: undefined })}
+        footer={
+          <div className="flex justify-end gap-2">
+            <Button onClick={() => setViewModal({ visible: false, dispatch: undefined })}>Close</Button>
+            {viewModal.dispatch && (
+              <Button type="primary" icon={<Download size={14} />} onClick={() => handleDownloadPDF(viewModal.dispatch!)}
+                style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none' }}
+              >Download PDF</Button>
+            )}
+          </div>
+        }
+        width={700}
       >
-        <div className="space-y-4 mt-4">
-          <div className="rounded-lg bg-red-500/10 border border-red-500/20 p-3">
-            <p className="text-sm text-red-600 font-medium">
-              Rejecting dispatch <span className="font-mono">{rejectModal.dispatch?.batchNumber}</span> will restore all allocated quantities back to the cleaning lots.
-            </p>
+        {viewModal.dispatch && (
+          <div className="space-y-5 mt-4">
+            {/* Batch Info Grid */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-muted/20 rounded-xl p-3 border border-border/50">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">Batch Number</div>
+                <div className="text-sm font-mono font-bold text-primary">{viewModal.dispatch.batchNumber}</div>
+              </div>
+              <div className="bg-muted/20 rounded-xl p-3 border border-border/50">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">Status</div>
+                <div>{getStatusBadge(viewModal.dispatch.status)}</div>
+              </div>
+              <div className="bg-muted/20 rounded-xl p-3 border border-border/50">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">Raw Material</div>
+                <div className="text-sm font-medium">{viewModal.dispatch.inputRawMaterial?.name || '-'} <span className="text-xs text-muted-foreground">({viewModal.dispatch.inputRawMaterial?.skuCode})</span></div>
+              </div>
+              <div className="bg-muted/20 rounded-xl p-3 border border-border/50">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">Total Quantity</div>
+                <div className="text-sm font-bold">{viewModal.dispatch.totalQuantity} {viewModal.dispatch.inputRawMaterial?.unitOfMeasurement || ''}</div>
+              </div>
+              <div className="bg-muted/20 rounded-xl p-3 border border-border/50">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">From Location</div>
+                <div className="text-sm font-medium flex items-center gap-1"><MapPin className="w-3 h-3 text-indigo-500" /> {viewModal.dispatch.fromLocation?.name || '-'}</div>
+              </div>
+              <div className="bg-muted/20 rounded-xl p-3 border border-border/50">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">To Location</div>
+                <div className="text-sm font-medium flex items-center gap-1"><MapPin className="w-3 h-3 text-emerald-500" /> {viewModal.dispatch.toLocation?.name || '-'}</div>
+              </div>
+            </div>
+
+            {/* Dates */}
+            <div className="grid grid-cols-3 gap-3">
+              {viewModal.dispatch.sentAt && (
+                <div className="text-center p-2 bg-blue-50 rounded-lg border border-blue-100">
+                  <div className="text-[10px] uppercase text-blue-500 font-semibold">Sent</div>
+                  <div className="text-xs font-medium text-blue-700 mt-1">{new Date(viewModal.dispatch.sentAt).toLocaleString()}</div>
+                </div>
+              )}
+              {viewModal.dispatch.acceptedAt && (
+                <div className="text-center p-2 bg-emerald-50 rounded-lg border border-emerald-100">
+                  <div className="text-[10px] uppercase text-emerald-500 font-semibold">Accepted</div>
+                  <div className="text-xs font-medium text-emerald-700 mt-1">{new Date(viewModal.dispatch.acceptedAt).toLocaleString()}</div>
+                </div>
+              )}
+              {viewModal.dispatch.rejectedAt && (
+                <div className="text-center p-2 bg-red-50 rounded-lg border border-red-100">
+                  <div className="text-[10px] uppercase text-red-500 font-semibold">Rejected</div>
+                  <div className="text-xs font-medium text-red-700 mt-1">{new Date(viewModal.dispatch.rejectedAt).toLocaleString()}</div>
+                </div>
+              )}
+            </div>
+
+            {/* Rejection Reason */}
+            {viewModal.dispatch.rejectionReason && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <div className="text-xs font-semibold text-red-600 mb-1">Rejection Reason</div>
+                <div className="text-sm text-red-700">{viewModal.dispatch.rejectionReason}</div>
+              </div>
+            )}
+
+            {/* Notes */}
+            {viewModal.dispatch.notes && (
+              <div className="bg-muted/20 border border-border/50 rounded-lg p-3">
+                <div className="text-xs font-semibold text-muted-foreground mb-1">Notes</div>
+                <div className="text-sm text-foreground">{viewModal.dispatch.notes}</div>
+              </div>
+            )}
+
+            {/* Lot Allocation Table */}
+            {viewModal.dispatch.lots && viewModal.dispatch.lots.filter(l => l.allocatedQuantity > 0).length > 0 && (
+              <div>
+                <div className="text-xs font-bold uppercase tracking-wider text-primary mb-2 flex items-center gap-2">
+                  <Layers className="w-3.5 h-3.5" /> Lot Allocation
+                </div>
+                <div className="rounded-lg border border-border overflow-hidden">
+                  <table className="min-w-full">
+                    <thead><tr className="bg-muted/50">
+                      <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Lot</th>
+                      <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Material</th>
+                      <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Allocated</th>
+                      <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Seed Wastage</th>
+                    </tr></thead>
+                    <tbody className="divide-y divide-border">
+                      {viewModal.dispatch.lots.filter(l => l.allocatedQuantity > 0).map(l => (
+                        <tr key={l.id} className="hover:bg-muted/30">
+                          <td className="px-3 py-2 text-sm font-mono text-primary font-medium">
+                            {l.cleaningLot?.cleaningJobId ? `LOT-${l.cleaningLot.cleaningJobId}` : (l.cleaningLot?.lotNumber || l.cleaningLotId)}
+                          </td>
+                          <td className="px-3 py-2 text-sm text-foreground">{l.cleaningLot?.rawMaterial?.name || '-'}</td>
+                          <td className="px-3 py-2 text-sm text-right font-semibold">{l.allocatedQuantity} {l.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
+                          <td className="px-3 py-2 text-sm text-right text-amber-600">{l.seedWastageAllocated > 0 ? `${l.seedWastageAllocated} ${l.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}` : '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
-          <div>
-            <div className="text-xs text-muted-foreground mb-1 font-medium">Rejection Reason *</div>
-            <TextArea rows={3} value={rejectModal.reason}
-              onChange={(e) => setRejectModal((p) => ({ ...p, reason: e.target.value }))}
-              placeholder="Enter reason for rejecting this dispatch" />
-          </div>
-          <div className="flex justify-end gap-2 pt-3 border-t border-border">
-            <Button onClick={() => setRejectModal((p) => ({ ...p, visible: false }))}>Cancel</Button>
-            <Button type="primary" danger loading={rejectModal.loading} onClick={handleRejectDispatch}>
-              <XCircle size={12} className="mr-1 inline" /> Reject Dispatch
-            </Button>
-          </div>
-        </div>
+        )}
       </Modal>
     </motion.div>
   );
