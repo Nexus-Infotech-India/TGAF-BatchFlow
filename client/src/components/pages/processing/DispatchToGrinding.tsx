@@ -695,7 +695,7 @@ const DispatchToGrinding: React.FC = () => {
                                               <tbody className="divide-y divide-border">
                                                 {dispatch.lots.filter((bl) => bl.allocatedQuantity > 0).map((bl) => (
                                                   <tr key={bl.id} className="hover:bg-muted/30">
-                                                    <td className="px-3 py-2 text-sm font-mono text-primary">{bl.cleaningLot?.lotNumber || bl.cleaningLotId}</td>
+                                                    <td className="px-3 py-2 text-sm font-mono text-primary">{bl.cleaningLot?.cleaningJobId ? `LOT-${bl.cleaningLot.cleaningJobId}` : (bl.cleaningLot?.lotNumber || bl.cleaningLotId)}</td>
                                                     <td className="px-3 py-2 text-sm text-foreground">{bl.cleaningLot?.rawMaterial?.name || '-'}</td>
                                                     <td className="px-3 py-2 text-sm text-right text-muted-foreground">{bl.cleaningLot?.cleanedQuantity ?? '-'} {bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
                                                     <td className="px-3 py-2 text-sm text-right font-semibold text-foreground">{bl.allocatedQuantity} {bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
@@ -738,7 +738,7 @@ const DispatchToGrinding: React.FC = () => {
                                               <tbody className="divide-y divide-border">
                                                 {dispatch.lots.filter((bl) => bl.seedWastageAllocated > 0).map((bl) => (
                                                   <tr key={`sw-${bl.id}`} className="hover:bg-muted/30">
-                                                    <td className="px-3 py-2 text-sm font-mono text-amber-600">{bl.cleaningLot?.lotNumber || bl.cleaningLotId}</td>
+                                                    <td className="px-3 py-2 text-sm font-mono text-amber-600">{bl.cleaningLot?.cleaningJobId ? `LOT-${bl.cleaningLot.cleaningJobId}` : (bl.cleaningLot?.lotNumber || bl.cleaningLotId)}</td>
                                                     <td className="px-3 py-2 text-sm text-foreground">{bl.cleaningLot?.rawMaterial?.name || '-'}</td>
                                                     <td className="px-3 py-2 text-sm text-right font-semibold text-amber-600">{bl.seedWastageAllocated} {bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
                                                   </tr>
@@ -866,7 +866,9 @@ const DispatchToGrinding: React.FC = () => {
                           }`}
                           onClick={() => toggleLotSelection(lot.id, lot)}>
                           <div className="flex-1">
-                            <div className="text-sm font-mono text-primary">{lot.lotNumber}</div>
+                            <div className="text-sm font-mono text-primary">
+                              {lot.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot.lotNumber}
+                            </div>
                             <div className="text-xs text-muted-foreground">Cleaned: {lot.cleanedQuantity ?? 0} {lot.rawMaterial?.unitOfMeasurement}</div>
                           </div>
                           {batchModal.selectedLots[lot.id] !== undefined && (
@@ -891,7 +893,9 @@ const DispatchToGrinding: React.FC = () => {
                           }`}
                           onClick={() => toggleSeedWastageLotSelection(lot.id, lot)}>
                           <div className="flex-1">
-                            <div className="text-sm font-mono text-amber-600">{lot.lotNumber}</div>
+                            <div className="text-sm font-mono text-amber-600">
+                              {lot.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot.lotNumber}
+                            </div>
                             <div className="text-xs text-muted-foreground">Available: {lot.availableSeedWastage ?? 0} {lot.rawMaterial?.unitOfMeasurement}</div>
                           </div>
                           {batchModal.seedWastageLots[lot.id] !== undefined && (
