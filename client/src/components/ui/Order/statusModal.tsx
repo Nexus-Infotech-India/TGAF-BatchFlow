@@ -2,12 +2,6 @@ import React, { useEffect, useState } from "react";
 import api, { API_ROUTES } from "../../../utils/api";
 import { Package, Scale, Hash, Plus, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 
-type Warehouse = {
-    id: string;
-    name: string;
-    location?: string;
-};
-
 type LocationOption = {
     id: string;
     code: string;
@@ -53,6 +47,21 @@ type Props = {
     currentStatus?: string;
     itemId?: string;
     receivals?: ReceivalEntry[];
+    unit?: string;
+};
+
+export const convertWeight = (val: number, fromU: string, toU: string) => {
+    const f = fromU.toLowerCase();
+    const t = toU.toLowerCase();
+    if (f === t) return val;
+    let valInKg = val;
+    if (f === 'gram' || f === 'grams') valInKg = val / 1000;
+    else if (f === 'ton' || f === 'tons') valInKg = val * 1000;
+    
+    if (t === 'gram' || t === 'grams') return valInKg * 1000;
+    else if (t === 'ton' || t === 'tons') return valInKg / 1000;
+    
+    return valInKg;
 };
 
 const ReceiveModal: React.FC<Props> = ({
@@ -63,6 +72,7 @@ const ReceiveModal: React.FC<Props> = ({
     currentReceived = 0,
     currentStatus = "PENDING",
     receivals = [],
+    unit = "KG",
 }) => {
     const [locations, setLocations] = useState<LocationOption[]>([]);
     const [selectedLocationId, setSelectedLocationId] = useState("");
@@ -75,6 +85,7 @@ const ReceiveModal: React.FC<Props> = ({
     const [notes, setNotes] = useState("");
     const [showHistory, setShowHistory] = useState(false);
     const [confirmFinishPrompt, setConfirmFinishPrompt] = useState(true);
+    const [inputUnit, setInputUnit] = useState<string>("KG");
 
     const remaining = defaultQuantity - currentReceived;
 
@@ -90,8 +101,9 @@ const ReceiveModal: React.FC<Props> = ({
             setWeightMode("TOTAL");
             setShowHistory(false);
             setConfirmFinishPrompt(true);
+            setInputUnit(unit);
         }
-    }, [open, defaultQuantity]);
+    }, [open, defaultQuantity, unit]);
 
     const fetchLocations = async () => {
         try {
@@ -142,16 +154,27 @@ const ReceiveModal: React.FC<Props> = ({
             }
         }
 
+
+        const convertedTotalWeight = weightMode === "TOTAL" ? convertWeight(totalWeight, inputUnit, unit) : undefined;
+        const convertedBags = weightMode === "INDIVIDUAL" ? bags.map(b => ({ ...b, bagWeight: convertWeight(b.bagWeight, inputUnit, unit) })) : undefined;
+        
+        let finalNotes = notes;
+        if (inputUnit !== unit) {
+            const enteredAmount = weightMode === "TOTAL" ? totalWeight : bags.reduce((sum, b) => sum + b.bagWeight, 0);
+            const conversionNote = `(Entered as ${enteredAmount} ${inputUnit})`;
+            finalNotes = notes ? `${conversionNote} | ${notes}` : conversionNote;
+        }
+
         setLoading(true);
         try {
             await onConfirm({
                 status,
                 locationId: selectedLocationId,
                 weightMode,
-                bags: weightMode === "INDIVIDUAL" ? bags : undefined,
-                totalWeight: weightMode === "TOTAL" ? totalWeight : undefined,
+                bags: convertedBags,
+                totalWeight: convertedTotalWeight,
                 numberOfBags: weightMode === "TOTAL" && numberOfBags > 0 ? numberOfBags : undefined,
-                notes: notes || undefined,
+                notes: finalNotes || undefined,
             });
         } finally {
             setLoading(false);
@@ -161,6 +184,11 @@ const ReceiveModal: React.FC<Props> = ({
     if (!open) return null;
 
     const isFullyReceived = currentStatus === "RECEIVED";
+
+    const liveTotal = weightMode === "TOTAL" 
+        ? convertWeight(totalWeight, inputUnit, unit) 
+        : bags.reduce((sum, b) => sum + convertWeight(b.bagWeight, inputUnit, unit), 0);
+    const newOverallTotal = currentReceived + liveTotal;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
@@ -175,11 +203,11 @@ const ReceiveModal: React.FC<Props> = ({
                             <h2 className="text-lg font-semibold text-foreground">Receive Item</h2>
                             <p className="text-xs text-muted-foreground">
                                 Ordered: <span className="font-medium text-foreground">{defaultQuantity}</span>
-                                <span className="text-xs font-semibold text-muted-foreground"> KG</span>
+                                <span className="text-xs font-semibold text-muted-foreground"> {unit}</span>
                                 {' · '}Received: <span className="font-medium text-green-400">{currentReceived}</span>
-                                <span className="text-xs font-semibold text-muted-foreground"> KG</span>
+                                <span className="text-xs font-semibold text-muted-foreground"> {unit}</span>
                                 {' · '}Remaining: <span className="font-medium text-amber-400">{remaining > 0 ? remaining : 0}</span>
-                                <span className="text-xs font-semibold text-muted-foreground"> KG</span>
+                                <span className="text-xs font-semibold text-muted-foreground"> {unit}</span>
                             </p>
                         </div>
                     </div>
@@ -203,7 +231,7 @@ const ReceiveModal: React.FC<Props> = ({
                         </p>
                         {receivals.length > 0 && (
                             <div className="mt-4 text-left">
-                                <ReceivalHistory receivals={receivals} />
+                                <ReceivalHistory receivals={receivals} unit={unit} />
                             </div>
                         )}
                         <button
@@ -256,7 +284,7 @@ const ReceiveModal: React.FC<Props> = ({
                                     {showHistory ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                                     Previous Receivals ({receivals.length})
                                 </button>
-                                {showHistory && <ReceivalHistory receivals={receivals} />}
+                                {showHistory && <ReceivalHistory receivals={receivals} unit={unit} />}
                             </div>
                         )}
 
@@ -343,7 +371,15 @@ const ReceiveModal: React.FC<Props> = ({
                                             onChange={(e) => setTotalWeight(Number(e.target.value))}
                                             placeholder="Enter total weight"
                                         />
-                                        <span className="text-xs font-semibold text-muted-foreground shrink-0">KG</span>
+                                        <select
+                                            className="bg-muted/20 border border-border/30 rounded-lg px-2 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition cursor-pointer"
+                                            value={inputUnit}
+                                            onChange={(e) => setInputUnit(e.target.value)}
+                                        >
+                                            {Array.from(new Set([unit, 'gram', 'KG', 'Ton'])).map(u => (
+                                                <option key={u} value={u}>{u}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </div>
                                 <div>
@@ -368,7 +404,7 @@ const ReceiveModal: React.FC<Props> = ({
                                         Individual Bag Weights
                                     </label>
                                     <span className="text-xs text-primary font-medium">
-                                        Total: {computedTotalFromBags.toFixed(2)}
+                                        Total: {computedTotalFromBags.toFixed(2)} {inputUnit}
                                     </span>
                                 </div>
                                 <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
@@ -389,7 +425,15 @@ const ReceiveModal: React.FC<Props> = ({
                                                     }
                                                     placeholder="Weight"
                                                 />
-                                                <span className="text-xs font-semibold text-muted-foreground shrink-0">KG</span>
+                                                <select
+                                                    className="bg-muted/20 border border-border/30 rounded-lg px-2 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary/50 transition cursor-pointer"
+                                                    value={inputUnit}
+                                                    onChange={(e) => setInputUnit(e.target.value)}
+                                                >
+                                                    {Array.from(new Set([unit, 'gram', 'KG', 'Ton'])).map(u => (
+                                                        <option key={u} value={u}>{u}</option>
+                                                    ))}
+                                                </select>
                                             </div>
                                             {bags.length > 1 && (
                                                 <button
@@ -428,6 +472,25 @@ const ReceiveModal: React.FC<Props> = ({
                             />
                         </div>
 
+                        {/* Conversion Preview Banner */}
+                        {liveTotal > 0 && (
+                            <div className={`border rounded-lg p-3 flex flex-col gap-1 text-xs ${inputUnit !== unit ? 'bg-primary/10 border-primary/20 text-primary-foreground' : 'bg-muted/10 border-border/20 text-foreground'}`}>
+                                <div className="flex justify-between font-medium">
+                                    <span className="text-muted-foreground">Receiving Now:</span>
+                                    <span className={inputUnit !== unit ? 'text-primary font-bold' : ''}>
+                                        {liveTotal.toFixed(2)} {unit}
+                                        {inputUnit !== unit && <span className="text-muted-foreground ml-1 font-normal">(from {weightMode === "TOTAL" ? totalWeight : bags.reduce((s, b) => s + b.bagWeight, 0)} {inputUnit})</span>}
+                                    </span>
+                                </div>
+                                <div className="flex justify-between font-medium">
+                                    <span className="text-muted-foreground">New Total Received:</span>
+                                    <span className={newOverallTotal >= defaultQuantity ? 'text-green-500 font-bold' : ''}>
+                                        {newOverallTotal.toFixed(2)} {unit} / {defaultQuantity} {unit}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Actions */}
                         <div className="flex justify-end gap-2 pt-2">
                             <button
@@ -463,7 +526,7 @@ const ReceiveModal: React.FC<Props> = ({
 };
 
 // Receival History sub-component
-const ReceivalHistory: React.FC<{ receivals: ReceivalEntry[] }> = ({ receivals }) => (
+const ReceivalHistory: React.FC<{ receivals: ReceivalEntry[], unit: string }> = ({ receivals, unit }) => (
     <div className="mt-3 space-y-2">
         {receivals.map((r, idx) => (
             <div
@@ -472,7 +535,7 @@ const ReceivalHistory: React.FC<{ receivals: ReceivalEntry[] }> = ({ receivals }
             >
                 <div className="flex items-center justify-between mb-1">
                     <span className="font-medium text-foreground">
-                        {r.totalWeight} received
+                        {r.totalWeight} {unit} received
                     </span>
                     <span className="text-muted-foreground">
                         {new Date(r.receivedDate).toLocaleDateString()}

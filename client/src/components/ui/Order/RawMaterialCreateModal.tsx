@@ -236,14 +236,18 @@ const RawMaterialCreateModal: React.FC<RawMaterialCreateModalProps> = ({
                                         Unit of Measurement{" "}
                                         <span className="text-destructive">*</span>
                                     </label>
-                                    <input
+                                    <select
                                         name="unitOfMeasurement"
-                                        placeholder="e.g. kg, liters"
-                                        className="w-full bg-background border border-input rounded-xl px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring placeholder:text-muted-foreground"
+                                        className="w-full bg-background border border-input rounded-xl px-4 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
                                         value={form.unitOfMeasurement}
-                                        onChange={handleChange}
+                                        onChange={handleChange as any}
                                         required
-                                    />
+                                    >
+                                        <option value="" disabled>Select unit</option>
+                                        <option value="gram">Gram</option>
+                                        <option value="KG">KG</option>
+                                        <option value="Ton">Ton</option>
+                                    </select>
                                 </div>
                             </div>
 

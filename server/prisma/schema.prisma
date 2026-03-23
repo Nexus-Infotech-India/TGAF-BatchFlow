@@ -772,6 +772,7 @@ model PurchaseOrderItem {
   purchaseOrderId String
   rawMaterialId   String
   quantityOrdered Float
+  quantityUnit    String                  @default("KG")
   rate            Float
   totalReceived   Float                   @default(0)
   status          PurchaseOrderItemStatus @default(PENDING)
@@ -991,6 +992,8 @@ model CleaningJob {
   stoneWastageUnit  String?            @default("kg")
   seedWastageQty    Float?             @default(0)
   seedWastageUnit   String?            @default("kg")
+  cleanedQuantity   Float?             @default(0)
+  cleanedQuantityUnit String?          @default("kg")
   wastagePercentage Float?             @default(0)
   wastageType       String?
   fromWarehouse    Warehouse          @relation("CleaningFromWarehouse", fields: [fromWarehouseId], references: [id])
@@ -1311,6 +1314,7 @@ model CleaningLot {
   warehouseId      String
   quantity         Float
   cleanedQuantity  Float?   @default(0)
+  cleanedQuantityUnit String? @default("kg")
   status           String   @default("Active")
   stoneWastageQty   Float?   @default(0)
   stoneWastageUnit  String?  @default("kg")

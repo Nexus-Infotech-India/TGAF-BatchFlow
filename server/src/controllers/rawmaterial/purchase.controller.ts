@@ -82,6 +82,7 @@ export class PurchaseOrderController {
             create: items.map((item: any) => ({
               rawMaterialId: item.rawMaterialId,
               quantityOrdered: item.quantityOrdered,
+              quantityUnit: item.quantityUnit || 'KG',
               rate: item.rate,
               status: 'PENDING',
               totalReceived: 0,

@@ -365,7 +365,7 @@ const SFGProcessingPage: React.FC = () => {
                                   </div>
 
                                   {/* Lot Allocation Table */}
-                                  {dispatch.lots && dispatch.lots.filter(l => l.allocatedQuantity > 0).length > 0 && (
+                                  {dispatch.lots && dispatch.lots.filter(l => l.allocatedQuantity > 0 || l.seedWastageAllocated > 0).length > 0 && (
                                     <div className="rounded-xl border border-border bg-card overflow-hidden">
                                       <div className="p-3 border-b border-border">
                                         <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
@@ -380,7 +380,7 @@ const SFGProcessingPage: React.FC = () => {
                                           <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Seed Wastage</th>
                                         </tr></thead>
                                         <tbody className="divide-y divide-border">
-                                          {dispatch.lots.filter(bl => bl.allocatedQuantity > 0).map(bl => (
+                                          {dispatch.lots.filter(bl => bl.allocatedQuantity > 0 || bl.seedWastageAllocated > 0).map(bl => (
                                             <tr key={bl.id} className="hover:bg-muted/30">
                                               <td className="px-3 py-2 text-sm font-mono text-primary">{bl.cleaningLot?.cleaningJobId ? `LOT-${bl.cleaningLot.cleaningJobId}` : (bl.cleaningLot?.lotNumber || bl.cleaningLotId)}</td>
                                               <td className="px-3 py-2 text-sm text-foreground">{bl.cleaningLot?.rawMaterial?.name || '-'}</td>

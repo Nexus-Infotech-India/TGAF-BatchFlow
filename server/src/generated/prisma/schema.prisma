@@ -772,6 +772,7 @@ model PurchaseOrderItem {
   purchaseOrderId String
   rawMaterialId   String
   quantityOrdered Float
+  quantityUnit    String                  @default("KG")
   rate            Float
   totalReceived   Float                   @default(0)
   status          PurchaseOrderItemStatus @default(PENDING)
@@ -978,27 +979,29 @@ model ProductionOutput {
 }
 
 model CleaningJob {
-  id                String             @id
-  rawMaterialId     String
-  fromWarehouseId   String
-  toWarehouseId     String
-  quantity          Float
-  status            String
-  startedAt         DateTime
-  finishedAt        DateTime?
-  grnId             String?
-  stoneWastageQty   Float?             @default(0)
-  stoneWastageUnit  String?            @default("kg")
-  seedWastageQty    Float?             @default(0)
-  seedWastageUnit   String?            @default("kg")
-  wastagePercentage Float?             @default(0)
-  wastageType       String?
-  fromWarehouse     Warehouse          @relation("CleaningFromWarehouse", fields: [fromWarehouseId], references: [id])
-  rawMaterial       RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
-  toWarehouse       Warehouse          @relation("CleaningToWarehouse", fields: [toWarehouseId], references: [id])
-  grn               GRNbyPo?           @relation(fields: [grnId], references: [id])
-  cleaningLogs      CleaningLog[]
-  cleaningLots      CleaningLot[]
+  id                  String             @id
+  rawMaterialId       String
+  fromWarehouseId     String
+  toWarehouseId       String
+  quantity            Float
+  status              String
+  startedAt           DateTime
+  finishedAt          DateTime?
+  grnId               String?
+  stoneWastageQty     Float?             @default(0)
+  stoneWastageUnit    String?            @default("kg")
+  seedWastageQty      Float?             @default(0)
+  seedWastageUnit     String?            @default("kg")
+  cleanedQuantity     Float?             @default(0)
+  cleanedQuantityUnit String?            @default("kg")
+  wastagePercentage   Float?             @default(0)
+  wastageType         String?
+  fromWarehouse       Warehouse          @relation("CleaningFromWarehouse", fields: [fromWarehouseId], references: [id])
+  rawMaterial         RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
+  toWarehouse         Warehouse          @relation("CleaningToWarehouse", fields: [toWarehouseId], references: [id])
+  grn                 GRNbyPo?           @relation(fields: [grnId], references: [id])
+  cleaningLogs        CleaningLog[]
+  cleaningLots        CleaningLot[]
 }
 
 model CleaningLog {
@@ -1303,23 +1306,24 @@ model GRNbyPo {
 }
 
 model CleaningLot {
-  id                String   @id @default(uuid())
-  lotNumber         String   @unique
-  cleaningJobId     String
-  grnId             String
-  rawMaterialId     String
-  warehouseId       String
-  quantity          Float
-  cleanedQuantity   Float?   @default(0)
-  status            String   @default("Active")
-  stoneWastageQty   Float?   @default(0)
-  stoneWastageUnit  String?  @default("kg")
-  seedWastageQty    Float?   @default(0)
-  seedWastageUnit   String?  @default("kg")
-  wastagePercentage Float?   @default(0)
-  wastageType       String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id                  String   @id @default(uuid())
+  lotNumber           String   @unique
+  cleaningJobId       String
+  grnId               String
+  rawMaterialId       String
+  warehouseId         String
+  quantity            Float
+  cleanedQuantity     Float?   @default(0)
+  cleanedQuantityUnit String?  @default("kg")
+  status              String   @default("Active")
+  stoneWastageQty     Float?   @default(0)
+  stoneWastageUnit    String?  @default("kg")
+  seedWastageQty      Float?   @default(0)
+  seedWastageUnit     String?  @default("kg")
+  wastagePercentage   Float?   @default(0)
+  wastageType         String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   cleaningJob          CleaningJob           @relation(fields: [cleaningJobId], references: [id])
   grn                  GRNbyPo               @relation(fields: [grnId], references: [id])

@@ -23,6 +23,7 @@ import {
   Download,
   XCircle,
 } from 'lucide-react';
+import { convertWeight } from '../../ui/Order/statusModal';
 
 const { Option } = Select;
 
@@ -322,6 +323,7 @@ const CleaningRawMaterialList: React.FC = () => {
   const [transferModalOpen, setTransferModalOpen] = useState(false);
   const [selectedGrn, setSelectedGrn] = useState<GRNItem | null>(null);
   const [transferQty, setTransferQty] = useState<number>(0);
+  const [transferUnit, setTransferUnit] = useState<string>('KG');
   const [toLocationId, setToLocationId] = useState('');
   const [transferring, setTransferring] = useState(false);
 
@@ -329,9 +331,9 @@ const CleaningRawMaterialList: React.FC = () => {
   const [finishModalOpen, setFinishModalOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState('');
   const [stoneWastageQty, setStoneWastageQty] = useState<number>(0);
-  const [stoneWastageUnit, setStoneWastageUnit] = useState<string>('kg');
+  const [stoneWastageUnit, setStoneWastageUnit] = useState<string>('KG');
   const [seedWastageQty, setSeedWastageQty] = useState<number>(0);
-  const [seedWastageUnit, setSeedWastageUnit] = useState<string>('kg');
+  const [seedWastageUnit, setSeedWastageUnit] = useState<string>('KG');
   const [finishing, setFinishing] = useState(false);
 
   // Processing Overlay
@@ -407,6 +409,7 @@ const CleaningRawMaterialList: React.FC = () => {
     setSelectedGrn(grn);
     setTransferQty(0);
     setToLocationId('');
+    setTransferUnit(grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG');
     setTransferModalOpen(true);
   };
 
@@ -428,8 +431,11 @@ const CleaningRawMaterialList: React.FC = () => {
       message.warning('Please fill all fields correctly');
       return;
     }
-    if (transferQty > selectedGrn.leftQuantity) {
-      message.error(`Cannot exceed available quantity (${selectedGrn.leftQuantity})`);
+    const unit = selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
+    const convertedQty = convertWeight(transferQty, transferUnit, unit);
+
+    if (convertedQty > selectedGrn.leftQuantity) {
+      message.error(`Cannot exceed available quantity (${selectedGrn.leftQuantity} ${unit})`);
       return;
     }
     setTransferring(true);
@@ -440,7 +446,7 @@ const CleaningRawMaterialList: React.FC = () => {
       await api.post(API_ROUTES.RAW.CREATE_GRN_CLEANING_TRANSFER, {
         grnId: selectedGrn.id,
         toLocationId,
-        quantity: transferQty,
+        quantity: convertedQty,
       }, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
@@ -457,9 +463,9 @@ const CleaningRawMaterialList: React.FC = () => {
   const handleOpenFinish = (jobId: string) => {
     setSelectedJobId(jobId);
     setStoneWastageQty(0);
-    setStoneWastageUnit('kg');
+    setStoneWastageUnit('KG');
     setSeedWastageQty(0);
-    setSeedWastageUnit('kg');
+    setSeedWastageUnit('KG');
     setFinishModalOpen(true);
   };
 
@@ -687,9 +693,11 @@ const CleaningRawMaterialList: React.FC = () => {
                           </td>
                           <td className="px-4 py-3 whitespace-nowrap text-sm font-semibold" style={{ color: '#059669' }}>
                             {grn.cleaningJobs?.filter((j) => j.status === 'Cleaned').reduce((sum, j) => {
-                              const net = (j.quantity || 0) - (j.stoneWastageQty || 0) - (j.seedWastageQty || 0);
+                              const stoneWastageInBase = convertWeight((j.stoneWastageQty || 0), (j.stoneWastageUnit || 'kg'), unit);
+                              const seedWastageInBase = convertWeight((j.seedWastageQty || 0), (j.seedWastageUnit || 'kg'), unit);
+                              const net = (j.quantity || 0) - stoneWastageInBase - seedWastageInBase;
                               return sum + Math.max(0, net);
-                            }, 0)} {unit}
+                            }, 0).toFixed(2)} {unit}
                           </td>
                           <td className="px-4 py-3 whitespace-nowrap">
                             {grn.allJobsFinished ? (
@@ -819,18 +827,36 @@ const CleaningRawMaterialList: React.FC = () => {
             </div>
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
-                Transfer Quantity(KG) <span style={{ color: 'var(--destructive)' }}>*</span>
-              </label>
-              <InputNumber
-                className="w-full"
-                min={0.01}
-                max={selectedGrn.leftQuantity}
-                step={0.1}
-                value={transferQty}
-                onChange={(v) => setTransferQty(v || 0)}
-                placeholder={`Max: ${selectedGrn.leftQuantity}`}
-              />
+              <div className="flex justify-between items-center mb-1">
+                <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
+                  Transfer Quantity <span style={{ color: 'var(--destructive)' }}>*</span>
+                </label>
+                {transferUnit !== (selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG') && (
+                  <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded">
+                    = {convertWeight(transferQty, transferUnit, selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG').toFixed(2)} {selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <InputNumber
+                  className="flex-1"
+                  min={0.01}
+                  step={0.1}
+                  value={transferQty}
+                  onChange={(v) => setTransferQty(v || 0)}
+                  placeholder={`Base Max: ${selectedGrn.leftQuantity}`}
+                />
+                <select
+                  className="bg-muted/20 border border-border/30 rounded-lg px-2 py-1 text-sm text-foreground focus:outline-none focus:border-primary/50 transition cursor-pointer"
+                  style={{ height: '32px' }}
+                  value={transferUnit}
+                  onChange={(e) => setTransferUnit(e.target.value)}
+                >
+                  {Array.from(new Set([selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG', 'gram', 'KG', 'Ton'])).map(u => (
+                    <option key={u} value={u}>{u}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div className="space-y-1.5">
@@ -919,14 +945,16 @@ const CleaningRawMaterialList: React.FC = () => {
                 onChange={(v) => setStoneWastageQty(v || 0)}
                 placeholder="Qty"
               />
-              <Select
-                style={{ width: 90 }}
+              <select
+                className="bg-muted/20 border border-border/30 rounded-lg px-2 py-1 text-sm text-foreground focus:outline-none focus:border-primary/50 transition cursor-pointer"
+                style={{ height: '32px', width: '90px' }}
                 value={stoneWastageUnit}
-                onChange={(v) => setStoneWastageUnit(v)}
+                onChange={(e) => setStoneWastageUnit(e.target.value)}
               >
-                <Option value="kg">KG</Option>
-                <Option value="gm">GM</Option>
-              </Select>
+                <option value="Ton">Ton</option>
+                <option value="KG">KG</option>
+                <option value="gram">gram</option>
+              </select>
             </div>
           </div>
 
@@ -944,14 +972,16 @@ const CleaningRawMaterialList: React.FC = () => {
                 onChange={(v) => setSeedWastageQty(v || 0)}
                 placeholder="Qty"
               />
-              <Select
-                style={{ width: 90 }}
+              <select
+                className="bg-muted/20 border border-border/30 rounded-lg px-2 py-1 text-sm text-foreground focus:outline-none focus:border-primary/50 transition cursor-pointer"
+                style={{ height: '32px', width: '90px' }}
                 value={seedWastageUnit}
-                onChange={(v) => setSeedWastageUnit(v)}
+                onChange={(e) => setSeedWastageUnit(e.target.value)}
               >
-                <Option value="kg">KG</Option>
-                <Option value="gm">GM</Option>
-              </Select>
+                <option value="Ton">Ton</option>
+                <option value="KG">KG</option>
+                <option value="gram">gram</option>
+              </select>
             </div>
           </div>
 
@@ -1050,7 +1080,9 @@ const CleaningRawMaterialList: React.FC = () => {
                 <div className="space-y-4">
                   {historyGrn.cleaningJobs.map((job) => {
                     const unit = historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
-                    const netQty = Math.max(0, (job.quantity || 0) - (job.stoneWastageQty || 0) - (job.seedWastageQty || 0));
+                    const stoneWastageInBase = convertWeight((job.stoneWastageQty || 0), (job.stoneWastageUnit || 'kg'), unit);
+                    const seedWastageInBase = convertWeight((job.seedWastageQty || 0), (job.seedWastageUnit || 'kg'), unit);
+                    const netQty = Math.max(0, (job.quantity || 0) - stoneWastageInBase - seedWastageInBase);
 
                     return (
                       <motion.div
@@ -1110,7 +1142,7 @@ const CleaningRawMaterialList: React.FC = () => {
                               <div className="text-center flex-1">
                                 <div className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Cleaned Qty</div>
                                 <div className="text-xl font-extrabold" style={{ color: job.status === 'Cleaned' ? '#059669' : 'var(--primary)' }}>
-                                  {job.status === 'Cleaned' ? netQty : '--'} <span className="text-[10px] font-medium opacity-60 ml-0.5">{unit}</span>
+                                  {job.status === 'Cleaned' ? netQty.toFixed(2) : '--'} <span className="text-[10px] font-medium opacity-60 ml-0.5">{unit}</span>
                                 </div>
                               </div>
                             </div>
@@ -1149,10 +1181,10 @@ const CleaningRawMaterialList: React.FC = () => {
 
                           {/* Column 2: Timeline & Logs */}
                           <div className="flex flex-col h-full">
-                            <div className="flex-1 space-y-5">
+                                <div className="flex-1 space-y-5">
                               {(() => {
-                                const totalWaste = (job.stoneWastageQty || 0) + (job.seedWastageQty || 0);
-                                const wastPct = job.wastagePercentage ?? (job.quantity ? parseFloat(((totalWaste / job.quantity) * 100).toFixed(2)) : 0);
+                                const totalWasteInBase = stoneWastageInBase + seedWastageInBase;
+                                const wastPct = job.wastagePercentage ?? (job.quantity ? parseFloat(((totalWasteInBase / job.quantity) * 100).toFixed(2)) : 0);
                                 const wastType = job.wastageType ?? (wastPct > 3 ? 'Abnormal Loss' : 'Normal Loss');
                                 const isAbnormal = wastType === 'Abnormal Loss';
                                 const showWastage = job.status === 'Cleaned';

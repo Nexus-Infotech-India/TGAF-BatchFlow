@@ -102,14 +102,18 @@ const RawMaterialBox: React.FC<RawMaterialBoxProps> = ({ rawMaterial, onCreated 
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">Unit of Measurement<span className="text-red-500">*</span></label>
-            <input
+            <select
               name="unitOfMeasurement"
-              placeholder="Unit of Measurement"
               className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               value={form.unitOfMeasurement}
-              onChange={handleChange}
+              onChange={handleChange as any}
               required
-            />
+            >
+              <option value="" disabled>Select unit</option>
+              <option value="gram">Gram</option>
+              <option value="KG">KG</option>
+              <option value="Ton">Ton</option>
+            </select>
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1">Min Reorder Level<span className="text-red-500">*</span></label>

@@ -435,8 +435,14 @@ const CreateBOMPage: React.FC = () => {
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>Unit of Measurement *</label>
-                                    <input name="unitOfMeasurement" value={form.unitOfMeasurement} onChange={handleChange} required placeholder="e.g. kg"
-                                        className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200" style={inputStyle} {...focusHandlers} />
+                                    <select name="unitOfMeasurement" value={form.unitOfMeasurement} onChange={handleChange} required
+                                        className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200 cursor-pointer"
+                                        style={{ ...inputStyle, color: form.unitOfMeasurement ? 'var(--foreground)' : 'var(--muted-foreground)' }} {...focusHandlers}>
+                                        <option value="">Select unit</option>
+                                        <option value="gram">Gram</option>
+                                        <option value="KG">KG</option>
+                                        <option value="Ton">Ton</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>Output Quantity</label>
@@ -514,8 +520,13 @@ const CreateBOMPage: React.FC = () => {
                                                         className="w-full rounded-lg px-2.5 py-2 text-sm outline-none transition-all duration-200" style={inputStyle} placeholder="0" {...focusHandlers} />
                                                 </td>
                                                 <td className="px-4 py-2.5">
-                                                    <input value={item.unitOfMeasurement} onChange={(e) => handleItemChange(idx, 'unitOfMeasurement', e.target.value)}
-                                                        className="w-full rounded-lg px-2.5 py-2 text-sm outline-none transition-all duration-200" style={inputStyle} placeholder="kg" {...focusHandlers} />
+                                                    <select value={item.unitOfMeasurement} onChange={(e) => handleItemChange(idx, 'unitOfMeasurement', e.target.value)}
+                                                        className="w-full rounded-lg px-2.5 py-2 text-sm outline-none transition-all duration-200 cursor-pointer" style={inputStyle} {...focusHandlers}>
+                                                        <option value="">Select</option>
+                                                        <option value="gram">Gram</option>
+                                                        <option value="KG">KG</option>
+                                                        <option value="Ton">Ton</option>
+                                                    </select>
                                                 </td>
                                                 <td className="px-4 py-2.5">
                                                     <input value={item.notes} onChange={(e) => handleItemChange(idx, 'notes', e.target.value)}

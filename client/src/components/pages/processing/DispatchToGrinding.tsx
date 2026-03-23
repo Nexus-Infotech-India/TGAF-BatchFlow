@@ -63,8 +63,11 @@ interface CleaningLot {
   warehouseId: string;
   quantity: number;
   cleanedQuantity?: number;
+  cleanedQuantityUnit?: string;
   stoneWastageQty?: number;
+  stoneWastageUnit?: string;
   seedWastageQty?: number;
+  seedWastageUnit?: string;
   status: string;
   createdAt: string;
   rawMaterial: RawMaterial;
@@ -393,7 +396,7 @@ const DispatchToGrinding: React.FC = () => {
       rejectedAt: dispatch.rejectedAt,
       rejectionReason: dispatch.rejectionReason,
       notes: dispatch.notes,
-      lots: (dispatch.lots || []).filter(l => l.allocatedQuantity > 0).map(l => ({
+      lots: (dispatch.lots || []).filter(l => l.allocatedQuantity > 0 || l.seedWastageAllocated > 0).map(l => ({
         lotId: l.cleaningLot?.cleaningJobId ? `LOT-${l.cleaningLot.cleaningJobId}` : (l.cleaningLot?.lotNumber || l.cleaningLotId),
         material: l.cleaningLot?.rawMaterial?.name || '-',
         cleanedQty: l.cleaningLot?.cleanedQuantity ?? 0,
@@ -660,7 +663,7 @@ const DispatchToGrinding: React.FC = () => {
                                 </div>
 
                                 {/* Lot Allocation Table */}
-                                  {dispatch.lots && dispatch.lots.filter(l => l.allocatedQuantity > 0).length > 0 && (
+                                  {dispatch.lots && dispatch.lots.filter(l => l.allocatedQuantity > 0 || l.seedWastageAllocated > 0).length > 0 && (
                                     <div className="rounded-xl border border-border bg-card overflow-hidden">
                                       <div className="p-3 border-b border-border">
                                         <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
@@ -675,7 +678,7 @@ const DispatchToGrinding: React.FC = () => {
                                           <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Seed Wastage</th>
                                         </tr></thead>
                                         <tbody className="divide-y divide-border">
-                                          {dispatch.lots.filter(bl => bl.allocatedQuantity > 0).map(bl => (
+                                          {dispatch.lots.filter(bl => bl.allocatedQuantity > 0 || bl.seedWastageAllocated > 0).map(bl => (
                                             <tr key={bl.id} className="hover:bg-muted/30">
                                               <td className="px-3 py-2 text-sm font-mono text-primary">{bl.cleaningLot?.cleaningJobId ? `LOT-${bl.cleaningLot.cleaningJobId}` : (bl.cleaningLot?.lotNumber || bl.cleaningLotId)}</td>
                                               <td className="px-3 py-2 text-sm text-foreground">{bl.cleaningLot?.rawMaterial?.name || '-'}</td>
@@ -875,7 +878,7 @@ const DispatchToGrinding: React.FC = () => {
                                 <div className="text-right flex-shrink-0">
                                   <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-1">Available Qty</div>
                                   <div className="text-sm font-medium bg-muted/40 px-3 py-1 rounded-lg border border-border/50">
-                                    {lot.cleanedQuantity ?? 0} {lot.rawMaterial?.unitOfMeasurement}
+                                    {lot.cleanedQuantity ?? 0} {lot.cleanedQuantityUnit || lot.rawMaterial?.unitOfMeasurement || ''}
                                   </div>
                                 </div>
                               </div>
@@ -937,7 +940,7 @@ const DispatchToGrinding: React.FC = () => {
                                 <div className="text-right flex-shrink-0">
                                   <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-1">Available Qty</div>
                                   <div className="text-sm font-medium bg-amber-50 px-3 py-1 rounded-lg border border-amber-100 text-amber-700">
-                                    {lot.availableSeedWastage ?? 0} {lot.rawMaterial?.unitOfMeasurement}
+                                    {lot.availableSeedWastage ?? 0} {lot.seedWastageUnit || lot.rawMaterial?.unitOfMeasurement || ''}
                                   </div>
                                 </div>
                               </div>
@@ -1090,7 +1093,7 @@ const DispatchToGrinding: React.FC = () => {
             )}
 
             {/* Lot Allocation Table */}
-            {viewModal.dispatch.lots && viewModal.dispatch.lots.filter(l => l.allocatedQuantity > 0).length > 0 && (
+            {viewModal.dispatch.lots && viewModal.dispatch.lots.filter(l => l.allocatedQuantity > 0 || l.seedWastageAllocated > 0).length > 0 && (
               <div>
                 <div className="text-xs font-bold uppercase tracking-wider text-primary mb-2 flex items-center gap-2">
                   <Layers className="w-3.5 h-3.5" /> Lot Allocation
@@ -1104,7 +1107,7 @@ const DispatchToGrinding: React.FC = () => {
                       <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Seed Wastage</th>
                     </tr></thead>
                     <tbody className="divide-y divide-border">
-                      {viewModal.dispatch.lots.filter(l => l.allocatedQuantity > 0).map(l => (
+                      {viewModal.dispatch.lots.filter(l => l.allocatedQuantity > 0 || l.seedWastageAllocated > 0).map(l => (
                         <tr key={l.id} className="hover:bg-muted/30">
                           <td className="px-3 py-2 text-sm font-mono text-primary font-medium">
                             {l.cleaningLot?.cleaningJobId ? `LOT-${l.cleaningLot.cleaningJobId}` : (l.cleaningLot?.lotNumber || l.cleaningLotId)}

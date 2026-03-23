@@ -375,16 +375,16 @@ const CreateRawMaterialPage: React.FC = () => {
               <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--muted-foreground)' }}>
                 Unit of Measurement
               </label>
-              <input
+              <select
                 name="unitOfMeasurement"
                 value={form.unitOfMeasurement}
                 onChange={handleChange}
-                placeholder="e.g. kg, litre"
+                required
                 className="w-full rounded-xl px-3.5 py-2.5 text-sm outline-none transition-all duration-200"
                 style={{
                   background: 'color-mix(in srgb, var(--card) 96%, var(--primary) 4%)',
                   border: '1px solid var(--border)',
-                  color: 'var(--foreground)',
+                  color: form.unitOfMeasurement ? 'var(--foreground)' : 'var(--muted-foreground)',
                 }}
                 onFocus={(e) => {
                   e.currentTarget.style.borderColor = 'var(--primary)';
@@ -394,7 +394,12 @@ const CreateRawMaterialPage: React.FC = () => {
                   e.currentTarget.style.borderColor = 'var(--border)';
                   e.currentTarget.style.boxShadow = 'none';
                 }}
-              />
+              >
+                <option value="">Select unit</option>
+                <option value="gram">Gram</option>
+                <option value="KG">KG</option>
+                <option value="Ton">Ton</option>
+              </select>
             </div>
 
             {/* Min Reorder Level */}

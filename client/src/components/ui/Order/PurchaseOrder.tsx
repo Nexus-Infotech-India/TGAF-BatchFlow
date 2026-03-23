@@ -100,7 +100,7 @@ const PurchaseOrder = () => {
   });
   const [expectedDate, setExpectedDate] = useState('');
   const [items, setItems] = useState([
-    { rawMaterialId: '', quantityOrdered: 1, rate: 0 },
+    { rawMaterialId: '', quantityOrdered: 1, quantityUnit: 'KG', rate: 0 },
   ]);
   const [selectedRawMaterials, setSelectedRawMaterials] = useState<
     Record<number, RawMaterial | null>
@@ -182,7 +182,7 @@ const PurchaseOrder = () => {
   };
 
   const addItem = () => {
-    setItems([...items, { rawMaterialId: '', quantityOrdered: 1, rate: 0 }]);
+    setItems([...items, { rawMaterialId: '', quantityOrdered: 1, quantityUnit: 'KG', rate: 0 }]);
   };
 
   const removeItem = (idx: number) => {
@@ -194,9 +194,18 @@ const PurchaseOrder = () => {
     });
   };
 
+  // Convert quantity to KG for pricing
+  const toKG = (qty: number, unit: string) => {
+    switch (unit) {
+      case 'gram': return qty / 1000;
+      case 'Ton': return qty * 1000;
+      default: return qty; // KG
+    }
+  };
+
   const calculateTotal = () => {
     return items.reduce(
-      (sum, item) => sum + item.quantityOrdered * item.rate,
+      (sum, item) => sum + toKG(item.quantityOrdered, item.quantityUnit) * item.rate,
       0
     );
   };
@@ -225,7 +234,7 @@ const PurchaseOrder = () => {
       setSelectedVendor(null);
       setOrderDate('');
       setExpectedDate('');
-      setItems([{ rawMaterialId: '', quantityOrdered: 1, rate: 0 }]);
+      setItems([{ rawMaterialId: '', quantityOrdered: 1, quantityUnit: 'KG', rate: 0 }]);
       setSelectedRawMaterials({});
       setTimeout(() => {
         navigate('/raw/purchase-history');
@@ -465,8 +474,7 @@ const PurchaseOrder = () => {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="p-4 bg-muted/50 rounded-xl border border-border"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                >                    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-foreground mb-2">
                         Items
@@ -531,26 +539,40 @@ const PurchaseOrder = () => {
 
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Quantity(KG)
+                        Quantity
                       </label>
-                      <input
-                        type="number"
-                        min={1}
-                        className="w-full bg-card border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-foreground"
-                        value={
-                          item.quantityOrdered === 0
-                            ? ''
-                            : item.quantityOrdered
-                        }
-                        onChange={(e) =>
-                          handleItemChange(
-                            idx,
-                            'quantityOrdered',
-                            Number(e.target.value)
-                          )
-                        }
-                        required
-                      />
+                      <div className="flex gap-2">
+                        <input
+                          type="number"
+                          min={0.01}
+                          step="0.01"
+                          className="w-full bg-card border border-border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-foreground"
+                          value={
+                            item.quantityOrdered === 0
+                              ? ''
+                              : item.quantityOrdered
+                          }
+                          onChange={(e) =>
+                            handleItemChange(
+                              idx,
+                              'quantityOrdered',
+                              Number(e.target.value)
+                            )
+                          }
+                          required
+                        />
+                        <select
+                          className="bg-card border border-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-foreground min-w-[80px]"
+                          value={item.quantityUnit}
+                          onChange={(e) =>
+                            handleItemChange(idx, 'quantityUnit', e.target.value)
+                          }
+                        >
+                          <option value="gram">Gram</option>
+                          <option value="KG">KG</option>
+                          <option value="Ton">Ton</option>
+                        </select>
+                      </div>
                     </div>
 
                     <div>
@@ -590,10 +612,10 @@ const PurchaseOrder = () => {
                     <div className="mt-3 pt-3 border-t border-border">
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-muted-foreground">
-                          Subtotal:
+                          Subtotal ({item.quantityOrdered} {item.quantityUnit} = {toKG(item.quantityOrdered, item.quantityUnit).toFixed(2)} KG × ₦{item.rate}/KG):
                         </span>
                         <span className="font-medium text-foreground">
-                          ₦{(item.quantityOrdered * item.rate).toFixed(2)}
+                          ₦{(toKG(item.quantityOrdered, item.quantityUnit) * item.rate).toFixed(2)}
                         </span>
                       </div>
                     </div>

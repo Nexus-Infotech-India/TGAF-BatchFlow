@@ -65,6 +65,7 @@ model PurchaseOrderItem {
   rawMaterialId    String
   rawMaterial      RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
   quantityOrdered  Float
+  quantityUnit     String             @default("KG")
   rate             Float
   quantityReceived Float              @default(0)
   status           String // e.g., Pending, Received, Rejected

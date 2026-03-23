@@ -675,6 +675,7 @@ exports.Prisma.PurchaseOrderItemScalarFieldEnum = {
   purchaseOrderId: 'purchaseOrderId',
   rawMaterialId: 'rawMaterialId',
   quantityOrdered: 'quantityOrdered',
+  quantityUnit: 'quantityUnit',
   rate: 'rate',
   totalReceived: 'totalReceived',
   status: 'status'
@@ -813,6 +814,8 @@ exports.Prisma.CleaningJobScalarFieldEnum = {
   stoneWastageUnit: 'stoneWastageUnit',
   seedWastageQty: 'seedWastageQty',
   seedWastageUnit: 'seedWastageUnit',
+  cleanedQuantity: 'cleanedQuantity',
+  cleanedQuantityUnit: 'cleanedQuantityUnit',
   wastagePercentage: 'wastagePercentage',
   wastageType: 'wastageType'
 };
@@ -956,6 +959,7 @@ exports.Prisma.CleaningLotScalarFieldEnum = {
   warehouseId: 'warehouseId',
   quantity: 'quantity',
   cleanedQuantity: 'cleanedQuantity',
+  cleanedQuantityUnit: 'cleanedQuantityUnit',
   status: 'status',
   stoneWastageQty: 'stoneWastageQty',
   stoneWastageUnit: 'stoneWastageUnit',

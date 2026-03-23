@@ -25,6 +25,7 @@ type PurchaseOrderItem = {
     id: string;
     rawMaterialId: string;
     quantityOrdered: number;
+    quantityUnit?: string;
     totalReceived: number;
     rate: number;
     status: string;
@@ -271,7 +272,7 @@ const PurchaseOrderList: React.FC = () => {
                     <table className="w-full text-sm" id="purchase-order-table">
                         <thead>
                             <tr className="border-b border-border/30">
-                                {['PO Number', 'Vendor', 'Product', 'Order Date', 'Expected Date', 'Ordered Quantity', 'Received Quantity', 'Remaining Quantity', 'Rate   (Per KG)', 'Status', 'Actions'].map(
+                                {['PO Number', 'Vendor', 'Product', 'Order Date', 'Expected Date', 'Ordered Quantity', 'Received Quantity', 'Remaining Quantity', 'Rate', 'Status', 'Actions'].map(
                                     (h) => (
                                         <th key={h} className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wider px-4 py-3">
                                             {h}
@@ -352,7 +353,7 @@ const PurchaseOrderList: React.FC = () => {
                                                 </td>
                                                 <td className="px-4 py-3 text-foreground font-medium">
                                                     {item.quantityOrdered}
-                                                    {item.rawMaterial?.unitOfMeasurement ? ` ${item.rawMaterial.unitOfMeasurement}` : ''}
+                                                    {item.quantityUnit ? ` ${item.quantityUnit}` : (item.rawMaterial?.unitOfMeasurement ? ` ${item.rawMaterial.unitOfMeasurement}` : '')}
                                                 </td>
                                                 <td className="px-4 py-3">
                                                     <div className="flex flex-col items-center gap-2">
@@ -371,7 +372,7 @@ const PurchaseOrderList: React.FC = () => {
                                                 </td>
                                                 <td className="px-4 py-3 text-foreground font-medium">
                                                     {formatQty(item.quantityOrdered - item.totalReceived)}
-                                                    {item.rawMaterial?.unitOfMeasurement ? ` ${item.rawMaterial.unitOfMeasurement}` : ''}
+                                                    {item.quantityUnit ? ` ${item.quantityUnit}` : (item.rawMaterial?.unitOfMeasurement ? ` ${item.rawMaterial.unitOfMeasurement}` : '')}
                                                 </td>
                                                 <td className="px-4 py-3 text-foreground/80">
                                                     ₦{item.rate.toLocaleString()}
@@ -520,6 +521,7 @@ const PurchaseOrderList: React.FC = () => {
                 currentStatus={receiveItem?.status || 'PENDING'}
                 itemId={receiveItem?.id}
                 receivals={receiveItem?.receivals || []}
+                unit={receiveItem?.quantityUnit || receiveItem?.rawMaterial?.unitOfMeasurement || 'KG'}
             />
 
             <EditOrderModal

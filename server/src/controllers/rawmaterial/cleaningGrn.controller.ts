@@ -11,6 +11,20 @@ export class CleaningGrnController {
         return locationId || null;
     }
 
+    private static convertWeight(val: number, fromU: string, toU: string): number {
+        const f = fromU.toLowerCase();
+        const t = toU.toLowerCase();
+        if (f === t) return val;
+        let valInKg = val;
+        if (f === 'gram' || f === 'grams') valInKg = val / 1000;
+        else if (f === 'ton' || f === 'tons') valInKg = val * 1000;
+        
+        if (t === 'gram' || t === 'grams') return valInKg * 1000;
+        else if (t === 'ton' || t === 'tons') return valInKg / 1000;
+        
+        return valInKg;
+    }
+
     private static async resolveWarehouseIdFromLocationId(locationId: string): Promise<string | null> {
         const location = await prisma.location.findUnique({ where: { id: locationId } });
         if (!location || !location.enabled) return null;
@@ -489,6 +503,7 @@ export class CleaningGrnController {
                             grn: { select: { grnNumber: true } },
                         },
                     },
+                    rawMaterial: true,
                 },
             });
 
@@ -502,8 +517,12 @@ export class CleaningGrnController {
             const parsedSeedWastageQty = seedWastageQty ? parseFloat(seedWastageQty) : 0;
             const parsedSeedWastageUnit = seedWastageUnit || 'kg';
 
+            const nativeUnit = cleaningJob.rawMaterial?.unitOfMeasurement || 'kg';
+            const baseStoneWastage = CleaningGrnController.convertWeight(parsedStoneWastageQty, parsedStoneWastageUnit, nativeUnit);
+            const baseSeedWastage = CleaningGrnController.convertWeight(parsedSeedWastageQty, parsedSeedWastageUnit, nativeUnit);
+
             // Calculate wastage percentage and type
-            const totalWastage = parsedStoneWastageQty + parsedSeedWastageQty;
+            const totalWastage = baseStoneWastage + baseSeedWastage;
             const transferQty = cleaningJob.quantity || 1; // avoid division by zero
             const wastagePercentage = parseFloat(((totalWastage / transferQty) * 100).toFixed(2));
             // ≤3% => Normal Loss, >3% => Abnormal Loss
@@ -528,6 +547,9 @@ export class CleaningGrnController {
 
             await prisma.$transaction(async (tx) => {
                 // Update cleaning job status + persist stone & seed wastage fields + wastage %
+                const jobQty = cleaningJob.quantity || 0;
+                const jobCleanedQty = Math.max(0, jobQty - baseStoneWastage - baseSeedWastage);
+
                 await tx.cleaningJob.update({
                     where: { id },
                     data: {
@@ -537,6 +559,8 @@ export class CleaningGrnController {
                         stoneWastageUnit: parsedStoneWastageUnit,
                         seedWastageQty: parsedSeedWastageQty,
                         seedWastageUnit: parsedSeedWastageUnit,
+                        cleanedQuantity: jobCleanedQty,
+                        cleanedQuantityUnit: nativeUnit,
                         wastagePercentage,
                         wastageType,
                     },
@@ -546,10 +570,10 @@ export class CleaningGrnController {
                 // Calculate cleaned quantity per lot = lot quantity - stone wastage - seed wastage
                 for (const lot of cleaningJob.cleaningLots) {
                     const lotQty = lot.quantity || 0;
-                    const cleanedQty = Math.max(0, lotQty - parsedStoneWastageQty - parsedSeedWastageQty);
+                    const cleanedQty = Math.max(0, lotQty - baseStoneWastage - baseSeedWastage);
 
                     // Calculate lot-level wastage percentage
-                    const lotTotalWastage = parsedStoneWastageQty + parsedSeedWastageQty;
+                    const lotTotalWastage = baseStoneWastage + baseSeedWastage;
                     const lotWastagePercentage = parseFloat(((lotTotalWastage / (lotQty || 1)) * 100).toFixed(2));
                     const lotWastageType = lotWastagePercentage > 3 ? 'Abnormal Loss' : 'Normal Loss';
 
@@ -558,6 +582,7 @@ export class CleaningGrnController {
                         data: {
                             status: 'Cleaned',
                             cleanedQuantity: cleanedQty,
+                            cleanedQuantityUnit: nativeUnit,
                             stoneWastageQty: parsedStoneWastageQty,
                             stoneWastageUnit: parsedStoneWastageUnit,
                             seedWastageQty: parsedSeedWastageQty,
