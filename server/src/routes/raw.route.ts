@@ -104,9 +104,11 @@ router.put('/transfers/:id/accept', TransferController.acceptTransfer);
 router.put('/transfers/:id/reject', TransferController.rejectTransfer);
 
 // Production Posting
+router.get('/production/consumption-data', ProductionController.getConsumptionData);
 router.post('/production/post', ProductionController.postProduction);
 router.get('/production/postings', ProductionController.getPostings);
 router.get('/production/postings/:id', ProductionController.getPostingById);
+router.put('/production/postings/:id/complete', ProductionController.completeProduction);
 
 router.get('/stock', StockEntryController.getCurrentStockDistribution);
 router.get('/purchase-order-items', PurchaseOrderController.getAllPurchaseOrderItems);

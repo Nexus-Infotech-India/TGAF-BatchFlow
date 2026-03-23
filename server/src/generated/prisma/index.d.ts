@@ -73474,8 +73474,18 @@ export namespace Prisma {
 
   export type AggregateProductionPosting = {
     _count: ProductionPostingCountAggregateOutputType | null
+    _avg: ProductionPostingAvgAggregateOutputType | null
+    _sum: ProductionPostingSumAggregateOutputType | null
     _min: ProductionPostingMinAggregateOutputType | null
     _max: ProductionPostingMaxAggregateOutputType | null
+  }
+
+  export type ProductionPostingAvgAggregateOutputType = {
+    productionQty: number | null
+  }
+
+  export type ProductionPostingSumAggregateOutputType = {
+    productionQty: number | null
   }
 
   export type ProductionPostingMinAggregateOutputType = {
@@ -73485,6 +73495,9 @@ export namespace Prisma {
     bomId: string | null
     locationId: string | null
     shiftDate: Date | null
+    productionQty: number | null
+    productionUnit: string | null
+    status: string | null
     notes: string | null
     postedById: string | null
     createdAt: Date | null
@@ -73498,6 +73511,9 @@ export namespace Prisma {
     bomId: string | null
     locationId: string | null
     shiftDate: Date | null
+    productionQty: number | null
+    productionUnit: string | null
+    status: string | null
     notes: string | null
     postedById: string | null
     createdAt: Date | null
@@ -73511,6 +73527,9 @@ export namespace Prisma {
     bomId: number
     locationId: number
     shiftDate: number
+    productionQty: number
+    productionUnit: number
+    status: number
     notes: number
     postedById: number
     createdAt: number
@@ -73519,6 +73538,14 @@ export namespace Prisma {
   }
 
 
+  export type ProductionPostingAvgAggregateInputType = {
+    productionQty?: true
+  }
+
+  export type ProductionPostingSumAggregateInputType = {
+    productionQty?: true
+  }
+
   export type ProductionPostingMinAggregateInputType = {
     id?: true
     postingNumber?: true
@@ -73526,6 +73553,9 @@ export namespace Prisma {
     bomId?: true
     locationId?: true
     shiftDate?: true
+    productionQty?: true
+    productionUnit?: true
+    status?: true
     notes?: true
     postedById?: true
     createdAt?: true
@@ -73539,6 +73569,9 @@ export namespace Prisma {
     bomId?: true
     locationId?: true
     shiftDate?: true
+    productionQty?: true
+    productionUnit?: true
+    status?: true
     notes?: true
     postedById?: true
     createdAt?: true
@@ -73552,6 +73585,9 @@ export namespace Prisma {
     bomId?: true
     locationId?: true
     shiftDate?: true
+    productionQty?: true
+    productionUnit?: true
+    status?: true
     notes?: true
     postedById?: true
     createdAt?: true
@@ -73597,6 +73633,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: ProductionPostingAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProductionPostingSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: ProductionPostingMinAggregateInputType
@@ -73627,6 +73675,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: ProductionPostingCountAggregateInputType | true
+    _avg?: ProductionPostingAvgAggregateInputType
+    _sum?: ProductionPostingSumAggregateInputType
     _min?: ProductionPostingMinAggregateInputType
     _max?: ProductionPostingMaxAggregateInputType
   }
@@ -73638,11 +73688,16 @@ export namespace Prisma {
     bomId: string
     locationId: string
     shiftDate: Date
+    productionQty: number | null
+    productionUnit: string | null
+    status: string
     notes: string | null
     postedById: string
     createdAt: Date
     updatedAt: Date
     _count: ProductionPostingCountAggregateOutputType | null
+    _avg: ProductionPostingAvgAggregateOutputType | null
+    _sum: ProductionPostingSumAggregateOutputType | null
     _min: ProductionPostingMinAggregateOutputType | null
     _max: ProductionPostingMaxAggregateOutputType | null
   }
@@ -73668,6 +73723,9 @@ export namespace Prisma {
     bomId?: boolean
     locationId?: boolean
     shiftDate?: boolean
+    productionQty?: boolean
+    productionUnit?: boolean
+    status?: boolean
     notes?: boolean
     postedById?: boolean
     createdAt?: boolean
@@ -73684,6 +73742,9 @@ export namespace Prisma {
     bomId?: boolean
     locationId?: boolean
     shiftDate?: boolean
+    productionQty?: boolean
+    productionUnit?: boolean
+    status?: boolean
     notes?: boolean
     postedById?: boolean
     createdAt?: boolean
@@ -73697,6 +73758,9 @@ export namespace Prisma {
     bomId?: boolean
     locationId?: boolean
     shiftDate?: boolean
+    productionQty?: boolean
+    productionUnit?: boolean
+    status?: boolean
     notes?: boolean
     postedById?: boolean
     createdAt?: boolean
@@ -73710,13 +73774,16 @@ export namespace Prisma {
     bomId?: boolean
     locationId?: boolean
     shiftDate?: boolean
+    productionQty?: boolean
+    productionUnit?: boolean
+    status?: boolean
     notes?: boolean
     postedById?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProductionPostingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postingNumber" | "sfgProductId" | "bomId" | "locationId" | "shiftDate" | "notes" | "postedById" | "createdAt" | "updatedAt", ExtArgs["result"]["productionPosting"]>
+  export type ProductionPostingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postingNumber" | "sfgProductId" | "bomId" | "locationId" | "shiftDate" | "productionQty" | "productionUnit" | "status" | "notes" | "postedById" | "createdAt" | "updatedAt", ExtArgs["result"]["productionPosting"]>
   export type ProductionPostingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     consumptions?: boolean | ProductionPosting$consumptionsArgs<ExtArgs>
     outputs?: boolean | ProductionPosting$outputsArgs<ExtArgs>
@@ -73738,6 +73805,9 @@ export namespace Prisma {
       bomId: string
       locationId: string
       shiftDate: Date
+      productionQty: number | null
+      productionUnit: string | null
+      status: string
       notes: string | null
       postedById: string
       createdAt: Date
@@ -74173,6 +74243,9 @@ export namespace Prisma {
     readonly bomId: FieldRef<"ProductionPosting", 'String'>
     readonly locationId: FieldRef<"ProductionPosting", 'String'>
     readonly shiftDate: FieldRef<"ProductionPosting", 'DateTime'>
+    readonly productionQty: FieldRef<"ProductionPosting", 'Float'>
+    readonly productionUnit: FieldRef<"ProductionPosting", 'String'>
+    readonly status: FieldRef<"ProductionPosting", 'String'>
     readonly notes: FieldRef<"ProductionPosting", 'String'>
     readonly postedById: FieldRef<"ProductionPosting", 'String'>
     readonly createdAt: FieldRef<"ProductionPosting", 'DateTime'>
@@ -100249,6 +100322,9 @@ export namespace Prisma {
     bomId: 'bomId',
     locationId: 'locationId',
     shiftDate: 'shiftDate',
+    productionQty: 'productionQty',
+    productionUnit: 'productionUnit',
+    status: 'status',
     notes: 'notes',
     postedById: 'postedById',
     createdAt: 'createdAt',
@@ -105616,6 +105692,9 @@ export namespace Prisma {
     bomId?: StringFilter<"ProductionPosting"> | string
     locationId?: StringFilter<"ProductionPosting"> | string
     shiftDate?: DateTimeFilter<"ProductionPosting"> | Date | string
+    productionQty?: FloatNullableFilter<"ProductionPosting"> | number | null
+    productionUnit?: StringNullableFilter<"ProductionPosting"> | string | null
+    status?: StringFilter<"ProductionPosting"> | string
     notes?: StringNullableFilter<"ProductionPosting"> | string | null
     postedById?: StringFilter<"ProductionPosting"> | string
     createdAt?: DateTimeFilter<"ProductionPosting"> | Date | string
@@ -105631,6 +105710,9 @@ export namespace Prisma {
     bomId?: SortOrder
     locationId?: SortOrder
     shiftDate?: SortOrder
+    productionQty?: SortOrderInput | SortOrder
+    productionUnit?: SortOrderInput | SortOrder
+    status?: SortOrder
     notes?: SortOrderInput | SortOrder
     postedById?: SortOrder
     createdAt?: SortOrder
@@ -105649,6 +105731,9 @@ export namespace Prisma {
     bomId?: StringFilter<"ProductionPosting"> | string
     locationId?: StringFilter<"ProductionPosting"> | string
     shiftDate?: DateTimeFilter<"ProductionPosting"> | Date | string
+    productionQty?: FloatNullableFilter<"ProductionPosting"> | number | null
+    productionUnit?: StringNullableFilter<"ProductionPosting"> | string | null
+    status?: StringFilter<"ProductionPosting"> | string
     notes?: StringNullableFilter<"ProductionPosting"> | string | null
     postedById?: StringFilter<"ProductionPosting"> | string
     createdAt?: DateTimeFilter<"ProductionPosting"> | Date | string
@@ -105664,13 +105749,18 @@ export namespace Prisma {
     bomId?: SortOrder
     locationId?: SortOrder
     shiftDate?: SortOrder
+    productionQty?: SortOrderInput | SortOrder
+    productionUnit?: SortOrderInput | SortOrder
+    status?: SortOrder
     notes?: SortOrderInput | SortOrder
     postedById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProductionPostingCountOrderByAggregateInput
+    _avg?: ProductionPostingAvgOrderByAggregateInput
     _max?: ProductionPostingMaxOrderByAggregateInput
     _min?: ProductionPostingMinOrderByAggregateInput
+    _sum?: ProductionPostingSumOrderByAggregateInput
   }
 
   export type ProductionPostingScalarWhereWithAggregatesInput = {
@@ -105683,6 +105773,9 @@ export namespace Prisma {
     bomId?: StringWithAggregatesFilter<"ProductionPosting"> | string
     locationId?: StringWithAggregatesFilter<"ProductionPosting"> | string
     shiftDate?: DateTimeWithAggregatesFilter<"ProductionPosting"> | Date | string
+    productionQty?: FloatNullableWithAggregatesFilter<"ProductionPosting"> | number | null
+    productionUnit?: StringNullableWithAggregatesFilter<"ProductionPosting"> | string | null
+    status?: StringWithAggregatesFilter<"ProductionPosting"> | string
     notes?: StringNullableWithAggregatesFilter<"ProductionPosting"> | string | null
     postedById?: StringWithAggregatesFilter<"ProductionPosting"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ProductionPosting"> | Date | string
@@ -112412,6 +112505,9 @@ export namespace Prisma {
     bomId: string
     locationId: string
     shiftDate: Date | string
+    productionQty?: number | null
+    productionUnit?: string | null
+    status?: string
     notes?: string | null
     postedById: string
     createdAt?: Date | string
@@ -112427,6 +112523,9 @@ export namespace Prisma {
     bomId: string
     locationId: string
     shiftDate: Date | string
+    productionQty?: number | null
+    productionUnit?: string | null
+    status?: string
     notes?: string | null
     postedById: string
     createdAt?: Date | string
@@ -112442,6 +112541,9 @@ export namespace Prisma {
     bomId?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
     shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    productionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     postedById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -112457,6 +112559,9 @@ export namespace Prisma {
     bomId?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
     shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    productionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     postedById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -112472,6 +112577,9 @@ export namespace Prisma {
     bomId: string
     locationId: string
     shiftDate: Date | string
+    productionQty?: number | null
+    productionUnit?: string | null
+    status?: string
     notes?: string | null
     postedById: string
     createdAt?: Date | string
@@ -112485,6 +112593,9 @@ export namespace Prisma {
     bomId?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
     shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    productionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     postedById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -112498,6 +112609,9 @@ export namespace Prisma {
     bomId?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
     shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    productionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     postedById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -117932,10 +118046,17 @@ export namespace Prisma {
     bomId?: SortOrder
     locationId?: SortOrder
     shiftDate?: SortOrder
+    productionQty?: SortOrder
+    productionUnit?: SortOrder
+    status?: SortOrder
     notes?: SortOrder
     postedById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type ProductionPostingAvgOrderByAggregateInput = {
+    productionQty?: SortOrder
   }
 
   export type ProductionPostingMaxOrderByAggregateInput = {
@@ -117945,6 +118066,9 @@ export namespace Prisma {
     bomId?: SortOrder
     locationId?: SortOrder
     shiftDate?: SortOrder
+    productionQty?: SortOrder
+    productionUnit?: SortOrder
+    status?: SortOrder
     notes?: SortOrder
     postedById?: SortOrder
     createdAt?: SortOrder
@@ -117958,10 +118082,17 @@ export namespace Prisma {
     bomId?: SortOrder
     locationId?: SortOrder
     shiftDate?: SortOrder
+    productionQty?: SortOrder
+    productionUnit?: SortOrder
+    status?: SortOrder
     notes?: SortOrder
     postedById?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type ProductionPostingSumOrderByAggregateInput = {
+    productionQty?: SortOrder
   }
 
   export type ProductionPostingScalarRelationFilter = {
@@ -147006,6 +147137,9 @@ export namespace Prisma {
     bomId: string
     locationId: string
     shiftDate: Date | string
+    productionQty?: number | null
+    productionUnit?: string | null
+    status?: string
     notes?: string | null
     postedById: string
     createdAt?: Date | string
@@ -147020,6 +147154,9 @@ export namespace Prisma {
     bomId: string
     locationId: string
     shiftDate: Date | string
+    productionQty?: number | null
+    productionUnit?: string | null
+    status?: string
     notes?: string | null
     postedById: string
     createdAt?: Date | string
@@ -147050,6 +147187,9 @@ export namespace Prisma {
     bomId?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
     shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    productionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     postedById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -147064,6 +147204,9 @@ export namespace Prisma {
     bomId?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
     shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    productionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     postedById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -147078,6 +147221,9 @@ export namespace Prisma {
     bomId: string
     locationId: string
     shiftDate: Date | string
+    productionQty?: number | null
+    productionUnit?: string | null
+    status?: string
     notes?: string | null
     postedById: string
     createdAt?: Date | string
@@ -147092,6 +147238,9 @@ export namespace Prisma {
     bomId: string
     locationId: string
     shiftDate: Date | string
+    productionQty?: number | null
+    productionUnit?: string | null
+    status?: string
     notes?: string | null
     postedById: string
     createdAt?: Date | string
@@ -147122,6 +147271,9 @@ export namespace Prisma {
     bomId?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
     shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    productionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     postedById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -147136,6 +147288,9 @@ export namespace Prisma {
     bomId?: StringFieldUpdateOperationsInput | string
     locationId?: StringFieldUpdateOperationsInput | string
     shiftDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    productionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     postedById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

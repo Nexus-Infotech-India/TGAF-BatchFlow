@@ -383,6 +383,8 @@ export const API_ROUTES = {
     POST_PRODUCTION: `${BASE_URL}/raw/production/post`,
     GET_PRODUCTION_POSTINGS: `${BASE_URL}/raw/production/postings`,
     GET_PRODUCTION_POSTING_BY_ID: (id: string) => `${BASE_URL}/raw/production/postings/${id}`,
+    GET_CONSUMPTION_DATA: `${BASE_URL}/raw/production/consumption-data`,
+    COMPLETE_PRODUCTION: (id: string) => `${BASE_URL}/raw/production/postings/${id}/complete`,
 
     // Grinding Dispatch (Transfer with Approval)
     CREATE_GRINDING_DISPATCH: `${BASE_URL}/raw/grinding/dispatch`,

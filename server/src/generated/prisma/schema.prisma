@@ -936,16 +936,19 @@ enum OutputType {
 }
 
 model ProductionPosting {
-  id            String   @id @default(uuid())
-  postingNumber String   @unique
-  sfgProductId  String
-  bomId         String
-  locationId    String
-  shiftDate     DateTime
-  notes         String?
-  postedById    String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             String   @id @default(uuid())
+  postingNumber  String   @unique
+  sfgProductId   String
+  bomId          String
+  locationId     String
+  shiftDate      DateTime
+  productionQty  Float?
+  productionUnit String?
+  status         String   @default("POSTED")
+  notes          String?
+  postedById     String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   consumptions ProductionConsumption[]
   outputs      ProductionOutput[]
