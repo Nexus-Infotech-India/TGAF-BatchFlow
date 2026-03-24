@@ -786,7 +786,10 @@ exports.Prisma.ProductionConsumptionScalarFieldEnum = {
   rawMaterialId: 'rawMaterialId',
   expectedQuantity: 'expectedQuantity',
   actualQuantity: 'actualQuantity',
+  unit: 'unit',
+  sourceType: 'sourceType',
   batchNumber: 'batchNumber',
+  dispatchId: 'dispatchId',
   cleaningLotId: 'cleaningLotId',
   createdAt: 'createdAt'
 };
@@ -1029,6 +1032,7 @@ exports.Prisma.GrindingDispatchScalarFieldEnum = {
   fromLocationId: 'fromLocationId',
   toLocationId: 'toLocationId',
   totalQuantity: 'totalQuantity',
+  consumedQuantity: 'consumedQuantity',
   status: 'status',
   sentAt: 'sentAt',
   acceptedAt: 'acceptedAt',

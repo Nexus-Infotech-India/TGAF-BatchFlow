@@ -93,6 +93,7 @@ interface POItem {
   id: string;
   rawMaterialId: string;
   quantityOrdered: number;
+  quantityUnit: string;
   rate: number;
   totalReceived: number;
   status: string;
@@ -123,7 +124,7 @@ interface GRNEntry {
   createdAt: string;
   grn: string | null;
   purchaseOrder: { id: string; poNumber: string; vendor: { name: string } } | null;
-  purchaseOrderItem: { rawMaterial: { name: string; skuCode: string; unitOfMeasurement?: string }; quantityOrdered: number; quantityReceived: number; totalReceived: number } | null;
+  purchaseOrderItem: { rawMaterial: { name: string; skuCode: string; unitOfMeasurement?: string }; quantityOrdered: number; quantityUnit?: string; quantityReceived: number; totalReceived: number } | null;
   qualityReport?: RMQualityReportType | null;
   parameters: any[];
   grn_entry?: { id: string; grnNumber: string } | null;
@@ -459,8 +460,8 @@ const RMQualityReport: React.FC = () => {
           <div class="detail-item"><span class="detail-label">SKU Code:</span><span class="detail-value">${grn.purchaseOrderItem?.rawMaterial?.skuCode || '-'}</span></div>
           <div class="detail-item"><span class="detail-label">Supplier:</span><span class="detail-value">${grn.supplier}</span></div>
           <div class="detail-item"><span class="detail-label">Date:</span><span class="detail-value">${reportDate}</span></div>
-          <div class="detail-item"><span class="detail-label">Qty Ordered:</span><span class="detail-value">${grn.purchaseOrderItem?.quantityOrdered ?? '-'}${grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement ? ' ' + grn.purchaseOrderItem.rawMaterial.unitOfMeasurement : ''}</span></div>
-          <div class="detail-item"><span class="detail-label">Qty Received:</span><span class="detail-value">${grn.purchaseOrderItem?.totalReceived ?? '-'}${grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement ? ' ' + grn.purchaseOrderItem.rawMaterial.unitOfMeasurement : ''}</span></div>
+          <div class="detail-item"><span class="detail-label">Qty Ordered:</span><span class="detail-value">${grn.purchaseOrderItem?.quantityOrdered ?? '-'} ${grn.purchaseOrderItem?.quantityUnit || grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || ''}</span></div>
+          <div class="detail-item"><span class="detail-label">Qty Received:</span><span class="detail-value">${grn.purchaseOrderItem?.totalReceived ?? '-'} ${grn.purchaseOrderItem?.quantityUnit || grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || ''}</span></div>
         </div>
       </div>
       <div class="section"><div class="section-title">Quality Parameters</div>
@@ -858,8 +859,8 @@ const RMQualityReport: React.FC = () => {
                           { icon: Package, label: 'Raw Material', value: selectedItem.rawMaterial.name },
                           { icon: Building, label: 'Supplier', value: selectedPO!.vendor.name },
                           { icon: Hash, label: 'PO Number', value: selectedPO!.poNumber },
-                          { icon: Package, label: 'Qty Ordered', value: `${selectedItem.quantityOrdered} ${selectedItem.rawMaterial.unitOfMeasurement || ''}`.trim() },
-                          { icon: Check, label: 'Qty Received', value: `${selectedItem.totalReceived} ${selectedItem.rawMaterial.unitOfMeasurement || ''}`.trim() },
+                          { icon: Package, label: 'Qty Ordered', value: `${selectedItem.quantityOrdered} ${selectedItem.quantityUnit || selectedItem.rawMaterial.unitOfMeasurement || ''}`.trim() },
+                          { icon: Check, label: 'Qty Received', value: `${selectedItem.totalReceived} ${selectedItem.quantityUnit || selectedItem.rawMaterial.unitOfMeasurement || ''}`.trim() },
                         ].map(({ icon: Icon, label, value }) => (
                           <div key={label} className="flex items-center gap-2.5 text-sm">
                             <Icon size={13} style={{ color: 'var(--primary)' }} />

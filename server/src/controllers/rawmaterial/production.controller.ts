@@ -34,6 +34,9 @@ export class ProductionController {
   /**
    * GET /production/consumption-data
    * Query: sfgProductId, productionQty, productionUnit, locationId
+   *
+   * Calculates expected raw material quantities from BOM,
+   * shows available batch/stock quantities MINUS what has already been consumed.
    */
   static async getConsumptionData(req: Request, res: Response): Promise<void> {
     try {
@@ -114,7 +117,8 @@ export class ProductionController {
         const bomItemInGrams = toGrams(item.quantity, item.unitOfMeasurement);
         const scaledGrams = bomItemInGrams * scaleFactor;
 
-        const displayUnit = item.rawMaterial.unitOfMeasurement;
+        // ── FIX: Use the BOM item's unit for display, not the raw material's unit ──
+        const displayUnit = item.unitOfMeasurement;
         const expectedQty = fromGrams(scaledGrams, displayUnit);
         const roundedExpected = Math.round(expectedQty * 1000) / 1000;
 
@@ -127,6 +131,8 @@ export class ProductionController {
           dispatchId: string;
           batchNumber: string;
           totalQuantity: number;
+          consumedQuantity: number;
+          remainingQuantity: number;
           unit: string;
         }[] = [];
         let currentStockQty = 0;
@@ -134,12 +140,21 @@ export class ProductionController {
 
         if (matchingDispatches.length > 0) {
           sourceType = 'BATCH';
-          availableBatches = matchingDispatches.map((d) => ({
-            dispatchId: d.id,
-            batchNumber: d.batchNumber,
-            totalQuantity: d.totalQuantity,
-            unit: d.inputRawMaterial.unitOfMeasurement,
-          }));
+          // ── FIX: Show remaining quantity (total - consumed) for each batch ──
+          availableBatches = matchingDispatches
+            .map((d) => {
+              const consumed = (d as any).consumedQuantity || 0;
+              const remaining = d.totalQuantity - consumed;
+              return {
+                dispatchId: d.id,
+                batchNumber: d.batchNumber,
+                totalQuantity: d.totalQuantity,
+                consumedQuantity: consumed,
+                remainingQuantity: Math.round(remaining * 1000) / 1000,
+                unit: d.inputRawMaterial.unitOfMeasurement,
+              };
+            })
+            .filter((b) => b.remainingQuantity > 0); // Only show batches with remaining qty
         } else {
           sourceType = 'STOCK';
           const stocks = await prisma.currentStock.findMany({
@@ -189,6 +204,7 @@ export class ProductionController {
   /**
    * POST /production/post
    * Posts production with SFG output only. Status = POSTED.
+   * ── FIX: Now deducts consumed quantities from batch dispatches and current stock ──
    */
   static async postProduction(req: Request, res: Response) {
     try {
@@ -244,6 +260,63 @@ export class ProductionController {
         return;
       }
 
+      // ── Validate available quantities before proceeding ──
+      for (const c of consumptions) {
+        const actualQty = Number(c.actualQuantity);
+        if (actualQty <= 0) continue;
+
+        if (c.sourceType === 'BATCH' && c.batchNumber) {
+          // Check batch has enough remaining quantity
+          const dispatch = await prisma.grindingDispatch.findUnique({
+            where: { batchNumber: c.batchNumber },
+            include: { inputRawMaterial: true },
+          });
+
+          if (!dispatch) {
+            res.status(400).json({
+              error: `Batch ${c.batchNumber} not found`,
+            });
+            return;
+          }
+
+          const dUnit = dispatch.inputRawMaterial.unitOfMeasurement;
+          const consumedInGrams = toGrams(actualQty, c.unit || dUnit);
+          const consumedInDispatchUnit = fromGrams(consumedInGrams, dUnit);
+          const remaining = dispatch.totalQuantity - (dispatch.consumedQuantity || 0);
+
+          if (consumedInDispatchUnit > remaining) {
+            const bomItem = bom.items.find((i) => i.rawMaterialId === c.rawMaterialId);
+            const materialName = bomItem?.rawMaterial?.name || c.rawMaterialId;
+            res.status(400).json({
+              error: `Insufficient batch quantity for ${materialName}. Required: ${actualQty} ${c.unit || 'KG'}, Available in batch ${c.batchNumber}: ${Math.round(remaining * 1000) / 1000} ${dUnit}`,
+            });
+            return;
+          }
+        } else if (c.sourceType === 'STOCK') {
+          // Check current stock has enough quantity
+          const stocks = await prisma.currentStock.findMany({
+            where: { rawMaterialId: c.rawMaterialId },
+            include: { rawMaterial: true },
+          });
+
+          const totalStockQty = stocks.reduce((sum, s) => sum + s.currentQuantity, 0);
+          const stockUnit = stocks[0]?.rawMaterial?.unitOfMeasurement || c.unit || 'KG';
+
+          // Convert actual qty to stock unit for comparison
+          const actualInGrams = toGrams(actualQty, c.unit || stockUnit);
+          const actualInStockUnit = fromGrams(actualInGrams, stockUnit);
+
+          if (totalStockQty <= 0 || actualInStockUnit > totalStockQty) {
+            const bomItem = bom.items.find((i) => i.rawMaterialId === c.rawMaterialId);
+            const materialName = bomItem?.rawMaterial?.name || c.rawMaterialId;
+            res.status(400).json({
+              error: `Insufficient stock for ${materialName}. Required: ${actualQty} ${c.unit || 'KG'}, Available: ${Math.round(totalStockQty * 1000) / 1000} ${stockUnit}`,
+            });
+            return;
+          }
+        }
+      }
+
       // Generate posting number
       const today = new Date();
       const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
@@ -277,7 +350,10 @@ export class ProductionController {
                 rawMaterialId: c.rawMaterialId,
                 expectedQuantity: Number(c.expectedQuantity) || 0,
                 actualQuantity: Number(c.actualQuantity),
+                unit: c.unit || null,
+                sourceType: c.sourceType || null,
                 batchNumber: c.batchNumber || null,
+                dispatchId: c.dispatchId || null,
                 cleaningLotId: c.cleaningLotId || null,
               })),
             },
@@ -297,6 +373,66 @@ export class ProductionController {
             outputs: true,
           },
         });
+
+        // ── FIX: Deduct consumed quantities from source (batch or stock) ──
+        for (const c of consumptions) {
+          const actualQty = Number(c.actualQuantity);
+          if (actualQty <= 0) continue;
+
+          if (c.sourceType === 'BATCH' && c.batchNumber) {
+            // Find the dispatch by batch number with its raw material to know the unit
+            const dispatchWithMaterial = await tx.grindingDispatch.findUnique({
+              where: { batchNumber: c.batchNumber },
+              include: { inputRawMaterial: true },
+            });
+
+            if (dispatchWithMaterial) {
+              const dUnit = dispatchWithMaterial.inputRawMaterial.unitOfMeasurement;
+              const consumedInGrams = toGrams(actualQty, c.unit || dUnit);
+              const consumedInDispatchUnit = fromGrams(consumedInGrams, dUnit);
+              const newConsumed = (dispatchWithMaterial.consumedQuantity || 0) + consumedInDispatchUnit;
+
+              await tx.grindingDispatch.update({
+                where: { id: dispatchWithMaterial.id },
+                data: {
+                  consumedQuantity: Math.round(newConsumed * 1000) / 1000,
+                },
+              });
+            }
+          } else if (c.sourceType === 'STOCK') {
+            // Deduct from current stock
+            const stocks = await tx.currentStock.findMany({
+              where: { rawMaterialId: c.rawMaterialId },
+              include: { rawMaterial: true },
+            });
+
+            let remainingToDeduct = actualQty; // in the consumption's unit
+
+            for (const stock of stocks) {
+              if (remainingToDeduct <= 0) break;
+
+              // Convert remaining to deduct to stock's unit for comparison
+              const remainingInGrams = toGrams(remainingToDeduct, c.unit || stock.rawMaterial.unitOfMeasurement);
+              const stockUnit = stock.rawMaterial.unitOfMeasurement;
+              const remainingInStockUnit = fromGrams(remainingInGrams, stockUnit);
+
+              const deductFromThisStock = Math.min(stock.currentQuantity, remainingInStockUnit);
+              if (deductFromThisStock > 0) {
+                await tx.currentStock.update({
+                  where: { id: stock.id },
+                  data: {
+                    currentQuantity: Math.round((stock.currentQuantity - deductFromThisStock) * 1000) / 1000,
+                  },
+                });
+
+                // Convert deducted amount back to consumption unit
+                const deductedInGrams = toGrams(deductFromThisStock, stockUnit);
+                const deductedInConsumptionUnit = fromGrams(deductedInGrams, c.unit || stockUnit);
+                remainingToDeduct -= deductedInConsumptionUnit;
+              }
+            }
+          }
+        }
 
         await tx.transactionLog.create({
           data: {

@@ -960,7 +960,10 @@ model ProductionConsumption {
   rawMaterialId    String
   expectedQuantity Float
   actualQuantity   Float
+  unit             String?
+  sourceType       String?  // 'BATCH' or 'STOCK'
   batchNumber      String?
+  dispatchId       String?  // Reference to GrindingDispatch used
   cleaningLotId    String?
   createdAt        DateTime @default(now())
 
@@ -1421,6 +1424,7 @@ model GrindingDispatch {
   fromLocationId     String
   toLocationId       String
   totalQuantity      Float
+  consumedQuantity   Float                   @default(0)
   status             GrindingDispatchStatus  @default(SENT)
   sentAt             DateTime                @default(now())
   acceptedAt         DateTime?
@@ -1435,6 +1439,7 @@ model GrindingDispatch {
   toLocation       Location             @relation("DispatchToLocation", fields: [toLocationId], references: [id])
   lots             GrindingDispatchLot[]
 }
+
 
 model GrindingDispatchLot {
   id                   String   @id @default(uuid())

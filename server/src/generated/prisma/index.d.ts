@@ -74732,7 +74732,10 @@ export namespace Prisma {
     rawMaterialId: string | null
     expectedQuantity: number | null
     actualQuantity: number | null
+    unit: string | null
+    sourceType: string | null
     batchNumber: string | null
+    dispatchId: string | null
     cleaningLotId: string | null
     createdAt: Date | null
   }
@@ -74743,7 +74746,10 @@ export namespace Prisma {
     rawMaterialId: string | null
     expectedQuantity: number | null
     actualQuantity: number | null
+    unit: string | null
+    sourceType: string | null
     batchNumber: string | null
+    dispatchId: string | null
     cleaningLotId: string | null
     createdAt: Date | null
   }
@@ -74754,7 +74760,10 @@ export namespace Prisma {
     rawMaterialId: number
     expectedQuantity: number
     actualQuantity: number
+    unit: number
+    sourceType: number
     batchNumber: number
+    dispatchId: number
     cleaningLotId: number
     createdAt: number
     _all: number
@@ -74777,7 +74786,10 @@ export namespace Prisma {
     rawMaterialId?: true
     expectedQuantity?: true
     actualQuantity?: true
+    unit?: true
+    sourceType?: true
     batchNumber?: true
+    dispatchId?: true
     cleaningLotId?: true
     createdAt?: true
   }
@@ -74788,7 +74800,10 @@ export namespace Prisma {
     rawMaterialId?: true
     expectedQuantity?: true
     actualQuantity?: true
+    unit?: true
+    sourceType?: true
     batchNumber?: true
+    dispatchId?: true
     cleaningLotId?: true
     createdAt?: true
   }
@@ -74799,7 +74814,10 @@ export namespace Prisma {
     rawMaterialId?: true
     expectedQuantity?: true
     actualQuantity?: true
+    unit?: true
+    sourceType?: true
     batchNumber?: true
+    dispatchId?: true
     cleaningLotId?: true
     createdAt?: true
     _all?: true
@@ -74897,7 +74915,10 @@ export namespace Prisma {
     rawMaterialId: string
     expectedQuantity: number
     actualQuantity: number
+    unit: string | null
+    sourceType: string | null
     batchNumber: string | null
+    dispatchId: string | null
     cleaningLotId: string | null
     createdAt: Date
     _count: ProductionConsumptionCountAggregateOutputType | null
@@ -74927,7 +74948,10 @@ export namespace Prisma {
     rawMaterialId?: boolean
     expectedQuantity?: boolean
     actualQuantity?: boolean
+    unit?: boolean
+    sourceType?: boolean
     batchNumber?: boolean
+    dispatchId?: boolean
     cleaningLotId?: boolean
     createdAt?: boolean
     posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
@@ -74939,7 +74963,10 @@ export namespace Prisma {
     rawMaterialId?: boolean
     expectedQuantity?: boolean
     actualQuantity?: boolean
+    unit?: boolean
+    sourceType?: boolean
     batchNumber?: boolean
+    dispatchId?: boolean
     cleaningLotId?: boolean
     createdAt?: boolean
     posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
@@ -74951,7 +74978,10 @@ export namespace Prisma {
     rawMaterialId?: boolean
     expectedQuantity?: boolean
     actualQuantity?: boolean
+    unit?: boolean
+    sourceType?: boolean
     batchNumber?: boolean
+    dispatchId?: boolean
     cleaningLotId?: boolean
     createdAt?: boolean
     posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
@@ -74963,12 +74993,15 @@ export namespace Prisma {
     rawMaterialId?: boolean
     expectedQuantity?: boolean
     actualQuantity?: boolean
+    unit?: boolean
+    sourceType?: boolean
     batchNumber?: boolean
+    dispatchId?: boolean
     cleaningLotId?: boolean
     createdAt?: boolean
   }
 
-  export type ProductionConsumptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postingId" | "rawMaterialId" | "expectedQuantity" | "actualQuantity" | "batchNumber" | "cleaningLotId" | "createdAt", ExtArgs["result"]["productionConsumption"]>
+  export type ProductionConsumptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postingId" | "rawMaterialId" | "expectedQuantity" | "actualQuantity" | "unit" | "sourceType" | "batchNumber" | "dispatchId" | "cleaningLotId" | "createdAt", ExtArgs["result"]["productionConsumption"]>
   export type ProductionConsumptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
   }
@@ -74990,7 +75023,10 @@ export namespace Prisma {
       rawMaterialId: string
       expectedQuantity: number
       actualQuantity: number
+      unit: string | null
+      sourceType: string | null
       batchNumber: string | null
+      dispatchId: string | null
       cleaningLotId: string | null
       createdAt: Date
     }, ExtArgs["result"]["productionConsumption"]>
@@ -75422,7 +75458,10 @@ export namespace Prisma {
     readonly rawMaterialId: FieldRef<"ProductionConsumption", 'String'>
     readonly expectedQuantity: FieldRef<"ProductionConsumption", 'Float'>
     readonly actualQuantity: FieldRef<"ProductionConsumption", 'Float'>
+    readonly unit: FieldRef<"ProductionConsumption", 'String'>
+    readonly sourceType: FieldRef<"ProductionConsumption", 'String'>
     readonly batchNumber: FieldRef<"ProductionConsumption", 'String'>
+    readonly dispatchId: FieldRef<"ProductionConsumption", 'String'>
     readonly cleaningLotId: FieldRef<"ProductionConsumption", 'String'>
     readonly createdAt: FieldRef<"ProductionConsumption", 'DateTime'>
   }
@@ -97141,10 +97180,12 @@ export namespace Prisma {
 
   export type GrindingDispatchAvgAggregateOutputType = {
     totalQuantity: number | null
+    consumedQuantity: number | null
   }
 
   export type GrindingDispatchSumAggregateOutputType = {
     totalQuantity: number | null
+    consumedQuantity: number | null
   }
 
   export type GrindingDispatchMinAggregateOutputType = {
@@ -97154,6 +97195,7 @@ export namespace Prisma {
     fromLocationId: string | null
     toLocationId: string | null
     totalQuantity: number | null
+    consumedQuantity: number | null
     status: $Enums.GrindingDispatchStatus | null
     sentAt: Date | null
     acceptedAt: Date | null
@@ -97171,6 +97213,7 @@ export namespace Prisma {
     fromLocationId: string | null
     toLocationId: string | null
     totalQuantity: number | null
+    consumedQuantity: number | null
     status: $Enums.GrindingDispatchStatus | null
     sentAt: Date | null
     acceptedAt: Date | null
@@ -97188,6 +97231,7 @@ export namespace Prisma {
     fromLocationId: number
     toLocationId: number
     totalQuantity: number
+    consumedQuantity: number
     status: number
     sentAt: number
     acceptedAt: number
@@ -97202,10 +97246,12 @@ export namespace Prisma {
 
   export type GrindingDispatchAvgAggregateInputType = {
     totalQuantity?: true
+    consumedQuantity?: true
   }
 
   export type GrindingDispatchSumAggregateInputType = {
     totalQuantity?: true
+    consumedQuantity?: true
   }
 
   export type GrindingDispatchMinAggregateInputType = {
@@ -97215,6 +97261,7 @@ export namespace Prisma {
     fromLocationId?: true
     toLocationId?: true
     totalQuantity?: true
+    consumedQuantity?: true
     status?: true
     sentAt?: true
     acceptedAt?: true
@@ -97232,6 +97279,7 @@ export namespace Prisma {
     fromLocationId?: true
     toLocationId?: true
     totalQuantity?: true
+    consumedQuantity?: true
     status?: true
     sentAt?: true
     acceptedAt?: true
@@ -97249,6 +97297,7 @@ export namespace Prisma {
     fromLocationId?: true
     toLocationId?: true
     totalQuantity?: true
+    consumedQuantity?: true
     status?: true
     sentAt?: true
     acceptedAt?: true
@@ -97353,6 +97402,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    consumedQuantity: number
     status: $Enums.GrindingDispatchStatus
     sentAt: Date
     acceptedAt: Date | null
@@ -97389,6 +97439,7 @@ export namespace Prisma {
     fromLocationId?: boolean
     toLocationId?: boolean
     totalQuantity?: boolean
+    consumedQuantity?: boolean
     status?: boolean
     sentAt?: boolean
     acceptedAt?: boolean
@@ -97411,6 +97462,7 @@ export namespace Prisma {
     fromLocationId?: boolean
     toLocationId?: boolean
     totalQuantity?: boolean
+    consumedQuantity?: boolean
     status?: boolean
     sentAt?: boolean
     acceptedAt?: boolean
@@ -97431,6 +97483,7 @@ export namespace Prisma {
     fromLocationId?: boolean
     toLocationId?: boolean
     totalQuantity?: boolean
+    consumedQuantity?: boolean
     status?: boolean
     sentAt?: boolean
     acceptedAt?: boolean
@@ -97451,6 +97504,7 @@ export namespace Prisma {
     fromLocationId?: boolean
     toLocationId?: boolean
     totalQuantity?: boolean
+    consumedQuantity?: boolean
     status?: boolean
     sentAt?: boolean
     acceptedAt?: boolean
@@ -97461,7 +97515,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type GrindingDispatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "inputRawMaterialId" | "fromLocationId" | "toLocationId" | "totalQuantity" | "status" | "sentAt" | "acceptedAt" | "rejectedAt" | "rejectionReason" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["grindingDispatch"]>
+  export type GrindingDispatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "inputRawMaterialId" | "fromLocationId" | "toLocationId" | "totalQuantity" | "consumedQuantity" | "status" | "sentAt" | "acceptedAt" | "rejectedAt" | "rejectionReason" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["grindingDispatch"]>
   export type GrindingDispatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inputRawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
@@ -97495,6 +97549,7 @@ export namespace Prisma {
       fromLocationId: string
       toLocationId: string
       totalQuantity: number
+      consumedQuantity: number
       status: $Enums.GrindingDispatchStatus
       sentAt: Date
       acceptedAt: Date | null
@@ -97936,6 +97991,7 @@ export namespace Prisma {
     readonly fromLocationId: FieldRef<"GrindingDispatch", 'String'>
     readonly toLocationId: FieldRef<"GrindingDispatch", 'String'>
     readonly totalQuantity: FieldRef<"GrindingDispatch", 'Float'>
+    readonly consumedQuantity: FieldRef<"GrindingDispatch", 'Float'>
     readonly status: FieldRef<"GrindingDispatch", 'GrindingDispatchStatus'>
     readonly sentAt: FieldRef<"GrindingDispatch", 'DateTime'>
     readonly acceptedAt: FieldRef<"GrindingDispatch", 'DateTime'>
@@ -100340,7 +100396,10 @@ export namespace Prisma {
     rawMaterialId: 'rawMaterialId',
     expectedQuantity: 'expectedQuantity',
     actualQuantity: 'actualQuantity',
+    unit: 'unit',
+    sourceType: 'sourceType',
     batchNumber: 'batchNumber',
+    dispatchId: 'dispatchId',
     cleaningLotId: 'cleaningLotId',
     createdAt: 'createdAt'
   };
@@ -100640,6 +100699,7 @@ export namespace Prisma {
     fromLocationId: 'fromLocationId',
     toLocationId: 'toLocationId',
     totalQuantity: 'totalQuantity',
+    consumedQuantity: 'consumedQuantity',
     status: 'status',
     sentAt: 'sentAt',
     acceptedAt: 'acceptedAt',
@@ -105791,7 +105851,10 @@ export namespace Prisma {
     rawMaterialId?: StringFilter<"ProductionConsumption"> | string
     expectedQuantity?: FloatFilter<"ProductionConsumption"> | number
     actualQuantity?: FloatFilter<"ProductionConsumption"> | number
+    unit?: StringNullableFilter<"ProductionConsumption"> | string | null
+    sourceType?: StringNullableFilter<"ProductionConsumption"> | string | null
     batchNumber?: StringNullableFilter<"ProductionConsumption"> | string | null
+    dispatchId?: StringNullableFilter<"ProductionConsumption"> | string | null
     cleaningLotId?: StringNullableFilter<"ProductionConsumption"> | string | null
     createdAt?: DateTimeFilter<"ProductionConsumption"> | Date | string
     posting?: XOR<ProductionPostingScalarRelationFilter, ProductionPostingWhereInput>
@@ -105803,7 +105866,10 @@ export namespace Prisma {
     rawMaterialId?: SortOrder
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
+    unit?: SortOrderInput | SortOrder
+    sourceType?: SortOrderInput | SortOrder
     batchNumber?: SortOrderInput | SortOrder
+    dispatchId?: SortOrderInput | SortOrder
     cleaningLotId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     posting?: ProductionPostingOrderByWithRelationInput
@@ -105818,7 +105884,10 @@ export namespace Prisma {
     rawMaterialId?: StringFilter<"ProductionConsumption"> | string
     expectedQuantity?: FloatFilter<"ProductionConsumption"> | number
     actualQuantity?: FloatFilter<"ProductionConsumption"> | number
+    unit?: StringNullableFilter<"ProductionConsumption"> | string | null
+    sourceType?: StringNullableFilter<"ProductionConsumption"> | string | null
     batchNumber?: StringNullableFilter<"ProductionConsumption"> | string | null
+    dispatchId?: StringNullableFilter<"ProductionConsumption"> | string | null
     cleaningLotId?: StringNullableFilter<"ProductionConsumption"> | string | null
     createdAt?: DateTimeFilter<"ProductionConsumption"> | Date | string
     posting?: XOR<ProductionPostingScalarRelationFilter, ProductionPostingWhereInput>
@@ -105830,7 +105899,10 @@ export namespace Prisma {
     rawMaterialId?: SortOrder
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
+    unit?: SortOrderInput | SortOrder
+    sourceType?: SortOrderInput | SortOrder
     batchNumber?: SortOrderInput | SortOrder
+    dispatchId?: SortOrderInput | SortOrder
     cleaningLotId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: ProductionConsumptionCountOrderByAggregateInput
@@ -105849,7 +105921,10 @@ export namespace Prisma {
     rawMaterialId?: StringWithAggregatesFilter<"ProductionConsumption"> | string
     expectedQuantity?: FloatWithAggregatesFilter<"ProductionConsumption"> | number
     actualQuantity?: FloatWithAggregatesFilter<"ProductionConsumption"> | number
+    unit?: StringNullableWithAggregatesFilter<"ProductionConsumption"> | string | null
+    sourceType?: StringNullableWithAggregatesFilter<"ProductionConsumption"> | string | null
     batchNumber?: StringNullableWithAggregatesFilter<"ProductionConsumption"> | string | null
+    dispatchId?: StringNullableWithAggregatesFilter<"ProductionConsumption"> | string | null
     cleaningLotId?: StringNullableWithAggregatesFilter<"ProductionConsumption"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"ProductionConsumption"> | Date | string
   }
@@ -107406,6 +107481,7 @@ export namespace Prisma {
     fromLocationId?: StringFilter<"GrindingDispatch"> | string
     toLocationId?: StringFilter<"GrindingDispatch"> | string
     totalQuantity?: FloatFilter<"GrindingDispatch"> | number
+    consumedQuantity?: FloatFilter<"GrindingDispatch"> | number
     status?: EnumGrindingDispatchStatusFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
     acceptedAt?: DateTimeNullableFilter<"GrindingDispatch"> | Date | string | null
@@ -107427,6 +107503,7 @@ export namespace Prisma {
     fromLocationId?: SortOrder
     toLocationId?: SortOrder
     totalQuantity?: SortOrder
+    consumedQuantity?: SortOrder
     status?: SortOrder
     sentAt?: SortOrder
     acceptedAt?: SortOrderInput | SortOrder
@@ -107451,6 +107528,7 @@ export namespace Prisma {
     fromLocationId?: StringFilter<"GrindingDispatch"> | string
     toLocationId?: StringFilter<"GrindingDispatch"> | string
     totalQuantity?: FloatFilter<"GrindingDispatch"> | number
+    consumedQuantity?: FloatFilter<"GrindingDispatch"> | number
     status?: EnumGrindingDispatchStatusFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
     acceptedAt?: DateTimeNullableFilter<"GrindingDispatch"> | Date | string | null
@@ -107472,6 +107550,7 @@ export namespace Prisma {
     fromLocationId?: SortOrder
     toLocationId?: SortOrder
     totalQuantity?: SortOrder
+    consumedQuantity?: SortOrder
     status?: SortOrder
     sentAt?: SortOrder
     acceptedAt?: SortOrderInput | SortOrder
@@ -107497,6 +107576,7 @@ export namespace Prisma {
     fromLocationId?: StringWithAggregatesFilter<"GrindingDispatch"> | string
     toLocationId?: StringWithAggregatesFilter<"GrindingDispatch"> | string
     totalQuantity?: FloatWithAggregatesFilter<"GrindingDispatch"> | number
+    consumedQuantity?: FloatWithAggregatesFilter<"GrindingDispatch"> | number
     status?: EnumGrindingDispatchStatusWithAggregatesFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeWithAggregatesFilter<"GrindingDispatch"> | Date | string
     acceptedAt?: DateTimeNullableWithAggregatesFilter<"GrindingDispatch"> | Date | string | null
@@ -112623,7 +112703,10 @@ export namespace Prisma {
     rawMaterialId: string
     expectedQuantity: number
     actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
     batchNumber?: string | null
+    dispatchId?: string | null
     cleaningLotId?: string | null
     createdAt?: Date | string
     posting: ProductionPostingCreateNestedOneWithoutConsumptionsInput
@@ -112635,7 +112718,10 @@ export namespace Prisma {
     rawMaterialId: string
     expectedQuantity: number
     actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
     batchNumber?: string | null
+    dispatchId?: string | null
     cleaningLotId?: string | null
     createdAt?: Date | string
   }
@@ -112645,7 +112731,10 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posting?: ProductionPostingUpdateOneRequiredWithoutConsumptionsNestedInput
@@ -112657,7 +112746,10 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -112668,7 +112760,10 @@ export namespace Prisma {
     rawMaterialId: string
     expectedQuantity: number
     actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
     batchNumber?: string | null
+    dispatchId?: string | null
     cleaningLotId?: string | null
     createdAt?: Date | string
   }
@@ -112678,7 +112773,10 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -112689,7 +112787,10 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -114328,6 +114429,7 @@ export namespace Prisma {
     id?: string
     batchNumber: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -114349,6 +114451,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -114364,6 +114467,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -114385,6 +114489,7 @@ export namespace Prisma {
     fromLocationId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -114403,6 +114508,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -114417,6 +114523,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -114434,6 +114541,7 @@ export namespace Prisma {
     fromLocationId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -118106,7 +118214,10 @@ export namespace Prisma {
     rawMaterialId?: SortOrder
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
+    unit?: SortOrder
+    sourceType?: SortOrder
     batchNumber?: SortOrder
+    dispatchId?: SortOrder
     cleaningLotId?: SortOrder
     createdAt?: SortOrder
   }
@@ -118122,7 +118233,10 @@ export namespace Prisma {
     rawMaterialId?: SortOrder
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
+    unit?: SortOrder
+    sourceType?: SortOrder
     batchNumber?: SortOrder
+    dispatchId?: SortOrder
     cleaningLotId?: SortOrder
     createdAt?: SortOrder
   }
@@ -118133,7 +118247,10 @@ export namespace Prisma {
     rawMaterialId?: SortOrder
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
+    unit?: SortOrder
+    sourceType?: SortOrder
     batchNumber?: SortOrder
+    dispatchId?: SortOrder
     cleaningLotId?: SortOrder
     createdAt?: SortOrder
   }
@@ -119108,6 +119225,7 @@ export namespace Prisma {
     fromLocationId?: SortOrder
     toLocationId?: SortOrder
     totalQuantity?: SortOrder
+    consumedQuantity?: SortOrder
     status?: SortOrder
     sentAt?: SortOrder
     acceptedAt?: SortOrder
@@ -119120,6 +119238,7 @@ export namespace Prisma {
 
   export type GrindingDispatchAvgOrderByAggregateInput = {
     totalQuantity?: SortOrder
+    consumedQuantity?: SortOrder
   }
 
   export type GrindingDispatchMaxOrderByAggregateInput = {
@@ -119129,6 +119248,7 @@ export namespace Prisma {
     fromLocationId?: SortOrder
     toLocationId?: SortOrder
     totalQuantity?: SortOrder
+    consumedQuantity?: SortOrder
     status?: SortOrder
     sentAt?: SortOrder
     acceptedAt?: SortOrder
@@ -119146,6 +119266,7 @@ export namespace Prisma {
     fromLocationId?: SortOrder
     toLocationId?: SortOrder
     totalQuantity?: SortOrder
+    consumedQuantity?: SortOrder
     status?: SortOrder
     sentAt?: SortOrder
     acceptedAt?: SortOrder
@@ -119158,6 +119279,7 @@ export namespace Prisma {
 
   export type GrindingDispatchSumOrderByAggregateInput = {
     totalQuantity?: SortOrder
+    consumedQuantity?: SortOrder
   }
 
   export type EnumGrindingDispatchStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -144207,6 +144329,7 @@ export namespace Prisma {
     id?: string
     batchNumber: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -144226,6 +144349,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -144580,6 +144704,7 @@ export namespace Prisma {
     fromLocationId?: StringFilter<"GrindingDispatch"> | string
     toLocationId?: StringFilter<"GrindingDispatch"> | string
     totalQuantity?: FloatFilter<"GrindingDispatch"> | number
+    consumedQuantity?: FloatFilter<"GrindingDispatch"> | number
     status?: EnumGrindingDispatchStatusFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
     acceptedAt?: DateTimeNullableFilter<"GrindingDispatch"> | Date | string | null
@@ -146510,6 +146635,7 @@ export namespace Prisma {
     id?: string
     batchNumber: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -146529,6 +146655,7 @@ export namespace Prisma {
     inputRawMaterialId: string
     toLocationId: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -146554,6 +146681,7 @@ export namespace Prisma {
     id?: string
     batchNumber: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -146573,6 +146701,7 @@ export namespace Prisma {
     inputRawMaterialId: string
     fromLocationId: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -147012,7 +147141,10 @@ export namespace Prisma {
     rawMaterialId: string
     expectedQuantity: number
     actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
     batchNumber?: string | null
+    dispatchId?: string | null
     cleaningLotId?: string | null
     createdAt?: Date | string
   }
@@ -147022,7 +147154,10 @@ export namespace Prisma {
     rawMaterialId: string
     expectedQuantity: number
     actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
     batchNumber?: string | null
+    dispatchId?: string | null
     cleaningLotId?: string | null
     createdAt?: Date | string
   }
@@ -147094,7 +147229,10 @@ export namespace Prisma {
     rawMaterialId?: StringFilter<"ProductionConsumption"> | string
     expectedQuantity?: FloatFilter<"ProductionConsumption"> | number
     actualQuantity?: FloatFilter<"ProductionConsumption"> | number
+    unit?: StringNullableFilter<"ProductionConsumption"> | string | null
+    sourceType?: StringNullableFilter<"ProductionConsumption"> | string | null
     batchNumber?: StringNullableFilter<"ProductionConsumption"> | string | null
+    dispatchId?: StringNullableFilter<"ProductionConsumption"> | string | null
     cleaningLotId?: StringNullableFilter<"ProductionConsumption"> | string | null
     createdAt?: DateTimeFilter<"ProductionConsumption"> | Date | string
   }
@@ -151733,6 +151871,7 @@ export namespace Prisma {
     id?: string
     batchNumber: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -151753,6 +151892,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -151832,6 +151972,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -151852,6 +151993,7 @@ export namespace Prisma {
     fromLocationId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -157056,6 +157198,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -157396,6 +157539,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -157415,6 +157559,7 @@ export namespace Prisma {
     fromLocationId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -157432,6 +157577,7 @@ export namespace Prisma {
     fromLocationId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -158416,6 +158562,7 @@ export namespace Prisma {
     inputRawMaterialId: string
     toLocationId: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -158432,6 +158579,7 @@ export namespace Prisma {
     inputRawMaterialId: string
     fromLocationId: string
     totalQuantity: number
+    consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
     acceptedAt?: Date | string | null
@@ -158578,6 +158726,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -158597,6 +158746,7 @@ export namespace Prisma {
     inputRawMaterialId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -158614,6 +158764,7 @@ export namespace Prisma {
     inputRawMaterialId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -158628,6 +158779,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -158647,6 +158799,7 @@ export namespace Prisma {
     inputRawMaterialId?: StringFieldUpdateOperationsInput | string
     fromLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -158664,6 +158817,7 @@ export namespace Prisma {
     inputRawMaterialId?: StringFieldUpdateOperationsInput | string
     fromLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acceptedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -158731,7 +158885,10 @@ export namespace Prisma {
     rawMaterialId: string
     expectedQuantity: number
     actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
     batchNumber?: string | null
+    dispatchId?: string | null
     cleaningLotId?: string | null
     createdAt?: Date | string
   }
@@ -158752,7 +158909,10 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -158762,7 +158922,10 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -158772,7 +158935,10 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

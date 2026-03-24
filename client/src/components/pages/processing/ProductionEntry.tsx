@@ -51,6 +51,8 @@ interface AvailableBatch {
   dispatchId: string;
   batchNumber: string;
   totalQuantity: number;
+  consumedQuantity: number;
+  remainingQuantity: number;
   unit: string;
 }
 
@@ -78,6 +80,7 @@ interface ConsumptionLine {
   unit: string;
   sourceType: 'BATCH' | 'STOCK';
   batchNumber: string;
+  dispatchId: string;
   availableBatches: AvailableBatch[];
   currentStockQty: number;
   currentStockUnit: string;
@@ -275,6 +278,9 @@ const ProductionEntry: React.FC = () => {
         batchNumber: item.sourceType === 'BATCH' && item.availableBatches.length > 0
           ? item.availableBatches[0].batchNumber
           : '',
+        dispatchId: item.sourceType === 'BATCH' && item.availableBatches.length > 0
+          ? item.availableBatches[0].dispatchId
+          : '',
         availableBatches: item.availableBatches,
         currentStockQty: item.currentStockQty,
         currentStockUnit: item.currentStockUnit,
@@ -310,12 +316,51 @@ const ProductionEntry: React.FC = () => {
     });
   };
 
+  // Check if any consumption line has insufficient available quantity
+  const hasInsufficientStock = consumptionLines.some((line) => {
+    if (line.sourceType === 'BATCH') {
+      // No batch available, or no batch selected
+      return line.availableBatches.length === 0 || !line.batchNumber;
+    } else {
+      // Stock source: check if available qty covers the actual qty
+      return line.currentStockQty <= 0 || line.actualQuantity > line.currentStockQty;
+    }
+  });
+
   // Submit production posting (SFG only, no byproduct/scrap)
   const handleSubmit = async () => {
     if (!selectedLocationId) { message.error('Select a grinding location'); return; }
     if (!selectedSfgId) { message.error('Select an SFG product'); return; }
     if (!productionQty || productionQty <= 0) { message.error('Enter a valid production quantity'); return; }
     if (consumptionLines.length === 0) { message.error('Add at least one raw material consumption'); return; }
+
+    // Validate availability for each consumption line
+    for (const line of consumptionLines) {
+      if (line.sourceType === 'BATCH') {
+        if (line.availableBatches.length === 0) {
+          message.error(`No batch available for ${line.rawMaterialName}. Cannot post production.`);
+          return;
+        }
+        if (!line.batchNumber) {
+          message.error(`Please select a batch for ${line.rawMaterialName}.`);
+          return;
+        }
+        const selectedBatch = line.availableBatches.find((b) => b.batchNumber === line.batchNumber);
+        if (selectedBatch && line.actualQuantity > selectedBatch.remainingQuantity) {
+          message.error(`Insufficient batch quantity for ${line.rawMaterialName}. Available: ${selectedBatch.remainingQuantity} ${selectedBatch.unit}`);
+          return;
+        }
+      } else {
+        if (line.currentStockQty <= 0) {
+          message.error(`No stock available for ${line.rawMaterialName}. Cannot post production.`);
+          return;
+        }
+        if (line.actualQuantity > line.currentStockQty) {
+          message.error(`Insufficient stock for ${line.rawMaterialName}. Available: ${line.currentStockQty} ${line.currentStockUnit}`);
+          return;
+        }
+      }
+    }
 
     setSubmitting(true);
     try {
@@ -333,6 +378,7 @@ const ProductionEntry: React.FC = () => {
           actualQuantity: c.actualQuantity,
           unit: c.unit,
           batchNumber: c.batchNumber || null,
+          dispatchId: c.dispatchId || null,
           sourceType: c.sourceType,
         })),
         outputs: outputLines
@@ -695,14 +741,20 @@ const ProductionEntry: React.FC = () => {
                                       size="small"
                                       style={{ width: '100%' }}
                                       value={line.batchNumber || undefined}
-                                      onChange={(val) => updateConsumption(idx, 'batchNumber', val)}
+                                      onChange={(val) => {
+                                        const selectedBatch = line.availableBatches.find((b) => b.batchNumber === val);
+                                        updateConsumption(idx, 'batchNumber', val);
+                                        if (selectedBatch) {
+                                          updateConsumption(idx, 'dispatchId', selectedBatch.dispatchId);
+                                        }
+                                      }}
                                       placeholder="Select batch"
                                     >
                                       {line.availableBatches.map((b) => (
                                         <Option key={b.dispatchId} value={b.batchNumber}>
                                           <div className="flex items-center justify-between gap-2">
                                             <span className="font-mono text-xs">{b.batchNumber}</span>
-                                            <span className="text-xs text-muted-foreground">{b.totalQuantity} {b.unit}</span>
+                                            <span className="text-xs text-muted-foreground">{b.remainingQuantity} {b.unit}</span>
                                           </div>
                                         </Option>
                                       ))}
@@ -711,8 +763,11 @@ const ProductionEntry: React.FC = () => {
                                     <span className="text-xs text-red-500 italic">No batch available</span>
                                   )
                                 ) : (
-                                  <span className="text-xs text-muted-foreground">
+                                  <span className={`text-xs font-medium ${line.currentStockQty <= 0 || line.actualQuantity > line.currentStockQty ? 'text-red-500' : 'text-muted-foreground'}`}>
                                     Avail: {line.currentStockQty} {line.currentStockUnit}
+                                    {(line.currentStockQty <= 0 || line.actualQuantity > line.currentStockQty) && (
+                                      <span className="block text-[10px] text-red-400 italic">Insufficient</span>
+                                    )}
                                   </span>
                                 )}
                               </td>
@@ -742,14 +797,22 @@ const ProductionEntry: React.FC = () => {
               {consumptionLines.length > 0 && (
                 <div className="flex justify-end gap-2 pt-3 border-t border-border">
                   <Button onClick={resetForm}>Cancel</Button>
-                  <Button
-                    type="primary"
-                    loading={submitting}
-                    onClick={handleSubmit}
-                    style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none', fontWeight: 600 }}
-                  >
-                    <CheckCircle size={12} className="mr-1 inline" /> Post Production
-                  </Button>
+                  <Tooltip title={hasInsufficientStock ? 'Cannot post: one or more materials have insufficient available quantity' : ''}>
+                    <Button
+                      type="primary"
+                      loading={submitting}
+                      onClick={handleSubmit}
+                      disabled={hasInsufficientStock}
+                      style={{
+                        background: hasInsufficientStock ? '#9ca3af' : 'linear-gradient(135deg, #10b981, #059669)',
+                        border: 'none',
+                        fontWeight: 600,
+                        cursor: hasInsufficientStock ? 'not-allowed' : 'pointer',
+                      }}
+                    >
+                      <CheckCircle size={12} className="mr-1 inline" /> Post Production
+                    </Button>
+                  </Tooltip>
                 </div>
               )}
             </div>
