@@ -627,4 +627,46 @@ export class ProductionController {
       res.status(500).json({ error: 'Failed to fetch production posting', details: error });
     }
   }
+
+  /**
+   * GET /production/completed-for-outbound
+   * Returns COMPLETED postings that have not been fully dispatched yet.
+   * Each posting includes its outputs (SFG, BYPRODUCT, SCRAP) with qty/unit.
+   */
+  static async getCompletedForOutbound(req: Request, res: Response) {
+    try {
+      const postings = await prisma.productionPosting.findMany({
+        where: { status: 'COMPLETED' },
+        include: {
+          outputs: true,
+          consumptions: true,
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      // Check which postings have already been dispatched (via outbound transfers)
+      const allTransfers = await prisma.materialTransfer.findMany({
+        where: { direction: 'OUTBOUND_FROM_GRINDING' },
+        include: { lines: true },
+      });
+
+      // Build a Set of posting numbers that have been dispatched
+      const dispatchedPostingNumbers = new Set<string>();
+      for (const t of allTransfers) {
+        for (const line of t.lines) {
+          if (line.batchNumber) dispatchedPostingNumbers.add(line.batchNumber);
+        }
+      }
+
+      // Filter out fully dispatched postings
+      const available = postings.filter(
+        (p) => !dispatchedPostingNumbers.has(p.postingNumber)
+      );
+
+      res.json({ success: true, data: available });
+    } catch (error) {
+      console.error('Error fetching completed postings for outbound:', error);
+      res.status(500).json({ error: 'Failed to fetch completed postings', details: error });
+    }
+  }
 }

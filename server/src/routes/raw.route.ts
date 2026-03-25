@@ -107,6 +107,7 @@ router.put('/transfers/:id/reject', TransferController.rejectTransfer);
 router.get('/production/consumption-data', ProductionController.getConsumptionData);
 router.post('/production/post', ProductionController.postProduction);
 router.get('/production/postings', ProductionController.getPostings);
+router.get('/production/completed-for-outbound', ProductionController.getCompletedForOutbound);
 router.get('/production/postings/:id', ProductionController.getPostingById);
 router.put('/production/postings/:id/complete', ProductionController.completeProduction);
 
