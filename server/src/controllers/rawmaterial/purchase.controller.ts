@@ -401,6 +401,7 @@ export class PurchaseOrderController {
             },
             data: {
               currentQuantity: { increment: receivalWeight },
+              quantityUnit: item.quantityUnit || 'KG',
             },
           });
         } else {
@@ -409,6 +410,7 @@ export class PurchaseOrderController {
               rawMaterialId: item.rawMaterialId,
               warehouseId: effectiveWarehouseId,
               currentQuantity: receivalWeight,
+              quantityUnit: item.quantityUnit || 'KG',
             },
           });
         }
@@ -491,7 +493,8 @@ export class PurchaseOrderController {
         warehouseName: stock.warehouse.name,
         currentQuantity: stock.currentQuantity,
         lastUpdated: stock.lastUpdated,
-        unitOfMeasurement: stock.rawMaterial.unitOfMeasurement,
+        unitOfMeasurement: stock.quantityUnit || stock.rawMaterial.unitOfMeasurement,
+        quantityUnit: stock.quantityUnit,
       }));
 
       res.json(result);

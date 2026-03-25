@@ -201,6 +201,7 @@ model CurrentStock {
   warehouseId     String
   warehouse       Warehouse          @relation(fields: [warehouseId], references: [id])
   currentQuantity Float
+  quantityUnit    String?
   lastUpdated     DateTime           @updatedAt
 
   @@unique([rawMaterialId, warehouseId])

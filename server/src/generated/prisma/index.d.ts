@@ -74730,6 +74730,7 @@ export namespace Prisma {
     id: string | null
     postingId: string | null
     rawMaterialId: string | null
+    rawMaterialName: string | null
     expectedQuantity: number | null
     actualQuantity: number | null
     unit: string | null
@@ -74744,6 +74745,7 @@ export namespace Prisma {
     id: string | null
     postingId: string | null
     rawMaterialId: string | null
+    rawMaterialName: string | null
     expectedQuantity: number | null
     actualQuantity: number | null
     unit: string | null
@@ -74758,6 +74760,7 @@ export namespace Prisma {
     id: number
     postingId: number
     rawMaterialId: number
+    rawMaterialName: number
     expectedQuantity: number
     actualQuantity: number
     unit: number
@@ -74784,6 +74787,7 @@ export namespace Prisma {
     id?: true
     postingId?: true
     rawMaterialId?: true
+    rawMaterialName?: true
     expectedQuantity?: true
     actualQuantity?: true
     unit?: true
@@ -74798,6 +74802,7 @@ export namespace Prisma {
     id?: true
     postingId?: true
     rawMaterialId?: true
+    rawMaterialName?: true
     expectedQuantity?: true
     actualQuantity?: true
     unit?: true
@@ -74812,6 +74817,7 @@ export namespace Prisma {
     id?: true
     postingId?: true
     rawMaterialId?: true
+    rawMaterialName?: true
     expectedQuantity?: true
     actualQuantity?: true
     unit?: true
@@ -74913,6 +74919,7 @@ export namespace Prisma {
     id: string
     postingId: string
     rawMaterialId: string
+    rawMaterialName: string | null
     expectedQuantity: number
     actualQuantity: number
     unit: string | null
@@ -74946,6 +74953,7 @@ export namespace Prisma {
     id?: boolean
     postingId?: boolean
     rawMaterialId?: boolean
+    rawMaterialName?: boolean
     expectedQuantity?: boolean
     actualQuantity?: boolean
     unit?: boolean
@@ -74961,6 +74969,7 @@ export namespace Prisma {
     id?: boolean
     postingId?: boolean
     rawMaterialId?: boolean
+    rawMaterialName?: boolean
     expectedQuantity?: boolean
     actualQuantity?: boolean
     unit?: boolean
@@ -74976,6 +74985,7 @@ export namespace Prisma {
     id?: boolean
     postingId?: boolean
     rawMaterialId?: boolean
+    rawMaterialName?: boolean
     expectedQuantity?: boolean
     actualQuantity?: boolean
     unit?: boolean
@@ -74991,6 +75001,7 @@ export namespace Prisma {
     id?: boolean
     postingId?: boolean
     rawMaterialId?: boolean
+    rawMaterialName?: boolean
     expectedQuantity?: boolean
     actualQuantity?: boolean
     unit?: boolean
@@ -75001,7 +75012,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type ProductionConsumptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postingId" | "rawMaterialId" | "expectedQuantity" | "actualQuantity" | "unit" | "sourceType" | "batchNumber" | "dispatchId" | "cleaningLotId" | "createdAt", ExtArgs["result"]["productionConsumption"]>
+  export type ProductionConsumptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postingId" | "rawMaterialId" | "rawMaterialName" | "expectedQuantity" | "actualQuantity" | "unit" | "sourceType" | "batchNumber" | "dispatchId" | "cleaningLotId" | "createdAt", ExtArgs["result"]["productionConsumption"]>
   export type ProductionConsumptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     posting?: boolean | ProductionPostingDefaultArgs<ExtArgs>
   }
@@ -75021,6 +75032,7 @@ export namespace Prisma {
       id: string
       postingId: string
       rawMaterialId: string
+      rawMaterialName: string | null
       expectedQuantity: number
       actualQuantity: number
       unit: string | null
@@ -75456,6 +75468,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProductionConsumption", 'String'>
     readonly postingId: FieldRef<"ProductionConsumption", 'String'>
     readonly rawMaterialId: FieldRef<"ProductionConsumption", 'String'>
+    readonly rawMaterialName: FieldRef<"ProductionConsumption", 'String'>
     readonly expectedQuantity: FieldRef<"ProductionConsumption", 'Float'>
     readonly actualQuantity: FieldRef<"ProductionConsumption", 'Float'>
     readonly unit: FieldRef<"ProductionConsumption", 'String'>
@@ -84270,6 +84283,7 @@ export namespace Prisma {
     rawMaterialId: string | null
     warehouseId: string | null
     currentQuantity: number | null
+    quantityUnit: string | null
     lastUpdated: Date | null
   }
 
@@ -84278,6 +84292,7 @@ export namespace Prisma {
     rawMaterialId: string | null
     warehouseId: string | null
     currentQuantity: number | null
+    quantityUnit: string | null
     lastUpdated: Date | null
   }
 
@@ -84286,6 +84301,7 @@ export namespace Prisma {
     rawMaterialId: number
     warehouseId: number
     currentQuantity: number
+    quantityUnit: number
     lastUpdated: number
     _all: number
   }
@@ -84304,6 +84320,7 @@ export namespace Prisma {
     rawMaterialId?: true
     warehouseId?: true
     currentQuantity?: true
+    quantityUnit?: true
     lastUpdated?: true
   }
 
@@ -84312,6 +84329,7 @@ export namespace Prisma {
     rawMaterialId?: true
     warehouseId?: true
     currentQuantity?: true
+    quantityUnit?: true
     lastUpdated?: true
   }
 
@@ -84320,6 +84338,7 @@ export namespace Prisma {
     rawMaterialId?: true
     warehouseId?: true
     currentQuantity?: true
+    quantityUnit?: true
     lastUpdated?: true
     _all?: true
   }
@@ -84415,6 +84434,7 @@ export namespace Prisma {
     rawMaterialId: string
     warehouseId: string
     currentQuantity: number
+    quantityUnit: string | null
     lastUpdated: Date
     _count: CurrentStockCountAggregateOutputType | null
     _avg: CurrentStockAvgAggregateOutputType | null
@@ -84442,6 +84462,7 @@ export namespace Prisma {
     rawMaterialId?: boolean
     warehouseId?: boolean
     currentQuantity?: boolean
+    quantityUnit?: boolean
     lastUpdated?: boolean
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
@@ -84452,6 +84473,7 @@ export namespace Prisma {
     rawMaterialId?: boolean
     warehouseId?: boolean
     currentQuantity?: boolean
+    quantityUnit?: boolean
     lastUpdated?: boolean
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
@@ -84462,6 +84484,7 @@ export namespace Prisma {
     rawMaterialId?: boolean
     warehouseId?: boolean
     currentQuantity?: boolean
+    quantityUnit?: boolean
     lastUpdated?: boolean
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
@@ -84472,10 +84495,11 @@ export namespace Prisma {
     rawMaterialId?: boolean
     warehouseId?: boolean
     currentQuantity?: boolean
+    quantityUnit?: boolean
     lastUpdated?: boolean
   }
 
-  export type CurrentStockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rawMaterialId" | "warehouseId" | "currentQuantity" | "lastUpdated", ExtArgs["result"]["currentStock"]>
+  export type CurrentStockOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rawMaterialId" | "warehouseId" | "currentQuantity" | "quantityUnit" | "lastUpdated", ExtArgs["result"]["currentStock"]>
   export type CurrentStockInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     warehouse?: boolean | WarehouseDefaultArgs<ExtArgs>
@@ -84500,6 +84524,7 @@ export namespace Prisma {
       rawMaterialId: string
       warehouseId: string
       currentQuantity: number
+      quantityUnit: string | null
       lastUpdated: Date
     }, ExtArgs["result"]["currentStock"]>
     composites: {}
@@ -84930,6 +84955,7 @@ export namespace Prisma {
     readonly rawMaterialId: FieldRef<"CurrentStock", 'String'>
     readonly warehouseId: FieldRef<"CurrentStock", 'String'>
     readonly currentQuantity: FieldRef<"CurrentStock", 'Float'>
+    readonly quantityUnit: FieldRef<"CurrentStock", 'String'>
     readonly lastUpdated: FieldRef<"CurrentStock", 'DateTime'>
   }
     
@@ -100394,6 +100420,7 @@ export namespace Prisma {
     id: 'id',
     postingId: 'postingId',
     rawMaterialId: 'rawMaterialId',
+    rawMaterialName: 'rawMaterialName',
     expectedQuantity: 'expectedQuantity',
     actualQuantity: 'actualQuantity',
     unit: 'unit',
@@ -100523,6 +100550,7 @@ export namespace Prisma {
     rawMaterialId: 'rawMaterialId',
     warehouseId: 'warehouseId',
     currentQuantity: 'currentQuantity',
+    quantityUnit: 'quantityUnit',
     lastUpdated: 'lastUpdated'
   };
 
@@ -105849,6 +105877,7 @@ export namespace Prisma {
     id?: StringFilter<"ProductionConsumption"> | string
     postingId?: StringFilter<"ProductionConsumption"> | string
     rawMaterialId?: StringFilter<"ProductionConsumption"> | string
+    rawMaterialName?: StringNullableFilter<"ProductionConsumption"> | string | null
     expectedQuantity?: FloatFilter<"ProductionConsumption"> | number
     actualQuantity?: FloatFilter<"ProductionConsumption"> | number
     unit?: StringNullableFilter<"ProductionConsumption"> | string | null
@@ -105864,6 +105893,7 @@ export namespace Prisma {
     id?: SortOrder
     postingId?: SortOrder
     rawMaterialId?: SortOrder
+    rawMaterialName?: SortOrderInput | SortOrder
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
     unit?: SortOrderInput | SortOrder
@@ -105882,6 +105912,7 @@ export namespace Prisma {
     NOT?: ProductionConsumptionWhereInput | ProductionConsumptionWhereInput[]
     postingId?: StringFilter<"ProductionConsumption"> | string
     rawMaterialId?: StringFilter<"ProductionConsumption"> | string
+    rawMaterialName?: StringNullableFilter<"ProductionConsumption"> | string | null
     expectedQuantity?: FloatFilter<"ProductionConsumption"> | number
     actualQuantity?: FloatFilter<"ProductionConsumption"> | number
     unit?: StringNullableFilter<"ProductionConsumption"> | string | null
@@ -105897,6 +105928,7 @@ export namespace Prisma {
     id?: SortOrder
     postingId?: SortOrder
     rawMaterialId?: SortOrder
+    rawMaterialName?: SortOrderInput | SortOrder
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
     unit?: SortOrderInput | SortOrder
@@ -105919,6 +105951,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"ProductionConsumption"> | string
     postingId?: StringWithAggregatesFilter<"ProductionConsumption"> | string
     rawMaterialId?: StringWithAggregatesFilter<"ProductionConsumption"> | string
+    rawMaterialName?: StringNullableWithAggregatesFilter<"ProductionConsumption"> | string | null
     expectedQuantity?: FloatWithAggregatesFilter<"ProductionConsumption"> | number
     actualQuantity?: FloatWithAggregatesFilter<"ProductionConsumption"> | number
     unit?: StringNullableWithAggregatesFilter<"ProductionConsumption"> | string | null
@@ -106545,6 +106578,7 @@ export namespace Prisma {
     rawMaterialId?: StringFilter<"CurrentStock"> | string
     warehouseId?: StringFilter<"CurrentStock"> | string
     currentQuantity?: FloatFilter<"CurrentStock"> | number
+    quantityUnit?: StringNullableFilter<"CurrentStock"> | string | null
     lastUpdated?: DateTimeFilter<"CurrentStock"> | Date | string
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     warehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
@@ -106555,6 +106589,7 @@ export namespace Prisma {
     rawMaterialId?: SortOrder
     warehouseId?: SortOrder
     currentQuantity?: SortOrder
+    quantityUnit?: SortOrderInput | SortOrder
     lastUpdated?: SortOrder
     rawMaterial?: RawMaterialProductOrderByWithRelationInput
     warehouse?: WarehouseOrderByWithRelationInput
@@ -106569,6 +106604,7 @@ export namespace Prisma {
     rawMaterialId?: StringFilter<"CurrentStock"> | string
     warehouseId?: StringFilter<"CurrentStock"> | string
     currentQuantity?: FloatFilter<"CurrentStock"> | number
+    quantityUnit?: StringNullableFilter<"CurrentStock"> | string | null
     lastUpdated?: DateTimeFilter<"CurrentStock"> | Date | string
     rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
     warehouse?: XOR<WarehouseScalarRelationFilter, WarehouseWhereInput>
@@ -106579,6 +106615,7 @@ export namespace Prisma {
     rawMaterialId?: SortOrder
     warehouseId?: SortOrder
     currentQuantity?: SortOrder
+    quantityUnit?: SortOrderInput | SortOrder
     lastUpdated?: SortOrder
     _count?: CurrentStockCountOrderByAggregateInput
     _avg?: CurrentStockAvgOrderByAggregateInput
@@ -106595,6 +106632,7 @@ export namespace Prisma {
     rawMaterialId?: StringWithAggregatesFilter<"CurrentStock"> | string
     warehouseId?: StringWithAggregatesFilter<"CurrentStock"> | string
     currentQuantity?: FloatWithAggregatesFilter<"CurrentStock"> | number
+    quantityUnit?: StringNullableWithAggregatesFilter<"CurrentStock"> | string | null
     lastUpdated?: DateTimeWithAggregatesFilter<"CurrentStock"> | Date | string
   }
 
@@ -112701,6 +112739,7 @@ export namespace Prisma {
   export type ProductionConsumptionCreateInput = {
     id?: string
     rawMaterialId: string
+    rawMaterialName?: string | null
     expectedQuantity: number
     actualQuantity: number
     unit?: string | null
@@ -112716,6 +112755,7 @@ export namespace Prisma {
     id?: string
     postingId: string
     rawMaterialId: string
+    rawMaterialName?: string | null
     expectedQuantity: number
     actualQuantity: number
     unit?: string | null
@@ -112729,6 +112769,7 @@ export namespace Prisma {
   export type ProductionConsumptionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
     unit?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112744,6 +112785,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     postingId?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
     unit?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112758,6 +112800,7 @@ export namespace Prisma {
     id?: string
     postingId: string
     rawMaterialId: string
+    rawMaterialName?: string | null
     expectedQuantity: number
     actualQuantity: number
     unit?: string | null
@@ -112771,6 +112814,7 @@ export namespace Prisma {
   export type ProductionConsumptionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
     unit?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112785,6 +112829,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     postingId?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
     unit?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113433,6 +113478,7 @@ export namespace Prisma {
   export type CurrentStockCreateInput = {
     id?: string
     currentQuantity: number
+    quantityUnit?: string | null
     lastUpdated?: Date | string
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCurrentStocksInput
     warehouse: WarehouseCreateNestedOneWithoutCurrentStocksInput
@@ -113443,12 +113489,14 @@ export namespace Prisma {
     rawMaterialId: string
     warehouseId: string
     currentQuantity: number
+    quantityUnit?: string | null
     lastUpdated?: Date | string
   }
 
   export type CurrentStockUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     currentQuantity?: FloatFieldUpdateOperationsInput | number
+    quantityUnit?: NullableStringFieldUpdateOperationsInput | string | null
     lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCurrentStocksNestedInput
     warehouse?: WarehouseUpdateOneRequiredWithoutCurrentStocksNestedInput
@@ -113459,6 +113507,7 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     warehouseId?: StringFieldUpdateOperationsInput | string
     currentQuantity?: FloatFieldUpdateOperationsInput | number
+    quantityUnit?: NullableStringFieldUpdateOperationsInput | string | null
     lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -113467,12 +113516,14 @@ export namespace Prisma {
     rawMaterialId: string
     warehouseId: string
     currentQuantity: number
+    quantityUnit?: string | null
     lastUpdated?: Date | string
   }
 
   export type CurrentStockUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     currentQuantity?: FloatFieldUpdateOperationsInput | number
+    quantityUnit?: NullableStringFieldUpdateOperationsInput | string | null
     lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -113481,6 +113532,7 @@ export namespace Prisma {
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     warehouseId?: StringFieldUpdateOperationsInput | string
     currentQuantity?: FloatFieldUpdateOperationsInput | number
+    quantityUnit?: NullableStringFieldUpdateOperationsInput | string | null
     lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -118212,6 +118264,7 @@ export namespace Prisma {
     id?: SortOrder
     postingId?: SortOrder
     rawMaterialId?: SortOrder
+    rawMaterialName?: SortOrder
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
     unit?: SortOrder
@@ -118231,6 +118284,7 @@ export namespace Prisma {
     id?: SortOrder
     postingId?: SortOrder
     rawMaterialId?: SortOrder
+    rawMaterialName?: SortOrder
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
     unit?: SortOrder
@@ -118245,6 +118299,7 @@ export namespace Prisma {
     id?: SortOrder
     postingId?: SortOrder
     rawMaterialId?: SortOrder
+    rawMaterialName?: SortOrder
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
     unit?: SortOrder
@@ -118651,6 +118706,7 @@ export namespace Prisma {
     rawMaterialId?: SortOrder
     warehouseId?: SortOrder
     currentQuantity?: SortOrder
+    quantityUnit?: SortOrder
     lastUpdated?: SortOrder
   }
 
@@ -118663,6 +118719,7 @@ export namespace Prisma {
     rawMaterialId?: SortOrder
     warehouseId?: SortOrder
     currentQuantity?: SortOrder
+    quantityUnit?: SortOrder
     lastUpdated?: SortOrder
   }
 
@@ -118671,6 +118728,7 @@ export namespace Prisma {
     rawMaterialId?: SortOrder
     warehouseId?: SortOrder
     currentQuantity?: SortOrder
+    quantityUnit?: SortOrder
     lastUpdated?: SortOrder
   }
 
@@ -144091,6 +144149,7 @@ export namespace Prisma {
   export type CurrentStockCreateWithoutRawMaterialInput = {
     id?: string
     currentQuantity: number
+    quantityUnit?: string | null
     lastUpdated?: Date | string
     warehouse: WarehouseCreateNestedOneWithoutCurrentStocksInput
   }
@@ -144099,6 +144158,7 @@ export namespace Prisma {
     id?: string
     warehouseId: string
     currentQuantity: number
+    quantityUnit?: string | null
     lastUpdated?: Date | string
   }
 
@@ -144474,6 +144534,7 @@ export namespace Prisma {
     rawMaterialId?: StringFilter<"CurrentStock"> | string
     warehouseId?: StringFilter<"CurrentStock"> | string
     currentQuantity?: FloatFilter<"CurrentStock"> | number
+    quantityUnit?: StringNullableFilter<"CurrentStock"> | string | null
     lastUpdated?: DateTimeFilter<"CurrentStock"> | Date | string
   }
 
@@ -146014,6 +146075,7 @@ export namespace Prisma {
   export type CurrentStockCreateWithoutWarehouseInput = {
     id?: string
     currentQuantity: number
+    quantityUnit?: string | null
     lastUpdated?: Date | string
     rawMaterial: RawMaterialProductCreateNestedOneWithoutCurrentStocksInput
   }
@@ -146022,6 +146084,7 @@ export namespace Prisma {
     id?: string
     rawMaterialId: string
     currentQuantity: number
+    quantityUnit?: string | null
     lastUpdated?: Date | string
   }
 
@@ -147139,6 +147202,7 @@ export namespace Prisma {
   export type ProductionConsumptionCreateWithoutPostingInput = {
     id?: string
     rawMaterialId: string
+    rawMaterialName?: string | null
     expectedQuantity: number
     actualQuantity: number
     unit?: string | null
@@ -147152,6 +147216,7 @@ export namespace Prisma {
   export type ProductionConsumptionUncheckedCreateWithoutPostingInput = {
     id?: string
     rawMaterialId: string
+    rawMaterialName?: string | null
     expectedQuantity: number
     actualQuantity: number
     unit?: string | null
@@ -147227,6 +147292,7 @@ export namespace Prisma {
     id?: StringFilter<"ProductionConsumption"> | string
     postingId?: StringFilter<"ProductionConsumption"> | string
     rawMaterialId?: StringFilter<"ProductionConsumption"> | string
+    rawMaterialName?: StringNullableFilter<"ProductionConsumption"> | string | null
     expectedQuantity?: FloatFilter<"ProductionConsumption"> | number
     actualQuantity?: FloatFilter<"ProductionConsumption"> | number
     unit?: StringNullableFilter<"ProductionConsumption"> | string | null
@@ -157133,6 +157199,7 @@ export namespace Prisma {
     id?: string
     warehouseId: string
     currentQuantity: number
+    quantityUnit?: string | null
     lastUpdated?: Date | string
   }
 
@@ -157337,6 +157404,7 @@ export namespace Prisma {
   export type CurrentStockUpdateWithoutRawMaterialInput = {
     id?: StringFieldUpdateOperationsInput | string
     currentQuantity?: FloatFieldUpdateOperationsInput | number
+    quantityUnit?: NullableStringFieldUpdateOperationsInput | string | null
     lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
     warehouse?: WarehouseUpdateOneRequiredWithoutCurrentStocksNestedInput
   }
@@ -157345,6 +157413,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     warehouseId?: StringFieldUpdateOperationsInput | string
     currentQuantity?: FloatFieldUpdateOperationsInput | number
+    quantityUnit?: NullableStringFieldUpdateOperationsInput | string | null
     lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -157352,6 +157421,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     warehouseId?: StringFieldUpdateOperationsInput | string
     currentQuantity?: FloatFieldUpdateOperationsInput | number
+    quantityUnit?: NullableStringFieldUpdateOperationsInput | string | null
     lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -157944,6 +158014,7 @@ export namespace Prisma {
     id?: string
     rawMaterialId: string
     currentQuantity: number
+    quantityUnit?: string | null
     lastUpdated?: Date | string
   }
 
@@ -158296,6 +158367,7 @@ export namespace Prisma {
   export type CurrentStockUpdateWithoutWarehouseInput = {
     id?: StringFieldUpdateOperationsInput | string
     currentQuantity?: FloatFieldUpdateOperationsInput | number
+    quantityUnit?: NullableStringFieldUpdateOperationsInput | string | null
     lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
     rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutCurrentStocksNestedInput
   }
@@ -158304,6 +158376,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     currentQuantity?: FloatFieldUpdateOperationsInput | number
+    quantityUnit?: NullableStringFieldUpdateOperationsInput | string | null
     lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -158311,6 +158384,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
     currentQuantity?: FloatFieldUpdateOperationsInput | number
+    quantityUnit?: NullableStringFieldUpdateOperationsInput | string | null
     lastUpdated?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -158883,6 +158957,7 @@ export namespace Prisma {
   export type ProductionConsumptionCreateManyPostingInput = {
     id?: string
     rawMaterialId: string
+    rawMaterialName?: string | null
     expectedQuantity: number
     actualQuantity: number
     unit?: string | null
@@ -158907,6 +158982,7 @@ export namespace Prisma {
   export type ProductionConsumptionUpdateWithoutPostingInput = {
     id?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
     unit?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158920,6 +158996,7 @@ export namespace Prisma {
   export type ProductionConsumptionUncheckedUpdateWithoutPostingInput = {
     id?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
     unit?: NullableStringFieldUpdateOperationsInput | string | null
@@ -158933,6 +159010,7 @@ export namespace Prisma {
   export type ProductionConsumptionUncheckedUpdateManyWithoutPostingInput = {
     id?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
     expectedQuantity?: FloatFieldUpdateOperationsInput | number
     actualQuantity?: FloatFieldUpdateOperationsInput | number
     unit?: NullableStringFieldUpdateOperationsInput | string | null

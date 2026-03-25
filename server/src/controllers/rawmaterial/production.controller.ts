@@ -117,11 +117,6 @@ export class ProductionController {
         const bomItemInGrams = toGrams(item.quantity, item.unitOfMeasurement);
         const scaledGrams = bomItemInGrams * scaleFactor;
 
-        // ── FIX: Use the BOM item's unit for display, not the raw material's unit ──
-        const displayUnit = item.unitOfMeasurement;
-        const expectedQty = fromGrams(scaledGrams, displayUnit);
-        const roundedExpected = Math.round(expectedQty * 1000) / 1000;
-
         const matchingDispatches = acceptedDispatches.filter(
           (d) => d.inputRawMaterialId === item.rawMaterialId
         );
@@ -136,10 +131,11 @@ export class ProductionController {
           unit: string;
         }[] = [];
         let currentStockQty = 0;
-        let currentStockUnit = displayUnit;
+        let currentStockUnit = item.rawMaterial.unitOfMeasurement;
 
         if (matchingDispatches.length > 0) {
           sourceType = 'BATCH';
+          currentStockUnit = matchingDispatches[0].inputRawMaterial.unitOfMeasurement;
           // ── FIX: Show remaining quantity (total - consumed) for each batch ──
           availableBatches = matchingDispatches
             .map((d) => {
@@ -162,8 +158,13 @@ export class ProductionController {
             include: { rawMaterial: true, warehouse: true },
           });
           currentStockQty = stocks.reduce((sum, s) => sum + s.currentQuantity, 0);
-          currentStockUnit = item.rawMaterial.unitOfMeasurement;
+          const stockWithUnit = stocks.find(s => s.quantityUnit && s.currentQuantity > 0) || stocks.find(s => s.quantityUnit) || stocks[0];
+          currentStockUnit = stockWithUnit?.quantityUnit || item.rawMaterial.unitOfMeasurement;
         }
+
+        const displayUnit = currentStockUnit;
+        const expectedQty = fromGrams(scaledGrams, displayUnit);
+        const roundedExpected = Math.round(expectedQty * 1000) / 1000;
 
         consumptionItems.push({
           rawMaterialId: item.rawMaterialId,
@@ -300,7 +301,8 @@ export class ProductionController {
           });
 
           const totalStockQty = stocks.reduce((sum, s) => sum + s.currentQuantity, 0);
-          const stockUnit = stocks[0]?.rawMaterial?.unitOfMeasurement || c.unit || 'KG';
+          const stockWithUnit = stocks.find(s => s.quantityUnit && s.currentQuantity > 0) || stocks.find(s => s.quantityUnit) || stocks[0];
+          const stockUnit = stockWithUnit?.quantityUnit || stockWithUnit?.rawMaterial?.unitOfMeasurement || c.unit || 'KG';
 
           // Convert actual qty to stock unit for comparison
           const actualInGrams = toGrams(actualQty, c.unit || stockUnit);
@@ -348,6 +350,7 @@ export class ProductionController {
             consumptions: {
               create: consumptions.map((c: any) => ({
                 rawMaterialId: c.rawMaterialId,
+                rawMaterialName: c.rawMaterialName || null,
                 expectedQuantity: Number(c.expectedQuantity) || 0,
                 actualQuantity: Number(c.actualQuantity),
                 unit: c.unit || null,
@@ -412,8 +415,8 @@ export class ProductionController {
               if (remainingToDeduct <= 0) break;
 
               // Convert remaining to deduct to stock's unit for comparison
-              const remainingInGrams = toGrams(remainingToDeduct, c.unit || stock.rawMaterial.unitOfMeasurement);
-              const stockUnit = stock.rawMaterial.unitOfMeasurement;
+              const stockUnit = stock.quantityUnit || stock.rawMaterial.unitOfMeasurement;
+              const remainingInGrams = toGrams(remainingToDeduct, c.unit || stockUnit);
               const remainingInStockUnit = fromGrams(remainingInGrams, stockUnit);
 
               const deductFromThisStock = Math.min(stock.currentQuantity, remainingInStockUnit);

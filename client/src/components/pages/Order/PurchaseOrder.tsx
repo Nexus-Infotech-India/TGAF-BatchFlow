@@ -438,7 +438,7 @@ const PurchaseOrderList: React.FC = () => {
                                                                             <tr className="text-left text-xs text-muted-foreground border-b border-border/20">
                                                                                 <th className="px-3 py-2">Received Quantity</th>
                                                                                 <th className="px-3 py-2">Location</th>
-                                                                                <th className="px-3 py-2">Bags/Weight(No./KG)</th>
+                                                                                <th className="px-3 py-2">Bags/Weight (No./{item.quantityUnit || item.rawMaterial?.unitOfMeasurement || 'KG'})</th>
                                                                                 <th className="px-3 py-2">Notes</th>
                                                                                 <th className="px-3 py-2">Received Date</th>
                                                                             </tr>
@@ -447,7 +447,7 @@ const PurchaseOrderList: React.FC = () => {
                                                                             {item.receivals.map((r, ri) => (
                                                                                 <tr key={r.id || ri} className="bg-muted/15">
                                                                                     <td className="px-3 py-3 text-sm font-medium">
-                                                                                        {r.totalWeight}{item.rawMaterial?.unitOfMeasurement ? ` ${item.rawMaterial.unitOfMeasurement}` : ''}
+                                                                                        {r.totalWeight} {item.quantityUnit || item.rawMaterial?.unitOfMeasurement || ''}
                                                                                     </td>
                                                                                     <td className="px-3 py-3 text-sm text-foreground/80">{r.location?.name || r.warehouse?.name || '-'}</td>
                                                                                     <td className="px-3 py-3 text-sm text-muted-foreground">

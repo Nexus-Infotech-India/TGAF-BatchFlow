@@ -322,9 +322,29 @@ const DispatchToGrinding: React.FC = () => {
   };
 
   const totalSelectedQuantity = useMemo(() => {
-    return Object.values(batchModal.selectedLots).reduce((s, q) => s + q, 0)
-      + Object.values(batchModal.seedWastageLots).reduce((s, q) => s + q, 0);
-  }, [batchModal.selectedLots, batchModal.seedWastageLots]);
+    const UNIT_TO_GRAMS: Record<string, number> = {
+      kg: 1000, KG: 1000, gram: 1, g: 1, G: 1,
+      ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000, tonne: 1_000_000,
+      quintal: 100_000, Quintal: 100_000, lb: 453.592, oz: 28.3495,
+    };
+    const toGrams = (qty: number, unit: string) => qty * (UNIT_TO_GRAMS[unit] ?? UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1);
+    const fromGrams = (grams: number, unit: string) => grams / (UNIT_TO_GRAMS[unit] ?? UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1);
+
+    const targetUnit = availableLots[0]?.rawMaterial?.unitOfMeasurement || availableSeedWastageLots[0]?.rawMaterial?.unitOfMeasurement || 'KG';
+
+    let totalGrams = 0;
+    Object.entries(batchModal.selectedLots).forEach(([lotId, qty]) => {
+      const lot = availableLots.find(l => l.id === lotId);
+      if (lot) totalGrams += toGrams(qty, lot.cleanedQuantityUnit || 'KG');
+    });
+
+    Object.entries(batchModal.seedWastageLots).forEach(([lotId, qty]) => {
+      const lot = availableSeedWastageLots.find(l => l.id === lotId);
+      if (lot) totalGrams += toGrams(qty, lot.seedWastageUnit || 'KG');
+    });
+
+    return Number(fromGrams(totalGrams, targetUnit).toFixed(3));
+  }, [batchModal.selectedLots, batchModal.seedWastageLots, availableLots, availableSeedWastageLots]);
 
   const filteredLots = availableLots;
   const filteredSeedWastageLots = availableSeedWastageLots;

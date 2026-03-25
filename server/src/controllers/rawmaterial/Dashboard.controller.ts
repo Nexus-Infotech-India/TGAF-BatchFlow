@@ -277,7 +277,8 @@ export class DashboardController {
         }
         warehouseMap[wid].items.push({
           rawMaterial: s.rawMaterial,
-          quantity: s.currentQuantity
+          quantity: s.currentQuantity,
+          quantityUnit: s.quantityUnit || s.rawMaterial.unitOfMeasurement
         });
       });
       res.json({ stockDistribution: Object.values(warehouseMap) });

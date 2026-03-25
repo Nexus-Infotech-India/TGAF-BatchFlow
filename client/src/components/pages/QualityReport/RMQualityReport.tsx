@@ -1583,8 +1583,8 @@ const RMQualityReport: React.FC = () => {
                           <span className="font-medium" style={{ color: 'var(--foreground)' }}>{viewGRN.purchaseOrderItem?.quantityOrdered ?? '-'}</span>
                           <span style={{ color: 'var(--muted-foreground)' }}> / </span>
                           <span className="font-semibold" style={{ color: 'var(--primary)' }}>{viewGRN.purchaseOrderItem?.totalReceived ?? '-'}</span>
-                          {viewGRN.purchaseOrderItem?.rawMaterial?.unitOfMeasurement && (
-                            <span className="ml-1 text-xs" style={{ color: 'var(--muted-foreground)' }}>{viewGRN.purchaseOrderItem.rawMaterial.unitOfMeasurement}</span>
+                          {(viewGRN.purchaseOrderItem?.quantityUnit || viewGRN.purchaseOrderItem?.rawMaterial?.unitOfMeasurement) && (
+                            <span className="ml-1 text-xs" style={{ color: 'var(--muted-foreground)' }}>{viewGRN.purchaseOrderItem.quantityUnit || viewGRN.purchaseOrderItem.rawMaterial.unitOfMeasurement}</span>
                           )}
                         </div>
                       </div>

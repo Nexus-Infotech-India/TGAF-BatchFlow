@@ -374,6 +374,7 @@ const ProductionEntry: React.FC = () => {
         notes,
         consumptions: consumptionLines.map((c) => ({
           rawMaterialId: c.rawMaterialId,
+          rawMaterialName: c.rawMaterialName,
           expectedQuantity: c.expectedQuantity,
           actualQuantity: c.actualQuantity,
           unit: c.unit,
@@ -964,9 +965,9 @@ const ProductionEntry: React.FC = () => {
                             <tbody className="divide-y divide-border">
                               {posting.consumptions.map((c) => (
                                 <tr key={c.id}>
-                                  <td className="px-3 py-1.5 text-sm text-foreground">{c.rawMaterialId}</td>
-                                  <td className="px-3 py-1.5 text-sm text-right text-muted-foreground">{c.expectedQuantity}</td>
-                                  <td className="px-3 py-1.5 text-sm text-right font-semibold text-foreground">{c.actualQuantity}</td>
+                                  <td className="px-3 py-1.5 text-sm font-semibold text-foreground">{c.rawMaterialName || c.rawMaterialId}</td>
+                                  <td className="px-3 py-1.5 text-sm text-right text-muted-foreground">{c.expectedQuantity} {c.unit}</td>
+                                  <td className="px-3 py-1.5 text-sm text-right font-semibold text-foreground">{c.actualQuantity} {c.unit}</td>
                                   <td className="px-3 py-1.5 text-sm text-muted-foreground">{c.batchNumber || '-'}</td>
                                 </tr>
                               ))}
@@ -985,7 +986,6 @@ const ProductionEntry: React.FC = () => {
                                 <th className="px-3 py-1.5 text-left text-xs font-semibold text-muted-foreground uppercase">Type</th>
                                 <th className="px-3 py-1.5 text-left text-xs font-semibold text-muted-foreground uppercase">Product</th>
                                 <th className="px-3 py-1.5 text-right text-xs font-semibold text-muted-foreground uppercase">Quantity</th>
-                                <th className="px-3 py-1.5 text-left text-xs font-semibold text-muted-foreground uppercase">Batch</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
@@ -1002,7 +1002,6 @@ const ProductionEntry: React.FC = () => {
                                   <td className="px-3 py-1.5 text-sm text-right font-semibold text-foreground">
                                     {o.quantity} {o.unit}
                                   </td>
-                                  <td className="px-3 py-1.5 text-sm text-muted-foreground">{o.batchNumber || '-'}</td>
                                 </tr>
                               ))}
                             </tbody>

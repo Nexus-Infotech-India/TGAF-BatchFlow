@@ -3,6 +3,32 @@ import { PrismaClient } from '../../generated/prisma';
 
 const prisma = new PrismaClient();
 
+const UNIT_TO_GRAMS: Record<string, number> = {
+  kg: 1000,
+  KG: 1000,
+  gram: 1,
+  g: 1,
+  G: 1,
+  ton: 1_000_000,
+  Ton: 1_000_000,
+  TON: 1_000_000,
+  tonne: 1_000_000,
+  quintal: 100_000,
+  Quintal: 100_000,
+  lb: 453.592,
+  oz: 28.3495,
+};
+
+function toGrams(qty: number, unit: string): number {
+  const factor = UNIT_TO_GRAMS[unit] ?? UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1;
+  return qty * factor;
+}
+
+function fromGrams(grams: number, unit: string): number {
+  const factor = UNIT_TO_GRAMS[unit] ?? UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1;
+  return grams / factor;
+}
+
 export class GrindingDispatchController {
   /**
    * Create a grinding dispatch (status = SENT).
@@ -66,11 +92,13 @@ export class GrindingDispatchController {
         }
 
         // Validate seed wastage
+        let seedUnit = 'KG';
         if (seedWastageAllocated > 0) {
           const seedWastageRecord = await prisma.seedWastageRecord.findFirst({
             where: { lotNumber: lot.lotNumber, source: 'cleaning' },
           });
           if (seedWastageRecord) {
+            seedUnit = seedWastageRecord.unit || 'KG';
             const availableSeedWastage = seedWastageRecord.quantity - seedWastageRecord.allocatedQuantity;
             if (seedWastageAllocated > availableSeedWastage) {
               res.status(400).json({
@@ -85,7 +113,12 @@ export class GrindingDispatchController {
         }
 
         validatedLots.push({ lotId: lot.id, allocatedQuantity, seedWastageAllocated, lotNumber: lot.lotNumber });
-        totalQuantity += allocatedQuantity + seedWastageAllocated;
+        
+        const allocUnit = lot.cleanedQuantityUnit || 'KG';
+        const allocGrams = toGrams(allocatedQuantity, allocUnit);
+        const seedGrams = toGrams(seedWastageAllocated, seedUnit);
+        const targetUnit = rawMaterial.unitOfMeasurement || 'KG';
+        totalQuantity += fromGrams(allocGrams + seedGrams, targetUnit);
       }
 
       // Generate batch number: GD-YYYYMMDD-XXXX

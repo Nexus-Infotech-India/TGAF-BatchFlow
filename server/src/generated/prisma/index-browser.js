@@ -784,6 +784,7 @@ exports.Prisma.ProductionConsumptionScalarFieldEnum = {
   id: 'id',
   postingId: 'postingId',
   rawMaterialId: 'rawMaterialId',
+  rawMaterialName: 'rawMaterialName',
   expectedQuantity: 'expectedQuantity',
   actualQuantity: 'actualQuantity',
   unit: 'unit',
@@ -889,6 +890,7 @@ exports.Prisma.CurrentStockScalarFieldEnum = {
   rawMaterialId: 'rawMaterialId',
   warehouseId: 'warehouseId',
   currentQuantity: 'currentQuantity',
+  quantityUnit: 'quantityUnit',
   lastUpdated: 'lastUpdated'
 };
 
