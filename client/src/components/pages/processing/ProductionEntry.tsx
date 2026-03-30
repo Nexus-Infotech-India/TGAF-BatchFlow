@@ -110,8 +110,10 @@ interface ProductionPosting {
   consumptions: {
     id: string;
     rawMaterialId: string;
+    rawMaterialName?: string;
     expectedQuantity: number;
     actualQuantity: number;
+    unit?: string;
     batchNumber?: string;
   }[];
   outputs: {
@@ -132,6 +134,14 @@ const ProductionEntry: React.FC = () => {
   const [postings, setPostings] = useState<ProductionPosting[]>([]);
   const [loading, setLoading] = useState(false);
   const [expandedPostingId, setExpandedPostingId] = useState<string | null>(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  const paginatedPostings = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return postings.slice(startIndex, startIndex + itemsPerPage);
+  }, [postings, currentPage]);
 
   // Form state
   const [formVisible, setFormVisible] = useState(false);
@@ -250,8 +260,11 @@ const ProductionEntry: React.FC = () => {
   };
 
   // When production quantity changes → fetch consumption data from backend
-  const fetchConsumptionData = useCallback(async (qty: number) => {
+  const fetchConsumptionData = useCallback(async (qty: number, unitOverride?: string, locOverride?: string) => {
     if (!selectedSfgId || !qty || qty <= 0) return;
+
+    const unitToUse = unitOverride || productionUnit;
+    const locToUse = locOverride !== undefined ? locOverride : selectedLocationId;
 
     setConsumptionLoading(true);
     try {
@@ -259,8 +272,8 @@ const ProductionEntry: React.FC = () => {
         params: {
           sfgProductId: selectedSfgId,
           productionQty: qty,
-          productionUnit,
-          locationId: selectedLocationId || undefined,
+          productionUnit: unitToUse,
+          locationId: locToUse || undefined,
         },
       });
 
@@ -289,7 +302,7 @@ const ProductionEntry: React.FC = () => {
       setConsumptionLines(lines);
       setOutputLines((prev) =>
         prev.map((line) =>
-          line.outputType === 'SFG' ? { ...line, quantity: qty } : line
+          line.outputType === 'SFG' ? { ...line, quantity: qty, unit: unitToUse } : line
         )
       );
     } catch (err: any) {
@@ -567,7 +580,7 @@ const ProductionEntry: React.FC = () => {
                     onChange={(val) => {
                       setSelectedLocationId(val);
                       if (productionQty && productionQty > 0 && selectedSfgId) {
-                        setTimeout(() => fetchConsumptionData(productionQty), 100);
+                        fetchConsumptionData(productionQty, undefined, val);
                       }
                     }}
                   >
@@ -652,8 +665,14 @@ const ProductionEntry: React.FC = () => {
                         value={productionUnit}
                         onChange={(val) => {
                           setProductionUnit(val);
+                          // Update SFG output line unit to match
+                          setOutputLines((prev) =>
+                            prev.map((line) =>
+                              line.outputType === 'SFG' ? { ...line, unit: val } : line
+                            )
+                          );
                           if (productionQty && productionQty > 0) {
-                            setTimeout(() => fetchConsumptionData(productionQty), 100);
+                            fetchConsumptionData(productionQty, val);
                           }
                         }}
                         size="large"
@@ -839,7 +858,7 @@ const ProductionEntry: React.FC = () => {
         )}
 
         {!loading &&
-          postings.map((posting) => {
+          paginatedPostings.map((posting) => {
             const sfgOutput = posting.outputs.find((o) => o.outputType === 'SFG');
             const bpOutputs = posting.outputs.filter((o) => o.outputType === 'BYPRODUCT');
             const scrapOutputs = posting.outputs.filter((o) => o.outputType === 'SCRAP');
@@ -1020,6 +1039,19 @@ const ProductionEntry: React.FC = () => {
               </motion.div>
             );
           })}
+
+        {/* Pagination */}
+        {postings.length > itemsPerPage && (
+          <div className="flex items-center justify-between p-4 bg-card rounded-xl border border-border">
+            <span className="text-xs text-muted-foreground">
+              Page {currentPage} of {Math.ceil(postings.length / itemsPerPage)} · {postings.length} total
+            </span>
+            <div className="flex gap-2">
+              <Button size="small" disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}>Previous</Button>
+              <Button size="small" disabled={currentPage >= Math.ceil(postings.length / itemsPerPage)} onClick={() => setCurrentPage((p) => p + 1)}>Next</Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ─── Complete Production Modal ─── */}

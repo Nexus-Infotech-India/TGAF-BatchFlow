@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Factory, Package, Send, CheckCircle, XCircle, Check, X, ChevronDown, Eye, MapPin, Scale, Hash, CalendarDays, Layers } from 'lucide-react';
 import { Button, Modal, Input, message, Spin } from 'antd';
@@ -48,6 +48,14 @@ const SFGProcessingPage: React.FC = () => {
   const [dispatches, setDispatches] = useState<GrindingDispatch[]>([]);
   const [loading, setLoading] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  const paginatedDispatches = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return dispatches.slice(startIndex, startIndex + itemsPerPage);
+  }, [dispatches, currentPage]);
 
   // Reject Modal
   const [rejectModal, setRejectModal] = useState<{
@@ -263,7 +271,7 @@ const SFGProcessingPage: React.FC = () => {
                           </td>
                         </tr>
                       )}
-                      {!loading && dispatches.map((dispatch, idx) => (
+                      {!loading && paginatedDispatches.map((dispatch, idx) => (
                         <React.Fragment key={dispatch.id}>
                           <motion.tr
                             className="hover:bg-muted/50 transition-colors duration-150"
@@ -403,6 +411,19 @@ const SFGProcessingPage: React.FC = () => {
                     </tbody>
                   </table>
                 </div>
+
+                {/* Pagination */}
+                {dispatches.length > itemsPerPage && (
+                  <div className="flex items-center justify-between p-4 bg-card rounded-xl border border-border">
+                    <span className="text-xs text-muted-foreground">
+                      Page {currentPage} of {Math.ceil(dispatches.length / itemsPerPage)} · {dispatches.length} total
+                    </span>
+                    <div className="flex gap-2">
+                      <Button size="small" disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}>Previous</Button>
+                      <Button size="small" disabled={currentPage >= Math.ceil(dispatches.length / itemsPerPage)} onClick={() => setCurrentPage((p) => p + 1)}>Next</Button>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <ProductionEntry />

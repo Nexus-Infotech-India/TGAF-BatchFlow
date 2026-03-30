@@ -294,11 +294,17 @@ const DispatchToGrinding: React.FC = () => {
   };
 
   const updateLotQuantity = (lotId: string, qty: number) => {
-    setBatchModal((prev) => ({ ...prev, selectedLots: { ...prev.selectedLots, [lotId]: qty } }));
+    const lot = availableLots.find(l => l.id === lotId);
+    const maxQty = lot?.cleanedQuantity ?? 0;
+    const clampedQty = Math.min(Math.max(0, qty), maxQty);
+    setBatchModal((prev) => ({ ...prev, selectedLots: { ...prev.selectedLots, [lotId]: clampedQty } }));
   };
 
   const updateSeedWastageQuantity = (lotId: string, qty: number) => {
-    setBatchModal((prev) => ({ ...prev, seedWastageLots: { ...prev.seedWastageLots, [lotId]: qty } }));
+    const lot = availableSeedWastageLots.find(l => l.id === lotId);
+    const maxQty = lot?.availableSeedWastage ?? 0;
+    const clampedQty = Math.min(Math.max(0, qty), maxQty);
+    setBatchModal((prev) => ({ ...prev, seedWastageLots: { ...prev.seedWastageLots, [lotId]: clampedQty } }));
   };
 
   const toggleSeedWastageLotSelection = (lotId: string, lot: CleaningLot) => {
@@ -364,6 +370,27 @@ const DispatchToGrinding: React.FC = () => {
     const seedWastageEntries = Object.entries(batchModal.seedWastageLots);
     if (cleanedEntries.length === 0 && seedWastageEntries.length === 0) {
       message.error('Select at least one lot'); return;
+    }
+    // Validate quantities don't exceed available
+    for (const [lotId, qty] of cleanedEntries) {
+      const lot = availableLots.find(l => l.id === lotId);
+      if (lot && qty > (lot.cleanedQuantity ?? 0)) {
+        message.error(`Quantity for ${lot.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot.lotNumber} exceeds available (${lot.cleanedQuantity})`);
+        return;
+      }
+      if (qty <= 0) {
+        message.error(`Quantity must be greater than 0 for ${lot?.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot?.lotNumber || lotId}`);
+        return;
+      }
+    }
+    for (const [lotId, qty] of seedWastageEntries) {
+      if (qty > 0) {
+        const lot = availableSeedWastageLots.find(l => l.id === lotId);
+        if (lot && qty > (lot.availableSeedWastage ?? 0)) {
+          message.error(`Seed wastage for ${lot.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot.lotNumber} exceeds available (${lot.availableSeedWastage})`);
+          return;
+        }
+      }
     }
     const lotsMap = new Map<string, { lotId: string; allocatedQuantity: number; seedWastageAllocated: number }>();
     for (const [lotId, qty] of cleanedEntries) lotsMap.set(lotId, { lotId, allocatedQuantity: qty, seedWastageAllocated: 0 });
@@ -903,13 +930,26 @@ const DispatchToGrinding: React.FC = () => {
                               <AnimatePresence>
                                 {batchModal.selectedLots[lot.id] !== undefined && (
                                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
-                                    <div className="px-4 pb-4 pt-3 border-t border-primary/10 bg-primary/5 flex items-center justify-between">
-                                      <span className="text-sm font-medium text-primary">Quantity to Allocate:</span>
-                                      <div className="w-32">
-                                        <Input type="number" size="large" value={batchModal.selectedLots[lot.id]}
-                                          onClick={(e) => e.stopPropagation()}
-                                          onChange={(e) => updateLotQuantity(lot.id, Number(e.target.value))}
-                                          min={0} max={lot.cleanedQuantity ?? 0} className="font-bold text-center text-primary shadow-inner-sm bg-white" />
+                                    <div className="px-4 pb-4 pt-3 border-t border-primary/10 bg-primary/5">
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-sm font-medium text-primary">Quantity to Allocate:</span>
+                                        <div className="w-32">
+                                          <Input type="number" size="large" value={batchModal.selectedLots[lot.id]}
+                                            onClick={(e) => e.stopPropagation()}
+                                            onChange={(e) => updateLotQuantity(lot.id, Number(e.target.value))}
+                                            min={0} max={lot.cleanedQuantity ?? 0}
+                                            status={batchModal.selectedLots[lot.id] > (lot.cleanedQuantity ?? 0) ? 'error' : undefined}
+                                            className="font-bold text-center text-primary shadow-inner-sm bg-white" />
+                                        </div>
+                                      </div>
+                                      {batchModal.selectedLots[lot.id] > (lot.cleanedQuantity ?? 0) && (
+                                        <div className="mt-2 text-xs text-red-500 font-medium flex items-center gap-1">
+                                          <XCircle size={12} />
+                                          Cannot exceed available: {lot.cleanedQuantity ?? 0} {lot.cleanedQuantityUnit || lot.rawMaterial?.unitOfMeasurement || ''}
+                                        </div>
+                                      )}
+                                      <div className="mt-1 text-[11px] text-muted-foreground">
+                                        Max: {lot.cleanedQuantity ?? 0} {lot.cleanedQuantityUnit || lot.rawMaterial?.unitOfMeasurement || ''}
                                       </div>
                                     </div>
                                   </motion.div>
@@ -965,13 +1005,26 @@ const DispatchToGrinding: React.FC = () => {
                               <AnimatePresence>
                                 {batchModal.seedWastageLots[lot.id] !== undefined && (
                                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
-                                    <div className="px-4 pb-4 pt-3 border-t border-amber-500/10 bg-amber-50 flex items-center justify-between">
-                                      <span className="text-sm font-medium text-amber-700">Quantity to Allocate:</span>
-                                      <div className="w-32">
-                                        <Input type="number" size="large" value={batchModal.seedWastageLots[lot.id]}
-                                          onClick={(e) => e.stopPropagation()}
-                                          onChange={(e) => updateSeedWastageQuantity(lot.id, Number(e.target.value))}
-                                          min={0} max={lot.availableSeedWastage ?? 0} className="font-bold text-center text-amber-600 shadow-inner-sm bg-white" />
+                                    <div className="px-4 pb-4 pt-3 border-t border-amber-500/10 bg-amber-50">
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-sm font-medium text-amber-700">Quantity to Allocate:</span>
+                                        <div className="w-32">
+                                          <Input type="number" size="large" value={batchModal.seedWastageLots[lot.id]}
+                                            onClick={(e) => e.stopPropagation()}
+                                            onChange={(e) => updateSeedWastageQuantity(lot.id, Number(e.target.value))}
+                                            min={0} max={lot.availableSeedWastage ?? 0}
+                                            status={batchModal.seedWastageLots[lot.id] > (lot.availableSeedWastage ?? 0) ? 'error' : undefined}
+                                            className="font-bold text-center text-amber-600 shadow-inner-sm bg-white" />
+                                        </div>
+                                      </div>
+                                      {batchModal.seedWastageLots[lot.id] > (lot.availableSeedWastage ?? 0) && (
+                                        <div className="mt-2 text-xs text-red-500 font-medium flex items-center gap-1">
+                                          <XCircle size={12} />
+                                          Cannot exceed available: {lot.availableSeedWastage ?? 0} {lot.seedWastageUnit || lot.rawMaterial?.unitOfMeasurement || ''}
+                                        </div>
+                                      )}
+                                      <div className="mt-1 text-[11px] text-muted-foreground">
+                                        Max: {lot.availableSeedWastage ?? 0} {lot.seedWastageUnit || lot.rawMaterial?.unitOfMeasurement || ''}
                                       </div>
                                     </div>
                                   </motion.div>

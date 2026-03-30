@@ -164,7 +164,7 @@ export class ProductionController {
 
         const displayUnit = currentStockUnit;
         const expectedQty = fromGrams(scaledGrams, displayUnit);
-        const roundedExpected = Math.round(expectedQty * 1000) / 1000;
+        const roundedExpected = Number(expectedQty.toFixed(5));
 
         consumptionItems.push({
           rawMaterialId: item.rawMaterialId,

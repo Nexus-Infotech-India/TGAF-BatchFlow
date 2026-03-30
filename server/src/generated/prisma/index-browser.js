@@ -761,6 +761,10 @@ exports.Prisma.MaterialTransferLineScalarFieldEnum = {
   unitOfMeasurement: 'unitOfMeasurement',
   batchNumber: 'batchNumber',
   cleaningLotId: 'cleaningLotId',
+  numberOfBags: 'numberOfBags',
+  bagSizeKg: 'bagSizeKg',
+  totalPackedQty: 'totalPackedQty',
+  totalPackedUnit: 'totalPackedUnit',
   createdAt: 'createdAt'
 };
 

@@ -72312,10 +72312,16 @@ export namespace Prisma {
 
   export type MaterialTransferLineAvgAggregateOutputType = {
     quantity: number | null
+    numberOfBags: number | null
+    bagSizeKg: number | null
+    totalPackedQty: number | null
   }
 
   export type MaterialTransferLineSumAggregateOutputType = {
     quantity: number | null
+    numberOfBags: number | null
+    bagSizeKg: number | null
+    totalPackedQty: number | null
   }
 
   export type MaterialTransferLineMinAggregateOutputType = {
@@ -72329,6 +72335,10 @@ export namespace Prisma {
     unitOfMeasurement: string | null
     batchNumber: string | null
     cleaningLotId: string | null
+    numberOfBags: number | null
+    bagSizeKg: number | null
+    totalPackedQty: number | null
+    totalPackedUnit: string | null
     createdAt: Date | null
   }
 
@@ -72343,6 +72353,10 @@ export namespace Prisma {
     unitOfMeasurement: string | null
     batchNumber: string | null
     cleaningLotId: string | null
+    numberOfBags: number | null
+    bagSizeKg: number | null
+    totalPackedQty: number | null
+    totalPackedUnit: string | null
     createdAt: Date | null
   }
 
@@ -72357,6 +72371,10 @@ export namespace Prisma {
     unitOfMeasurement: number
     batchNumber: number
     cleaningLotId: number
+    numberOfBags: number
+    bagSizeKg: number
+    totalPackedQty: number
+    totalPackedUnit: number
     createdAt: number
     _all: number
   }
@@ -72364,10 +72382,16 @@ export namespace Prisma {
 
   export type MaterialTransferLineAvgAggregateInputType = {
     quantity?: true
+    numberOfBags?: true
+    bagSizeKg?: true
+    totalPackedQty?: true
   }
 
   export type MaterialTransferLineSumAggregateInputType = {
     quantity?: true
+    numberOfBags?: true
+    bagSizeKg?: true
+    totalPackedQty?: true
   }
 
   export type MaterialTransferLineMinAggregateInputType = {
@@ -72381,6 +72405,10 @@ export namespace Prisma {
     unitOfMeasurement?: true
     batchNumber?: true
     cleaningLotId?: true
+    numberOfBags?: true
+    bagSizeKg?: true
+    totalPackedQty?: true
+    totalPackedUnit?: true
     createdAt?: true
   }
 
@@ -72395,6 +72423,10 @@ export namespace Prisma {
     unitOfMeasurement?: true
     batchNumber?: true
     cleaningLotId?: true
+    numberOfBags?: true
+    bagSizeKg?: true
+    totalPackedQty?: true
+    totalPackedUnit?: true
     createdAt?: true
   }
 
@@ -72409,6 +72441,10 @@ export namespace Prisma {
     unitOfMeasurement?: true
     batchNumber?: true
     cleaningLotId?: true
+    numberOfBags?: true
+    bagSizeKg?: true
+    totalPackedQty?: true
+    totalPackedUnit?: true
     createdAt?: true
     _all?: true
   }
@@ -72510,6 +72546,10 @@ export namespace Prisma {
     unitOfMeasurement: string
     batchNumber: string | null
     cleaningLotId: string | null
+    numberOfBags: number | null
+    bagSizeKg: number | null
+    totalPackedQty: number | null
+    totalPackedUnit: string | null
     createdAt: Date
     _count: MaterialTransferLineCountAggregateOutputType | null
     _avg: MaterialTransferLineAvgAggregateOutputType | null
@@ -72543,6 +72583,10 @@ export namespace Prisma {
     unitOfMeasurement?: boolean
     batchNumber?: boolean
     cleaningLotId?: boolean
+    numberOfBags?: boolean
+    bagSizeKg?: boolean
+    totalPackedQty?: boolean
+    totalPackedUnit?: boolean
     createdAt?: boolean
     transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["materialTransferLine"]>
@@ -72558,6 +72602,10 @@ export namespace Prisma {
     unitOfMeasurement?: boolean
     batchNumber?: boolean
     cleaningLotId?: boolean
+    numberOfBags?: boolean
+    bagSizeKg?: boolean
+    totalPackedQty?: boolean
+    totalPackedUnit?: boolean
     createdAt?: boolean
     transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["materialTransferLine"]>
@@ -72573,6 +72621,10 @@ export namespace Prisma {
     unitOfMeasurement?: boolean
     batchNumber?: boolean
     cleaningLotId?: boolean
+    numberOfBags?: boolean
+    bagSizeKg?: boolean
+    totalPackedQty?: boolean
+    totalPackedUnit?: boolean
     createdAt?: boolean
     transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["materialTransferLine"]>
@@ -72588,10 +72640,14 @@ export namespace Prisma {
     unitOfMeasurement?: boolean
     batchNumber?: boolean
     cleaningLotId?: boolean
+    numberOfBags?: boolean
+    bagSizeKg?: boolean
+    totalPackedQty?: boolean
+    totalPackedUnit?: boolean
     createdAt?: boolean
   }
 
-  export type MaterialTransferLineOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transferId" | "lineType" | "rawMaterialId" | "productName" | "skuCode" | "quantity" | "unitOfMeasurement" | "batchNumber" | "cleaningLotId" | "createdAt", ExtArgs["result"]["materialTransferLine"]>
+  export type MaterialTransferLineOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transferId" | "lineType" | "rawMaterialId" | "productName" | "skuCode" | "quantity" | "unitOfMeasurement" | "batchNumber" | "cleaningLotId" | "numberOfBags" | "bagSizeKg" | "totalPackedQty" | "totalPackedUnit" | "createdAt", ExtArgs["result"]["materialTransferLine"]>
   export type MaterialTransferLineInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
   }
@@ -72618,6 +72674,10 @@ export namespace Prisma {
       unitOfMeasurement: string
       batchNumber: string | null
       cleaningLotId: string | null
+      numberOfBags: number | null
+      bagSizeKg: number | null
+      totalPackedQty: number | null
+      totalPackedUnit: string | null
       createdAt: Date
     }, ExtArgs["result"]["materialTransferLine"]>
     composites: {}
@@ -73053,6 +73113,10 @@ export namespace Prisma {
     readonly unitOfMeasurement: FieldRef<"MaterialTransferLine", 'String'>
     readonly batchNumber: FieldRef<"MaterialTransferLine", 'String'>
     readonly cleaningLotId: FieldRef<"MaterialTransferLine", 'String'>
+    readonly numberOfBags: FieldRef<"MaterialTransferLine", 'Int'>
+    readonly bagSizeKg: FieldRef<"MaterialTransferLine", 'Float'>
+    readonly totalPackedQty: FieldRef<"MaterialTransferLine", 'Float'>
+    readonly totalPackedUnit: FieldRef<"MaterialTransferLine", 'String'>
     readonly createdAt: FieldRef<"MaterialTransferLine", 'DateTime'>
   }
     
@@ -100391,6 +100455,10 @@ export namespace Prisma {
     unitOfMeasurement: 'unitOfMeasurement',
     batchNumber: 'batchNumber',
     cleaningLotId: 'cleaningLotId',
+    numberOfBags: 'numberOfBags',
+    bagSizeKg: 'bagSizeKg',
+    totalPackedQty: 'totalPackedQty',
+    totalPackedUnit: 'totalPackedUnit',
     createdAt: 'createdAt'
   };
 
@@ -105697,6 +105765,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringFilter<"MaterialTransferLine"> | string
     batchNumber?: StringNullableFilter<"MaterialTransferLine"> | string | null
     cleaningLotId?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    numberOfBags?: IntNullableFilter<"MaterialTransferLine"> | number | null
+    bagSizeKg?: FloatNullableFilter<"MaterialTransferLine"> | number | null
+    totalPackedQty?: FloatNullableFilter<"MaterialTransferLine"> | number | null
+    totalPackedUnit?: StringNullableFilter<"MaterialTransferLine"> | string | null
     createdAt?: DateTimeFilter<"MaterialTransferLine"> | Date | string
     transfer?: XOR<MaterialTransferScalarRelationFilter, MaterialTransferWhereInput>
   }
@@ -105712,6 +105784,10 @@ export namespace Prisma {
     unitOfMeasurement?: SortOrder
     batchNumber?: SortOrderInput | SortOrder
     cleaningLotId?: SortOrderInput | SortOrder
+    numberOfBags?: SortOrderInput | SortOrder
+    bagSizeKg?: SortOrderInput | SortOrder
+    totalPackedQty?: SortOrderInput | SortOrder
+    totalPackedUnit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     transfer?: MaterialTransferOrderByWithRelationInput
   }
@@ -105730,6 +105806,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringFilter<"MaterialTransferLine"> | string
     batchNumber?: StringNullableFilter<"MaterialTransferLine"> | string | null
     cleaningLotId?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    numberOfBags?: IntNullableFilter<"MaterialTransferLine"> | number | null
+    bagSizeKg?: FloatNullableFilter<"MaterialTransferLine"> | number | null
+    totalPackedQty?: FloatNullableFilter<"MaterialTransferLine"> | number | null
+    totalPackedUnit?: StringNullableFilter<"MaterialTransferLine"> | string | null
     createdAt?: DateTimeFilter<"MaterialTransferLine"> | Date | string
     transfer?: XOR<MaterialTransferScalarRelationFilter, MaterialTransferWhereInput>
   }, "id">
@@ -105745,6 +105825,10 @@ export namespace Prisma {
     unitOfMeasurement?: SortOrder
     batchNumber?: SortOrderInput | SortOrder
     cleaningLotId?: SortOrderInput | SortOrder
+    numberOfBags?: SortOrderInput | SortOrder
+    bagSizeKg?: SortOrderInput | SortOrder
+    totalPackedQty?: SortOrderInput | SortOrder
+    totalPackedUnit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: MaterialTransferLineCountOrderByAggregateInput
     _avg?: MaterialTransferLineAvgOrderByAggregateInput
@@ -105767,6 +105851,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringWithAggregatesFilter<"MaterialTransferLine"> | string
     batchNumber?: StringNullableWithAggregatesFilter<"MaterialTransferLine"> | string | null
     cleaningLotId?: StringNullableWithAggregatesFilter<"MaterialTransferLine"> | string | null
+    numberOfBags?: IntNullableWithAggregatesFilter<"MaterialTransferLine"> | number | null
+    bagSizeKg?: FloatNullableWithAggregatesFilter<"MaterialTransferLine"> | number | null
+    totalPackedQty?: FloatNullableWithAggregatesFilter<"MaterialTransferLine"> | number | null
+    totalPackedUnit?: StringNullableWithAggregatesFilter<"MaterialTransferLine"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"MaterialTransferLine"> | Date | string
   }
 
@@ -112529,6 +112617,10 @@ export namespace Prisma {
     unitOfMeasurement: string
     batchNumber?: string | null
     cleaningLotId?: string | null
+    numberOfBags?: number | null
+    bagSizeKg?: number | null
+    totalPackedQty?: number | null
+    totalPackedUnit?: string | null
     createdAt?: Date | string
     transfer: MaterialTransferCreateNestedOneWithoutLinesInput
   }
@@ -112544,6 +112636,10 @@ export namespace Prisma {
     unitOfMeasurement: string
     batchNumber?: string | null
     cleaningLotId?: string | null
+    numberOfBags?: number | null
+    bagSizeKg?: number | null
+    totalPackedQty?: number | null
+    totalPackedUnit?: string | null
     createdAt?: Date | string
   }
 
@@ -112557,6 +112653,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
+    bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     transfer?: MaterialTransferUpdateOneRequiredWithoutLinesNestedInput
   }
@@ -112572,6 +112672,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
+    bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -112586,6 +112690,10 @@ export namespace Prisma {
     unitOfMeasurement: string
     batchNumber?: string | null
     cleaningLotId?: string | null
+    numberOfBags?: number | null
+    bagSizeKg?: number | null
+    totalPackedQty?: number | null
+    totalPackedUnit?: string | null
     createdAt?: Date | string
   }
 
@@ -112599,6 +112707,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
+    bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -112613,6 +112725,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
+    bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -118130,11 +118246,18 @@ export namespace Prisma {
     unitOfMeasurement?: SortOrder
     batchNumber?: SortOrder
     cleaningLotId?: SortOrder
+    numberOfBags?: SortOrder
+    bagSizeKg?: SortOrder
+    totalPackedQty?: SortOrder
+    totalPackedUnit?: SortOrder
     createdAt?: SortOrder
   }
 
   export type MaterialTransferLineAvgOrderByAggregateInput = {
     quantity?: SortOrder
+    numberOfBags?: SortOrder
+    bagSizeKg?: SortOrder
+    totalPackedQty?: SortOrder
   }
 
   export type MaterialTransferLineMaxOrderByAggregateInput = {
@@ -118148,6 +118271,10 @@ export namespace Prisma {
     unitOfMeasurement?: SortOrder
     batchNumber?: SortOrder
     cleaningLotId?: SortOrder
+    numberOfBags?: SortOrder
+    bagSizeKg?: SortOrder
+    totalPackedQty?: SortOrder
+    totalPackedUnit?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -118162,11 +118289,18 @@ export namespace Prisma {
     unitOfMeasurement?: SortOrder
     batchNumber?: SortOrder
     cleaningLotId?: SortOrder
+    numberOfBags?: SortOrder
+    bagSizeKg?: SortOrder
+    totalPackedQty?: SortOrder
+    totalPackedUnit?: SortOrder
     createdAt?: SortOrder
   }
 
   export type MaterialTransferLineSumOrderByAggregateInput = {
     quantity?: SortOrder
+    numberOfBags?: SortOrder
+    bagSizeKg?: SortOrder
+    totalPackedQty?: SortOrder
   }
 
   export type EnumTransferLineTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -146970,6 +147104,10 @@ export namespace Prisma {
     unitOfMeasurement: string
     batchNumber?: string | null
     cleaningLotId?: string | null
+    numberOfBags?: number | null
+    bagSizeKg?: number | null
+    totalPackedQty?: number | null
+    totalPackedUnit?: string | null
     createdAt?: Date | string
   }
 
@@ -146983,6 +147121,10 @@ export namespace Prisma {
     unitOfMeasurement: string
     batchNumber?: string | null
     cleaningLotId?: string | null
+    numberOfBags?: number | null
+    bagSizeKg?: number | null
+    totalPackedQty?: number | null
+    totalPackedUnit?: string | null
     createdAt?: Date | string
   }
 
@@ -147112,6 +147254,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringFilter<"MaterialTransferLine"> | string
     batchNumber?: StringNullableFilter<"MaterialTransferLine"> | string | null
     cleaningLotId?: StringNullableFilter<"MaterialTransferLine"> | string | null
+    numberOfBags?: IntNullableFilter<"MaterialTransferLine"> | number | null
+    bagSizeKg?: FloatNullableFilter<"MaterialTransferLine"> | number | null
+    totalPackedQty?: FloatNullableFilter<"MaterialTransferLine"> | number | null
+    totalPackedUnit?: StringNullableFilter<"MaterialTransferLine"> | string | null
     createdAt?: DateTimeFilter<"MaterialTransferLine"> | Date | string
   }
 
@@ -158912,6 +159058,10 @@ export namespace Prisma {
     unitOfMeasurement: string
     batchNumber?: string | null
     cleaningLotId?: string | null
+    numberOfBags?: number | null
+    bagSizeKg?: number | null
+    totalPackedQty?: number | null
+    totalPackedUnit?: string | null
     createdAt?: Date | string
   }
 
@@ -158925,6 +159075,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
+    bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -158938,6 +159092,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
+    bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -158951,6 +159109,10 @@ export namespace Prisma {
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
+    numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
+    bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

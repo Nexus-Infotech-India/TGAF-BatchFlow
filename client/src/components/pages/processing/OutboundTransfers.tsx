@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
 import { Button, Modal, Input, Select, message } from 'antd';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -61,6 +61,10 @@ interface TransferLine {
   quantity: number;
   unitOfMeasurement: string;
   batchNumber?: string;
+  numberOfBags?: number;
+  bagSizeKg?: number;
+  totalPackedQty?: number;
+  totalPackedUnit?: string;
 }
 
 interface Transfer {
@@ -106,6 +110,10 @@ const OutboundTransfers: React.FC = () => {
       quantity: number;
       unitOfMeasurement: string;
       batchNumber: string;
+      numberOfBags?: number;
+      bagSizeKg?: number;
+      totalPackedQty?: number;
+      totalPackedUnit?: string;
     }[];
     notes: string;
     loading: boolean;
@@ -217,19 +225,44 @@ const OutboundTransfers: React.FC = () => {
     });
   };
 
+  /* ─── Unit conversion helper: convert any qty+unit to KG ─── */
+  const UNIT_TO_KG: Record<string, number> = {
+    g: 0.001, gram: 0.001, grams: 0.001, G: 0.001,
+    kg: 1, KG: 1, Kg: 1,
+    ton: 1000, Ton: 1000, TON: 1000, tonne: 1000,
+    quintal: 100, Quintal: 100,
+    lb: 0.453592, oz: 0.0283495,
+  };
+  const toKg = (qty: number, unit: string) => qty * (UNIT_TO_KG[unit] ?? UNIT_TO_KG[unit.toLowerCase()] ?? 1);
+
   // When a completed posting is selected, auto-populate lines from its outputs
+  // ONLY SFG items go to SFG warehouse — byproduct/scrap are excluded
   const handleSelectPosting = (postingId: string) => {
     const posting = completedPostings.find((p) => p.id === postingId);
     if (!posting) return;
 
-    const lines = posting.outputs.map((o) => ({
-      lineType: o.outputType,
-      productName: o.productName,
-      skuCode: o.skuCode || '',
-      quantity: o.quantity,
-      unitOfMeasurement: o.unit,
-      batchNumber: posting.postingNumber,
-    }));
+    // Filter ONLY SFG outputs for dispatch to SFG warehouse
+    const sfgOutputs = posting.outputs.filter((o) => o.outputType === 'SFG');
+
+    const lines = sfgOutputs.map((o) => {
+      const qtyInKg = toKg(o.quantity, o.unit);
+      const BAG_SIZE_KG = 25;
+      const numberOfBags = Math.floor(qtyInKg / BAG_SIZE_KG);
+      const totalPackedQty = numberOfBags * BAG_SIZE_KG; // in KG
+
+      return {
+        lineType: o.outputType,
+        productName: o.productName,
+        skuCode: o.skuCode || '',
+        quantity: o.quantity,
+        unitOfMeasurement: o.unit,
+        batchNumber: posting.postingNumber,
+        numberOfBags,
+        bagSizeKg: BAG_SIZE_KG,
+        totalPackedQty,
+        totalPackedUnit: 'KG',
+      };
+    });
 
     setSendModal((prev) => ({
       ...prev,
@@ -262,11 +295,17 @@ const OutboundTransfers: React.FC = () => {
     setSendModal((prev) => ({ ...prev, step: Math.max(0, prev.step - 1) }));
   };
 
-  // Submit outbound transfer
+  // Submit outbound transfer — only SFG items with packing info
   const handleSendTransfer = async () => {
     const validLines = sendModal.lines.filter((l) => l.productName && l.quantity > 0);
     if (validLines.length === 0) {
-      message.error('No valid line items to dispatch');
+      message.error('No valid SFG line items to dispatch');
+      return;
+    }
+    // Validate that every SFG line has bags calculated
+    const linesWithNoBags = validLines.filter((l) => !l.numberOfBags || l.numberOfBags <= 0);
+    if (linesWithNoBags.length > 0) {
+      message.error('SFG quantity is too small to fill even one 25 KG bag');
       return;
     }
     setSendModal((p) => ({ ...p, loading: true }));
@@ -282,9 +321,13 @@ const OutboundTransfers: React.FC = () => {
           quantity: l.quantity,
           unitOfMeasurement: l.unitOfMeasurement,
           batchNumber: l.batchNumber,
+          numberOfBags: l.numberOfBags,
+          bagSizeKg: l.bagSizeKg,
+          totalPackedQty: l.totalPackedQty,
+          totalPackedUnit: l.totalPackedUnit,
         })),
       });
-      message.success('Outbound transfer dispatched!');
+      message.success('SFG dispatch with packing details sent successfully!');
       setSendModal((p) => ({ ...p, visible: false, loading: false }));
       fetchTransfers();
       fetchCompletedPostings();
@@ -336,6 +379,10 @@ const OutboundTransfers: React.FC = () => {
   };
 
   const totalDispatchInfo = calculateTotalQuantity(sendModal.lines);
+
+  // Calculate total bags for the dispatch summary
+  const totalBags = useMemo(() => sendModal.lines.reduce((sum, l) => sum + (l.numberOfBags || 0), 0), [sendModal.lines]);
+  const totalPackedKg = useMemo(() => sendModal.lines.reduce((sum, l) => sum + (l.totalPackedQty || 0), 0), [sendModal.lines]);
 
   return (
     <div className="space-y-5">
@@ -398,7 +445,7 @@ const OutboundTransfers: React.FC = () => {
           <div className="text-center py-12 text-muted-foreground bg-card rounded-xl border border-border">
             <Truck className="mx-auto mb-3 opacity-40" size={36} />
             <p className="text-lg font-medium">No outbound transfers</p>
-            <p className="text-sm">Dispatch SFG / byproducts / scrap from grinding to SFG warehouse.</p>
+            <p className="text-sm">Dispatch finished SFG products from grinding to SFG warehouse.</p>
           </div>
         )}
 
@@ -490,8 +537,8 @@ const OutboundTransfers: React.FC = () => {
                           <tr className="bg-muted/40">
                             <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Type</th>
                             <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Product</th>
-                            <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">SKU</th>
                             <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Quantity</th>
+                            <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Bags Packed</th>
                             <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Production Batch</th>
                           </tr>
                         </thead>
@@ -513,9 +560,19 @@ const OutboundTransfers: React.FC = () => {
                                   </span>
                                 </td>
                                 <td className="px-3 py-2 text-sm font-medium text-foreground">{line.productName || '-'}</td>
-                                <td className="px-3 py-2 text-sm text-muted-foreground font-mono">{line.skuCode || '-'}</td>
                                 <td className="px-3 py-2 text-sm text-foreground text-right font-semibold">
                                   {line.quantity} {line.unitOfMeasurement}
+                                </td>
+                                <td className="px-3 py-2 text-sm text-right">
+                                  {line.numberOfBags ? (
+                                    <span className="inline-flex items-center gap-1">
+                                      <span className="font-bold text-amber-600">{line.numberOfBags}</span>
+                                      <span className="text-muted-foreground">× {line.bagSizeKg || 25} KG</span>
+                                      <span className="text-xs text-indigo-600 ml-1">({line.totalPackedQty} KG)</span>
+                                    </span>
+                                  ) : (
+                                    <span className="text-muted-foreground">-</span>
+                                  )}
                                 </td>
                                 <td className="px-3 py-2 text-sm text-primary font-mono">{line.batchNumber || '-'}</td>
                               </tr>
@@ -712,10 +769,10 @@ const OutboundTransfers: React.FC = () => {
             </motion.div>
           )}
 
-          {/* Step 2: Review & Dispatch */}
+          {/* Step 2: Review & Dispatch — SFG Packing */}
           {sendModal.step === 2 && (
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-              {/* Summary */}
+              {/* Compact summary bar */}
               <div className="bg-muted/20 p-4 rounded-xl border border-border/50">
                 <div className="grid grid-cols-3 gap-4">
                   <div>
@@ -729,49 +786,89 @@ const OutboundTransfers: React.FC = () => {
                     </div>
                   </div>
                   <div>
-                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">Total Quantity</div>
+                    <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">Total SFG Quantity</div>
                     <div className="text-sm font-bold text-foreground">{totalDispatchInfo?.qty} {totalDispatchInfo?.unit}</div>
                   </div>
                 </div>
               </div>
 
-              {/* Line items */}
-              <div>
-                <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Items to Dispatch</div>
-                <table className="min-w-full rounded-lg overflow-hidden border border-border">
+              {/* ─── Single clean table with packing info ─── */}
+              <div className="rounded-xl border border-border overflow-hidden">
+                <table className="min-w-full">
                   <thead>
                     <tr className="bg-muted/40">
-                      <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Type</th>
-                      <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Product</th>
-                      <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Quantity</th>
-                      <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Batch</th>
+                      <th className="px-4 py-2.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">SFG Product</th>
+                      <th className="px-4 py-2.5 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wide">Quantity</th>
+                      <th className="px-4 py-2.5 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wide">In KG</th>
+                      <th className="px-4 py-2.5 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wide">25 KG Bags</th>
+                      <th className="px-4 py-2.5 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wide">Packed</th>
+                      <th className="px-4 py-2.5 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wide">Loose</th>
+                      <th className="px-4 py-2.5 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wide">Batch</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
                     {sendModal.lines.map((line, idx) => {
-                      const lt = LINE_TYPES.find((l) => l.value === line.lineType);
+                      const qtyInKg = toKg(line.quantity, line.unitOfMeasurement);
+                      const remainder = Math.round((qtyInKg - (line.totalPackedQty || 0)) * 1000) / 1000;
                       return (
-                        <tr key={idx} className="hover:bg-muted/30">
-                          <td className="px-3 py-2">
-                            <span
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border"
-                              style={{
-                                background: lineTypeColor(line.lineType),
-                                color: lt?.color || 'var(--foreground)',
-                                borderColor: `color-mix(in srgb, ${lt?.color || '#888'} 30%, transparent)`,
-                              }}
-                            >
-                              {lt?.icon} {line.lineType}
+                        <tr key={idx} className="hover:bg-muted/20 transition-colors">
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-2">
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-600">
+                                <Package size={10} /> SFG
+                              </span>
+                              <span className="text-sm font-medium text-foreground">{line.productName}</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-sm text-right font-semibold text-foreground">
+                            {line.quantity} {line.unitOfMeasurement}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-right text-muted-foreground">
+                            {line.unitOfMeasurement.toLowerCase() !== 'kg'
+                              ? <span>{qtyInKg.toFixed(2)} KG</span>
+                              : <span className="text-muted-foreground/50">—</span>
+                            }
+                          </td>
+                          <td className="px-4 py-3 text-center">
+                            <span className="inline-flex items-center justify-center min-w-[48px] px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-700 text-sm font-bold">
+                              {line.numberOfBags || 0}
                             </span>
                           </td>
-                          <td className="px-3 py-2 text-sm font-medium text-foreground">{line.productName}</td>
-                          <td className="px-3 py-2 text-sm text-right font-semibold text-foreground">{line.quantity} {line.unitOfMeasurement}</td>
-                          <td className="px-3 py-2 text-sm font-mono text-primary">{line.batchNumber}</td>
+                          <td className="px-4 py-3 text-sm text-right font-semibold text-emerald-600">
+                            {line.totalPackedQty || 0} KG
+                          </td>
+                          <td className="px-4 py-3 text-sm text-right">
+                            {remainder > 0
+                              ? <span className="text-amber-600 font-medium">{remainder} KG</span>
+                              : <span className="text-muted-foreground/50">—</span>
+                            }
+                          </td>
+                          <td className="px-4 py-3 text-sm font-mono text-primary">{line.batchNumber}</td>
                         </tr>
                       );
                     })}
                   </tbody>
                 </table>
+
+                {/* Packing summary footer row */}
+                <div className="bg-emerald-50 dark:bg-emerald-950/20 px-4 py-3 border-t border-emerald-200 dark:border-emerald-800/30 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-sm text-emerald-700 dark:text-emerald-400">
+                    <Package size={14} />
+                    <span className="font-semibold">Packing Summary</span>
+                    <span className="text-xs text-emerald-600 dark:text-emerald-500">(auto-calculated @ 25 KG/bag)</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm">
+                    <span>
+                      <span className="font-bold text-amber-700 dark:text-amber-400 text-base">{totalBags}</span>
+                      <span className="text-muted-foreground ml-1">bags</span>
+                    </span>
+                    <span className="text-muted-foreground">·</span>
+                    <span>
+                      <span className="font-bold text-emerald-700 dark:text-emerald-400 text-base">{totalPackedKg}</span>
+                      <span className="text-muted-foreground ml-1">KG packed</span>
+                    </span>
+                  </div>
+                </div>
               </div>
 
               {/* Notes */}

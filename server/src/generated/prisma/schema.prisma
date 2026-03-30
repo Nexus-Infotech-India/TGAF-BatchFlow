@@ -922,6 +922,10 @@ model MaterialTransferLine {
   unitOfMeasurement String
   batchNumber       String?
   cleaningLotId     String?
+  numberOfBags      Int?
+  bagSizeKg         Float?           @default(25)
+  totalPackedQty    Float?
+  totalPackedUnit   String?
   createdAt         DateTime         @default(now())
 
   transfer MaterialTransfer @relation(fields: [transferId], references: [id], onDelete: Cascade)
