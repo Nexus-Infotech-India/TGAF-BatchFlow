@@ -546,7 +546,8 @@ interface GrindingDispatchPDFConfig {
     cleanedQty: number;
     allocatedQty: number;
     seedWastage: number;
-    unit: string;
+    unit: string;           // Maps to allocated / cleaned unit
+    seedWastageUnit?: string;
   }[];
 }
 
@@ -689,7 +690,7 @@ export const generateGrindingDispatchPDF = (config: GrindingDispatchPDFConfig): 
         { text: lot.lotId, w: lc[0].w, bold: true },
         { text: lot.material, w: lc[1].w },
         { text: `${lot.allocatedQty} ${lot.unit}`, w: lc[2].w, align: 'center', bold: true },
-        { text: lot.seedWastage > 0 ? `${lot.seedWastage} ${lot.unit}` : '--', w: lc[3].w, align: 'center', color: lot.seedWastage > 0 ? [200, 120, 10] : [150, 150, 160] },
+        { text: lot.seedWastage > 0 ? `${lot.seedWastage} ${lot.seedWastageUnit || lot.unit}` : '--', w: lc[3].w, align: 'center', color: lot.seedWastage > 0 ? [200, 120, 10] : [150, 150, 160] },
       ], yPos, false, i % 2 === 0);
       yPos += rowH;
     });
@@ -698,6 +699,7 @@ export const generateGrindingDispatchPDF = (config: GrindingDispatchPDFConfig): 
     const totalAllocated = config.lots.reduce((s, l) => s + l.allocatedQty, 0);
     const totalSeedWastage = config.lots.reduce((s, l) => s + l.seedWastage, 0);
     const unit = config.lots[0]?.unit || config.unit;
+    const seedUnit = config.lots[0]?.seedWastageUnit || unit;
 
     yPos += 2;
     doc.setFillColor(235, 240, 250); doc.rect(margin, yPos, contentWidth, rowH, 'F');
@@ -705,7 +707,7 @@ export const generateGrindingDispatchPDF = (config: GrindingDispatchPDFConfig): 
       { text: '', w: lc[0].w },
       { text: 'Total', w: lc[1].w, bold: true, align: 'right' },
       { text: `${totalAllocated} ${unit}`, w: lc[2].w, align: 'center', bold: true, color: [5, 100, 75] },
-      { text: totalSeedWastage > 0 ? `${totalSeedWastage} ${unit}` : '--', w: lc[3].w, align: 'center', bold: true, color: [200, 120, 10] },
+      { text: totalSeedWastage > 0 ? `${totalSeedWastage} ${seedUnit}` : '--', w: lc[3].w, align: 'center', bold: true, color: [200, 120, 10] },
     ], yPos, false, false);
     yPos += rowH;
   }

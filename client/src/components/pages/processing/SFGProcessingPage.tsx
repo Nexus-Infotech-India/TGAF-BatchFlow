@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Factory, Package, Send, CheckCircle, XCircle, Check, X, ChevronDown, Eye, MapPin, Scale, Hash, CalendarDays, Layers, Leaf, Download } from 'lucide-react';
+import { Factory, Package, Send, CheckCircle, XCircle, Check, X, ChevronDown, Eye, MapPin, Scale, Hash, CalendarDays, Layers } from 'lucide-react';
 import { Button, Modal, Input, message, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import api, { API_ROUTES } from '../../../utils/api';
@@ -36,6 +36,8 @@ interface GrindingDispatch {
       lotNumber: string;
       cleaningJobId?: string;
       cleanedQuantity?: number;
+      cleanedQuantityUnit?: string;
+      seedWastageUnit?: string;
       rawMaterial?: { name: string; unitOfMeasurement: string };
     };
   }[];
@@ -384,8 +386,8 @@ const SFGProcessingPage: React.FC = () => {
                                             <tr key={bl.id} className="hover:bg-muted/30">
                                               <td className="px-3 py-2 text-sm font-mono text-primary">{bl.cleaningLot?.cleaningJobId ? `LOT-${bl.cleaningLot.cleaningJobId}` : (bl.cleaningLot?.lotNumber || bl.cleaningLotId)}</td>
                                               <td className="px-3 py-2 text-sm text-foreground">{bl.cleaningLot?.rawMaterial?.name || '-'}</td>
-                                              <td className="px-3 py-2 text-sm text-right font-semibold text-foreground">{bl.allocatedQuantity} {bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
-                                              <td className="px-3 py-2 text-sm text-right text-amber-600">{bl.seedWastageAllocated > 0 ? `${bl.seedWastageAllocated} ${bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}` : '-'}</td>
+                                              <td className="px-3 py-2 text-sm text-right font-semibold text-foreground">{bl.allocatedQuantity} {bl.cleaningLot?.cleanedQuantityUnit || bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
+                                              <td className="px-3 py-2 text-sm text-right text-amber-600">{bl.seedWastageAllocated > 0 ? `${bl.seedWastageAllocated} ${bl.cleaningLot?.seedWastageUnit || bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}` : '-'}</td>
                                             </tr>
                                           ))}
                                         </tbody>

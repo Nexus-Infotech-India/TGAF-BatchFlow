@@ -5,25 +5,21 @@ import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Package,
-  TrendingUp,
   CheckCircle,
   FileText,
   Boxes,
-  Warehouse,
   Scale,
   Layers,
   Hash,
   CalendarDays,
   Eye,
   ChevronDown,
-  ChevronRight,
   Leaf,
   ArrowDownToLine,
   MapPin,
   Send,
   XCircle,
   Check,
-  X,
   Download,
 } from 'lucide-react';
 import { generateGrindingDispatchPDF } from '../../../utils/exportPdf';
@@ -412,17 +408,18 @@ const DispatchToGrinding: React.FC = () => {
       totalQuantity: dispatch.totalQuantity,
       status: dispatch.status,
       sentAt: dispatch.sentAt,
-      acceptedAt: dispatch.acceptedAt,
-      rejectedAt: dispatch.rejectedAt,
-      rejectionReason: dispatch.rejectionReason,
-      notes: dispatch.notes,
+      acceptedAt: dispatch.acceptedAt ? dispatch.acceptedAt : undefined,
+      rejectedAt: dispatch.rejectedAt ? dispatch.rejectedAt : undefined,
+      rejectionReason: dispatch.rejectionReason ? dispatch.rejectionReason : undefined,
+      notes: dispatch.notes ? dispatch.notes : undefined,
       lots: (dispatch.lots || []).filter(l => l.allocatedQuantity > 0 || l.seedWastageAllocated > 0).map(l => ({
         lotId: l.cleaningLot?.cleaningJobId ? `LOT-${l.cleaningLot.cleaningJobId}` : (l.cleaningLot?.lotNumber || l.cleaningLotId),
         material: l.cleaningLot?.rawMaterial?.name || '-',
         cleanedQty: l.cleaningLot?.cleanedQuantity ?? 0,
         allocatedQty: l.allocatedQuantity,
         seedWastage: l.seedWastageAllocated ?? 0,
-        unit: l.cleaningLot?.rawMaterial?.unitOfMeasurement || '',
+        unit: l.cleaningLot?.cleanedQuantityUnit || l.cleaningLot?.rawMaterial?.unitOfMeasurement || '',
+        seedWastageUnit: l.cleaningLot?.seedWastageUnit || l.cleaningLot?.rawMaterial?.unitOfMeasurement || '',
       })),
     });
   };
@@ -702,8 +699,8 @@ const DispatchToGrinding: React.FC = () => {
                                             <tr key={bl.id} className="hover:bg-muted/30">
                                               <td className="px-3 py-2 text-sm font-mono text-primary">{bl.cleaningLot?.cleaningJobId ? `LOT-${bl.cleaningLot.cleaningJobId}` : (bl.cleaningLot?.lotNumber || bl.cleaningLotId)}</td>
                                               <td className="px-3 py-2 text-sm text-foreground">{bl.cleaningLot?.rawMaterial?.name || '-'}</td>
-                                              <td className="px-3 py-2 text-sm text-right font-semibold text-foreground">{bl.allocatedQuantity} {bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
-                                              <td className="px-3 py-2 text-sm text-right text-amber-600">{bl.seedWastageAllocated > 0 ? `${bl.seedWastageAllocated} ${bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}` : '-'}</td>
+                                              <td className="px-3 py-2 text-sm text-right font-semibold text-foreground">{bl.allocatedQuantity} {bl.cleaningLot?.cleanedQuantityUnit || bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
+                                              <td className="px-3 py-2 text-sm text-right text-amber-600">{bl.seedWastageAllocated > 0 ? `${bl.seedWastageAllocated} ${bl.cleaningLot?.seedWastageUnit || bl.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}` : '-'}</td>
                                             </tr>
                                           ))}
                                         </tbody>
@@ -1133,8 +1130,8 @@ const DispatchToGrinding: React.FC = () => {
                             {l.cleaningLot?.cleaningJobId ? `LOT-${l.cleaningLot.cleaningJobId}` : (l.cleaningLot?.lotNumber || l.cleaningLotId)}
                           </td>
                           <td className="px-3 py-2 text-sm text-foreground">{l.cleaningLot?.rawMaterial?.name || '-'}</td>
-                          <td className="px-3 py-2 text-sm text-right font-semibold">{l.allocatedQuantity} {l.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
-                          <td className="px-3 py-2 text-sm text-right text-amber-600">{l.seedWastageAllocated > 0 ? `${l.seedWastageAllocated} ${l.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}` : '-'}</td>
+                          <td className="px-3 py-2 text-sm text-right font-semibold">{l.allocatedQuantity} {l.cleaningLot?.cleanedQuantityUnit || l.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}</td>
+                          <td className="px-3 py-2 text-sm text-right text-amber-600">{l.seedWastageAllocated > 0 ? `${l.seedWastageAllocated} ${l.cleaningLot?.seedWastageUnit || l.cleaningLot?.rawMaterial?.unitOfMeasurement || ''}` : '-'}</td>
                         </tr>
                       ))}
                     </tbody>
