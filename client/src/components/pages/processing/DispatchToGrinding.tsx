@@ -885,156 +885,150 @@ const DispatchToGrinding: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="max-h-[350px] overflow-y-auto pr-2 custom-scrollbar space-y-6">
-                    {filteredLots.length > 0 && (
-                      <div>
-                        <div className="flex items-center gap-2 mb-3">
-                          <Layers className="w-4 h-4 text-primary" />
-                          <h4 className="text-sm font-bold text-primary tracking-wide">CLEANED LOTS</h4>
-                          <div className="h-px bg-border flex-1 ml-2"></div>
-                        </div>
-                        <div className="flex flex-col gap-3">
-                          {filteredLots.map((lot) => (
-                            <div key={lot.id}
-                              className={`flex flex-col rounded-xl border transition-all duration-200 overflow-hidden ${
-                                batchModal.selectedLots[lot.id] !== undefined 
-                                  ? 'border-primary ring-1 ring-primary/20 bg-primary/[0.02] shadow-sm' 
-                                  : 'border-border bg-card hover:border-primary/40 hover:shadow-sm'
-                              }`}
-                            >
-                              <div 
-                                className="flex items-center justify-between p-4 cursor-pointer"
-                                onClick={() => toggleLotSelection(lot.id, lot)}
-                              >
-                                <div className="flex items-center gap-4 flex-1 pr-4">
-                                  <div className={`w-5 h-5 flex-shrink-0 rounded-full border flex items-center justify-center transition-colors ${
-                                    batchModal.selectedLots[lot.id] !== undefined ? 'bg-primary border-primary text-white' : 'border-gray-300 bg-white'
-                                  }`}>
-                                    {batchModal.selectedLots[lot.id] !== undefined && <Check size={12} strokeWidth={3} />}
-                                  </div>
-                                  <div className="flex-1">
-                                    <div className="text-sm font-bold text-gray-800 break-words leading-tight">
+                  <div className="max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                    <div className="flex flex-col md:flex-row gap-6 items-start">
+                      {filteredLots.length > 0 && (
+                        <div className="flex-1 w-full min-w-0">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Layers className="w-4 h-4 text-primary" />
+                            <h4 className="text-sm font-bold text-primary tracking-wide">CLEANED LOTS</h4>
+                            <div className="h-px bg-border flex-1 ml-2"></div>
+                          </div>
+                          <div className="bg-card rounded-xl border border-border overflow-hidden">
+                            <table className="min-w-full divide-y divide-border">
+                              <thead className="bg-muted/50">
+                                <tr>
+                                  <th className="px-2 py-2.5 w-10 text-center"></th>
+                                  <th className="px-2 py-2.5 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Lot Number</th>
+                                  <th className="px-2 py-2.5 text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Available</th>
+                                  <th className="px-2 py-2.5 text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-28">Allocate</th>
+                                </tr>
+                              </thead>
+                            <tbody className="divide-y divide-border">
+                              {filteredLots.map((lot) => {
+                                const isSelected = batchModal.selectedLots[lot.id] !== undefined;
+                                return (
+                                  <tr key={lot.id} className={`hover:bg-muted/30 transition-colors ${isSelected ? 'bg-primary/[0.02]' : ''}`}>
+                                    <td className="px-2 py-2 text-center">
+                                      <div 
+                                        className="cursor-pointer inline-flex items-center justify-center p-1"
+                                        onClick={() => toggleLotSelection(lot.id, lot)}
+                                      >
+                                        <div className={`w-4 h-4 flex-shrink-0 rounded flex items-center justify-center transition-colors border ${
+                                          isSelected ? 'bg-primary border-primary text-white' : 'border-gray-300 bg-white'
+                                        }`}>
+                                          {isSelected && <Check size={12} strokeWidth={3} />}
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td className="px-2 py-2 text-xs font-bold text-gray-800 break-all">
                                       {lot.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot.lotNumber}
-                                    </div>
-                                  </div>
-                                </div>
-                                
-                                <div className="text-right flex-shrink-0">
-                                  <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-1">Available Qty</div>
-                                  <div className="text-sm font-medium bg-muted/40 px-3 py-1 rounded-lg border border-border/50">
-                                    {lot.cleanedQuantity ?? 0} {lot.cleanedQuantityUnit || lot.rawMaterial?.unitOfMeasurement || ''}
-                                  </div>
-                                </div>
-                              </div>
-                              
-                              <AnimatePresence>
-                                {batchModal.selectedLots[lot.id] !== undefined && (
-                                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
-                                    <div className="px-4 pb-4 pt-3 border-t border-primary/10 bg-primary/5">
-                                      <div className="flex items-center justify-between">
-                                        <span className="text-sm font-medium text-primary">Quantity to Allocate:</span>
-                                        <div className="w-32">
-                                          <Input type="number" size="large" value={batchModal.selectedLots[lot.id]}
+                                    </td>
+                                    <td className="px-2 py-2 text-xs text-right font-medium text-muted-foreground">
+                                      {lot.cleanedQuantity ?? 0} {lot.cleanedQuantityUnit || lot.rawMaterial?.unitOfMeasurement || ''}
+                                    </td>
+                                    <td className="px-2 py-2 text-right">
+                                      {isSelected ? (
+                                        <div className="flex flex-col items-end gap-1">
+                                          <Input 
+                                            type="number" 
+                                            size="small" 
+                                            value={batchModal.selectedLots[lot.id]}
                                             onClick={(e) => e.stopPropagation()}
                                             onChange={(e) => updateLotQuantity(lot.id, Number(e.target.value))}
-                                            min={0} max={lot.cleanedQuantity ?? 0}
+                                            min={0} 
+                                            max={lot.cleanedQuantity ?? 0}
                                             status={batchModal.selectedLots[lot.id] > (lot.cleanedQuantity ?? 0) ? 'error' : undefined}
-                                            className="font-bold text-center text-primary shadow-inner-sm bg-white" />
+                                            className="w-20 font-bold text-center text-primary bg-white shadow-inner-sm text-xs" 
+                                          />
+                                          {batchModal.selectedLots[lot.id] > (lot.cleanedQuantity ?? 0) && (
+                                            <span className="text-[9px] text-red-500 font-medium whitespace-nowrap">Exceeds max</span>
+                                          )}
                                         </div>
-                                      </div>
-                                      {batchModal.selectedLots[lot.id] > (lot.cleanedQuantity ?? 0) && (
-                                        <div className="mt-2 text-xs text-red-500 font-medium flex items-center gap-1">
-                                          <XCircle size={12} />
-                                          Cannot exceed available: {lot.cleanedQuantity ?? 0} {lot.cleanedQuantityUnit || lot.rawMaterial?.unitOfMeasurement || ''}
-                                        </div>
+                                      ) : (
+                                        <span className="text-[10px] text-muted-foreground/50 italic mr-1 select-none">Unselected</span>
                                       )}
-                                      <div className="mt-1 text-[11px] text-muted-foreground">
-                                        Max: {lot.cleanedQuantity ?? 0} {lot.cleanedQuantityUnit || lot.rawMaterial?.unitOfMeasurement || ''}
-                                      </div>
-                                    </div>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
-                            </div>
-                          ))}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     )}
 
                     {filteredSeedWastageLots.length > 0 && (
-                      <div>
+                      <div className="flex-1 w-full min-w-0">
                         <div className="flex items-center gap-2 mb-3">
                           <Leaf className="w-4 h-4 text-amber-500" />
-                          <h4 className="text-sm font-bold text-amber-600 tracking-wide">SEED WASTAGE LOTS</h4>
+                          <h4 className="text-sm font-bold text-amber-600 tracking-wide">SEED WASTAGE</h4>
                           <div className="h-px bg-border flex-1 ml-2"></div>
                         </div>
-                        <div className="flex flex-col gap-3">
-                          {filteredSeedWastageLots.map((lot) => (
-                            <div key={`sw-${lot.id}`}
-                              className={`flex flex-col rounded-xl border transition-all duration-200 overflow-hidden ${
-                                batchModal.seedWastageLots[lot.id] !== undefined 
-                                  ? 'border-amber-500 ring-1 ring-amber-500/20 bg-amber-500/[0.02] shadow-sm' 
-                                  : 'border-border bg-card hover:border-amber-500/40 hover:shadow-sm'
-                              }`}
-                            >
-                              <div 
-                                className="flex items-center justify-between p-4 cursor-pointer"
-                                onClick={() => toggleSeedWastageLotSelection(lot.id, lot)}
-                              >
-                                <div className="flex items-center gap-4 flex-1 pr-4">
-                                  <div className={`w-5 h-5 flex-shrink-0 rounded-full border flex items-center justify-center transition-colors ${
-                                    batchModal.seedWastageLots[lot.id] !== undefined ? 'bg-amber-500 border-amber-500 text-white' : 'border-gray-300 bg-white'
-                                  }`}>
-                                    {batchModal.seedWastageLots[lot.id] !== undefined && <Check size={12} strokeWidth={3} />}
-                                  </div>
-                                  <div className="flex-1">
-                                    <div className="text-sm font-bold text-gray-800 break-words leading-tight">
+                        <div className="bg-card rounded-xl border border-border overflow-hidden">
+                          <table className="min-w-full divide-y divide-border">
+                            <thead className="bg-muted/50">
+                              <tr>
+                                <th className="px-2 py-2.5 w-10 text-center"></th>
+                                <th className="px-2 py-2.5 text-left text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Lot Number</th>
+                                <th className="px-2 py-2.5 text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">Available</th>
+                                <th className="px-2 py-2.5 text-right text-[11px] font-semibold text-muted-foreground uppercase tracking-wider w-28">Allocate</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-border">
+                              {filteredSeedWastageLots.map((lot) => {
+                                const isSelected = batchModal.seedWastageLots[lot.id] !== undefined;
+                                return (
+                                  <tr key={`sw-${lot.id}`} className={`hover:bg-muted/30 transition-colors ${isSelected ? 'bg-amber-500/[0.02]' : ''}`}>
+                                    <td className="px-2 py-2 text-center">
+                                      <div 
+                                        className="cursor-pointer inline-flex items-center justify-center p-1"
+                                        onClick={() => toggleSeedWastageLotSelection(lot.id, lot)}
+                                      >
+                                        <div className={`w-4 h-4 flex-shrink-0 rounded flex items-center justify-center transition-colors border ${
+                                          isSelected ? 'bg-amber-500 border-amber-500 text-white' : 'border-gray-300 bg-white'
+                                        }`}>
+                                          {isSelected && <Check size={12} strokeWidth={3} />}
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td className="px-2 py-2 text-xs font-bold text-gray-800 break-all">
                                       {lot.cleaningJobId ? `LOT-${lot.cleaningJobId}` : lot.lotNumber}
-                                    </div>
-                                  </div>
-                                </div>
-                                
-                                <div className="text-right flex-shrink-0">
-                                  <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-semibold mb-1">Available Qty</div>
-                                  <div className="text-sm font-medium bg-amber-50 px-3 py-1 rounded-lg border border-amber-100 text-amber-700">
-                                    {lot.availableSeedWastage ?? 0} {lot.seedWastageUnit || lot.rawMaterial?.unitOfMeasurement || ''}
-                                  </div>
-                                </div>
-                              </div>
-                              
-                              <AnimatePresence>
-                                {batchModal.seedWastageLots[lot.id] !== undefined && (
-                                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
-                                    <div className="px-4 pb-4 pt-3 border-t border-amber-500/10 bg-amber-50">
-                                      <div className="flex items-center justify-between">
-                                        <span className="text-sm font-medium text-amber-700">Quantity to Allocate:</span>
-                                        <div className="w-32">
-                                          <Input type="number" size="large" value={batchModal.seedWastageLots[lot.id]}
+                                    </td>
+                                    <td className="px-2 py-2 text-xs text-right font-medium text-amber-700">
+                                      {lot.availableSeedWastage ?? 0} {lot.seedWastageUnit || lot.rawMaterial?.unitOfMeasurement || ''}
+                                    </td>
+                                    <td className="px-2 py-2 text-right">
+                                      {isSelected ? (
+                                        <div className="flex flex-col items-end gap-1">
+                                          <Input 
+                                            type="number" 
+                                            size="small" 
+                                            value={batchModal.seedWastageLots[lot.id]}
                                             onClick={(e) => e.stopPropagation()}
                                             onChange={(e) => updateSeedWastageQuantity(lot.id, Number(e.target.value))}
-                                            min={0} max={lot.availableSeedWastage ?? 0}
+                                            min={0} 
+                                            max={lot.availableSeedWastage ?? 0}
                                             status={batchModal.seedWastageLots[lot.id] > (lot.availableSeedWastage ?? 0) ? 'error' : undefined}
-                                            className="font-bold text-center text-amber-600 shadow-inner-sm bg-white" />
+                                            className="w-20 font-bold text-center text-amber-600 bg-white shadow-inner-sm text-xs" 
+                                          />
+                                          {batchModal.seedWastageLots[lot.id] > (lot.availableSeedWastage ?? 0) && (
+                                            <span className="text-[9px] text-red-500 font-medium whitespace-nowrap">Exceeds max</span>
+                                          )}
                                         </div>
-                                      </div>
-                                      {batchModal.seedWastageLots[lot.id] > (lot.availableSeedWastage ?? 0) && (
-                                        <div className="mt-2 text-xs text-red-500 font-medium flex items-center gap-1">
-                                          <XCircle size={12} />
-                                          Cannot exceed available: {lot.availableSeedWastage ?? 0} {lot.seedWastageUnit || lot.rawMaterial?.unitOfMeasurement || ''}
-                                        </div>
+                                      ) : (
+                                        <span className="text-[10px] text-muted-foreground/50 italic mr-1 select-none">Unselected</span>
                                       )}
-                                      <div className="mt-1 text-[11px] text-muted-foreground">
-                                        Max: {lot.availableSeedWastage ?? 0} {lot.seedWastageUnit || lot.rawMaterial?.unitOfMeasurement || ''}
-                                      </div>
-                                    </div>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
-                            </div>
-                          ))}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     )}
+                    </div>
                   </div>
 
                   {/* Notes */}
