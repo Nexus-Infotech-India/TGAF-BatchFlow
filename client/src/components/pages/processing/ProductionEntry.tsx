@@ -613,84 +613,109 @@ const ProductionEntry: React.FC = () => {
                 </div>
               </div>
 
-              {/* BOM Info */}
-              {selectedBom && (
-                <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Layers size={14} className="text-primary" />
-                    <span className="font-semibold text-primary">BOM: {selectedBom.bomCode}</span>
-                    <span className="text-xs text-muted-foreground">— {selectedBom.productName}</span>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    Output: {selectedBom.outputQuantity} {selectedBom.unitOfMeasurement} &middot; {selectedBom.itemCount} raw material{selectedBom.itemCount !== 1 ? 's' : ''}
-                  </div>
-                </div>
-              )}
-
-              {/* ── Production Quantity Input ── */}
-              {selectedBom && (
-                <div className="rounded-xl border-2 border-dashed border-emerald-400/40 bg-emerald-50/30 p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="p-1.5 rounded-lg bg-emerald-500/10">
-                      <Zap size={14} className="text-emerald-600" />
-                    </div>
-                    <span className="text-sm font-bold text-emerald-700 uppercase tracking-wider">
-                      SFG Production Quantity
+              {/* BOM Info & Production Quantity Input */}
+              <AnimatePresence mode="wait">
+                {bomLoading ? (
+                  <motion.div
+                    key="bomLoading"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="flex flex-col items-center justify-center py-8 rounded-xl border-2 border-dashed border-emerald-400/20 bg-emerald-50/10 overflow-hidden"
+                  >
+                    <div className="w-8 h-8 rounded-full border-4 border-emerald-200 border-t-emerald-500 animate-spin" />
+                    <span className="text-sm font-medium text-emerald-600 mt-3 animate-pulse">
+                      Fetching SFG details...
                     </span>
-                    <Tooltip title="Enter how much SFG was produced. The system will automatically calculate raw material quantities from the BOM recipe.">
-                      <Info size={14} className="text-muted-foreground cursor-help" />
-                    </Tooltip>
-                  </div>
-                  <div className="flex items-end gap-3">
-                    <div className="flex-1 max-w-xs">
-                      <div className="text-xs text-muted-foreground mb-1 font-medium">
-                        How much {selectedBom.productName} was produced? *
+                  </motion.div>
+                ) : selectedBom ? (
+                  <motion.div
+                    key="bomContent"
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: "spring", bounce: 0.4, duration: 0.6 }}
+                    className="space-y-5"
+                  >
+                    <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm shadow-sm">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Layers size={14} className="text-primary" />
+                        <span className="font-semibold text-primary">BOM: {selectedBom.bomCode}</span>
+                        <span className="text-xs text-muted-foreground">— {selectedBom.productName}</span>
                       </div>
-                      <InputNumber
-                        style={{ width: '100%' }}
-                        min={0.001}
-                        step={0.1}
-                        precision={3}
-                        value={productionQty}
-                        onChange={handleProductionQtyChange}
-                        placeholder="Enter quantity"
-                        size="large"
-                        className="font-semibold"
-                      />
-                    </div>
-                    <div className="w-32">
-                      <div className="text-xs text-muted-foreground mb-1 font-medium">Unit</div>
-                      <Select
-                        style={{ width: '100%' }}
-                        value={productionUnit}
-                        onChange={(val) => {
-                          setProductionUnit(val);
-                          // Update SFG output line unit to match
-                          setOutputLines((prev) =>
-                            prev.map((line) =>
-                              line.outputType === 'SFG' ? { ...line, unit: val } : line
-                            )
-                          );
-                          if (productionQty && productionQty > 0) {
-                            fetchConsumptionData(productionQty, val);
-                          }
-                        }}
-                        size="large"
-                      >
-                        {unitOptions.map((u) => (
-                          <Option key={u} value={u}>{u}</Option>
-                        ))}
-                      </Select>
-                    </div>
-                    {consumptionLoading && (
-                      <div className="flex items-center gap-2 text-emerald-600 pb-1">
-                        <div className="inline-block w-4 h-4 border-2 rounded-full animate-spin" style={{ borderColor: '#d1d5db', borderTopColor: '#10b981' }} />
-                        <span className="text-xs font-medium">Calculating...</span>
+                      <div className="text-xs text-muted-foreground">
+                        Output: {selectedBom.outputQuantity} {selectedBom.unitOfMeasurement} &middot; {selectedBom.itemCount} raw material{selectedBom.itemCount !== 1 ? 's' : ''}
                       </div>
-                    )}
-                  </div>
-                </div>
-              )}
+                    </div>
+
+                    <div className="rounded-xl border-2 border-dashed border-emerald-400/60 bg-gradient-to-br from-emerald-50/50 to-emerald-100/30 p-5 shadow-sm">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="p-1.5 rounded-lg bg-emerald-500/10 shadow-sm">
+                          <Zap size={14} className="text-emerald-600" />
+                        </div>
+                        <span className="text-sm font-bold text-emerald-700 uppercase tracking-wider">
+                          SFG Production Quantity
+                        </span>
+                        <Tooltip title="Enter how much SFG was produced. The system will automatically calculate raw material quantities from the BOM recipe.">
+                          <Info size={14} className="text-muted-foreground cursor-help" />
+                        </Tooltip>
+                      </div>
+                      <div className="flex items-end gap-4">
+                        <div className="flex-1 max-w-xs relative">
+                          <div className="text-xs text-muted-foreground mb-1.5 font-medium">
+                            How much {selectedBom.productName} was produced? *
+                          </div>
+                          <InputNumber
+                            style={{ width: '100%' }}
+                            min={0.001}
+                            step={0.1}
+                            precision={3}
+                            value={productionQty}
+                            onChange={handleProductionQtyChange}
+                            placeholder="Enter quantity"
+                            size="large"
+                            className="font-semibold shadow-sm hover:border-emerald-400 focus:border-emerald-500 transition-colors"
+                          />
+                        </div>
+                        <div className="w-32">
+                          <div className="text-xs text-muted-foreground mb-1.5 font-medium">Unit</div>
+                          <Select
+                            style={{ width: '100%' }}
+                            value={productionUnit}
+                            onChange={(val) => {
+                              setProductionUnit(val);
+                              // Update SFG output line unit to match
+                              setOutputLines((prev) =>
+                                prev.map((line) =>
+                                  line.outputType === 'SFG' ? { ...line, unit: val } : line
+                                )
+                              );
+                              if (productionQty && productionQty > 0) {
+                                fetchConsumptionData(productionQty, val);
+                              }
+                            }}
+                            size="large"
+                            className="shadow-sm hover:border-emerald-400 focus:border-emerald-500 transition-colors"
+                          >
+                            {unitOptions.map((u) => (
+                              <Option key={u} value={u}>{u}</Option>
+                            ))}
+                          </Select>
+                        </div>
+                        {consumptionLoading && (
+                          <div className="flex items-center gap-2 text-emerald-600 pb-2 pl-2">
+                            <motion.div 
+                              animate={{ rotate: 360 }}
+                              transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                              className="w-4 h-4 border-2 rounded-full border-t-emerald-500 border-emerald-200"
+                            />
+                            <span className="text-xs font-semibold animate-pulse">Calculating...</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
 
               {/* ── Raw Material Consumption ── */}
               {consumptionLines.length > 0 && (

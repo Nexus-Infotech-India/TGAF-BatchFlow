@@ -47,6 +47,7 @@ const SFGProcessingPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'incoming' | 'production'>('incoming');
   const [dispatches, setDispatches] = useState<GrindingDispatch[]>([]);
   const [loading, setLoading] = useState(false);
+  const [acceptingId, setAcceptingId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -87,12 +88,15 @@ const SFGProcessingPage: React.FC = () => {
 
   /* ─── Accept / Reject Handlers ─── */
   const handleAcceptDispatch = async (dispatch: GrindingDispatch) => {
+    setAcceptingId(dispatch.id);
     try {
       await api.put(API_ROUTES.RAW.ACCEPT_GRINDING_DISPATCH(dispatch.id));
       message.success(`Dispatch ${dispatch.batchNumber} accepted!`);
-      fetchDispatches();
+      await fetchDispatches();
     } catch (err: any) {
       message.error(err?.response?.data?.error || 'Failed to accept dispatch');
+    } finally {
+      setAcceptingId(null);
     }
   };
 
@@ -311,29 +315,68 @@ const SFGProcessingPage: React.FC = () => {
                               {dispatch.sentAt && !isNaN(Date.parse(dispatch.sentAt)) ? new Date(dispatch.sentAt).toLocaleString() : '-'}
                             </td>
                             <td className="px-4 py-3 text-center">
-                              {dispatch.status === 'SENT' && (
-                                <div className="flex gap-1 justify-center">
-                                  <Button type="primary" size="small"
-                                    icon={<Check className="w-3 h-3" />}
-                                    onClick={() => handleAcceptDispatch(dispatch)}
-                                    className="rounded-lg"
-                                    style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none' }}
-                                  >Accept</Button>
-                                  <Button size="small" danger
-                                    icon={<X className="w-3 h-3" />}
-                                    onClick={() => openRejectModal(dispatch)}
-                                    className="rounded-lg"
-                                  >Reject</Button>
-                                </div>
-                              )}
-                              {dispatch.status === 'ACCEPTED' && (
-                                <span className="text-xs text-emerald-600 font-medium">✓ Received</span>
-                              )}
-                              {dispatch.status === 'REJECTED' && dispatch.rejectionReason && (
-                                <span className="text-xs text-red-500 italic" title={dispatch.rejectionReason}>
-                                  {dispatch.rejectionReason.length > 20 ? dispatch.rejectionReason.slice(0, 20) + '…' : dispatch.rejectionReason}
-                                </span>
-                              )}
+                              <div className="flex justify-center min-h-[28px] items-center overflow-hidden">
+                                <AnimatePresence mode="wait">
+                                  {dispatch.status === 'SENT' ? (
+                                    acceptingId === dispatch.id ? (
+                                      <motion.div
+                                        key="accepting"
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        className="flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 text-emerald-600 rounded-lg text-xs font-semibold"
+                                      >
+                                        <div className="w-3.5 h-3.5 border-2 border-emerald-400 border-t-emerald-600 rounded-full animate-spin" />
+                                        Accepting...
+                                      </motion.div>
+                                    ) : (
+                                      <motion.div
+                                        key="actions"
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        className="flex gap-1 justify-center"
+                                      >
+                                        <Button type="primary" size="small"
+                                          icon={<Check className="w-3 h-3" />}
+                                          onClick={() => handleAcceptDispatch(dispatch)}
+                                          className="rounded-lg shadow-sm"
+                                          disabled={acceptingId !== null}
+                                          style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none' }}
+                                        >Accept</Button>
+                                        <Button size="small" danger
+                                          icon={<X className="w-3 h-3" />}
+                                          onClick={() => openRejectModal(dispatch)}
+                                          className="rounded-lg"
+                                          disabled={acceptingId !== null}
+                                        >Reject</Button>
+                                      </motion.div>
+                                    )
+                                  ) : dispatch.status === 'ACCEPTED' ? (
+                                    <motion.div
+                                      key="accepted"
+                                      initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+                                      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                                      className="flex justify-center"
+                                    >
+                                      <span className="inline-flex items-center gap-1 text-xs text-emerald-600 font-bold bg-emerald-500/10 px-2 py-1 rounded-full border border-emerald-500/20 shadow-sm">
+                                        <CheckCircle className="w-3 h-3" /> Received
+                                      </span>
+                                    </motion.div>
+                                  ) : dispatch.status === 'REJECTED' && dispatch.rejectionReason ? (
+                                    <motion.span
+                                      key="rejected"
+                                      initial={{ opacity: 0, scale: 0.9 }}
+                                      animate={{ opacity: 1, scale: 1 }}
+                                      className="text-xs text-red-500 italic block"
+                                      title={dispatch.rejectionReason}
+                                    >
+                                      {dispatch.rejectionReason.length > 20 ? dispatch.rejectionReason.slice(0, 20) + '…' : dispatch.rejectionReason}
+                                    </motion.span>
+                                  ) : null}
+                                </AnimatePresence>
+                              </div>
                             </td>
                           </motion.tr>
 
