@@ -64,12 +64,13 @@ const SIDEBAR_SECTIONS: SidebarSection[] = [
   {
     key: 'grinding-production',
     label: 'Grinding & Production',
-    description: 'Dispatch to grinding, SFG processing, Outbound to SFG WH',
+    description: 'Dispatch to grinding, SFG processing, Outbound to SFG WH, Stock Verification',
     permissionKeys: [
       'send_cleaned_to_grinding',
       'manage_processing_list',
       'dispatch_to_sfg',
       'process_raw_materials',
+      'manage_stock_verification',
     ],
   },
   {
@@ -150,6 +151,7 @@ const PERMISSION_LABELS: Record<string, string> = {
   manage_processing_list: 'SFG Processing',
   dispatch_to_sfg: 'Outbound to SFG Warehouse',
   process_raw_materials: 'Processing List',
+  manage_stock_verification: 'Stock Verification',
   view_operation_dashboard: 'Operation Dashboard',
   view_batches: 'View Batches',
   create_batch: 'Create Batch',

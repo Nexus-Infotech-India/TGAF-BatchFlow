@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 
 const { Option } = Select;
-const { TextArea } = Input;
 
 /* ─── Types ─── */
 interface Location {
@@ -128,18 +127,6 @@ const OutboundTransfers: React.FC = () => {
     loading: false,
   });
 
-  // Reject modal state
-  const [rejectModal, setRejectModal] = useState<{
-    visible: boolean;
-    transferId: string;
-    reason: string;
-    loading: boolean;
-  }>({
-    visible: false,
-    transferId: '',
-    reason: '',
-    loading: false,
-  });
 
   const fetchTransfers = async () => {
     setLoading(true);
@@ -178,38 +165,6 @@ const OutboundTransfers: React.FC = () => {
     fetchCompletedPostings();
   }, []);
 
-  // Accept
-  const handleAccept = async (id: string) => {
-    try {
-      await api.put(API_ROUTES.RAW.ACCEPT_TRANSFER(id));
-      message.success('Outbound transfer accepted at SFG warehouse');
-      fetchTransfers();
-      fetchCompletedPostings();
-    } catch (err: any) {
-      message.error(err?.response?.data?.error || 'Failed to accept transfer');
-    }
-  };
-
-  // Reject
-  const handleReject = async () => {
-    if (!rejectModal.reason.trim()) {
-      message.error('Please enter a rejection reason');
-      return;
-    }
-    setRejectModal((p) => ({ ...p, loading: true }));
-    try {
-      await api.put(API_ROUTES.RAW.REJECT_TRANSFER(rejectModal.transferId), {
-        rejectionReason: rejectModal.reason,
-      });
-      message.success('Transfer rejected');
-      setRejectModal({ visible: false, transferId: '', reason: '', loading: false });
-      fetchTransfers();
-      fetchCompletedPostings();
-    } catch (err: any) {
-      message.error(err?.response?.data?.error || 'Failed to reject');
-      setRejectModal((p) => ({ ...p, loading: false }));
-    }
-  };
 
   // Open send modal
   const openSendModal = () => {
@@ -485,31 +440,6 @@ const OutboundTransfers: React.FC = () => {
                     {transfer.status === 'REJECTED' && <XCircle size={10} className="mr-1" />}
                     {transfer.status}
                   </span>
-
-                  {transfer.status === 'SENT' && (
-                    <div className="flex gap-1.5">
-                      <Button
-                        type="primary"
-                        size="small"
-                        onClick={(e) => { e.stopPropagation(); handleAccept(transfer.id); }}
-                        style={{ background: '#10b981', border: 'none' }}
-                        className="rounded-lg"
-                      >
-                        <CheckCircle size={12} className="mr-1 inline" /> Accept
-                      </Button>
-                      <Button
-                        danger
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setRejectModal({ visible: true, transferId: transfer.id, reason: '', loading: false });
-                        }}
-                        className="rounded-lg"
-                      >
-                        <XCircle size={12} className="mr-1 inline" /> Reject
-                      </Button>
-                    </div>
-                  )}
 
                   {expandedId === transfer.id ? (
                     <ChevronDown size={16} className="text-muted-foreground" />
@@ -915,31 +845,7 @@ const OutboundTransfers: React.FC = () => {
         </div>
       </Modal>
 
-      {/* ─── Reject Modal ─── */}
-      <Modal
-        open={rejectModal.visible}
-        title={
-          <div className="flex items-center gap-2">
-            <XCircle className="text-red-500" size={18} />
-            <span>Reject Transfer</span>
-          </div>
-        }
-        onCancel={() => setRejectModal({ visible: false, transferId: '', reason: '', loading: false })}
-        onOk={handleReject}
-        confirmLoading={rejectModal.loading}
-        okText="Reject"
-        okButtonProps={{ danger: true }}
-      >
-        <div className="text-xs text-muted-foreground mb-1 font-medium">
-          Rejection Reason <span className="text-red-500">*</span>
-        </div>
-        <TextArea
-          rows={3}
-          value={rejectModal.reason}
-          onChange={(e) => setRejectModal((p) => ({ ...p, reason: e.target.value }))}
-          placeholder="Enter the reason for rejecting this transfer"
-        />
-      </Modal>
+
     </div>
   );
 };

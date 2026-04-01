@@ -263,6 +263,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "Outbound to SFG WH",
           icon: <ArrowUpFromLine className="sidebar-icon" size={18} />,
           permissionKey: "dispatch_to_sfg"
+        },
+        {
+          path: "/grinding/stock-verification",
+          name: "Stock Verification",
+          icon: <Shield className="sidebar-icon" size={18} />,
+          permissionKey: "manage_stock_verification"
         }
       ]
     },

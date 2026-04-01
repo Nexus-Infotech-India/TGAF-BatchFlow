@@ -40,6 +40,7 @@ import TransactionalLog from './components/pages/Order/TransactionalLog';
 import DispatchToGrinding from './components/pages/processing/DispatchToGrinding';
 import SFGProcessingPage from './components/pages/processing/SFGProcessingPage';
 import OutboundToSFGPage from './components/pages/processing/OutboundToSFGPage';
+import StockVerificationPage from './components/pages/processing/StockVerificationPage';
 import RawDashboard from './components/pages/Dashboard/rawDashboard';
 import RMQualityReport from './components/pages/QualityReport/RMQualityReport';
 import GenerateGRN from './components/pages/GenerateGRN/GenerateGRN';
@@ -96,6 +97,7 @@ const App = () => {
     { path: '/grinding/dispatch', name: 'Dispatch to Grinding', description: 'Send cleaned RM batches to grinding unit', permissionKey: 'send_cleaned_to_grinding' },
     { path: '/grinding/sfg-processing', name: 'SFG Processing', description: 'Manage processing batches and production entries', permissionKey: 'manage_processing_list' },
     { path: '/grinding/outbound-sfg', name: 'Outbound to SFG WH', description: 'Dispatch SFG output to warehouse', permissionKey: 'dispatch_to_sfg' },
+    { path: '/grinding/stock-verification', name: 'Stock Verification', description: 'Verify and accept or reject incoming stock dispatches', permissionKey: 'manage_stock_verification' },
     { path: '/masters/bom/create', name: 'Bill of Material', description: 'Create and manage Bill of Materials', permissionKey: 'manage_bom' },
     { path: '/masters/locations/create', name: 'Location Master', description: 'Manage physical locations (warehouses, cleaning, grinding)', permissionKey: 'manage_locations' },
   ];
@@ -944,6 +946,24 @@ const App = () => {
                   name="Outbound to SFG WH"
                   description="Dispatch SFG output to warehouse"
                   permissionKey="dispatch_to_sfg"
+                />
+              }
+            />
+
+            <Route
+              path="/grinding/stock-verification"
+              element={
+                <PermissionedRoute
+                  path="/grinding/stock-verification"
+                  element={
+                    <SecureRoute
+                      element={<StockVerificationPage />}
+                      permissionKey="manage_stock_verification"
+                    />
+                  }
+                  name="Stock Verification"
+                  description="Verify and accept or reject incoming stock dispatches"
+                  permissionKey="manage_stock_verification"
                 />
               }
             />
