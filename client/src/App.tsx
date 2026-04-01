@@ -41,6 +41,12 @@ import DispatchToGrinding from './components/pages/processing/DispatchToGrinding
 import SFGProcessingPage from './components/pages/processing/SFGProcessingPage';
 import OutboundToSFGPage from './components/pages/processing/OutboundToSFGPage';
 import StockVerificationPage from './components/pages/processing/StockVerificationPage';
+import MaterialTransferPage from './components/pages/packaging/MaterialTransferPage';
+import CreateFGBatchPage from './components/pages/packaging/CreateFGBatchPage';
+import ReceiveMaterialsPage from './components/pages/packaging/ReceiveMaterialsPage';
+import FGProductionPage from './components/pages/packaging/FGProductionPage';
+import OutboundToFGPage from './components/pages/packaging/OutboundToFGPage';
+import FGVerificationPage from './components/pages/packaging/FGVerificationPage';
 import RawDashboard from './components/pages/Dashboard/rawDashboard';
 import RMQualityReport from './components/pages/QualityReport/RMQualityReport';
 import GenerateGRN from './components/pages/GenerateGRN/GenerateGRN';
@@ -98,6 +104,12 @@ const App = () => {
     { path: '/grinding/sfg-processing', name: 'SFG Processing', description: 'Manage processing batches and production entries', permissionKey: 'manage_processing_list' },
     { path: '/grinding/outbound-sfg', name: 'Outbound to SFG WH', description: 'Dispatch SFG output to warehouse', permissionKey: 'dispatch_to_sfg' },
     { path: '/grinding/stock-verification', name: 'Stock Verification', description: 'Verify and accept or reject incoming stock dispatches', permissionKey: 'manage_stock_verification' },
+    { path: '/packaging/material-transfer', name: 'Material Transfer', description: 'Transfer SFG & packing materials to packaging production', permissionKey: 'manage_pkg_material_transfer' },
+    { path: '/packaging/create-fg-batch', name: 'Create FG Batch', description: 'Create new FG batches from transferring materials', permissionKey: 'manage_pkg_material_transfer' },
+    { path: '/packaging/receive-materials', name: 'Receive Materials', description: 'Accept or reject incoming materials at packaging', permissionKey: 'manage_pkg_receive_materials' },
+    { path: '/packaging/fg-production', name: 'FG Production Entry', description: 'Machine-wise FG production with BOM-based input tracking', permissionKey: 'manage_fg_production' },
+    { path: '/packaging/outbound-fg', name: 'Outbound to FG WH', description: 'Dispatch FG from machine locations to FG warehouse', permissionKey: 'manage_pkg_outbound_fg' },
+    { path: '/packaging/fg-verification', name: 'FG Verification', description: 'Accept or reject FG and scrap at FG warehouse', permissionKey: 'manage_fg_verification' },
     { path: '/masters/bom/create', name: 'Bill of Material', description: 'Create and manage Bill of Materials', permissionKey: 'manage_bom' },
     { path: '/masters/locations/create', name: 'Location Master', description: 'Manage physical locations (warehouses, cleaning, grinding)', permissionKey: 'manage_locations' },
   ];
@@ -982,6 +994,116 @@ const App = () => {
                   name="Location Master"
                   description="Manage physical locations"
                   permissionKey="manage_locations"
+                />
+              }
+            />
+
+            {/* ==================== FG PRODUCTION (PACKAGING) ROUTES ==================== */}
+
+            <Route
+              path="/packaging/material-transfer"
+              element={
+                <PermissionedRoute
+                  path="/packaging/material-transfer"
+                  element={
+                    <SecureRoute
+                      element={<MaterialTransferPage />}
+                      permissionKey="manage_pkg_material_transfer"
+                    />
+                  }
+                  name="Material Transfer"
+                  description="Transfer SFG & packing materials to packaging production"
+                  permissionKey="manage_pkg_material_transfer"
+                />
+              }
+            />
+
+            <Route
+              path="/packaging/create-fg-batch"
+              element={
+                <PermissionedRoute
+                  path="/packaging/create-fg-batch"
+                  element={
+                    <SecureRoute
+                      element={<CreateFGBatchPage />}
+                      permissionKey="manage_pkg_material_transfer"
+                    />
+                  }
+                  name="Create FG Batch"
+                  description="Create new FG batches from transferring materials"
+                  permissionKey="manage_pkg_material_transfer"
+                />
+              }
+            />
+
+            <Route
+              path="/packaging/receive-materials"
+              element={
+                <PermissionedRoute
+                  path="/packaging/receive-materials"
+                  element={
+                    <SecureRoute
+                      element={<ReceiveMaterialsPage />}
+                      permissionKey="manage_pkg_receive_materials"
+                    />
+                  }
+                  name="Receive Materials"
+                  description="Accept or reject incoming materials at packaging"
+                  permissionKey="manage_pkg_receive_materials"
+                />
+              }
+            />
+
+            <Route
+              path="/packaging/fg-production"
+              element={
+                <PermissionedRoute
+                  path="/packaging/fg-production"
+                  element={
+                    <SecureRoute
+                      element={<FGProductionPage />}
+                      permissionKey="manage_fg_production"
+                    />
+                  }
+                  name="FG Production Entry"
+                  description="Machine-wise FG production with BOM-based input tracking"
+                  permissionKey="manage_fg_production"
+                />
+              }
+            />
+
+            <Route
+              path="/packaging/outbound-fg"
+              element={
+                <PermissionedRoute
+                  path="/packaging/outbound-fg"
+                  element={
+                    <SecureRoute
+                      element={<OutboundToFGPage />}
+                      permissionKey="manage_pkg_outbound_fg"
+                    />
+                  }
+                  name="Outbound to FG WH"
+                  description="Dispatch FG from machine locations to FG warehouse"
+                  permissionKey="manage_pkg_outbound_fg"
+                />
+              }
+            />
+
+            <Route
+              path="/packaging/fg-verification"
+              element={
+                <PermissionedRoute
+                  path="/packaging/fg-verification"
+                  element={
+                    <SecureRoute
+                      element={<FGVerificationPage />}
+                      permissionKey="manage_fg_verification"
+                    />
+                  }
+                  name="FG Verification"
+                  description="Accept or reject FG and scrap at FG warehouse"
+                  permissionKey="manage_fg_verification"
                 />
               }
             />

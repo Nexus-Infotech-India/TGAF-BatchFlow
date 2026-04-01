@@ -1058,6 +1058,37 @@ exports.Prisma.GrindingDispatchLotScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.FGBatchScalarFieldEnum = {
+  id: 'id',
+  batchNumber: 'batchNumber',
+  bomId: 'bomId',
+  fgProductName: 'fgProductName',
+  productionQty: 'productionQty',
+  productionUnit: 'productionUnit',
+  packetSize: 'packetSize',
+  packetUnit: 'packetUnit',
+  totalPackets: 'totalPackets',
+  status: 'status',
+  notes: 'notes',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FGBatchConsumptionScalarFieldEnum = {
+  id: 'id',
+  fgBatchId: 'fgBatchId',
+  rawMaterialId: 'rawMaterialId',
+  rawMaterialName: 'rawMaterialName',
+  expectedQuantity: 'expectedQuantity',
+  actualQuantity: 'actualQuantity',
+  unit: 'unit',
+  sourceType: 'sourceType',
+  batchNumber: 'batchNumber',
+  dispatchId: 'dispatchId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1338,7 +1369,9 @@ exports.Prisma.ModelName = {
   BOMItem: 'BOMItem',
   SeedWastageRecord: 'SeedWastageRecord',
   GrindingDispatch: 'GrindingDispatch',
-  GrindingDispatchLot: 'GrindingDispatchLot'
+  GrindingDispatchLot: 'GrindingDispatchLot',
+  FGBatch: 'FGBatch',
+  FGBatchConsumption: 'FGBatchConsumption'
 };
 
 /**

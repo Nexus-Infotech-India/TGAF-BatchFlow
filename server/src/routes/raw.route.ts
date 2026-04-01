@@ -23,6 +23,7 @@ import { LocationController } from '../controllers/rawmaterial/location.controll
 import { TransferController } from '../controllers/rawmaterial/transfer.controller';
 import { ProductionController } from '../controllers/rawmaterial/production.controller';
 import { GrindingDispatchController } from '../controllers/rawmaterial/grindingDispatch.controller';
+import { FGBatchController } from '../controllers/rawmaterial/fgBatch.controller';
 
 const router = Router();
 
@@ -177,5 +178,14 @@ router.get('/grinding/dispatches', GrindingDispatchController.getDispatches);
 router.get('/grinding/dispatch/:id', GrindingDispatchController.getDispatchById);
 router.put('/grinding/dispatch/:id/accept', GrindingDispatchController.acceptDispatch);
 router.put('/grinding/dispatch/:id/reject', GrindingDispatchController.rejectDispatch);
+
+// FG Batch (Finished Good Batch Production)
+router.get('/fg-batch/boms', FGBatchController.getFGBOMs);
+router.get('/fg-batch/bom-items', FGBatchController.getFGBOMItems);
+router.post('/fg-batch/create', FGBatchController.createFGBatch);
+router.get('/fg-batch/list', FGBatchController.getFGBatches);
+router.get('/fg-batch/:id', FGBatchController.getFGBatchById);
+router.put('/fg-batch/:id/accept', FGBatchController.acceptFGBatch);
+router.put('/fg-batch/:id/reject', FGBatchController.rejectFGBatch);
 
 export default router;

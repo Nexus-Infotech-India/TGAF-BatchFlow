@@ -23,7 +23,11 @@ import {
   ArrowDownToLine,
   Layers,
   Factory,
-  ArrowUpFromLine
+  ArrowUpFromLine,
+  BoxSelect,
+  ClipboardCheck,
+  Settings2,
+  ShieldCheck
 } from "lucide-react";
 import { usePermissions } from "../../hooks/permission";
 
@@ -269,6 +273,44 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "Stock Verification",
           icon: <Shield className="sidebar-icon" size={18} />,
           permissionKey: "manage_stock_verification"
+        }
+      ]
+    },
+
+    {
+      key: "fg-production",
+      name: "FG Production",
+      icon: <BoxSelect className="sidebar-icon" size={20} />,
+      children: [
+        {
+          path: "/packaging/material-transfer",
+          name: "Material Transfer",
+          icon: <ArrowDownToLine className="sidebar-icon" size={18} />,
+          permissionKey: "manage_pkg_material_transfer"
+        },
+        {
+          path: "/packaging/receive-materials",
+          name: "Receive Materials",
+          icon: <ClipboardCheck className="sidebar-icon" size={18} />,
+          permissionKey: "manage_pkg_receive_materials"
+        },
+        {
+          path: "/packaging/fg-production",
+          name: "FG Production Entry",
+          icon: <Settings2 className="sidebar-icon" size={18} />,
+          permissionKey: "manage_fg_production"
+        },
+        {
+          path: "/packaging/outbound-fg",
+          name: "Outbound to FG WH",
+          icon: <ArrowUpFromLine className="sidebar-icon" size={18} />,
+          permissionKey: "manage_pkg_outbound_fg"
+        },
+        {
+          path: "/packaging/fg-verification",
+          name: "FG Verification",
+          icon: <ShieldCheck className="sidebar-icon" size={18} />,
+          permissionKey: "manage_fg_verification"
         }
       ]
     },

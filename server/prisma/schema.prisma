@@ -1458,3 +1458,40 @@ model GrindingDispatchLot {
   dispatch    GrindingDispatch @relation(fields: [dispatchId], references: [id], onDelete: Cascade)
   cleaningLot CleaningLot      @relation(fields: [cleaningLotId], references: [id])
 }
+
+// ==================== FG BATCH (Finished Good Batch) ====================
+
+model FGBatch {
+  id              String               @id @default(uuid())
+  batchNumber     String               @unique
+  bomId           String
+  fgProductName   String
+  productionQty   Float
+  productionUnit  String
+  packetSize      Float?
+  packetUnit      String?
+  totalPackets    Int                  @default(0)
+  status          String               @default("CREATED")
+  notes           String?
+  createdById     String
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+
+  consumptions FGBatchConsumption[]
+}
+
+model FGBatchConsumption {
+  id               String   @id @default(uuid())
+  fgBatchId        String
+  rawMaterialId    String
+  rawMaterialName  String?
+  expectedQuantity Float
+  actualQuantity   Float
+  unit             String?
+  sourceType       String?  // 'SFG_BATCH' or 'STOCK'
+  batchNumber      String?
+  dispatchId       String?
+  createdAt        DateTime @default(now())
+
+  fgBatch FGBatch @relation(fields: [fgBatchId], references: [id], onDelete: Cascade)
+}

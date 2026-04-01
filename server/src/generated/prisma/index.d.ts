@@ -388,6 +388,16 @@ export type GrindingDispatch = $Result.DefaultSelection<Prisma.$GrindingDispatch
  * 
  */
 export type GrindingDispatchLot = $Result.DefaultSelection<Prisma.$GrindingDispatchLotPayload>
+/**
+ * Model FGBatch
+ * 
+ */
+export type FGBatch = $Result.DefaultSelection<Prisma.$FGBatchPayload>
+/**
+ * Model FGBatchConsumption
+ * 
+ */
+export type FGBatchConsumption = $Result.DefaultSelection<Prisma.$FGBatchConsumptionPayload>
 
 /**
  * Enums
@@ -1628,6 +1638,26 @@ export class PrismaClient<
     * ```
     */
   get grindingDispatchLot(): Prisma.GrindingDispatchLotDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fGBatch`: Exposes CRUD operations for the **FGBatch** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FGBatches
+    * const fGBatches = await prisma.fGBatch.findMany()
+    * ```
+    */
+  get fGBatch(): Prisma.FGBatchDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fGBatchConsumption`: Exposes CRUD operations for the **FGBatchConsumption** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FGBatchConsumptions
+    * const fGBatchConsumptions = await prisma.fGBatchConsumption.findMany()
+    * ```
+    */
+  get fGBatchConsumption(): Prisma.FGBatchConsumptionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2143,7 +2173,9 @@ export namespace Prisma {
     BOMItem: 'BOMItem',
     SeedWastageRecord: 'SeedWastageRecord',
     GrindingDispatch: 'GrindingDispatch',
-    GrindingDispatchLot: 'GrindingDispatchLot'
+    GrindingDispatchLot: 'GrindingDispatchLot',
+    FGBatch: 'FGBatch',
+    FGBatchConsumption: 'FGBatchConsumption'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2162,7 +2194,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -7716,6 +7748,154 @@ export namespace Prisma {
           }
         }
       }
+      FGBatch: {
+        payload: Prisma.$FGBatchPayload<ExtArgs>
+        fields: Prisma.FGBatchFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FGBatchFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FGBatchFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload>
+          }
+          findFirst: {
+            args: Prisma.FGBatchFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FGBatchFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload>
+          }
+          findMany: {
+            args: Prisma.FGBatchFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload>[]
+          }
+          create: {
+            args: Prisma.FGBatchCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload>
+          }
+          createMany: {
+            args: Prisma.FGBatchCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FGBatchCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload>[]
+          }
+          delete: {
+            args: Prisma.FGBatchDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload>
+          }
+          update: {
+            args: Prisma.FGBatchUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload>
+          }
+          deleteMany: {
+            args: Prisma.FGBatchDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FGBatchUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FGBatchUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload>[]
+          }
+          upsert: {
+            args: Prisma.FGBatchUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchPayload>
+          }
+          aggregate: {
+            args: Prisma.FGBatchAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFGBatch>
+          }
+          groupBy: {
+            args: Prisma.FGBatchGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FGBatchGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FGBatchCountArgs<ExtArgs>
+            result: $Utils.Optional<FGBatchCountAggregateOutputType> | number
+          }
+        }
+      }
+      FGBatchConsumption: {
+        payload: Prisma.$FGBatchConsumptionPayload<ExtArgs>
+        fields: Prisma.FGBatchConsumptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FGBatchConsumptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FGBatchConsumptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload>
+          }
+          findFirst: {
+            args: Prisma.FGBatchConsumptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FGBatchConsumptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload>
+          }
+          findMany: {
+            args: Prisma.FGBatchConsumptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload>[]
+          }
+          create: {
+            args: Prisma.FGBatchConsumptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload>
+          }
+          createMany: {
+            args: Prisma.FGBatchConsumptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FGBatchConsumptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload>[]
+          }
+          delete: {
+            args: Prisma.FGBatchConsumptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload>
+          }
+          update: {
+            args: Prisma.FGBatchConsumptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.FGBatchConsumptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FGBatchConsumptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FGBatchConsumptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload>[]
+          }
+          upsert: {
+            args: Prisma.FGBatchConsumptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGBatchConsumptionPayload>
+          }
+          aggregate: {
+            args: Prisma.FGBatchConsumptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFGBatchConsumption>
+          }
+          groupBy: {
+            args: Prisma.FGBatchConsumptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FGBatchConsumptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FGBatchConsumptionCountArgs<ExtArgs>
+            result: $Utils.Optional<FGBatchConsumptionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -7887,6 +8067,8 @@ export namespace Prisma {
     seedWastageRecord?: SeedWastageRecordOmit
     grindingDispatch?: GrindingDispatchOmit
     grindingDispatchLot?: GrindingDispatchLotOmit
+    fGBatch?: FGBatchOmit
+    fGBatchConsumption?: FGBatchConsumptionOmit
   }
 
   /* Types for Logging */
@@ -9985,6 +10167,37 @@ export namespace Prisma {
    */
   export type GrindingDispatchCountOutputTypeCountLotsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GrindingDispatchLotWhereInput
+  }
+
+
+  /**
+   * Count Type FGBatchCountOutputType
+   */
+
+  export type FGBatchCountOutputType = {
+    consumptions: number
+  }
+
+  export type FGBatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    consumptions?: boolean | FGBatchCountOutputTypeCountConsumptionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FGBatchCountOutputType without action
+   */
+  export type FGBatchCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchCountOutputType
+     */
+    select?: FGBatchCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FGBatchCountOutputType without action
+   */
+  export type FGBatchCountOutputTypeCountConsumptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGBatchConsumptionWhereInput
   }
 
 
@@ -99646,6 +99859,2409 @@ export namespace Prisma {
 
 
   /**
+   * Model FGBatch
+   */
+
+  export type AggregateFGBatch = {
+    _count: FGBatchCountAggregateOutputType | null
+    _avg: FGBatchAvgAggregateOutputType | null
+    _sum: FGBatchSumAggregateOutputType | null
+    _min: FGBatchMinAggregateOutputType | null
+    _max: FGBatchMaxAggregateOutputType | null
+  }
+
+  export type FGBatchAvgAggregateOutputType = {
+    productionQty: number | null
+    packetSize: number | null
+    totalPackets: number | null
+  }
+
+  export type FGBatchSumAggregateOutputType = {
+    productionQty: number | null
+    packetSize: number | null
+    totalPackets: number | null
+  }
+
+  export type FGBatchMinAggregateOutputType = {
+    id: string | null
+    batchNumber: string | null
+    bomId: string | null
+    fgProductName: string | null
+    productionQty: number | null
+    productionUnit: string | null
+    packetSize: number | null
+    packetUnit: string | null
+    totalPackets: number | null
+    status: string | null
+    notes: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGBatchMaxAggregateOutputType = {
+    id: string | null
+    batchNumber: string | null
+    bomId: string | null
+    fgProductName: string | null
+    productionQty: number | null
+    productionUnit: string | null
+    packetSize: number | null
+    packetUnit: string | null
+    totalPackets: number | null
+    status: string | null
+    notes: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGBatchCountAggregateOutputType = {
+    id: number
+    batchNumber: number
+    bomId: number
+    fgProductName: number
+    productionQty: number
+    productionUnit: number
+    packetSize: number
+    packetUnit: number
+    totalPackets: number
+    status: number
+    notes: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FGBatchAvgAggregateInputType = {
+    productionQty?: true
+    packetSize?: true
+    totalPackets?: true
+  }
+
+  export type FGBatchSumAggregateInputType = {
+    productionQty?: true
+    packetSize?: true
+    totalPackets?: true
+  }
+
+  export type FGBatchMinAggregateInputType = {
+    id?: true
+    batchNumber?: true
+    bomId?: true
+    fgProductName?: true
+    productionQty?: true
+    productionUnit?: true
+    packetSize?: true
+    packetUnit?: true
+    totalPackets?: true
+    status?: true
+    notes?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGBatchMaxAggregateInputType = {
+    id?: true
+    batchNumber?: true
+    bomId?: true
+    fgProductName?: true
+    productionQty?: true
+    productionUnit?: true
+    packetSize?: true
+    packetUnit?: true
+    totalPackets?: true
+    status?: true
+    notes?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGBatchCountAggregateInputType = {
+    id?: true
+    batchNumber?: true
+    bomId?: true
+    fgProductName?: true
+    productionQty?: true
+    productionUnit?: true
+    packetSize?: true
+    packetUnit?: true
+    totalPackets?: true
+    status?: true
+    notes?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FGBatchAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGBatch to aggregate.
+     */
+    where?: FGBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGBatches to fetch.
+     */
+    orderBy?: FGBatchOrderByWithRelationInput | FGBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FGBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FGBatches
+    **/
+    _count?: true | FGBatchCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FGBatchAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FGBatchSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FGBatchMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FGBatchMaxAggregateInputType
+  }
+
+  export type GetFGBatchAggregateType<T extends FGBatchAggregateArgs> = {
+        [P in keyof T & keyof AggregateFGBatch]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFGBatch[P]>
+      : GetScalarType<T[P], AggregateFGBatch[P]>
+  }
+
+
+
+
+  export type FGBatchGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGBatchWhereInput
+    orderBy?: FGBatchOrderByWithAggregationInput | FGBatchOrderByWithAggregationInput[]
+    by: FGBatchScalarFieldEnum[] | FGBatchScalarFieldEnum
+    having?: FGBatchScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FGBatchCountAggregateInputType | true
+    _avg?: FGBatchAvgAggregateInputType
+    _sum?: FGBatchSumAggregateInputType
+    _min?: FGBatchMinAggregateInputType
+    _max?: FGBatchMaxAggregateInputType
+  }
+
+  export type FGBatchGroupByOutputType = {
+    id: string
+    batchNumber: string
+    bomId: string
+    fgProductName: string
+    productionQty: number
+    productionUnit: string
+    packetSize: number | null
+    packetUnit: string | null
+    totalPackets: number
+    status: string
+    notes: string | null
+    createdById: string
+    createdAt: Date
+    updatedAt: Date
+    _count: FGBatchCountAggregateOutputType | null
+    _avg: FGBatchAvgAggregateOutputType | null
+    _sum: FGBatchSumAggregateOutputType | null
+    _min: FGBatchMinAggregateOutputType | null
+    _max: FGBatchMaxAggregateOutputType | null
+  }
+
+  type GetFGBatchGroupByPayload<T extends FGBatchGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FGBatchGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FGBatchGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FGBatchGroupByOutputType[P]>
+            : GetScalarType<T[P], FGBatchGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FGBatchSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchNumber?: boolean
+    bomId?: boolean
+    fgProductName?: boolean
+    productionQty?: boolean
+    productionUnit?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    totalPackets?: boolean
+    status?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    consumptions?: boolean | FGBatch$consumptionsArgs<ExtArgs>
+    _count?: boolean | FGBatchCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGBatch"]>
+
+  export type FGBatchSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchNumber?: boolean
+    bomId?: boolean
+    fgProductName?: boolean
+    productionQty?: boolean
+    productionUnit?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    totalPackets?: boolean
+    status?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["fGBatch"]>
+
+  export type FGBatchSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    batchNumber?: boolean
+    bomId?: boolean
+    fgProductName?: boolean
+    productionQty?: boolean
+    productionUnit?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    totalPackets?: boolean
+    status?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["fGBatch"]>
+
+  export type FGBatchSelectScalar = {
+    id?: boolean
+    batchNumber?: boolean
+    bomId?: boolean
+    fgProductName?: boolean
+    productionQty?: boolean
+    productionUnit?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    totalPackets?: boolean
+    status?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FGBatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "bomId" | "fgProductName" | "productionQty" | "productionUnit" | "packetSize" | "packetUnit" | "totalPackets" | "status" | "notes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["fGBatch"]>
+  export type FGBatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    consumptions?: boolean | FGBatch$consumptionsArgs<ExtArgs>
+    _count?: boolean | FGBatchCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FGBatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type FGBatchIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $FGBatchPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FGBatch"
+    objects: {
+      consumptions: Prisma.$FGBatchConsumptionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      batchNumber: string
+      bomId: string
+      fgProductName: string
+      productionQty: number
+      productionUnit: string
+      packetSize: number | null
+      packetUnit: string | null
+      totalPackets: number
+      status: string
+      notes: string | null
+      createdById: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fGBatch"]>
+    composites: {}
+  }
+
+  type FGBatchGetPayload<S extends boolean | null | undefined | FGBatchDefaultArgs> = $Result.GetResult<Prisma.$FGBatchPayload, S>
+
+  type FGBatchCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FGBatchFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FGBatchCountAggregateInputType | true
+    }
+
+  export interface FGBatchDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FGBatch'], meta: { name: 'FGBatch' } }
+    /**
+     * Find zero or one FGBatch that matches the filter.
+     * @param {FGBatchFindUniqueArgs} args - Arguments to find a FGBatch
+     * @example
+     * // Get one FGBatch
+     * const fGBatch = await prisma.fGBatch.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FGBatchFindUniqueArgs>(args: SelectSubset<T, FGBatchFindUniqueArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FGBatch that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FGBatchFindUniqueOrThrowArgs} args - Arguments to find a FGBatch
+     * @example
+     * // Get one FGBatch
+     * const fGBatch = await prisma.fGBatch.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FGBatchFindUniqueOrThrowArgs>(args: SelectSubset<T, FGBatchFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGBatch that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchFindFirstArgs} args - Arguments to find a FGBatch
+     * @example
+     * // Get one FGBatch
+     * const fGBatch = await prisma.fGBatch.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FGBatchFindFirstArgs>(args?: SelectSubset<T, FGBatchFindFirstArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGBatch that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchFindFirstOrThrowArgs} args - Arguments to find a FGBatch
+     * @example
+     * // Get one FGBatch
+     * const fGBatch = await prisma.fGBatch.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FGBatchFindFirstOrThrowArgs>(args?: SelectSubset<T, FGBatchFindFirstOrThrowArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FGBatches that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FGBatches
+     * const fGBatches = await prisma.fGBatch.findMany()
+     * 
+     * // Get first 10 FGBatches
+     * const fGBatches = await prisma.fGBatch.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fGBatchWithIdOnly = await prisma.fGBatch.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FGBatchFindManyArgs>(args?: SelectSubset<T, FGBatchFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FGBatch.
+     * @param {FGBatchCreateArgs} args - Arguments to create a FGBatch.
+     * @example
+     * // Create one FGBatch
+     * const FGBatch = await prisma.fGBatch.create({
+     *   data: {
+     *     // ... data to create a FGBatch
+     *   }
+     * })
+     * 
+     */
+    create<T extends FGBatchCreateArgs>(args: SelectSubset<T, FGBatchCreateArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FGBatches.
+     * @param {FGBatchCreateManyArgs} args - Arguments to create many FGBatches.
+     * @example
+     * // Create many FGBatches
+     * const fGBatch = await prisma.fGBatch.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FGBatchCreateManyArgs>(args?: SelectSubset<T, FGBatchCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FGBatches and returns the data saved in the database.
+     * @param {FGBatchCreateManyAndReturnArgs} args - Arguments to create many FGBatches.
+     * @example
+     * // Create many FGBatches
+     * const fGBatch = await prisma.fGBatch.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FGBatches and only return the `id`
+     * const fGBatchWithIdOnly = await prisma.fGBatch.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FGBatchCreateManyAndReturnArgs>(args?: SelectSubset<T, FGBatchCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FGBatch.
+     * @param {FGBatchDeleteArgs} args - Arguments to delete one FGBatch.
+     * @example
+     * // Delete one FGBatch
+     * const FGBatch = await prisma.fGBatch.delete({
+     *   where: {
+     *     // ... filter to delete one FGBatch
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FGBatchDeleteArgs>(args: SelectSubset<T, FGBatchDeleteArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FGBatch.
+     * @param {FGBatchUpdateArgs} args - Arguments to update one FGBatch.
+     * @example
+     * // Update one FGBatch
+     * const fGBatch = await prisma.fGBatch.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FGBatchUpdateArgs>(args: SelectSubset<T, FGBatchUpdateArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FGBatches.
+     * @param {FGBatchDeleteManyArgs} args - Arguments to filter FGBatches to delete.
+     * @example
+     * // Delete a few FGBatches
+     * const { count } = await prisma.fGBatch.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FGBatchDeleteManyArgs>(args?: SelectSubset<T, FGBatchDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGBatches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FGBatches
+     * const fGBatch = await prisma.fGBatch.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FGBatchUpdateManyArgs>(args: SelectSubset<T, FGBatchUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGBatches and returns the data updated in the database.
+     * @param {FGBatchUpdateManyAndReturnArgs} args - Arguments to update many FGBatches.
+     * @example
+     * // Update many FGBatches
+     * const fGBatch = await prisma.fGBatch.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FGBatches and only return the `id`
+     * const fGBatchWithIdOnly = await prisma.fGBatch.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FGBatchUpdateManyAndReturnArgs>(args: SelectSubset<T, FGBatchUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FGBatch.
+     * @param {FGBatchUpsertArgs} args - Arguments to update or create a FGBatch.
+     * @example
+     * // Update or create a FGBatch
+     * const fGBatch = await prisma.fGBatch.upsert({
+     *   create: {
+     *     // ... data to create a FGBatch
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FGBatch we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FGBatchUpsertArgs>(args: SelectSubset<T, FGBatchUpsertArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FGBatches.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchCountArgs} args - Arguments to filter FGBatches to count.
+     * @example
+     * // Count the number of FGBatches
+     * const count = await prisma.fGBatch.count({
+     *   where: {
+     *     // ... the filter for the FGBatches we want to count
+     *   }
+     * })
+    **/
+    count<T extends FGBatchCountArgs>(
+      args?: Subset<T, FGBatchCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FGBatchCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FGBatch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FGBatchAggregateArgs>(args: Subset<T, FGBatchAggregateArgs>): Prisma.PrismaPromise<GetFGBatchAggregateType<T>>
+
+    /**
+     * Group by FGBatch.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FGBatchGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FGBatchGroupByArgs['orderBy'] }
+        : { orderBy?: FGBatchGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FGBatchGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFGBatchGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FGBatch model
+   */
+  readonly fields: FGBatchFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FGBatch.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FGBatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    consumptions<T extends FGBatch$consumptionsArgs<ExtArgs> = {}>(args?: Subset<T, FGBatch$consumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FGBatch model
+   */
+  interface FGBatchFieldRefs {
+    readonly id: FieldRef<"FGBatch", 'String'>
+    readonly batchNumber: FieldRef<"FGBatch", 'String'>
+    readonly bomId: FieldRef<"FGBatch", 'String'>
+    readonly fgProductName: FieldRef<"FGBatch", 'String'>
+    readonly productionQty: FieldRef<"FGBatch", 'Float'>
+    readonly productionUnit: FieldRef<"FGBatch", 'String'>
+    readonly packetSize: FieldRef<"FGBatch", 'Float'>
+    readonly packetUnit: FieldRef<"FGBatch", 'String'>
+    readonly totalPackets: FieldRef<"FGBatch", 'Int'>
+    readonly status: FieldRef<"FGBatch", 'String'>
+    readonly notes: FieldRef<"FGBatch", 'String'>
+    readonly createdById: FieldRef<"FGBatch", 'String'>
+    readonly createdAt: FieldRef<"FGBatch", 'DateTime'>
+    readonly updatedAt: FieldRef<"FGBatch", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FGBatch findUnique
+   */
+  export type FGBatchFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which FGBatch to fetch.
+     */
+    where: FGBatchWhereUniqueInput
+  }
+
+  /**
+   * FGBatch findUniqueOrThrow
+   */
+  export type FGBatchFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which FGBatch to fetch.
+     */
+    where: FGBatchWhereUniqueInput
+  }
+
+  /**
+   * FGBatch findFirst
+   */
+  export type FGBatchFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which FGBatch to fetch.
+     */
+    where?: FGBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGBatches to fetch.
+     */
+    orderBy?: FGBatchOrderByWithRelationInput | FGBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGBatches.
+     */
+    cursor?: FGBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGBatches.
+     */
+    distinct?: FGBatchScalarFieldEnum | FGBatchScalarFieldEnum[]
+  }
+
+  /**
+   * FGBatch findFirstOrThrow
+   */
+  export type FGBatchFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which FGBatch to fetch.
+     */
+    where?: FGBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGBatches to fetch.
+     */
+    orderBy?: FGBatchOrderByWithRelationInput | FGBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGBatches.
+     */
+    cursor?: FGBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGBatches.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGBatches.
+     */
+    distinct?: FGBatchScalarFieldEnum | FGBatchScalarFieldEnum[]
+  }
+
+  /**
+   * FGBatch findMany
+   */
+  export type FGBatchFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+    /**
+     * Filter, which FGBatches to fetch.
+     */
+    where?: FGBatchWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGBatches to fetch.
+     */
+    orderBy?: FGBatchOrderByWithRelationInput | FGBatchOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FGBatches.
+     */
+    cursor?: FGBatchWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGBatches from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGBatches.
+     */
+    skip?: number
+    distinct?: FGBatchScalarFieldEnum | FGBatchScalarFieldEnum[]
+  }
+
+  /**
+   * FGBatch create
+   */
+  export type FGBatchCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FGBatch.
+     */
+    data: XOR<FGBatchCreateInput, FGBatchUncheckedCreateInput>
+  }
+
+  /**
+   * FGBatch createMany
+   */
+  export type FGBatchCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FGBatches.
+     */
+    data: FGBatchCreateManyInput | FGBatchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FGBatch createManyAndReturn
+   */
+  export type FGBatchCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * The data used to create many FGBatches.
+     */
+    data: FGBatchCreateManyInput | FGBatchCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FGBatch update
+   */
+  export type FGBatchUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FGBatch.
+     */
+    data: XOR<FGBatchUpdateInput, FGBatchUncheckedUpdateInput>
+    /**
+     * Choose, which FGBatch to update.
+     */
+    where: FGBatchWhereUniqueInput
+  }
+
+  /**
+   * FGBatch updateMany
+   */
+  export type FGBatchUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FGBatches.
+     */
+    data: XOR<FGBatchUpdateManyMutationInput, FGBatchUncheckedUpdateManyInput>
+    /**
+     * Filter which FGBatches to update
+     */
+    where?: FGBatchWhereInput
+    /**
+     * Limit how many FGBatches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGBatch updateManyAndReturn
+   */
+  export type FGBatchUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * The data used to update FGBatches.
+     */
+    data: XOR<FGBatchUpdateManyMutationInput, FGBatchUncheckedUpdateManyInput>
+    /**
+     * Filter which FGBatches to update
+     */
+    where?: FGBatchWhereInput
+    /**
+     * Limit how many FGBatches to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGBatch upsert
+   */
+  export type FGBatchUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FGBatch to update in case it exists.
+     */
+    where: FGBatchWhereUniqueInput
+    /**
+     * In case the FGBatch found by the `where` argument doesn't exist, create a new FGBatch with this data.
+     */
+    create: XOR<FGBatchCreateInput, FGBatchUncheckedCreateInput>
+    /**
+     * In case the FGBatch was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FGBatchUpdateInput, FGBatchUncheckedUpdateInput>
+  }
+
+  /**
+   * FGBatch delete
+   */
+  export type FGBatchDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+    /**
+     * Filter which FGBatch to delete.
+     */
+    where: FGBatchWhereUniqueInput
+  }
+
+  /**
+   * FGBatch deleteMany
+   */
+  export type FGBatchDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGBatches to delete
+     */
+    where?: FGBatchWhereInput
+    /**
+     * Limit how many FGBatches to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGBatch.consumptions
+   */
+  export type FGBatch$consumptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+    where?: FGBatchConsumptionWhereInput
+    orderBy?: FGBatchConsumptionOrderByWithRelationInput | FGBatchConsumptionOrderByWithRelationInput[]
+    cursor?: FGBatchConsumptionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FGBatchConsumptionScalarFieldEnum | FGBatchConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * FGBatch without action
+   */
+  export type FGBatchDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FGBatchConsumption
+   */
+
+  export type AggregateFGBatchConsumption = {
+    _count: FGBatchConsumptionCountAggregateOutputType | null
+    _avg: FGBatchConsumptionAvgAggregateOutputType | null
+    _sum: FGBatchConsumptionSumAggregateOutputType | null
+    _min: FGBatchConsumptionMinAggregateOutputType | null
+    _max: FGBatchConsumptionMaxAggregateOutputType | null
+  }
+
+  export type FGBatchConsumptionAvgAggregateOutputType = {
+    expectedQuantity: number | null
+    actualQuantity: number | null
+  }
+
+  export type FGBatchConsumptionSumAggregateOutputType = {
+    expectedQuantity: number | null
+    actualQuantity: number | null
+  }
+
+  export type FGBatchConsumptionMinAggregateOutputType = {
+    id: string | null
+    fgBatchId: string | null
+    rawMaterialId: string | null
+    rawMaterialName: string | null
+    expectedQuantity: number | null
+    actualQuantity: number | null
+    unit: string | null
+    sourceType: string | null
+    batchNumber: string | null
+    dispatchId: string | null
+    createdAt: Date | null
+  }
+
+  export type FGBatchConsumptionMaxAggregateOutputType = {
+    id: string | null
+    fgBatchId: string | null
+    rawMaterialId: string | null
+    rawMaterialName: string | null
+    expectedQuantity: number | null
+    actualQuantity: number | null
+    unit: string | null
+    sourceType: string | null
+    batchNumber: string | null
+    dispatchId: string | null
+    createdAt: Date | null
+  }
+
+  export type FGBatchConsumptionCountAggregateOutputType = {
+    id: number
+    fgBatchId: number
+    rawMaterialId: number
+    rawMaterialName: number
+    expectedQuantity: number
+    actualQuantity: number
+    unit: number
+    sourceType: number
+    batchNumber: number
+    dispatchId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FGBatchConsumptionAvgAggregateInputType = {
+    expectedQuantity?: true
+    actualQuantity?: true
+  }
+
+  export type FGBatchConsumptionSumAggregateInputType = {
+    expectedQuantity?: true
+    actualQuantity?: true
+  }
+
+  export type FGBatchConsumptionMinAggregateInputType = {
+    id?: true
+    fgBatchId?: true
+    rawMaterialId?: true
+    rawMaterialName?: true
+    expectedQuantity?: true
+    actualQuantity?: true
+    unit?: true
+    sourceType?: true
+    batchNumber?: true
+    dispatchId?: true
+    createdAt?: true
+  }
+
+  export type FGBatchConsumptionMaxAggregateInputType = {
+    id?: true
+    fgBatchId?: true
+    rawMaterialId?: true
+    rawMaterialName?: true
+    expectedQuantity?: true
+    actualQuantity?: true
+    unit?: true
+    sourceType?: true
+    batchNumber?: true
+    dispatchId?: true
+    createdAt?: true
+  }
+
+  export type FGBatchConsumptionCountAggregateInputType = {
+    id?: true
+    fgBatchId?: true
+    rawMaterialId?: true
+    rawMaterialName?: true
+    expectedQuantity?: true
+    actualQuantity?: true
+    unit?: true
+    sourceType?: true
+    batchNumber?: true
+    dispatchId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FGBatchConsumptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGBatchConsumption to aggregate.
+     */
+    where?: FGBatchConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGBatchConsumptions to fetch.
+     */
+    orderBy?: FGBatchConsumptionOrderByWithRelationInput | FGBatchConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FGBatchConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGBatchConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGBatchConsumptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FGBatchConsumptions
+    **/
+    _count?: true | FGBatchConsumptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FGBatchConsumptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FGBatchConsumptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FGBatchConsumptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FGBatchConsumptionMaxAggregateInputType
+  }
+
+  export type GetFGBatchConsumptionAggregateType<T extends FGBatchConsumptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateFGBatchConsumption]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFGBatchConsumption[P]>
+      : GetScalarType<T[P], AggregateFGBatchConsumption[P]>
+  }
+
+
+
+
+  export type FGBatchConsumptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGBatchConsumptionWhereInput
+    orderBy?: FGBatchConsumptionOrderByWithAggregationInput | FGBatchConsumptionOrderByWithAggregationInput[]
+    by: FGBatchConsumptionScalarFieldEnum[] | FGBatchConsumptionScalarFieldEnum
+    having?: FGBatchConsumptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FGBatchConsumptionCountAggregateInputType | true
+    _avg?: FGBatchConsumptionAvgAggregateInputType
+    _sum?: FGBatchConsumptionSumAggregateInputType
+    _min?: FGBatchConsumptionMinAggregateInputType
+    _max?: FGBatchConsumptionMaxAggregateInputType
+  }
+
+  export type FGBatchConsumptionGroupByOutputType = {
+    id: string
+    fgBatchId: string
+    rawMaterialId: string
+    rawMaterialName: string | null
+    expectedQuantity: number
+    actualQuantity: number
+    unit: string | null
+    sourceType: string | null
+    batchNumber: string | null
+    dispatchId: string | null
+    createdAt: Date
+    _count: FGBatchConsumptionCountAggregateOutputType | null
+    _avg: FGBatchConsumptionAvgAggregateOutputType | null
+    _sum: FGBatchConsumptionSumAggregateOutputType | null
+    _min: FGBatchConsumptionMinAggregateOutputType | null
+    _max: FGBatchConsumptionMaxAggregateOutputType | null
+  }
+
+  type GetFGBatchConsumptionGroupByPayload<T extends FGBatchConsumptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FGBatchConsumptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FGBatchConsumptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FGBatchConsumptionGroupByOutputType[P]>
+            : GetScalarType<T[P], FGBatchConsumptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FGBatchConsumptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fgBatchId?: boolean
+    rawMaterialId?: boolean
+    rawMaterialName?: boolean
+    expectedQuantity?: boolean
+    actualQuantity?: boolean
+    unit?: boolean
+    sourceType?: boolean
+    batchNumber?: boolean
+    dispatchId?: boolean
+    createdAt?: boolean
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGBatchConsumption"]>
+
+  export type FGBatchConsumptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fgBatchId?: boolean
+    rawMaterialId?: boolean
+    rawMaterialName?: boolean
+    expectedQuantity?: boolean
+    actualQuantity?: boolean
+    unit?: boolean
+    sourceType?: boolean
+    batchNumber?: boolean
+    dispatchId?: boolean
+    createdAt?: boolean
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGBatchConsumption"]>
+
+  export type FGBatchConsumptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    fgBatchId?: boolean
+    rawMaterialId?: boolean
+    rawMaterialName?: boolean
+    expectedQuantity?: boolean
+    actualQuantity?: boolean
+    unit?: boolean
+    sourceType?: boolean
+    batchNumber?: boolean
+    dispatchId?: boolean
+    createdAt?: boolean
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGBatchConsumption"]>
+
+  export type FGBatchConsumptionSelectScalar = {
+    id?: boolean
+    fgBatchId?: boolean
+    rawMaterialId?: boolean
+    rawMaterialName?: boolean
+    expectedQuantity?: boolean
+    actualQuantity?: boolean
+    unit?: boolean
+    sourceType?: boolean
+    batchNumber?: boolean
+    dispatchId?: boolean
+    createdAt?: boolean
+  }
+
+  export type FGBatchConsumptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "fgBatchId" | "rawMaterialId" | "rawMaterialName" | "expectedQuantity" | "actualQuantity" | "unit" | "sourceType" | "batchNumber" | "dispatchId" | "createdAt", ExtArgs["result"]["fGBatchConsumption"]>
+  export type FGBatchConsumptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+  }
+  export type FGBatchConsumptionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+  }
+  export type FGBatchConsumptionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+  }
+
+  export type $FGBatchConsumptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FGBatchConsumption"
+    objects: {
+      fgBatch: Prisma.$FGBatchPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      fgBatchId: string
+      rawMaterialId: string
+      rawMaterialName: string | null
+      expectedQuantity: number
+      actualQuantity: number
+      unit: string | null
+      sourceType: string | null
+      batchNumber: string | null
+      dispatchId: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["fGBatchConsumption"]>
+    composites: {}
+  }
+
+  type FGBatchConsumptionGetPayload<S extends boolean | null | undefined | FGBatchConsumptionDefaultArgs> = $Result.GetResult<Prisma.$FGBatchConsumptionPayload, S>
+
+  type FGBatchConsumptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FGBatchConsumptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FGBatchConsumptionCountAggregateInputType | true
+    }
+
+  export interface FGBatchConsumptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FGBatchConsumption'], meta: { name: 'FGBatchConsumption' } }
+    /**
+     * Find zero or one FGBatchConsumption that matches the filter.
+     * @param {FGBatchConsumptionFindUniqueArgs} args - Arguments to find a FGBatchConsumption
+     * @example
+     * // Get one FGBatchConsumption
+     * const fGBatchConsumption = await prisma.fGBatchConsumption.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FGBatchConsumptionFindUniqueArgs>(args: SelectSubset<T, FGBatchConsumptionFindUniqueArgs<ExtArgs>>): Prisma__FGBatchConsumptionClient<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FGBatchConsumption that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FGBatchConsumptionFindUniqueOrThrowArgs} args - Arguments to find a FGBatchConsumption
+     * @example
+     * // Get one FGBatchConsumption
+     * const fGBatchConsumption = await prisma.fGBatchConsumption.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FGBatchConsumptionFindUniqueOrThrowArgs>(args: SelectSubset<T, FGBatchConsumptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FGBatchConsumptionClient<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGBatchConsumption that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchConsumptionFindFirstArgs} args - Arguments to find a FGBatchConsumption
+     * @example
+     * // Get one FGBatchConsumption
+     * const fGBatchConsumption = await prisma.fGBatchConsumption.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FGBatchConsumptionFindFirstArgs>(args?: SelectSubset<T, FGBatchConsumptionFindFirstArgs<ExtArgs>>): Prisma__FGBatchConsumptionClient<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGBatchConsumption that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchConsumptionFindFirstOrThrowArgs} args - Arguments to find a FGBatchConsumption
+     * @example
+     * // Get one FGBatchConsumption
+     * const fGBatchConsumption = await prisma.fGBatchConsumption.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FGBatchConsumptionFindFirstOrThrowArgs>(args?: SelectSubset<T, FGBatchConsumptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__FGBatchConsumptionClient<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FGBatchConsumptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchConsumptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FGBatchConsumptions
+     * const fGBatchConsumptions = await prisma.fGBatchConsumption.findMany()
+     * 
+     * // Get first 10 FGBatchConsumptions
+     * const fGBatchConsumptions = await prisma.fGBatchConsumption.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fGBatchConsumptionWithIdOnly = await prisma.fGBatchConsumption.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FGBatchConsumptionFindManyArgs>(args?: SelectSubset<T, FGBatchConsumptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FGBatchConsumption.
+     * @param {FGBatchConsumptionCreateArgs} args - Arguments to create a FGBatchConsumption.
+     * @example
+     * // Create one FGBatchConsumption
+     * const FGBatchConsumption = await prisma.fGBatchConsumption.create({
+     *   data: {
+     *     // ... data to create a FGBatchConsumption
+     *   }
+     * })
+     * 
+     */
+    create<T extends FGBatchConsumptionCreateArgs>(args: SelectSubset<T, FGBatchConsumptionCreateArgs<ExtArgs>>): Prisma__FGBatchConsumptionClient<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FGBatchConsumptions.
+     * @param {FGBatchConsumptionCreateManyArgs} args - Arguments to create many FGBatchConsumptions.
+     * @example
+     * // Create many FGBatchConsumptions
+     * const fGBatchConsumption = await prisma.fGBatchConsumption.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FGBatchConsumptionCreateManyArgs>(args?: SelectSubset<T, FGBatchConsumptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FGBatchConsumptions and returns the data saved in the database.
+     * @param {FGBatchConsumptionCreateManyAndReturnArgs} args - Arguments to create many FGBatchConsumptions.
+     * @example
+     * // Create many FGBatchConsumptions
+     * const fGBatchConsumption = await prisma.fGBatchConsumption.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FGBatchConsumptions and only return the `id`
+     * const fGBatchConsumptionWithIdOnly = await prisma.fGBatchConsumption.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FGBatchConsumptionCreateManyAndReturnArgs>(args?: SelectSubset<T, FGBatchConsumptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FGBatchConsumption.
+     * @param {FGBatchConsumptionDeleteArgs} args - Arguments to delete one FGBatchConsumption.
+     * @example
+     * // Delete one FGBatchConsumption
+     * const FGBatchConsumption = await prisma.fGBatchConsumption.delete({
+     *   where: {
+     *     // ... filter to delete one FGBatchConsumption
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FGBatchConsumptionDeleteArgs>(args: SelectSubset<T, FGBatchConsumptionDeleteArgs<ExtArgs>>): Prisma__FGBatchConsumptionClient<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FGBatchConsumption.
+     * @param {FGBatchConsumptionUpdateArgs} args - Arguments to update one FGBatchConsumption.
+     * @example
+     * // Update one FGBatchConsumption
+     * const fGBatchConsumption = await prisma.fGBatchConsumption.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FGBatchConsumptionUpdateArgs>(args: SelectSubset<T, FGBatchConsumptionUpdateArgs<ExtArgs>>): Prisma__FGBatchConsumptionClient<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FGBatchConsumptions.
+     * @param {FGBatchConsumptionDeleteManyArgs} args - Arguments to filter FGBatchConsumptions to delete.
+     * @example
+     * // Delete a few FGBatchConsumptions
+     * const { count } = await prisma.fGBatchConsumption.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FGBatchConsumptionDeleteManyArgs>(args?: SelectSubset<T, FGBatchConsumptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGBatchConsumptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchConsumptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FGBatchConsumptions
+     * const fGBatchConsumption = await prisma.fGBatchConsumption.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FGBatchConsumptionUpdateManyArgs>(args: SelectSubset<T, FGBatchConsumptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGBatchConsumptions and returns the data updated in the database.
+     * @param {FGBatchConsumptionUpdateManyAndReturnArgs} args - Arguments to update many FGBatchConsumptions.
+     * @example
+     * // Update many FGBatchConsumptions
+     * const fGBatchConsumption = await prisma.fGBatchConsumption.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FGBatchConsumptions and only return the `id`
+     * const fGBatchConsumptionWithIdOnly = await prisma.fGBatchConsumption.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FGBatchConsumptionUpdateManyAndReturnArgs>(args: SelectSubset<T, FGBatchConsumptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FGBatchConsumption.
+     * @param {FGBatchConsumptionUpsertArgs} args - Arguments to update or create a FGBatchConsumption.
+     * @example
+     * // Update or create a FGBatchConsumption
+     * const fGBatchConsumption = await prisma.fGBatchConsumption.upsert({
+     *   create: {
+     *     // ... data to create a FGBatchConsumption
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FGBatchConsumption we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FGBatchConsumptionUpsertArgs>(args: SelectSubset<T, FGBatchConsumptionUpsertArgs<ExtArgs>>): Prisma__FGBatchConsumptionClient<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FGBatchConsumptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchConsumptionCountArgs} args - Arguments to filter FGBatchConsumptions to count.
+     * @example
+     * // Count the number of FGBatchConsumptions
+     * const count = await prisma.fGBatchConsumption.count({
+     *   where: {
+     *     // ... the filter for the FGBatchConsumptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends FGBatchConsumptionCountArgs>(
+      args?: Subset<T, FGBatchConsumptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FGBatchConsumptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FGBatchConsumption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchConsumptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FGBatchConsumptionAggregateArgs>(args: Subset<T, FGBatchConsumptionAggregateArgs>): Prisma.PrismaPromise<GetFGBatchConsumptionAggregateType<T>>
+
+    /**
+     * Group by FGBatchConsumption.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGBatchConsumptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FGBatchConsumptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FGBatchConsumptionGroupByArgs['orderBy'] }
+        : { orderBy?: FGBatchConsumptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FGBatchConsumptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFGBatchConsumptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FGBatchConsumption model
+   */
+  readonly fields: FGBatchConsumptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FGBatchConsumption.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FGBatchConsumptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    fgBatch<T extends FGBatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGBatchDefaultArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FGBatchConsumption model
+   */
+  interface FGBatchConsumptionFieldRefs {
+    readonly id: FieldRef<"FGBatchConsumption", 'String'>
+    readonly fgBatchId: FieldRef<"FGBatchConsumption", 'String'>
+    readonly rawMaterialId: FieldRef<"FGBatchConsumption", 'String'>
+    readonly rawMaterialName: FieldRef<"FGBatchConsumption", 'String'>
+    readonly expectedQuantity: FieldRef<"FGBatchConsumption", 'Float'>
+    readonly actualQuantity: FieldRef<"FGBatchConsumption", 'Float'>
+    readonly unit: FieldRef<"FGBatchConsumption", 'String'>
+    readonly sourceType: FieldRef<"FGBatchConsumption", 'String'>
+    readonly batchNumber: FieldRef<"FGBatchConsumption", 'String'>
+    readonly dispatchId: FieldRef<"FGBatchConsumption", 'String'>
+    readonly createdAt: FieldRef<"FGBatchConsumption", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FGBatchConsumption findUnique
+   */
+  export type FGBatchConsumptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which FGBatchConsumption to fetch.
+     */
+    where: FGBatchConsumptionWhereUniqueInput
+  }
+
+  /**
+   * FGBatchConsumption findUniqueOrThrow
+   */
+  export type FGBatchConsumptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which FGBatchConsumption to fetch.
+     */
+    where: FGBatchConsumptionWhereUniqueInput
+  }
+
+  /**
+   * FGBatchConsumption findFirst
+   */
+  export type FGBatchConsumptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which FGBatchConsumption to fetch.
+     */
+    where?: FGBatchConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGBatchConsumptions to fetch.
+     */
+    orderBy?: FGBatchConsumptionOrderByWithRelationInput | FGBatchConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGBatchConsumptions.
+     */
+    cursor?: FGBatchConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGBatchConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGBatchConsumptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGBatchConsumptions.
+     */
+    distinct?: FGBatchConsumptionScalarFieldEnum | FGBatchConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * FGBatchConsumption findFirstOrThrow
+   */
+  export type FGBatchConsumptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which FGBatchConsumption to fetch.
+     */
+    where?: FGBatchConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGBatchConsumptions to fetch.
+     */
+    orderBy?: FGBatchConsumptionOrderByWithRelationInput | FGBatchConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGBatchConsumptions.
+     */
+    cursor?: FGBatchConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGBatchConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGBatchConsumptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGBatchConsumptions.
+     */
+    distinct?: FGBatchConsumptionScalarFieldEnum | FGBatchConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * FGBatchConsumption findMany
+   */
+  export type FGBatchConsumptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter, which FGBatchConsumptions to fetch.
+     */
+    where?: FGBatchConsumptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGBatchConsumptions to fetch.
+     */
+    orderBy?: FGBatchConsumptionOrderByWithRelationInput | FGBatchConsumptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FGBatchConsumptions.
+     */
+    cursor?: FGBatchConsumptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGBatchConsumptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGBatchConsumptions.
+     */
+    skip?: number
+    distinct?: FGBatchConsumptionScalarFieldEnum | FGBatchConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * FGBatchConsumption create
+   */
+  export type FGBatchConsumptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FGBatchConsumption.
+     */
+    data: XOR<FGBatchConsumptionCreateInput, FGBatchConsumptionUncheckedCreateInput>
+  }
+
+  /**
+   * FGBatchConsumption createMany
+   */
+  export type FGBatchConsumptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FGBatchConsumptions.
+     */
+    data: FGBatchConsumptionCreateManyInput | FGBatchConsumptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FGBatchConsumption createManyAndReturn
+   */
+  export type FGBatchConsumptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many FGBatchConsumptions.
+     */
+    data: FGBatchConsumptionCreateManyInput | FGBatchConsumptionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGBatchConsumption update
+   */
+  export type FGBatchConsumptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FGBatchConsumption.
+     */
+    data: XOR<FGBatchConsumptionUpdateInput, FGBatchConsumptionUncheckedUpdateInput>
+    /**
+     * Choose, which FGBatchConsumption to update.
+     */
+    where: FGBatchConsumptionWhereUniqueInput
+  }
+
+  /**
+   * FGBatchConsumption updateMany
+   */
+  export type FGBatchConsumptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FGBatchConsumptions.
+     */
+    data: XOR<FGBatchConsumptionUpdateManyMutationInput, FGBatchConsumptionUncheckedUpdateManyInput>
+    /**
+     * Filter which FGBatchConsumptions to update
+     */
+    where?: FGBatchConsumptionWhereInput
+    /**
+     * Limit how many FGBatchConsumptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGBatchConsumption updateManyAndReturn
+   */
+  export type FGBatchConsumptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * The data used to update FGBatchConsumptions.
+     */
+    data: XOR<FGBatchConsumptionUpdateManyMutationInput, FGBatchConsumptionUncheckedUpdateManyInput>
+    /**
+     * Filter which FGBatchConsumptions to update
+     */
+    where?: FGBatchConsumptionWhereInput
+    /**
+     * Limit how many FGBatchConsumptions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGBatchConsumption upsert
+   */
+  export type FGBatchConsumptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FGBatchConsumption to update in case it exists.
+     */
+    where: FGBatchConsumptionWhereUniqueInput
+    /**
+     * In case the FGBatchConsumption found by the `where` argument doesn't exist, create a new FGBatchConsumption with this data.
+     */
+    create: XOR<FGBatchConsumptionCreateInput, FGBatchConsumptionUncheckedCreateInput>
+    /**
+     * In case the FGBatchConsumption was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FGBatchConsumptionUpdateInput, FGBatchConsumptionUncheckedUpdateInput>
+  }
+
+  /**
+   * FGBatchConsumption delete
+   */
+  export type FGBatchConsumptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+    /**
+     * Filter which FGBatchConsumption to delete.
+     */
+    where: FGBatchConsumptionWhereUniqueInput
+  }
+
+  /**
+   * FGBatchConsumption deleteMany
+   */
+  export type FGBatchConsumptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGBatchConsumptions to delete
+     */
+    where?: FGBatchConsumptionWhereInput
+    /**
+     * Limit how many FGBatchConsumptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGBatchConsumption without action
+   */
+  export type FGBatchConsumptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatchConsumption
+     */
+    select?: FGBatchConsumptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatchConsumption
+     */
+    omit?: FGBatchConsumptionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchConsumptionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -100819,6 +103435,43 @@ export namespace Prisma {
   };
 
   export type GrindingDispatchLotScalarFieldEnum = (typeof GrindingDispatchLotScalarFieldEnum)[keyof typeof GrindingDispatchLotScalarFieldEnum]
+
+
+  export const FGBatchScalarFieldEnum: {
+    id: 'id',
+    batchNumber: 'batchNumber',
+    bomId: 'bomId',
+    fgProductName: 'fgProductName',
+    productionQty: 'productionQty',
+    productionUnit: 'productionUnit',
+    packetSize: 'packetSize',
+    packetUnit: 'packetUnit',
+    totalPackets: 'totalPackets',
+    status: 'status',
+    notes: 'notes',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FGBatchScalarFieldEnum = (typeof FGBatchScalarFieldEnum)[keyof typeof FGBatchScalarFieldEnum]
+
+
+  export const FGBatchConsumptionScalarFieldEnum: {
+    id: 'id',
+    fgBatchId: 'fgBatchId',
+    rawMaterialId: 'rawMaterialId',
+    rawMaterialName: 'rawMaterialName',
+    expectedQuantity: 'expectedQuantity',
+    actualQuantity: 'actualQuantity',
+    unit: 'unit',
+    sourceType: 'sourceType',
+    batchNumber: 'batchNumber',
+    dispatchId: 'dispatchId',
+    createdAt: 'createdAt'
+  };
+
+  export type FGBatchConsumptionScalarFieldEnum = (typeof FGBatchConsumptionScalarFieldEnum)[keyof typeof FGBatchConsumptionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -107776,6 +110429,195 @@ export namespace Prisma {
     allocatedQuantity?: FloatWithAggregatesFilter<"GrindingDispatchLot"> | number
     seedWastageAllocated?: FloatWithAggregatesFilter<"GrindingDispatchLot"> | number
     createdAt?: DateTimeWithAggregatesFilter<"GrindingDispatchLot"> | Date | string
+  }
+
+  export type FGBatchWhereInput = {
+    AND?: FGBatchWhereInput | FGBatchWhereInput[]
+    OR?: FGBatchWhereInput[]
+    NOT?: FGBatchWhereInput | FGBatchWhereInput[]
+    id?: StringFilter<"FGBatch"> | string
+    batchNumber?: StringFilter<"FGBatch"> | string
+    bomId?: StringFilter<"FGBatch"> | string
+    fgProductName?: StringFilter<"FGBatch"> | string
+    productionQty?: FloatFilter<"FGBatch"> | number
+    productionUnit?: StringFilter<"FGBatch"> | string
+    packetSize?: FloatNullableFilter<"FGBatch"> | number | null
+    packetUnit?: StringNullableFilter<"FGBatch"> | string | null
+    totalPackets?: IntFilter<"FGBatch"> | number
+    status?: StringFilter<"FGBatch"> | string
+    notes?: StringNullableFilter<"FGBatch"> | string | null
+    createdById?: StringFilter<"FGBatch"> | string
+    createdAt?: DateTimeFilter<"FGBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"FGBatch"> | Date | string
+    consumptions?: FGBatchConsumptionListRelationFilter
+  }
+
+  export type FGBatchOrderByWithRelationInput = {
+    id?: SortOrder
+    batchNumber?: SortOrder
+    bomId?: SortOrder
+    fgProductName?: SortOrder
+    productionQty?: SortOrder
+    productionUnit?: SortOrder
+    packetSize?: SortOrderInput | SortOrder
+    packetUnit?: SortOrderInput | SortOrder
+    totalPackets?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    consumptions?: FGBatchConsumptionOrderByRelationAggregateInput
+  }
+
+  export type FGBatchWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    batchNumber?: string
+    AND?: FGBatchWhereInput | FGBatchWhereInput[]
+    OR?: FGBatchWhereInput[]
+    NOT?: FGBatchWhereInput | FGBatchWhereInput[]
+    bomId?: StringFilter<"FGBatch"> | string
+    fgProductName?: StringFilter<"FGBatch"> | string
+    productionQty?: FloatFilter<"FGBatch"> | number
+    productionUnit?: StringFilter<"FGBatch"> | string
+    packetSize?: FloatNullableFilter<"FGBatch"> | number | null
+    packetUnit?: StringNullableFilter<"FGBatch"> | string | null
+    totalPackets?: IntFilter<"FGBatch"> | number
+    status?: StringFilter<"FGBatch"> | string
+    notes?: StringNullableFilter<"FGBatch"> | string | null
+    createdById?: StringFilter<"FGBatch"> | string
+    createdAt?: DateTimeFilter<"FGBatch"> | Date | string
+    updatedAt?: DateTimeFilter<"FGBatch"> | Date | string
+    consumptions?: FGBatchConsumptionListRelationFilter
+  }, "id" | "batchNumber">
+
+  export type FGBatchOrderByWithAggregationInput = {
+    id?: SortOrder
+    batchNumber?: SortOrder
+    bomId?: SortOrder
+    fgProductName?: SortOrder
+    productionQty?: SortOrder
+    productionUnit?: SortOrder
+    packetSize?: SortOrderInput | SortOrder
+    packetUnit?: SortOrderInput | SortOrder
+    totalPackets?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FGBatchCountOrderByAggregateInput
+    _avg?: FGBatchAvgOrderByAggregateInput
+    _max?: FGBatchMaxOrderByAggregateInput
+    _min?: FGBatchMinOrderByAggregateInput
+    _sum?: FGBatchSumOrderByAggregateInput
+  }
+
+  export type FGBatchScalarWhereWithAggregatesInput = {
+    AND?: FGBatchScalarWhereWithAggregatesInput | FGBatchScalarWhereWithAggregatesInput[]
+    OR?: FGBatchScalarWhereWithAggregatesInput[]
+    NOT?: FGBatchScalarWhereWithAggregatesInput | FGBatchScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FGBatch"> | string
+    batchNumber?: StringWithAggregatesFilter<"FGBatch"> | string
+    bomId?: StringWithAggregatesFilter<"FGBatch"> | string
+    fgProductName?: StringWithAggregatesFilter<"FGBatch"> | string
+    productionQty?: FloatWithAggregatesFilter<"FGBatch"> | number
+    productionUnit?: StringWithAggregatesFilter<"FGBatch"> | string
+    packetSize?: FloatNullableWithAggregatesFilter<"FGBatch"> | number | null
+    packetUnit?: StringNullableWithAggregatesFilter<"FGBatch"> | string | null
+    totalPackets?: IntWithAggregatesFilter<"FGBatch"> | number
+    status?: StringWithAggregatesFilter<"FGBatch"> | string
+    notes?: StringNullableWithAggregatesFilter<"FGBatch"> | string | null
+    createdById?: StringWithAggregatesFilter<"FGBatch"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FGBatch"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FGBatch"> | Date | string
+  }
+
+  export type FGBatchConsumptionWhereInput = {
+    AND?: FGBatchConsumptionWhereInput | FGBatchConsumptionWhereInput[]
+    OR?: FGBatchConsumptionWhereInput[]
+    NOT?: FGBatchConsumptionWhereInput | FGBatchConsumptionWhereInput[]
+    id?: StringFilter<"FGBatchConsumption"> | string
+    fgBatchId?: StringFilter<"FGBatchConsumption"> | string
+    rawMaterialId?: StringFilter<"FGBatchConsumption"> | string
+    rawMaterialName?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    expectedQuantity?: FloatFilter<"FGBatchConsumption"> | number
+    actualQuantity?: FloatFilter<"FGBatchConsumption"> | number
+    unit?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    sourceType?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    batchNumber?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    dispatchId?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    createdAt?: DateTimeFilter<"FGBatchConsumption"> | Date | string
+    fgBatch?: XOR<FGBatchScalarRelationFilter, FGBatchWhereInput>
+  }
+
+  export type FGBatchConsumptionOrderByWithRelationInput = {
+    id?: SortOrder
+    fgBatchId?: SortOrder
+    rawMaterialId?: SortOrder
+    rawMaterialName?: SortOrderInput | SortOrder
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+    unit?: SortOrderInput | SortOrder
+    sourceType?: SortOrderInput | SortOrder
+    batchNumber?: SortOrderInput | SortOrder
+    dispatchId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    fgBatch?: FGBatchOrderByWithRelationInput
+  }
+
+  export type FGBatchConsumptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FGBatchConsumptionWhereInput | FGBatchConsumptionWhereInput[]
+    OR?: FGBatchConsumptionWhereInput[]
+    NOT?: FGBatchConsumptionWhereInput | FGBatchConsumptionWhereInput[]
+    fgBatchId?: StringFilter<"FGBatchConsumption"> | string
+    rawMaterialId?: StringFilter<"FGBatchConsumption"> | string
+    rawMaterialName?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    expectedQuantity?: FloatFilter<"FGBatchConsumption"> | number
+    actualQuantity?: FloatFilter<"FGBatchConsumption"> | number
+    unit?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    sourceType?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    batchNumber?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    dispatchId?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    createdAt?: DateTimeFilter<"FGBatchConsumption"> | Date | string
+    fgBatch?: XOR<FGBatchScalarRelationFilter, FGBatchWhereInput>
+  }, "id">
+
+  export type FGBatchConsumptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    fgBatchId?: SortOrder
+    rawMaterialId?: SortOrder
+    rawMaterialName?: SortOrderInput | SortOrder
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+    unit?: SortOrderInput | SortOrder
+    sourceType?: SortOrderInput | SortOrder
+    batchNumber?: SortOrderInput | SortOrder
+    dispatchId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: FGBatchConsumptionCountOrderByAggregateInput
+    _avg?: FGBatchConsumptionAvgOrderByAggregateInput
+    _max?: FGBatchConsumptionMaxOrderByAggregateInput
+    _min?: FGBatchConsumptionMinOrderByAggregateInput
+    _sum?: FGBatchConsumptionSumOrderByAggregateInput
+  }
+
+  export type FGBatchConsumptionScalarWhereWithAggregatesInput = {
+    AND?: FGBatchConsumptionScalarWhereWithAggregatesInput | FGBatchConsumptionScalarWhereWithAggregatesInput[]
+    OR?: FGBatchConsumptionScalarWhereWithAggregatesInput[]
+    NOT?: FGBatchConsumptionScalarWhereWithAggregatesInput | FGBatchConsumptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FGBatchConsumption"> | string
+    fgBatchId?: StringWithAggregatesFilter<"FGBatchConsumption"> | string
+    rawMaterialId?: StringWithAggregatesFilter<"FGBatchConsumption"> | string
+    rawMaterialName?: StringNullableWithAggregatesFilter<"FGBatchConsumption"> | string | null
+    expectedQuantity?: FloatWithAggregatesFilter<"FGBatchConsumption"> | number
+    actualQuantity?: FloatWithAggregatesFilter<"FGBatchConsumption"> | number
+    unit?: StringNullableWithAggregatesFilter<"FGBatchConsumption"> | string | null
+    sourceType?: StringNullableWithAggregatesFilter<"FGBatchConsumption"> | string | null
+    batchNumber?: StringNullableWithAggregatesFilter<"FGBatchConsumption"> | string | null
+    dispatchId?: StringNullableWithAggregatesFilter<"FGBatchConsumption"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FGBatchConsumption"> | Date | string
   }
 
   export type ActivityLogCreateInput = {
@@ -114781,6 +117623,226 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FGBatchCreateInput = {
+    id?: string
+    batchNumber: string
+    bomId: string
+    fgProductName: string
+    productionQty: number
+    productionUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consumptions?: FGBatchConsumptionCreateNestedManyWithoutFgBatchInput
+  }
+
+  export type FGBatchUncheckedCreateInput = {
+    id?: string
+    batchNumber: string
+    bomId: string
+    fgProductName: string
+    productionQty: number
+    productionUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consumptions?: FGBatchConsumptionUncheckedCreateNestedManyWithoutFgBatchInput
+  }
+
+  export type FGBatchUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    productionQty?: FloatFieldUpdateOperationsInput | number
+    productionUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumptions?: FGBatchConsumptionUpdateManyWithoutFgBatchNestedInput
+  }
+
+  export type FGBatchUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    productionQty?: FloatFieldUpdateOperationsInput | number
+    productionUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumptions?: FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchNestedInput
+  }
+
+  export type FGBatchCreateManyInput = {
+    id?: string
+    batchNumber: string
+    bomId: string
+    fgProductName: string
+    productionQty: number
+    productionUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGBatchUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    productionQty?: FloatFieldUpdateOperationsInput | number
+    productionUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGBatchUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    productionQty?: FloatFieldUpdateOperationsInput | number
+    productionUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGBatchConsumptionCreateInput = {
+    id?: string
+    rawMaterialId: string
+    rawMaterialName?: string | null
+    expectedQuantity: number
+    actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
+    batchNumber?: string | null
+    dispatchId?: string | null
+    createdAt?: Date | string
+    fgBatch: FGBatchCreateNestedOneWithoutConsumptionsInput
+  }
+
+  export type FGBatchConsumptionUncheckedCreateInput = {
+    id?: string
+    fgBatchId: string
+    rawMaterialId: string
+    rawMaterialName?: string | null
+    expectedQuantity: number
+    actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
+    batchNumber?: string | null
+    dispatchId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGBatchConsumptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fgBatch?: FGBatchUpdateOneRequiredWithoutConsumptionsNestedInput
+  }
+
+  export type FGBatchConsumptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fgBatchId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGBatchConsumptionCreateManyInput = {
+    id?: string
+    fgBatchId: string
+    rawMaterialId: string
+    rawMaterialName?: string | null
+    expectedQuantity: number
+    actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
+    batchNumber?: string | null
+    dispatchId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGBatchConsumptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGBatchConsumptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fgBatchId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -119524,6 +122586,136 @@ export namespace Prisma {
   export type GrindingDispatchLotSumOrderByAggregateInput = {
     allocatedQuantity?: SortOrder
     seedWastageAllocated?: SortOrder
+  }
+
+  export type FGBatchConsumptionListRelationFilter = {
+    every?: FGBatchConsumptionWhereInput
+    some?: FGBatchConsumptionWhereInput
+    none?: FGBatchConsumptionWhereInput
+  }
+
+  export type FGBatchConsumptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FGBatchCountOrderByAggregateInput = {
+    id?: SortOrder
+    batchNumber?: SortOrder
+    bomId?: SortOrder
+    fgProductName?: SortOrder
+    productionQty?: SortOrder
+    productionUnit?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    totalPackets?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGBatchAvgOrderByAggregateInput = {
+    productionQty?: SortOrder
+    packetSize?: SortOrder
+    totalPackets?: SortOrder
+  }
+
+  export type FGBatchMaxOrderByAggregateInput = {
+    id?: SortOrder
+    batchNumber?: SortOrder
+    bomId?: SortOrder
+    fgProductName?: SortOrder
+    productionQty?: SortOrder
+    productionUnit?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    totalPackets?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGBatchMinOrderByAggregateInput = {
+    id?: SortOrder
+    batchNumber?: SortOrder
+    bomId?: SortOrder
+    fgProductName?: SortOrder
+    productionQty?: SortOrder
+    productionUnit?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    totalPackets?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGBatchSumOrderByAggregateInput = {
+    productionQty?: SortOrder
+    packetSize?: SortOrder
+    totalPackets?: SortOrder
+  }
+
+  export type FGBatchScalarRelationFilter = {
+    is?: FGBatchWhereInput
+    isNot?: FGBatchWhereInput
+  }
+
+  export type FGBatchConsumptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    fgBatchId?: SortOrder
+    rawMaterialId?: SortOrder
+    rawMaterialName?: SortOrder
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+    unit?: SortOrder
+    sourceType?: SortOrder
+    batchNumber?: SortOrder
+    dispatchId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FGBatchConsumptionAvgOrderByAggregateInput = {
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+  }
+
+  export type FGBatchConsumptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    fgBatchId?: SortOrder
+    rawMaterialId?: SortOrder
+    rawMaterialName?: SortOrder
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+    unit?: SortOrder
+    sourceType?: SortOrder
+    batchNumber?: SortOrder
+    dispatchId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FGBatchConsumptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    fgBatchId?: SortOrder
+    rawMaterialId?: SortOrder
+    rawMaterialName?: SortOrder
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
+    unit?: SortOrder
+    sourceType?: SortOrder
+    batchNumber?: SortOrder
+    dispatchId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FGBatchConsumptionSumOrderByAggregateInput = {
+    expectedQuantity?: SortOrder
+    actualQuantity?: SortOrder
   }
 
   export type BatchCreateNestedOneWithoutActivityLogInput = {
@@ -127566,6 +130758,62 @@ export namespace Prisma {
     upsert?: CleaningLotUpsertWithoutGrindingDispatchLotsInput
     connect?: CleaningLotWhereUniqueInput
     update?: XOR<XOR<CleaningLotUpdateToOneWithWhereWithoutGrindingDispatchLotsInput, CleaningLotUpdateWithoutGrindingDispatchLotsInput>, CleaningLotUncheckedUpdateWithoutGrindingDispatchLotsInput>
+  }
+
+  export type FGBatchConsumptionCreateNestedManyWithoutFgBatchInput = {
+    create?: XOR<FGBatchConsumptionCreateWithoutFgBatchInput, FGBatchConsumptionUncheckedCreateWithoutFgBatchInput> | FGBatchConsumptionCreateWithoutFgBatchInput[] | FGBatchConsumptionUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGBatchConsumptionCreateOrConnectWithoutFgBatchInput | FGBatchConsumptionCreateOrConnectWithoutFgBatchInput[]
+    createMany?: FGBatchConsumptionCreateManyFgBatchInputEnvelope
+    connect?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+  }
+
+  export type FGBatchConsumptionUncheckedCreateNestedManyWithoutFgBatchInput = {
+    create?: XOR<FGBatchConsumptionCreateWithoutFgBatchInput, FGBatchConsumptionUncheckedCreateWithoutFgBatchInput> | FGBatchConsumptionCreateWithoutFgBatchInput[] | FGBatchConsumptionUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGBatchConsumptionCreateOrConnectWithoutFgBatchInput | FGBatchConsumptionCreateOrConnectWithoutFgBatchInput[]
+    createMany?: FGBatchConsumptionCreateManyFgBatchInputEnvelope
+    connect?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+  }
+
+  export type FGBatchConsumptionUpdateManyWithoutFgBatchNestedInput = {
+    create?: XOR<FGBatchConsumptionCreateWithoutFgBatchInput, FGBatchConsumptionUncheckedCreateWithoutFgBatchInput> | FGBatchConsumptionCreateWithoutFgBatchInput[] | FGBatchConsumptionUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGBatchConsumptionCreateOrConnectWithoutFgBatchInput | FGBatchConsumptionCreateOrConnectWithoutFgBatchInput[]
+    upsert?: FGBatchConsumptionUpsertWithWhereUniqueWithoutFgBatchInput | FGBatchConsumptionUpsertWithWhereUniqueWithoutFgBatchInput[]
+    createMany?: FGBatchConsumptionCreateManyFgBatchInputEnvelope
+    set?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+    disconnect?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+    delete?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+    connect?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+    update?: FGBatchConsumptionUpdateWithWhereUniqueWithoutFgBatchInput | FGBatchConsumptionUpdateWithWhereUniqueWithoutFgBatchInput[]
+    updateMany?: FGBatchConsumptionUpdateManyWithWhereWithoutFgBatchInput | FGBatchConsumptionUpdateManyWithWhereWithoutFgBatchInput[]
+    deleteMany?: FGBatchConsumptionScalarWhereInput | FGBatchConsumptionScalarWhereInput[]
+  }
+
+  export type FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchNestedInput = {
+    create?: XOR<FGBatchConsumptionCreateWithoutFgBatchInput, FGBatchConsumptionUncheckedCreateWithoutFgBatchInput> | FGBatchConsumptionCreateWithoutFgBatchInput[] | FGBatchConsumptionUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGBatchConsumptionCreateOrConnectWithoutFgBatchInput | FGBatchConsumptionCreateOrConnectWithoutFgBatchInput[]
+    upsert?: FGBatchConsumptionUpsertWithWhereUniqueWithoutFgBatchInput | FGBatchConsumptionUpsertWithWhereUniqueWithoutFgBatchInput[]
+    createMany?: FGBatchConsumptionCreateManyFgBatchInputEnvelope
+    set?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+    disconnect?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+    delete?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+    connect?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+    update?: FGBatchConsumptionUpdateWithWhereUniqueWithoutFgBatchInput | FGBatchConsumptionUpdateWithWhereUniqueWithoutFgBatchInput[]
+    updateMany?: FGBatchConsumptionUpdateManyWithWhereWithoutFgBatchInput | FGBatchConsumptionUpdateManyWithWhereWithoutFgBatchInput[]
+    deleteMany?: FGBatchConsumptionScalarWhereInput | FGBatchConsumptionScalarWhereInput[]
+  }
+
+  export type FGBatchCreateNestedOneWithoutConsumptionsInput = {
+    create?: XOR<FGBatchCreateWithoutConsumptionsInput, FGBatchUncheckedCreateWithoutConsumptionsInput>
+    connectOrCreate?: FGBatchCreateOrConnectWithoutConsumptionsInput
+    connect?: FGBatchWhereUniqueInput
+  }
+
+  export type FGBatchUpdateOneRequiredWithoutConsumptionsNestedInput = {
+    create?: XOR<FGBatchCreateWithoutConsumptionsInput, FGBatchUncheckedCreateWithoutConsumptionsInput>
+    connectOrCreate?: FGBatchCreateOrConnectWithoutConsumptionsInput
+    upsert?: FGBatchUpsertWithoutConsumptionsInput
+    connect?: FGBatchWhereUniqueInput
+    update?: XOR<XOR<FGBatchUpdateToOneWithWhereWithoutConsumptionsInput, FGBatchUpdateWithoutConsumptionsInput>, FGBatchUncheckedUpdateWithoutConsumptionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -152271,6 +155519,159 @@ export namespace Prisma {
     processingBatchLots?: ProcessingBatchLotUncheckedUpdateManyWithoutCleaningLotNestedInput
   }
 
+  export type FGBatchConsumptionCreateWithoutFgBatchInput = {
+    id?: string
+    rawMaterialId: string
+    rawMaterialName?: string | null
+    expectedQuantity: number
+    actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
+    batchNumber?: string | null
+    dispatchId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGBatchConsumptionUncheckedCreateWithoutFgBatchInput = {
+    id?: string
+    rawMaterialId: string
+    rawMaterialName?: string | null
+    expectedQuantity: number
+    actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
+    batchNumber?: string | null
+    dispatchId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGBatchConsumptionCreateOrConnectWithoutFgBatchInput = {
+    where: FGBatchConsumptionWhereUniqueInput
+    create: XOR<FGBatchConsumptionCreateWithoutFgBatchInput, FGBatchConsumptionUncheckedCreateWithoutFgBatchInput>
+  }
+
+  export type FGBatchConsumptionCreateManyFgBatchInputEnvelope = {
+    data: FGBatchConsumptionCreateManyFgBatchInput | FGBatchConsumptionCreateManyFgBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FGBatchConsumptionUpsertWithWhereUniqueWithoutFgBatchInput = {
+    where: FGBatchConsumptionWhereUniqueInput
+    update: XOR<FGBatchConsumptionUpdateWithoutFgBatchInput, FGBatchConsumptionUncheckedUpdateWithoutFgBatchInput>
+    create: XOR<FGBatchConsumptionCreateWithoutFgBatchInput, FGBatchConsumptionUncheckedCreateWithoutFgBatchInput>
+  }
+
+  export type FGBatchConsumptionUpdateWithWhereUniqueWithoutFgBatchInput = {
+    where: FGBatchConsumptionWhereUniqueInput
+    data: XOR<FGBatchConsumptionUpdateWithoutFgBatchInput, FGBatchConsumptionUncheckedUpdateWithoutFgBatchInput>
+  }
+
+  export type FGBatchConsumptionUpdateManyWithWhereWithoutFgBatchInput = {
+    where: FGBatchConsumptionScalarWhereInput
+    data: XOR<FGBatchConsumptionUpdateManyMutationInput, FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchInput>
+  }
+
+  export type FGBatchConsumptionScalarWhereInput = {
+    AND?: FGBatchConsumptionScalarWhereInput | FGBatchConsumptionScalarWhereInput[]
+    OR?: FGBatchConsumptionScalarWhereInput[]
+    NOT?: FGBatchConsumptionScalarWhereInput | FGBatchConsumptionScalarWhereInput[]
+    id?: StringFilter<"FGBatchConsumption"> | string
+    fgBatchId?: StringFilter<"FGBatchConsumption"> | string
+    rawMaterialId?: StringFilter<"FGBatchConsumption"> | string
+    rawMaterialName?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    expectedQuantity?: FloatFilter<"FGBatchConsumption"> | number
+    actualQuantity?: FloatFilter<"FGBatchConsumption"> | number
+    unit?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    sourceType?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    batchNumber?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    dispatchId?: StringNullableFilter<"FGBatchConsumption"> | string | null
+    createdAt?: DateTimeFilter<"FGBatchConsumption"> | Date | string
+  }
+
+  export type FGBatchCreateWithoutConsumptionsInput = {
+    id?: string
+    batchNumber: string
+    bomId: string
+    fgProductName: string
+    productionQty: number
+    productionUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGBatchUncheckedCreateWithoutConsumptionsInput = {
+    id?: string
+    batchNumber: string
+    bomId: string
+    fgProductName: string
+    productionQty: number
+    productionUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGBatchCreateOrConnectWithoutConsumptionsInput = {
+    where: FGBatchWhereUniqueInput
+    create: XOR<FGBatchCreateWithoutConsumptionsInput, FGBatchUncheckedCreateWithoutConsumptionsInput>
+  }
+
+  export type FGBatchUpsertWithoutConsumptionsInput = {
+    update: XOR<FGBatchUpdateWithoutConsumptionsInput, FGBatchUncheckedUpdateWithoutConsumptionsInput>
+    create: XOR<FGBatchCreateWithoutConsumptionsInput, FGBatchUncheckedCreateWithoutConsumptionsInput>
+    where?: FGBatchWhereInput
+  }
+
+  export type FGBatchUpdateToOneWithWhereWithoutConsumptionsInput = {
+    where?: FGBatchWhereInput
+    data: XOR<FGBatchUpdateWithoutConsumptionsInput, FGBatchUncheckedUpdateWithoutConsumptionsInput>
+  }
+
+  export type FGBatchUpdateWithoutConsumptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    productionQty?: FloatFieldUpdateOperationsInput | number
+    productionUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGBatchUncheckedUpdateWithoutConsumptionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    productionQty?: FloatFieldUpdateOperationsInput | number
+    productionUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ActivityLogCreateManyBatchInput = {
     id: string
     userId: string
@@ -159797,6 +163198,58 @@ export namespace Prisma {
     cleaningLotId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGBatchConsumptionCreateManyFgBatchInput = {
+    id?: string
+    rawMaterialId: string
+    rawMaterialName?: string | null
+    expectedQuantity: number
+    actualQuantity: number
+    unit?: string | null
+    sourceType?: string | null
+    batchNumber?: string | null
+    dispatchId?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGBatchConsumptionUpdateWithoutFgBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGBatchConsumptionUncheckedUpdateWithoutFgBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    rawMaterialName?: NullableStringFieldUpdateOperationsInput | string | null
+    expectedQuantity?: FloatFieldUpdateOperationsInput | number
+    actualQuantity?: FloatFieldUpdateOperationsInput | number
+    unit?: NullableStringFieldUpdateOperationsInput | string | null
+    sourceType?: NullableStringFieldUpdateOperationsInput | string | null
+    batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

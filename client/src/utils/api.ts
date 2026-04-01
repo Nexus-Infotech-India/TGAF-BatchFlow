@@ -393,6 +393,15 @@ export const API_ROUTES = {
     GET_GRINDING_DISPATCH_BY_ID: (id: string) => `${BASE_URL}/raw/grinding/dispatch/${id}`,
     ACCEPT_GRINDING_DISPATCH: (id: string) => `${BASE_URL}/raw/grinding/dispatch/${id}/accept`,
     REJECT_GRINDING_DISPATCH: (id: string) => `${BASE_URL}/raw/grinding/dispatch/${id}/reject`,
+
+    // FG Batch (Finished Good Batch Production)
+    GET_FG_BOMS: `${BASE_URL}/raw/fg-batch/boms`,
+    GET_FG_BOM_ITEMS: `${BASE_URL}/raw/fg-batch/bom-items`,
+    CREATE_FG_BATCH: `${BASE_URL}/raw/fg-batch/create`,
+    GET_FG_BATCHES: `${BASE_URL}/raw/fg-batch/list`,
+    GET_FG_BATCH_BY_ID: (id: string) => `${BASE_URL}/raw/fg-batch/${id}`,
+    ACCEPT_FG_BATCH: (id: string) => `${BASE_URL}/raw/fg-batch/${id}/accept`,
+    REJECT_FG_BATCH: (id: string) => `${BASE_URL}/raw/fg-batch/${id}/reject`,
   },
 
   DRAFT: {
