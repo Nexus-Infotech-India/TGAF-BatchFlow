@@ -1089,6 +1089,58 @@ exports.Prisma.FGBatchConsumptionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.FGProductionEntryScalarFieldEnum = {
+  id: 'id',
+  entryNumber: 'entryNumber',
+  fgBatchId: 'fgBatchId',
+  bomId: 'bomId',
+  fgProductName: 'fgProductName',
+  targetQty: 'targetQty',
+  targetUnit: 'targetUnit',
+  packetSize: 'packetSize',
+  packetUnit: 'packetUnit',
+  totalPlannedPackets: 'totalPlannedPackets',
+  totalActualFg: 'totalActualFg',
+  totalActualByproduct: 'totalActualByproduct',
+  totalActualScrap: 'totalActualScrap',
+  totalActualPackets: 'totalActualPackets',
+  status: 'status',
+  notes: 'notes',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FGProductionMachineEntryScalarFieldEnum = {
+  id: 'id',
+  productionEntryId: 'productionEntryId',
+  machineId: 'machineId',
+  machineName: 'machineName',
+  allocatedQty: 'allocatedQty',
+  allocatedUnit: 'allocatedUnit',
+  plannedPackets: 'plannedPackets',
+  actualFgQty: 'actualFgQty',
+  actualFgUnit: 'actualFgUnit',
+  actualByproduct: 'actualByproduct',
+  actualByproductUnit: 'actualByproductUnit',
+  actualScrap: 'actualScrap',
+  actualScrapUnit: 'actualScrapUnit',
+  actualPackets: 'actualPackets',
+  notes: 'notes',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MachineScalarFieldEnum = {
+  id: 'id',
+  machineId: 'machineId',
+  name: 'name',
+  location: 'location',
+  capacityQty: 'capacityQty',
+  capacityUnit: 'capacityUnit',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1371,7 +1423,10 @@ exports.Prisma.ModelName = {
   GrindingDispatch: 'GrindingDispatch',
   GrindingDispatchLot: 'GrindingDispatchLot',
   FGBatch: 'FGBatch',
-  FGBatchConsumption: 'FGBatchConsumption'
+  FGBatchConsumption: 'FGBatchConsumption',
+  FGProductionEntry: 'FGProductionEntry',
+  FGProductionMachineEntry: 'FGProductionMachineEntry',
+  Machine: 'Machine'
 };
 
 /**

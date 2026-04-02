@@ -196,6 +196,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "Location Master",
           icon: <MapPin className="sidebar-icon" size={18} />,
           permissionKey: "manage_locations"
+        },
+        {
+          path: "/masters/machine",
+          name: "Machine Master",
+          icon: <Factory className="sidebar-icon" size={18} />,
+          permissionKey: "manage_locations"
         }
       ]
     },
@@ -296,8 +302,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
         },
         {
           path: "/packaging/fg-production",
-          name: "FG Production Entry",
+          name: "FG Production Allocation",
           icon: <Settings2 className="sidebar-icon" size={18} />,
+          permissionKey: "manage_fg_production"
+        },
+        {
+          path: "/packaging/production-output-entry",
+          name: "Production Output Entry",
+          icon: <ClipboardCheck className="sidebar-icon" size={18} />,
           permissionKey: "manage_fg_production"
         },
         {

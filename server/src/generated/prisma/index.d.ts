@@ -398,6 +398,21 @@ export type FGBatch = $Result.DefaultSelection<Prisma.$FGBatchPayload>
  * 
  */
 export type FGBatchConsumption = $Result.DefaultSelection<Prisma.$FGBatchConsumptionPayload>
+/**
+ * Model FGProductionEntry
+ * 
+ */
+export type FGProductionEntry = $Result.DefaultSelection<Prisma.$FGProductionEntryPayload>
+/**
+ * Model FGProductionMachineEntry
+ * 
+ */
+export type FGProductionMachineEntry = $Result.DefaultSelection<Prisma.$FGProductionMachineEntryPayload>
+/**
+ * Model Machine
+ * 
+ */
+export type Machine = $Result.DefaultSelection<Prisma.$MachinePayload>
 
 /**
  * Enums
@@ -1658,6 +1673,36 @@ export class PrismaClient<
     * ```
     */
   get fGBatchConsumption(): Prisma.FGBatchConsumptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fGProductionEntry`: Exposes CRUD operations for the **FGProductionEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FGProductionEntries
+    * const fGProductionEntries = await prisma.fGProductionEntry.findMany()
+    * ```
+    */
+  get fGProductionEntry(): Prisma.FGProductionEntryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fGProductionMachineEntry`: Exposes CRUD operations for the **FGProductionMachineEntry** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FGProductionMachineEntries
+    * const fGProductionMachineEntries = await prisma.fGProductionMachineEntry.findMany()
+    * ```
+    */
+  get fGProductionMachineEntry(): Prisma.FGProductionMachineEntryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.machine`: Exposes CRUD operations for the **Machine** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Machines
+    * const machines = await prisma.machine.findMany()
+    * ```
+    */
+  get machine(): Prisma.MachineDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2175,7 +2220,10 @@ export namespace Prisma {
     GrindingDispatch: 'GrindingDispatch',
     GrindingDispatchLot: 'GrindingDispatchLot',
     FGBatch: 'FGBatch',
-    FGBatchConsumption: 'FGBatchConsumption'
+    FGBatchConsumption: 'FGBatchConsumption',
+    FGProductionEntry: 'FGProductionEntry',
+    FGProductionMachineEntry: 'FGProductionMachineEntry',
+    Machine: 'Machine'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2194,7 +2242,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "machine"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -7896,6 +7944,228 @@ export namespace Prisma {
           }
         }
       }
+      FGProductionEntry: {
+        payload: Prisma.$FGProductionEntryPayload<ExtArgs>
+        fields: Prisma.FGProductionEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FGProductionEntryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FGProductionEntryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.FGProductionEntryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FGProductionEntryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload>
+          }
+          findMany: {
+            args: Prisma.FGProductionEntryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload>[]
+          }
+          create: {
+            args: Prisma.FGProductionEntryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload>
+          }
+          createMany: {
+            args: Prisma.FGProductionEntryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FGProductionEntryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload>[]
+          }
+          delete: {
+            args: Prisma.FGProductionEntryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload>
+          }
+          update: {
+            args: Prisma.FGProductionEntryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.FGProductionEntryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FGProductionEntryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FGProductionEntryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload>[]
+          }
+          upsert: {
+            args: Prisma.FGProductionEntryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.FGProductionEntryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFGProductionEntry>
+          }
+          groupBy: {
+            args: Prisma.FGProductionEntryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FGProductionEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FGProductionEntryCountArgs<ExtArgs>
+            result: $Utils.Optional<FGProductionEntryCountAggregateOutputType> | number
+          }
+        }
+      }
+      FGProductionMachineEntry: {
+        payload: Prisma.$FGProductionMachineEntryPayload<ExtArgs>
+        fields: Prisma.FGProductionMachineEntryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FGProductionMachineEntryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FGProductionMachineEntryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload>
+          }
+          findFirst: {
+            args: Prisma.FGProductionMachineEntryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FGProductionMachineEntryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload>
+          }
+          findMany: {
+            args: Prisma.FGProductionMachineEntryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload>[]
+          }
+          create: {
+            args: Prisma.FGProductionMachineEntryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload>
+          }
+          createMany: {
+            args: Prisma.FGProductionMachineEntryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FGProductionMachineEntryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload>[]
+          }
+          delete: {
+            args: Prisma.FGProductionMachineEntryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload>
+          }
+          update: {
+            args: Prisma.FGProductionMachineEntryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload>
+          }
+          deleteMany: {
+            args: Prisma.FGProductionMachineEntryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FGProductionMachineEntryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FGProductionMachineEntryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload>[]
+          }
+          upsert: {
+            args: Prisma.FGProductionMachineEntryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionMachineEntryPayload>
+          }
+          aggregate: {
+            args: Prisma.FGProductionMachineEntryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFGProductionMachineEntry>
+          }
+          groupBy: {
+            args: Prisma.FGProductionMachineEntryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FGProductionMachineEntryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FGProductionMachineEntryCountArgs<ExtArgs>
+            result: $Utils.Optional<FGProductionMachineEntryCountAggregateOutputType> | number
+          }
+        }
+      }
+      Machine: {
+        payload: Prisma.$MachinePayload<ExtArgs>
+        fields: Prisma.MachineFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MachineFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MachineFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload>
+          }
+          findFirst: {
+            args: Prisma.MachineFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MachineFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload>
+          }
+          findMany: {
+            args: Prisma.MachineFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload>[]
+          }
+          create: {
+            args: Prisma.MachineCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload>
+          }
+          createMany: {
+            args: Prisma.MachineCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MachineCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload>[]
+          }
+          delete: {
+            args: Prisma.MachineDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload>
+          }
+          update: {
+            args: Prisma.MachineUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload>
+          }
+          deleteMany: {
+            args: Prisma.MachineDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MachineUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MachineUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload>[]
+          }
+          upsert: {
+            args: Prisma.MachineUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MachinePayload>
+          }
+          aggregate: {
+            args: Prisma.MachineAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMachine>
+          }
+          groupBy: {
+            args: Prisma.MachineGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MachineGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MachineCountArgs<ExtArgs>
+            result: $Utils.Optional<MachineCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -8069,6 +8339,9 @@ export namespace Prisma {
     grindingDispatchLot?: GrindingDispatchLotOmit
     fGBatch?: FGBatchOmit
     fGBatchConsumption?: FGBatchConsumptionOmit
+    fGProductionEntry?: FGProductionEntryOmit
+    fGProductionMachineEntry?: FGProductionMachineEntryOmit
+    machine?: MachineOmit
   }
 
   /* Types for Logging */
@@ -10176,10 +10449,12 @@ export namespace Prisma {
 
   export type FGBatchCountOutputType = {
     consumptions: number
+    productionEntries: number
   }
 
   export type FGBatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     consumptions?: boolean | FGBatchCountOutputTypeCountConsumptionsArgs
+    productionEntries?: boolean | FGBatchCountOutputTypeCountProductionEntriesArgs
   }
 
   // Custom InputTypes
@@ -10198,6 +10473,75 @@ export namespace Prisma {
    */
   export type FGBatchCountOutputTypeCountConsumptionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FGBatchConsumptionWhereInput
+  }
+
+  /**
+   * FGBatchCountOutputType without action
+   */
+  export type FGBatchCountOutputTypeCountProductionEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGProductionEntryWhereInput
+  }
+
+
+  /**
+   * Count Type FGProductionEntryCountOutputType
+   */
+
+  export type FGProductionEntryCountOutputType = {
+    machineEntries: number
+  }
+
+  export type FGProductionEntryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    machineEntries?: boolean | FGProductionEntryCountOutputTypeCountMachineEntriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FGProductionEntryCountOutputType without action
+   */
+  export type FGProductionEntryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntryCountOutputType
+     */
+    select?: FGProductionEntryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FGProductionEntryCountOutputType without action
+   */
+  export type FGProductionEntryCountOutputTypeCountMachineEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGProductionMachineEntryWhereInput
+  }
+
+
+  /**
+   * Count Type MachineCountOutputType
+   */
+
+  export type MachineCountOutputType = {
+    productionMachineEntries: number
+  }
+
+  export type MachineCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productionMachineEntries?: boolean | MachineCountOutputTypeCountProductionMachineEntriesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MachineCountOutputType without action
+   */
+  export type MachineCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MachineCountOutputType
+     */
+    select?: MachineCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MachineCountOutputType without action
+   */
+  export type MachineCountOutputTypeCountProductionMachineEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGProductionMachineEntryWhereInput
   }
 
 
@@ -100137,6 +100481,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     consumptions?: boolean | FGBatch$consumptionsArgs<ExtArgs>
+    productionEntries?: boolean | FGBatch$productionEntriesArgs<ExtArgs>
     _count?: boolean | FGBatchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fGBatch"]>
 
@@ -100194,6 +100539,7 @@ export namespace Prisma {
   export type FGBatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "bomId" | "fgProductName" | "productionQty" | "productionUnit" | "packetSize" | "packetUnit" | "totalPackets" | "status" | "notes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["fGBatch"]>
   export type FGBatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     consumptions?: boolean | FGBatch$consumptionsArgs<ExtArgs>
+    productionEntries?: boolean | FGBatch$productionEntriesArgs<ExtArgs>
     _count?: boolean | FGBatchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FGBatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -100203,6 +100549,7 @@ export namespace Prisma {
     name: "FGBatch"
     objects: {
       consumptions: Prisma.$FGBatchConsumptionPayload<ExtArgs>[]
+      productionEntries: Prisma.$FGProductionEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -100614,6 +100961,7 @@ export namespace Prisma {
   export interface Prisma__FGBatchClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     consumptions<T extends FGBatch$consumptionsArgs<ExtArgs> = {}>(args?: Subset<T, FGBatch$consumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    productionEntries<T extends FGBatch$productionEntriesArgs<ExtArgs> = {}>(args?: Subset<T, FGBatch$productionEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -101066,6 +101414,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FGBatchConsumptionScalarFieldEnum | FGBatchConsumptionScalarFieldEnum[]
+  }
+
+  /**
+   * FGBatch.productionEntries
+   */
+  export type FGBatch$productionEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    where?: FGProductionEntryWhereInput
+    orderBy?: FGProductionEntryOrderByWithRelationInput | FGProductionEntryOrderByWithRelationInput[]
+    cursor?: FGProductionEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FGProductionEntryScalarFieldEnum | FGProductionEntryScalarFieldEnum[]
   }
 
   /**
@@ -102258,6 +102630,3740 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FGBatchConsumptionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FGProductionEntry
+   */
+
+  export type AggregateFGProductionEntry = {
+    _count: FGProductionEntryCountAggregateOutputType | null
+    _avg: FGProductionEntryAvgAggregateOutputType | null
+    _sum: FGProductionEntrySumAggregateOutputType | null
+    _min: FGProductionEntryMinAggregateOutputType | null
+    _max: FGProductionEntryMaxAggregateOutputType | null
+  }
+
+  export type FGProductionEntryAvgAggregateOutputType = {
+    targetQty: number | null
+    packetSize: number | null
+    totalPlannedPackets: number | null
+    totalActualFg: number | null
+    totalActualByproduct: number | null
+    totalActualScrap: number | null
+    totalActualPackets: number | null
+  }
+
+  export type FGProductionEntrySumAggregateOutputType = {
+    targetQty: number | null
+    packetSize: number | null
+    totalPlannedPackets: number | null
+    totalActualFg: number | null
+    totalActualByproduct: number | null
+    totalActualScrap: number | null
+    totalActualPackets: number | null
+  }
+
+  export type FGProductionEntryMinAggregateOutputType = {
+    id: string | null
+    entryNumber: string | null
+    fgBatchId: string | null
+    bomId: string | null
+    fgProductName: string | null
+    targetQty: number | null
+    targetUnit: string | null
+    packetSize: number | null
+    packetUnit: string | null
+    totalPlannedPackets: number | null
+    totalActualFg: number | null
+    totalActualByproduct: number | null
+    totalActualScrap: number | null
+    totalActualPackets: number | null
+    status: string | null
+    notes: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGProductionEntryMaxAggregateOutputType = {
+    id: string | null
+    entryNumber: string | null
+    fgBatchId: string | null
+    bomId: string | null
+    fgProductName: string | null
+    targetQty: number | null
+    targetUnit: string | null
+    packetSize: number | null
+    packetUnit: string | null
+    totalPlannedPackets: number | null
+    totalActualFg: number | null
+    totalActualByproduct: number | null
+    totalActualScrap: number | null
+    totalActualPackets: number | null
+    status: string | null
+    notes: string | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGProductionEntryCountAggregateOutputType = {
+    id: number
+    entryNumber: number
+    fgBatchId: number
+    bomId: number
+    fgProductName: number
+    targetQty: number
+    targetUnit: number
+    packetSize: number
+    packetUnit: number
+    totalPlannedPackets: number
+    totalActualFg: number
+    totalActualByproduct: number
+    totalActualScrap: number
+    totalActualPackets: number
+    status: number
+    notes: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FGProductionEntryAvgAggregateInputType = {
+    targetQty?: true
+    packetSize?: true
+    totalPlannedPackets?: true
+    totalActualFg?: true
+    totalActualByproduct?: true
+    totalActualScrap?: true
+    totalActualPackets?: true
+  }
+
+  export type FGProductionEntrySumAggregateInputType = {
+    targetQty?: true
+    packetSize?: true
+    totalPlannedPackets?: true
+    totalActualFg?: true
+    totalActualByproduct?: true
+    totalActualScrap?: true
+    totalActualPackets?: true
+  }
+
+  export type FGProductionEntryMinAggregateInputType = {
+    id?: true
+    entryNumber?: true
+    fgBatchId?: true
+    bomId?: true
+    fgProductName?: true
+    targetQty?: true
+    targetUnit?: true
+    packetSize?: true
+    packetUnit?: true
+    totalPlannedPackets?: true
+    totalActualFg?: true
+    totalActualByproduct?: true
+    totalActualScrap?: true
+    totalActualPackets?: true
+    status?: true
+    notes?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGProductionEntryMaxAggregateInputType = {
+    id?: true
+    entryNumber?: true
+    fgBatchId?: true
+    bomId?: true
+    fgProductName?: true
+    targetQty?: true
+    targetUnit?: true
+    packetSize?: true
+    packetUnit?: true
+    totalPlannedPackets?: true
+    totalActualFg?: true
+    totalActualByproduct?: true
+    totalActualScrap?: true
+    totalActualPackets?: true
+    status?: true
+    notes?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGProductionEntryCountAggregateInputType = {
+    id?: true
+    entryNumber?: true
+    fgBatchId?: true
+    bomId?: true
+    fgProductName?: true
+    targetQty?: true
+    targetUnit?: true
+    packetSize?: true
+    packetUnit?: true
+    totalPlannedPackets?: true
+    totalActualFg?: true
+    totalActualByproduct?: true
+    totalActualScrap?: true
+    totalActualPackets?: true
+    status?: true
+    notes?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FGProductionEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGProductionEntry to aggregate.
+     */
+    where?: FGProductionEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionEntries to fetch.
+     */
+    orderBy?: FGProductionEntryOrderByWithRelationInput | FGProductionEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FGProductionEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FGProductionEntries
+    **/
+    _count?: true | FGProductionEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FGProductionEntryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FGProductionEntrySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FGProductionEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FGProductionEntryMaxAggregateInputType
+  }
+
+  export type GetFGProductionEntryAggregateType<T extends FGProductionEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregateFGProductionEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFGProductionEntry[P]>
+      : GetScalarType<T[P], AggregateFGProductionEntry[P]>
+  }
+
+
+
+
+  export type FGProductionEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGProductionEntryWhereInput
+    orderBy?: FGProductionEntryOrderByWithAggregationInput | FGProductionEntryOrderByWithAggregationInput[]
+    by: FGProductionEntryScalarFieldEnum[] | FGProductionEntryScalarFieldEnum
+    having?: FGProductionEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FGProductionEntryCountAggregateInputType | true
+    _avg?: FGProductionEntryAvgAggregateInputType
+    _sum?: FGProductionEntrySumAggregateInputType
+    _min?: FGProductionEntryMinAggregateInputType
+    _max?: FGProductionEntryMaxAggregateInputType
+  }
+
+  export type FGProductionEntryGroupByOutputType = {
+    id: string
+    entryNumber: string
+    fgBatchId: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize: number | null
+    packetUnit: string | null
+    totalPlannedPackets: number
+    totalActualFg: number
+    totalActualByproduct: number
+    totalActualScrap: number
+    totalActualPackets: number
+    status: string
+    notes: string | null
+    createdById: string
+    createdAt: Date
+    updatedAt: Date
+    _count: FGProductionEntryCountAggregateOutputType | null
+    _avg: FGProductionEntryAvgAggregateOutputType | null
+    _sum: FGProductionEntrySumAggregateOutputType | null
+    _min: FGProductionEntryMinAggregateOutputType | null
+    _max: FGProductionEntryMaxAggregateOutputType | null
+  }
+
+  type GetFGProductionEntryGroupByPayload<T extends FGProductionEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FGProductionEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FGProductionEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FGProductionEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], FGProductionEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FGProductionEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    entryNumber?: boolean
+    fgBatchId?: boolean
+    bomId?: boolean
+    fgProductName?: boolean
+    targetQty?: boolean
+    targetUnit?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    totalPlannedPackets?: boolean
+    totalActualFg?: boolean
+    totalActualByproduct?: boolean
+    totalActualScrap?: boolean
+    totalActualPackets?: boolean
+    status?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+    machineEntries?: boolean | FGProductionEntry$machineEntriesArgs<ExtArgs>
+    _count?: boolean | FGProductionEntryCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGProductionEntry"]>
+
+  export type FGProductionEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    entryNumber?: boolean
+    fgBatchId?: boolean
+    bomId?: boolean
+    fgProductName?: boolean
+    targetQty?: boolean
+    targetUnit?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    totalPlannedPackets?: boolean
+    totalActualFg?: boolean
+    totalActualByproduct?: boolean
+    totalActualScrap?: boolean
+    totalActualPackets?: boolean
+    status?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGProductionEntry"]>
+
+  export type FGProductionEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    entryNumber?: boolean
+    fgBatchId?: boolean
+    bomId?: boolean
+    fgProductName?: boolean
+    targetQty?: boolean
+    targetUnit?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    totalPlannedPackets?: boolean
+    totalActualFg?: boolean
+    totalActualByproduct?: boolean
+    totalActualScrap?: boolean
+    totalActualPackets?: boolean
+    status?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGProductionEntry"]>
+
+  export type FGProductionEntrySelectScalar = {
+    id?: boolean
+    entryNumber?: boolean
+    fgBatchId?: boolean
+    bomId?: boolean
+    fgProductName?: boolean
+    targetQty?: boolean
+    targetUnit?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    totalPlannedPackets?: boolean
+    totalActualFg?: boolean
+    totalActualByproduct?: boolean
+    totalActualScrap?: boolean
+    totalActualPackets?: boolean
+    status?: boolean
+    notes?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FGProductionEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "entryNumber" | "fgBatchId" | "bomId" | "fgProductName" | "targetQty" | "targetUnit" | "packetSize" | "packetUnit" | "totalPlannedPackets" | "totalActualFg" | "totalActualByproduct" | "totalActualScrap" | "totalActualPackets" | "status" | "notes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["fGProductionEntry"]>
+  export type FGProductionEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+    machineEntries?: boolean | FGProductionEntry$machineEntriesArgs<ExtArgs>
+    _count?: boolean | FGProductionEntryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FGProductionEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+  }
+  export type FGProductionEntryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+  }
+
+  export type $FGProductionEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FGProductionEntry"
+    objects: {
+      fgBatch: Prisma.$FGBatchPayload<ExtArgs>
+      machineEntries: Prisma.$FGProductionMachineEntryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      entryNumber: string
+      fgBatchId: string
+      bomId: string
+      fgProductName: string
+      targetQty: number
+      targetUnit: string
+      packetSize: number | null
+      packetUnit: string | null
+      totalPlannedPackets: number
+      totalActualFg: number
+      totalActualByproduct: number
+      totalActualScrap: number
+      totalActualPackets: number
+      status: string
+      notes: string | null
+      createdById: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fGProductionEntry"]>
+    composites: {}
+  }
+
+  type FGProductionEntryGetPayload<S extends boolean | null | undefined | FGProductionEntryDefaultArgs> = $Result.GetResult<Prisma.$FGProductionEntryPayload, S>
+
+  type FGProductionEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FGProductionEntryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FGProductionEntryCountAggregateInputType | true
+    }
+
+  export interface FGProductionEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FGProductionEntry'], meta: { name: 'FGProductionEntry' } }
+    /**
+     * Find zero or one FGProductionEntry that matches the filter.
+     * @param {FGProductionEntryFindUniqueArgs} args - Arguments to find a FGProductionEntry
+     * @example
+     * // Get one FGProductionEntry
+     * const fGProductionEntry = await prisma.fGProductionEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FGProductionEntryFindUniqueArgs>(args: SelectSubset<T, FGProductionEntryFindUniqueArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FGProductionEntry that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FGProductionEntryFindUniqueOrThrowArgs} args - Arguments to find a FGProductionEntry
+     * @example
+     * // Get one FGProductionEntry
+     * const fGProductionEntry = await prisma.fGProductionEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FGProductionEntryFindUniqueOrThrowArgs>(args: SelectSubset<T, FGProductionEntryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGProductionEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionEntryFindFirstArgs} args - Arguments to find a FGProductionEntry
+     * @example
+     * // Get one FGProductionEntry
+     * const fGProductionEntry = await prisma.fGProductionEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FGProductionEntryFindFirstArgs>(args?: SelectSubset<T, FGProductionEntryFindFirstArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGProductionEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionEntryFindFirstOrThrowArgs} args - Arguments to find a FGProductionEntry
+     * @example
+     * // Get one FGProductionEntry
+     * const fGProductionEntry = await prisma.fGProductionEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FGProductionEntryFindFirstOrThrowArgs>(args?: SelectSubset<T, FGProductionEntryFindFirstOrThrowArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FGProductionEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionEntryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FGProductionEntries
+     * const fGProductionEntries = await prisma.fGProductionEntry.findMany()
+     * 
+     * // Get first 10 FGProductionEntries
+     * const fGProductionEntries = await prisma.fGProductionEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fGProductionEntryWithIdOnly = await prisma.fGProductionEntry.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FGProductionEntryFindManyArgs>(args?: SelectSubset<T, FGProductionEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FGProductionEntry.
+     * @param {FGProductionEntryCreateArgs} args - Arguments to create a FGProductionEntry.
+     * @example
+     * // Create one FGProductionEntry
+     * const FGProductionEntry = await prisma.fGProductionEntry.create({
+     *   data: {
+     *     // ... data to create a FGProductionEntry
+     *   }
+     * })
+     * 
+     */
+    create<T extends FGProductionEntryCreateArgs>(args: SelectSubset<T, FGProductionEntryCreateArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FGProductionEntries.
+     * @param {FGProductionEntryCreateManyArgs} args - Arguments to create many FGProductionEntries.
+     * @example
+     * // Create many FGProductionEntries
+     * const fGProductionEntry = await prisma.fGProductionEntry.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FGProductionEntryCreateManyArgs>(args?: SelectSubset<T, FGProductionEntryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FGProductionEntries and returns the data saved in the database.
+     * @param {FGProductionEntryCreateManyAndReturnArgs} args - Arguments to create many FGProductionEntries.
+     * @example
+     * // Create many FGProductionEntries
+     * const fGProductionEntry = await prisma.fGProductionEntry.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FGProductionEntries and only return the `id`
+     * const fGProductionEntryWithIdOnly = await prisma.fGProductionEntry.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FGProductionEntryCreateManyAndReturnArgs>(args?: SelectSubset<T, FGProductionEntryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FGProductionEntry.
+     * @param {FGProductionEntryDeleteArgs} args - Arguments to delete one FGProductionEntry.
+     * @example
+     * // Delete one FGProductionEntry
+     * const FGProductionEntry = await prisma.fGProductionEntry.delete({
+     *   where: {
+     *     // ... filter to delete one FGProductionEntry
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FGProductionEntryDeleteArgs>(args: SelectSubset<T, FGProductionEntryDeleteArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FGProductionEntry.
+     * @param {FGProductionEntryUpdateArgs} args - Arguments to update one FGProductionEntry.
+     * @example
+     * // Update one FGProductionEntry
+     * const fGProductionEntry = await prisma.fGProductionEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FGProductionEntryUpdateArgs>(args: SelectSubset<T, FGProductionEntryUpdateArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FGProductionEntries.
+     * @param {FGProductionEntryDeleteManyArgs} args - Arguments to filter FGProductionEntries to delete.
+     * @example
+     * // Delete a few FGProductionEntries
+     * const { count } = await prisma.fGProductionEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FGProductionEntryDeleteManyArgs>(args?: SelectSubset<T, FGProductionEntryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGProductionEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FGProductionEntries
+     * const fGProductionEntry = await prisma.fGProductionEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FGProductionEntryUpdateManyArgs>(args: SelectSubset<T, FGProductionEntryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGProductionEntries and returns the data updated in the database.
+     * @param {FGProductionEntryUpdateManyAndReturnArgs} args - Arguments to update many FGProductionEntries.
+     * @example
+     * // Update many FGProductionEntries
+     * const fGProductionEntry = await prisma.fGProductionEntry.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FGProductionEntries and only return the `id`
+     * const fGProductionEntryWithIdOnly = await prisma.fGProductionEntry.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FGProductionEntryUpdateManyAndReturnArgs>(args: SelectSubset<T, FGProductionEntryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FGProductionEntry.
+     * @param {FGProductionEntryUpsertArgs} args - Arguments to update or create a FGProductionEntry.
+     * @example
+     * // Update or create a FGProductionEntry
+     * const fGProductionEntry = await prisma.fGProductionEntry.upsert({
+     *   create: {
+     *     // ... data to create a FGProductionEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FGProductionEntry we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FGProductionEntryUpsertArgs>(args: SelectSubset<T, FGProductionEntryUpsertArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FGProductionEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionEntryCountArgs} args - Arguments to filter FGProductionEntries to count.
+     * @example
+     * // Count the number of FGProductionEntries
+     * const count = await prisma.fGProductionEntry.count({
+     *   where: {
+     *     // ... the filter for the FGProductionEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends FGProductionEntryCountArgs>(
+      args?: Subset<T, FGProductionEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FGProductionEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FGProductionEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FGProductionEntryAggregateArgs>(args: Subset<T, FGProductionEntryAggregateArgs>): Prisma.PrismaPromise<GetFGProductionEntryAggregateType<T>>
+
+    /**
+     * Group by FGProductionEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FGProductionEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FGProductionEntryGroupByArgs['orderBy'] }
+        : { orderBy?: FGProductionEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FGProductionEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFGProductionEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FGProductionEntry model
+   */
+  readonly fields: FGProductionEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FGProductionEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FGProductionEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    fgBatch<T extends FGBatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGBatchDefaultArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    machineEntries<T extends FGProductionEntry$machineEntriesArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntry$machineEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FGProductionEntry model
+   */
+  interface FGProductionEntryFieldRefs {
+    readonly id: FieldRef<"FGProductionEntry", 'String'>
+    readonly entryNumber: FieldRef<"FGProductionEntry", 'String'>
+    readonly fgBatchId: FieldRef<"FGProductionEntry", 'String'>
+    readonly bomId: FieldRef<"FGProductionEntry", 'String'>
+    readonly fgProductName: FieldRef<"FGProductionEntry", 'String'>
+    readonly targetQty: FieldRef<"FGProductionEntry", 'Float'>
+    readonly targetUnit: FieldRef<"FGProductionEntry", 'String'>
+    readonly packetSize: FieldRef<"FGProductionEntry", 'Float'>
+    readonly packetUnit: FieldRef<"FGProductionEntry", 'String'>
+    readonly totalPlannedPackets: FieldRef<"FGProductionEntry", 'Int'>
+    readonly totalActualFg: FieldRef<"FGProductionEntry", 'Float'>
+    readonly totalActualByproduct: FieldRef<"FGProductionEntry", 'Float'>
+    readonly totalActualScrap: FieldRef<"FGProductionEntry", 'Float'>
+    readonly totalActualPackets: FieldRef<"FGProductionEntry", 'Int'>
+    readonly status: FieldRef<"FGProductionEntry", 'String'>
+    readonly notes: FieldRef<"FGProductionEntry", 'String'>
+    readonly createdById: FieldRef<"FGProductionEntry", 'String'>
+    readonly createdAt: FieldRef<"FGProductionEntry", 'DateTime'>
+    readonly updatedAt: FieldRef<"FGProductionEntry", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FGProductionEntry findUnique
+   */
+  export type FGProductionEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionEntry to fetch.
+     */
+    where: FGProductionEntryWhereUniqueInput
+  }
+
+  /**
+   * FGProductionEntry findUniqueOrThrow
+   */
+  export type FGProductionEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionEntry to fetch.
+     */
+    where: FGProductionEntryWhereUniqueInput
+  }
+
+  /**
+   * FGProductionEntry findFirst
+   */
+  export type FGProductionEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionEntry to fetch.
+     */
+    where?: FGProductionEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionEntries to fetch.
+     */
+    orderBy?: FGProductionEntryOrderByWithRelationInput | FGProductionEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGProductionEntries.
+     */
+    cursor?: FGProductionEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGProductionEntries.
+     */
+    distinct?: FGProductionEntryScalarFieldEnum | FGProductionEntryScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionEntry findFirstOrThrow
+   */
+  export type FGProductionEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionEntry to fetch.
+     */
+    where?: FGProductionEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionEntries to fetch.
+     */
+    orderBy?: FGProductionEntryOrderByWithRelationInput | FGProductionEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGProductionEntries.
+     */
+    cursor?: FGProductionEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGProductionEntries.
+     */
+    distinct?: FGProductionEntryScalarFieldEnum | FGProductionEntryScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionEntry findMany
+   */
+  export type FGProductionEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionEntries to fetch.
+     */
+    where?: FGProductionEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionEntries to fetch.
+     */
+    orderBy?: FGProductionEntryOrderByWithRelationInput | FGProductionEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FGProductionEntries.
+     */
+    cursor?: FGProductionEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionEntries.
+     */
+    skip?: number
+    distinct?: FGProductionEntryScalarFieldEnum | FGProductionEntryScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionEntry create
+   */
+  export type FGProductionEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FGProductionEntry.
+     */
+    data: XOR<FGProductionEntryCreateInput, FGProductionEntryUncheckedCreateInput>
+  }
+
+  /**
+   * FGProductionEntry createMany
+   */
+  export type FGProductionEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FGProductionEntries.
+     */
+    data: FGProductionEntryCreateManyInput | FGProductionEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FGProductionEntry createManyAndReturn
+   */
+  export type FGProductionEntryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * The data used to create many FGProductionEntries.
+     */
+    data: FGProductionEntryCreateManyInput | FGProductionEntryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGProductionEntry update
+   */
+  export type FGProductionEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FGProductionEntry.
+     */
+    data: XOR<FGProductionEntryUpdateInput, FGProductionEntryUncheckedUpdateInput>
+    /**
+     * Choose, which FGProductionEntry to update.
+     */
+    where: FGProductionEntryWhereUniqueInput
+  }
+
+  /**
+   * FGProductionEntry updateMany
+   */
+  export type FGProductionEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FGProductionEntries.
+     */
+    data: XOR<FGProductionEntryUpdateManyMutationInput, FGProductionEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which FGProductionEntries to update
+     */
+    where?: FGProductionEntryWhereInput
+    /**
+     * Limit how many FGProductionEntries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGProductionEntry updateManyAndReturn
+   */
+  export type FGProductionEntryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * The data used to update FGProductionEntries.
+     */
+    data: XOR<FGProductionEntryUpdateManyMutationInput, FGProductionEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which FGProductionEntries to update
+     */
+    where?: FGProductionEntryWhereInput
+    /**
+     * Limit how many FGProductionEntries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGProductionEntry upsert
+   */
+  export type FGProductionEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FGProductionEntry to update in case it exists.
+     */
+    where: FGProductionEntryWhereUniqueInput
+    /**
+     * In case the FGProductionEntry found by the `where` argument doesn't exist, create a new FGProductionEntry with this data.
+     */
+    create: XOR<FGProductionEntryCreateInput, FGProductionEntryUncheckedCreateInput>
+    /**
+     * In case the FGProductionEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FGProductionEntryUpdateInput, FGProductionEntryUncheckedUpdateInput>
+  }
+
+  /**
+   * FGProductionEntry delete
+   */
+  export type FGProductionEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    /**
+     * Filter which FGProductionEntry to delete.
+     */
+    where: FGProductionEntryWhereUniqueInput
+  }
+
+  /**
+   * FGProductionEntry deleteMany
+   */
+  export type FGProductionEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGProductionEntries to delete
+     */
+    where?: FGProductionEntryWhereInput
+    /**
+     * Limit how many FGProductionEntries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGProductionEntry.machineEntries
+   */
+  export type FGProductionEntry$machineEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    where?: FGProductionMachineEntryWhereInput
+    orderBy?: FGProductionMachineEntryOrderByWithRelationInput | FGProductionMachineEntryOrderByWithRelationInput[]
+    cursor?: FGProductionMachineEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FGProductionMachineEntryScalarFieldEnum | FGProductionMachineEntryScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionEntry without action
+   */
+  export type FGProductionEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FGProductionMachineEntry
+   */
+
+  export type AggregateFGProductionMachineEntry = {
+    _count: FGProductionMachineEntryCountAggregateOutputType | null
+    _avg: FGProductionMachineEntryAvgAggregateOutputType | null
+    _sum: FGProductionMachineEntrySumAggregateOutputType | null
+    _min: FGProductionMachineEntryMinAggregateOutputType | null
+    _max: FGProductionMachineEntryMaxAggregateOutputType | null
+  }
+
+  export type FGProductionMachineEntryAvgAggregateOutputType = {
+    allocatedQty: number | null
+    plannedPackets: number | null
+    actualFgQty: number | null
+    actualByproduct: number | null
+    actualScrap: number | null
+    actualPackets: number | null
+  }
+
+  export type FGProductionMachineEntrySumAggregateOutputType = {
+    allocatedQty: number | null
+    plannedPackets: number | null
+    actualFgQty: number | null
+    actualByproduct: number | null
+    actualScrap: number | null
+    actualPackets: number | null
+  }
+
+  export type FGProductionMachineEntryMinAggregateOutputType = {
+    id: string | null
+    productionEntryId: string | null
+    machineId: string | null
+    machineName: string | null
+    allocatedQty: number | null
+    allocatedUnit: string | null
+    plannedPackets: number | null
+    actualFgQty: number | null
+    actualFgUnit: string | null
+    actualByproduct: number | null
+    actualByproductUnit: string | null
+    actualScrap: number | null
+    actualScrapUnit: string | null
+    actualPackets: number | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type FGProductionMachineEntryMaxAggregateOutputType = {
+    id: string | null
+    productionEntryId: string | null
+    machineId: string | null
+    machineName: string | null
+    allocatedQty: number | null
+    allocatedUnit: string | null
+    plannedPackets: number | null
+    actualFgQty: number | null
+    actualFgUnit: string | null
+    actualByproduct: number | null
+    actualByproductUnit: string | null
+    actualScrap: number | null
+    actualScrapUnit: string | null
+    actualPackets: number | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type FGProductionMachineEntryCountAggregateOutputType = {
+    id: number
+    productionEntryId: number
+    machineId: number
+    machineName: number
+    allocatedQty: number
+    allocatedUnit: number
+    plannedPackets: number
+    actualFgQty: number
+    actualFgUnit: number
+    actualByproduct: number
+    actualByproductUnit: number
+    actualScrap: number
+    actualScrapUnit: number
+    actualPackets: number
+    notes: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FGProductionMachineEntryAvgAggregateInputType = {
+    allocatedQty?: true
+    plannedPackets?: true
+    actualFgQty?: true
+    actualByproduct?: true
+    actualScrap?: true
+    actualPackets?: true
+  }
+
+  export type FGProductionMachineEntrySumAggregateInputType = {
+    allocatedQty?: true
+    plannedPackets?: true
+    actualFgQty?: true
+    actualByproduct?: true
+    actualScrap?: true
+    actualPackets?: true
+  }
+
+  export type FGProductionMachineEntryMinAggregateInputType = {
+    id?: true
+    productionEntryId?: true
+    machineId?: true
+    machineName?: true
+    allocatedQty?: true
+    allocatedUnit?: true
+    plannedPackets?: true
+    actualFgQty?: true
+    actualFgUnit?: true
+    actualByproduct?: true
+    actualByproductUnit?: true
+    actualScrap?: true
+    actualScrapUnit?: true
+    actualPackets?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type FGProductionMachineEntryMaxAggregateInputType = {
+    id?: true
+    productionEntryId?: true
+    machineId?: true
+    machineName?: true
+    allocatedQty?: true
+    allocatedUnit?: true
+    plannedPackets?: true
+    actualFgQty?: true
+    actualFgUnit?: true
+    actualByproduct?: true
+    actualByproductUnit?: true
+    actualScrap?: true
+    actualScrapUnit?: true
+    actualPackets?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type FGProductionMachineEntryCountAggregateInputType = {
+    id?: true
+    productionEntryId?: true
+    machineId?: true
+    machineName?: true
+    allocatedQty?: true
+    allocatedUnit?: true
+    plannedPackets?: true
+    actualFgQty?: true
+    actualFgUnit?: true
+    actualByproduct?: true
+    actualByproductUnit?: true
+    actualScrap?: true
+    actualScrapUnit?: true
+    actualPackets?: true
+    notes?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FGProductionMachineEntryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGProductionMachineEntry to aggregate.
+     */
+    where?: FGProductionMachineEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionMachineEntries to fetch.
+     */
+    orderBy?: FGProductionMachineEntryOrderByWithRelationInput | FGProductionMachineEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FGProductionMachineEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionMachineEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionMachineEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FGProductionMachineEntries
+    **/
+    _count?: true | FGProductionMachineEntryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FGProductionMachineEntryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FGProductionMachineEntrySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FGProductionMachineEntryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FGProductionMachineEntryMaxAggregateInputType
+  }
+
+  export type GetFGProductionMachineEntryAggregateType<T extends FGProductionMachineEntryAggregateArgs> = {
+        [P in keyof T & keyof AggregateFGProductionMachineEntry]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFGProductionMachineEntry[P]>
+      : GetScalarType<T[P], AggregateFGProductionMachineEntry[P]>
+  }
+
+
+
+
+  export type FGProductionMachineEntryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGProductionMachineEntryWhereInput
+    orderBy?: FGProductionMachineEntryOrderByWithAggregationInput | FGProductionMachineEntryOrderByWithAggregationInput[]
+    by: FGProductionMachineEntryScalarFieldEnum[] | FGProductionMachineEntryScalarFieldEnum
+    having?: FGProductionMachineEntryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FGProductionMachineEntryCountAggregateInputType | true
+    _avg?: FGProductionMachineEntryAvgAggregateInputType
+    _sum?: FGProductionMachineEntrySumAggregateInputType
+    _min?: FGProductionMachineEntryMinAggregateInputType
+    _max?: FGProductionMachineEntryMaxAggregateInputType
+  }
+
+  export type FGProductionMachineEntryGroupByOutputType = {
+    id: string
+    productionEntryId: string
+    machineId: string
+    machineName: string
+    allocatedQty: number
+    allocatedUnit: string
+    plannedPackets: number
+    actualFgQty: number
+    actualFgUnit: string
+    actualByproduct: number
+    actualByproductUnit: string
+    actualScrap: number
+    actualScrapUnit: string
+    actualPackets: number
+    notes: string | null
+    createdAt: Date
+    _count: FGProductionMachineEntryCountAggregateOutputType | null
+    _avg: FGProductionMachineEntryAvgAggregateOutputType | null
+    _sum: FGProductionMachineEntrySumAggregateOutputType | null
+    _min: FGProductionMachineEntryMinAggregateOutputType | null
+    _max: FGProductionMachineEntryMaxAggregateOutputType | null
+  }
+
+  type GetFGProductionMachineEntryGroupByPayload<T extends FGProductionMachineEntryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FGProductionMachineEntryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FGProductionMachineEntryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FGProductionMachineEntryGroupByOutputType[P]>
+            : GetScalarType<T[P], FGProductionMachineEntryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FGProductionMachineEntrySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productionEntryId?: boolean
+    machineId?: boolean
+    machineName?: boolean
+    allocatedQty?: boolean
+    allocatedUnit?: boolean
+    plannedPackets?: boolean
+    actualFgQty?: boolean
+    actualFgUnit?: boolean
+    actualByproduct?: boolean
+    actualByproductUnit?: boolean
+    actualScrap?: boolean
+    actualScrapUnit?: boolean
+    actualPackets?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    machine?: boolean | MachineDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGProductionMachineEntry"]>
+
+  export type FGProductionMachineEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productionEntryId?: boolean
+    machineId?: boolean
+    machineName?: boolean
+    allocatedQty?: boolean
+    allocatedUnit?: boolean
+    plannedPackets?: boolean
+    actualFgQty?: boolean
+    actualFgUnit?: boolean
+    actualByproduct?: boolean
+    actualByproductUnit?: boolean
+    actualScrap?: boolean
+    actualScrapUnit?: boolean
+    actualPackets?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    machine?: boolean | MachineDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGProductionMachineEntry"]>
+
+  export type FGProductionMachineEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    productionEntryId?: boolean
+    machineId?: boolean
+    machineName?: boolean
+    allocatedQty?: boolean
+    allocatedUnit?: boolean
+    plannedPackets?: boolean
+    actualFgQty?: boolean
+    actualFgUnit?: boolean
+    actualByproduct?: boolean
+    actualByproductUnit?: boolean
+    actualScrap?: boolean
+    actualScrapUnit?: boolean
+    actualPackets?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    machine?: boolean | MachineDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGProductionMachineEntry"]>
+
+  export type FGProductionMachineEntrySelectScalar = {
+    id?: boolean
+    productionEntryId?: boolean
+    machineId?: boolean
+    machineName?: boolean
+    allocatedQty?: boolean
+    allocatedUnit?: boolean
+    plannedPackets?: boolean
+    actualFgQty?: boolean
+    actualFgUnit?: boolean
+    actualByproduct?: boolean
+    actualByproductUnit?: boolean
+    actualScrap?: boolean
+    actualScrapUnit?: boolean
+    actualPackets?: boolean
+    notes?: boolean
+    createdAt?: boolean
+  }
+
+  export type FGProductionMachineEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productionEntryId" | "machineId" | "machineName" | "allocatedQty" | "allocatedUnit" | "plannedPackets" | "actualFgQty" | "actualFgUnit" | "actualByproduct" | "actualByproductUnit" | "actualScrap" | "actualScrapUnit" | "actualPackets" | "notes" | "createdAt", ExtArgs["result"]["fGProductionMachineEntry"]>
+  export type FGProductionMachineEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    machine?: boolean | MachineDefaultArgs<ExtArgs>
+  }
+  export type FGProductionMachineEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    machine?: boolean | MachineDefaultArgs<ExtArgs>
+  }
+  export type FGProductionMachineEntryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    machine?: boolean | MachineDefaultArgs<ExtArgs>
+  }
+
+  export type $FGProductionMachineEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FGProductionMachineEntry"
+    objects: {
+      productionEntry: Prisma.$FGProductionEntryPayload<ExtArgs>
+      machine: Prisma.$MachinePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      productionEntryId: string
+      machineId: string
+      machineName: string
+      allocatedQty: number
+      allocatedUnit: string
+      plannedPackets: number
+      actualFgQty: number
+      actualFgUnit: string
+      actualByproduct: number
+      actualByproductUnit: string
+      actualScrap: number
+      actualScrapUnit: string
+      actualPackets: number
+      notes: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["fGProductionMachineEntry"]>
+    composites: {}
+  }
+
+  type FGProductionMachineEntryGetPayload<S extends boolean | null | undefined | FGProductionMachineEntryDefaultArgs> = $Result.GetResult<Prisma.$FGProductionMachineEntryPayload, S>
+
+  type FGProductionMachineEntryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FGProductionMachineEntryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FGProductionMachineEntryCountAggregateInputType | true
+    }
+
+  export interface FGProductionMachineEntryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FGProductionMachineEntry'], meta: { name: 'FGProductionMachineEntry' } }
+    /**
+     * Find zero or one FGProductionMachineEntry that matches the filter.
+     * @param {FGProductionMachineEntryFindUniqueArgs} args - Arguments to find a FGProductionMachineEntry
+     * @example
+     * // Get one FGProductionMachineEntry
+     * const fGProductionMachineEntry = await prisma.fGProductionMachineEntry.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FGProductionMachineEntryFindUniqueArgs>(args: SelectSubset<T, FGProductionMachineEntryFindUniqueArgs<ExtArgs>>): Prisma__FGProductionMachineEntryClient<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FGProductionMachineEntry that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FGProductionMachineEntryFindUniqueOrThrowArgs} args - Arguments to find a FGProductionMachineEntry
+     * @example
+     * // Get one FGProductionMachineEntry
+     * const fGProductionMachineEntry = await prisma.fGProductionMachineEntry.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FGProductionMachineEntryFindUniqueOrThrowArgs>(args: SelectSubset<T, FGProductionMachineEntryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FGProductionMachineEntryClient<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGProductionMachineEntry that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionMachineEntryFindFirstArgs} args - Arguments to find a FGProductionMachineEntry
+     * @example
+     * // Get one FGProductionMachineEntry
+     * const fGProductionMachineEntry = await prisma.fGProductionMachineEntry.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FGProductionMachineEntryFindFirstArgs>(args?: SelectSubset<T, FGProductionMachineEntryFindFirstArgs<ExtArgs>>): Prisma__FGProductionMachineEntryClient<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGProductionMachineEntry that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionMachineEntryFindFirstOrThrowArgs} args - Arguments to find a FGProductionMachineEntry
+     * @example
+     * // Get one FGProductionMachineEntry
+     * const fGProductionMachineEntry = await prisma.fGProductionMachineEntry.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FGProductionMachineEntryFindFirstOrThrowArgs>(args?: SelectSubset<T, FGProductionMachineEntryFindFirstOrThrowArgs<ExtArgs>>): Prisma__FGProductionMachineEntryClient<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FGProductionMachineEntries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionMachineEntryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FGProductionMachineEntries
+     * const fGProductionMachineEntries = await prisma.fGProductionMachineEntry.findMany()
+     * 
+     * // Get first 10 FGProductionMachineEntries
+     * const fGProductionMachineEntries = await prisma.fGProductionMachineEntry.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fGProductionMachineEntryWithIdOnly = await prisma.fGProductionMachineEntry.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FGProductionMachineEntryFindManyArgs>(args?: SelectSubset<T, FGProductionMachineEntryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FGProductionMachineEntry.
+     * @param {FGProductionMachineEntryCreateArgs} args - Arguments to create a FGProductionMachineEntry.
+     * @example
+     * // Create one FGProductionMachineEntry
+     * const FGProductionMachineEntry = await prisma.fGProductionMachineEntry.create({
+     *   data: {
+     *     // ... data to create a FGProductionMachineEntry
+     *   }
+     * })
+     * 
+     */
+    create<T extends FGProductionMachineEntryCreateArgs>(args: SelectSubset<T, FGProductionMachineEntryCreateArgs<ExtArgs>>): Prisma__FGProductionMachineEntryClient<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FGProductionMachineEntries.
+     * @param {FGProductionMachineEntryCreateManyArgs} args - Arguments to create many FGProductionMachineEntries.
+     * @example
+     * // Create many FGProductionMachineEntries
+     * const fGProductionMachineEntry = await prisma.fGProductionMachineEntry.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FGProductionMachineEntryCreateManyArgs>(args?: SelectSubset<T, FGProductionMachineEntryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FGProductionMachineEntries and returns the data saved in the database.
+     * @param {FGProductionMachineEntryCreateManyAndReturnArgs} args - Arguments to create many FGProductionMachineEntries.
+     * @example
+     * // Create many FGProductionMachineEntries
+     * const fGProductionMachineEntry = await prisma.fGProductionMachineEntry.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FGProductionMachineEntries and only return the `id`
+     * const fGProductionMachineEntryWithIdOnly = await prisma.fGProductionMachineEntry.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FGProductionMachineEntryCreateManyAndReturnArgs>(args?: SelectSubset<T, FGProductionMachineEntryCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FGProductionMachineEntry.
+     * @param {FGProductionMachineEntryDeleteArgs} args - Arguments to delete one FGProductionMachineEntry.
+     * @example
+     * // Delete one FGProductionMachineEntry
+     * const FGProductionMachineEntry = await prisma.fGProductionMachineEntry.delete({
+     *   where: {
+     *     // ... filter to delete one FGProductionMachineEntry
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FGProductionMachineEntryDeleteArgs>(args: SelectSubset<T, FGProductionMachineEntryDeleteArgs<ExtArgs>>): Prisma__FGProductionMachineEntryClient<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FGProductionMachineEntry.
+     * @param {FGProductionMachineEntryUpdateArgs} args - Arguments to update one FGProductionMachineEntry.
+     * @example
+     * // Update one FGProductionMachineEntry
+     * const fGProductionMachineEntry = await prisma.fGProductionMachineEntry.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FGProductionMachineEntryUpdateArgs>(args: SelectSubset<T, FGProductionMachineEntryUpdateArgs<ExtArgs>>): Prisma__FGProductionMachineEntryClient<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FGProductionMachineEntries.
+     * @param {FGProductionMachineEntryDeleteManyArgs} args - Arguments to filter FGProductionMachineEntries to delete.
+     * @example
+     * // Delete a few FGProductionMachineEntries
+     * const { count } = await prisma.fGProductionMachineEntry.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FGProductionMachineEntryDeleteManyArgs>(args?: SelectSubset<T, FGProductionMachineEntryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGProductionMachineEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionMachineEntryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FGProductionMachineEntries
+     * const fGProductionMachineEntry = await prisma.fGProductionMachineEntry.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FGProductionMachineEntryUpdateManyArgs>(args: SelectSubset<T, FGProductionMachineEntryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGProductionMachineEntries and returns the data updated in the database.
+     * @param {FGProductionMachineEntryUpdateManyAndReturnArgs} args - Arguments to update many FGProductionMachineEntries.
+     * @example
+     * // Update many FGProductionMachineEntries
+     * const fGProductionMachineEntry = await prisma.fGProductionMachineEntry.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FGProductionMachineEntries and only return the `id`
+     * const fGProductionMachineEntryWithIdOnly = await prisma.fGProductionMachineEntry.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FGProductionMachineEntryUpdateManyAndReturnArgs>(args: SelectSubset<T, FGProductionMachineEntryUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FGProductionMachineEntry.
+     * @param {FGProductionMachineEntryUpsertArgs} args - Arguments to update or create a FGProductionMachineEntry.
+     * @example
+     * // Update or create a FGProductionMachineEntry
+     * const fGProductionMachineEntry = await prisma.fGProductionMachineEntry.upsert({
+     *   create: {
+     *     // ... data to create a FGProductionMachineEntry
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FGProductionMachineEntry we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FGProductionMachineEntryUpsertArgs>(args: SelectSubset<T, FGProductionMachineEntryUpsertArgs<ExtArgs>>): Prisma__FGProductionMachineEntryClient<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FGProductionMachineEntries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionMachineEntryCountArgs} args - Arguments to filter FGProductionMachineEntries to count.
+     * @example
+     * // Count the number of FGProductionMachineEntries
+     * const count = await prisma.fGProductionMachineEntry.count({
+     *   where: {
+     *     // ... the filter for the FGProductionMachineEntries we want to count
+     *   }
+     * })
+    **/
+    count<T extends FGProductionMachineEntryCountArgs>(
+      args?: Subset<T, FGProductionMachineEntryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FGProductionMachineEntryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FGProductionMachineEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionMachineEntryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FGProductionMachineEntryAggregateArgs>(args: Subset<T, FGProductionMachineEntryAggregateArgs>): Prisma.PrismaPromise<GetFGProductionMachineEntryAggregateType<T>>
+
+    /**
+     * Group by FGProductionMachineEntry.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionMachineEntryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FGProductionMachineEntryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FGProductionMachineEntryGroupByArgs['orderBy'] }
+        : { orderBy?: FGProductionMachineEntryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FGProductionMachineEntryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFGProductionMachineEntryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FGProductionMachineEntry model
+   */
+  readonly fields: FGProductionMachineEntryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FGProductionMachineEntry.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FGProductionMachineEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    productionEntry<T extends FGProductionEntryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntryDefaultArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    machine<T extends MachineDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MachineDefaultArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FGProductionMachineEntry model
+   */
+  interface FGProductionMachineEntryFieldRefs {
+    readonly id: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly productionEntryId: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly machineId: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly machineName: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly allocatedQty: FieldRef<"FGProductionMachineEntry", 'Float'>
+    readonly allocatedUnit: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly plannedPackets: FieldRef<"FGProductionMachineEntry", 'Int'>
+    readonly actualFgQty: FieldRef<"FGProductionMachineEntry", 'Float'>
+    readonly actualFgUnit: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly actualByproduct: FieldRef<"FGProductionMachineEntry", 'Float'>
+    readonly actualByproductUnit: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly actualScrap: FieldRef<"FGProductionMachineEntry", 'Float'>
+    readonly actualScrapUnit: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly actualPackets: FieldRef<"FGProductionMachineEntry", 'Int'>
+    readonly notes: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly createdAt: FieldRef<"FGProductionMachineEntry", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FGProductionMachineEntry findUnique
+   */
+  export type FGProductionMachineEntryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionMachineEntry to fetch.
+     */
+    where: FGProductionMachineEntryWhereUniqueInput
+  }
+
+  /**
+   * FGProductionMachineEntry findUniqueOrThrow
+   */
+  export type FGProductionMachineEntryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionMachineEntry to fetch.
+     */
+    where: FGProductionMachineEntryWhereUniqueInput
+  }
+
+  /**
+   * FGProductionMachineEntry findFirst
+   */
+  export type FGProductionMachineEntryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionMachineEntry to fetch.
+     */
+    where?: FGProductionMachineEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionMachineEntries to fetch.
+     */
+    orderBy?: FGProductionMachineEntryOrderByWithRelationInput | FGProductionMachineEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGProductionMachineEntries.
+     */
+    cursor?: FGProductionMachineEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionMachineEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionMachineEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGProductionMachineEntries.
+     */
+    distinct?: FGProductionMachineEntryScalarFieldEnum | FGProductionMachineEntryScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionMachineEntry findFirstOrThrow
+   */
+  export type FGProductionMachineEntryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionMachineEntry to fetch.
+     */
+    where?: FGProductionMachineEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionMachineEntries to fetch.
+     */
+    orderBy?: FGProductionMachineEntryOrderByWithRelationInput | FGProductionMachineEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGProductionMachineEntries.
+     */
+    cursor?: FGProductionMachineEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionMachineEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionMachineEntries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGProductionMachineEntries.
+     */
+    distinct?: FGProductionMachineEntryScalarFieldEnum | FGProductionMachineEntryScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionMachineEntry findMany
+   */
+  export type FGProductionMachineEntryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionMachineEntries to fetch.
+     */
+    where?: FGProductionMachineEntryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionMachineEntries to fetch.
+     */
+    orderBy?: FGProductionMachineEntryOrderByWithRelationInput | FGProductionMachineEntryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FGProductionMachineEntries.
+     */
+    cursor?: FGProductionMachineEntryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionMachineEntries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionMachineEntries.
+     */
+    skip?: number
+    distinct?: FGProductionMachineEntryScalarFieldEnum | FGProductionMachineEntryScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionMachineEntry create
+   */
+  export type FGProductionMachineEntryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FGProductionMachineEntry.
+     */
+    data: XOR<FGProductionMachineEntryCreateInput, FGProductionMachineEntryUncheckedCreateInput>
+  }
+
+  /**
+   * FGProductionMachineEntry createMany
+   */
+  export type FGProductionMachineEntryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FGProductionMachineEntries.
+     */
+    data: FGProductionMachineEntryCreateManyInput | FGProductionMachineEntryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FGProductionMachineEntry createManyAndReturn
+   */
+  export type FGProductionMachineEntryCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * The data used to create many FGProductionMachineEntries.
+     */
+    data: FGProductionMachineEntryCreateManyInput | FGProductionMachineEntryCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGProductionMachineEntry update
+   */
+  export type FGProductionMachineEntryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FGProductionMachineEntry.
+     */
+    data: XOR<FGProductionMachineEntryUpdateInput, FGProductionMachineEntryUncheckedUpdateInput>
+    /**
+     * Choose, which FGProductionMachineEntry to update.
+     */
+    where: FGProductionMachineEntryWhereUniqueInput
+  }
+
+  /**
+   * FGProductionMachineEntry updateMany
+   */
+  export type FGProductionMachineEntryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FGProductionMachineEntries.
+     */
+    data: XOR<FGProductionMachineEntryUpdateManyMutationInput, FGProductionMachineEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which FGProductionMachineEntries to update
+     */
+    where?: FGProductionMachineEntryWhereInput
+    /**
+     * Limit how many FGProductionMachineEntries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGProductionMachineEntry updateManyAndReturn
+   */
+  export type FGProductionMachineEntryUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * The data used to update FGProductionMachineEntries.
+     */
+    data: XOR<FGProductionMachineEntryUpdateManyMutationInput, FGProductionMachineEntryUncheckedUpdateManyInput>
+    /**
+     * Filter which FGProductionMachineEntries to update
+     */
+    where?: FGProductionMachineEntryWhereInput
+    /**
+     * Limit how many FGProductionMachineEntries to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGProductionMachineEntry upsert
+   */
+  export type FGProductionMachineEntryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FGProductionMachineEntry to update in case it exists.
+     */
+    where: FGProductionMachineEntryWhereUniqueInput
+    /**
+     * In case the FGProductionMachineEntry found by the `where` argument doesn't exist, create a new FGProductionMachineEntry with this data.
+     */
+    create: XOR<FGProductionMachineEntryCreateInput, FGProductionMachineEntryUncheckedCreateInput>
+    /**
+     * In case the FGProductionMachineEntry was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FGProductionMachineEntryUpdateInput, FGProductionMachineEntryUncheckedUpdateInput>
+  }
+
+  /**
+   * FGProductionMachineEntry delete
+   */
+  export type FGProductionMachineEntryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    /**
+     * Filter which FGProductionMachineEntry to delete.
+     */
+    where: FGProductionMachineEntryWhereUniqueInput
+  }
+
+  /**
+   * FGProductionMachineEntry deleteMany
+   */
+  export type FGProductionMachineEntryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGProductionMachineEntries to delete
+     */
+    where?: FGProductionMachineEntryWhereInput
+    /**
+     * Limit how many FGProductionMachineEntries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGProductionMachineEntry without action
+   */
+  export type FGProductionMachineEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Machine
+   */
+
+  export type AggregateMachine = {
+    _count: MachineCountAggregateOutputType | null
+    _avg: MachineAvgAggregateOutputType | null
+    _sum: MachineSumAggregateOutputType | null
+    _min: MachineMinAggregateOutputType | null
+    _max: MachineMaxAggregateOutputType | null
+  }
+
+  export type MachineAvgAggregateOutputType = {
+    capacityQty: number | null
+  }
+
+  export type MachineSumAggregateOutputType = {
+    capacityQty: number | null
+  }
+
+  export type MachineMinAggregateOutputType = {
+    id: string | null
+    machineId: string | null
+    name: string | null
+    location: string | null
+    capacityQty: number | null
+    capacityUnit: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MachineMaxAggregateOutputType = {
+    id: string | null
+    machineId: string | null
+    name: string | null
+    location: string | null
+    capacityQty: number | null
+    capacityUnit: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MachineCountAggregateOutputType = {
+    id: number
+    machineId: number
+    name: number
+    location: number
+    capacityQty: number
+    capacityUnit: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type MachineAvgAggregateInputType = {
+    capacityQty?: true
+  }
+
+  export type MachineSumAggregateInputType = {
+    capacityQty?: true
+  }
+
+  export type MachineMinAggregateInputType = {
+    id?: true
+    machineId?: true
+    name?: true
+    location?: true
+    capacityQty?: true
+    capacityUnit?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MachineMaxAggregateInputType = {
+    id?: true
+    machineId?: true
+    name?: true
+    location?: true
+    capacityQty?: true
+    capacityUnit?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MachineCountAggregateInputType = {
+    id?: true
+    machineId?: true
+    name?: true
+    location?: true
+    capacityQty?: true
+    capacityUnit?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MachineAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Machine to aggregate.
+     */
+    where?: MachineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Machines to fetch.
+     */
+    orderBy?: MachineOrderByWithRelationInput | MachineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: MachineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Machines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Machines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Machines
+    **/
+    _count?: true | MachineCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: MachineAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: MachineSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MachineMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MachineMaxAggregateInputType
+  }
+
+  export type GetMachineAggregateType<T extends MachineAggregateArgs> = {
+        [P in keyof T & keyof AggregateMachine]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMachine[P]>
+      : GetScalarType<T[P], AggregateMachine[P]>
+  }
+
+
+
+
+  export type MachineGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MachineWhereInput
+    orderBy?: MachineOrderByWithAggregationInput | MachineOrderByWithAggregationInput[]
+    by: MachineScalarFieldEnum[] | MachineScalarFieldEnum
+    having?: MachineScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MachineCountAggregateInputType | true
+    _avg?: MachineAvgAggregateInputType
+    _sum?: MachineSumAggregateInputType
+    _min?: MachineMinAggregateInputType
+    _max?: MachineMaxAggregateInputType
+  }
+
+  export type MachineGroupByOutputType = {
+    id: string
+    machineId: string
+    name: string
+    location: string
+    capacityQty: number
+    capacityUnit: string
+    createdAt: Date
+    updatedAt: Date
+    _count: MachineCountAggregateOutputType | null
+    _avg: MachineAvgAggregateOutputType | null
+    _sum: MachineSumAggregateOutputType | null
+    _min: MachineMinAggregateOutputType | null
+    _max: MachineMaxAggregateOutputType | null
+  }
+
+  type GetMachineGroupByPayload<T extends MachineGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MachineGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MachineGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MachineGroupByOutputType[P]>
+            : GetScalarType<T[P], MachineGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type MachineSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    machineId?: boolean
+    name?: boolean
+    location?: boolean
+    capacityQty?: boolean
+    capacityUnit?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    productionMachineEntries?: boolean | Machine$productionMachineEntriesArgs<ExtArgs>
+    _count?: boolean | MachineCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["machine"]>
+
+  export type MachineSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    machineId?: boolean
+    name?: boolean
+    location?: boolean
+    capacityQty?: boolean
+    capacityUnit?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["machine"]>
+
+  export type MachineSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    machineId?: boolean
+    name?: boolean
+    location?: boolean
+    capacityQty?: boolean
+    capacityUnit?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["machine"]>
+
+  export type MachineSelectScalar = {
+    id?: boolean
+    machineId?: boolean
+    name?: boolean
+    location?: boolean
+    capacityQty?: boolean
+    capacityUnit?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MachineOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "machineId" | "name" | "location" | "capacityQty" | "capacityUnit" | "createdAt" | "updatedAt", ExtArgs["result"]["machine"]>
+  export type MachineInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productionMachineEntries?: boolean | Machine$productionMachineEntriesArgs<ExtArgs>
+    _count?: boolean | MachineCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MachineIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type MachineIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $MachinePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Machine"
+    objects: {
+      productionMachineEntries: Prisma.$FGProductionMachineEntryPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      machineId: string
+      name: string
+      location: string
+      capacityQty: number
+      capacityUnit: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["machine"]>
+    composites: {}
+  }
+
+  type MachineGetPayload<S extends boolean | null | undefined | MachineDefaultArgs> = $Result.GetResult<Prisma.$MachinePayload, S>
+
+  type MachineCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MachineFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MachineCountAggregateInputType | true
+    }
+
+  export interface MachineDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Machine'], meta: { name: 'Machine' } }
+    /**
+     * Find zero or one Machine that matches the filter.
+     * @param {MachineFindUniqueArgs} args - Arguments to find a Machine
+     * @example
+     * // Get one Machine
+     * const machine = await prisma.machine.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MachineFindUniqueArgs>(args: SelectSubset<T, MachineFindUniqueArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Machine that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MachineFindUniqueOrThrowArgs} args - Arguments to find a Machine
+     * @example
+     * // Get one Machine
+     * const machine = await prisma.machine.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MachineFindUniqueOrThrowArgs>(args: SelectSubset<T, MachineFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Machine that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MachineFindFirstArgs} args - Arguments to find a Machine
+     * @example
+     * // Get one Machine
+     * const machine = await prisma.machine.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MachineFindFirstArgs>(args?: SelectSubset<T, MachineFindFirstArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Machine that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MachineFindFirstOrThrowArgs} args - Arguments to find a Machine
+     * @example
+     * // Get one Machine
+     * const machine = await prisma.machine.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MachineFindFirstOrThrowArgs>(args?: SelectSubset<T, MachineFindFirstOrThrowArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Machines that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MachineFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Machines
+     * const machines = await prisma.machine.findMany()
+     * 
+     * // Get first 10 Machines
+     * const machines = await prisma.machine.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const machineWithIdOnly = await prisma.machine.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends MachineFindManyArgs>(args?: SelectSubset<T, MachineFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Machine.
+     * @param {MachineCreateArgs} args - Arguments to create a Machine.
+     * @example
+     * // Create one Machine
+     * const Machine = await prisma.machine.create({
+     *   data: {
+     *     // ... data to create a Machine
+     *   }
+     * })
+     * 
+     */
+    create<T extends MachineCreateArgs>(args: SelectSubset<T, MachineCreateArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Machines.
+     * @param {MachineCreateManyArgs} args - Arguments to create many Machines.
+     * @example
+     * // Create many Machines
+     * const machine = await prisma.machine.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends MachineCreateManyArgs>(args?: SelectSubset<T, MachineCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Machines and returns the data saved in the database.
+     * @param {MachineCreateManyAndReturnArgs} args - Arguments to create many Machines.
+     * @example
+     * // Create many Machines
+     * const machine = await prisma.machine.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Machines and only return the `id`
+     * const machineWithIdOnly = await prisma.machine.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends MachineCreateManyAndReturnArgs>(args?: SelectSubset<T, MachineCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Machine.
+     * @param {MachineDeleteArgs} args - Arguments to delete one Machine.
+     * @example
+     * // Delete one Machine
+     * const Machine = await prisma.machine.delete({
+     *   where: {
+     *     // ... filter to delete one Machine
+     *   }
+     * })
+     * 
+     */
+    delete<T extends MachineDeleteArgs>(args: SelectSubset<T, MachineDeleteArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Machine.
+     * @param {MachineUpdateArgs} args - Arguments to update one Machine.
+     * @example
+     * // Update one Machine
+     * const machine = await prisma.machine.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends MachineUpdateArgs>(args: SelectSubset<T, MachineUpdateArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Machines.
+     * @param {MachineDeleteManyArgs} args - Arguments to filter Machines to delete.
+     * @example
+     * // Delete a few Machines
+     * const { count } = await prisma.machine.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends MachineDeleteManyArgs>(args?: SelectSubset<T, MachineDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Machines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MachineUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Machines
+     * const machine = await prisma.machine.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends MachineUpdateManyArgs>(args: SelectSubset<T, MachineUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Machines and returns the data updated in the database.
+     * @param {MachineUpdateManyAndReturnArgs} args - Arguments to update many Machines.
+     * @example
+     * // Update many Machines
+     * const machine = await prisma.machine.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Machines and only return the `id`
+     * const machineWithIdOnly = await prisma.machine.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends MachineUpdateManyAndReturnArgs>(args: SelectSubset<T, MachineUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Machine.
+     * @param {MachineUpsertArgs} args - Arguments to update or create a Machine.
+     * @example
+     * // Update or create a Machine
+     * const machine = await prisma.machine.upsert({
+     *   create: {
+     *     // ... data to create a Machine
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Machine we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MachineUpsertArgs>(args: SelectSubset<T, MachineUpsertArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Machines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MachineCountArgs} args - Arguments to filter Machines to count.
+     * @example
+     * // Count the number of Machines
+     * const count = await prisma.machine.count({
+     *   where: {
+     *     // ... the filter for the Machines we want to count
+     *   }
+     * })
+    **/
+    count<T extends MachineCountArgs>(
+      args?: Subset<T, MachineCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MachineCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Machine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MachineAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MachineAggregateArgs>(args: Subset<T, MachineAggregateArgs>): Prisma.PrismaPromise<GetMachineAggregateType<T>>
+
+    /**
+     * Group by Machine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MachineGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends MachineGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MachineGroupByArgs['orderBy'] }
+        : { orderBy?: MachineGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, MachineGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMachineGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Machine model
+   */
+  readonly fields: MachineFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Machine.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MachineClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    productionMachineEntries<T extends Machine$productionMachineEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Machine$productionMachineEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Machine model
+   */
+  interface MachineFieldRefs {
+    readonly id: FieldRef<"Machine", 'String'>
+    readonly machineId: FieldRef<"Machine", 'String'>
+    readonly name: FieldRef<"Machine", 'String'>
+    readonly location: FieldRef<"Machine", 'String'>
+    readonly capacityQty: FieldRef<"Machine", 'Float'>
+    readonly capacityUnit: FieldRef<"Machine", 'String'>
+    readonly createdAt: FieldRef<"Machine", 'DateTime'>
+    readonly updatedAt: FieldRef<"Machine", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Machine findUnique
+   */
+  export type MachineFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
+    /**
+     * Filter, which Machine to fetch.
+     */
+    where: MachineWhereUniqueInput
+  }
+
+  /**
+   * Machine findUniqueOrThrow
+   */
+  export type MachineFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
+    /**
+     * Filter, which Machine to fetch.
+     */
+    where: MachineWhereUniqueInput
+  }
+
+  /**
+   * Machine findFirst
+   */
+  export type MachineFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
+    /**
+     * Filter, which Machine to fetch.
+     */
+    where?: MachineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Machines to fetch.
+     */
+    orderBy?: MachineOrderByWithRelationInput | MachineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Machines.
+     */
+    cursor?: MachineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Machines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Machines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Machines.
+     */
+    distinct?: MachineScalarFieldEnum | MachineScalarFieldEnum[]
+  }
+
+  /**
+   * Machine findFirstOrThrow
+   */
+  export type MachineFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
+    /**
+     * Filter, which Machine to fetch.
+     */
+    where?: MachineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Machines to fetch.
+     */
+    orderBy?: MachineOrderByWithRelationInput | MachineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Machines.
+     */
+    cursor?: MachineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Machines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Machines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Machines.
+     */
+    distinct?: MachineScalarFieldEnum | MachineScalarFieldEnum[]
+  }
+
+  /**
+   * Machine findMany
+   */
+  export type MachineFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
+    /**
+     * Filter, which Machines to fetch.
+     */
+    where?: MachineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Machines to fetch.
+     */
+    orderBy?: MachineOrderByWithRelationInput | MachineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Machines.
+     */
+    cursor?: MachineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Machines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Machines.
+     */
+    skip?: number
+    distinct?: MachineScalarFieldEnum | MachineScalarFieldEnum[]
+  }
+
+  /**
+   * Machine create
+   */
+  export type MachineCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Machine.
+     */
+    data: XOR<MachineCreateInput, MachineUncheckedCreateInput>
+  }
+
+  /**
+   * Machine createMany
+   */
+  export type MachineCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Machines.
+     */
+    data: MachineCreateManyInput | MachineCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Machine createManyAndReturn
+   */
+  export type MachineCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * The data used to create many Machines.
+     */
+    data: MachineCreateManyInput | MachineCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Machine update
+   */
+  export type MachineUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Machine.
+     */
+    data: XOR<MachineUpdateInput, MachineUncheckedUpdateInput>
+    /**
+     * Choose, which Machine to update.
+     */
+    where: MachineWhereUniqueInput
+  }
+
+  /**
+   * Machine updateMany
+   */
+  export type MachineUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Machines.
+     */
+    data: XOR<MachineUpdateManyMutationInput, MachineUncheckedUpdateManyInput>
+    /**
+     * Filter which Machines to update
+     */
+    where?: MachineWhereInput
+    /**
+     * Limit how many Machines to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Machine updateManyAndReturn
+   */
+  export type MachineUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * The data used to update Machines.
+     */
+    data: XOR<MachineUpdateManyMutationInput, MachineUncheckedUpdateManyInput>
+    /**
+     * Filter which Machines to update
+     */
+    where?: MachineWhereInput
+    /**
+     * Limit how many Machines to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Machine upsert
+   */
+  export type MachineUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Machine to update in case it exists.
+     */
+    where: MachineWhereUniqueInput
+    /**
+     * In case the Machine found by the `where` argument doesn't exist, create a new Machine with this data.
+     */
+    create: XOR<MachineCreateInput, MachineUncheckedCreateInput>
+    /**
+     * In case the Machine was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<MachineUpdateInput, MachineUncheckedUpdateInput>
+  }
+
+  /**
+   * Machine delete
+   */
+  export type MachineDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
+    /**
+     * Filter which Machine to delete.
+     */
+    where: MachineWhereUniqueInput
+  }
+
+  /**
+   * Machine deleteMany
+   */
+  export type MachineDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Machines to delete
+     */
+    where?: MachineWhereInput
+    /**
+     * Limit how many Machines to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Machine.productionMachineEntries
+   */
+  export type Machine$productionMachineEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntry
+     */
+    select?: FGProductionMachineEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionMachineEntry
+     */
+    omit?: FGProductionMachineEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionMachineEntryInclude<ExtArgs> | null
+    where?: FGProductionMachineEntryWhereInput
+    orderBy?: FGProductionMachineEntryOrderByWithRelationInput | FGProductionMachineEntryOrderByWithRelationInput[]
+    cursor?: FGProductionMachineEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FGProductionMachineEntryScalarFieldEnum | FGProductionMachineEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Machine without action
+   */
+  export type MachineDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
   }
 
 
@@ -103472,6 +107578,67 @@ export namespace Prisma {
   };
 
   export type FGBatchConsumptionScalarFieldEnum = (typeof FGBatchConsumptionScalarFieldEnum)[keyof typeof FGBatchConsumptionScalarFieldEnum]
+
+
+  export const FGProductionEntryScalarFieldEnum: {
+    id: 'id',
+    entryNumber: 'entryNumber',
+    fgBatchId: 'fgBatchId',
+    bomId: 'bomId',
+    fgProductName: 'fgProductName',
+    targetQty: 'targetQty',
+    targetUnit: 'targetUnit',
+    packetSize: 'packetSize',
+    packetUnit: 'packetUnit',
+    totalPlannedPackets: 'totalPlannedPackets',
+    totalActualFg: 'totalActualFg',
+    totalActualByproduct: 'totalActualByproduct',
+    totalActualScrap: 'totalActualScrap',
+    totalActualPackets: 'totalActualPackets',
+    status: 'status',
+    notes: 'notes',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FGProductionEntryScalarFieldEnum = (typeof FGProductionEntryScalarFieldEnum)[keyof typeof FGProductionEntryScalarFieldEnum]
+
+
+  export const FGProductionMachineEntryScalarFieldEnum: {
+    id: 'id',
+    productionEntryId: 'productionEntryId',
+    machineId: 'machineId',
+    machineName: 'machineName',
+    allocatedQty: 'allocatedQty',
+    allocatedUnit: 'allocatedUnit',
+    plannedPackets: 'plannedPackets',
+    actualFgQty: 'actualFgQty',
+    actualFgUnit: 'actualFgUnit',
+    actualByproduct: 'actualByproduct',
+    actualByproductUnit: 'actualByproductUnit',
+    actualScrap: 'actualScrap',
+    actualScrapUnit: 'actualScrapUnit',
+    actualPackets: 'actualPackets',
+    notes: 'notes',
+    createdAt: 'createdAt'
+  };
+
+  export type FGProductionMachineEntryScalarFieldEnum = (typeof FGProductionMachineEntryScalarFieldEnum)[keyof typeof FGProductionMachineEntryScalarFieldEnum]
+
+
+  export const MachineScalarFieldEnum: {
+    id: 'id',
+    machineId: 'machineId',
+    name: 'name',
+    location: 'location',
+    capacityQty: 'capacityQty',
+    capacityUnit: 'capacityUnit',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type MachineScalarFieldEnum = (typeof MachineScalarFieldEnum)[keyof typeof MachineScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -110450,6 +114617,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"FGBatch"> | Date | string
     updatedAt?: DateTimeFilter<"FGBatch"> | Date | string
     consumptions?: FGBatchConsumptionListRelationFilter
+    productionEntries?: FGProductionEntryListRelationFilter
   }
 
   export type FGBatchOrderByWithRelationInput = {
@@ -110468,6 +114636,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     consumptions?: FGBatchConsumptionOrderByRelationAggregateInput
+    productionEntries?: FGProductionEntryOrderByRelationAggregateInput
   }
 
   export type FGBatchWhereUniqueInput = Prisma.AtLeast<{
@@ -110489,6 +114658,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"FGBatch"> | Date | string
     updatedAt?: DateTimeFilter<"FGBatch"> | Date | string
     consumptions?: FGBatchConsumptionListRelationFilter
+    productionEntries?: FGProductionEntryListRelationFilter
   }, "id" | "batchNumber">
 
   export type FGBatchOrderByWithAggregationInput = {
@@ -110618,6 +114788,323 @@ export namespace Prisma {
     batchNumber?: StringNullableWithAggregatesFilter<"FGBatchConsumption"> | string | null
     dispatchId?: StringNullableWithAggregatesFilter<"FGBatchConsumption"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"FGBatchConsumption"> | Date | string
+  }
+
+  export type FGProductionEntryWhereInput = {
+    AND?: FGProductionEntryWhereInput | FGProductionEntryWhereInput[]
+    OR?: FGProductionEntryWhereInput[]
+    NOT?: FGProductionEntryWhereInput | FGProductionEntryWhereInput[]
+    id?: StringFilter<"FGProductionEntry"> | string
+    entryNumber?: StringFilter<"FGProductionEntry"> | string
+    fgBatchId?: StringFilter<"FGProductionEntry"> | string
+    bomId?: StringFilter<"FGProductionEntry"> | string
+    fgProductName?: StringFilter<"FGProductionEntry"> | string
+    targetQty?: FloatFilter<"FGProductionEntry"> | number
+    targetUnit?: StringFilter<"FGProductionEntry"> | string
+    packetSize?: FloatNullableFilter<"FGProductionEntry"> | number | null
+    packetUnit?: StringNullableFilter<"FGProductionEntry"> | string | null
+    totalPlannedPackets?: IntFilter<"FGProductionEntry"> | number
+    totalActualFg?: FloatFilter<"FGProductionEntry"> | number
+    totalActualByproduct?: FloatFilter<"FGProductionEntry"> | number
+    totalActualScrap?: FloatFilter<"FGProductionEntry"> | number
+    totalActualPackets?: IntFilter<"FGProductionEntry"> | number
+    status?: StringFilter<"FGProductionEntry"> | string
+    notes?: StringNullableFilter<"FGProductionEntry"> | string | null
+    createdById?: StringFilter<"FGProductionEntry"> | string
+    createdAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
+    fgBatch?: XOR<FGBatchScalarRelationFilter, FGBatchWhereInput>
+    machineEntries?: FGProductionMachineEntryListRelationFilter
+  }
+
+  export type FGProductionEntryOrderByWithRelationInput = {
+    id?: SortOrder
+    entryNumber?: SortOrder
+    fgBatchId?: SortOrder
+    bomId?: SortOrder
+    fgProductName?: SortOrder
+    targetQty?: SortOrder
+    targetUnit?: SortOrder
+    packetSize?: SortOrderInput | SortOrder
+    packetUnit?: SortOrderInput | SortOrder
+    totalPlannedPackets?: SortOrder
+    totalActualFg?: SortOrder
+    totalActualByproduct?: SortOrder
+    totalActualScrap?: SortOrder
+    totalActualPackets?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    fgBatch?: FGBatchOrderByWithRelationInput
+    machineEntries?: FGProductionMachineEntryOrderByRelationAggregateInput
+  }
+
+  export type FGProductionEntryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    entryNumber?: string
+    AND?: FGProductionEntryWhereInput | FGProductionEntryWhereInput[]
+    OR?: FGProductionEntryWhereInput[]
+    NOT?: FGProductionEntryWhereInput | FGProductionEntryWhereInput[]
+    fgBatchId?: StringFilter<"FGProductionEntry"> | string
+    bomId?: StringFilter<"FGProductionEntry"> | string
+    fgProductName?: StringFilter<"FGProductionEntry"> | string
+    targetQty?: FloatFilter<"FGProductionEntry"> | number
+    targetUnit?: StringFilter<"FGProductionEntry"> | string
+    packetSize?: FloatNullableFilter<"FGProductionEntry"> | number | null
+    packetUnit?: StringNullableFilter<"FGProductionEntry"> | string | null
+    totalPlannedPackets?: IntFilter<"FGProductionEntry"> | number
+    totalActualFg?: FloatFilter<"FGProductionEntry"> | number
+    totalActualByproduct?: FloatFilter<"FGProductionEntry"> | number
+    totalActualScrap?: FloatFilter<"FGProductionEntry"> | number
+    totalActualPackets?: IntFilter<"FGProductionEntry"> | number
+    status?: StringFilter<"FGProductionEntry"> | string
+    notes?: StringNullableFilter<"FGProductionEntry"> | string | null
+    createdById?: StringFilter<"FGProductionEntry"> | string
+    createdAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
+    fgBatch?: XOR<FGBatchScalarRelationFilter, FGBatchWhereInput>
+    machineEntries?: FGProductionMachineEntryListRelationFilter
+  }, "id" | "entryNumber">
+
+  export type FGProductionEntryOrderByWithAggregationInput = {
+    id?: SortOrder
+    entryNumber?: SortOrder
+    fgBatchId?: SortOrder
+    bomId?: SortOrder
+    fgProductName?: SortOrder
+    targetQty?: SortOrder
+    targetUnit?: SortOrder
+    packetSize?: SortOrderInput | SortOrder
+    packetUnit?: SortOrderInput | SortOrder
+    totalPlannedPackets?: SortOrder
+    totalActualFg?: SortOrder
+    totalActualByproduct?: SortOrder
+    totalActualScrap?: SortOrder
+    totalActualPackets?: SortOrder
+    status?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FGProductionEntryCountOrderByAggregateInput
+    _avg?: FGProductionEntryAvgOrderByAggregateInput
+    _max?: FGProductionEntryMaxOrderByAggregateInput
+    _min?: FGProductionEntryMinOrderByAggregateInput
+    _sum?: FGProductionEntrySumOrderByAggregateInput
+  }
+
+  export type FGProductionEntryScalarWhereWithAggregatesInput = {
+    AND?: FGProductionEntryScalarWhereWithAggregatesInput | FGProductionEntryScalarWhereWithAggregatesInput[]
+    OR?: FGProductionEntryScalarWhereWithAggregatesInput[]
+    NOT?: FGProductionEntryScalarWhereWithAggregatesInput | FGProductionEntryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FGProductionEntry"> | string
+    entryNumber?: StringWithAggregatesFilter<"FGProductionEntry"> | string
+    fgBatchId?: StringWithAggregatesFilter<"FGProductionEntry"> | string
+    bomId?: StringWithAggregatesFilter<"FGProductionEntry"> | string
+    fgProductName?: StringWithAggregatesFilter<"FGProductionEntry"> | string
+    targetQty?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
+    targetUnit?: StringWithAggregatesFilter<"FGProductionEntry"> | string
+    packetSize?: FloatNullableWithAggregatesFilter<"FGProductionEntry"> | number | null
+    packetUnit?: StringNullableWithAggregatesFilter<"FGProductionEntry"> | string | null
+    totalPlannedPackets?: IntWithAggregatesFilter<"FGProductionEntry"> | number
+    totalActualFg?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
+    totalActualByproduct?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
+    totalActualScrap?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
+    totalActualPackets?: IntWithAggregatesFilter<"FGProductionEntry"> | number
+    status?: StringWithAggregatesFilter<"FGProductionEntry"> | string
+    notes?: StringNullableWithAggregatesFilter<"FGProductionEntry"> | string | null
+    createdById?: StringWithAggregatesFilter<"FGProductionEntry"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FGProductionEntry"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FGProductionEntry"> | Date | string
+  }
+
+  export type FGProductionMachineEntryWhereInput = {
+    AND?: FGProductionMachineEntryWhereInput | FGProductionMachineEntryWhereInput[]
+    OR?: FGProductionMachineEntryWhereInput[]
+    NOT?: FGProductionMachineEntryWhereInput | FGProductionMachineEntryWhereInput[]
+    id?: StringFilter<"FGProductionMachineEntry"> | string
+    productionEntryId?: StringFilter<"FGProductionMachineEntry"> | string
+    machineId?: StringFilter<"FGProductionMachineEntry"> | string
+    machineName?: StringFilter<"FGProductionMachineEntry"> | string
+    allocatedQty?: FloatFilter<"FGProductionMachineEntry"> | number
+    allocatedUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    plannedPackets?: IntFilter<"FGProductionMachineEntry"> | number
+    actualFgQty?: FloatFilter<"FGProductionMachineEntry"> | number
+    actualFgUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    actualByproduct?: FloatFilter<"FGProductionMachineEntry"> | number
+    actualByproductUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    actualScrap?: FloatFilter<"FGProductionMachineEntry"> | number
+    actualScrapUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    actualPackets?: IntFilter<"FGProductionMachineEntry"> | number
+    notes?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    createdAt?: DateTimeFilter<"FGProductionMachineEntry"> | Date | string
+    productionEntry?: XOR<FGProductionEntryScalarRelationFilter, FGProductionEntryWhereInput>
+    machine?: XOR<MachineScalarRelationFilter, MachineWhereInput>
+  }
+
+  export type FGProductionMachineEntryOrderByWithRelationInput = {
+    id?: SortOrder
+    productionEntryId?: SortOrder
+    machineId?: SortOrder
+    machineName?: SortOrder
+    allocatedQty?: SortOrder
+    allocatedUnit?: SortOrder
+    plannedPackets?: SortOrder
+    actualFgQty?: SortOrder
+    actualFgUnit?: SortOrder
+    actualByproduct?: SortOrder
+    actualByproductUnit?: SortOrder
+    actualScrap?: SortOrder
+    actualScrapUnit?: SortOrder
+    actualPackets?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    productionEntry?: FGProductionEntryOrderByWithRelationInput
+    machine?: MachineOrderByWithRelationInput
+  }
+
+  export type FGProductionMachineEntryWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FGProductionMachineEntryWhereInput | FGProductionMachineEntryWhereInput[]
+    OR?: FGProductionMachineEntryWhereInput[]
+    NOT?: FGProductionMachineEntryWhereInput | FGProductionMachineEntryWhereInput[]
+    productionEntryId?: StringFilter<"FGProductionMachineEntry"> | string
+    machineId?: StringFilter<"FGProductionMachineEntry"> | string
+    machineName?: StringFilter<"FGProductionMachineEntry"> | string
+    allocatedQty?: FloatFilter<"FGProductionMachineEntry"> | number
+    allocatedUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    plannedPackets?: IntFilter<"FGProductionMachineEntry"> | number
+    actualFgQty?: FloatFilter<"FGProductionMachineEntry"> | number
+    actualFgUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    actualByproduct?: FloatFilter<"FGProductionMachineEntry"> | number
+    actualByproductUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    actualScrap?: FloatFilter<"FGProductionMachineEntry"> | number
+    actualScrapUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    actualPackets?: IntFilter<"FGProductionMachineEntry"> | number
+    notes?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    createdAt?: DateTimeFilter<"FGProductionMachineEntry"> | Date | string
+    productionEntry?: XOR<FGProductionEntryScalarRelationFilter, FGProductionEntryWhereInput>
+    machine?: XOR<MachineScalarRelationFilter, MachineWhereInput>
+  }, "id">
+
+  export type FGProductionMachineEntryOrderByWithAggregationInput = {
+    id?: SortOrder
+    productionEntryId?: SortOrder
+    machineId?: SortOrder
+    machineName?: SortOrder
+    allocatedQty?: SortOrder
+    allocatedUnit?: SortOrder
+    plannedPackets?: SortOrder
+    actualFgQty?: SortOrder
+    actualFgUnit?: SortOrder
+    actualByproduct?: SortOrder
+    actualByproductUnit?: SortOrder
+    actualScrap?: SortOrder
+    actualScrapUnit?: SortOrder
+    actualPackets?: SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: FGProductionMachineEntryCountOrderByAggregateInput
+    _avg?: FGProductionMachineEntryAvgOrderByAggregateInput
+    _max?: FGProductionMachineEntryMaxOrderByAggregateInput
+    _min?: FGProductionMachineEntryMinOrderByAggregateInput
+    _sum?: FGProductionMachineEntrySumOrderByAggregateInput
+  }
+
+  export type FGProductionMachineEntryScalarWhereWithAggregatesInput = {
+    AND?: FGProductionMachineEntryScalarWhereWithAggregatesInput | FGProductionMachineEntryScalarWhereWithAggregatesInput[]
+    OR?: FGProductionMachineEntryScalarWhereWithAggregatesInput[]
+    NOT?: FGProductionMachineEntryScalarWhereWithAggregatesInput | FGProductionMachineEntryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
+    productionEntryId?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
+    machineId?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
+    machineName?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
+    allocatedQty?: FloatWithAggregatesFilter<"FGProductionMachineEntry"> | number
+    allocatedUnit?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
+    plannedPackets?: IntWithAggregatesFilter<"FGProductionMachineEntry"> | number
+    actualFgQty?: FloatWithAggregatesFilter<"FGProductionMachineEntry"> | number
+    actualFgUnit?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
+    actualByproduct?: FloatWithAggregatesFilter<"FGProductionMachineEntry"> | number
+    actualByproductUnit?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
+    actualScrap?: FloatWithAggregatesFilter<"FGProductionMachineEntry"> | number
+    actualScrapUnit?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
+    actualPackets?: IntWithAggregatesFilter<"FGProductionMachineEntry"> | number
+    notes?: StringNullableWithAggregatesFilter<"FGProductionMachineEntry"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FGProductionMachineEntry"> | Date | string
+  }
+
+  export type MachineWhereInput = {
+    AND?: MachineWhereInput | MachineWhereInput[]
+    OR?: MachineWhereInput[]
+    NOT?: MachineWhereInput | MachineWhereInput[]
+    id?: StringFilter<"Machine"> | string
+    machineId?: StringFilter<"Machine"> | string
+    name?: StringFilter<"Machine"> | string
+    location?: StringFilter<"Machine"> | string
+    capacityQty?: FloatFilter<"Machine"> | number
+    capacityUnit?: StringFilter<"Machine"> | string
+    createdAt?: DateTimeFilter<"Machine"> | Date | string
+    updatedAt?: DateTimeFilter<"Machine"> | Date | string
+    productionMachineEntries?: FGProductionMachineEntryListRelationFilter
+  }
+
+  export type MachineOrderByWithRelationInput = {
+    id?: SortOrder
+    machineId?: SortOrder
+    name?: SortOrder
+    location?: SortOrder
+    capacityQty?: SortOrder
+    capacityUnit?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    productionMachineEntries?: FGProductionMachineEntryOrderByRelationAggregateInput
+  }
+
+  export type MachineWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    machineId?: string
+    AND?: MachineWhereInput | MachineWhereInput[]
+    OR?: MachineWhereInput[]
+    NOT?: MachineWhereInput | MachineWhereInput[]
+    name?: StringFilter<"Machine"> | string
+    location?: StringFilter<"Machine"> | string
+    capacityQty?: FloatFilter<"Machine"> | number
+    capacityUnit?: StringFilter<"Machine"> | string
+    createdAt?: DateTimeFilter<"Machine"> | Date | string
+    updatedAt?: DateTimeFilter<"Machine"> | Date | string
+    productionMachineEntries?: FGProductionMachineEntryListRelationFilter
+  }, "id" | "machineId">
+
+  export type MachineOrderByWithAggregationInput = {
+    id?: SortOrder
+    machineId?: SortOrder
+    name?: SortOrder
+    location?: SortOrder
+    capacityQty?: SortOrder
+    capacityUnit?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MachineCountOrderByAggregateInput
+    _avg?: MachineAvgOrderByAggregateInput
+    _max?: MachineMaxOrderByAggregateInput
+    _min?: MachineMinOrderByAggregateInput
+    _sum?: MachineSumOrderByAggregateInput
+  }
+
+  export type MachineScalarWhereWithAggregatesInput = {
+    AND?: MachineScalarWhereWithAggregatesInput | MachineScalarWhereWithAggregatesInput[]
+    OR?: MachineScalarWhereWithAggregatesInput[]
+    NOT?: MachineScalarWhereWithAggregatesInput | MachineScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Machine"> | string
+    machineId?: StringWithAggregatesFilter<"Machine"> | string
+    name?: StringWithAggregatesFilter<"Machine"> | string
+    location?: StringWithAggregatesFilter<"Machine"> | string
+    capacityQty?: FloatWithAggregatesFilter<"Machine"> | number
+    capacityUnit?: StringWithAggregatesFilter<"Machine"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Machine"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Machine"> | Date | string
   }
 
   export type ActivityLogCreateInput = {
@@ -117639,6 +122126,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     consumptions?: FGBatchConsumptionCreateNestedManyWithoutFgBatchInput
+    productionEntries?: FGProductionEntryCreateNestedManyWithoutFgBatchInput
   }
 
   export type FGBatchUncheckedCreateInput = {
@@ -117657,6 +122145,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     consumptions?: FGBatchConsumptionUncheckedCreateNestedManyWithoutFgBatchInput
+    productionEntries?: FGProductionEntryUncheckedCreateNestedManyWithoutFgBatchInput
   }
 
   export type FGBatchUpdateInput = {
@@ -117675,6 +122164,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     consumptions?: FGBatchConsumptionUpdateManyWithoutFgBatchNestedInput
+    productionEntries?: FGProductionEntryUpdateManyWithoutFgBatchNestedInput
   }
 
   export type FGBatchUncheckedUpdateInput = {
@@ -117693,6 +122183,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     consumptions?: FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchNestedInput
+    productionEntries?: FGProductionEntryUncheckedUpdateManyWithoutFgBatchNestedInput
   }
 
   export type FGBatchCreateManyInput = {
@@ -117841,6 +122332,375 @@ export namespace Prisma {
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionEntryCreateInput = {
+    id?: string
+    entryNumber: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPlannedPackets?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
+    machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
+  }
+
+  export type FGProductionEntryUncheckedCreateInput = {
+    id?: string
+    entryNumber: string
+    fgBatchId: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPlannedPackets?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    machineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput
+  }
+
+  export type FGProductionEntryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
+    machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
+  }
+
+  export type FGProductionEntryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgBatchId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    machineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput
+  }
+
+  export type FGProductionEntryCreateManyInput = {
+    id?: string
+    entryNumber: string
+    fgBatchId: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPlannedPackets?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGProductionEntryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionEntryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgBatchId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionMachineEntryCreateInput = {
+    id?: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    plannedPackets?: number
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    actualPackets?: number
+    notes?: string | null
+    createdAt?: Date | string
+    productionEntry: FGProductionEntryCreateNestedOneWithoutMachineEntriesInput
+    machine: MachineCreateNestedOneWithoutProductionMachineEntriesInput
+  }
+
+  export type FGProductionMachineEntryUncheckedCreateInput = {
+    id?: string
+    productionEntryId: string
+    machineId: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    plannedPackets?: number
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    actualPackets?: number
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGProductionMachineEntryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    plannedPackets?: IntFieldUpdateOperationsInput | number
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    actualPackets?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionEntry?: FGProductionEntryUpdateOneRequiredWithoutMachineEntriesNestedInput
+    machine?: MachineUpdateOneRequiredWithoutProductionMachineEntriesNestedInput
+  }
+
+  export type FGProductionMachineEntryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    plannedPackets?: IntFieldUpdateOperationsInput | number
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    actualPackets?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionMachineEntryCreateManyInput = {
+    id?: string
+    productionEntryId: string
+    machineId: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    plannedPackets?: number
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    actualPackets?: number
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGProductionMachineEntryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    plannedPackets?: IntFieldUpdateOperationsInput | number
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    actualPackets?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionMachineEntryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    plannedPackets?: IntFieldUpdateOperationsInput | number
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    actualPackets?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MachineCreateInput = {
+    id?: string
+    machineId: string
+    name: string
+    location: string
+    capacityQty: number
+    capacityUnit?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    productionMachineEntries?: FGProductionMachineEntryCreateNestedManyWithoutMachineInput
+  }
+
+  export type MachineUncheckedCreateInput = {
+    id?: string
+    machineId: string
+    name: string
+    location: string
+    capacityQty: number
+    capacityUnit?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    productionMachineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutMachineInput
+  }
+
+  export type MachineUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    capacityQty?: FloatFieldUpdateOperationsInput | number
+    capacityUnit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionMachineEntries?: FGProductionMachineEntryUpdateManyWithoutMachineNestedInput
+  }
+
+  export type MachineUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    capacityQty?: FloatFieldUpdateOperationsInput | number
+    capacityUnit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionMachineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutMachineNestedInput
+  }
+
+  export type MachineCreateManyInput = {
+    id?: string
+    machineId: string
+    name: string
+    location: string
+    capacityQty: number
+    capacityUnit?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MachineUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    capacityQty?: FloatFieldUpdateOperationsInput | number
+    capacityUnit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MachineUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    capacityQty?: FloatFieldUpdateOperationsInput | number
+    capacityUnit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -122594,7 +127454,17 @@ export namespace Prisma {
     none?: FGBatchConsumptionWhereInput
   }
 
+  export type FGProductionEntryListRelationFilter = {
+    every?: FGProductionEntryWhereInput
+    some?: FGProductionEntryWhereInput
+    none?: FGProductionEntryWhereInput
+  }
+
   export type FGBatchConsumptionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FGProductionEntryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -122716,6 +127586,228 @@ export namespace Prisma {
   export type FGBatchConsumptionSumOrderByAggregateInput = {
     expectedQuantity?: SortOrder
     actualQuantity?: SortOrder
+  }
+
+  export type FGProductionMachineEntryListRelationFilter = {
+    every?: FGProductionMachineEntryWhereInput
+    some?: FGProductionMachineEntryWhereInput
+    none?: FGProductionMachineEntryWhereInput
+  }
+
+  export type FGProductionMachineEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FGProductionEntryCountOrderByAggregateInput = {
+    id?: SortOrder
+    entryNumber?: SortOrder
+    fgBatchId?: SortOrder
+    bomId?: SortOrder
+    fgProductName?: SortOrder
+    targetQty?: SortOrder
+    targetUnit?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    totalPlannedPackets?: SortOrder
+    totalActualFg?: SortOrder
+    totalActualByproduct?: SortOrder
+    totalActualScrap?: SortOrder
+    totalActualPackets?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGProductionEntryAvgOrderByAggregateInput = {
+    targetQty?: SortOrder
+    packetSize?: SortOrder
+    totalPlannedPackets?: SortOrder
+    totalActualFg?: SortOrder
+    totalActualByproduct?: SortOrder
+    totalActualScrap?: SortOrder
+    totalActualPackets?: SortOrder
+  }
+
+  export type FGProductionEntryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    entryNumber?: SortOrder
+    fgBatchId?: SortOrder
+    bomId?: SortOrder
+    fgProductName?: SortOrder
+    targetQty?: SortOrder
+    targetUnit?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    totalPlannedPackets?: SortOrder
+    totalActualFg?: SortOrder
+    totalActualByproduct?: SortOrder
+    totalActualScrap?: SortOrder
+    totalActualPackets?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGProductionEntryMinOrderByAggregateInput = {
+    id?: SortOrder
+    entryNumber?: SortOrder
+    fgBatchId?: SortOrder
+    bomId?: SortOrder
+    fgProductName?: SortOrder
+    targetQty?: SortOrder
+    targetUnit?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    totalPlannedPackets?: SortOrder
+    totalActualFg?: SortOrder
+    totalActualByproduct?: SortOrder
+    totalActualScrap?: SortOrder
+    totalActualPackets?: SortOrder
+    status?: SortOrder
+    notes?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGProductionEntrySumOrderByAggregateInput = {
+    targetQty?: SortOrder
+    packetSize?: SortOrder
+    totalPlannedPackets?: SortOrder
+    totalActualFg?: SortOrder
+    totalActualByproduct?: SortOrder
+    totalActualScrap?: SortOrder
+    totalActualPackets?: SortOrder
+  }
+
+  export type FGProductionEntryScalarRelationFilter = {
+    is?: FGProductionEntryWhereInput
+    isNot?: FGProductionEntryWhereInput
+  }
+
+  export type MachineScalarRelationFilter = {
+    is?: MachineWhereInput
+    isNot?: MachineWhereInput
+  }
+
+  export type FGProductionMachineEntryCountOrderByAggregateInput = {
+    id?: SortOrder
+    productionEntryId?: SortOrder
+    machineId?: SortOrder
+    machineName?: SortOrder
+    allocatedQty?: SortOrder
+    allocatedUnit?: SortOrder
+    plannedPackets?: SortOrder
+    actualFgQty?: SortOrder
+    actualFgUnit?: SortOrder
+    actualByproduct?: SortOrder
+    actualByproductUnit?: SortOrder
+    actualScrap?: SortOrder
+    actualScrapUnit?: SortOrder
+    actualPackets?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FGProductionMachineEntryAvgOrderByAggregateInput = {
+    allocatedQty?: SortOrder
+    plannedPackets?: SortOrder
+    actualFgQty?: SortOrder
+    actualByproduct?: SortOrder
+    actualScrap?: SortOrder
+    actualPackets?: SortOrder
+  }
+
+  export type FGProductionMachineEntryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    productionEntryId?: SortOrder
+    machineId?: SortOrder
+    machineName?: SortOrder
+    allocatedQty?: SortOrder
+    allocatedUnit?: SortOrder
+    plannedPackets?: SortOrder
+    actualFgQty?: SortOrder
+    actualFgUnit?: SortOrder
+    actualByproduct?: SortOrder
+    actualByproductUnit?: SortOrder
+    actualScrap?: SortOrder
+    actualScrapUnit?: SortOrder
+    actualPackets?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FGProductionMachineEntryMinOrderByAggregateInput = {
+    id?: SortOrder
+    productionEntryId?: SortOrder
+    machineId?: SortOrder
+    machineName?: SortOrder
+    allocatedQty?: SortOrder
+    allocatedUnit?: SortOrder
+    plannedPackets?: SortOrder
+    actualFgQty?: SortOrder
+    actualFgUnit?: SortOrder
+    actualByproduct?: SortOrder
+    actualByproductUnit?: SortOrder
+    actualScrap?: SortOrder
+    actualScrapUnit?: SortOrder
+    actualPackets?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FGProductionMachineEntrySumOrderByAggregateInput = {
+    allocatedQty?: SortOrder
+    plannedPackets?: SortOrder
+    actualFgQty?: SortOrder
+    actualByproduct?: SortOrder
+    actualScrap?: SortOrder
+    actualPackets?: SortOrder
+  }
+
+  export type MachineCountOrderByAggregateInput = {
+    id?: SortOrder
+    machineId?: SortOrder
+    name?: SortOrder
+    location?: SortOrder
+    capacityQty?: SortOrder
+    capacityUnit?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MachineAvgOrderByAggregateInput = {
+    capacityQty?: SortOrder
+  }
+
+  export type MachineMaxOrderByAggregateInput = {
+    id?: SortOrder
+    machineId?: SortOrder
+    name?: SortOrder
+    location?: SortOrder
+    capacityQty?: SortOrder
+    capacityUnit?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MachineMinOrderByAggregateInput = {
+    id?: SortOrder
+    machineId?: SortOrder
+    name?: SortOrder
+    location?: SortOrder
+    capacityQty?: SortOrder
+    capacityUnit?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MachineSumOrderByAggregateInput = {
+    capacityQty?: SortOrder
   }
 
   export type BatchCreateNestedOneWithoutActivityLogInput = {
@@ -130767,11 +135859,25 @@ export namespace Prisma {
     connect?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
   }
 
+  export type FGProductionEntryCreateNestedManyWithoutFgBatchInput = {
+    create?: XOR<FGProductionEntryCreateWithoutFgBatchInput, FGProductionEntryUncheckedCreateWithoutFgBatchInput> | FGProductionEntryCreateWithoutFgBatchInput[] | FGProductionEntryUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutFgBatchInput | FGProductionEntryCreateOrConnectWithoutFgBatchInput[]
+    createMany?: FGProductionEntryCreateManyFgBatchInputEnvelope
+    connect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+  }
+
   export type FGBatchConsumptionUncheckedCreateNestedManyWithoutFgBatchInput = {
     create?: XOR<FGBatchConsumptionCreateWithoutFgBatchInput, FGBatchConsumptionUncheckedCreateWithoutFgBatchInput> | FGBatchConsumptionCreateWithoutFgBatchInput[] | FGBatchConsumptionUncheckedCreateWithoutFgBatchInput[]
     connectOrCreate?: FGBatchConsumptionCreateOrConnectWithoutFgBatchInput | FGBatchConsumptionCreateOrConnectWithoutFgBatchInput[]
     createMany?: FGBatchConsumptionCreateManyFgBatchInputEnvelope
     connect?: FGBatchConsumptionWhereUniqueInput | FGBatchConsumptionWhereUniqueInput[]
+  }
+
+  export type FGProductionEntryUncheckedCreateNestedManyWithoutFgBatchInput = {
+    create?: XOR<FGProductionEntryCreateWithoutFgBatchInput, FGProductionEntryUncheckedCreateWithoutFgBatchInput> | FGProductionEntryCreateWithoutFgBatchInput[] | FGProductionEntryUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutFgBatchInput | FGProductionEntryCreateOrConnectWithoutFgBatchInput[]
+    createMany?: FGProductionEntryCreateManyFgBatchInputEnvelope
+    connect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
   }
 
   export type FGBatchConsumptionUpdateManyWithoutFgBatchNestedInput = {
@@ -130788,6 +135894,20 @@ export namespace Prisma {
     deleteMany?: FGBatchConsumptionScalarWhereInput | FGBatchConsumptionScalarWhereInput[]
   }
 
+  export type FGProductionEntryUpdateManyWithoutFgBatchNestedInput = {
+    create?: XOR<FGProductionEntryCreateWithoutFgBatchInput, FGProductionEntryUncheckedCreateWithoutFgBatchInput> | FGProductionEntryCreateWithoutFgBatchInput[] | FGProductionEntryUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutFgBatchInput | FGProductionEntryCreateOrConnectWithoutFgBatchInput[]
+    upsert?: FGProductionEntryUpsertWithWhereUniqueWithoutFgBatchInput | FGProductionEntryUpsertWithWhereUniqueWithoutFgBatchInput[]
+    createMany?: FGProductionEntryCreateManyFgBatchInputEnvelope
+    set?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    disconnect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    delete?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    connect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    update?: FGProductionEntryUpdateWithWhereUniqueWithoutFgBatchInput | FGProductionEntryUpdateWithWhereUniqueWithoutFgBatchInput[]
+    updateMany?: FGProductionEntryUpdateManyWithWhereWithoutFgBatchInput | FGProductionEntryUpdateManyWithWhereWithoutFgBatchInput[]
+    deleteMany?: FGProductionEntryScalarWhereInput | FGProductionEntryScalarWhereInput[]
+  }
+
   export type FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchNestedInput = {
     create?: XOR<FGBatchConsumptionCreateWithoutFgBatchInput, FGBatchConsumptionUncheckedCreateWithoutFgBatchInput> | FGBatchConsumptionCreateWithoutFgBatchInput[] | FGBatchConsumptionUncheckedCreateWithoutFgBatchInput[]
     connectOrCreate?: FGBatchConsumptionCreateOrConnectWithoutFgBatchInput | FGBatchConsumptionCreateOrConnectWithoutFgBatchInput[]
@@ -130802,6 +135922,20 @@ export namespace Prisma {
     deleteMany?: FGBatchConsumptionScalarWhereInput | FGBatchConsumptionScalarWhereInput[]
   }
 
+  export type FGProductionEntryUncheckedUpdateManyWithoutFgBatchNestedInput = {
+    create?: XOR<FGProductionEntryCreateWithoutFgBatchInput, FGProductionEntryUncheckedCreateWithoutFgBatchInput> | FGProductionEntryCreateWithoutFgBatchInput[] | FGProductionEntryUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutFgBatchInput | FGProductionEntryCreateOrConnectWithoutFgBatchInput[]
+    upsert?: FGProductionEntryUpsertWithWhereUniqueWithoutFgBatchInput | FGProductionEntryUpsertWithWhereUniqueWithoutFgBatchInput[]
+    createMany?: FGProductionEntryCreateManyFgBatchInputEnvelope
+    set?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    disconnect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    delete?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    connect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    update?: FGProductionEntryUpdateWithWhereUniqueWithoutFgBatchInput | FGProductionEntryUpdateWithWhereUniqueWithoutFgBatchInput[]
+    updateMany?: FGProductionEntryUpdateManyWithWhereWithoutFgBatchInput | FGProductionEntryUpdateManyWithWhereWithoutFgBatchInput[]
+    deleteMany?: FGProductionEntryScalarWhereInput | FGProductionEntryScalarWhereInput[]
+  }
+
   export type FGBatchCreateNestedOneWithoutConsumptionsInput = {
     create?: XOR<FGBatchCreateWithoutConsumptionsInput, FGBatchUncheckedCreateWithoutConsumptionsInput>
     connectOrCreate?: FGBatchCreateOrConnectWithoutConsumptionsInput
@@ -130814,6 +135948,132 @@ export namespace Prisma {
     upsert?: FGBatchUpsertWithoutConsumptionsInput
     connect?: FGBatchWhereUniqueInput
     update?: XOR<XOR<FGBatchUpdateToOneWithWhereWithoutConsumptionsInput, FGBatchUpdateWithoutConsumptionsInput>, FGBatchUncheckedUpdateWithoutConsumptionsInput>
+  }
+
+  export type FGBatchCreateNestedOneWithoutProductionEntriesInput = {
+    create?: XOR<FGBatchCreateWithoutProductionEntriesInput, FGBatchUncheckedCreateWithoutProductionEntriesInput>
+    connectOrCreate?: FGBatchCreateOrConnectWithoutProductionEntriesInput
+    connect?: FGBatchWhereUniqueInput
+  }
+
+  export type FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput = {
+    create?: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput> | FGProductionMachineEntryCreateWithoutProductionEntryInput[] | FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput[]
+    connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput | FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput[]
+    createMany?: FGProductionMachineEntryCreateManyProductionEntryInputEnvelope
+    connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+  }
+
+  export type FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput = {
+    create?: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput> | FGProductionMachineEntryCreateWithoutProductionEntryInput[] | FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput[]
+    connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput | FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput[]
+    createMany?: FGProductionMachineEntryCreateManyProductionEntryInputEnvelope
+    connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+  }
+
+  export type FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput = {
+    create?: XOR<FGBatchCreateWithoutProductionEntriesInput, FGBatchUncheckedCreateWithoutProductionEntriesInput>
+    connectOrCreate?: FGBatchCreateOrConnectWithoutProductionEntriesInput
+    upsert?: FGBatchUpsertWithoutProductionEntriesInput
+    connect?: FGBatchWhereUniqueInput
+    update?: XOR<XOR<FGBatchUpdateToOneWithWhereWithoutProductionEntriesInput, FGBatchUpdateWithoutProductionEntriesInput>, FGBatchUncheckedUpdateWithoutProductionEntriesInput>
+  }
+
+  export type FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput = {
+    create?: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput> | FGProductionMachineEntryCreateWithoutProductionEntryInput[] | FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput[]
+    connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput | FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput[]
+    upsert?: FGProductionMachineEntryUpsertWithWhereUniqueWithoutProductionEntryInput | FGProductionMachineEntryUpsertWithWhereUniqueWithoutProductionEntryInput[]
+    createMany?: FGProductionMachineEntryCreateManyProductionEntryInputEnvelope
+    set?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    disconnect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    delete?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    update?: FGProductionMachineEntryUpdateWithWhereUniqueWithoutProductionEntryInput | FGProductionMachineEntryUpdateWithWhereUniqueWithoutProductionEntryInput[]
+    updateMany?: FGProductionMachineEntryUpdateManyWithWhereWithoutProductionEntryInput | FGProductionMachineEntryUpdateManyWithWhereWithoutProductionEntryInput[]
+    deleteMany?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
+  }
+
+  export type FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput = {
+    create?: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput> | FGProductionMachineEntryCreateWithoutProductionEntryInput[] | FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput[]
+    connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput | FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput[]
+    upsert?: FGProductionMachineEntryUpsertWithWhereUniqueWithoutProductionEntryInput | FGProductionMachineEntryUpsertWithWhereUniqueWithoutProductionEntryInput[]
+    createMany?: FGProductionMachineEntryCreateManyProductionEntryInputEnvelope
+    set?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    disconnect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    delete?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    update?: FGProductionMachineEntryUpdateWithWhereUniqueWithoutProductionEntryInput | FGProductionMachineEntryUpdateWithWhereUniqueWithoutProductionEntryInput[]
+    updateMany?: FGProductionMachineEntryUpdateManyWithWhereWithoutProductionEntryInput | FGProductionMachineEntryUpdateManyWithWhereWithoutProductionEntryInput[]
+    deleteMany?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
+  }
+
+  export type FGProductionEntryCreateNestedOneWithoutMachineEntriesInput = {
+    create?: XOR<FGProductionEntryCreateWithoutMachineEntriesInput, FGProductionEntryUncheckedCreateWithoutMachineEntriesInput>
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutMachineEntriesInput
+    connect?: FGProductionEntryWhereUniqueInput
+  }
+
+  export type MachineCreateNestedOneWithoutProductionMachineEntriesInput = {
+    create?: XOR<MachineCreateWithoutProductionMachineEntriesInput, MachineUncheckedCreateWithoutProductionMachineEntriesInput>
+    connectOrCreate?: MachineCreateOrConnectWithoutProductionMachineEntriesInput
+    connect?: MachineWhereUniqueInput
+  }
+
+  export type FGProductionEntryUpdateOneRequiredWithoutMachineEntriesNestedInput = {
+    create?: XOR<FGProductionEntryCreateWithoutMachineEntriesInput, FGProductionEntryUncheckedCreateWithoutMachineEntriesInput>
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutMachineEntriesInput
+    upsert?: FGProductionEntryUpsertWithoutMachineEntriesInput
+    connect?: FGProductionEntryWhereUniqueInput
+    update?: XOR<XOR<FGProductionEntryUpdateToOneWithWhereWithoutMachineEntriesInput, FGProductionEntryUpdateWithoutMachineEntriesInput>, FGProductionEntryUncheckedUpdateWithoutMachineEntriesInput>
+  }
+
+  export type MachineUpdateOneRequiredWithoutProductionMachineEntriesNestedInput = {
+    create?: XOR<MachineCreateWithoutProductionMachineEntriesInput, MachineUncheckedCreateWithoutProductionMachineEntriesInput>
+    connectOrCreate?: MachineCreateOrConnectWithoutProductionMachineEntriesInput
+    upsert?: MachineUpsertWithoutProductionMachineEntriesInput
+    connect?: MachineWhereUniqueInput
+    update?: XOR<XOR<MachineUpdateToOneWithWhereWithoutProductionMachineEntriesInput, MachineUpdateWithoutProductionMachineEntriesInput>, MachineUncheckedUpdateWithoutProductionMachineEntriesInput>
+  }
+
+  export type FGProductionMachineEntryCreateNestedManyWithoutMachineInput = {
+    create?: XOR<FGProductionMachineEntryCreateWithoutMachineInput, FGProductionMachineEntryUncheckedCreateWithoutMachineInput> | FGProductionMachineEntryCreateWithoutMachineInput[] | FGProductionMachineEntryUncheckedCreateWithoutMachineInput[]
+    connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutMachineInput | FGProductionMachineEntryCreateOrConnectWithoutMachineInput[]
+    createMany?: FGProductionMachineEntryCreateManyMachineInputEnvelope
+    connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+  }
+
+  export type FGProductionMachineEntryUncheckedCreateNestedManyWithoutMachineInput = {
+    create?: XOR<FGProductionMachineEntryCreateWithoutMachineInput, FGProductionMachineEntryUncheckedCreateWithoutMachineInput> | FGProductionMachineEntryCreateWithoutMachineInput[] | FGProductionMachineEntryUncheckedCreateWithoutMachineInput[]
+    connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutMachineInput | FGProductionMachineEntryCreateOrConnectWithoutMachineInput[]
+    createMany?: FGProductionMachineEntryCreateManyMachineInputEnvelope
+    connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+  }
+
+  export type FGProductionMachineEntryUpdateManyWithoutMachineNestedInput = {
+    create?: XOR<FGProductionMachineEntryCreateWithoutMachineInput, FGProductionMachineEntryUncheckedCreateWithoutMachineInput> | FGProductionMachineEntryCreateWithoutMachineInput[] | FGProductionMachineEntryUncheckedCreateWithoutMachineInput[]
+    connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutMachineInput | FGProductionMachineEntryCreateOrConnectWithoutMachineInput[]
+    upsert?: FGProductionMachineEntryUpsertWithWhereUniqueWithoutMachineInput | FGProductionMachineEntryUpsertWithWhereUniqueWithoutMachineInput[]
+    createMany?: FGProductionMachineEntryCreateManyMachineInputEnvelope
+    set?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    disconnect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    delete?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    update?: FGProductionMachineEntryUpdateWithWhereUniqueWithoutMachineInput | FGProductionMachineEntryUpdateWithWhereUniqueWithoutMachineInput[]
+    updateMany?: FGProductionMachineEntryUpdateManyWithWhereWithoutMachineInput | FGProductionMachineEntryUpdateManyWithWhereWithoutMachineInput[]
+    deleteMany?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
+  }
+
+  export type FGProductionMachineEntryUncheckedUpdateManyWithoutMachineNestedInput = {
+    create?: XOR<FGProductionMachineEntryCreateWithoutMachineInput, FGProductionMachineEntryUncheckedCreateWithoutMachineInput> | FGProductionMachineEntryCreateWithoutMachineInput[] | FGProductionMachineEntryUncheckedCreateWithoutMachineInput[]
+    connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutMachineInput | FGProductionMachineEntryCreateOrConnectWithoutMachineInput[]
+    upsert?: FGProductionMachineEntryUpsertWithWhereUniqueWithoutMachineInput | FGProductionMachineEntryUpsertWithWhereUniqueWithoutMachineInput[]
+    createMany?: FGProductionMachineEntryCreateManyMachineInputEnvelope
+    set?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    disconnect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    delete?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+    update?: FGProductionMachineEntryUpdateWithWhereUniqueWithoutMachineInput | FGProductionMachineEntryUpdateWithWhereUniqueWithoutMachineInput[]
+    updateMany?: FGProductionMachineEntryUpdateManyWithWhereWithoutMachineInput | FGProductionMachineEntryUpdateManyWithWhereWithoutMachineInput[]
+    deleteMany?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -155555,6 +160815,60 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FGProductionEntryCreateWithoutFgBatchInput = {
+    id?: string
+    entryNumber: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPlannedPackets?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
+  }
+
+  export type FGProductionEntryUncheckedCreateWithoutFgBatchInput = {
+    id?: string
+    entryNumber: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPlannedPackets?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    machineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput
+  }
+
+  export type FGProductionEntryCreateOrConnectWithoutFgBatchInput = {
+    where: FGProductionEntryWhereUniqueInput
+    create: XOR<FGProductionEntryCreateWithoutFgBatchInput, FGProductionEntryUncheckedCreateWithoutFgBatchInput>
+  }
+
+  export type FGProductionEntryCreateManyFgBatchInputEnvelope = {
+    data: FGProductionEntryCreateManyFgBatchInput | FGProductionEntryCreateManyFgBatchInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FGBatchConsumptionUpsertWithWhereUniqueWithoutFgBatchInput = {
     where: FGBatchConsumptionWhereUniqueInput
     update: XOR<FGBatchConsumptionUpdateWithoutFgBatchInput, FGBatchConsumptionUncheckedUpdateWithoutFgBatchInput>
@@ -155588,6 +160902,47 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"FGBatchConsumption"> | Date | string
   }
 
+  export type FGProductionEntryUpsertWithWhereUniqueWithoutFgBatchInput = {
+    where: FGProductionEntryWhereUniqueInput
+    update: XOR<FGProductionEntryUpdateWithoutFgBatchInput, FGProductionEntryUncheckedUpdateWithoutFgBatchInput>
+    create: XOR<FGProductionEntryCreateWithoutFgBatchInput, FGProductionEntryUncheckedCreateWithoutFgBatchInput>
+  }
+
+  export type FGProductionEntryUpdateWithWhereUniqueWithoutFgBatchInput = {
+    where: FGProductionEntryWhereUniqueInput
+    data: XOR<FGProductionEntryUpdateWithoutFgBatchInput, FGProductionEntryUncheckedUpdateWithoutFgBatchInput>
+  }
+
+  export type FGProductionEntryUpdateManyWithWhereWithoutFgBatchInput = {
+    where: FGProductionEntryScalarWhereInput
+    data: XOR<FGProductionEntryUpdateManyMutationInput, FGProductionEntryUncheckedUpdateManyWithoutFgBatchInput>
+  }
+
+  export type FGProductionEntryScalarWhereInput = {
+    AND?: FGProductionEntryScalarWhereInput | FGProductionEntryScalarWhereInput[]
+    OR?: FGProductionEntryScalarWhereInput[]
+    NOT?: FGProductionEntryScalarWhereInput | FGProductionEntryScalarWhereInput[]
+    id?: StringFilter<"FGProductionEntry"> | string
+    entryNumber?: StringFilter<"FGProductionEntry"> | string
+    fgBatchId?: StringFilter<"FGProductionEntry"> | string
+    bomId?: StringFilter<"FGProductionEntry"> | string
+    fgProductName?: StringFilter<"FGProductionEntry"> | string
+    targetQty?: FloatFilter<"FGProductionEntry"> | number
+    targetUnit?: StringFilter<"FGProductionEntry"> | string
+    packetSize?: FloatNullableFilter<"FGProductionEntry"> | number | null
+    packetUnit?: StringNullableFilter<"FGProductionEntry"> | string | null
+    totalPlannedPackets?: IntFilter<"FGProductionEntry"> | number
+    totalActualFg?: FloatFilter<"FGProductionEntry"> | number
+    totalActualByproduct?: FloatFilter<"FGProductionEntry"> | number
+    totalActualScrap?: FloatFilter<"FGProductionEntry"> | number
+    totalActualPackets?: IntFilter<"FGProductionEntry"> | number
+    status?: StringFilter<"FGProductionEntry"> | string
+    notes?: StringNullableFilter<"FGProductionEntry"> | string | null
+    createdById?: StringFilter<"FGProductionEntry"> | string
+    createdAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
+    updatedAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
+  }
+
   export type FGBatchCreateWithoutConsumptionsInput = {
     id?: string
     batchNumber: string
@@ -155603,6 +160958,7 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    productionEntries?: FGProductionEntryCreateNestedManyWithoutFgBatchInput
   }
 
   export type FGBatchUncheckedCreateWithoutConsumptionsInput = {
@@ -155620,6 +160976,7 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    productionEntries?: FGProductionEntryUncheckedCreateNestedManyWithoutFgBatchInput
   }
 
   export type FGBatchCreateOrConnectWithoutConsumptionsInput = {
@@ -155653,6 +161010,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionEntries?: FGProductionEntryUpdateManyWithoutFgBatchNestedInput
   }
 
   export type FGBatchUncheckedUpdateWithoutConsumptionsInput = {
@@ -155670,6 +161028,405 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionEntries?: FGProductionEntryUncheckedUpdateManyWithoutFgBatchNestedInput
+  }
+
+  export type FGBatchCreateWithoutProductionEntriesInput = {
+    id?: string
+    batchNumber: string
+    bomId: string
+    fgProductName: string
+    productionQty: number
+    productionUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consumptions?: FGBatchConsumptionCreateNestedManyWithoutFgBatchInput
+  }
+
+  export type FGBatchUncheckedCreateWithoutProductionEntriesInput = {
+    id?: string
+    batchNumber: string
+    bomId: string
+    fgProductName: string
+    productionQty: number
+    productionUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consumptions?: FGBatchConsumptionUncheckedCreateNestedManyWithoutFgBatchInput
+  }
+
+  export type FGBatchCreateOrConnectWithoutProductionEntriesInput = {
+    where: FGBatchWhereUniqueInput
+    create: XOR<FGBatchCreateWithoutProductionEntriesInput, FGBatchUncheckedCreateWithoutProductionEntriesInput>
+  }
+
+  export type FGProductionMachineEntryCreateWithoutProductionEntryInput = {
+    id?: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    plannedPackets?: number
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    actualPackets?: number
+    notes?: string | null
+    createdAt?: Date | string
+    machine: MachineCreateNestedOneWithoutProductionMachineEntriesInput
+  }
+
+  export type FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput = {
+    id?: string
+    machineId: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    plannedPackets?: number
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    actualPackets?: number
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput = {
+    where: FGProductionMachineEntryWhereUniqueInput
+    create: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput>
+  }
+
+  export type FGProductionMachineEntryCreateManyProductionEntryInputEnvelope = {
+    data: FGProductionMachineEntryCreateManyProductionEntryInput | FGProductionMachineEntryCreateManyProductionEntryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FGBatchUpsertWithoutProductionEntriesInput = {
+    update: XOR<FGBatchUpdateWithoutProductionEntriesInput, FGBatchUncheckedUpdateWithoutProductionEntriesInput>
+    create: XOR<FGBatchCreateWithoutProductionEntriesInput, FGBatchUncheckedCreateWithoutProductionEntriesInput>
+    where?: FGBatchWhereInput
+  }
+
+  export type FGBatchUpdateToOneWithWhereWithoutProductionEntriesInput = {
+    where?: FGBatchWhereInput
+    data: XOR<FGBatchUpdateWithoutProductionEntriesInput, FGBatchUncheckedUpdateWithoutProductionEntriesInput>
+  }
+
+  export type FGBatchUpdateWithoutProductionEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    productionQty?: FloatFieldUpdateOperationsInput | number
+    productionUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumptions?: FGBatchConsumptionUpdateManyWithoutFgBatchNestedInput
+  }
+
+  export type FGBatchUncheckedUpdateWithoutProductionEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    productionQty?: FloatFieldUpdateOperationsInput | number
+    productionUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumptions?: FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchNestedInput
+  }
+
+  export type FGProductionMachineEntryUpsertWithWhereUniqueWithoutProductionEntryInput = {
+    where: FGProductionMachineEntryWhereUniqueInput
+    update: XOR<FGProductionMachineEntryUpdateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedUpdateWithoutProductionEntryInput>
+    create: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput>
+  }
+
+  export type FGProductionMachineEntryUpdateWithWhereUniqueWithoutProductionEntryInput = {
+    where: FGProductionMachineEntryWhereUniqueInput
+    data: XOR<FGProductionMachineEntryUpdateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedUpdateWithoutProductionEntryInput>
+  }
+
+  export type FGProductionMachineEntryUpdateManyWithWhereWithoutProductionEntryInput = {
+    where: FGProductionMachineEntryScalarWhereInput
+    data: XOR<FGProductionMachineEntryUpdateManyMutationInput, FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryInput>
+  }
+
+  export type FGProductionMachineEntryScalarWhereInput = {
+    AND?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
+    OR?: FGProductionMachineEntryScalarWhereInput[]
+    NOT?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
+    id?: StringFilter<"FGProductionMachineEntry"> | string
+    productionEntryId?: StringFilter<"FGProductionMachineEntry"> | string
+    machineId?: StringFilter<"FGProductionMachineEntry"> | string
+    machineName?: StringFilter<"FGProductionMachineEntry"> | string
+    allocatedQty?: FloatFilter<"FGProductionMachineEntry"> | number
+    allocatedUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    plannedPackets?: IntFilter<"FGProductionMachineEntry"> | number
+    actualFgQty?: FloatFilter<"FGProductionMachineEntry"> | number
+    actualFgUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    actualByproduct?: FloatFilter<"FGProductionMachineEntry"> | number
+    actualByproductUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    actualScrap?: FloatFilter<"FGProductionMachineEntry"> | number
+    actualScrapUnit?: StringFilter<"FGProductionMachineEntry"> | string
+    actualPackets?: IntFilter<"FGProductionMachineEntry"> | number
+    notes?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    createdAt?: DateTimeFilter<"FGProductionMachineEntry"> | Date | string
+  }
+
+  export type FGProductionEntryCreateWithoutMachineEntriesInput = {
+    id?: string
+    entryNumber: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPlannedPackets?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
+  }
+
+  export type FGProductionEntryUncheckedCreateWithoutMachineEntriesInput = {
+    id?: string
+    entryNumber: string
+    fgBatchId: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPlannedPackets?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGProductionEntryCreateOrConnectWithoutMachineEntriesInput = {
+    where: FGProductionEntryWhereUniqueInput
+    create: XOR<FGProductionEntryCreateWithoutMachineEntriesInput, FGProductionEntryUncheckedCreateWithoutMachineEntriesInput>
+  }
+
+  export type MachineCreateWithoutProductionMachineEntriesInput = {
+    id?: string
+    machineId: string
+    name: string
+    location: string
+    capacityQty: number
+    capacityUnit?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MachineUncheckedCreateWithoutProductionMachineEntriesInput = {
+    id?: string
+    machineId: string
+    name: string
+    location: string
+    capacityQty: number
+    capacityUnit?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MachineCreateOrConnectWithoutProductionMachineEntriesInput = {
+    where: MachineWhereUniqueInput
+    create: XOR<MachineCreateWithoutProductionMachineEntriesInput, MachineUncheckedCreateWithoutProductionMachineEntriesInput>
+  }
+
+  export type FGProductionEntryUpsertWithoutMachineEntriesInput = {
+    update: XOR<FGProductionEntryUpdateWithoutMachineEntriesInput, FGProductionEntryUncheckedUpdateWithoutMachineEntriesInput>
+    create: XOR<FGProductionEntryCreateWithoutMachineEntriesInput, FGProductionEntryUncheckedCreateWithoutMachineEntriesInput>
+    where?: FGProductionEntryWhereInput
+  }
+
+  export type FGProductionEntryUpdateToOneWithWhereWithoutMachineEntriesInput = {
+    where?: FGProductionEntryWhereInput
+    data: XOR<FGProductionEntryUpdateWithoutMachineEntriesInput, FGProductionEntryUncheckedUpdateWithoutMachineEntriesInput>
+  }
+
+  export type FGProductionEntryUpdateWithoutMachineEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
+  }
+
+  export type FGProductionEntryUncheckedUpdateWithoutMachineEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgBatchId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MachineUpsertWithoutProductionMachineEntriesInput = {
+    update: XOR<MachineUpdateWithoutProductionMachineEntriesInput, MachineUncheckedUpdateWithoutProductionMachineEntriesInput>
+    create: XOR<MachineCreateWithoutProductionMachineEntriesInput, MachineUncheckedCreateWithoutProductionMachineEntriesInput>
+    where?: MachineWhereInput
+  }
+
+  export type MachineUpdateToOneWithWhereWithoutProductionMachineEntriesInput = {
+    where?: MachineWhereInput
+    data: XOR<MachineUpdateWithoutProductionMachineEntriesInput, MachineUncheckedUpdateWithoutProductionMachineEntriesInput>
+  }
+
+  export type MachineUpdateWithoutProductionMachineEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    capacityQty?: FloatFieldUpdateOperationsInput | number
+    capacityUnit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MachineUncheckedUpdateWithoutProductionMachineEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    capacityQty?: FloatFieldUpdateOperationsInput | number
+    capacityUnit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionMachineEntryCreateWithoutMachineInput = {
+    id?: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    plannedPackets?: number
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    actualPackets?: number
+    notes?: string | null
+    createdAt?: Date | string
+    productionEntry: FGProductionEntryCreateNestedOneWithoutMachineEntriesInput
+  }
+
+  export type FGProductionMachineEntryUncheckedCreateWithoutMachineInput = {
+    id?: string
+    productionEntryId: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    plannedPackets?: number
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    actualPackets?: number
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGProductionMachineEntryCreateOrConnectWithoutMachineInput = {
+    where: FGProductionMachineEntryWhereUniqueInput
+    create: XOR<FGProductionMachineEntryCreateWithoutMachineInput, FGProductionMachineEntryUncheckedCreateWithoutMachineInput>
+  }
+
+  export type FGProductionMachineEntryCreateManyMachineInputEnvelope = {
+    data: FGProductionMachineEntryCreateManyMachineInput | FGProductionMachineEntryCreateManyMachineInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FGProductionMachineEntryUpsertWithWhereUniqueWithoutMachineInput = {
+    where: FGProductionMachineEntryWhereUniqueInput
+    update: XOR<FGProductionMachineEntryUpdateWithoutMachineInput, FGProductionMachineEntryUncheckedUpdateWithoutMachineInput>
+    create: XOR<FGProductionMachineEntryCreateWithoutMachineInput, FGProductionMachineEntryUncheckedCreateWithoutMachineInput>
+  }
+
+  export type FGProductionMachineEntryUpdateWithWhereUniqueWithoutMachineInput = {
+    where: FGProductionMachineEntryWhereUniqueInput
+    data: XOR<FGProductionMachineEntryUpdateWithoutMachineInput, FGProductionMachineEntryUncheckedUpdateWithoutMachineInput>
+  }
+
+  export type FGProductionMachineEntryUpdateManyWithWhereWithoutMachineInput = {
+    where: FGProductionMachineEntryScalarWhereInput
+    data: XOR<FGProductionMachineEntryUpdateManyMutationInput, FGProductionMachineEntryUncheckedUpdateManyWithoutMachineInput>
   }
 
   export type ActivityLogCreateManyBatchInput = {
@@ -163214,6 +168971,27 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type FGProductionEntryCreateManyFgBatchInput = {
+    id?: string
+    entryNumber: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPlannedPackets?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type FGBatchConsumptionUpdateWithoutFgBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
@@ -163250,6 +169028,215 @@ export namespace Prisma {
     sourceType?: NullableStringFieldUpdateOperationsInput | string | null
     batchNumber?: NullableStringFieldUpdateOperationsInput | string | null
     dispatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionEntryUpdateWithoutFgBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
+  }
+
+  export type FGProductionEntryUncheckedUpdateWithoutFgBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    machineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput
+  }
+
+  export type FGProductionEntryUncheckedUpdateManyWithoutFgBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionMachineEntryCreateManyProductionEntryInput = {
+    id?: string
+    machineId: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    plannedPackets?: number
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    actualPackets?: number
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGProductionMachineEntryUpdateWithoutProductionEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    plannedPackets?: IntFieldUpdateOperationsInput | number
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    actualPackets?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    machine?: MachineUpdateOneRequiredWithoutProductionMachineEntriesNestedInput
+  }
+
+  export type FGProductionMachineEntryUncheckedUpdateWithoutProductionEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    plannedPackets?: IntFieldUpdateOperationsInput | number
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    actualPackets?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    plannedPackets?: IntFieldUpdateOperationsInput | number
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    actualPackets?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionMachineEntryCreateManyMachineInput = {
+    id?: string
+    productionEntryId: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    plannedPackets?: number
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    actualPackets?: number
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGProductionMachineEntryUpdateWithoutMachineInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    plannedPackets?: IntFieldUpdateOperationsInput | number
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    actualPackets?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionEntry?: FGProductionEntryUpdateOneRequiredWithoutMachineEntriesNestedInput
+  }
+
+  export type FGProductionMachineEntryUncheckedUpdateWithoutMachineInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    plannedPackets?: IntFieldUpdateOperationsInput | number
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    actualPackets?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionMachineEntryUncheckedUpdateManyWithoutMachineInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    plannedPackets?: IntFieldUpdateOperationsInput | number
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    actualPackets?: IntFieldUpdateOperationsInput | number
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

@@ -45,6 +45,8 @@ import MaterialTransferPage from './components/pages/packaging/MaterialTransferP
 import CreateFGBatchPage from './components/pages/packaging/CreateFGBatchPage';
 import ReceiveMaterialsPage from './components/pages/packaging/ReceiveMaterialsPage';
 import FGProductionPage from './components/pages/packaging/FGProductionPage';
+import NewFGProductionEntryPage from './components/pages/packaging/NewFGProductionEntryPage';
+import ProductionOutputEntryPage from './components/pages/packaging/ProductionOutputEntryPage';
 import OutboundToFGPage from './components/pages/packaging/OutboundToFGPage';
 import FGVerificationPage from './components/pages/packaging/FGVerificationPage';
 import RawDashboard from './components/pages/Dashboard/rawDashboard';
@@ -52,6 +54,7 @@ import RMQualityReport from './components/pages/QualityReport/RMQualityReport';
 import GenerateGRN from './components/pages/GenerateGRN/GenerateGRN';
 import CreateBOMPage from './components/pages/Masters/CreateBOM';
 import CreateLocationPage from './components/pages/Masters/CreateLocation';
+import MachineMasterPage from './components/pages/Masters/MachineMaster';
 
 const App = () => {
   // Pre-register permissioned routes so they appear in the permission selector
@@ -108,10 +111,13 @@ const App = () => {
     { path: '/packaging/create-fg-batch', name: 'Create FG Batch', description: 'Create new FG batches from transferring materials', permissionKey: 'manage_pkg_material_transfer' },
     { path: '/packaging/receive-materials', name: 'Receive Materials', description: 'Accept or reject incoming materials at packaging', permissionKey: 'manage_pkg_receive_materials' },
     { path: '/packaging/fg-production', name: 'FG Production Entry', description: 'Machine-wise FG production with BOM-based input tracking', permissionKey: 'manage_fg_production' },
+    { path: '/packaging/new-production-entry', name: 'New Production Entry', description: 'Create new machine-wise FG production entry', permissionKey: 'manage_fg_production' },
+    { path: '/packaging/production-output-entry', name: 'Production Output Entry', description: 'Record actual machine-wise FG output', permissionKey: 'manage_fg_production' },
     { path: '/packaging/outbound-fg', name: 'Outbound to FG WH', description: 'Dispatch FG from machine locations to FG warehouse', permissionKey: 'manage_pkg_outbound_fg' },
     { path: '/packaging/fg-verification', name: 'FG Verification', description: 'Accept or reject FG and scrap at FG warehouse', permissionKey: 'manage_fg_verification' },
     { path: '/masters/bom/create', name: 'Bill of Material', description: 'Create and manage Bill of Materials', permissionKey: 'manage_bom' },
     { path: '/masters/locations/create', name: 'Location Master', description: 'Manage physical locations (warehouses, cleaning, grinding)', permissionKey: 'manage_locations' },
+    { path: '/masters/machine', name: 'Machine Master', description: 'Manage machine capacities', permissionKey: 'manage_locations' },
   ];
 
   staticRoutes.forEach(r => registerRoute({ ...r, element: <></>, resource: 'page' }));
@@ -998,6 +1004,24 @@ const App = () => {
               }
             />
 
+            <Route
+              path="/masters/machine"
+              element={
+                <PermissionedRoute
+                  path="/masters/machine"
+                  element={
+                    <SecureRoute
+                      element={<MachineMasterPage />}
+                      permissionKey="manage_locations"
+                    />
+                  }
+                  name="Machine Master"
+                  description="Manage machine master data"
+                  permissionKey="manage_locations"
+                />
+              }
+            />
+
             {/* ==================== FG PRODUCTION (PACKAGING) ROUTES ==================== */}
 
             <Route
@@ -1067,6 +1091,42 @@ const App = () => {
                   }
                   name="FG Production Entry"
                   description="Machine-wise FG production with BOM-based input tracking"
+                  permissionKey="manage_fg_production"
+                />
+              }
+            />
+
+            <Route
+              path="/packaging/new-production-entry"
+              element={
+                <PermissionedRoute
+                  path="/packaging/new-production-entry"
+                  element={
+                    <SecureRoute
+                      element={<NewFGProductionEntryPage />}
+                      permissionKey="manage_fg_production"
+                    />
+                  }
+                  name="New Production Entry"
+                  description="Create new machine-wise FG production entry"
+                  permissionKey="manage_fg_production"
+                />
+              }
+            />
+
+            <Route
+              path="/packaging/production-output-entry"
+              element={
+                <PermissionedRoute
+                  path="/packaging/production-output-entry"
+                  element={
+                    <SecureRoute
+                      element={<ProductionOutputEntryPage />}
+                      permissionKey="manage_fg_production"
+                    />
+                  }
+                  name="Production Output Entry"
+                  description="Record actual machine-wise FG output"
                   permissionKey="manage_fg_production"
                 />
               }

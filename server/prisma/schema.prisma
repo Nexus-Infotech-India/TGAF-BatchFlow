@@ -1477,7 +1477,8 @@ model FGBatch {
   createdAt       DateTime             @default(now())
   updatedAt       DateTime             @updatedAt
 
-  consumptions FGBatchConsumption[]
+  consumptions      FGBatchConsumption[]
+  productionEntries FGProductionEntry[]
 }
 
 model FGBatchConsumption {
@@ -1494,4 +1495,68 @@ model FGBatchConsumption {
   createdAt        DateTime @default(now())
 
   fgBatch FGBatch @relation(fields: [fgBatchId], references: [id], onDelete: Cascade)
+}
+
+// ==================== FG PRODUCTION ENTRY ====================
+
+model FGProductionEntry {
+  id              String                     @id @default(uuid())
+  entryNumber     String                     @unique
+  fgBatchId       String
+  bomId           String
+  fgProductName   String
+  targetQty       Float
+  targetUnit      String
+  packetSize      Float?
+  packetUnit      String?
+  totalPlannedPackets Int                    @default(0)
+  totalActualFg   Float                      @default(0)
+  totalActualByproduct Float                 @default(0)
+  totalActualScrap Float                     @default(0)
+  totalActualPackets Int                     @default(0)
+  status          String                     @default("DRAFT")
+  notes           String?
+  createdById     String
+  createdAt       DateTime                   @default(now())
+  updatedAt       DateTime                   @updatedAt
+
+  fgBatch         FGBatch                    @relation(fields: [fgBatchId], references: [id])
+  machineEntries  FGProductionMachineEntry[]
+}
+
+model FGProductionMachineEntry {
+  id                String   @id @default(uuid())
+  productionEntryId String
+  machineId         String
+  machineName       String
+  allocatedQty      Float    @default(0)
+  allocatedUnit     String   @default("Ton")
+  plannedPackets    Int      @default(0)
+  actualFgQty       Float    @default(0)
+  actualFgUnit      String   @default("Ton")
+  actualByproduct   Float    @default(0)
+  actualByproductUnit String @default("Ton")
+  actualScrap       Float    @default(0)
+  actualScrapUnit   String   @default("Ton")
+  actualPackets     Int      @default(0)
+  notes             String?
+  createdAt         DateTime @default(now())
+
+  productionEntry FGProductionEntry @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
+  machine         Machine           @relation(fields: [machineId], references: [id])
+}
+
+// ==================== MACHINE MASTER ====================
+
+model Machine {
+  id           String   @id @default(uuid())
+  machineId    String   @unique
+  name         String
+  location     String
+  capacityQty  Float
+  capacityUnit String   @default("KG_PER_SHIFT")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  productionMachineEntries FGProductionMachineEntry[]
 }

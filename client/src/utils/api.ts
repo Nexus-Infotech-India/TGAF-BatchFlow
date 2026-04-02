@@ -402,6 +402,13 @@ export const API_ROUTES = {
     GET_FG_BATCH_BY_ID: (id: string) => `${BASE_URL}/raw/fg-batch/${id}`,
     ACCEPT_FG_BATCH: (id: string) => `${BASE_URL}/raw/fg-batch/${id}/accept`,
     REJECT_FG_BATCH: (id: string) => `${BASE_URL}/raw/fg-batch/${id}/reject`,
+
+    // FG Production Entry (Machine-wise Production)
+    GET_ACCEPTED_FG_BATCHES: `${BASE_URL}/raw/fg-batch/accepted-batches`,
+    CREATE_FG_PRODUCTION_ENTRY: `${BASE_URL}/raw/fg-batch/production-entry`,
+    GET_FG_PRODUCTION_ENTRIES: `${BASE_URL}/raw/fg-batch/production-entries`,
+    GET_FG_PRODUCTION_ENTRY_BY_ID: (id: string) => `${BASE_URL}/raw/fg-batch/production-entries/${id}`,
+    COMPLETE_FG_PRODUCTION_ENTRY: (id: string) => `${BASE_URL}/raw/fg-batch/production-entries/${id}/complete`,
   },
 
   DRAFT: {
@@ -409,6 +416,13 @@ export const API_ROUTES = {
     GET_BATCH: (id: string) => `${BASE_URL}/draft/batch/${id}`,
     GET_LATEST_BATCH_DRAFT: `${BASE_URL}/draft/batch-latest`,
     DELETE_BATCH: (id: string) => `${BASE_URL}/draft/batch/${id}`,
+  },
+
+  MACHINE: {
+    CREATE_MACHINE: `${BASE_URL}/machine`,
+    GET_MACHINES: `${BASE_URL}/machine`,
+    UPDATE_MACHINE: (id: string) => `${BASE_URL}/machine/${id}`,
+    DELETE_MACHINE: (id: string) => `${BASE_URL}/machine/${id}`,
   },
 
 

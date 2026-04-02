@@ -24,6 +24,7 @@ import { TransferController } from '../controllers/rawmaterial/transfer.controll
 import { ProductionController } from '../controllers/rawmaterial/production.controller';
 import { GrindingDispatchController } from '../controllers/rawmaterial/grindingDispatch.controller';
 import { FGBatchController } from '../controllers/rawmaterial/fgBatch.controller';
+import { FGProductionController } from '../controllers/rawmaterial/fgProduction.controller';
 
 const router = Router();
 
@@ -184,6 +185,15 @@ router.get('/fg-batch/boms', FGBatchController.getFGBOMs);
 router.get('/fg-batch/bom-items', FGBatchController.getFGBOMItems);
 router.post('/fg-batch/create', FGBatchController.createFGBatch);
 router.get('/fg-batch/list', FGBatchController.getFGBatches);
+
+// FG Production Entry (Machine-wise Production) — must be before :id wildcard
+router.get('/fg-batch/accepted-batches', FGProductionController.getAcceptedBatches);
+router.post('/fg-batch/production-entry', FGProductionController.createProductionEntry);
+router.get('/fg-batch/production-entries', FGProductionController.getProductionEntries);
+router.get('/fg-batch/production-entries/:id', FGProductionController.getProductionEntryById);
+router.put('/fg-batch/production-entries/:id/complete', FGProductionController.submitProductionOutput);
+
+// FG Batch by ID — :id wildcard must come last
 router.get('/fg-batch/:id', FGBatchController.getFGBatchById);
 router.put('/fg-batch/:id/accept', FGBatchController.acceptFGBatch);
 router.put('/fg-batch/:id/reject', FGBatchController.rejectFGBatch);

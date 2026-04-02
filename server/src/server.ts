@@ -12,6 +12,7 @@ import trainingRoutes from './routes/training.route';
 import auditRoutes from './routes/audit.route';
 import rawRoutes from './routes/raw.route';
 import draftRoutes from './routes/draft.route';
+import machineRoutes from './routes/machine.route';
 import { updateAuditStatuses } from './jobs/updateauditstatus';
 import { runScheduledMailJob } from './jobs/scheduledMailJob';
 
@@ -39,6 +40,7 @@ app.use('/training', trainingRoutes);
 app.use('/audit', auditRoutes);
 app.use('/raw', rawRoutes);
 app.use('/draft', draftRoutes);
+app.use('/machine', machineRoutes);
 
 // Schedule background jobs
 // Run once at startup and then every 6 hours
@@ -80,4 +82,4 @@ setTimeout(async () => {
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
-});
+});
