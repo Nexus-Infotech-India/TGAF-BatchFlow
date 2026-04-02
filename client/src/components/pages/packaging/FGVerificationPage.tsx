@@ -1,93 +1,77 @@
 import React, { useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
 import { Button, Modal, Input, message } from 'antd';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   CheckCircle,
   XCircle,
   MapPin,
   Clock,
-  ChevronDown,
-  ChevronRight,
   Package,
   Truck,
   ShieldCheck,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 
 const { TextArea } = Input;
+const PAGE_SIZE = 10;
 
 /* ─── Types ─── */
-interface Location {
+interface Verification {
   id: string;
-  code: string;
-  name: string;
-  type: string;
-}
-
-interface TransferLine {
-  id: string;
-  lineType: string;
-  productName?: string;
-  skuCode?: string;
-  quantity: number;
-  unitOfMeasurement: string;
-  batchNumber?: string;
-}
-
-interface Transfer {
-  id: string;
-  transferNumber: string;
-  direction: string;
+  verificationNumber: string;
+  entryNumber: string;
+  fgProductName: string;
+  totalPackets: number;
+  packetSize?: number;
+  packetUnit?: string;
+  toLocationName?: string;
   status: string;
-  sentAt: string;
-  acceptedAt?: string;
-  rejectionReason?: string;
   notes?: string;
-  fromLocation: Location;
-  toLocation: Location;
-  lines: TransferLine[];
+  rejectionReason?: string;
+  dispatchedAt: string;
+  verifiedAt?: string;
 }
 
 /* ─── Component ─── */
 const FGVerificationPage: React.FC = () => {
-  const [transfers, setTransfers] = useState<Transfer[]>([]);
+  const [verifications, setVerifications] = useState<Verification[]>([]);
   const [loading, setLoading] = useState(false);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   const [rejectModal, setRejectModal] = useState<{
     visible: boolean;
-    transferId: string;
+    verificationId: string;
     reason: string;
     loading: boolean;
   }>({
     visible: false,
-    transferId: '',
+    verificationId: '',
     reason: '',
     loading: false,
   });
 
-  const fetchTransfers = async () => {
+  const fetchVerifications = async () => {
     setLoading(true);
     try {
-      const res = await api.get(API_ROUTES.RAW.GET_TRANSFERS, {
-        params: { direction: 'PACKAGING_TO_FG_WAREHOUSE' },
-      });
-      setTransfers(res.data?.data || []);
+      const res = await api.get(API_ROUTES.RAW.GET_FG_VERIFICATIONS);
+      setVerifications(res.data?.data || []);
     } catch {
-      message.error('Failed to fetch incoming FG transfers');
+      message.error('Failed to fetch FG verifications');
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchTransfers();
+    fetchVerifications();
   }, []);
 
   const handleAccept = async (id: string) => {
     try {
-      await api.put(API_ROUTES.RAW.ACCEPT_TRANSFER(id));
-      message.success('FG accepted at warehouse');
-      fetchTransfers();
+      await api.put(API_ROUTES.RAW.ACCEPT_FG_VERIFICATION(id));
+      message.success('FG batch accepted at warehouse');
+      fetchVerifications();
     } catch (err: any) {
       message.error(err?.response?.data?.error || 'Failed to accept');
     }
@@ -100,38 +84,36 @@ const FGVerificationPage: React.FC = () => {
     }
     setRejectModal(p => ({ ...p, loading: true }));
     try {
-      await api.put(API_ROUTES.RAW.REJECT_TRANSFER(rejectModal.transferId), {
+      await api.put(API_ROUTES.RAW.REJECT_FG_VERIFICATION(rejectModal.verificationId), {
         rejectionReason: rejectModal.reason,
       });
-      message.success('Transfer rejected');
-      setRejectModal({ visible: false, transferId: '', reason: '', loading: false });
-      fetchTransfers();
+      message.success('FG batch rejected');
+      setRejectModal({ visible: false, verificationId: '', reason: '', loading: false });
+      fetchVerifications();
     } catch (err: any) {
       message.error(err?.response?.data?.error || 'Failed to reject');
       setRejectModal(p => ({ ...p, loading: false }));
     }
   };
 
-  const statusColor = (status: string) => {
-    switch (status) {
-      case 'SENT': return 'bg-amber-500/10 text-amber-600 border-amber-500/20';
-      case 'ACCEPTED': return 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20';
-      case 'REJECTED': return 'bg-red-500/10 text-red-600 border-red-500/20';
-      default: return 'bg-muted/50 text-muted-foreground border-border';
-    }
+  const statusBadge = (status: string) => {
+    const map: Record<string, string> = {
+      PENDING: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+      ACCEPTED: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+      REJECTED: 'bg-red-500/10 text-red-600 border-red-500/20',
+    };
+    return map[status] || 'bg-muted/50 text-muted-foreground border-border';
   };
 
-  const sentCount = transfers.filter(t => t.status === 'SENT').length;
-  const acceptedCount = transfers.filter(t => t.status === 'ACCEPTED').length;
+  const pendingCount = verifications.filter(v => v.status === 'PENDING').length;
+  const acceptedCount = verifications.filter(v => v.status === 'ACCEPTED').length;
+  const totalPages = Math.max(1, Math.ceil(verifications.length / PAGE_SIZE));
+  const paged = verifications.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <motion.div className="min-h-screen bg-background">
+    <motion.div className="min-h-screen bg-background" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <motion.div
-          className="bg-card rounded-2xl border border-border overflow-hidden"
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+        <motion.div className="bg-card rounded-2xl border border-border overflow-hidden" initial={{ y: -12 }} animate={{ y: 0 }}>
           {/* Header */}
           <div className="p-6 border-b border-border">
             <div className="flex items-center gap-3">
@@ -140,9 +122,7 @@ const FGVerificationPage: React.FC = () => {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-foreground">FG Warehouse Verification</h1>
-                <p className="text-muted-foreground text-sm">
-                  Accept or reject incoming FG &amp; scrap at the FG warehouse
-                </p>
+                <p className="text-muted-foreground text-sm">Accept or reject incoming FG packet batches at the warehouse</p>
               </div>
             </div>
           </div>
@@ -152,163 +132,114 @@ const FGVerificationPage: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="bg-card rounded-xl p-4 border border-border">
                 <p className="text-xs font-medium text-muted-foreground mb-1">Incoming (Pending)</p>
-                <p className="text-2xl font-bold text-amber-600">{sentCount}</p>
-                <div className="flex items-center mt-1">
-                  <Clock size={12} className="text-amber-500 mr-1" />
-                  <span className="text-xs text-amber-500 font-medium">Awaiting warehouse verification</span>
-                </div>
+                <p className="text-2xl font-bold text-amber-600">{pendingCount}</p>
+                <div className="flex items-center mt-1"><Clock size={12} className="text-amber-500 mr-1" /><span className="text-xs text-amber-500 font-medium">Awaiting verification</span></div>
               </div>
               <div className="bg-card rounded-xl p-4 border border-border">
                 <p className="text-xs font-medium text-muted-foreground mb-1">Received</p>
                 <p className="text-2xl font-bold text-emerald-600">{acceptedCount}</p>
-                <div className="flex items-center mt-1">
-                  <CheckCircle size={12} className="text-emerald-500 mr-1" />
-                  <span className="text-xs text-emerald-500 font-medium">Verified and accepted</span>
-                </div>
+                <div className="flex items-center mt-1"><CheckCircle size={12} className="text-emerald-500 mr-1" /><span className="text-xs text-emerald-500 font-medium">Verified and accepted</span></div>
               </div>
             </div>
 
-            {/* Transfers List */}
-            <div className="space-y-3">
-              {loading && (
-                <div className="text-center py-12 text-muted-foreground">
-                  <div className="inline-block w-8 h-8 border-[3px] rounded-full animate-spin mb-3" style={{ borderColor: 'var(--border)', borderTopColor: 'var(--primary)' }} />
-                  <p className="text-sm">Loading incoming FG transfers…</p>
-                </div>
-              )}
-
-              {!loading && transfers.length === 0 && (
-                <div className="text-center py-12 text-muted-foreground bg-card rounded-xl border border-border">
-                  <Truck className="mx-auto mb-3 opacity-40" size={36} />
-                  <p className="text-lg font-medium">No incoming FG transfers</p>
-                  <p className="text-sm">No finished goods waiting for verification at the FG warehouse.</p>
-                </div>
-              )}
-
-              {!loading && transfers.map(transfer => (
-                <motion.div
-                  key={transfer.id}
-                  className="bg-card rounded-xl border border-border overflow-hidden"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
-                  <div
-                    className="p-4 flex items-center justify-between cursor-pointer hover:bg-muted/30 transition-colors"
-                    onClick={() => setExpandedId(expandedId === transfer.id ? null : transfer.id)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-emerald-500/10">
-                        <Package size={16} className="text-emerald-600" />
-                      </div>
-                      <div>
-                        <div className="text-sm font-semibold font-mono text-primary">{transfer.transferNumber}</div>
-                        <div className="text-xs text-muted-foreground mt-0.5">
-                          <MapPin size={10} className="inline mr-1" />
-                          {transfer.fromLocation?.name} → {transfer.toLocation?.name}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${statusColor(transfer.status)}`}>
-                        {transfer.status === 'SENT' && <Clock size={10} className="mr-1" />}
-                        {transfer.status === 'ACCEPTED' && <CheckCircle size={10} className="mr-1" />}
-                        {transfer.status === 'REJECTED' && <XCircle size={10} className="mr-1" />}
-                        {transfer.status}
-                      </span>
-
-                      {transfer.status === 'SENT' && (
-                        <div className="flex gap-1.5">
-                          <Button
-                            type="primary"
-                            size="small"
-                            onClick={e => { e.stopPropagation(); handleAccept(transfer.id); }}
-                            style={{ background: '#10b981', border: 'none' }}
-                            className="rounded-lg"
-                          >
-                            <CheckCircle size={12} className="mr-1 inline" /> Accept
-                          </Button>
-                          <Button
-                            danger
-                            size="small"
-                            onClick={e => {
-                              e.stopPropagation();
-                              setRejectModal({ visible: true, transferId: transfer.id, reason: '', loading: false });
-                            }}
-                            className="rounded-lg"
-                          >
-                            <XCircle size={12} className="mr-1 inline" /> Reject
-                          </Button>
-                        </div>
-                      )}
-
-                      {expandedId === transfer.id ? (
-                        <ChevronDown size={16} className="text-muted-foreground" />
-                      ) : (
-                        <ChevronRight size={16} className="text-muted-foreground" />
-                      )}
-                    </div>
-                  </div>
-
-                  <AnimatePresence>
-                    {expandedId === transfer.id && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="border-t border-border p-4 bg-muted/20">
-                          <table className="min-w-full">
-                            <thead>
-                              <tr className="bg-muted/40">
-                                <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Type</th>
-                                <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Product</th>
-                                <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Quantity</th>
-                                <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Batch</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-border">
-                              {transfer.lines.map(line => (
-                                <tr key={line.id} className="hover:bg-muted/30">
-                                  <td className="px-3 py-2">
-                                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
-                                      line.lineType === 'FG' ? 'bg-violet-500/10 text-violet-600 border-violet-500/20'
-                                        : 'bg-red-500/10 text-red-600 border-red-500/20'
-                                    }`}>
-                                      {line.lineType}
-                                    </span>
-                                  </td>
-                                  <td className="px-3 py-2 text-sm font-medium text-foreground">{line.productName || '-'}</td>
-                                  <td className="px-3 py-2 text-sm text-foreground text-right font-semibold">{line.quantity} {line.unitOfMeasurement}</td>
-                                  <td className="px-3 py-2 text-sm text-primary font-mono">{line.batchNumber || '-'}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-
-                          {transfer.notes && (
-                            <div className="mt-3 text-xs text-muted-foreground bg-muted/40 rounded-lg p-2">
-                              <strong>Notes:</strong> {transfer.notes}
-                            </div>
-                          )}
-                          {transfer.rejectionReason && (
-                            <div className="mt-3 text-xs text-red-600 bg-red-500/5 rounded-lg p-2 border border-red-500/10">
-                              <strong>Rejection Reason:</strong> {transfer.rejectionReason}
-                            </div>
-                          )}
-                          <div className="mt-3 text-xs text-muted-foreground">
-                            Sent: {new Date(transfer.sentAt).toLocaleString()}
-                            {transfer.acceptedAt && <span className="ml-4">Accepted: {new Date(transfer.acceptedAt).toLocaleString()}</span>}
+            {/* Table */}
+            <div className="border border-border rounded-xl overflow-hidden">
+              <table className="min-w-full">
+                <thead>
+                  <tr className="bg-muted/40">
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Verification #</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Entry #</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Product</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">Packets</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Destination</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Dispatched</th>
+                    <th className="px-4 py-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+                    <th className="px-4 py-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {loading && (
+                    <tr><td colSpan={8} className="px-4 py-12 text-center text-muted-foreground">
+                      <div className="inline-block w-6 h-6 border-[3px] rounded-full animate-spin mb-2" style={{ borderColor: 'var(--border)', borderTopColor: 'var(--primary)' }} />
+                      <p className="text-sm">Loading…</p>
+                    </td></tr>
+                  )}
+                  {!loading && paged.length === 0 && (
+                    <tr><td colSpan={8} className="px-4 py-12 text-center text-muted-foreground">
+                      <Truck className="mx-auto mb-2 opacity-40" size={28} />
+                      <p className="text-sm font-medium">No incoming FG batches</p>
+                    </td></tr>
+                  )}
+                  {!loading && paged.map((v, idx) => (
+                    <tr key={v.id} className={`hover:bg-muted/20 transition-colors ${idx % 2 === 0 ? 'bg-card' : 'bg-muted/5'}`}>
+                      <td className="px-4 py-3 text-sm font-mono font-semibold text-primary">{v.verificationNumber}</td>
+                      <td className="px-4 py-3 text-sm font-mono text-foreground">{v.entryNumber}</td>
+                      <td className="px-4 py-3 text-sm font-medium text-foreground">{v.fgProductName}</td>
+                      <td className="px-4 py-3 text-sm font-bold text-violet-600 text-right">{v.totalPackets.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-sm text-foreground">
+                        <span className="inline-flex items-center gap-1"><MapPin size={12} className="text-muted-foreground" />{v.toLocationName}</span>
+                      </td>
+                      <td className="px-4 py-3 text-xs text-muted-foreground">{new Date(v.dispatchedAt).toLocaleDateString()}</td>
+                      <td className="px-4 py-3 text-center">
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${statusBadge(v.status)}`}>
+                          {v.status === 'PENDING' && <Clock size={10} />}
+                          {v.status === 'ACCEPTED' && <CheckCircle size={10} />}
+                          {v.status === 'REJECTED' && <XCircle size={10} />}
+                          {v.status}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {v.status === 'PENDING' ? (
+                          <div className="flex items-center justify-center gap-1.5">
+                            <Button
+                              type="primary"
+                              size="small"
+                              onClick={() => handleAccept(v.id)}
+                              style={{ background: '#10b981', border: 'none' }}
+                              className="rounded-lg"
+                            >
+                              <CheckCircle size={12} className="mr-1 inline" /> Accept
+                            </Button>
+                            <Button
+                              danger
+                              size="small"
+                              onClick={() => setRejectModal({ visible: true, verificationId: v.id, reason: '', loading: false })}
+                              className="rounded-lg"
+                            >
+                              <XCircle size={12} className="mr-1 inline" /> Reject
+                            </Button>
                           </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              ))}
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
+
+            {/* Pagination */}
+            {verifications.length > PAGE_SIZE && (
+              <div className="flex items-center justify-between pt-2">
+                <p className="text-xs text-muted-foreground">
+                  Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, verifications.length)} of {verifications.length}
+                </p>
+                <div className="flex gap-1">
+                  <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-1.5 rounded-lg border border-border hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                    <ChevronLeft size={16} />
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
+                    <button key={n} onClick={() => setPage(n)} className={`w-8 h-8 rounded-lg text-xs font-semibold border transition-colors ${page === n ? 'bg-emerald-600 text-white border-emerald-600' : 'border-border hover:bg-muted/40 text-foreground'}`}>
+                      {n}
+                    </button>
+                  ))}
+                  <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="p-1.5 rounded-lg border border-border hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>
@@ -316,13 +247,8 @@ const FGVerificationPage: React.FC = () => {
       {/* Reject Modal */}
       <Modal
         open={rejectModal.visible}
-        title={
-          <div className="flex items-center gap-2">
-            <XCircle className="text-red-500" size={18} />
-            <span>Reject FG Transfer</span>
-          </div>
-        }
-        onCancel={() => setRejectModal({ visible: false, transferId: '', reason: '', loading: false })}
+        title={<div className="flex items-center gap-2"><XCircle className="text-red-500" size={18} /><span>Reject FG Batch</span></div>}
+        onCancel={() => setRejectModal({ visible: false, verificationId: '', reason: '', loading: false })}
         onOk={handleReject}
         confirmLoading={rejectModal.loading}
         okText="Reject"
@@ -335,7 +261,7 @@ const FGVerificationPage: React.FC = () => {
           rows={3}
           value={rejectModal.reason}
           onChange={e => setRejectModal(p => ({ ...p, reason: e.target.value }))}
-          placeholder="Enter the reason for rejecting this FG transfer"
+          placeholder="Enter the reason for rejecting this FG batch"
         />
       </Modal>
     </motion.div>

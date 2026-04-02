@@ -228,13 +228,16 @@ const FGProductionPage: React.FC = () => {
                                           {m.allocatedQty || 0} <span className="text-xs text-muted-foreground">{m.allocatedUnit}</span>
                                         </td>
                                         <td className="px-3 py-2 text-sm text-right font-bold text-emerald-600">
-                                          {m.actualFgQty || (entry.status === 'COMPLETED' ? '0' : '-')} <span className="text-xs text-emerald-600/50">{entry.targetUnit}</span>
+                                          {m.actualFgQty || (entry.status === 'COMPLETED' ? '0' : '-')} 
+                                          {entry.status === 'COMPLETED' && m.actualFgUnit && <span className="text-xs text-emerald-600/50 ml-1">{m.actualFgUnit}</span>}
                                         </td>
                                         <td className="px-3 py-2 text-sm text-right text-amber-600 font-semibold">
                                           {m.actualByproduct || (entry.status === 'COMPLETED' ? '0' : '-')}
+                                          {entry.status === 'COMPLETED' && m.actualByproductUnit && <span className="text-xs text-amber-600/50 ml-1">{m.actualByproductUnit}</span>}
                                         </td>
                                         <td className="px-3 py-2 text-sm text-right text-red-600 font-semibold">
                                           {m.actualScrap || (entry.status === 'COMPLETED' ? '0' : '-')}
+                                          {entry.status === 'COMPLETED' && m.actualScrapUnit && <span className="text-xs text-red-600/50 ml-1">{m.actualScrapUnit}</span>}
                                         </td>
                                         <td className="px-3 py-2 text-sm text-right text-violet-600 font-bold">
                                           {m.actualPackets > 0 ? m.actualPackets.toLocaleString() : (entry.status === 'COMPLETED' ? '0' : '-')}

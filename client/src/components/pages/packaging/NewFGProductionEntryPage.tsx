@@ -173,19 +173,36 @@ const NewFGProductionEntryPage: React.FC = () => {
   /* ─── Summary calculations ─── */
   const totalAllocatedQty = allocations.reduce((s, a) => s + (Number(a.allocatedQty) || 0), 0);
   const totalPlannedPackets = allocations.reduce((s, a) => s + (Number(a.plannedPackets) || 0), 0);
+  const remainingQty = selectedBatch ? Number((selectedBatch.productionQty - totalAllocatedQty).toFixed(3)) : 0;
+  const isFullyAllocated = selectedBatch ? Math.abs(remainingQty) < 0.001 : false;
+
+  /* Helper: get machine capacity in the same unit as the batch for comparison */
+  const getMachineCapacityInBatchUnit = (machine: MachineData): number => {
+    if (!selectedBatch) return 0;
+    const capTon = capacityInTon(machine);
+    const batchUnit = selectedBatch.productionUnit.toLowerCase();
+    if (batchUnit === 'ton' || batchUnit === 'tonne') return capTon;
+    if (batchUnit === 'kg') return capTon * 1000;
+    if (batchUnit === 'gram' || batchUnit === 'grams' || batchUnit === 'g') return capTon * 1_000_000;
+    if (batchUnit === 'quintal') return capTon * 10;
+    return capTon;
+  };
 
   /* ─── Submit ─── */
   const handleSubmit = async () => {
     if (!selectedBatch) return;
 
-    // Validate
     if (totalAllocatedQty <= 0) {
       message.error('Please allocate production to at least one machine');
       return;
     }
 
-    if (totalAllocatedQty > selectedBatch.productionQty * 1.05) {
-      message.error(`Total allocated quantity exceeds batch target by more than 5%`);
+    if (!isFullyAllocated) {
+      if (remainingQty > 0) {
+        message.error(`You still have ${remainingQty.toFixed(3)} ${selectedBatch.productionUnit} remaining. Please distribute the full quantity.`);
+      } else {
+        message.error(`Total allocated exceeds target by ${Math.abs(remainingQty).toFixed(3)} ${selectedBatch.productionUnit}. Please reduce allocation.`);
+      }
       return;
     }
 
@@ -414,9 +431,17 @@ const NewFGProductionEntryPage: React.FC = () => {
                     </div>
                     <div>
                       <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Total Allocated</div>
-                      <div className={`text-sm font-bold mt-1 ${totalAllocatedQty > selectedBatch.productionQty ? 'text-red-500' : 'text-blue-600'}`}>
+                      <div className={`text-sm font-bold mt-1 ${isFullyAllocated ? 'text-emerald-600' : totalAllocatedQty > selectedBatch.productionQty ? 'text-red-500' : 'text-blue-600'}`}>
                         {totalAllocatedQty.toFixed(3)} / {selectedBatch.productionQty} {selectedBatch.productionUnit}
                       </div>
+                      {!isFullyAllocated && totalAllocatedQty > 0 && (
+                        <div className={`text-xs font-semibold mt-0.5 ${remainingQty > 0 ? 'text-amber-600' : 'text-red-500'}`}>
+                          {remainingQty > 0
+                            ? `⚠ ${remainingQty.toFixed(3)} ${selectedBatch.productionUnit} remaining`
+                            : `✕ Exceeds by ${Math.abs(remainingQty).toFixed(3)} ${selectedBatch.productionUnit}`
+                          }
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -455,9 +480,15 @@ const NewFGProductionEntryPage: React.FC = () => {
                               onChange={(val) => updateAllocation(idx, 'allocatedQty', val || 0)}
                               placeholder="0.00"
                               className="w-28 font-semibold"
+                              status={alloc.allocatedQty > getMachineCapacityInBatchUnit(alloc.machine) ? 'warning' : undefined}
                             />
                             <span className="text-xs font-bold text-muted-foreground">{selectedBatch.productionUnit}</span>
                           </div>
+                          {alloc.allocatedQty > getMachineCapacityInBatchUnit(alloc.machine) && (
+                            <div className="text-[10px] text-amber-600 font-semibold mt-1">
+                              ⚠ Exceeds capacity ({getMachineCapacityInBatchUnit(alloc.machine).toFixed(2)} {selectedBatch.productionUnit}/Shift)
+                            </div>
+                          )}
                         </div>
                         <div className="space-y-1">
                           <div className="text-[10px] font-bold text-muted-foreground uppercase">Est. Packets</div>
@@ -476,10 +507,25 @@ const NewFGProductionEntryPage: React.FC = () => {
                   ))}
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-muted/30 rounded-xl border border-border">
-                  <span className="font-bold">Total Mapping:</span>
+                <div className={`flex items-center justify-between p-4 rounded-xl border ${isFullyAllocated ? 'bg-emerald-500/5 border-emerald-500/30' : remainingQty < 0 ? 'bg-red-500/5 border-red-500/30' : 'bg-muted/30 border-border'}`}>
+                  <div>
+                    <span className="font-bold">Total Mapping:</span>
+                    {!isFullyAllocated && totalAllocatedQty > 0 && (
+                      <span className={`ml-3 text-xs font-semibold px-2 py-0.5 rounded-full ${remainingQty > 0 ? 'bg-amber-500/10 text-amber-600' : 'bg-red-500/10 text-red-500'}`}>
+                        {remainingQty > 0
+                          ? `${remainingQty.toFixed(3)} ${selectedBatch.productionUnit} remaining`
+                          : `Exceeds by ${Math.abs(remainingQty).toFixed(3)} ${selectedBatch.productionUnit}`
+                        }
+                      </span>
+                    )}
+                    {isFullyAllocated && (
+                      <span className="ml-3 text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600">
+                        ✓ Fully distributed
+                      </span>
+                    )}
+                  </div>
                   <div className="flex gap-8">
-                    <span className="font-bold text-emerald-600">
+                    <span className={`font-bold ${isFullyAllocated ? 'text-emerald-600' : remainingQty < 0 ? 'text-red-500' : 'text-blue-600'}`}>
                       {totalAllocatedQty.toFixed(3)} {selectedBatch.productionUnit}
                     </span>
                     <span className="font-bold text-violet-600">
@@ -548,7 +594,7 @@ const NewFGProductionEntryPage: React.FC = () => {
                 size="large"
                 loading={submitting}
                 onClick={handleSubmit}
-                disabled={totalAllocatedQty <= 0}
+                disabled={!isFullyAllocated}
                 className="rounded-xl px-8 h-11 text-base font-bold shadow-lg shadow-emerald-500/30 border-0 transition-all hover:scale-105 active:scale-95"
                 style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}
               >

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, InputNumber, Input, message, Modal, Empty, Spin } from 'antd';
+import { Button, InputNumber, Input, message, Empty, Spin } from 'antd';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -16,18 +16,6 @@ import {
   Zap,
 } from 'lucide-react';
 import api, { API_ROUTES } from '../../../utils/api';
-
-/* ─── Unit conversion helpers ─── */
-const UNIT_TO_GRAMS: Record<string, number> = {
-  gram: 1, grams: 1, g: 1,
-  kg: 1000, KG: 1000, Kg: 1000,
-  ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000, tonne: 1_000_000,
-  quintal: 100_000, Quintal: 100_000,
-};
-function toGrams(qty: number, unit: string): number {
-  const factor = UNIT_TO_GRAMS[unit] ?? UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1;
-  return qty * factor;
-}
 
 export default function ProductionOutputEntryPage() {
   const navigate = useNavigate();
@@ -87,28 +75,36 @@ export default function ProductionOutputEntryPage() {
       const next = [...prev];
       (next[index] as any)[field] = value;
 
-      // Auto-calc packets if FG qty changes
-      if (field === 'actualFgQty' && selectedEntry?.fgBatch) {
-        const packetSizeGrams =
-          selectedEntry.fgBatch.packetSize && selectedEntry.fgBatch.packetUnit
-            ? toGrams(selectedEntry.fgBatch.packetSize, selectedEntry.fgBatch.packetUnit)
-            : 0;
-        if (packetSizeGrams > 0 && value > 0) {
-          const actualFgGrams = toGrams(value, selectedEntry.fgBatch.productionUnit);
-          next[index].actualPackets = Math.floor(actualFgGrams / packetSizeGrams);
-        } else {
-          next[index].actualPackets = 0;
-        }
-      }
+      // Remove auto-calc packets since user will input it manually
       return next;
     });
   };
 
   /* ─── Summary calculations ─── */
+  const getFactor = (unit: string) => {
+    if (!unit) return 1000;
+    const u = unit.toLowerCase();
+    if (u === 'ton') return 1000000;
+    if (u === 'kg') return 1000;
+    if (u === 'gram') return 1;
+    return 1000;
+  };
+
+  const getNormalized = (qty: number, fromUnit: string, toUnit: string) => {
+    if (!qty) return 0;
+    const fIn = getFactor(fromUnit);
+    const fOut = getFactor(toUnit);
+    return (Number(qty) * fIn) / fOut;
+  };
+
+  const displayFgUnit = machineInputs[0]?.actualUnit || selectedEntry?.targetUnit || 'KG';
+  const displayByproductUnit = machineInputs[0]?.actualByproductUnit || selectedEntry?.targetUnit || 'KG';
+  const displayScrapUnit = machineInputs[0]?.actualScrapUnit || selectedEntry?.targetUnit || 'KG';
+
   const totalAllocated = machineInputs.reduce((s, a) => s + (Number(a.allocatedQty) || 0), 0);
-  const totalActualFg = machineInputs.reduce((s, a) => s + (Number(a.actualFgQty) || 0), 0);
-  const totalByproduct = machineInputs.reduce((s, a) => s + (Number(a.actualByproduct) || 0), 0);
-  const totalScrap = machineInputs.reduce((s, a) => s + (Number(a.actualScrap) || 0), 0);
+  const totalActualFg = machineInputs.reduce((s, a) => s + getNormalized(a.actualFgQty, a.actualUnit || selectedEntry?.targetUnit, displayFgUnit), 0);
+  const totalByproduct = machineInputs.reduce((s, a) => s + getNormalized(a.actualByproduct, a.actualByproductUnit || selectedEntry?.targetUnit, displayByproductUnit), 0);
+  const totalScrap = machineInputs.reduce((s, a) => s + getNormalized(a.actualScrap, a.actualScrapUnit || selectedEntry?.targetUnit, displayScrapUnit), 0);
   const totalActualPackets = machineInputs.reduce((s, a) => s + (Number(a.actualPackets) || 0), 0);
 
   const handleSubmit = async () => {
@@ -140,6 +136,9 @@ export default function ProductionOutputEntryPage() {
           actualByproduct: a.actualByproduct,
           actualScrap: a.actualScrap,
           actualPackets: a.actualPackets,
+          actualUnit: a.actualUnit || selectedEntry?.targetUnit,
+          actualByproductUnit: a.actualByproductUnit || selectedEntry?.targetUnit,
+          actualScrapUnit: a.actualScrapUnit || selectedEntry?.targetUnit
         })),
         notes
       });
@@ -307,12 +306,6 @@ export default function ProductionOutputEntryPage() {
                               </div>
                             </div>
                           </div>
-                          {alloc.actualPackets > 0 && (
-                            <div className="bg-gradient-to-r from-violet-500 to-purple-600 text-white px-4 py-2 rounded-xl shadow-lg shadow-violet-500/20">
-                              <div className="text-[10px] font-bold uppercase tracking-wider opacity-80">Actual Packets</div>
-                              <div className="text-xl font-black">{alloc.actualPackets.toLocaleString()}</div>
-                            </div>
-                          )}
                         </div>
 
                         {overAllocated && (
@@ -323,13 +316,13 @@ export default function ProductionOutputEntryPage() {
                         )}
 
                         {/* Input fields */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                           <div className="space-y-2">
                             <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                               <Zap size={12} className="text-emerald-500" />
-                              Actual FG Produced <span className="text-red-500">*</span>
+                              Actual FG <span className="text-red-500">*</span>
                             </label>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
                               <InputNumber
                                 min={0}
                                 step={0.001}
@@ -340,16 +333,24 @@ export default function ProductionOutputEntryPage() {
                                 size="large"
                                 className={`w-full font-semibold ${overAllocated ? 'border-red-400' : ''}`}
                               />
-                              <span className="text-sm font-bold text-muted-foreground whitespace-nowrap">{selectedEntry.targetUnit}</span>
+                              <select 
+                                className="h-10 px-2 text-sm font-bold bg-muted/20 border border-border rounded-lg outline-none"
+                                value={alloc.actualUnit || selectedEntry?.targetUnit || 'KG'}
+                                onChange={(e) => updateInput(idx, 'actualUnit', e.target.value)}
+                              >
+                                <option value="KG">KG</option>
+                                <option value="Ton">Ton</option>
+                                <option value="Gram">Gram</option>
+                              </select>
                             </div>
                           </div>
 
                           <div className="space-y-2">
                             <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                               <Trash2 size={12} className="text-amber-500" />
-                              Byproduct Generated
+                              Byproduct
                             </label>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
                               <InputNumber
                                 min={0}
                                 step={0.001}
@@ -360,16 +361,24 @@ export default function ProductionOutputEntryPage() {
                                 size="large"
                                 className="w-full font-semibold"
                               />
-                              <span className="text-sm font-bold text-muted-foreground whitespace-nowrap">{selectedEntry.targetUnit}</span>
+                              <select 
+                                className="h-10 px-2 text-sm font-bold bg-muted/20 border border-border rounded-lg outline-none"
+                                value={alloc.actualByproductUnit || selectedEntry?.targetUnit || 'KG'}
+                                onChange={(e) => updateInput(idx, 'actualByproductUnit', e.target.value)}
+                              >
+                                <option value="KG">KG</option>
+                                <option value="Ton">Ton</option>
+                                <option value="Gram">Gram</option>
+                              </select>
                             </div>
                           </div>
 
                           <div className="space-y-2">
                             <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                               <AlertTriangle size={12} className="text-red-500" />
-                              Scrap / Floor Sweep
+                              Scrap
                             </label>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-1">
                               <InputNumber
                                 min={0}
                                 step={0.001}
@@ -380,8 +389,33 @@ export default function ProductionOutputEntryPage() {
                                 size="large"
                                 className="w-full font-semibold"
                               />
-                              <span className="text-sm font-bold text-muted-foreground whitespace-nowrap">{selectedEntry.targetUnit}</span>
+                              <select 
+                                className="h-10 px-2 text-sm font-bold bg-muted/20 border border-border rounded-lg outline-none"
+                                value={alloc.actualScrapUnit || selectedEntry?.targetUnit || 'KG'}
+                                onChange={(e) => updateInput(idx, 'actualScrapUnit', e.target.value)}
+                              >
+                                <option value="KG">KG</option>
+                                <option value="Ton">Ton</option>
+                                <option value="Gram">Gram</option>
+                              </select>
                             </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                              <Hash size={12} className="text-violet-500" />
+                              Actual Packets
+                            </label>
+                            <InputNumber
+                              min={0}
+                              step={1}
+                              precision={0}
+                              value={alloc.actualPackets || undefined}
+                              onChange={(val) => updateInput(idx, 'actualPackets', val || 0)}
+                              placeholder="0"
+                              size="large"
+                              className="w-full font-semibold"
+                            />
                           </div>
                         </div>
                       </motion.div>
@@ -414,9 +448,9 @@ export default function ProductionOutputEntryPage() {
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
                   {[
                     { label: 'Target FG', value: `${selectedEntry.targetQty} ${selectedEntry.targetUnit}`, color: 'from-blue-500 to-indigo-600', icon: <Scale size={16} /> },
-                    { label: 'Actual FG', value: `${totalActualFg.toFixed(3)} ${selectedEntry.targetUnit}`, color: 'from-emerald-500 to-teal-600', icon: <Zap size={16} /> },
-                    { label: 'Byproduct', value: `${totalByproduct.toFixed(3)} ${selectedEntry.targetUnit}`, color: 'from-amber-500 to-orange-600', icon: <Trash2 size={16} /> },
-                    { label: 'Scrap', value: `${totalScrap.toFixed(3)} ${selectedEntry.targetUnit}`, color: 'from-red-500 to-rose-600', icon: <AlertTriangle size={16} /> },
+                    { label: 'Actual FG', value: `${totalActualFg.toFixed(3)} ${displayFgUnit}`, color: 'from-emerald-500 to-teal-600', icon: <Zap size={16} /> },
+                    { label: 'Byproduct', value: `${totalByproduct.toFixed(3)} ${displayByproductUnit}`, color: 'from-amber-500 to-orange-600', icon: <Trash2 size={16} /> },
+                    { label: 'Scrap', value: `${totalScrap.toFixed(3)} ${displayScrapUnit}`, color: 'from-red-500 to-rose-600', icon: <AlertTriangle size={16} /> },
                     { label: 'Actual Packets', value: totalActualPackets.toLocaleString(), color: 'from-violet-500 to-purple-600', icon: <Hash size={16} /> },
                   ].map((card, i) => (
                     <div key={i} className={`rounded-xl p-4 bg-gradient-to-br ${card.color} text-white shadow-lg relative overflow-hidden`}>
@@ -456,13 +490,13 @@ export default function ProductionOutputEntryPage() {
                               {alloc.allocatedQty} {alloc.allocatedUnit}
                             </td>
                             <td className="px-4 py-3 text-right font-bold text-emerald-600">
-                              {alloc.actualFgQty} {selectedEntry.targetUnit}
+                              {alloc.actualFgQty} {alloc.actualUnit || selectedEntry.targetUnit}
                             </td>
                             <td className="px-4 py-3 text-right font-semibold text-amber-600">
-                              {alloc.actualByproduct} {selectedEntry.targetUnit}
+                              {alloc.actualByproduct} {alloc.actualByproductUnit || selectedEntry.targetUnit}
                             </td>
                             <td className="px-4 py-3 text-right font-semibold text-red-600">
-                              {alloc.actualScrap} {selectedEntry.targetUnit}
+                              {alloc.actualScrap} {alloc.actualScrapUnit || selectedEntry.targetUnit}
                             </td>
                             <td className="px-4 py-3 text-right font-bold text-violet-600">
                               {alloc.actualPackets.toLocaleString()}
@@ -477,13 +511,13 @@ export default function ProductionOutputEntryPage() {
                             {totalAllocated.toFixed(3)} {selectedEntry.targetUnit}
                           </td>
                           <td className="px-4 py-3 text-right text-emerald-600 text-base">
-                            {totalActualFg.toFixed(3)} {selectedEntry.targetUnit}
+                            {totalActualFg.toFixed(3)} {displayFgUnit}
                           </td>
                           <td className="px-4 py-3 text-right text-amber-600">
-                            {totalByproduct.toFixed(3)} {selectedEntry.targetUnit}
+                            {totalByproduct.toFixed(3)} {displayByproductUnit}
                           </td>
                           <td className="px-4 py-3 text-right text-red-600">
-                            {totalScrap.toFixed(3)} {selectedEntry.targetUnit}
+                            {totalScrap.toFixed(3)} {displayScrapUnit}
                           </td>
                           <td className="px-4 py-3 text-right text-violet-600 text-base">
                             {totalActualPackets.toLocaleString()}
@@ -494,33 +528,7 @@ export default function ProductionOutputEntryPage() {
                   </div>
                 </div>
 
-                {/* Efficiency indicator */}
-                <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="rounded-xl border border-border p-4 bg-card">
-                    <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Production Efficiency</div>
-                    <div className="flex items-end gap-2">
-                      <span className={`text-3xl font-black ${
-                        totalActualFg / selectedEntry.targetQty >= 0.9 ? 'text-emerald-600' :
-                        totalActualFg / selectedEntry.targetQty >= 0.7 ? 'text-amber-600' : 'text-red-600'
-                      }`}>
-                        {selectedEntry.targetQty > 0 ? ((totalActualFg / selectedEntry.targetQty) * 100).toFixed(1) : 0}%
-                      </span>
-                      <span className="text-sm text-muted-foreground mb-1">of target production</span>
-                    </div>
-                  </div>
-                  <div className="rounded-xl border border-border p-4 bg-card">
-                    <div className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Wastage Rate</div>
-                    <div className="flex items-end gap-2">
-                      <span className={`text-3xl font-black ${
-                        (totalByproduct + totalScrap) / totalActualFg <= 0.05 ? 'text-emerald-600' :
-                        (totalByproduct + totalScrap) / totalActualFg <= 0.15 ? 'text-amber-600' : 'text-red-600'
-                      }`}>
-                        {totalActualFg > 0 ? (((totalByproduct + totalScrap) / totalActualFg) * 100).toFixed(1) : 0}%
-                      </span>
-                      <span className="text-sm text-muted-foreground mb-1">byproduct + scrap as % of FG</span>
-                    </div>
-                  </div>
-                </div>
+                {/* Summary removed per user request */}
 
                 {/* Notes */}
                 <div className="space-y-2 mb-6">

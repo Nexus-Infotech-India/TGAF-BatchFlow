@@ -1141,6 +1141,28 @@ exports.Prisma.MachineScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FGProductionVerificationScalarFieldEnum = {
+  id: 'id',
+  verificationNumber: 'verificationNumber',
+  productionEntryId: 'productionEntryId',
+  entryNumber: 'entryNumber',
+  fgProductName: 'fgProductName',
+  totalPackets: 'totalPackets',
+  packetSize: 'packetSize',
+  packetUnit: 'packetUnit',
+  toLocationId: 'toLocationId',
+  toLocationName: 'toLocationName',
+  status: 'status',
+  rejectionReason: 'rejectionReason',
+  notes: 'notes',
+  dispatchedById: 'dispatchedById',
+  dispatchedAt: 'dispatchedAt',
+  verifiedById: 'verifiedById',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1426,7 +1448,8 @@ exports.Prisma.ModelName = {
   FGBatchConsumption: 'FGBatchConsumption',
   FGProductionEntry: 'FGProductionEntry',
   FGProductionMachineEntry: 'FGProductionMachineEntry',
-  Machine: 'Machine'
+  Machine: 'Machine',
+  FGProductionVerification: 'FGProductionVerification'
 };
 
 /**

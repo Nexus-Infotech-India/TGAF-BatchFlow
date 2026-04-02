@@ -409,6 +409,12 @@ export const API_ROUTES = {
     GET_FG_PRODUCTION_ENTRIES: `${BASE_URL}/raw/fg-batch/production-entries`,
     GET_FG_PRODUCTION_ENTRY_BY_ID: (id: string) => `${BASE_URL}/raw/fg-batch/production-entries/${id}`,
     COMPLETE_FG_PRODUCTION_ENTRY: (id: string) => `${BASE_URL}/raw/fg-batch/production-entries/${id}/complete`,
+
+    // FG Production Verification
+    DISPATCH_FG_VERIFICATION: `${BASE_URL}/raw/fg-verification/dispatch`,
+    GET_FG_VERIFICATIONS: `${BASE_URL}/raw/fg-verification`,
+    ACCEPT_FG_VERIFICATION: (id: string) => `${BASE_URL}/raw/fg-verification/${id}/accept`,
+    REJECT_FG_VERIFICATION: (id: string) => `${BASE_URL}/raw/fg-verification/${id}/reject`,
   },
 
   DRAFT: {

@@ -279,7 +279,7 @@ export class FGProductionController {
   static async submitProductionOutput(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const { machineEntries } = req.body; // Array of { id: machineEntryId, actualFgQty, actualByproduct, actualScrap, actualPackets }
+      const { machineEntries } = req.body; // Array of { id, actualFgQty, actualByproduct, actualScrap, actualPackets, actualUnit }
 
       if (!Array.isArray(machineEntries) || machineEntries.length === 0) {
         res.status(400).json({ error: 'No machine outputs provided' });
@@ -315,18 +315,37 @@ export class FGProductionController {
           const actualByproduct = Number(input.actualByproduct) || 0;
           const actualScrap = Number(input.actualScrap) || 0;
           const actualPackets = Number(input.actualPackets) || 0;
+          
+          const actualUnit = input.actualUnit || existingEntry.targetUnit || 'Ton';
+          const actualByproductUnit = input.actualByproductUnit || existingEntry.targetUnit || 'Ton';
+          const actualScrapUnit = input.actualScrapUnit || existingEntry.targetUnit || 'Ton';
 
-          totalActualFg += actualFgQty;
-          totalActualByproduct += actualByproduct;
-          totalActualScrap += actualScrap;
+          // Convert all inputs to targetUnit so we can safely add them up
+          const factor = (unit: string) => {
+            const u = unit.toLowerCase();
+            if (u === 'ton') return 1000000;
+            if (u === 'kg') return 1000;
+            if (u === 'gram') return 1;
+            return 1000;
+          };
+          
+          const fOut = factor(existingEntry.targetUnit || 'Ton');
+
+          // Normalized quantities into targetUnit
+          totalActualFg += (actualFgQty * factor(actualUnit)) / fOut;
+          totalActualByproduct += (actualByproduct * factor(actualByproductUnit)) / fOut;
+          totalActualScrap += (actualScrap * factor(actualScrapUnit)) / fOut;
           totalActualPackets += actualPackets;
 
           await tx.fGProductionMachineEntry.update({
             where: { id: input.id },
             data: {
               actualFgQty,
+              actualFgUnit: actualUnit,
               actualByproduct,
+              actualByproductUnit,
               actualScrap,
+              actualScrapUnit,
               actualPackets,
             },
           });

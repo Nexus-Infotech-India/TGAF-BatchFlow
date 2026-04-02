@@ -25,6 +25,7 @@ import { ProductionController } from '../controllers/rawmaterial/production.cont
 import { GrindingDispatchController } from '../controllers/rawmaterial/grindingDispatch.controller';
 import { FGBatchController } from '../controllers/rawmaterial/fgBatch.controller';
 import { FGProductionController } from '../controllers/rawmaterial/fgProduction.controller';
+import { FGVerificationController } from '../controllers/rawmaterial/fgVerification.controller';
 
 const router = Router();
 
@@ -197,5 +198,11 @@ router.put('/fg-batch/production-entries/:id/complete', FGProductionController.s
 router.get('/fg-batch/:id', FGBatchController.getFGBatchById);
 router.put('/fg-batch/:id/accept', FGBatchController.acceptFGBatch);
 router.put('/fg-batch/:id/reject', FGBatchController.rejectFGBatch);
+
+// FG Production Verification (Dispatch & Warehouse Accept/Reject)
+router.post('/fg-verification/dispatch', FGVerificationController.dispatchToWarehouse);
+router.get('/fg-verification', FGVerificationController.getVerifications);
+router.put('/fg-verification/:id/accept', FGVerificationController.acceptVerification);
+router.put('/fg-verification/:id/reject', FGVerificationController.rejectVerification);
 
 export default router;

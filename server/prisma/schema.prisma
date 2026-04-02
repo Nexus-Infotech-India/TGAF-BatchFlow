@@ -1522,6 +1522,7 @@ model FGProductionEntry {
 
   fgBatch         FGBatch                    @relation(fields: [fgBatchId], references: [id])
   machineEntries  FGProductionMachineEntry[]
+  verifications   FGProductionVerification[]
 }
 
 model FGProductionMachineEntry {
@@ -1559,4 +1560,30 @@ model Machine {
   updatedAt    DateTime @updatedAt
 
   productionMachineEntries FGProductionMachineEntry[]
+}
+
+// ==================== FG PRODUCTION VERIFICATION ====================
+
+model FGProductionVerification {
+  id                  String   @id @default(uuid())
+  verificationNumber  String   @unique
+  productionEntryId   String
+  entryNumber         String
+  fgProductName       String
+  totalPackets        Int      @default(0)
+  packetSize          Float?
+  packetUnit          String?
+  toLocationId        String
+  toLocationName      String?
+  status              String   @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  rejectionReason     String?
+  notes               String?
+  dispatchedById      String?
+  dispatchedAt        DateTime @default(now())
+  verifiedById        String?
+  verifiedAt          DateTime?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  productionEntry FGProductionEntry @relation(fields: [productionEntryId], references: [id])
 }

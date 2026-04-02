@@ -413,6 +413,11 @@ export type FGProductionMachineEntry = $Result.DefaultSelection<Prisma.$FGProduc
  * 
  */
 export type Machine = $Result.DefaultSelection<Prisma.$MachinePayload>
+/**
+ * Model FGProductionVerification
+ * 
+ */
+export type FGProductionVerification = $Result.DefaultSelection<Prisma.$FGProductionVerificationPayload>
 
 /**
  * Enums
@@ -1703,6 +1708,16 @@ export class PrismaClient<
     * ```
     */
   get machine(): Prisma.MachineDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fGProductionVerification`: Exposes CRUD operations for the **FGProductionVerification** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FGProductionVerifications
+    * const fGProductionVerifications = await prisma.fGProductionVerification.findMany()
+    * ```
+    */
+  get fGProductionVerification(): Prisma.FGProductionVerificationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2223,7 +2238,8 @@ export namespace Prisma {
     FGBatchConsumption: 'FGBatchConsumption',
     FGProductionEntry: 'FGProductionEntry',
     FGProductionMachineEntry: 'FGProductionMachineEntry',
-    Machine: 'Machine'
+    Machine: 'Machine',
+    FGProductionVerification: 'FGProductionVerification'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2242,7 +2258,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "machine"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "machine" | "fGProductionVerification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -8166,6 +8182,80 @@ export namespace Prisma {
           }
         }
       }
+      FGProductionVerification: {
+        payload: Prisma.$FGProductionVerificationPayload<ExtArgs>
+        fields: Prisma.FGProductionVerificationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FGProductionVerificationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FGProductionVerificationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload>
+          }
+          findFirst: {
+            args: Prisma.FGProductionVerificationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FGProductionVerificationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload>
+          }
+          findMany: {
+            args: Prisma.FGProductionVerificationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload>[]
+          }
+          create: {
+            args: Prisma.FGProductionVerificationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload>
+          }
+          createMany: {
+            args: Prisma.FGProductionVerificationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FGProductionVerificationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload>[]
+          }
+          delete: {
+            args: Prisma.FGProductionVerificationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload>
+          }
+          update: {
+            args: Prisma.FGProductionVerificationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload>
+          }
+          deleteMany: {
+            args: Prisma.FGProductionVerificationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FGProductionVerificationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FGProductionVerificationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload>[]
+          }
+          upsert: {
+            args: Prisma.FGProductionVerificationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGProductionVerificationPayload>
+          }
+          aggregate: {
+            args: Prisma.FGProductionVerificationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFGProductionVerification>
+          }
+          groupBy: {
+            args: Prisma.FGProductionVerificationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FGProductionVerificationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FGProductionVerificationCountArgs<ExtArgs>
+            result: $Utils.Optional<FGProductionVerificationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -8342,6 +8432,7 @@ export namespace Prisma {
     fGProductionEntry?: FGProductionEntryOmit
     fGProductionMachineEntry?: FGProductionMachineEntryOmit
     machine?: MachineOmit
+    fGProductionVerification?: FGProductionVerificationOmit
   }
 
   /* Types for Logging */
@@ -10489,10 +10580,12 @@ export namespace Prisma {
 
   export type FGProductionEntryCountOutputType = {
     machineEntries: number
+    verifications: number
   }
 
   export type FGProductionEntryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     machineEntries?: boolean | FGProductionEntryCountOutputTypeCountMachineEntriesArgs
+    verifications?: boolean | FGProductionEntryCountOutputTypeCountVerificationsArgs
   }
 
   // Custom InputTypes
@@ -10511,6 +10604,13 @@ export namespace Prisma {
    */
   export type FGProductionEntryCountOutputTypeCountMachineEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FGProductionMachineEntryWhereInput
+  }
+
+  /**
+   * FGProductionEntryCountOutputType without action
+   */
+  export type FGProductionEntryCountOutputTypeCountVerificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGProductionVerificationWhereInput
   }
 
 
@@ -102969,6 +103069,7 @@ export namespace Prisma {
     updatedAt?: boolean
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
     machineEntries?: boolean | FGProductionEntry$machineEntriesArgs<ExtArgs>
+    verifications?: boolean | FGProductionEntry$verificationsArgs<ExtArgs>
     _count?: boolean | FGProductionEntryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fGProductionEntry"]>
 
@@ -103044,6 +103145,7 @@ export namespace Prisma {
   export type FGProductionEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
     machineEntries?: boolean | FGProductionEntry$machineEntriesArgs<ExtArgs>
+    verifications?: boolean | FGProductionEntry$verificationsArgs<ExtArgs>
     _count?: boolean | FGProductionEntryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FGProductionEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -103058,6 +103160,7 @@ export namespace Prisma {
     objects: {
       fgBatch: Prisma.$FGBatchPayload<ExtArgs>
       machineEntries: Prisma.$FGProductionMachineEntryPayload<ExtArgs>[]
+      verifications: Prisma.$FGProductionVerificationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -103475,6 +103578,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     fgBatch<T extends FGBatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGBatchDefaultArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     machineEntries<T extends FGProductionEntry$machineEntriesArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntry$machineEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    verifications<T extends FGProductionEntry$verificationsArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntry$verificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -103940,6 +104044,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FGProductionMachineEntryScalarFieldEnum | FGProductionMachineEntryScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionEntry.verifications
+   */
+  export type FGProductionEntry$verificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+    where?: FGProductionVerificationWhereInput
+    orderBy?: FGProductionVerificationOrderByWithRelationInput | FGProductionVerificationOrderByWithRelationInput[]
+    cursor?: FGProductionVerificationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FGProductionVerificationScalarFieldEnum | FGProductionVerificationScalarFieldEnum[]
   }
 
   /**
@@ -106368,6 +106496,1284 @@ export namespace Prisma {
 
 
   /**
+   * Model FGProductionVerification
+   */
+
+  export type AggregateFGProductionVerification = {
+    _count: FGProductionVerificationCountAggregateOutputType | null
+    _avg: FGProductionVerificationAvgAggregateOutputType | null
+    _sum: FGProductionVerificationSumAggregateOutputType | null
+    _min: FGProductionVerificationMinAggregateOutputType | null
+    _max: FGProductionVerificationMaxAggregateOutputType | null
+  }
+
+  export type FGProductionVerificationAvgAggregateOutputType = {
+    totalPackets: number | null
+    packetSize: number | null
+  }
+
+  export type FGProductionVerificationSumAggregateOutputType = {
+    totalPackets: number | null
+    packetSize: number | null
+  }
+
+  export type FGProductionVerificationMinAggregateOutputType = {
+    id: string | null
+    verificationNumber: string | null
+    productionEntryId: string | null
+    entryNumber: string | null
+    fgProductName: string | null
+    totalPackets: number | null
+    packetSize: number | null
+    packetUnit: string | null
+    toLocationId: string | null
+    toLocationName: string | null
+    status: string | null
+    rejectionReason: string | null
+    notes: string | null
+    dispatchedById: string | null
+    dispatchedAt: Date | null
+    verifiedById: string | null
+    verifiedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGProductionVerificationMaxAggregateOutputType = {
+    id: string | null
+    verificationNumber: string | null
+    productionEntryId: string | null
+    entryNumber: string | null
+    fgProductName: string | null
+    totalPackets: number | null
+    packetSize: number | null
+    packetUnit: string | null
+    toLocationId: string | null
+    toLocationName: string | null
+    status: string | null
+    rejectionReason: string | null
+    notes: string | null
+    dispatchedById: string | null
+    dispatchedAt: Date | null
+    verifiedById: string | null
+    verifiedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGProductionVerificationCountAggregateOutputType = {
+    id: number
+    verificationNumber: number
+    productionEntryId: number
+    entryNumber: number
+    fgProductName: number
+    totalPackets: number
+    packetSize: number
+    packetUnit: number
+    toLocationId: number
+    toLocationName: number
+    status: number
+    rejectionReason: number
+    notes: number
+    dispatchedById: number
+    dispatchedAt: number
+    verifiedById: number
+    verifiedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FGProductionVerificationAvgAggregateInputType = {
+    totalPackets?: true
+    packetSize?: true
+  }
+
+  export type FGProductionVerificationSumAggregateInputType = {
+    totalPackets?: true
+    packetSize?: true
+  }
+
+  export type FGProductionVerificationMinAggregateInputType = {
+    id?: true
+    verificationNumber?: true
+    productionEntryId?: true
+    entryNumber?: true
+    fgProductName?: true
+    totalPackets?: true
+    packetSize?: true
+    packetUnit?: true
+    toLocationId?: true
+    toLocationName?: true
+    status?: true
+    rejectionReason?: true
+    notes?: true
+    dispatchedById?: true
+    dispatchedAt?: true
+    verifiedById?: true
+    verifiedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGProductionVerificationMaxAggregateInputType = {
+    id?: true
+    verificationNumber?: true
+    productionEntryId?: true
+    entryNumber?: true
+    fgProductName?: true
+    totalPackets?: true
+    packetSize?: true
+    packetUnit?: true
+    toLocationId?: true
+    toLocationName?: true
+    status?: true
+    rejectionReason?: true
+    notes?: true
+    dispatchedById?: true
+    dispatchedAt?: true
+    verifiedById?: true
+    verifiedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGProductionVerificationCountAggregateInputType = {
+    id?: true
+    verificationNumber?: true
+    productionEntryId?: true
+    entryNumber?: true
+    fgProductName?: true
+    totalPackets?: true
+    packetSize?: true
+    packetUnit?: true
+    toLocationId?: true
+    toLocationName?: true
+    status?: true
+    rejectionReason?: true
+    notes?: true
+    dispatchedById?: true
+    dispatchedAt?: true
+    verifiedById?: true
+    verifiedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FGProductionVerificationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGProductionVerification to aggregate.
+     */
+    where?: FGProductionVerificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionVerifications to fetch.
+     */
+    orderBy?: FGProductionVerificationOrderByWithRelationInput | FGProductionVerificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FGProductionVerificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionVerifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionVerifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FGProductionVerifications
+    **/
+    _count?: true | FGProductionVerificationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FGProductionVerificationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FGProductionVerificationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FGProductionVerificationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FGProductionVerificationMaxAggregateInputType
+  }
+
+  export type GetFGProductionVerificationAggregateType<T extends FGProductionVerificationAggregateArgs> = {
+        [P in keyof T & keyof AggregateFGProductionVerification]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFGProductionVerification[P]>
+      : GetScalarType<T[P], AggregateFGProductionVerification[P]>
+  }
+
+
+
+
+  export type FGProductionVerificationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGProductionVerificationWhereInput
+    orderBy?: FGProductionVerificationOrderByWithAggregationInput | FGProductionVerificationOrderByWithAggregationInput[]
+    by: FGProductionVerificationScalarFieldEnum[] | FGProductionVerificationScalarFieldEnum
+    having?: FGProductionVerificationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FGProductionVerificationCountAggregateInputType | true
+    _avg?: FGProductionVerificationAvgAggregateInputType
+    _sum?: FGProductionVerificationSumAggregateInputType
+    _min?: FGProductionVerificationMinAggregateInputType
+    _max?: FGProductionVerificationMaxAggregateInputType
+  }
+
+  export type FGProductionVerificationGroupByOutputType = {
+    id: string
+    verificationNumber: string
+    productionEntryId: string
+    entryNumber: string
+    fgProductName: string
+    totalPackets: number
+    packetSize: number | null
+    packetUnit: string | null
+    toLocationId: string
+    toLocationName: string | null
+    status: string
+    rejectionReason: string | null
+    notes: string | null
+    dispatchedById: string | null
+    dispatchedAt: Date
+    verifiedById: string | null
+    verifiedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: FGProductionVerificationCountAggregateOutputType | null
+    _avg: FGProductionVerificationAvgAggregateOutputType | null
+    _sum: FGProductionVerificationSumAggregateOutputType | null
+    _min: FGProductionVerificationMinAggregateOutputType | null
+    _max: FGProductionVerificationMaxAggregateOutputType | null
+  }
+
+  type GetFGProductionVerificationGroupByPayload<T extends FGProductionVerificationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FGProductionVerificationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FGProductionVerificationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FGProductionVerificationGroupByOutputType[P]>
+            : GetScalarType<T[P], FGProductionVerificationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FGProductionVerificationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    verificationNumber?: boolean
+    productionEntryId?: boolean
+    entryNumber?: boolean
+    fgProductName?: boolean
+    totalPackets?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    toLocationId?: boolean
+    toLocationName?: boolean
+    status?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    dispatchedById?: boolean
+    dispatchedAt?: boolean
+    verifiedById?: boolean
+    verifiedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGProductionVerification"]>
+
+  export type FGProductionVerificationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    verificationNumber?: boolean
+    productionEntryId?: boolean
+    entryNumber?: boolean
+    fgProductName?: boolean
+    totalPackets?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    toLocationId?: boolean
+    toLocationName?: boolean
+    status?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    dispatchedById?: boolean
+    dispatchedAt?: boolean
+    verifiedById?: boolean
+    verifiedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGProductionVerification"]>
+
+  export type FGProductionVerificationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    verificationNumber?: boolean
+    productionEntryId?: boolean
+    entryNumber?: boolean
+    fgProductName?: boolean
+    totalPackets?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    toLocationId?: boolean
+    toLocationName?: boolean
+    status?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    dispatchedById?: boolean
+    dispatchedAt?: boolean
+    verifiedById?: boolean
+    verifiedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGProductionVerification"]>
+
+  export type FGProductionVerificationSelectScalar = {
+    id?: boolean
+    verificationNumber?: boolean
+    productionEntryId?: boolean
+    entryNumber?: boolean
+    fgProductName?: boolean
+    totalPackets?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    toLocationId?: boolean
+    toLocationName?: boolean
+    status?: boolean
+    rejectionReason?: boolean
+    notes?: boolean
+    dispatchedById?: boolean
+    dispatchedAt?: boolean
+    verifiedById?: boolean
+    verifiedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FGProductionVerificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "verificationNumber" | "productionEntryId" | "entryNumber" | "fgProductName" | "totalPackets" | "packetSize" | "packetUnit" | "toLocationId" | "toLocationName" | "status" | "rejectionReason" | "notes" | "dispatchedById" | "dispatchedAt" | "verifiedById" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["fGProductionVerification"]>
+  export type FGProductionVerificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+  }
+  export type FGProductionVerificationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+  }
+  export type FGProductionVerificationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+  }
+
+  export type $FGProductionVerificationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FGProductionVerification"
+    objects: {
+      productionEntry: Prisma.$FGProductionEntryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      verificationNumber: string
+      productionEntryId: string
+      entryNumber: string
+      fgProductName: string
+      totalPackets: number
+      packetSize: number | null
+      packetUnit: string | null
+      toLocationId: string
+      toLocationName: string | null
+      status: string
+      rejectionReason: string | null
+      notes: string | null
+      dispatchedById: string | null
+      dispatchedAt: Date
+      verifiedById: string | null
+      verifiedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fGProductionVerification"]>
+    composites: {}
+  }
+
+  type FGProductionVerificationGetPayload<S extends boolean | null | undefined | FGProductionVerificationDefaultArgs> = $Result.GetResult<Prisma.$FGProductionVerificationPayload, S>
+
+  type FGProductionVerificationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FGProductionVerificationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FGProductionVerificationCountAggregateInputType | true
+    }
+
+  export interface FGProductionVerificationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FGProductionVerification'], meta: { name: 'FGProductionVerification' } }
+    /**
+     * Find zero or one FGProductionVerification that matches the filter.
+     * @param {FGProductionVerificationFindUniqueArgs} args - Arguments to find a FGProductionVerification
+     * @example
+     * // Get one FGProductionVerification
+     * const fGProductionVerification = await prisma.fGProductionVerification.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FGProductionVerificationFindUniqueArgs>(args: SelectSubset<T, FGProductionVerificationFindUniqueArgs<ExtArgs>>): Prisma__FGProductionVerificationClient<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FGProductionVerification that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FGProductionVerificationFindUniqueOrThrowArgs} args - Arguments to find a FGProductionVerification
+     * @example
+     * // Get one FGProductionVerification
+     * const fGProductionVerification = await prisma.fGProductionVerification.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FGProductionVerificationFindUniqueOrThrowArgs>(args: SelectSubset<T, FGProductionVerificationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FGProductionVerificationClient<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGProductionVerification that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionVerificationFindFirstArgs} args - Arguments to find a FGProductionVerification
+     * @example
+     * // Get one FGProductionVerification
+     * const fGProductionVerification = await prisma.fGProductionVerification.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FGProductionVerificationFindFirstArgs>(args?: SelectSubset<T, FGProductionVerificationFindFirstArgs<ExtArgs>>): Prisma__FGProductionVerificationClient<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGProductionVerification that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionVerificationFindFirstOrThrowArgs} args - Arguments to find a FGProductionVerification
+     * @example
+     * // Get one FGProductionVerification
+     * const fGProductionVerification = await prisma.fGProductionVerification.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FGProductionVerificationFindFirstOrThrowArgs>(args?: SelectSubset<T, FGProductionVerificationFindFirstOrThrowArgs<ExtArgs>>): Prisma__FGProductionVerificationClient<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FGProductionVerifications that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionVerificationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FGProductionVerifications
+     * const fGProductionVerifications = await prisma.fGProductionVerification.findMany()
+     * 
+     * // Get first 10 FGProductionVerifications
+     * const fGProductionVerifications = await prisma.fGProductionVerification.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fGProductionVerificationWithIdOnly = await prisma.fGProductionVerification.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FGProductionVerificationFindManyArgs>(args?: SelectSubset<T, FGProductionVerificationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FGProductionVerification.
+     * @param {FGProductionVerificationCreateArgs} args - Arguments to create a FGProductionVerification.
+     * @example
+     * // Create one FGProductionVerification
+     * const FGProductionVerification = await prisma.fGProductionVerification.create({
+     *   data: {
+     *     // ... data to create a FGProductionVerification
+     *   }
+     * })
+     * 
+     */
+    create<T extends FGProductionVerificationCreateArgs>(args: SelectSubset<T, FGProductionVerificationCreateArgs<ExtArgs>>): Prisma__FGProductionVerificationClient<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FGProductionVerifications.
+     * @param {FGProductionVerificationCreateManyArgs} args - Arguments to create many FGProductionVerifications.
+     * @example
+     * // Create many FGProductionVerifications
+     * const fGProductionVerification = await prisma.fGProductionVerification.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FGProductionVerificationCreateManyArgs>(args?: SelectSubset<T, FGProductionVerificationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FGProductionVerifications and returns the data saved in the database.
+     * @param {FGProductionVerificationCreateManyAndReturnArgs} args - Arguments to create many FGProductionVerifications.
+     * @example
+     * // Create many FGProductionVerifications
+     * const fGProductionVerification = await prisma.fGProductionVerification.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FGProductionVerifications and only return the `id`
+     * const fGProductionVerificationWithIdOnly = await prisma.fGProductionVerification.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FGProductionVerificationCreateManyAndReturnArgs>(args?: SelectSubset<T, FGProductionVerificationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FGProductionVerification.
+     * @param {FGProductionVerificationDeleteArgs} args - Arguments to delete one FGProductionVerification.
+     * @example
+     * // Delete one FGProductionVerification
+     * const FGProductionVerification = await prisma.fGProductionVerification.delete({
+     *   where: {
+     *     // ... filter to delete one FGProductionVerification
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FGProductionVerificationDeleteArgs>(args: SelectSubset<T, FGProductionVerificationDeleteArgs<ExtArgs>>): Prisma__FGProductionVerificationClient<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FGProductionVerification.
+     * @param {FGProductionVerificationUpdateArgs} args - Arguments to update one FGProductionVerification.
+     * @example
+     * // Update one FGProductionVerification
+     * const fGProductionVerification = await prisma.fGProductionVerification.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FGProductionVerificationUpdateArgs>(args: SelectSubset<T, FGProductionVerificationUpdateArgs<ExtArgs>>): Prisma__FGProductionVerificationClient<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FGProductionVerifications.
+     * @param {FGProductionVerificationDeleteManyArgs} args - Arguments to filter FGProductionVerifications to delete.
+     * @example
+     * // Delete a few FGProductionVerifications
+     * const { count } = await prisma.fGProductionVerification.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FGProductionVerificationDeleteManyArgs>(args?: SelectSubset<T, FGProductionVerificationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGProductionVerifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionVerificationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FGProductionVerifications
+     * const fGProductionVerification = await prisma.fGProductionVerification.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FGProductionVerificationUpdateManyArgs>(args: SelectSubset<T, FGProductionVerificationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGProductionVerifications and returns the data updated in the database.
+     * @param {FGProductionVerificationUpdateManyAndReturnArgs} args - Arguments to update many FGProductionVerifications.
+     * @example
+     * // Update many FGProductionVerifications
+     * const fGProductionVerification = await prisma.fGProductionVerification.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FGProductionVerifications and only return the `id`
+     * const fGProductionVerificationWithIdOnly = await prisma.fGProductionVerification.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FGProductionVerificationUpdateManyAndReturnArgs>(args: SelectSubset<T, FGProductionVerificationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FGProductionVerification.
+     * @param {FGProductionVerificationUpsertArgs} args - Arguments to update or create a FGProductionVerification.
+     * @example
+     * // Update or create a FGProductionVerification
+     * const fGProductionVerification = await prisma.fGProductionVerification.upsert({
+     *   create: {
+     *     // ... data to create a FGProductionVerification
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FGProductionVerification we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FGProductionVerificationUpsertArgs>(args: SelectSubset<T, FGProductionVerificationUpsertArgs<ExtArgs>>): Prisma__FGProductionVerificationClient<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FGProductionVerifications.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionVerificationCountArgs} args - Arguments to filter FGProductionVerifications to count.
+     * @example
+     * // Count the number of FGProductionVerifications
+     * const count = await prisma.fGProductionVerification.count({
+     *   where: {
+     *     // ... the filter for the FGProductionVerifications we want to count
+     *   }
+     * })
+    **/
+    count<T extends FGProductionVerificationCountArgs>(
+      args?: Subset<T, FGProductionVerificationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FGProductionVerificationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FGProductionVerification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionVerificationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FGProductionVerificationAggregateArgs>(args: Subset<T, FGProductionVerificationAggregateArgs>): Prisma.PrismaPromise<GetFGProductionVerificationAggregateType<T>>
+
+    /**
+     * Group by FGProductionVerification.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGProductionVerificationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FGProductionVerificationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FGProductionVerificationGroupByArgs['orderBy'] }
+        : { orderBy?: FGProductionVerificationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FGProductionVerificationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFGProductionVerificationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FGProductionVerification model
+   */
+  readonly fields: FGProductionVerificationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FGProductionVerification.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FGProductionVerificationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    productionEntry<T extends FGProductionEntryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntryDefaultArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FGProductionVerification model
+   */
+  interface FGProductionVerificationFieldRefs {
+    readonly id: FieldRef<"FGProductionVerification", 'String'>
+    readonly verificationNumber: FieldRef<"FGProductionVerification", 'String'>
+    readonly productionEntryId: FieldRef<"FGProductionVerification", 'String'>
+    readonly entryNumber: FieldRef<"FGProductionVerification", 'String'>
+    readonly fgProductName: FieldRef<"FGProductionVerification", 'String'>
+    readonly totalPackets: FieldRef<"FGProductionVerification", 'Int'>
+    readonly packetSize: FieldRef<"FGProductionVerification", 'Float'>
+    readonly packetUnit: FieldRef<"FGProductionVerification", 'String'>
+    readonly toLocationId: FieldRef<"FGProductionVerification", 'String'>
+    readonly toLocationName: FieldRef<"FGProductionVerification", 'String'>
+    readonly status: FieldRef<"FGProductionVerification", 'String'>
+    readonly rejectionReason: FieldRef<"FGProductionVerification", 'String'>
+    readonly notes: FieldRef<"FGProductionVerification", 'String'>
+    readonly dispatchedById: FieldRef<"FGProductionVerification", 'String'>
+    readonly dispatchedAt: FieldRef<"FGProductionVerification", 'DateTime'>
+    readonly verifiedById: FieldRef<"FGProductionVerification", 'String'>
+    readonly verifiedAt: FieldRef<"FGProductionVerification", 'DateTime'>
+    readonly createdAt: FieldRef<"FGProductionVerification", 'DateTime'>
+    readonly updatedAt: FieldRef<"FGProductionVerification", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FGProductionVerification findUnique
+   */
+  export type FGProductionVerificationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionVerification to fetch.
+     */
+    where: FGProductionVerificationWhereUniqueInput
+  }
+
+  /**
+   * FGProductionVerification findUniqueOrThrow
+   */
+  export type FGProductionVerificationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionVerification to fetch.
+     */
+    where: FGProductionVerificationWhereUniqueInput
+  }
+
+  /**
+   * FGProductionVerification findFirst
+   */
+  export type FGProductionVerificationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionVerification to fetch.
+     */
+    where?: FGProductionVerificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionVerifications to fetch.
+     */
+    orderBy?: FGProductionVerificationOrderByWithRelationInput | FGProductionVerificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGProductionVerifications.
+     */
+    cursor?: FGProductionVerificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionVerifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionVerifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGProductionVerifications.
+     */
+    distinct?: FGProductionVerificationScalarFieldEnum | FGProductionVerificationScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionVerification findFirstOrThrow
+   */
+  export type FGProductionVerificationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionVerification to fetch.
+     */
+    where?: FGProductionVerificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionVerifications to fetch.
+     */
+    orderBy?: FGProductionVerificationOrderByWithRelationInput | FGProductionVerificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGProductionVerifications.
+     */
+    cursor?: FGProductionVerificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionVerifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionVerifications.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGProductionVerifications.
+     */
+    distinct?: FGProductionVerificationScalarFieldEnum | FGProductionVerificationScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionVerification findMany
+   */
+  export type FGProductionVerificationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+    /**
+     * Filter, which FGProductionVerifications to fetch.
+     */
+    where?: FGProductionVerificationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGProductionVerifications to fetch.
+     */
+    orderBy?: FGProductionVerificationOrderByWithRelationInput | FGProductionVerificationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FGProductionVerifications.
+     */
+    cursor?: FGProductionVerificationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGProductionVerifications from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGProductionVerifications.
+     */
+    skip?: number
+    distinct?: FGProductionVerificationScalarFieldEnum | FGProductionVerificationScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionVerification create
+   */
+  export type FGProductionVerificationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FGProductionVerification.
+     */
+    data: XOR<FGProductionVerificationCreateInput, FGProductionVerificationUncheckedCreateInput>
+  }
+
+  /**
+   * FGProductionVerification createMany
+   */
+  export type FGProductionVerificationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FGProductionVerifications.
+     */
+    data: FGProductionVerificationCreateManyInput | FGProductionVerificationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FGProductionVerification createManyAndReturn
+   */
+  export type FGProductionVerificationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * The data used to create many FGProductionVerifications.
+     */
+    data: FGProductionVerificationCreateManyInput | FGProductionVerificationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGProductionVerification update
+   */
+  export type FGProductionVerificationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FGProductionVerification.
+     */
+    data: XOR<FGProductionVerificationUpdateInput, FGProductionVerificationUncheckedUpdateInput>
+    /**
+     * Choose, which FGProductionVerification to update.
+     */
+    where: FGProductionVerificationWhereUniqueInput
+  }
+
+  /**
+   * FGProductionVerification updateMany
+   */
+  export type FGProductionVerificationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FGProductionVerifications.
+     */
+    data: XOR<FGProductionVerificationUpdateManyMutationInput, FGProductionVerificationUncheckedUpdateManyInput>
+    /**
+     * Filter which FGProductionVerifications to update
+     */
+    where?: FGProductionVerificationWhereInput
+    /**
+     * Limit how many FGProductionVerifications to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGProductionVerification updateManyAndReturn
+   */
+  export type FGProductionVerificationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * The data used to update FGProductionVerifications.
+     */
+    data: XOR<FGProductionVerificationUpdateManyMutationInput, FGProductionVerificationUncheckedUpdateManyInput>
+    /**
+     * Filter which FGProductionVerifications to update
+     */
+    where?: FGProductionVerificationWhereInput
+    /**
+     * Limit how many FGProductionVerifications to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGProductionVerification upsert
+   */
+  export type FGProductionVerificationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FGProductionVerification to update in case it exists.
+     */
+    where: FGProductionVerificationWhereUniqueInput
+    /**
+     * In case the FGProductionVerification found by the `where` argument doesn't exist, create a new FGProductionVerification with this data.
+     */
+    create: XOR<FGProductionVerificationCreateInput, FGProductionVerificationUncheckedCreateInput>
+    /**
+     * In case the FGProductionVerification was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FGProductionVerificationUpdateInput, FGProductionVerificationUncheckedUpdateInput>
+  }
+
+  /**
+   * FGProductionVerification delete
+   */
+  export type FGProductionVerificationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+    /**
+     * Filter which FGProductionVerification to delete.
+     */
+    where: FGProductionVerificationWhereUniqueInput
+  }
+
+  /**
+   * FGProductionVerification deleteMany
+   */
+  export type FGProductionVerificationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGProductionVerifications to delete
+     */
+    where?: FGProductionVerificationWhereInput
+    /**
+     * Limit how many FGProductionVerifications to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGProductionVerification without action
+   */
+  export type FGProductionVerificationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionVerification
+     */
+    select?: FGProductionVerificationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionVerification
+     */
+    omit?: FGProductionVerificationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionVerificationInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -107639,6 +109045,31 @@ export namespace Prisma {
   };
 
   export type MachineScalarFieldEnum = (typeof MachineScalarFieldEnum)[keyof typeof MachineScalarFieldEnum]
+
+
+  export const FGProductionVerificationScalarFieldEnum: {
+    id: 'id',
+    verificationNumber: 'verificationNumber',
+    productionEntryId: 'productionEntryId',
+    entryNumber: 'entryNumber',
+    fgProductName: 'fgProductName',
+    totalPackets: 'totalPackets',
+    packetSize: 'packetSize',
+    packetUnit: 'packetUnit',
+    toLocationId: 'toLocationId',
+    toLocationName: 'toLocationName',
+    status: 'status',
+    rejectionReason: 'rejectionReason',
+    notes: 'notes',
+    dispatchedById: 'dispatchedById',
+    dispatchedAt: 'dispatchedAt',
+    verifiedById: 'verifiedById',
+    verifiedAt: 'verifiedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FGProductionVerificationScalarFieldEnum = (typeof FGProductionVerificationScalarFieldEnum)[keyof typeof FGProductionVerificationScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -114815,6 +116246,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
     fgBatch?: XOR<FGBatchScalarRelationFilter, FGBatchWhereInput>
     machineEntries?: FGProductionMachineEntryListRelationFilter
+    verifications?: FGProductionVerificationListRelationFilter
   }
 
   export type FGProductionEntryOrderByWithRelationInput = {
@@ -114839,6 +116271,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     fgBatch?: FGBatchOrderByWithRelationInput
     machineEntries?: FGProductionMachineEntryOrderByRelationAggregateInput
+    verifications?: FGProductionVerificationOrderByRelationAggregateInput
   }
 
   export type FGProductionEntryWhereUniqueInput = Prisma.AtLeast<{
@@ -114866,6 +116299,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
     fgBatch?: XOR<FGBatchScalarRelationFilter, FGBatchWhereInput>
     machineEntries?: FGProductionMachineEntryListRelationFilter
+    verifications?: FGProductionVerificationListRelationFilter
   }, "id" | "entryNumber">
 
   export type FGProductionEntryOrderByWithAggregationInput = {
@@ -115105,6 +116539,133 @@ export namespace Prisma {
     capacityUnit?: StringWithAggregatesFilter<"Machine"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Machine"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Machine"> | Date | string
+  }
+
+  export type FGProductionVerificationWhereInput = {
+    AND?: FGProductionVerificationWhereInput | FGProductionVerificationWhereInput[]
+    OR?: FGProductionVerificationWhereInput[]
+    NOT?: FGProductionVerificationWhereInput | FGProductionVerificationWhereInput[]
+    id?: StringFilter<"FGProductionVerification"> | string
+    verificationNumber?: StringFilter<"FGProductionVerification"> | string
+    productionEntryId?: StringFilter<"FGProductionVerification"> | string
+    entryNumber?: StringFilter<"FGProductionVerification"> | string
+    fgProductName?: StringFilter<"FGProductionVerification"> | string
+    totalPackets?: IntFilter<"FGProductionVerification"> | number
+    packetSize?: FloatNullableFilter<"FGProductionVerification"> | number | null
+    packetUnit?: StringNullableFilter<"FGProductionVerification"> | string | null
+    toLocationId?: StringFilter<"FGProductionVerification"> | string
+    toLocationName?: StringNullableFilter<"FGProductionVerification"> | string | null
+    status?: StringFilter<"FGProductionVerification"> | string
+    rejectionReason?: StringNullableFilter<"FGProductionVerification"> | string | null
+    notes?: StringNullableFilter<"FGProductionVerification"> | string | null
+    dispatchedById?: StringNullableFilter<"FGProductionVerification"> | string | null
+    dispatchedAt?: DateTimeFilter<"FGProductionVerification"> | Date | string
+    verifiedById?: StringNullableFilter<"FGProductionVerification"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"FGProductionVerification"> | Date | string | null
+    createdAt?: DateTimeFilter<"FGProductionVerification"> | Date | string
+    updatedAt?: DateTimeFilter<"FGProductionVerification"> | Date | string
+    productionEntry?: XOR<FGProductionEntryScalarRelationFilter, FGProductionEntryWhereInput>
+  }
+
+  export type FGProductionVerificationOrderByWithRelationInput = {
+    id?: SortOrder
+    verificationNumber?: SortOrder
+    productionEntryId?: SortOrder
+    entryNumber?: SortOrder
+    fgProductName?: SortOrder
+    totalPackets?: SortOrder
+    packetSize?: SortOrderInput | SortOrder
+    packetUnit?: SortOrderInput | SortOrder
+    toLocationId?: SortOrder
+    toLocationName?: SortOrderInput | SortOrder
+    status?: SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    dispatchedById?: SortOrderInput | SortOrder
+    dispatchedAt?: SortOrder
+    verifiedById?: SortOrderInput | SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    productionEntry?: FGProductionEntryOrderByWithRelationInput
+  }
+
+  export type FGProductionVerificationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    verificationNumber?: string
+    AND?: FGProductionVerificationWhereInput | FGProductionVerificationWhereInput[]
+    OR?: FGProductionVerificationWhereInput[]
+    NOT?: FGProductionVerificationWhereInput | FGProductionVerificationWhereInput[]
+    productionEntryId?: StringFilter<"FGProductionVerification"> | string
+    entryNumber?: StringFilter<"FGProductionVerification"> | string
+    fgProductName?: StringFilter<"FGProductionVerification"> | string
+    totalPackets?: IntFilter<"FGProductionVerification"> | number
+    packetSize?: FloatNullableFilter<"FGProductionVerification"> | number | null
+    packetUnit?: StringNullableFilter<"FGProductionVerification"> | string | null
+    toLocationId?: StringFilter<"FGProductionVerification"> | string
+    toLocationName?: StringNullableFilter<"FGProductionVerification"> | string | null
+    status?: StringFilter<"FGProductionVerification"> | string
+    rejectionReason?: StringNullableFilter<"FGProductionVerification"> | string | null
+    notes?: StringNullableFilter<"FGProductionVerification"> | string | null
+    dispatchedById?: StringNullableFilter<"FGProductionVerification"> | string | null
+    dispatchedAt?: DateTimeFilter<"FGProductionVerification"> | Date | string
+    verifiedById?: StringNullableFilter<"FGProductionVerification"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"FGProductionVerification"> | Date | string | null
+    createdAt?: DateTimeFilter<"FGProductionVerification"> | Date | string
+    updatedAt?: DateTimeFilter<"FGProductionVerification"> | Date | string
+    productionEntry?: XOR<FGProductionEntryScalarRelationFilter, FGProductionEntryWhereInput>
+  }, "id" | "verificationNumber">
+
+  export type FGProductionVerificationOrderByWithAggregationInput = {
+    id?: SortOrder
+    verificationNumber?: SortOrder
+    productionEntryId?: SortOrder
+    entryNumber?: SortOrder
+    fgProductName?: SortOrder
+    totalPackets?: SortOrder
+    packetSize?: SortOrderInput | SortOrder
+    packetUnit?: SortOrderInput | SortOrder
+    toLocationId?: SortOrder
+    toLocationName?: SortOrderInput | SortOrder
+    status?: SortOrder
+    rejectionReason?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    dispatchedById?: SortOrderInput | SortOrder
+    dispatchedAt?: SortOrder
+    verifiedById?: SortOrderInput | SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FGProductionVerificationCountOrderByAggregateInput
+    _avg?: FGProductionVerificationAvgOrderByAggregateInput
+    _max?: FGProductionVerificationMaxOrderByAggregateInput
+    _min?: FGProductionVerificationMinOrderByAggregateInput
+    _sum?: FGProductionVerificationSumOrderByAggregateInput
+  }
+
+  export type FGProductionVerificationScalarWhereWithAggregatesInput = {
+    AND?: FGProductionVerificationScalarWhereWithAggregatesInput | FGProductionVerificationScalarWhereWithAggregatesInput[]
+    OR?: FGProductionVerificationScalarWhereWithAggregatesInput[]
+    NOT?: FGProductionVerificationScalarWhereWithAggregatesInput | FGProductionVerificationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FGProductionVerification"> | string
+    verificationNumber?: StringWithAggregatesFilter<"FGProductionVerification"> | string
+    productionEntryId?: StringWithAggregatesFilter<"FGProductionVerification"> | string
+    entryNumber?: StringWithAggregatesFilter<"FGProductionVerification"> | string
+    fgProductName?: StringWithAggregatesFilter<"FGProductionVerification"> | string
+    totalPackets?: IntWithAggregatesFilter<"FGProductionVerification"> | number
+    packetSize?: FloatNullableWithAggregatesFilter<"FGProductionVerification"> | number | null
+    packetUnit?: StringNullableWithAggregatesFilter<"FGProductionVerification"> | string | null
+    toLocationId?: StringWithAggregatesFilter<"FGProductionVerification"> | string
+    toLocationName?: StringNullableWithAggregatesFilter<"FGProductionVerification"> | string | null
+    status?: StringWithAggregatesFilter<"FGProductionVerification"> | string
+    rejectionReason?: StringNullableWithAggregatesFilter<"FGProductionVerification"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"FGProductionVerification"> | string | null
+    dispatchedById?: StringNullableWithAggregatesFilter<"FGProductionVerification"> | string | null
+    dispatchedAt?: DateTimeWithAggregatesFilter<"FGProductionVerification"> | Date | string
+    verifiedById?: StringNullableWithAggregatesFilter<"FGProductionVerification"> | string | null
+    verifiedAt?: DateTimeNullableWithAggregatesFilter<"FGProductionVerification"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FGProductionVerification"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FGProductionVerification"> | Date | string
   }
 
   export type ActivityLogCreateInput = {
@@ -122355,6 +123916,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
     machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
+    verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
   }
 
   export type FGProductionEntryUncheckedCreateInput = {
@@ -122378,6 +123940,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     machineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput
+    verifications?: FGProductionVerificationUncheckedCreateNestedManyWithoutProductionEntryInput
   }
 
   export type FGProductionEntryUpdateInput = {
@@ -122401,6 +123964,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
     machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
+    verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryUncheckedUpdateInput = {
@@ -122424,6 +123988,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     machineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput
+    verifications?: FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryCreateManyInput = {
@@ -122699,6 +124264,159 @@ export namespace Prisma {
     location?: StringFieldUpdateOperationsInput | string
     capacityQty?: FloatFieldUpdateOperationsInput | number
     capacityUnit?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionVerificationCreateInput = {
+    id?: string
+    verificationNumber: string
+    entryNumber: string
+    fgProductName: string
+    totalPackets?: number
+    packetSize?: number | null
+    packetUnit?: string | null
+    toLocationId: string
+    toLocationName?: string | null
+    status?: string
+    rejectionReason?: string | null
+    notes?: string | null
+    dispatchedById?: string | null
+    dispatchedAt?: Date | string
+    verifiedById?: string | null
+    verifiedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    productionEntry: FGProductionEntryCreateNestedOneWithoutVerificationsInput
+  }
+
+  export type FGProductionVerificationUncheckedCreateInput = {
+    id?: string
+    verificationNumber: string
+    productionEntryId: string
+    entryNumber: string
+    fgProductName: string
+    totalPackets?: number
+    packetSize?: number | null
+    packetUnit?: string | null
+    toLocationId: string
+    toLocationName?: string | null
+    status?: string
+    rejectionReason?: string | null
+    notes?: string | null
+    dispatchedById?: string | null
+    dispatchedAt?: Date | string
+    verifiedById?: string | null
+    verifiedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGProductionVerificationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    verificationNumber?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionEntry?: FGProductionEntryUpdateOneRequiredWithoutVerificationsNestedInput
+  }
+
+  export type FGProductionVerificationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    verificationNumber?: StringFieldUpdateOperationsInput | string
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionVerificationCreateManyInput = {
+    id?: string
+    verificationNumber: string
+    productionEntryId: string
+    entryNumber: string
+    fgProductName: string
+    totalPackets?: number
+    packetSize?: number | null
+    packetUnit?: string | null
+    toLocationId: string
+    toLocationName?: string | null
+    status?: string
+    rejectionReason?: string | null
+    notes?: string | null
+    dispatchedById?: string | null
+    dispatchedAt?: Date | string
+    verifiedById?: string | null
+    verifiedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGProductionVerificationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    verificationNumber?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionVerificationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    verificationNumber?: StringFieldUpdateOperationsInput | string
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -127594,7 +129312,17 @@ export namespace Prisma {
     none?: FGProductionMachineEntryWhereInput
   }
 
+  export type FGProductionVerificationListRelationFilter = {
+    every?: FGProductionVerificationWhereInput
+    some?: FGProductionVerificationWhereInput
+    none?: FGProductionVerificationWhereInput
+  }
+
   export type FGProductionMachineEntryOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FGProductionVerificationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -127808,6 +129536,82 @@ export namespace Prisma {
 
   export type MachineSumOrderByAggregateInput = {
     capacityQty?: SortOrder
+  }
+
+  export type FGProductionVerificationCountOrderByAggregateInput = {
+    id?: SortOrder
+    verificationNumber?: SortOrder
+    productionEntryId?: SortOrder
+    entryNumber?: SortOrder
+    fgProductName?: SortOrder
+    totalPackets?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    toLocationId?: SortOrder
+    toLocationName?: SortOrder
+    status?: SortOrder
+    rejectionReason?: SortOrder
+    notes?: SortOrder
+    dispatchedById?: SortOrder
+    dispatchedAt?: SortOrder
+    verifiedById?: SortOrder
+    verifiedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGProductionVerificationAvgOrderByAggregateInput = {
+    totalPackets?: SortOrder
+    packetSize?: SortOrder
+  }
+
+  export type FGProductionVerificationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    verificationNumber?: SortOrder
+    productionEntryId?: SortOrder
+    entryNumber?: SortOrder
+    fgProductName?: SortOrder
+    totalPackets?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    toLocationId?: SortOrder
+    toLocationName?: SortOrder
+    status?: SortOrder
+    rejectionReason?: SortOrder
+    notes?: SortOrder
+    dispatchedById?: SortOrder
+    dispatchedAt?: SortOrder
+    verifiedById?: SortOrder
+    verifiedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGProductionVerificationMinOrderByAggregateInput = {
+    id?: SortOrder
+    verificationNumber?: SortOrder
+    productionEntryId?: SortOrder
+    entryNumber?: SortOrder
+    fgProductName?: SortOrder
+    totalPackets?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    toLocationId?: SortOrder
+    toLocationName?: SortOrder
+    status?: SortOrder
+    rejectionReason?: SortOrder
+    notes?: SortOrder
+    dispatchedById?: SortOrder
+    dispatchedAt?: SortOrder
+    verifiedById?: SortOrder
+    verifiedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGProductionVerificationSumOrderByAggregateInput = {
+    totalPackets?: SortOrder
+    packetSize?: SortOrder
   }
 
   export type BatchCreateNestedOneWithoutActivityLogInput = {
@@ -135963,11 +137767,25 @@ export namespace Prisma {
     connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
   }
 
+  export type FGProductionVerificationCreateNestedManyWithoutProductionEntryInput = {
+    create?: XOR<FGProductionVerificationCreateWithoutProductionEntryInput, FGProductionVerificationUncheckedCreateWithoutProductionEntryInput> | FGProductionVerificationCreateWithoutProductionEntryInput[] | FGProductionVerificationUncheckedCreateWithoutProductionEntryInput[]
+    connectOrCreate?: FGProductionVerificationCreateOrConnectWithoutProductionEntryInput | FGProductionVerificationCreateOrConnectWithoutProductionEntryInput[]
+    createMany?: FGProductionVerificationCreateManyProductionEntryInputEnvelope
+    connect?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
+  }
+
   export type FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput = {
     create?: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput> | FGProductionMachineEntryCreateWithoutProductionEntryInput[] | FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput[]
     connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput | FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput[]
     createMany?: FGProductionMachineEntryCreateManyProductionEntryInputEnvelope
     connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+  }
+
+  export type FGProductionVerificationUncheckedCreateNestedManyWithoutProductionEntryInput = {
+    create?: XOR<FGProductionVerificationCreateWithoutProductionEntryInput, FGProductionVerificationUncheckedCreateWithoutProductionEntryInput> | FGProductionVerificationCreateWithoutProductionEntryInput[] | FGProductionVerificationUncheckedCreateWithoutProductionEntryInput[]
+    connectOrCreate?: FGProductionVerificationCreateOrConnectWithoutProductionEntryInput | FGProductionVerificationCreateOrConnectWithoutProductionEntryInput[]
+    createMany?: FGProductionVerificationCreateManyProductionEntryInputEnvelope
+    connect?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
   }
 
   export type FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput = {
@@ -135992,6 +137810,20 @@ export namespace Prisma {
     deleteMany?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
   }
 
+  export type FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput = {
+    create?: XOR<FGProductionVerificationCreateWithoutProductionEntryInput, FGProductionVerificationUncheckedCreateWithoutProductionEntryInput> | FGProductionVerificationCreateWithoutProductionEntryInput[] | FGProductionVerificationUncheckedCreateWithoutProductionEntryInput[]
+    connectOrCreate?: FGProductionVerificationCreateOrConnectWithoutProductionEntryInput | FGProductionVerificationCreateOrConnectWithoutProductionEntryInput[]
+    upsert?: FGProductionVerificationUpsertWithWhereUniqueWithoutProductionEntryInput | FGProductionVerificationUpsertWithWhereUniqueWithoutProductionEntryInput[]
+    createMany?: FGProductionVerificationCreateManyProductionEntryInputEnvelope
+    set?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
+    disconnect?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
+    delete?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
+    connect?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
+    update?: FGProductionVerificationUpdateWithWhereUniqueWithoutProductionEntryInput | FGProductionVerificationUpdateWithWhereUniqueWithoutProductionEntryInput[]
+    updateMany?: FGProductionVerificationUpdateManyWithWhereWithoutProductionEntryInput | FGProductionVerificationUpdateManyWithWhereWithoutProductionEntryInput[]
+    deleteMany?: FGProductionVerificationScalarWhereInput | FGProductionVerificationScalarWhereInput[]
+  }
+
   export type FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput = {
     create?: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput> | FGProductionMachineEntryCreateWithoutProductionEntryInput[] | FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput[]
     connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput | FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput[]
@@ -136004,6 +137836,20 @@ export namespace Prisma {
     update?: FGProductionMachineEntryUpdateWithWhereUniqueWithoutProductionEntryInput | FGProductionMachineEntryUpdateWithWhereUniqueWithoutProductionEntryInput[]
     updateMany?: FGProductionMachineEntryUpdateManyWithWhereWithoutProductionEntryInput | FGProductionMachineEntryUpdateManyWithWhereWithoutProductionEntryInput[]
     deleteMany?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
+  }
+
+  export type FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryNestedInput = {
+    create?: XOR<FGProductionVerificationCreateWithoutProductionEntryInput, FGProductionVerificationUncheckedCreateWithoutProductionEntryInput> | FGProductionVerificationCreateWithoutProductionEntryInput[] | FGProductionVerificationUncheckedCreateWithoutProductionEntryInput[]
+    connectOrCreate?: FGProductionVerificationCreateOrConnectWithoutProductionEntryInput | FGProductionVerificationCreateOrConnectWithoutProductionEntryInput[]
+    upsert?: FGProductionVerificationUpsertWithWhereUniqueWithoutProductionEntryInput | FGProductionVerificationUpsertWithWhereUniqueWithoutProductionEntryInput[]
+    createMany?: FGProductionVerificationCreateManyProductionEntryInputEnvelope
+    set?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
+    disconnect?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
+    delete?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
+    connect?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
+    update?: FGProductionVerificationUpdateWithWhereUniqueWithoutProductionEntryInput | FGProductionVerificationUpdateWithWhereUniqueWithoutProductionEntryInput[]
+    updateMany?: FGProductionVerificationUpdateManyWithWhereWithoutProductionEntryInput | FGProductionVerificationUpdateManyWithWhereWithoutProductionEntryInput[]
+    deleteMany?: FGProductionVerificationScalarWhereInput | FGProductionVerificationScalarWhereInput[]
   }
 
   export type FGProductionEntryCreateNestedOneWithoutMachineEntriesInput = {
@@ -136074,6 +137920,20 @@ export namespace Prisma {
     update?: FGProductionMachineEntryUpdateWithWhereUniqueWithoutMachineInput | FGProductionMachineEntryUpdateWithWhereUniqueWithoutMachineInput[]
     updateMany?: FGProductionMachineEntryUpdateManyWithWhereWithoutMachineInput | FGProductionMachineEntryUpdateManyWithWhereWithoutMachineInput[]
     deleteMany?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
+  }
+
+  export type FGProductionEntryCreateNestedOneWithoutVerificationsInput = {
+    create?: XOR<FGProductionEntryCreateWithoutVerificationsInput, FGProductionEntryUncheckedCreateWithoutVerificationsInput>
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutVerificationsInput
+    connect?: FGProductionEntryWhereUniqueInput
+  }
+
+  export type FGProductionEntryUpdateOneRequiredWithoutVerificationsNestedInput = {
+    create?: XOR<FGProductionEntryCreateWithoutVerificationsInput, FGProductionEntryUncheckedCreateWithoutVerificationsInput>
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutVerificationsInput
+    upsert?: FGProductionEntryUpsertWithoutVerificationsInput
+    connect?: FGProductionEntryWhereUniqueInput
+    update?: XOR<XOR<FGProductionEntryUpdateToOneWithWhereWithoutVerificationsInput, FGProductionEntryUpdateWithoutVerificationsInput>, FGProductionEntryUncheckedUpdateWithoutVerificationsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -160835,6 +162695,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
+    verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
   }
 
   export type FGProductionEntryUncheckedCreateWithoutFgBatchInput = {
@@ -160857,6 +162718,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     machineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput
+    verifications?: FGProductionVerificationUncheckedCreateNestedManyWithoutProductionEntryInput
   }
 
   export type FGProductionEntryCreateOrConnectWithoutFgBatchInput = {
@@ -161118,6 +162980,58 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FGProductionVerificationCreateWithoutProductionEntryInput = {
+    id?: string
+    verificationNumber: string
+    entryNumber: string
+    fgProductName: string
+    totalPackets?: number
+    packetSize?: number | null
+    packetUnit?: string | null
+    toLocationId: string
+    toLocationName?: string | null
+    status?: string
+    rejectionReason?: string | null
+    notes?: string | null
+    dispatchedById?: string | null
+    dispatchedAt?: Date | string
+    verifiedById?: string | null
+    verifiedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGProductionVerificationUncheckedCreateWithoutProductionEntryInput = {
+    id?: string
+    verificationNumber: string
+    entryNumber: string
+    fgProductName: string
+    totalPackets?: number
+    packetSize?: number | null
+    packetUnit?: string | null
+    toLocationId: string
+    toLocationName?: string | null
+    status?: string
+    rejectionReason?: string | null
+    notes?: string | null
+    dispatchedById?: string | null
+    dispatchedAt?: Date | string
+    verifiedById?: string | null
+    verifiedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGProductionVerificationCreateOrConnectWithoutProductionEntryInput = {
+    where: FGProductionVerificationWhereUniqueInput
+    create: XOR<FGProductionVerificationCreateWithoutProductionEntryInput, FGProductionVerificationUncheckedCreateWithoutProductionEntryInput>
+  }
+
+  export type FGProductionVerificationCreateManyProductionEntryInputEnvelope = {
+    data: FGProductionVerificationCreateManyProductionEntryInput | FGProductionVerificationCreateManyProductionEntryInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FGBatchUpsertWithoutProductionEntriesInput = {
     update: XOR<FGBatchUpdateWithoutProductionEntriesInput, FGBatchUncheckedUpdateWithoutProductionEntriesInput>
     create: XOR<FGBatchCreateWithoutProductionEntriesInput, FGBatchUncheckedCreateWithoutProductionEntriesInput>
@@ -161203,6 +163117,47 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"FGProductionMachineEntry"> | Date | string
   }
 
+  export type FGProductionVerificationUpsertWithWhereUniqueWithoutProductionEntryInput = {
+    where: FGProductionVerificationWhereUniqueInput
+    update: XOR<FGProductionVerificationUpdateWithoutProductionEntryInput, FGProductionVerificationUncheckedUpdateWithoutProductionEntryInput>
+    create: XOR<FGProductionVerificationCreateWithoutProductionEntryInput, FGProductionVerificationUncheckedCreateWithoutProductionEntryInput>
+  }
+
+  export type FGProductionVerificationUpdateWithWhereUniqueWithoutProductionEntryInput = {
+    where: FGProductionVerificationWhereUniqueInput
+    data: XOR<FGProductionVerificationUpdateWithoutProductionEntryInput, FGProductionVerificationUncheckedUpdateWithoutProductionEntryInput>
+  }
+
+  export type FGProductionVerificationUpdateManyWithWhereWithoutProductionEntryInput = {
+    where: FGProductionVerificationScalarWhereInput
+    data: XOR<FGProductionVerificationUpdateManyMutationInput, FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryInput>
+  }
+
+  export type FGProductionVerificationScalarWhereInput = {
+    AND?: FGProductionVerificationScalarWhereInput | FGProductionVerificationScalarWhereInput[]
+    OR?: FGProductionVerificationScalarWhereInput[]
+    NOT?: FGProductionVerificationScalarWhereInput | FGProductionVerificationScalarWhereInput[]
+    id?: StringFilter<"FGProductionVerification"> | string
+    verificationNumber?: StringFilter<"FGProductionVerification"> | string
+    productionEntryId?: StringFilter<"FGProductionVerification"> | string
+    entryNumber?: StringFilter<"FGProductionVerification"> | string
+    fgProductName?: StringFilter<"FGProductionVerification"> | string
+    totalPackets?: IntFilter<"FGProductionVerification"> | number
+    packetSize?: FloatNullableFilter<"FGProductionVerification"> | number | null
+    packetUnit?: StringNullableFilter<"FGProductionVerification"> | string | null
+    toLocationId?: StringFilter<"FGProductionVerification"> | string
+    toLocationName?: StringNullableFilter<"FGProductionVerification"> | string | null
+    status?: StringFilter<"FGProductionVerification"> | string
+    rejectionReason?: StringNullableFilter<"FGProductionVerification"> | string | null
+    notes?: StringNullableFilter<"FGProductionVerification"> | string | null
+    dispatchedById?: StringNullableFilter<"FGProductionVerification"> | string | null
+    dispatchedAt?: DateTimeFilter<"FGProductionVerification"> | Date | string
+    verifiedById?: StringNullableFilter<"FGProductionVerification"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"FGProductionVerification"> | Date | string | null
+    createdAt?: DateTimeFilter<"FGProductionVerification"> | Date | string
+    updatedAt?: DateTimeFilter<"FGProductionVerification"> | Date | string
+  }
+
   export type FGProductionEntryCreateWithoutMachineEntriesInput = {
     id?: string
     entryNumber: string
@@ -161223,6 +163178,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
+    verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
   }
 
   export type FGProductionEntryUncheckedCreateWithoutMachineEntriesInput = {
@@ -161245,6 +163201,7 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    verifications?: FGProductionVerificationUncheckedCreateNestedManyWithoutProductionEntryInput
   }
 
   export type FGProductionEntryCreateOrConnectWithoutMachineEntriesInput = {
@@ -161310,6 +163267,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
+    verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryUncheckedUpdateWithoutMachineEntriesInput = {
@@ -161332,6 +163290,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verifications?: FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryNestedInput
   }
 
   export type MachineUpsertWithoutProductionMachineEntriesInput = {
@@ -161427,6 +163386,114 @@ export namespace Prisma {
   export type FGProductionMachineEntryUpdateManyWithWhereWithoutMachineInput = {
     where: FGProductionMachineEntryScalarWhereInput
     data: XOR<FGProductionMachineEntryUpdateManyMutationInput, FGProductionMachineEntryUncheckedUpdateManyWithoutMachineInput>
+  }
+
+  export type FGProductionEntryCreateWithoutVerificationsInput = {
+    id?: string
+    entryNumber: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPlannedPackets?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
+    machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
+  }
+
+  export type FGProductionEntryUncheckedCreateWithoutVerificationsInput = {
+    id?: string
+    entryNumber: string
+    fgBatchId: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPlannedPackets?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    machineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput
+  }
+
+  export type FGProductionEntryCreateOrConnectWithoutVerificationsInput = {
+    where: FGProductionEntryWhereUniqueInput
+    create: XOR<FGProductionEntryCreateWithoutVerificationsInput, FGProductionEntryUncheckedCreateWithoutVerificationsInput>
+  }
+
+  export type FGProductionEntryUpsertWithoutVerificationsInput = {
+    update: XOR<FGProductionEntryUpdateWithoutVerificationsInput, FGProductionEntryUncheckedUpdateWithoutVerificationsInput>
+    create: XOR<FGProductionEntryCreateWithoutVerificationsInput, FGProductionEntryUncheckedCreateWithoutVerificationsInput>
+    where?: FGProductionEntryWhereInput
+  }
+
+  export type FGProductionEntryUpdateToOneWithWhereWithoutVerificationsInput = {
+    where?: FGProductionEntryWhereInput
+    data: XOR<FGProductionEntryUpdateWithoutVerificationsInput, FGProductionEntryUncheckedUpdateWithoutVerificationsInput>
+  }
+
+  export type FGProductionEntryUpdateWithoutVerificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
+    machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
+  }
+
+  export type FGProductionEntryUncheckedUpdateWithoutVerificationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgBatchId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    machineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput
   }
 
   export type ActivityLogCreateManyBatchInput = {
@@ -169051,6 +171118,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
+    verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryUncheckedUpdateWithoutFgBatchInput = {
@@ -169073,6 +171141,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     machineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput
+    verifications?: FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryUncheckedUpdateManyWithoutFgBatchInput = {
@@ -169112,6 +171181,27 @@ export namespace Prisma {
     actualPackets?: number
     notes?: string | null
     createdAt?: Date | string
+  }
+
+  export type FGProductionVerificationCreateManyProductionEntryInput = {
+    id?: string
+    verificationNumber: string
+    entryNumber: string
+    fgProductName: string
+    totalPackets?: number
+    packetSize?: number | null
+    packetUnit?: string | null
+    toLocationId: string
+    toLocationName?: string | null
+    status?: string
+    rejectionReason?: string | null
+    notes?: string | null
+    dispatchedById?: string | null
+    dispatchedAt?: Date | string
+    verifiedById?: string | null
+    verifiedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type FGProductionMachineEntryUpdateWithoutProductionEntryInput = {
@@ -169166,6 +171256,69 @@ export namespace Prisma {
     actualPackets?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionVerificationUpdateWithoutProductionEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    verificationNumber?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionVerificationUncheckedUpdateWithoutProductionEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    verificationNumber?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    verificationNumber?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    toLocationId?: StringFieldUpdateOperationsInput | string
+    toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedById?: NullableStringFieldUpdateOperationsInput | string | null
+    dispatchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FGProductionMachineEntryCreateManyMachineInput = {
