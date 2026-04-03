@@ -250,6 +250,7 @@ export class FGBatchController {
         productionUnit,
         packetSize,
         packetUnit,
+        cartonCapacity,
         notes,
         consumptions, // Array of { rawMaterialId, actualQuantity, unit, sourceType, batchNumber, dispatchId }
       } = req.body;
@@ -332,12 +333,17 @@ export class FGBatchController {
         }
       }
 
-      // Calculate packets
+      // Calculate packets and cartons
       let totalPackets = 0;
+      let totalCartons = 0;
       if (packetSize && packetSize > 0) {
         const prodInGrams = toGrams(Number(productionQty), productionUnit || bom.unitOfMeasurement);
         const packetInGrams = toGrams(Number(packetSize), packetUnit || 'gram');
         totalPackets = Math.floor(prodInGrams / packetInGrams);
+      }
+      
+      if (cartonCapacity && cartonCapacity > 0 && totalPackets > 0) {
+        totalCartons = Math.ceil(totalPackets / Number(cartonCapacity));
       }
 
       // Generate batch number
@@ -366,6 +372,8 @@ export class FGBatchController {
             packetSize: packetSize ? Number(packetSize) : null,
             packetUnit: packetUnit || null,
             totalPackets,
+            cartonCapacity: cartonCapacity ? Number(cartonCapacity) : null,
+            totalCartons,
             status: 'CREATED',
             notes: notes || null,
             createdById: (req as any).user?.id || 'system',
@@ -443,7 +451,7 @@ export class FGBatchController {
             entity: 'FGBatch',
             entityId: created.id,
             userId: (req as any).user?.id || 'system',
-            description: `FG Batch created: ${batchNumber}. Product: ${bom.productName}, Qty: ${productionQty} ${productionUnit || bom.unitOfMeasurement}, Packets: ${totalPackets}`,
+            description: `FG Batch created: ${batchNumber}. Product: ${bom.productName}, Qty: ${productionQty} ${productionUnit || bom.unitOfMeasurement}, Packets: ${totalPackets}, Cartons: ${totalCartons}`,
           },
         });
 
@@ -459,8 +467,10 @@ export class FGBatchController {
           productionQty: Number(productionQty),
           productionUnit: productionUnit || bom.unitOfMeasurement,
           totalPackets,
+          totalCartons,
           packetSize: packetSize ? Number(packetSize) : null,
           packetUnit: packetUnit || null,
+          cartonCapacity: cartonCapacity ? Number(cartonCapacity) : null,
         },
       });
     } catch (error) {

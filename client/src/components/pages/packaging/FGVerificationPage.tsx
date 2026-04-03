@@ -24,8 +24,10 @@ interface Verification {
   entryNumber: string;
   fgProductName: string;
   totalPackets: number;
+  totalCartons?: number;
   packetSize?: number;
   packetUnit?: string;
+  cartonCapacity?: number;
   toLocationName?: string;
   status: string;
   notes?: string;
@@ -151,6 +153,7 @@ const FGVerificationPage: React.FC = () => {
                     <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Entry #</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Product</th>
                     <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">Packets</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">Cartons</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Destination</th>
                     <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Dispatched</th>
                     <th className="px-4 py-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
@@ -165,7 +168,7 @@ const FGVerificationPage: React.FC = () => {
                     </td></tr>
                   )}
                   {!loading && paged.length === 0 && (
-                    <tr><td colSpan={8} className="px-4 py-12 text-center text-muted-foreground">
+                    <tr><td colSpan={9} className="px-4 py-12 text-center text-muted-foreground">
                       <Truck className="mx-auto mb-2 opacity-40" size={28} />
                       <p className="text-sm font-medium">No incoming FG batches</p>
                     </td></tr>
@@ -176,6 +179,7 @@ const FGVerificationPage: React.FC = () => {
                       <td className="px-4 py-3 text-sm font-mono text-foreground">{v.entryNumber}</td>
                       <td className="px-4 py-3 text-sm font-medium text-foreground">{v.fgProductName}</td>
                       <td className="px-4 py-3 text-sm font-bold text-violet-600 text-right">{v.totalPackets.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-sm font-bold text-amber-600 text-right">{v.totalCartons ? v.totalCartons.toLocaleString() : '-'}</td>
                       <td className="px-4 py-3 text-sm text-foreground">
                         <span className="inline-flex items-center gap-1"><MapPin size={12} className="text-muted-foreground" />{v.toLocationName}</span>
                       </td>

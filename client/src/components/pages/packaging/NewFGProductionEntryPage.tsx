@@ -39,7 +39,9 @@ interface FGBatch {
   productionUnit: string;
   packetSize?: number;
   packetUnit?: string;
+  cartonCapacity?: number;
   totalPackets: number;
+  totalCartons?: number;
   status: string;
   notes?: string;
   createdAt: string;
@@ -61,6 +63,7 @@ interface MachineAllocation {
   allocatedQty: number;
   allocatedUnit: string;
   plannedPackets: number;
+  plannedCartons: number;
   notes: string;
 }
 
@@ -118,15 +121,20 @@ const NewFGProductionEntryPage: React.FC = () => {
     const totalCapTon = machineList.reduce((s, m) => s + capacityInTon(m), 0);
     const packetSizeGrams =
       batch.packetSize && batch.packetUnit ? toGrams(batch.packetSize, batch.packetUnit) : 0;
+    const cartonCapacity = batch.cartonCapacity || 0;
 
     const allocs: MachineAllocation[] = machineList.map((machine) => {
       const proportion = totalCapTon > 0 ? capacityInTon(machine) / totalCapTon : 1 / machineList.length;
       const allocatedQty = Number((batch.productionQty * proportion).toFixed(3));
 
       let plannedPackets = 0;
+      let plannedCartons = 0;
       if (packetSizeGrams > 0) {
         const allocGrams = toGrams(allocatedQty, batch.productionUnit);
         plannedPackets = Math.floor(allocGrams / packetSizeGrams);
+        if (cartonCapacity > 0) {
+          plannedCartons = Math.ceil(plannedPackets / cartonCapacity);
+        }
       }
 
       return {
@@ -134,6 +142,7 @@ const NewFGProductionEntryPage: React.FC = () => {
         allocatedQty: 0,
         allocatedUnit: batch.productionUnit,
         plannedPackets: 0,
+        plannedCartons: 0,
         notes: '',
       };
     });
@@ -158,11 +167,18 @@ const NewFGProductionEntryPage: React.FC = () => {
           selectedBatch.packetSize && selectedBatch.packetUnit
             ? toGrams(selectedBatch.packetSize, selectedBatch.packetUnit)
             : 0;
+        const cartonCapacity = selectedBatch.cartonCapacity || 0;
         if (packetSizeGrams > 0 && value > 0) {
           const allocGrams = toGrams(value, selectedBatch.productionUnit);
           next[index].plannedPackets = Math.floor(allocGrams / packetSizeGrams);
+          if (cartonCapacity > 0) {
+            next[index].plannedCartons = Math.ceil(next[index].plannedPackets / cartonCapacity);
+          } else {
+            next[index].plannedCartons = 0;
+          }
         } else {
           next[index].plannedPackets = 0;
+          next[index].plannedCartons = 0;
         }
       }
 
@@ -173,6 +189,7 @@ const NewFGProductionEntryPage: React.FC = () => {
   /* ─── Summary calculations ─── */
   const totalAllocatedQty = allocations.reduce((s, a) => s + (Number(a.allocatedQty) || 0), 0);
   const totalPlannedPackets = allocations.reduce((s, a) => s + (Number(a.plannedPackets) || 0), 0);
+  const totalPlannedCartons = allocations.reduce((s, a) => s + (Number(a.plannedCartons) || 0), 0);
   const remainingQty = selectedBatch ? Number((selectedBatch.productionQty - totalAllocatedQty).toFixed(3)) : 0;
   const isFullyAllocated = selectedBatch ? Math.abs(remainingQty) < 0.001 : false;
 
@@ -218,6 +235,7 @@ const NewFGProductionEntryPage: React.FC = () => {
           machineId: a.machine.id,
           allocatedQty: a.allocatedQty,
           plannedPackets: a.plannedPackets,
+          plannedCartons: a.plannedCartons,
           notes: a.notes,
         })),
       });
@@ -499,9 +517,23 @@ const NewFGProductionEntryPage: React.FC = () => {
                             value={alloc.plannedPackets || undefined}
                             onChange={(val) => updateAllocation(idx, 'plannedPackets', val || 0)}
                             placeholder="0"
-                            className="w-28 font-semibold"
+                            className="w-24 font-semibold"
                           />
                         </div>
+                        {selectedBatch?.cartonCapacity && selectedBatch.cartonCapacity > 0 && (
+                          <div className="space-y-1">
+                            <div className="text-[10px] font-bold text-muted-foreground uppercase">Est. Cartons</div>
+                            <InputNumber
+                              min={0}
+                              step={1}
+                              precision={0}
+                              value={alloc.plannedCartons || undefined}
+                              onChange={(val) => updateAllocation(idx, 'plannedCartons', val || 0)}
+                              placeholder="0"
+                              className="w-24 font-semibold border-amber-500/30"
+                            />
+                          </div>
+                        )}
                       </div>
                     </motion.div>
                   ))}
@@ -531,6 +563,11 @@ const NewFGProductionEntryPage: React.FC = () => {
                     <span className="font-bold text-violet-600">
                       {totalPlannedPackets.toLocaleString()} Packets
                     </span>
+                    {selectedBatch?.cartonCapacity && selectedBatch.cartonCapacity > 0 && (
+                      <span className="font-bold text-amber-600">
+                        {totalPlannedCartons.toLocaleString()} Cartons
+                      </span>
+                    )}
                   </div>
                 </div>
 

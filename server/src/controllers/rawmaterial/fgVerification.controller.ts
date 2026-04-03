@@ -63,8 +63,10 @@ export class FGVerificationController {
             entryNumber: entry.entryNumber,
             fgProductName: entry.fgProductName,
             totalPackets: entry.totalActualPackets,
+            totalCartons: entry.totalActualCartons,
             packetSize: entry.packetSize,
             packetUnit: entry.packetUnit,
+            cartonCapacity: entry.cartonCapacity,
             toLocationId,
             toLocationName: location.name,
             status: 'PENDING',
@@ -80,7 +82,7 @@ export class FGVerificationController {
             entity: 'FGProductionVerification',
             entityId: created.id,
             userId: (req as any).user?.id || 'system',
-            description: `FG dispatch ${verificationNumber}: ${entry.fgProductName} (${entry.totalActualPackets} packets) to ${location.name}`,
+            description: `FG dispatch ${verificationNumber}: ${entry.fgProductName} (${entry.totalActualPackets} packets${entry.totalActualCartons ? `, ${entry.totalActualCartons} cartons` : ''}) to ${location.name}`,
           },
         });
 

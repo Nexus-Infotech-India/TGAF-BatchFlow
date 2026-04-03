@@ -109,6 +109,7 @@ const CreateFGBatchPage: React.FC = () => {
   const [productionUnit, setProductionUnit] = useState('KG');
   const [packetSize, setPacketSize] = useState<number | null>(null);
   const [packetUnit, setPacketUnit] = useState('gram');
+  const [cartonCapacity, setCartonCapacity] = useState<number | null>(null);
   const [notes, setNotes] = useState('');
   const [consumptionLines, setConsumptionLines] = useState<ConsumptionLine[]>([]);
   const [bomItemsLoading, setBomItemsLoading] = useState(false);
@@ -139,6 +140,12 @@ const CreateFGBatchPage: React.FC = () => {
     const packetInGrams = toGrams(packetSize, packetUnit);
     if (packetInGrams <= 0) return 0;
     return Math.floor(prodInGrams / packetInGrams);
+  })();
+
+  // Calculate cartons on the fly
+  const calculatedCartons = (() => {
+    if (calculatedPackets <= 0 || !cartonCapacity || cartonCapacity <= 0) return 0;
+    return Math.ceil(calculatedPackets / cartonCapacity);
   })();
 
   const fetchBomItems = useCallback(async (bomId: string, qty: number, unit: string) => {
@@ -245,6 +252,7 @@ const CreateFGBatchPage: React.FC = () => {
         productionUnit,
         packetSize: packetSize || null,
         packetUnit: packetUnit || null,
+        cartonCapacity: cartonCapacity || null,
         notes,
         consumptions: consumptionLines.map(c => ({
           rawMaterialId: c.rawMaterialId,
@@ -412,6 +420,24 @@ const CreateFGBatchPage: React.FC = () => {
                     </div>
                     <p className="text-xs text-muted-foreground pt-1">Will be used to estimate number of items to package.</p>
                   </div>
+                  
+                  {/* Carton capacity */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-foreground">
+                      Carton Capacity
+                    </label>
+                    <InputNumber
+                      style={{ width: '100%' }}
+                      min={1}
+                      step={1}
+                      precision={0}
+                      value={cartonCapacity}
+                      onChange={v => setCartonCapacity(v)}
+                      placeholder="Packets per carton, e.g. 100"
+                      size="large"
+                    />
+                    <p className="text-xs text-muted-foreground pt-1">Will be used to estimate total cartons required.</p>
+                  </div>
                 </div>
 
                 {/* Packet Calculation Display */}
@@ -426,14 +452,28 @@ const CreateFGBatchPage: React.FC = () => {
                       <div className="rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 p-5 text-white shadow-xl relative overflow-hidden group">
                         <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:bg-white/20 transition-all duration-700"></div>
                         <div className="flex items-center justify-between relative z-10">
-                          <div className="flex items-center gap-4">
-                            <div className="p-3 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20">
-                              <Hash size={24} className="text-white" />
+                          <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-4">
+                              <div className="p-3 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20">
+                                <Hash size={24} className="text-white" />
+                              </div>
+                              <div>
+                                <div className="text-xs font-bold text-white/80 tracking-widest uppercase mb-1">Estimated Packets</div>
+                                <div className="text-4xl font-black">{calculatedPackets.toLocaleString()}</div>
+                              </div>
                             </div>
-                            <div>
-                              <div className="text-xs font-bold text-white/80 tracking-widest uppercase mb-1">Estimated Packets</div>
-                              <div className="text-4xl font-black">{calculatedPackets.toLocaleString()}</div>
-                            </div>
+                            
+                            {cartonCapacity && cartonCapacity > 0 && (
+                              <div className="flex items-center gap-4 border-l border-white/20 pl-6">
+                                <div className="p-3 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20">
+                                  <Package size={24} className="text-white" />
+                                </div>
+                                <div>
+                                  <div className="text-xs font-bold text-white/80 tracking-widest uppercase mb-1">Total Cartons</div>
+                                  <div className="text-4xl font-black text-amber-300">{calculatedCartons.toLocaleString()}</div>
+                                </div>
+                              </div>
+                            )}
                           </div>
                           <div className="text-right flex flex-col items-end gap-1">
                             <div className="bg-white/15 backdrop-blur-sm px-3 py-1 rounded-md text-sm border border-white/10">

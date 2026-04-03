@@ -60,10 +60,12 @@ export default function ProductionOutputEntryPage() {
         allocatedQty: me.allocatedQty,
         allocatedUnit: me.allocatedUnit,
         plannedPackets: me.plannedPackets,
+        plannedCartons: me.plannedCartons,
         actualFgQty: 0,
         actualByproduct: 0,
         actualScrap: 0,
         actualPackets: 0,
+        actualCartons: 0,
       };
     });
     setMachineInputs(initInputs);
@@ -106,6 +108,7 @@ export default function ProductionOutputEntryPage() {
   const totalByproduct = machineInputs.reduce((s, a) => s + getNormalized(a.actualByproduct, a.actualByproductUnit || selectedEntry?.targetUnit, displayByproductUnit), 0);
   const totalScrap = machineInputs.reduce((s, a) => s + getNormalized(a.actualScrap, a.actualScrapUnit || selectedEntry?.targetUnit, displayScrapUnit), 0);
   const totalActualPackets = machineInputs.reduce((s, a) => s + (Number(a.actualPackets) || 0), 0);
+  const totalActualCartons = machineInputs.reduce((s, a) => s + (Number(a.actualCartons) || 0), 0);
 
   const handleSubmit = async () => {
     if (!selectedEntry) return;
@@ -136,6 +139,7 @@ export default function ProductionOutputEntryPage() {
           actualByproduct: a.actualByproduct,
           actualScrap: a.actualScrap,
           actualPackets: a.actualPackets,
+          actualCartons: a.actualCartons,
           actualUnit: a.actualUnit || selectedEntry?.targetUnit,
           actualByproductUnit: a.actualByproductUnit || selectedEntry?.targetUnit,
           actualScrapUnit: a.actualScrapUnit || selectedEntry?.targetUnit
@@ -316,7 +320,7 @@ export default function ProductionOutputEntryPage() {
                         )}
 
                         {/* Input fields */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                        <div className={`grid grid-cols-2 ${selectedEntry?.fgBatch?.cartonCapacity > 0 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-5`}>
                           <div className="space-y-2">
                             <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                               <Zap size={12} className="text-emerald-500" />
@@ -417,6 +421,25 @@ export default function ProductionOutputEntryPage() {
                               className="w-full font-semibold"
                             />
                           </div>
+                          
+                          {selectedEntry?.fgBatch?.cartonCapacity > 0 && (
+                            <div className="space-y-2">
+                              <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                                <Package size={12} className="text-amber-500" />
+                                Actual Cartons
+                              </label>
+                              <InputNumber
+                                min={0}
+                                step={1}
+                                precision={0}
+                                value={alloc.actualCartons || undefined}
+                                onChange={(val) => updateInput(idx, 'actualCartons', val || 0)}
+                                placeholder="0"
+                                size="large"
+                                className="w-full font-semibold border-amber-500/30"
+                              />
+                            </div>
+                          )}
                         </div>
                       </motion.div>
                     );
@@ -445,14 +468,15 @@ export default function ProductionOutputEntryPage() {
                 </div>
 
                 {/* Summary Cards */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-6">
+                <div className={`grid grid-cols-2 ${selectedEntry?.fgBatch?.cartonCapacity > 0 ? 'md:grid-cols-3 lg:grid-cols-6' : 'md:grid-cols-5'} gap-3 mb-6`}>
                   {[
                     { label: 'Target FG', value: `${selectedEntry.targetQty} ${selectedEntry.targetUnit}`, color: 'from-blue-500 to-indigo-600', icon: <Scale size={16} /> },
                     { label: 'Actual FG', value: `${totalActualFg.toFixed(3)} ${displayFgUnit}`, color: 'from-emerald-500 to-teal-600', icon: <Zap size={16} /> },
                     { label: 'Byproduct', value: `${totalByproduct.toFixed(3)} ${displayByproductUnit}`, color: 'from-amber-500 to-orange-600', icon: <Trash2 size={16} /> },
                     { label: 'Scrap', value: `${totalScrap.toFixed(3)} ${displayScrapUnit}`, color: 'from-red-500 to-rose-600', icon: <AlertTriangle size={16} /> },
                     { label: 'Actual Packets', value: totalActualPackets.toLocaleString(), color: 'from-violet-500 to-purple-600', icon: <Hash size={16} /> },
-                  ].map((card, i) => (
+                    selectedEntry?.fgBatch?.cartonCapacity > 0 ? { label: 'Actual Cartons', value: totalActualCartons.toLocaleString(), color: 'from-amber-500 to-yellow-600', icon: <Package size={16} /> } : null,
+                  ].filter(Boolean).map((card: any, i) => (
                     <div key={i} className={`rounded-xl p-4 bg-gradient-to-br ${card.color} text-white shadow-lg relative overflow-hidden`}>
                       <div className="absolute -right-2 -top-2 w-12 h-12 bg-white/10 rounded-full blur-lg" />
                       <div className="relative z-10">
@@ -477,6 +501,7 @@ export default function ProductionOutputEntryPage() {
                           <th className="px-4 py-3 text-right text-xs font-bold text-amber-600 uppercase">Byproduct</th>
                           <th className="px-4 py-3 text-right text-xs font-bold text-red-600 uppercase">Scrap</th>
                           <th className="px-4 py-3 text-right text-xs font-bold text-violet-600 uppercase">Packets</th>
+                          {selectedEntry?.fgBatch?.cartonCapacity > 0 && <th className="px-4 py-3 text-right text-xs font-bold text-amber-600 uppercase">Cartons</th>}
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
@@ -501,6 +526,11 @@ export default function ProductionOutputEntryPage() {
                             <td className="px-4 py-3 text-right font-bold text-violet-600">
                               {alloc.actualPackets.toLocaleString()}
                             </td>
+                            {selectedEntry?.fgBatch?.cartonCapacity > 0 && (
+                              <td className="px-4 py-3 text-right font-bold text-amber-600">
+                                {alloc.actualCartons.toLocaleString()}
+                              </td>
+                            )}
                           </tr>
                         ))}
                       </tbody>
@@ -522,6 +552,11 @@ export default function ProductionOutputEntryPage() {
                           <td className="px-4 py-3 text-right text-violet-600 text-base">
                             {totalActualPackets.toLocaleString()}
                           </td>
+                          {selectedEntry?.fgBatch?.cartonCapacity > 0 && (
+                            <td className="px-4 py-3 text-right text-amber-600 text-base">
+                              {totalActualCartons.toLocaleString()}
+                            </td>
+                          )}
                         </tr>
                       </tfoot>
                     </table>

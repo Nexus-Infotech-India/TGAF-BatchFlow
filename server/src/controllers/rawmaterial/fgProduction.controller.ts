@@ -104,6 +104,7 @@ export class FGProductionController {
       });
 
       let totalPlannedPackets = 0;
+      let totalPlannedCartons = 0;
       let totalAllocatedQty = 0;
 
       const packetSizeGrams = fgBatch.packetSize && fgBatch.packetUnit
@@ -114,9 +115,11 @@ export class FGProductionController {
         const machine = machines.find(m => m.id === entry.machineId)!;
         const allocatedQty = Number(entry.allocatedQty) || 0;
         const plannedPackets = Number(entry.plannedPackets) || 0;
+        const plannedCartons = Number(entry.plannedCartons) || 0;
 
         totalAllocatedQty += allocatedQty;
         totalPlannedPackets += plannedPackets;
+        totalPlannedCartons += plannedCartons;
 
         return {
           machineId: machine.id,
@@ -124,6 +127,7 @@ export class FGProductionController {
           allocatedQty,
           allocatedUnit: fgBatch.productionUnit,
           plannedPackets,
+          plannedCartons,
           actualFgQty: 0,
           actualFgUnit: fgBatch.productionUnit,
           actualByproduct: 0,
@@ -131,6 +135,7 @@ export class FGProductionController {
           actualScrap: 0,
           actualScrapUnit: fgBatch.productionUnit,
           actualPackets: 0,
+          actualCartons: 0,
           notes: entry.notes || null,
         };
       });
@@ -170,11 +175,14 @@ export class FGProductionController {
             targetUnit: fgBatch.productionUnit,
             packetSize: fgBatch.packetSize,
             packetUnit: fgBatch.packetUnit,
+            cartonCapacity: fgBatch.cartonCapacity,
             totalPlannedPackets,
+            totalPlannedCartons,
             totalActualFg: 0,
             totalActualByproduct: 0,
             totalActualScrap: 0,
             totalActualPackets: 0,
+            totalActualCartons: 0,
             status: 'PENDING',
             notes: notes || null,
             createdById: (req as any).user?.id || 'system',
@@ -308,6 +316,7 @@ export class FGProductionController {
       let totalActualByproduct = 0;
       let totalActualScrap = 0;
       let totalActualPackets = 0;
+      let totalActualCartons = 0;
 
       await prisma.$transaction(async (tx) => {
         for (const input of machineEntries) {
@@ -315,6 +324,7 @@ export class FGProductionController {
           const actualByproduct = Number(input.actualByproduct) || 0;
           const actualScrap = Number(input.actualScrap) || 0;
           const actualPackets = Number(input.actualPackets) || 0;
+          const actualCartons = Number(input.actualCartons) || 0;
           
           const actualUnit = input.actualUnit || existingEntry.targetUnit || 'Ton';
           const actualByproductUnit = input.actualByproductUnit || existingEntry.targetUnit || 'Ton';
@@ -336,6 +346,7 @@ export class FGProductionController {
           totalActualByproduct += (actualByproduct * factor(actualByproductUnit)) / fOut;
           totalActualScrap += (actualScrap * factor(actualScrapUnit)) / fOut;
           totalActualPackets += actualPackets;
+          totalActualCartons += actualCartons;
 
           await tx.fGProductionMachineEntry.update({
             where: { id: input.id },
@@ -347,6 +358,7 @@ export class FGProductionController {
               actualScrap,
               actualScrapUnit,
               actualPackets,
+              actualCartons,
             },
           });
         }
@@ -363,6 +375,7 @@ export class FGProductionController {
             totalActualByproduct,
             totalActualScrap,
             totalActualPackets,
+            totalActualCartons,
             status: 'COMPLETED',
           },
         });
