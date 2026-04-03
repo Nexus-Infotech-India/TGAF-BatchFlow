@@ -415,6 +415,10 @@ export const API_ROUTES = {
     GET_FG_VERIFICATIONS: `${BASE_URL}/raw/fg-verification`,
     ACCEPT_FG_VERIFICATION: (id: string) => `${BASE_URL}/raw/fg-verification/${id}/accept`,
     REJECT_FG_VERIFICATION: (id: string) => `${BASE_URL}/raw/fg-verification/${id}/reject`,
+
+    // FG Packaging
+    FG_PACKAGING: `${BASE_URL}/raw/fg-packaging`,
+    FG_PACKAGING_BY_PRODUCT: (productId: string) => `${BASE_URL}/raw/fg-packaging/product/${productId}`,
   },
 
   DRAFT: {

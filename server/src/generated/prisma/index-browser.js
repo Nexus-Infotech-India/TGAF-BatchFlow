@@ -659,6 +659,16 @@ exports.Prisma.RawMaterialProductScalarFieldEnum = {
   vendorId: 'vendorId'
 };
 
+exports.Prisma.FGPackagingMasterScalarFieldEnum = {
+  id: 'id',
+  rawMaterialId: 'rawMaterialId',
+  packetSize: 'packetSize',
+  packetUnit: 'packetUnit',
+  cartonCapacity: 'cartonCapacity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.PurchaseOrderScalarFieldEnum = {
   id: 'id',
   poNumber: 'poNumber',
@@ -1422,6 +1432,7 @@ exports.Prisma.ModelName = {
   AuditNotification: 'AuditNotification',
   Vendor: 'Vendor',
   RawMaterialProduct: 'RawMaterialProduct',
+  FGPackagingMaster: 'FGPackagingMaster',
   PurchaseOrder: 'PurchaseOrder',
   PurchaseOrderItem: 'PurchaseOrderItem',
   ReceivalEntry: 'ReceivalEntry',

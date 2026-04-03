@@ -212,6 +212,12 @@ export class FGBatchController {
       });
       const sfgNames = new Set(sfgProducts.map(p => p.name.toLowerCase().trim()));
 
+      // Also fetch FG products so we can match by name
+      const fgProducts = await prisma.rawMaterialProduct.findMany({
+        where: { category: 'FINISHED_GOOD' },
+        select: { id: true, name: true },
+      });
+
       const boms = await prisma.billOfMaterial.findMany({
         where: { 
           status: 'ACTIVE',
@@ -227,7 +233,16 @@ export class FGBatchController {
       // Filter out any BOMs that produce something matching an SFG name
       const fgBoms = boms.filter(bom => !sfgNames.has(bom.productName.toLowerCase().trim()));
 
-      res.json({ data: fgBoms });
+      // Attach matched FG product ID to each BOM
+      const enrichedBoms = fgBoms.map(bom => {
+        const matchedFG = fgProducts.find(fg => fg.name.toLowerCase().trim() === bom.productName.toLowerCase().trim());
+        return {
+          ...bom,
+          fgProductId: matchedFG?.id || null,
+        };
+      });
+
+      res.json({ data: enrichedBoms });
     } catch (error) {
       console.error('Error fetching FG BOMs:', error);
       res.status(500).json({ error: 'Failed to fetch FG BOMs', details: error });

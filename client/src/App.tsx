@@ -55,6 +55,7 @@ import GenerateGRN from './components/pages/GenerateGRN/GenerateGRN';
 import CreateBOMPage from './components/pages/Masters/CreateBOM';
 import CreateLocationPage from './components/pages/Masters/CreateLocation';
 import MachineMasterPage from './components/pages/Masters/MachineMaster';
+import CreateFGPackaging from './components/pages/Masters/CreateFGPackaging';
 
 const App = () => {
   // Pre-register permissioned routes so they appear in the permission selector
@@ -118,6 +119,7 @@ const App = () => {
     { path: '/masters/bom/create', name: 'Bill of Material', description: 'Create and manage Bill of Materials', permissionKey: 'manage_bom' },
     { path: '/masters/locations/create', name: 'Location Master', description: 'Manage physical locations (warehouses, cleaning, grinding)', permissionKey: 'manage_locations' },
     { path: '/masters/machine', name: 'Machine Master', description: 'Manage machine capacities', permissionKey: 'manage_locations' },
+    { path: '/masters/fg-packaging', name: 'FG Packaging Master', description: 'Manage FG packaging specifications', permissionKey: 'manage_raw_materials' },
   ];
 
   staticRoutes.forEach(r => registerRoute({ ...r, element: <></>, resource: 'page' }));
@@ -799,6 +801,24 @@ const App = () => {
                   }
                   name="Create Raw Material"
                   description="Create raw material master data"
+                  permissionKey="manage_raw_materials"
+                />
+              }
+            />
+
+            <Route
+              path="/masters/fg-packaging"
+              element={
+                <PermissionedRoute
+                  path="/masters/fg-packaging"
+                  element={
+                    <SecureRoute
+                      element={<CreateFGPackaging />}
+                      permissionKey="manage_raw_materials"
+                    />
+                  }
+                  name="FG Packaging Master"
+                  description="Manage FG packaging specifications"
                   permissionKey="manage_raw_materials"
                 />
               }

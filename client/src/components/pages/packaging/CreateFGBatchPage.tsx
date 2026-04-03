@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api, { API_ROUTES } from '../../../utils/api';
 import { Button, Select, Input, InputNumber, message, Tooltip } from 'antd';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Package,
   Layers,
@@ -37,6 +37,7 @@ interface BOM {
   productName: string;
   unitOfMeasurement: string;
   outputQuantity: number;
+  fgProductId?: string | null;
   items: {
     id: string;
     rawMaterialId: string;
@@ -180,13 +181,36 @@ const CreateFGBatchPage: React.FC = () => {
     setBomItemsLoading(false);
   }, []);
 
-  const handleBomSelect = (bomId: string) => {
+  const handleBomSelect = async (bomId: string) => {
     setSelectedBomId(bomId);
     setConsumptionLines([]);
     setProductionQty(null);
+    setPacketSize(null);
+    setPacketUnit('gram');
+    setCartonCapacity(null);
+
     const bom = boms.find(b => b.id === bomId);
     if (bom) {
       setProductionUnit(bom.unitOfMeasurement || 'KG');
+
+      // Fetch automated packaging setup for this FG Product
+      const productId = bom.fgProductId;
+      if (productId) {
+        try {
+          const res = await api.get(API_ROUTES.RAW.FG_PACKAGING_BY_PRODUCT(productId));
+          if (res.data?.success && res.data?.data) {
+            const pkg = res.data.data;
+            setPacketSize(pkg.packetSize);
+            setPacketUnit(pkg.packetUnit);
+            setCartonCapacity(pkg.cartonCapacity);
+            message.success('Packaging config loaded from FG Packaging Master');
+          }
+        } catch (err: any) {
+          if (err?.response?.status !== 404) {
+             console.error('Failed to load packaging details', err);
+          }
+        }
+      }
     }
   };
 
@@ -343,7 +367,7 @@ const CreateFGBatchPage: React.FC = () => {
             )}
           </div>
 
-          {/* Step 2: Production Quantity + Packet Info */}
+          {/* Step 2: Production Quantity + Packaging Info — Tabular View */}
           {selectedBomId && (
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
@@ -358,136 +382,110 @@ const CreateFGBatchPage: React.FC = () => {
                 <h2 className="text-lg font-bold">2. Target Production & Packaging</h2>
               </div>
 
-              <div className="bg-gradient-to-br from-indigo-50/50 to-indigo-100/30 dark:from-indigo-950/20 dark:to-indigo-900/10 rounded-2xl p-6 border border-indigo-100 dark:border-indigo-500/20 shadow-inner">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* Production quantity */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-foreground flex items-center gap-2">
-                      Total Output Quantity <span className="text-red-500">*</span>
-                    </label>
-                    <div className="flex gap-2">
-                      <InputNumber
-                        style={{ width: '100%' }}
-                        min={0.001}
-                        step={0.1}
-                        precision={3}
-                        value={productionQty}
-                        onChange={handleProductionQtyChange}
-                        placeholder="e.g. 5.5"
-                        size="large"
-                        className="font-semibold"
-                      />
-                      <Select
-                        style={{ width: 120 }}
-                        value={productionUnit}
-                        onChange={handleProductionUnitChange}
-                        size="large"
-                      >
-                        {unitOptions.map(u => (
-                          <Option key={u} value={u}>{u}</Option>
-                        ))}
-                      </Select>
+              <div className="rounded-2xl border border-indigo-200/60 dark:border-indigo-500/20 overflow-hidden shadow-lg bg-white dark:bg-card">
+                {/* Row 1: Total Output Quantity */}
+                <div className="flex items-center gap-4 px-6 py-5 border-b border-border/40">
+                  <div className="flex items-center gap-3 min-w-[200px]">
+                    <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-500/15">
+                      <Scale size={16} className="text-indigo-600 dark:text-indigo-400" />
                     </div>
-                    <p className="text-xs text-muted-foreground pt-1">The system will dynamically calculate material demands based on this target.</p>
+                    <span className="font-bold text-sm text-foreground">Total Output Quantity <span className="text-red-500">*</span></span>
                   </div>
-
-                  {/* Packet size */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-foreground">
-                      Packet Sizing 
-                    </label>
-                    <div className="flex gap-2">
-                      <InputNumber
-                        style={{ width: '100%' }}
-                        min={0.001}
-                        step={1}
-                        precision={2}
-                        value={packetSize}
-                        onChange={v => setPacketSize(v)}
-                        placeholder="e.g. 5"
-                        size="large"
-                      />
-                      <Select
-                        style={{ width: 120 }}
-                        value={packetUnit}
-                        onChange={v => setPacketUnit(v)}
-                        size="large"
-                      >
-                        {unitOptions.map(u => (
-                          <Option key={u} value={u}>{u}</Option>
-                        ))}
-                      </Select>
-                    </div>
-                    <p className="text-xs text-muted-foreground pt-1">Will be used to estimate number of items to package.</p>
-                  </div>
-                  
-                  {/* Carton capacity */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-bold text-foreground">
-                      Carton Capacity
-                    </label>
+                  <div className="flex gap-2 flex-1 max-w-md">
                     <InputNumber
                       style={{ width: '100%' }}
-                      min={1}
-                      step={1}
-                      precision={0}
-                      value={cartonCapacity}
-                      onChange={v => setCartonCapacity(v)}
-                      placeholder="Packets per carton, e.g. 100"
+                      min={0.001}
+                      step={0.1}
+                      precision={3}
+                      value={productionQty}
+                      onChange={handleProductionQtyChange}
+                      placeholder="e.g. 1.000"
                       size="large"
+                      className="font-semibold"
                     />
-                    <p className="text-xs text-muted-foreground pt-1">Will be used to estimate total cartons required.</p>
+                    <Select
+                      style={{ width: 110 }}
+                      value={productionUnit}
+                      onChange={handleProductionUnitChange}
+                      size="large"
+                    >
+                      {unitOptions.map(u => (
+                        <Option key={u} value={u}>{u}</Option>
+                      ))}
+                    </Select>
                   </div>
                 </div>
 
-                {/* Packet Calculation Display */}
-                <AnimatePresence>
-                  {productionQty && productionQty > 0 && packetSize && packetSize > 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
-                      animate={{ opacity: 1, height: 'auto', marginTop: 24 }}
-                      exit={{ opacity: 0, height: 0, marginTop: 0 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 p-5 text-white shadow-xl relative overflow-hidden group">
-                        <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl group-hover:bg-white/20 transition-all duration-700"></div>
-                        <div className="flex items-center justify-between relative z-10">
-                          <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-4">
-                              <div className="p-3 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20">
-                                <Hash size={24} className="text-white" />
-                              </div>
-                              <div>
-                                <div className="text-xs font-bold text-white/80 tracking-widest uppercase mb-1">Estimated Packets</div>
-                                <div className="text-4xl font-black">{calculatedPackets.toLocaleString()}</div>
-                              </div>
-                            </div>
-                            
-                            {cartonCapacity && cartonCapacity > 0 && (
-                              <div className="flex items-center gap-4 border-l border-white/20 pl-6">
-                                <div className="p-3 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20">
-                                  <Package size={24} className="text-white" />
-                                </div>
-                                <div>
-                                  <div className="text-xs font-bold text-white/80 tracking-widest uppercase mb-1">Total Cartons</div>
-                                  <div className="text-4xl font-black text-amber-300">{calculatedCartons.toLocaleString()}</div>
-                                </div>
-                              </div>
-                            )}
+                {/* Row 2 & 3: Packet Size + Carton Capacity — read-only auto-fetched */}
+                <div className="grid grid-cols-2 divide-x divide-border/40">
+                  <div className="flex items-center gap-4 px-6 py-5">
+                    <div className="flex items-center gap-3 min-w-[200px]">
+                      <div className="p-2 rounded-lg bg-emerald-100 dark:bg-emerald-500/15">
+                        <Hash size={16} className="text-emerald-600 dark:text-emerald-400" />
+                      </div>
+                      <span className="font-bold text-sm text-foreground">Packet Size</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400 leading-none">{packetSize ?? '—'}</span>
+                      <span className="text-sm font-semibold text-muted-foreground">{packetUnit}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 px-6 py-5">
+                    <div className="flex items-center gap-3 min-w-[180px]">
+                      <div className="p-2 rounded-lg bg-amber-100 dark:bg-amber-500/15">
+                        <Package size={16} className="text-amber-600 dark:text-amber-400" />
+                      </div>
+                      <span className="font-bold text-sm text-foreground">Carton Capacity</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-2xl font-black text-amber-600 dark:text-amber-400 leading-none">{cartonCapacity ?? '—'}</span>
+                      <span className="text-sm font-semibold text-muted-foreground">Packets/Carton</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Calculated Summary Bar */}
+                {productionQty && productionQty > 0 && packetSize && packetSize > 0 && (
+                  <div className="bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 px-6 py-5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-8">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2.5 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20">
+                            <Hash size={20} className="text-white" />
                           </div>
-                          <div className="text-right flex flex-col items-end gap-1">
-                            <div className="bg-white/15 backdrop-blur-sm px-3 py-1 rounded-md text-sm border border-white/10">
-                              Output: <span className="font-bold text-white">{productionQty} {productionUnit}</span>
-                            </div>
-                            <div className="bg-white/15 backdrop-blur-sm px-3 py-1 rounded-md text-sm border border-white/10">
-                              Size: <span className="font-bold text-white">{packetSize} {packetUnit}</span> / ea
-                            </div>
+                          <div>
+                            <div className="text-[10px] font-bold text-white/70 tracking-widest uppercase">Est. Packets</div>
+                            <div className="text-3xl font-black text-white leading-tight">{calculatedPackets.toLocaleString()}</div>
                           </div>
                         </div>
+
+                        {cartonCapacity && cartonCapacity > 0 && (
+                          <>
+                            <div className="w-px h-12 bg-white/20" />
+                            <div className="flex items-center gap-3">
+                              <div className="p-2.5 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20">
+                                <Package size={20} className="text-white" />
+                              </div>
+                              <div>
+                                <div className="text-[10px] font-bold text-white/70 tracking-widest uppercase">Est. Cartons</div>
+                                <div className="text-3xl font-black text-amber-300 leading-tight">{calculatedCartons.toLocaleString()}</div>
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+
+                      <div className="flex flex-col items-end gap-1.5">
+                        <div className="bg-white/10 backdrop-blur-sm px-3 py-1 rounded-lg text-xs text-white/90 border border-white/10">
+                          Output: <span className="font-bold">{productionQty} {productionUnit}</span>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm px-3 py-1 rounded-lg text-xs text-white/90 border border-white/10">
+                          Packet: <span className="font-bold">{packetSize} {packetUnit}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {bomItemsLoading && (

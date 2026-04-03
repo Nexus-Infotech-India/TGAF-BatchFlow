@@ -751,6 +751,19 @@ model RawMaterialProduct {
   bomItems           BOMItem[]
   bomsAsSfg          BillOfMaterial[]    @relation("BOMSfgProduct")
   grindingDispatches GrindingDispatch[]
+  fgPackagingMaster  FGPackagingMaster?
+}
+
+model FGPackagingMaster {
+  id              String             @id @default(uuid())
+  rawMaterialId   String             @unique
+  packetSize      Float
+  packetUnit      String
+  cartonCapacity  Int
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  
+  rawMaterial     RawMaterialProduct @relation(fields: [rawMaterialId], references: [id], onDelete: Cascade)
 }
 
 model PurchaseOrder {

@@ -234,6 +234,11 @@ export type Vendor = $Result.DefaultSelection<Prisma.$VendorPayload>
  */
 export type RawMaterialProduct = $Result.DefaultSelection<Prisma.$RawMaterialProductPayload>
 /**
+ * Model FGPackagingMaster
+ * 
+ */
+export type FGPackagingMaster = $Result.DefaultSelection<Prisma.$FGPackagingMasterPayload>
+/**
  * Model PurchaseOrder
  * 
  */
@@ -1350,6 +1355,16 @@ export class PrismaClient<
   get rawMaterialProduct(): Prisma.RawMaterialProductDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.fGPackagingMaster`: Exposes CRUD operations for the **FGPackagingMaster** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FGPackagingMasters
+    * const fGPackagingMasters = await prisma.fGPackagingMaster.findMany()
+    * ```
+    */
+  get fGPackagingMaster(): Prisma.FGPackagingMasterDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.purchaseOrder`: Exposes CRUD operations for the **PurchaseOrder** model.
     * Example usage:
     * ```ts
@@ -2203,6 +2218,7 @@ export namespace Prisma {
     AuditNotification: 'AuditNotification',
     Vendor: 'Vendor',
     RawMaterialProduct: 'RawMaterialProduct',
+    FGPackagingMaster: 'FGPackagingMaster',
     PurchaseOrder: 'PurchaseOrder',
     PurchaseOrderItem: 'PurchaseOrderItem',
     ReceivalEntry: 'ReceivalEntry',
@@ -2258,7 +2274,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "machine" | "fGProductionVerification"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "fGPackagingMaster" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "machine" | "fGProductionVerification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -5518,6 +5534,80 @@ export namespace Prisma {
           }
         }
       }
+      FGPackagingMaster: {
+        payload: Prisma.$FGPackagingMasterPayload<ExtArgs>
+        fields: Prisma.FGPackagingMasterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FGPackagingMasterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FGPackagingMasterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload>
+          }
+          findFirst: {
+            args: Prisma.FGPackagingMasterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FGPackagingMasterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload>
+          }
+          findMany: {
+            args: Prisma.FGPackagingMasterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload>[]
+          }
+          create: {
+            args: Prisma.FGPackagingMasterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload>
+          }
+          createMany: {
+            args: Prisma.FGPackagingMasterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FGPackagingMasterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload>[]
+          }
+          delete: {
+            args: Prisma.FGPackagingMasterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload>
+          }
+          update: {
+            args: Prisma.FGPackagingMasterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload>
+          }
+          deleteMany: {
+            args: Prisma.FGPackagingMasterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FGPackagingMasterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FGPackagingMasterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload>[]
+          }
+          upsert: {
+            args: Prisma.FGPackagingMasterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGPackagingMasterPayload>
+          }
+          aggregate: {
+            args: Prisma.FGPackagingMasterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFGPackagingMaster>
+          }
+          groupBy: {
+            args: Prisma.FGPackagingMasterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FGPackagingMasterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FGPackagingMasterCountArgs<ExtArgs>
+            result: $Utils.Optional<FGPackagingMasterCountAggregateOutputType> | number
+          }
+        }
+      }
       PurchaseOrder: {
         payload: Prisma.$PurchaseOrderPayload<ExtArgs>
         fields: Prisma.PurchaseOrderFieldRefs
@@ -8396,6 +8486,7 @@ export namespace Prisma {
     auditNotification?: AuditNotificationOmit
     vendor?: VendorOmit
     rawMaterialProduct?: RawMaterialProductOmit
+    fGPackagingMaster?: FGPackagingMasterOmit
     purchaseOrder?: PurchaseOrderOmit
     purchaseOrderItem?: PurchaseOrderItemOmit
     receivalEntry?: ReceivalEntryOmit
@@ -62079,6 +62170,7 @@ export namespace Prisma {
     bomItems?: boolean | RawMaterialProduct$bomItemsArgs<ExtArgs>
     bomsAsSfg?: boolean | RawMaterialProduct$bomsAsSfgArgs<ExtArgs>
     grindingDispatches?: boolean | RawMaterialProduct$grindingDispatchesArgs<ExtArgs>
+    fgPackagingMaster?: boolean | RawMaterialProduct$fgPackagingMasterArgs<ExtArgs>
     _count?: boolean | RawMaterialProductCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["rawMaterialProduct"]>
 
@@ -62138,6 +62230,7 @@ export namespace Prisma {
     bomItems?: boolean | RawMaterialProduct$bomItemsArgs<ExtArgs>
     bomsAsSfg?: boolean | RawMaterialProduct$bomsAsSfgArgs<ExtArgs>
     grindingDispatches?: boolean | RawMaterialProduct$grindingDispatchesArgs<ExtArgs>
+    fgPackagingMaster?: boolean | RawMaterialProduct$fgPackagingMasterArgs<ExtArgs>
     _count?: boolean | RawMaterialProductCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type RawMaterialProductIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -62160,6 +62253,7 @@ export namespace Prisma {
       bomItems: Prisma.$BOMItemPayload<ExtArgs>[]
       bomsAsSfg: Prisma.$BillOfMaterialPayload<ExtArgs>[]
       grindingDispatches: Prisma.$GrindingDispatchPayload<ExtArgs>[]
+      fgPackagingMaster: Prisma.$FGPackagingMasterPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -62577,6 +62671,7 @@ export namespace Prisma {
     bomItems<T extends RawMaterialProduct$bomItemsArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$bomItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BOMItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     bomsAsSfg<T extends RawMaterialProduct$bomsAsSfgArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$bomsAsSfgArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BillOfMaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     grindingDispatches<T extends RawMaterialProduct$grindingDispatchesArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$grindingDispatchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fgPackagingMaster<T extends RawMaterialProduct$fgPackagingMasterArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProduct$fgPackagingMasterArgs<ExtArgs>>): Prisma__FGPackagingMasterClient<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -63248,6 +63343,25 @@ export namespace Prisma {
   }
 
   /**
+   * RawMaterialProduct.fgPackagingMaster
+   */
+  export type RawMaterialProduct$fgPackagingMasterArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
+    where?: FGPackagingMasterWhereInput
+  }
+
+  /**
    * RawMaterialProduct without action
    */
   export type RawMaterialProductDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -63263,6 +63377,1128 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: RawMaterialProductInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FGPackagingMaster
+   */
+
+  export type AggregateFGPackagingMaster = {
+    _count: FGPackagingMasterCountAggregateOutputType | null
+    _avg: FGPackagingMasterAvgAggregateOutputType | null
+    _sum: FGPackagingMasterSumAggregateOutputType | null
+    _min: FGPackagingMasterMinAggregateOutputType | null
+    _max: FGPackagingMasterMaxAggregateOutputType | null
+  }
+
+  export type FGPackagingMasterAvgAggregateOutputType = {
+    packetSize: number | null
+    cartonCapacity: number | null
+  }
+
+  export type FGPackagingMasterSumAggregateOutputType = {
+    packetSize: number | null
+    cartonCapacity: number | null
+  }
+
+  export type FGPackagingMasterMinAggregateOutputType = {
+    id: string | null
+    rawMaterialId: string | null
+    packetSize: number | null
+    packetUnit: string | null
+    cartonCapacity: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGPackagingMasterMaxAggregateOutputType = {
+    id: string | null
+    rawMaterialId: string | null
+    packetSize: number | null
+    packetUnit: string | null
+    cartonCapacity: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGPackagingMasterCountAggregateOutputType = {
+    id: number
+    rawMaterialId: number
+    packetSize: number
+    packetUnit: number
+    cartonCapacity: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FGPackagingMasterAvgAggregateInputType = {
+    packetSize?: true
+    cartonCapacity?: true
+  }
+
+  export type FGPackagingMasterSumAggregateInputType = {
+    packetSize?: true
+    cartonCapacity?: true
+  }
+
+  export type FGPackagingMasterMinAggregateInputType = {
+    id?: true
+    rawMaterialId?: true
+    packetSize?: true
+    packetUnit?: true
+    cartonCapacity?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGPackagingMasterMaxAggregateInputType = {
+    id?: true
+    rawMaterialId?: true
+    packetSize?: true
+    packetUnit?: true
+    cartonCapacity?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGPackagingMasterCountAggregateInputType = {
+    id?: true
+    rawMaterialId?: true
+    packetSize?: true
+    packetUnit?: true
+    cartonCapacity?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FGPackagingMasterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGPackagingMaster to aggregate.
+     */
+    where?: FGPackagingMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGPackagingMasters to fetch.
+     */
+    orderBy?: FGPackagingMasterOrderByWithRelationInput | FGPackagingMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FGPackagingMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGPackagingMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGPackagingMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FGPackagingMasters
+    **/
+    _count?: true | FGPackagingMasterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FGPackagingMasterAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FGPackagingMasterSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FGPackagingMasterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FGPackagingMasterMaxAggregateInputType
+  }
+
+  export type GetFGPackagingMasterAggregateType<T extends FGPackagingMasterAggregateArgs> = {
+        [P in keyof T & keyof AggregateFGPackagingMaster]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFGPackagingMaster[P]>
+      : GetScalarType<T[P], AggregateFGPackagingMaster[P]>
+  }
+
+
+
+
+  export type FGPackagingMasterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGPackagingMasterWhereInput
+    orderBy?: FGPackagingMasterOrderByWithAggregationInput | FGPackagingMasterOrderByWithAggregationInput[]
+    by: FGPackagingMasterScalarFieldEnum[] | FGPackagingMasterScalarFieldEnum
+    having?: FGPackagingMasterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FGPackagingMasterCountAggregateInputType | true
+    _avg?: FGPackagingMasterAvgAggregateInputType
+    _sum?: FGPackagingMasterSumAggregateInputType
+    _min?: FGPackagingMasterMinAggregateInputType
+    _max?: FGPackagingMasterMaxAggregateInputType
+  }
+
+  export type FGPackagingMasterGroupByOutputType = {
+    id: string
+    rawMaterialId: string
+    packetSize: number
+    packetUnit: string
+    cartonCapacity: number
+    createdAt: Date
+    updatedAt: Date
+    _count: FGPackagingMasterCountAggregateOutputType | null
+    _avg: FGPackagingMasterAvgAggregateOutputType | null
+    _sum: FGPackagingMasterSumAggregateOutputType | null
+    _min: FGPackagingMasterMinAggregateOutputType | null
+    _max: FGPackagingMasterMaxAggregateOutputType | null
+  }
+
+  type GetFGPackagingMasterGroupByPayload<T extends FGPackagingMasterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FGPackagingMasterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FGPackagingMasterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FGPackagingMasterGroupByOutputType[P]>
+            : GetScalarType<T[P], FGPackagingMasterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FGPackagingMasterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    rawMaterialId?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    cartonCapacity?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGPackagingMaster"]>
+
+  export type FGPackagingMasterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    rawMaterialId?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    cartonCapacity?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGPackagingMaster"]>
+
+  export type FGPackagingMasterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    rawMaterialId?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    cartonCapacity?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGPackagingMaster"]>
+
+  export type FGPackagingMasterSelectScalar = {
+    id?: boolean
+    rawMaterialId?: boolean
+    packetSize?: boolean
+    packetUnit?: boolean
+    cartonCapacity?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FGPackagingMasterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "rawMaterialId" | "packetSize" | "packetUnit" | "cartonCapacity" | "createdAt" | "updatedAt", ExtArgs["result"]["fGPackagingMaster"]>
+  export type FGPackagingMasterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }
+  export type FGPackagingMasterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }
+  export type FGPackagingMasterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    rawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
+  }
+
+  export type $FGPackagingMasterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FGPackagingMaster"
+    objects: {
+      rawMaterial: Prisma.$RawMaterialProductPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      rawMaterialId: string
+      packetSize: number
+      packetUnit: string
+      cartonCapacity: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fGPackagingMaster"]>
+    composites: {}
+  }
+
+  type FGPackagingMasterGetPayload<S extends boolean | null | undefined | FGPackagingMasterDefaultArgs> = $Result.GetResult<Prisma.$FGPackagingMasterPayload, S>
+
+  type FGPackagingMasterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FGPackagingMasterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FGPackagingMasterCountAggregateInputType | true
+    }
+
+  export interface FGPackagingMasterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FGPackagingMaster'], meta: { name: 'FGPackagingMaster' } }
+    /**
+     * Find zero or one FGPackagingMaster that matches the filter.
+     * @param {FGPackagingMasterFindUniqueArgs} args - Arguments to find a FGPackagingMaster
+     * @example
+     * // Get one FGPackagingMaster
+     * const fGPackagingMaster = await prisma.fGPackagingMaster.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FGPackagingMasterFindUniqueArgs>(args: SelectSubset<T, FGPackagingMasterFindUniqueArgs<ExtArgs>>): Prisma__FGPackagingMasterClient<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FGPackagingMaster that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FGPackagingMasterFindUniqueOrThrowArgs} args - Arguments to find a FGPackagingMaster
+     * @example
+     * // Get one FGPackagingMaster
+     * const fGPackagingMaster = await prisma.fGPackagingMaster.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FGPackagingMasterFindUniqueOrThrowArgs>(args: SelectSubset<T, FGPackagingMasterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FGPackagingMasterClient<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGPackagingMaster that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGPackagingMasterFindFirstArgs} args - Arguments to find a FGPackagingMaster
+     * @example
+     * // Get one FGPackagingMaster
+     * const fGPackagingMaster = await prisma.fGPackagingMaster.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FGPackagingMasterFindFirstArgs>(args?: SelectSubset<T, FGPackagingMasterFindFirstArgs<ExtArgs>>): Prisma__FGPackagingMasterClient<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGPackagingMaster that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGPackagingMasterFindFirstOrThrowArgs} args - Arguments to find a FGPackagingMaster
+     * @example
+     * // Get one FGPackagingMaster
+     * const fGPackagingMaster = await prisma.fGPackagingMaster.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FGPackagingMasterFindFirstOrThrowArgs>(args?: SelectSubset<T, FGPackagingMasterFindFirstOrThrowArgs<ExtArgs>>): Prisma__FGPackagingMasterClient<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FGPackagingMasters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGPackagingMasterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FGPackagingMasters
+     * const fGPackagingMasters = await prisma.fGPackagingMaster.findMany()
+     * 
+     * // Get first 10 FGPackagingMasters
+     * const fGPackagingMasters = await prisma.fGPackagingMaster.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fGPackagingMasterWithIdOnly = await prisma.fGPackagingMaster.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FGPackagingMasterFindManyArgs>(args?: SelectSubset<T, FGPackagingMasterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FGPackagingMaster.
+     * @param {FGPackagingMasterCreateArgs} args - Arguments to create a FGPackagingMaster.
+     * @example
+     * // Create one FGPackagingMaster
+     * const FGPackagingMaster = await prisma.fGPackagingMaster.create({
+     *   data: {
+     *     // ... data to create a FGPackagingMaster
+     *   }
+     * })
+     * 
+     */
+    create<T extends FGPackagingMasterCreateArgs>(args: SelectSubset<T, FGPackagingMasterCreateArgs<ExtArgs>>): Prisma__FGPackagingMasterClient<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FGPackagingMasters.
+     * @param {FGPackagingMasterCreateManyArgs} args - Arguments to create many FGPackagingMasters.
+     * @example
+     * // Create many FGPackagingMasters
+     * const fGPackagingMaster = await prisma.fGPackagingMaster.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FGPackagingMasterCreateManyArgs>(args?: SelectSubset<T, FGPackagingMasterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FGPackagingMasters and returns the data saved in the database.
+     * @param {FGPackagingMasterCreateManyAndReturnArgs} args - Arguments to create many FGPackagingMasters.
+     * @example
+     * // Create many FGPackagingMasters
+     * const fGPackagingMaster = await prisma.fGPackagingMaster.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FGPackagingMasters and only return the `id`
+     * const fGPackagingMasterWithIdOnly = await prisma.fGPackagingMaster.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FGPackagingMasterCreateManyAndReturnArgs>(args?: SelectSubset<T, FGPackagingMasterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FGPackagingMaster.
+     * @param {FGPackagingMasterDeleteArgs} args - Arguments to delete one FGPackagingMaster.
+     * @example
+     * // Delete one FGPackagingMaster
+     * const FGPackagingMaster = await prisma.fGPackagingMaster.delete({
+     *   where: {
+     *     // ... filter to delete one FGPackagingMaster
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FGPackagingMasterDeleteArgs>(args: SelectSubset<T, FGPackagingMasterDeleteArgs<ExtArgs>>): Prisma__FGPackagingMasterClient<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FGPackagingMaster.
+     * @param {FGPackagingMasterUpdateArgs} args - Arguments to update one FGPackagingMaster.
+     * @example
+     * // Update one FGPackagingMaster
+     * const fGPackagingMaster = await prisma.fGPackagingMaster.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FGPackagingMasterUpdateArgs>(args: SelectSubset<T, FGPackagingMasterUpdateArgs<ExtArgs>>): Prisma__FGPackagingMasterClient<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FGPackagingMasters.
+     * @param {FGPackagingMasterDeleteManyArgs} args - Arguments to filter FGPackagingMasters to delete.
+     * @example
+     * // Delete a few FGPackagingMasters
+     * const { count } = await prisma.fGPackagingMaster.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FGPackagingMasterDeleteManyArgs>(args?: SelectSubset<T, FGPackagingMasterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGPackagingMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGPackagingMasterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FGPackagingMasters
+     * const fGPackagingMaster = await prisma.fGPackagingMaster.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FGPackagingMasterUpdateManyArgs>(args: SelectSubset<T, FGPackagingMasterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGPackagingMasters and returns the data updated in the database.
+     * @param {FGPackagingMasterUpdateManyAndReturnArgs} args - Arguments to update many FGPackagingMasters.
+     * @example
+     * // Update many FGPackagingMasters
+     * const fGPackagingMaster = await prisma.fGPackagingMaster.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FGPackagingMasters and only return the `id`
+     * const fGPackagingMasterWithIdOnly = await prisma.fGPackagingMaster.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FGPackagingMasterUpdateManyAndReturnArgs>(args: SelectSubset<T, FGPackagingMasterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FGPackagingMaster.
+     * @param {FGPackagingMasterUpsertArgs} args - Arguments to update or create a FGPackagingMaster.
+     * @example
+     * // Update or create a FGPackagingMaster
+     * const fGPackagingMaster = await prisma.fGPackagingMaster.upsert({
+     *   create: {
+     *     // ... data to create a FGPackagingMaster
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FGPackagingMaster we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FGPackagingMasterUpsertArgs>(args: SelectSubset<T, FGPackagingMasterUpsertArgs<ExtArgs>>): Prisma__FGPackagingMasterClient<$Result.GetResult<Prisma.$FGPackagingMasterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FGPackagingMasters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGPackagingMasterCountArgs} args - Arguments to filter FGPackagingMasters to count.
+     * @example
+     * // Count the number of FGPackagingMasters
+     * const count = await prisma.fGPackagingMaster.count({
+     *   where: {
+     *     // ... the filter for the FGPackagingMasters we want to count
+     *   }
+     * })
+    **/
+    count<T extends FGPackagingMasterCountArgs>(
+      args?: Subset<T, FGPackagingMasterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FGPackagingMasterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FGPackagingMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGPackagingMasterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FGPackagingMasterAggregateArgs>(args: Subset<T, FGPackagingMasterAggregateArgs>): Prisma.PrismaPromise<GetFGPackagingMasterAggregateType<T>>
+
+    /**
+     * Group by FGPackagingMaster.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGPackagingMasterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FGPackagingMasterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FGPackagingMasterGroupByArgs['orderBy'] }
+        : { orderBy?: FGPackagingMasterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FGPackagingMasterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFGPackagingMasterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FGPackagingMaster model
+   */
+  readonly fields: FGPackagingMasterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FGPackagingMaster.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FGPackagingMasterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    rawMaterial<T extends RawMaterialProductDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RawMaterialProductDefaultArgs<ExtArgs>>): Prisma__RawMaterialProductClient<$Result.GetResult<Prisma.$RawMaterialProductPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FGPackagingMaster model
+   */
+  interface FGPackagingMasterFieldRefs {
+    readonly id: FieldRef<"FGPackagingMaster", 'String'>
+    readonly rawMaterialId: FieldRef<"FGPackagingMaster", 'String'>
+    readonly packetSize: FieldRef<"FGPackagingMaster", 'Float'>
+    readonly packetUnit: FieldRef<"FGPackagingMaster", 'String'>
+    readonly cartonCapacity: FieldRef<"FGPackagingMaster", 'Int'>
+    readonly createdAt: FieldRef<"FGPackagingMaster", 'DateTime'>
+    readonly updatedAt: FieldRef<"FGPackagingMaster", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FGPackagingMaster findUnique
+   */
+  export type FGPackagingMasterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which FGPackagingMaster to fetch.
+     */
+    where: FGPackagingMasterWhereUniqueInput
+  }
+
+  /**
+   * FGPackagingMaster findUniqueOrThrow
+   */
+  export type FGPackagingMasterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which FGPackagingMaster to fetch.
+     */
+    where: FGPackagingMasterWhereUniqueInput
+  }
+
+  /**
+   * FGPackagingMaster findFirst
+   */
+  export type FGPackagingMasterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which FGPackagingMaster to fetch.
+     */
+    where?: FGPackagingMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGPackagingMasters to fetch.
+     */
+    orderBy?: FGPackagingMasterOrderByWithRelationInput | FGPackagingMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGPackagingMasters.
+     */
+    cursor?: FGPackagingMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGPackagingMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGPackagingMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGPackagingMasters.
+     */
+    distinct?: FGPackagingMasterScalarFieldEnum | FGPackagingMasterScalarFieldEnum[]
+  }
+
+  /**
+   * FGPackagingMaster findFirstOrThrow
+   */
+  export type FGPackagingMasterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which FGPackagingMaster to fetch.
+     */
+    where?: FGPackagingMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGPackagingMasters to fetch.
+     */
+    orderBy?: FGPackagingMasterOrderByWithRelationInput | FGPackagingMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGPackagingMasters.
+     */
+    cursor?: FGPackagingMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGPackagingMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGPackagingMasters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGPackagingMasters.
+     */
+    distinct?: FGPackagingMasterScalarFieldEnum | FGPackagingMasterScalarFieldEnum[]
+  }
+
+  /**
+   * FGPackagingMaster findMany
+   */
+  export type FGPackagingMasterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
+    /**
+     * Filter, which FGPackagingMasters to fetch.
+     */
+    where?: FGPackagingMasterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGPackagingMasters to fetch.
+     */
+    orderBy?: FGPackagingMasterOrderByWithRelationInput | FGPackagingMasterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FGPackagingMasters.
+     */
+    cursor?: FGPackagingMasterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGPackagingMasters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGPackagingMasters.
+     */
+    skip?: number
+    distinct?: FGPackagingMasterScalarFieldEnum | FGPackagingMasterScalarFieldEnum[]
+  }
+
+  /**
+   * FGPackagingMaster create
+   */
+  export type FGPackagingMasterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FGPackagingMaster.
+     */
+    data: XOR<FGPackagingMasterCreateInput, FGPackagingMasterUncheckedCreateInput>
+  }
+
+  /**
+   * FGPackagingMaster createMany
+   */
+  export type FGPackagingMasterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FGPackagingMasters.
+     */
+    data: FGPackagingMasterCreateManyInput | FGPackagingMasterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FGPackagingMaster createManyAndReturn
+   */
+  export type FGPackagingMasterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * The data used to create many FGPackagingMasters.
+     */
+    data: FGPackagingMasterCreateManyInput | FGPackagingMasterCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGPackagingMaster update
+   */
+  export type FGPackagingMasterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FGPackagingMaster.
+     */
+    data: XOR<FGPackagingMasterUpdateInput, FGPackagingMasterUncheckedUpdateInput>
+    /**
+     * Choose, which FGPackagingMaster to update.
+     */
+    where: FGPackagingMasterWhereUniqueInput
+  }
+
+  /**
+   * FGPackagingMaster updateMany
+   */
+  export type FGPackagingMasterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FGPackagingMasters.
+     */
+    data: XOR<FGPackagingMasterUpdateManyMutationInput, FGPackagingMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which FGPackagingMasters to update
+     */
+    where?: FGPackagingMasterWhereInput
+    /**
+     * Limit how many FGPackagingMasters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGPackagingMaster updateManyAndReturn
+   */
+  export type FGPackagingMasterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * The data used to update FGPackagingMasters.
+     */
+    data: XOR<FGPackagingMasterUpdateManyMutationInput, FGPackagingMasterUncheckedUpdateManyInput>
+    /**
+     * Filter which FGPackagingMasters to update
+     */
+    where?: FGPackagingMasterWhereInput
+    /**
+     * Limit how many FGPackagingMasters to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGPackagingMaster upsert
+   */
+  export type FGPackagingMasterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FGPackagingMaster to update in case it exists.
+     */
+    where: FGPackagingMasterWhereUniqueInput
+    /**
+     * In case the FGPackagingMaster found by the `where` argument doesn't exist, create a new FGPackagingMaster with this data.
+     */
+    create: XOR<FGPackagingMasterCreateInput, FGPackagingMasterUncheckedCreateInput>
+    /**
+     * In case the FGPackagingMaster was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FGPackagingMasterUpdateInput, FGPackagingMasterUncheckedUpdateInput>
+  }
+
+  /**
+   * FGPackagingMaster delete
+   */
+  export type FGPackagingMasterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
+    /**
+     * Filter which FGPackagingMaster to delete.
+     */
+    where: FGPackagingMasterWhereUniqueInput
+  }
+
+  /**
+   * FGPackagingMaster deleteMany
+   */
+  export type FGPackagingMasterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGPackagingMasters to delete
+     */
+    where?: FGPackagingMasterWhereInput
+    /**
+     * Limit how many FGPackagingMasters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGPackagingMaster without action
+   */
+  export type FGPackagingMasterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGPackagingMaster
+     */
+    select?: FGPackagingMasterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGPackagingMaster
+     */
+    omit?: FGPackagingMasterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGPackagingMasterInclude<ExtArgs> | null
   }
 
 
@@ -108610,6 +109846,19 @@ export namespace Prisma {
   export type RawMaterialProductScalarFieldEnum = (typeof RawMaterialProductScalarFieldEnum)[keyof typeof RawMaterialProductScalarFieldEnum]
 
 
+  export const FGPackagingMasterScalarFieldEnum: {
+    id: 'id',
+    rawMaterialId: 'rawMaterialId',
+    packetSize: 'packetSize',
+    packetUnit: 'packetUnit',
+    cartonCapacity: 'cartonCapacity',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FGPackagingMasterScalarFieldEnum = (typeof FGPackagingMasterScalarFieldEnum)[keyof typeof FGPackagingMasterScalarFieldEnum]
+
+
   export const PurchaseOrderScalarFieldEnum: {
     id: 'id',
     poNumber: 'poNumber',
@@ -113411,6 +114660,7 @@ export namespace Prisma {
     bomItems?: BOMItemListRelationFilter
     bomsAsSfg?: BillOfMaterialListRelationFilter
     grindingDispatches?: GrindingDispatchListRelationFilter
+    fgPackagingMaster?: XOR<FGPackagingMasterNullableScalarRelationFilter, FGPackagingMasterWhereInput> | null
   }
 
   export type RawMaterialProductOrderByWithRelationInput = {
@@ -113435,6 +114685,7 @@ export namespace Prisma {
     bomItems?: BOMItemOrderByRelationAggregateInput
     bomsAsSfg?: BillOfMaterialOrderByRelationAggregateInput
     grindingDispatches?: GrindingDispatchOrderByRelationAggregateInput
+    fgPackagingMaster?: FGPackagingMasterOrderByWithRelationInput
   }
 
   export type RawMaterialProductWhereUniqueInput = Prisma.AtLeast<{
@@ -113462,6 +114713,7 @@ export namespace Prisma {
     bomItems?: BOMItemListRelationFilter
     bomsAsSfg?: BillOfMaterialListRelationFilter
     grindingDispatches?: GrindingDispatchListRelationFilter
+    fgPackagingMaster?: XOR<FGPackagingMasterNullableScalarRelationFilter, FGPackagingMasterWhereInput> | null
   }, "id" | "skuCode">
 
   export type RawMaterialProductOrderByWithAggregationInput = {
@@ -113498,6 +114750,73 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"RawMaterialProduct"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"RawMaterialProduct"> | Date | string
     vendorId?: StringNullableWithAggregatesFilter<"RawMaterialProduct"> | string | null
+  }
+
+  export type FGPackagingMasterWhereInput = {
+    AND?: FGPackagingMasterWhereInput | FGPackagingMasterWhereInput[]
+    OR?: FGPackagingMasterWhereInput[]
+    NOT?: FGPackagingMasterWhereInput | FGPackagingMasterWhereInput[]
+    id?: StringFilter<"FGPackagingMaster"> | string
+    rawMaterialId?: StringFilter<"FGPackagingMaster"> | string
+    packetSize?: FloatFilter<"FGPackagingMaster"> | number
+    packetUnit?: StringFilter<"FGPackagingMaster"> | string
+    cartonCapacity?: IntFilter<"FGPackagingMaster"> | number
+    createdAt?: DateTimeFilter<"FGPackagingMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"FGPackagingMaster"> | Date | string
+    rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
+  }
+
+  export type FGPackagingMasterOrderByWithRelationInput = {
+    id?: SortOrder
+    rawMaterialId?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    cartonCapacity?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    rawMaterial?: RawMaterialProductOrderByWithRelationInput
+  }
+
+  export type FGPackagingMasterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    rawMaterialId?: string
+    AND?: FGPackagingMasterWhereInput | FGPackagingMasterWhereInput[]
+    OR?: FGPackagingMasterWhereInput[]
+    NOT?: FGPackagingMasterWhereInput | FGPackagingMasterWhereInput[]
+    packetSize?: FloatFilter<"FGPackagingMaster"> | number
+    packetUnit?: StringFilter<"FGPackagingMaster"> | string
+    cartonCapacity?: IntFilter<"FGPackagingMaster"> | number
+    createdAt?: DateTimeFilter<"FGPackagingMaster"> | Date | string
+    updatedAt?: DateTimeFilter<"FGPackagingMaster"> | Date | string
+    rawMaterial?: XOR<RawMaterialProductScalarRelationFilter, RawMaterialProductWhereInput>
+  }, "id" | "rawMaterialId">
+
+  export type FGPackagingMasterOrderByWithAggregationInput = {
+    id?: SortOrder
+    rawMaterialId?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    cartonCapacity?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FGPackagingMasterCountOrderByAggregateInput
+    _avg?: FGPackagingMasterAvgOrderByAggregateInput
+    _max?: FGPackagingMasterMaxOrderByAggregateInput
+    _min?: FGPackagingMasterMinOrderByAggregateInput
+    _sum?: FGPackagingMasterSumOrderByAggregateInput
+  }
+
+  export type FGPackagingMasterScalarWhereWithAggregatesInput = {
+    AND?: FGPackagingMasterScalarWhereWithAggregatesInput | FGPackagingMasterScalarWhereWithAggregatesInput[]
+    OR?: FGPackagingMasterScalarWhereWithAggregatesInput[]
+    NOT?: FGPackagingMasterScalarWhereWithAggregatesInput | FGPackagingMasterScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FGPackagingMaster"> | string
+    rawMaterialId?: StringWithAggregatesFilter<"FGPackagingMaster"> | string
+    packetSize?: FloatWithAggregatesFilter<"FGPackagingMaster"> | number
+    packetUnit?: StringWithAggregatesFilter<"FGPackagingMaster"> | string
+    cartonCapacity?: IntWithAggregatesFilter<"FGPackagingMaster"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"FGPackagingMaster"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FGPackagingMaster"> | Date | string
   }
 
   export type PurchaseOrderWhereInput = {
@@ -120870,6 +122189,7 @@ export namespace Prisma {
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateInput = {
@@ -120893,6 +122213,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUpdateInput = {
@@ -120916,6 +122237,7 @@ export namespace Prisma {
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateInput = {
@@ -120939,6 +122261,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductCreateManyInput = {
@@ -120980,6 +122303,75 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     vendorId?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type FGPackagingMasterCreateInput = {
+    id?: string
+    packetSize: number
+    packetUnit: string
+    cartonCapacity: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    rawMaterial: RawMaterialProductCreateNestedOneWithoutFgPackagingMasterInput
+  }
+
+  export type FGPackagingMasterUncheckedCreateInput = {
+    id?: string
+    rawMaterialId: string
+    packetSize: number
+    packetUnit: string
+    cartonCapacity: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGPackagingMasterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    packetSize?: FloatFieldUpdateOperationsInput | number
+    packetUnit?: StringFieldUpdateOperationsInput | string
+    cartonCapacity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    rawMaterial?: RawMaterialProductUpdateOneRequiredWithoutFgPackagingMasterNestedInput
+  }
+
+  export type FGPackagingMasterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    packetSize?: FloatFieldUpdateOperationsInput | number
+    packetUnit?: StringFieldUpdateOperationsInput | string
+    cartonCapacity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGPackagingMasterCreateManyInput = {
+    id?: string
+    rawMaterialId: string
+    packetSize: number
+    packetUnit: string
+    cartonCapacity: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGPackagingMasterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    packetSize?: FloatFieldUpdateOperationsInput | number
+    packetUnit?: StringFieldUpdateOperationsInput | string
+    cartonCapacity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGPackagingMasterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: StringFieldUpdateOperationsInput | string
+    packetSize?: FloatFieldUpdateOperationsInput | number
+    packetUnit?: StringFieldUpdateOperationsInput | string
+    cartonCapacity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type PurchaseOrderCreateInput = {
@@ -127479,6 +128871,11 @@ export namespace Prisma {
     none?: GrindingDispatchWhereInput
   }
 
+  export type FGPackagingMasterNullableScalarRelationFilter = {
+    is?: FGPackagingMasterWhereInput | null
+    isNot?: FGPackagingMasterWhereInput | null
+  }
+
   export type CleaningJobOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -127575,6 +128972,78 @@ export namespace Prisma {
     _max?: NestedEnumMaterialCategoryFilter<$PrismaModel>
   }
 
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type RawMaterialProductScalarRelationFilter = {
+    is?: RawMaterialProductWhereInput
+    isNot?: RawMaterialProductWhereInput
+  }
+
+  export type FGPackagingMasterCountOrderByAggregateInput = {
+    id?: SortOrder
+    rawMaterialId?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    cartonCapacity?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGPackagingMasterAvgOrderByAggregateInput = {
+    packetSize?: SortOrder
+    cartonCapacity?: SortOrder
+  }
+
+  export type FGPackagingMasterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    rawMaterialId?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    cartonCapacity?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGPackagingMasterMinOrderByAggregateInput = {
+    id?: SortOrder
+    rawMaterialId?: SortOrder
+    packetSize?: SortOrder
+    packetUnit?: SortOrder
+    cartonCapacity?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGPackagingMasterSumOrderByAggregateInput = {
+    packetSize?: SortOrder
+    cartonCapacity?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type VendorScalarRelationFilter = {
     is?: VendorWhereInput
     isNot?: VendorWhereInput
@@ -127613,17 +129082,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
   export type EnumPurchaseOrderItemStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.PurchaseOrderItemStatus | EnumPurchaseOrderItemStatusFieldRefInput<$PrismaModel>
     in?: $Enums.PurchaseOrderItemStatus[] | ListEnumPurchaseOrderItemStatusFieldRefInput<$PrismaModel>
@@ -127634,11 +129092,6 @@ export namespace Prisma {
   export type PurchaseOrderScalarRelationFilter = {
     is?: PurchaseOrderWhereInput
     isNot?: PurchaseOrderWhereInput
-  }
-
-  export type RawMaterialProductScalarRelationFilter = {
-    is?: RawMaterialProductWhereInput
-    isNot?: RawMaterialProductWhereInput
   }
 
   export type ReceivalEntryListRelationFilter = {
@@ -127694,22 +129147,6 @@ export namespace Prisma {
     quantityOrdered?: SortOrder
     rate?: SortOrder
     totalReceived?: SortOrder
-  }
-
-  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type EnumPurchaseOrderItemStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -135212,6 +136649,12 @@ export namespace Prisma {
     connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
   }
 
+  export type FGPackagingMasterCreateNestedOneWithoutRawMaterialInput = {
+    create?: XOR<FGPackagingMasterCreateWithoutRawMaterialInput, FGPackagingMasterUncheckedCreateWithoutRawMaterialInput>
+    connectOrCreate?: FGPackagingMasterCreateOrConnectWithoutRawMaterialInput
+    connect?: FGPackagingMasterWhereUniqueInput
+  }
+
   export type CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput = {
     create?: XOR<CleaningJobCreateWithoutRawMaterialInput, CleaningJobUncheckedCreateWithoutRawMaterialInput> | CleaningJobCreateWithoutRawMaterialInput[] | CleaningJobUncheckedCreateWithoutRawMaterialInput[]
     connectOrCreate?: CleaningJobCreateOrConnectWithoutRawMaterialInput | CleaningJobCreateOrConnectWithoutRawMaterialInput[]
@@ -135273,6 +136716,12 @@ export namespace Prisma {
     connectOrCreate?: GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput | GrindingDispatchCreateOrConnectWithoutInputRawMaterialInput[]
     createMany?: GrindingDispatchCreateManyInputRawMaterialInputEnvelope
     connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+  }
+
+  export type FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput = {
+    create?: XOR<FGPackagingMasterCreateWithoutRawMaterialInput, FGPackagingMasterUncheckedCreateWithoutRawMaterialInput>
+    connectOrCreate?: FGPackagingMasterCreateOrConnectWithoutRawMaterialInput
+    connect?: FGPackagingMasterWhereUniqueInput
   }
 
   export type EnumMaterialCategoryFieldUpdateOperationsInput = {
@@ -135415,6 +136864,16 @@ export namespace Prisma {
     deleteMany?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
   }
 
+  export type FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput = {
+    create?: XOR<FGPackagingMasterCreateWithoutRawMaterialInput, FGPackagingMasterUncheckedCreateWithoutRawMaterialInput>
+    connectOrCreate?: FGPackagingMasterCreateOrConnectWithoutRawMaterialInput
+    upsert?: FGPackagingMasterUpsertWithoutRawMaterialInput
+    disconnect?: FGPackagingMasterWhereInput | boolean
+    delete?: FGPackagingMasterWhereInput | boolean
+    connect?: FGPackagingMasterWhereUniqueInput
+    update?: XOR<XOR<FGPackagingMasterUpdateToOneWithWhereWithoutRawMaterialInput, FGPackagingMasterUpdateWithoutRawMaterialInput>, FGPackagingMasterUncheckedUpdateWithoutRawMaterialInput>
+  }
+
   export type CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput = {
     create?: XOR<CleaningJobCreateWithoutRawMaterialInput, CleaningJobUncheckedCreateWithoutRawMaterialInput> | CleaningJobCreateWithoutRawMaterialInput[] | CleaningJobUncheckedCreateWithoutRawMaterialInput[]
     connectOrCreate?: CleaningJobCreateOrConnectWithoutRawMaterialInput | CleaningJobCreateOrConnectWithoutRawMaterialInput[]
@@ -135539,6 +136998,38 @@ export namespace Prisma {
     update?: GrindingDispatchUpdateWithWhereUniqueWithoutInputRawMaterialInput | GrindingDispatchUpdateWithWhereUniqueWithoutInputRawMaterialInput[]
     updateMany?: GrindingDispatchUpdateManyWithWhereWithoutInputRawMaterialInput | GrindingDispatchUpdateManyWithWhereWithoutInputRawMaterialInput[]
     deleteMany?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
+  }
+
+  export type FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput = {
+    create?: XOR<FGPackagingMasterCreateWithoutRawMaterialInput, FGPackagingMasterUncheckedCreateWithoutRawMaterialInput>
+    connectOrCreate?: FGPackagingMasterCreateOrConnectWithoutRawMaterialInput
+    upsert?: FGPackagingMasterUpsertWithoutRawMaterialInput
+    disconnect?: FGPackagingMasterWhereInput | boolean
+    delete?: FGPackagingMasterWhereInput | boolean
+    connect?: FGPackagingMasterWhereUniqueInput
+    update?: XOR<XOR<FGPackagingMasterUpdateToOneWithWhereWithoutRawMaterialInput, FGPackagingMasterUpdateWithoutRawMaterialInput>, FGPackagingMasterUncheckedUpdateWithoutRawMaterialInput>
+  }
+
+  export type RawMaterialProductCreateNestedOneWithoutFgPackagingMasterInput = {
+    create?: XOR<RawMaterialProductCreateWithoutFgPackagingMasterInput, RawMaterialProductUncheckedCreateWithoutFgPackagingMasterInput>
+    connectOrCreate?: RawMaterialProductCreateOrConnectWithoutFgPackagingMasterInput
+    connect?: RawMaterialProductWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type RawMaterialProductUpdateOneRequiredWithoutFgPackagingMasterNestedInput = {
+    create?: XOR<RawMaterialProductCreateWithoutFgPackagingMasterInput, RawMaterialProductUncheckedCreateWithoutFgPackagingMasterInput>
+    connectOrCreate?: RawMaterialProductCreateOrConnectWithoutFgPackagingMasterInput
+    upsert?: RawMaterialProductUpsertWithoutFgPackagingMasterInput
+    connect?: RawMaterialProductWhereUniqueInput
+    update?: XOR<XOR<RawMaterialProductUpdateToOneWithWhereWithoutFgPackagingMasterInput, RawMaterialProductUpdateWithoutFgPackagingMasterInput>, RawMaterialProductUncheckedUpdateWithoutFgPackagingMasterInput>
   }
 
   export type VendorCreateNestedOneWithoutPurchaseOrdersInput = {
@@ -135677,14 +137168,6 @@ export namespace Prisma {
     connectOrCreate?: GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput | GRNbyPoCreateOrConnectWithoutPurchaseOrderItemInput[]
     createMany?: GRNbyPoCreateManyPurchaseOrderItemInputEnvelope
     connect?: GRNbyPoWhereUniqueInput | GRNbyPoWhereUniqueInput[]
-  }
-
-  export type FloatFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type EnumPurchaseOrderItemStatusFieldUpdateOperationsInput = {
@@ -138793,13 +140276,6 @@ export namespace Prisma {
     _max?: NestedEnumMaterialCategoryFilter<$PrismaModel>
   }
 
-  export type NestedEnumPurchaseOrderItemStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.PurchaseOrderItemStatus | EnumPurchaseOrderItemStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.PurchaseOrderItemStatus[] | ListEnumPurchaseOrderItemStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.PurchaseOrderItemStatus[] | ListEnumPurchaseOrderItemStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumPurchaseOrderItemStatusFilter<$PrismaModel> | $Enums.PurchaseOrderItemStatus
-  }
-
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -138814,6 +140290,13 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
+  }
+
+  export type NestedEnumPurchaseOrderItemStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.PurchaseOrderItemStatus | EnumPurchaseOrderItemStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.PurchaseOrderItemStatus[] | ListEnumPurchaseOrderItemStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.PurchaseOrderItemStatus[] | ListEnumPurchaseOrderItemStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumPurchaseOrderItemStatusFilter<$PrismaModel> | $Enums.PurchaseOrderItemStatus
   }
 
   export type NestedEnumPurchaseOrderItemStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -154760,6 +156243,7 @@ export namespace Prisma {
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutVendorInput = {
@@ -154782,6 +156266,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutVendorInput = {
@@ -155248,6 +156733,29 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FGPackagingMasterCreateWithoutRawMaterialInput = {
+    id?: string
+    packetSize: number
+    packetUnit: string
+    cartonCapacity: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGPackagingMasterUncheckedCreateWithoutRawMaterialInput = {
+    id?: string
+    packetSize: number
+    packetUnit: string
+    cartonCapacity: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGPackagingMasterCreateOrConnectWithoutRawMaterialInput = {
+    where: FGPackagingMasterWhereUniqueInput
+    create: XOR<FGPackagingMasterCreateWithoutRawMaterialInput, FGPackagingMasterUncheckedCreateWithoutRawMaterialInput>
+  }
+
   export type CleaningJobUpsertWithWhereUniqueWithoutRawMaterialInput = {
     where: CleaningJobWhereUniqueInput
     update: XOR<CleaningJobUpdateWithoutRawMaterialInput, CleaningJobUncheckedUpdateWithoutRawMaterialInput>
@@ -155593,6 +157101,143 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
   }
 
+  export type FGPackagingMasterUpsertWithoutRawMaterialInput = {
+    update: XOR<FGPackagingMasterUpdateWithoutRawMaterialInput, FGPackagingMasterUncheckedUpdateWithoutRawMaterialInput>
+    create: XOR<FGPackagingMasterCreateWithoutRawMaterialInput, FGPackagingMasterUncheckedCreateWithoutRawMaterialInput>
+    where?: FGPackagingMasterWhereInput
+  }
+
+  export type FGPackagingMasterUpdateToOneWithWhereWithoutRawMaterialInput = {
+    where?: FGPackagingMasterWhereInput
+    data: XOR<FGPackagingMasterUpdateWithoutRawMaterialInput, FGPackagingMasterUncheckedUpdateWithoutRawMaterialInput>
+  }
+
+  export type FGPackagingMasterUpdateWithoutRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    packetSize?: FloatFieldUpdateOperationsInput | number
+    packetUnit?: StringFieldUpdateOperationsInput | string
+    cartonCapacity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGPackagingMasterUncheckedUpdateWithoutRawMaterialInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    packetSize?: FloatFieldUpdateOperationsInput | number
+    packetUnit?: StringFieldUpdateOperationsInput | string
+    cartonCapacity?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type RawMaterialProductCreateWithoutFgPackagingMasterInput = {
+    id?: string
+    skuCode: string
+    name: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
+    variety?: string | null
+    unitOfMeasurement: string
+    minReorderLevel: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    cleaningJobs?: CleaningJobCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotCreateNestedManyWithoutRawMaterialInput
+    currentStocks?: CurrentStockCreateNestedManyWithoutRawMaterialInput
+    processingJobs?: ProcessingJobCreateNestedManyWithoutInputRawMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemCreateNestedManyWithoutRawMaterialInput
+    vendor?: VendorCreateNestedOneWithoutRawMaterialsInput
+    stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+  }
+
+  export type RawMaterialProductUncheckedCreateWithoutFgPackagingMasterInput = {
+    id?: string
+    skuCode: string
+    name: string
+    category: $Enums.MaterialCategory
+    subcategory?: string | null
+    variety?: string | null
+    unitOfMeasurement: string
+    minReorderLevel: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    vendorId?: string | null
+    cleaningJobs?: CleaningJobUncheckedCreateNestedManyWithoutRawMaterialInput
+    cleaningLots?: CleaningLotUncheckedCreateNestedManyWithoutRawMaterialInput
+    currentStocks?: CurrentStockUncheckedCreateNestedManyWithoutRawMaterialInput
+    processingJobs?: ProcessingJobUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
+    bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+  }
+
+  export type RawMaterialProductCreateOrConnectWithoutFgPackagingMasterInput = {
+    where: RawMaterialProductWhereUniqueInput
+    create: XOR<RawMaterialProductCreateWithoutFgPackagingMasterInput, RawMaterialProductUncheckedCreateWithoutFgPackagingMasterInput>
+  }
+
+  export type RawMaterialProductUpsertWithoutFgPackagingMasterInput = {
+    update: XOR<RawMaterialProductUpdateWithoutFgPackagingMasterInput, RawMaterialProductUncheckedUpdateWithoutFgPackagingMasterInput>
+    create: XOR<RawMaterialProductCreateWithoutFgPackagingMasterInput, RawMaterialProductUncheckedCreateWithoutFgPackagingMasterInput>
+    where?: RawMaterialProductWhereInput
+  }
+
+  export type RawMaterialProductUpdateToOneWithWhereWithoutFgPackagingMasterInput = {
+    where?: RawMaterialProductWhereInput
+    data: XOR<RawMaterialProductUpdateWithoutFgPackagingMasterInput, RawMaterialProductUncheckedUpdateWithoutFgPackagingMasterInput>
+  }
+
+  export type RawMaterialProductUpdateWithoutFgPackagingMasterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    minReorderLevel?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    cleaningJobs?: CleaningJobUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUpdateManyWithoutRawMaterialNestedInput
+    currentStocks?: CurrentStockUpdateManyWithoutRawMaterialNestedInput
+    processingJobs?: ProcessingJobUpdateManyWithoutInputRawMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUpdateManyWithoutRawMaterialNestedInput
+    vendor?: VendorUpdateOneWithoutRawMaterialsNestedInput
+    stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+  }
+
+  export type RawMaterialProductUncheckedUpdateWithoutFgPackagingMasterInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    skuCode?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    category?: EnumMaterialCategoryFieldUpdateOperationsInput | $Enums.MaterialCategory
+    subcategory?: NullableStringFieldUpdateOperationsInput | string | null
+    variety?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    minReorderLevel?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    vendorId?: NullableStringFieldUpdateOperationsInput | string | null
+    cleaningJobs?: CleaningJobUncheckedUpdateManyWithoutRawMaterialNestedInput
+    cleaningLots?: CleaningLotUncheckedUpdateManyWithoutRawMaterialNestedInput
+    currentStocks?: CurrentStockUncheckedUpdateManyWithoutRawMaterialNestedInput
+    processingJobs?: ProcessingJobUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    purchaseOrderItems?: PurchaseOrderItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
+    bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+  }
+
   export type VendorCreateWithoutPurchaseOrdersInput = {
     id?: string
     vendorCode: string
@@ -155842,6 +157487,7 @@ export namespace Prisma {
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutPurchaseOrderItemsInput = {
@@ -155864,6 +157510,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutPurchaseOrderItemsInput = {
@@ -156019,6 +157666,7 @@ export namespace Prisma {
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutPurchaseOrderItemsInput = {
@@ -156041,6 +157689,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type ReceivalEntryUpsertWithWhereUniqueWithoutPurchaseOrderItemInput = {
@@ -156457,6 +158106,7 @@ export namespace Prisma {
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutStockEntriesInput = {
@@ -156479,6 +158129,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutStockEntriesInput = {
@@ -156562,6 +158213,7 @@ export namespace Prisma {
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutStockEntriesInput = {
@@ -156584,6 +158236,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutStockEntriesInput = {
@@ -158396,6 +160049,7 @@ export namespace Prisma {
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutCleaningJobsInput = {
@@ -158418,6 +160072,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutCleaningJobsInput = {
@@ -158683,6 +160338,7 @@ export namespace Prisma {
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutCleaningJobsInput = {
@@ -158705,6 +160361,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutCleaningJobsToInput = {
@@ -159339,6 +160996,7 @@ export namespace Prisma {
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutProcessingJobsInput = {
@@ -159361,6 +161019,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutProcessingJobsInput = {
@@ -159504,6 +161163,7 @@ export namespace Prisma {
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutProcessingJobsInput = {
@@ -159526,6 +161186,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutProcessingJobsInput = {
@@ -159927,6 +161588,7 @@ export namespace Prisma {
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutCurrentStocksInput = {
@@ -159949,6 +161611,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutCurrentStocksInput = {
@@ -160032,6 +161695,7 @@ export namespace Prisma {
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutCurrentStocksInput = {
@@ -160054,6 +161718,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutCurrentStocksInput = {
@@ -161458,6 +163123,7 @@ export namespace Prisma {
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutCleaningLotsInput = {
@@ -161480,6 +163146,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutCleaningLotsInput = {
@@ -161719,6 +163386,7 @@ export namespace Prisma {
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutCleaningLotsInput = {
@@ -161741,6 +163409,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type WarehouseUpsertWithoutCleaningLotsInput = {
@@ -162060,6 +163729,7 @@ export namespace Prisma {
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
     grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutBomsAsSfgInput = {
@@ -162082,6 +163752,7 @@ export namespace Prisma {
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
     grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutBomsAsSfgInput = {
@@ -162136,6 +163807,7 @@ export namespace Prisma {
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
     grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutBomsAsSfgInput = {
@@ -162158,6 +163830,7 @@ export namespace Prisma {
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type BillOfMaterialCreateWithoutItemsInput = {
@@ -162213,6 +163886,7 @@ export namespace Prisma {
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutBomItemsInput = {
@@ -162235,6 +163909,7 @@ export namespace Prisma {
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
     grindingDispatches?: GrindingDispatchUncheckedCreateNestedManyWithoutInputRawMaterialInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutBomItemsInput = {
@@ -162312,6 +163987,7 @@ export namespace Prisma {
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutBomItemsInput = {
@@ -162334,6 +164010,7 @@ export namespace Prisma {
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type BatchCreateWithoutSeedWastageRecordsInput = {
@@ -162476,6 +164153,7 @@ export namespace Prisma {
     stockEntries?: StockEntryCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialCreateNestedManyWithoutSfgProductInput
+    fgPackagingMaster?: FGPackagingMasterCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductUncheckedCreateWithoutGrindingDispatchesInput = {
@@ -162498,6 +164176,7 @@ export namespace Prisma {
     stockEntries?: StockEntryUncheckedCreateNestedManyWithoutRawMaterialInput
     bomItems?: BOMItemUncheckedCreateNestedManyWithoutRawMaterialInput
     bomsAsSfg?: BillOfMaterialUncheckedCreateNestedManyWithoutSfgProductInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedCreateNestedOneWithoutRawMaterialInput
   }
 
   export type RawMaterialProductCreateOrConnectWithoutGrindingDispatchesInput = {
@@ -162636,6 +164315,7 @@ export namespace Prisma {
     stockEntries?: StockEntryUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutGrindingDispatchesInput = {
@@ -162658,6 +164338,7 @@ export namespace Prisma {
     stockEntries?: StockEntryUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type LocationUpsertWithoutDispatchesFromInput = {
@@ -168870,6 +170551,7 @@ export namespace Prisma {
     bomItems?: BOMItemUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateWithoutVendorInput = {
@@ -168892,6 +170574,7 @@ export namespace Prisma {
     bomItems?: BOMItemUncheckedUpdateManyWithoutRawMaterialNestedInput
     bomsAsSfg?: BillOfMaterialUncheckedUpdateManyWithoutSfgProductNestedInput
     grindingDispatches?: GrindingDispatchUncheckedUpdateManyWithoutInputRawMaterialNestedInput
+    fgPackagingMaster?: FGPackagingMasterUncheckedUpdateOneWithoutRawMaterialNestedInput
   }
 
   export type RawMaterialProductUncheckedUpdateManyWithoutVendorInput = {

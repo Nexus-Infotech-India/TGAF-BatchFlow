@@ -751,6 +751,19 @@ model RawMaterialProduct {
   bomItems           BOMItem[]
   bomsAsSfg          BillOfMaterial[]    @relation("BOMSfgProduct")
   grindingDispatches GrindingDispatch[]
+  fgPackagingMaster  FGPackagingMaster?
+}
+
+model FGPackagingMaster {
+  id             String   @id @default(uuid())
+  rawMaterialId  String   @unique
+  packetSize     Float
+  packetUnit     String
+  cartonCapacity Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  rawMaterial RawMaterialProduct @relation(fields: [rawMaterialId], references: [id], onDelete: Cascade)
 }
 
 model PurchaseOrder {
@@ -1470,6 +1483,8 @@ model FGBatch {
   packetSize     Float?
   packetUnit     String?
   totalPackets   Int      @default(0)
+  cartonCapacity Int?
+  totalCartons   Int      @default(0)
   status         String   @default("CREATED")
   notes          String?
   createdById    String
@@ -1508,11 +1523,14 @@ model FGProductionEntry {
   targetUnit           String
   packetSize           Float?
   packetUnit           String?
+  cartonCapacity       Int?
   totalPlannedPackets  Int      @default(0)
+  totalPlannedCartons  Int      @default(0)
   totalActualFg        Float    @default(0)
   totalActualByproduct Float    @default(0)
   totalActualScrap     Float    @default(0)
   totalActualPackets   Int      @default(0)
+  totalActualCartons   Int      @default(0)
   status               String   @default("DRAFT")
   notes                String?
   createdById          String
@@ -1532,6 +1550,7 @@ model FGProductionMachineEntry {
   allocatedQty        Float    @default(0)
   allocatedUnit       String   @default("Ton")
   plannedPackets      Int      @default(0)
+  plannedCartons      Int      @default(0)
   actualFgQty         Float    @default(0)
   actualFgUnit        String   @default("Ton")
   actualByproduct     Float    @default(0)
@@ -1539,6 +1558,7 @@ model FGProductionMachineEntry {
   actualScrap         Float    @default(0)
   actualScrapUnit     String   @default("Ton")
   actualPackets       Int      @default(0)
+  actualCartons       Int      @default(0)
   notes               String?
   createdAt           DateTime @default(now())
 
@@ -1570,8 +1590,10 @@ model FGProductionVerification {
   entryNumber        String
   fgProductName      String
   totalPackets       Int       @default(0)
+  totalCartons       Int       @default(0)
   packetSize         Float?
   packetUnit         String?
+  cartonCapacity     Int?
   toLocationId       String
   toLocationName     String?
   status             String    @default("PENDING") // PENDING, ACCEPTED, REJECTED

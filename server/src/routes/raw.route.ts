@@ -26,6 +26,7 @@ import { GrindingDispatchController } from '../controllers/rawmaterial/grindingD
 import { FGBatchController } from '../controllers/rawmaterial/fgBatch.controller';
 import { FGProductionController } from '../controllers/rawmaterial/fgProduction.controller';
 import { FGVerificationController } from '../controllers/rawmaterial/fgVerification.controller';
+import { FGPackagingController } from '../controllers/rawmaterial/fgPackaging.controller';
 
 const router = Router();
 
@@ -204,5 +205,11 @@ router.post('/fg-verification/dispatch', FGVerificationController.dispatchToWare
 router.get('/fg-verification', FGVerificationController.getVerifications);
 router.put('/fg-verification/:id/accept', FGVerificationController.acceptVerification);
 router.put('/fg-verification/:id/reject', FGVerificationController.rejectVerification);
+
+// FG Packaging Master
+router.get('/fg-packaging', FGPackagingController.getFGPackagingSettings);
+router.get('/fg-packaging/product/:productId', FGPackagingController.getFGPackagingByProductId);
+router.post('/fg-packaging', FGPackagingController.upsertFGPackagingSetting);
+router.delete('/fg-packaging/:id', FGPackagingController.deleteFGPackagingSetting);
 
 export default router;
