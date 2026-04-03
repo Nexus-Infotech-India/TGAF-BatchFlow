@@ -170,6 +170,7 @@ model User {
   createdChecklistItems        PreAuditChecklistItem[] @relation("CreatedChecklistItems")
   responsibleForChecklistItems PreAuditChecklistItem[] @relation("ResponsibleForChecklistItems")
   rmQualityReports             RMQualityReport[]
+  fgQualityReports             FGQualityReport[]
   createdGRNs                  GRNbyPo[]               @relation("GRNCreatedBy")
   StandardsCreated             Standard[]              @relation("StandardCreatedBy")
   StandardsModified            Standard[]              @relation("StandardModifiedBy")
@@ -1494,6 +1495,7 @@ model FGBatch {
 
   consumptions      FGBatchConsumption[]
   productionEntries FGProductionEntry[]
+  fgQualityReports  FGQualityReport[]
 }
 
 model FGBatchConsumption {
@@ -1541,6 +1543,7 @@ model FGProductionEntry {
   fgBatch         FGBatch                    @relation(fields: [fgBatchId], references: [id])
   machineEntries  FGProductionMachineEntry[]
   verifications   FGProductionVerification[]
+  qualityReport   FGQualityReport?
 }
 
 model FGProductionMachineEntry {
@@ -1608,4 +1611,33 @@ model FGProductionVerification {
   updatedAt           DateTime @updatedAt
 
   productionEntry FGProductionEntry @relation(fields: [productionEntryId], references: [id])
+}
+
+model FGQualityReport {
+  id                  String               @id @default(uuid())
+  reportNumber        String?              @unique
+  fgBatchId           String?
+  productionEntryId   String               @unique
+  productName         String
+  dateOfReport        DateTime             @default(now())
+  createdById         String
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+
+  parameters          FGQualityParameter[]
+  productionEntry     FGProductionEntry    @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
+  fgBatch             FGBatch?             @relation(fields: [fgBatchId], references: [id])
+  createdBy           User                 @relation(fields: [createdById], references: [id])
+}
+
+model FGQualityParameter {
+  id        String          @id @default(uuid())
+  reportId  String
+  parameter String
+  standard  String
+  result    String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  
+  report    FGQualityReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
 }

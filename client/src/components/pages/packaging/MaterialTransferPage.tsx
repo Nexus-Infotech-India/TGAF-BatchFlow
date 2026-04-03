@@ -15,7 +15,10 @@ import {
   BoxIcon,
   XCircle,
   Clock,
+  ChevronLeft,
 } from 'lucide-react';
+
+const PAGE_SIZE = 10;
 
 
 /* ─── Types ─── */
@@ -70,6 +73,7 @@ const MaterialTransferPage: React.FC = () => {
   const [fgBatches, setFgBatches] = useState<FGBatchRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   const navigate = useNavigate();
 
@@ -102,6 +106,8 @@ const MaterialTransferPage: React.FC = () => {
   };
 
   const createdCount = fgBatches.filter(b => b.status === 'CREATED').length;
+  const totalPages = Math.max(1, Math.ceil(fgBatches.length / PAGE_SIZE));
+  const pagedBatches = fgBatches.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <motion.div className="min-h-screen bg-background">
@@ -189,7 +195,7 @@ const MaterialTransferPage: React.FC = () => {
                 </div>
               )}
 
-              {!loading && fgBatches.map(batch => (
+              {!loading && pagedBatches.map(batch => (
                 <motion.div
                   key={batch.id}
                   className="bg-card rounded-xl border border-border overflow-hidden"
@@ -328,6 +334,28 @@ const MaterialTransferPage: React.FC = () => {
                 </motion.div>
               ))}
             </div>
+
+            {/* Pagination */}
+            {fgBatches.length > PAGE_SIZE && (
+              <div className="flex items-center justify-between pt-2">
+                <p className="text-xs text-muted-foreground">
+                  Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, fgBatches.length)} of {fgBatches.length}
+                </p>
+                <div className="flex gap-1">
+                  <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-1.5 rounded-lg border border-border hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                    <ChevronLeft size={16} />
+                  </button>
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
+                    <button key={n} onClick={() => setPage(n)} className={`w-8 h-8 rounded-lg text-xs font-semibold border transition-colors ${page === n ? 'bg-violet-600 text-white border-violet-600' : 'border-border hover:bg-muted/40 text-foreground'}`}>
+                      {n}
+                    </button>
+                  ))}
+                  <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="p-1.5 rounded-lg border border-border hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>

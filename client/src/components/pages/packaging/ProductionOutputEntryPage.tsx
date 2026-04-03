@@ -14,8 +14,24 @@ import {
   Trash2,
   Scale,
   Zap,
+  Beaker,
+  FileCheck,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import api, { API_ROUTES } from '../../../utils/api';
+
+const FG_QUALITY_PARAMETERS = [
+  { parameter: 'Moisture', standard: 'max 10%' },
+  { parameter: 'ASTA Color', standard: 'min 40' },
+  { parameter: 'Acid Insoluble Ash', standard: 'max 1.5%' },
+  { parameter: 'Total Ash', standard: 'max 8%' },
+  { parameter: 'Aflatoxin', standard: 'max 20 ppb' },
+  { parameter: 'TPC', standard: 'max 10 million cfu' },
+  { parameter: 'YM', standard: '10,000 cfu' },
+];
+
+const PAGE_SIZE = 10;
 
 export default function ProductionOutputEntryPage() {
   const navigate = useNavigate();
@@ -29,6 +45,12 @@ export default function ProductionOutputEntryPage() {
   const [machineInputs, setMachineInputs] = useState<any[]>([]);
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [page, setPage] = useState(1);
+
+  // Quality check form state (Step 1)
+  const [qualityResults, setQualityResults] = useState<string[]>(
+    Array(FG_QUALITY_PARAMETERS.length).fill('')
+  );
 
   /* ─── Fetch Pending Entries ─── */
   useEffect(() => {
@@ -80,6 +102,12 @@ export default function ProductionOutputEntryPage() {
       // Remove auto-calc packets since user will input it manually
       return next;
     });
+  };
+
+  const handleQualityResultChange = (index: number, value: string) => {
+    const next = [...qualityResults];
+    next[index] = value;
+    setQualityResults(next);
   };
 
   /* ─── Summary calculations ─── */
@@ -144,6 +172,11 @@ export default function ProductionOutputEntryPage() {
           actualByproductUnit: a.actualByproductUnit || selectedEntry?.targetUnit,
           actualScrapUnit: a.actualScrapUnit || selectedEntry?.targetUnit
         })),
+        qualityParameters: FG_QUALITY_PARAMETERS.map((p, i) => ({
+          parameter: p.parameter,
+          standard: p.standard,
+          result: qualityResults[i]
+        })),
         notes
       });
       message.success('Production output submitted successfully!');
@@ -170,7 +203,6 @@ export default function ProductionOutputEntryPage() {
       </div>
 
       <div className="bg-card rounded-2xl shadow-xl shadow-black/5 border border-border overflow-hidden">
-        {/* Header Steps */}
         <div className="px-6 py-4 border-b border-border bg-muted/10">
           <div className="flex items-center justify-between">
             <div className={`flex items-center gap-2 ${step >= 0 ? 'text-primary' : 'text-muted-foreground'}`}>
@@ -178,13 +210,18 @@ export default function ProductionOutputEntryPage() {
               <span className="font-semibold text-sm">Select Running Allocation</span>
             </div>
             <div className="flex-1 max-w-[100px] h-0.5 bg-border mx-4" />
-            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-blue-600' : 'text-muted-foreground'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 1 ? 'bg-blue-600 text-white' : step > 1 ? 'bg-blue-600/20' : 'bg-muted'}`}>2</div>
+            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-amber-600' : 'text-muted-foreground'}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 1 ? 'bg-amber-600 text-white' : step > 1 ? 'bg-amber-600/20' : 'bg-muted'}`}>2</div>
+              <span className="font-semibold text-sm">FG Quality Check</span>
+            </div>
+            <div className="flex-1 max-w-[100px] h-0.5 bg-border mx-4" />
+            <div className={`flex items-center gap-2 ${step >= 2 ? 'text-blue-600' : 'text-muted-foreground'}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 2 ? 'bg-blue-600 text-white' : step > 2 ? 'bg-blue-600/20' : 'bg-muted'}`}>3</div>
               <span className="font-semibold text-sm">Supervisor Output Entry</span>
             </div>
             <div className="flex-1 max-w-[100px] h-0.5 bg-border mx-4" />
-            <div className={`flex items-center gap-2 ${step >= 2 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 2 ? 'bg-emerald-600 text-white' : 'bg-muted'}`}>3</div>
+            <div className={`flex items-center gap-2 ${step >= 3 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 3 ? 'bg-emerald-600 text-white' : 'bg-muted'}`}>4</div>
               <span className="font-semibold text-sm">Review & Submit</span>
             </div>
           </div>
@@ -231,7 +268,7 @@ export default function ProductionOutputEntryPage() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                          {entries.map((entry) => (
+                          {entries.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map((entry) => (
                             <tr key={entry.id} className="hover:bg-muted/20 transition-colors">
                               <td className="px-5 py-4 font-bold text-primary text-sm">{entry.entryNumber}</td>
                               <td className="px-5 py-4 text-sm">
@@ -259,13 +296,87 @@ export default function ProductionOutputEntryPage() {
                         </tbody>
                       </table>
                     </div>
+
+                    {/* Pagination */}
+                    {entries.length > PAGE_SIZE && (
+                      <div className="flex items-center justify-between px-5 py-3 border-t border-border bg-muted/10">
+                        <p className="text-xs text-muted-foreground">
+                          Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, entries.length)} of {entries.length}
+                        </p>
+                        <div className="flex gap-1">
+                          <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-1.5 rounded-lg border border-border hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                            <ChevronLeft size={16} />
+                          </button>
+                          {Array.from({ length: Math.ceil(entries.length / PAGE_SIZE) }, (_, i) => i + 1).map(n => (
+                            <button key={n} onClick={() => setPage(n)} className={`w-8 h-8 rounded-lg text-xs font-semibold border transition-colors ${page === n ? 'bg-primary text-white border-primary' : 'border-border hover:bg-muted/40 text-foreground'}`}>
+                              {n}
+                            </button>
+                          ))}
+                          <button onClick={() => setPage(p => Math.min(Math.ceil(entries.length / PAGE_SIZE), p + 1))} disabled={page === Math.ceil(entries.length / PAGE_SIZE)} className="p-1.5 rounded-lg border border-border hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                            <ChevronRight size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </motion.div>
             )}
 
-            {/* ═══ STEP 1: Output Entry ═══ */}
+            {/* ═══ STEP 1: FG Quality Check ═══ */}
             {step === 1 && selectedEntry && (
+              <motion.div
+                key="step-1"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                className="p-6 md:p-8"
+              >
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/20">
+                    <Beaker size={20} className="text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-foreground">FG Quality Check</h2>
+                    <p className="text-sm text-muted-foreground">Perform quality checks on the finished good batch before supervisor entry</p>
+                  </div>
+                </div>
+
+                <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
+                  <div className="px-5 py-4 bg-muted/30 border-b border-border flex items-center gap-2">
+                    <FileCheck size={16} className="text-primary" />
+                    <h3 className="font-bold text-foreground text-sm">Quality Parameters</h3>
+                  </div>
+                  
+                  <div className="divide-y divide-border">
+                    {FG_QUALITY_PARAMETERS.map((param, idx) => (
+                      <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 items-center hover:bg-muted/10 transition-colors">
+                        <div className="col-span-1 md:col-span-2">
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1 block">Parameter</label>
+                          <div className="font-semibold text-foreground">{param.parameter}</div>
+                        </div>
+                        <div className="col-span-1">
+                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1 block">Standard</label>
+                          <div className="text-sm text-primary font-medium">{param.standard}</div>
+                        </div>
+                        <div className="col-span-1">
+                          <Input
+                            placeholder="Result *"
+                            value={qualityResults[idx]}
+                            onChange={(e) => handleQualityResultChange(idx, e.target.value)}
+                            className="font-semibold"
+                            status={qualityResults[idx].trim() === '' ? 'warning' : ''}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* ═══ STEP 2: Output Entry ═══ */}
+            {step === 2 && selectedEntry && (
               <motion.div
                 key="step-1"
                 initial={{ opacity: 0, x: -20 }}
@@ -448,8 +559,8 @@ export default function ProductionOutputEntryPage() {
               </motion.div>
             )}
 
-            {/* ═══ STEP 2: Review & Submit ═══ */}
-            {step === 2 && selectedEntry && (
+            {/* ═══ STEP 3: Review & Submit ═══ */}
+            {step === 3 && selectedEntry && (
               <motion.div
                 key="step-2"
                 initial={{ opacity: 0, x: -20 }}
@@ -563,7 +674,33 @@ export default function ProductionOutputEntryPage() {
                   </div>
                 </div>
 
-                {/* Summary removed per user request */}
+                {/* Quality Check Review Table */}
+                <div className="rounded-xl border border-border shadow-sm overflow-hidden bg-card mb-6">
+                  <div className="px-5 py-3 bg-muted/40 border-b border-border flex items-center gap-2">
+                    <Beaker size={16} className="text-amber-600" />
+                    <h3 className="font-bold text-foreground text-sm">Quality Report Details</h3>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                      <thead className="bg-muted/20 border-b border-border">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-xs font-bold text-muted-foreground uppercase">Parameter</th>
+                          <th className="px-4 py-3 text-left text-xs font-bold text-muted-foreground uppercase">Standard</th>
+                          <th className="px-4 py-3 text-left text-xs font-bold text-primary uppercase">Result</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-border">
+                        {FG_QUALITY_PARAMETERS.map((p, i) => (
+                          <tr key={i} className="hover:bg-muted/10">
+                            <td className="px-4 py-3 font-semibold text-foreground text-sm">{p.parameter}</td>
+                            <td className="px-4 py-3 text-amber-600 text-sm">{p.standard}</td>
+                            <td className="px-4 py-3 font-bold text-emerald-600 text-sm">{qualityResults[i]}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
 
                 {/* Notes */}
                 <div className="space-y-2 mb-6">
@@ -593,6 +730,23 @@ export default function ProductionOutputEntryPage() {
               </Button>
 
               {step === 1 ? (
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={() => {
+                    const allFilled = qualityResults.every(r => r.trim() !== '');
+                    if (!allFilled) {
+                      message.warning('Please enter results for all quality parameters');
+                      return;
+                    }
+                    setStep(step + 1);
+                  }}
+                  className="rounded-xl px-6 h-11 font-bold shadow-lg shadow-amber-500/20 border-0"
+                  style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}
+                >
+                  Confirm Quality Results <ArrowRight size={16} className="ml-1 inline" />
+                </Button>
+              ) : step === 2 ? (
                 <Button
                   type="primary"
                   size="large"

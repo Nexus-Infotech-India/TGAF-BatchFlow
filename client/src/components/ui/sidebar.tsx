@@ -205,7 +205,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
         },
         {
           path: "/masters/fg-packaging",
-          name: "FG Packaging Master",
+          name: "FG UOM Master",
           icon: <PackageOpen className="sidebar-icon" size={18} />,
           permissionKey: "manage_raw_materials"
         }

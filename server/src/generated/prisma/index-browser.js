@@ -1182,6 +1182,28 @@ exports.Prisma.FGProductionVerificationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.FGQualityReportScalarFieldEnum = {
+  id: 'id',
+  reportNumber: 'reportNumber',
+  fgBatchId: 'fgBatchId',
+  productionEntryId: 'productionEntryId',
+  productName: 'productName',
+  dateOfReport: 'dateOfReport',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FGQualityParameterScalarFieldEnum = {
+  id: 'id',
+  reportId: 'reportId',
+  parameter: 'parameter',
+  standard: 'standard',
+  result: 'result',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1469,7 +1491,9 @@ exports.Prisma.ModelName = {
   FGProductionEntry: 'FGProductionEntry',
   FGProductionMachineEntry: 'FGProductionMachineEntry',
   Machine: 'Machine',
-  FGProductionVerification: 'FGProductionVerification'
+  FGProductionVerification: 'FGProductionVerification',
+  FGQualityReport: 'FGQualityReport',
+  FGQualityParameter: 'FGQualityParameter'
 };
 
 /**

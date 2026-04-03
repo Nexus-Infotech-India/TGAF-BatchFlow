@@ -164,6 +164,14 @@ export class FGProductionController {
       // We already calculated totalPlannedPackets during mapping from user input
       const entryNumber = `${prefix}${String(seq).padStart(4, '0')}`;
 
+      // Resolve acting user before the transaction so FK constraints don't break
+      const tokenUserId = (req as any).user?.id;
+      let resolvedUserId = tokenUserId;
+      if (!resolvedUserId) {
+        const fallbackUser = await prisma.user.findFirst();
+        resolvedUserId = fallbackUser?.id || 'system';
+      }
+
       const productionEntry = await prisma.$transaction(async (tx) => {
         const created = await tx.fGProductionEntry.create({
           data: {
@@ -185,7 +193,7 @@ export class FGProductionController {
             totalActualCartons: 0,
             status: 'PENDING',
             notes: notes || null,
-            createdById: (req as any).user?.id || 'system',
+            createdById: resolvedUserId,
             machineEntries: {
               create: enrichedEntries,
             },
@@ -205,7 +213,7 @@ export class FGProductionController {
             type: 'FG_PRODUCTION_ENTRY',
             entity: 'FGProductionEntry',
             entityId: created.id,
-            userId: (req as any).user?.id || 'system',
+            userId: resolvedUserId,
             description: `FG Production Allocation created: ${entryNumber}. Product: ${fgBatch.fgProductName}. Allocated to ${machineEntries.length} machines.`,
           },
         });
@@ -243,6 +251,7 @@ export class FGProductionController {
             include: { machine: true },
           },
           fgBatch: true,
+          qualityReport: { include: { parameters: true } },
         },
         orderBy: { createdAt: 'desc' },
       });
@@ -267,6 +276,7 @@ export class FGProductionController {
             include: { machine: true },
           },
           fgBatch: { include: { consumptions: true } },
+          qualityReport: { include: { parameters: true } },
         },
       });
       if (!entry) {
@@ -287,7 +297,7 @@ export class FGProductionController {
   static async submitProductionOutput(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const { machineEntries } = req.body; // Array of { id, actualFgQty, actualByproduct, actualScrap, actualPackets, actualUnit }
+      const { machineEntries, qualityParameters } = req.body; // Array of { id, actualFgQty... } and { parameter, standard, result }
 
       if (!Array.isArray(machineEntries) || machineEntries.length === 0) {
         res.status(400).json({ error: 'No machine outputs provided' });
@@ -310,6 +320,23 @@ export class FGProductionController {
       if (existingEntry.status === 'COMPLETED') {
         res.status(400).json({ error: 'Production entry is already completed' });
         return;
+      }
+
+      if (!Array.isArray(qualityParameters) || qualityParameters.length === 0) {
+        res.status(400).json({ error: 'Quality parameters are strictly required before completing production.' });
+        return;
+      }
+
+      // Resolve acting user before the transaction so FK constraints don't break
+      const tokenUserId = (req as any).user?.id;
+      let actingUserId = tokenUserId;
+      if (!actingUserId) {
+        const fallbackUser = await prisma.user.findFirst();
+        if (!fallbackUser) {
+          res.status(500).json({ error: 'No user found in the system to associate with this action' });
+          return;
+        }
+        actingUserId = fallbackUser.id;
       }
 
       let totalActualFg = 0;
@@ -385,12 +412,45 @@ export class FGProductionController {
           data: { status: 'PRODUCTION_COMPLETED' },
         });
 
+        // Add quality report since we strictly required it above
+        // Generate report number
+        const today = new Date();
+        const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
+        const prefix = `FGQ-${dateStr}-`;
+        const lastReport = await tx.fGQualityReport.findFirst({
+          where: { reportNumber: { startsWith: prefix } },
+          orderBy: { reportNumber: 'desc' },
+        });
+        let seq = 1;
+        if (lastReport?.reportNumber) {
+          const lastSeq = parseInt(lastReport.reportNumber.replace(prefix, ''), 10);
+          if (!isNaN(lastSeq)) seq = lastSeq + 1;
+        }
+        const reportNumber = `${prefix}${String(seq).padStart(4, '0')}`;
+
+        await tx.fGQualityReport.create({
+          data: {
+            reportNumber,
+            productionEntryId: id,
+            fgBatchId: existingEntry.fgBatchId,
+            productName: existingEntry.fgProductName,
+            createdById: actingUserId,
+            parameters: {
+              create: qualityParameters.map((p: any) => ({
+                parameter: p.parameter,
+                standard: p.standard,
+                result: p.result || '-',
+              })),
+            },
+          },
+        });
+
         await tx.transactionLog.create({
           data: {
             type: 'FG_PRODUCTION_OUTPUT',
             entity: 'FGProductionEntry',
             entityId: id,
-            userId: (req as any).user?.id || 'system',
+            userId: actingUserId,
             description: `FG Production Output submitted for ${existingEntry.entryNumber}. Actual FG: ${totalActualFg}, Packets: ${totalActualPackets}`,
           },
         });
@@ -400,6 +460,86 @@ export class FGProductionController {
     } catch (error: any) {
       console.error('Error submitting production output:', error);
       res.status(500).json({ error: error.message || 'Failed to submit production output' });
+    }
+  }
+
+  /**
+   * POST /fg-batch/production-entries/:id/quality
+   * Records FG quality check details for the given production entry.
+   */
+  static async submitQualityCheck(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params; // production entry id
+      const { parameters } = req.body; // Array of { parameter, standard, result }
+
+      if (!Array.isArray(parameters) || parameters.length === 0) {
+        res.status(400).json({ error: 'Quality parameters are required' });
+        return;
+      }
+
+      const existingEntry = await prisma.fGProductionEntry.findUnique({
+        where: { id },
+        include: { qualityReport: true },
+      });
+
+      if (!existingEntry) {
+        res.status(404).json({ error: 'Production entry not found' });
+        return;
+      }
+
+      if (existingEntry.qualityReport) {
+        res.status(400).json({ error: 'Quality check already exists for this entry' });
+        return;
+      }
+
+      // Resolve acting user so FK constraints don't break
+      let createdById = (req as any).user?.id;
+      if (!createdById) {
+        const fallbackUser = await prisma.user.findFirst();
+        if (!fallbackUser) {
+          res.status(500).json({ error: 'No user found in the system to associate with this action' });
+          return;
+        }
+        createdById = fallbackUser.id;
+      }
+
+      // Generate report number
+      const today = new Date();
+      const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
+      const prefix = `FGQ-${dateStr}-`;
+      const lastReport = await prisma.fGQualityReport.findFirst({
+        where: { reportNumber: { startsWith: prefix } },
+        orderBy: { reportNumber: 'desc' },
+      });
+      let seq = 1;
+      if (lastReport?.reportNumber) {
+        const lastSeq = parseInt(lastReport.reportNumber.replace(prefix, ''), 10);
+        if (!isNaN(lastSeq)) seq = lastSeq + 1;
+      }
+      const reportNumber = `${prefix}${String(seq).padStart(4, '0')}`;
+
+      const qualityReport = await prisma.fGQualityReport.create({
+        data: {
+          reportNumber,
+          productionEntryId: id,
+          fgBatchId: existingEntry.fgBatchId,
+          productName: existingEntry.fgProductName,
+          createdById,
+          parameters: {
+            create: parameters.map((p: any) => ({
+              parameter: p.parameter,
+              standard: p.standard,
+              result: p.result,
+            })),
+          },
+        },
+        include: { parameters: true },
+      });
+
+      res.status(201).json({ success: true, data: qualityReport, message: 'Quality check submitted successfully' });
+    } catch (error: any) {
+      console.error('Error submitting quality check:', error);
+      res.status(500).json({ error: error.message || 'Failed to submit quality check' });
     }
   }
 }

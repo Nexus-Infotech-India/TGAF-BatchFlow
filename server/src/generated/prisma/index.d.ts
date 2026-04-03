@@ -423,6 +423,16 @@ export type Machine = $Result.DefaultSelection<Prisma.$MachinePayload>
  * 
  */
 export type FGProductionVerification = $Result.DefaultSelection<Prisma.$FGProductionVerificationPayload>
+/**
+ * Model FGQualityReport
+ * 
+ */
+export type FGQualityReport = $Result.DefaultSelection<Prisma.$FGQualityReportPayload>
+/**
+ * Model FGQualityParameter
+ * 
+ */
+export type FGQualityParameter = $Result.DefaultSelection<Prisma.$FGQualityParameterPayload>
 
 /**
  * Enums
@@ -1733,6 +1743,26 @@ export class PrismaClient<
     * ```
     */
   get fGProductionVerification(): Prisma.FGProductionVerificationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fGQualityReport`: Exposes CRUD operations for the **FGQualityReport** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FGQualityReports
+    * const fGQualityReports = await prisma.fGQualityReport.findMany()
+    * ```
+    */
+  get fGQualityReport(): Prisma.FGQualityReportDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fGQualityParameter`: Exposes CRUD operations for the **FGQualityParameter** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FGQualityParameters
+    * const fGQualityParameters = await prisma.fGQualityParameter.findMany()
+    * ```
+    */
+  get fGQualityParameter(): Prisma.FGQualityParameterDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -2255,7 +2285,9 @@ export namespace Prisma {
     FGProductionEntry: 'FGProductionEntry',
     FGProductionMachineEntry: 'FGProductionMachineEntry',
     Machine: 'Machine',
-    FGProductionVerification: 'FGProductionVerification'
+    FGProductionVerification: 'FGProductionVerification',
+    FGQualityReport: 'FGQualityReport',
+    FGQualityParameter: 'FGQualityParameter'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2274,7 +2306,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "fGPackagingMaster" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "machine" | "fGProductionVerification"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "fGPackagingMaster" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "machine" | "fGProductionVerification" | "fGQualityReport" | "fGQualityParameter"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -8346,6 +8378,154 @@ export namespace Prisma {
           }
         }
       }
+      FGQualityReport: {
+        payload: Prisma.$FGQualityReportPayload<ExtArgs>
+        fields: Prisma.FGQualityReportFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FGQualityReportFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FGQualityReportFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload>
+          }
+          findFirst: {
+            args: Prisma.FGQualityReportFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FGQualityReportFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload>
+          }
+          findMany: {
+            args: Prisma.FGQualityReportFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload>[]
+          }
+          create: {
+            args: Prisma.FGQualityReportCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload>
+          }
+          createMany: {
+            args: Prisma.FGQualityReportCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FGQualityReportCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload>[]
+          }
+          delete: {
+            args: Prisma.FGQualityReportDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload>
+          }
+          update: {
+            args: Prisma.FGQualityReportUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload>
+          }
+          deleteMany: {
+            args: Prisma.FGQualityReportDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FGQualityReportUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FGQualityReportUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload>[]
+          }
+          upsert: {
+            args: Prisma.FGQualityReportUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityReportPayload>
+          }
+          aggregate: {
+            args: Prisma.FGQualityReportAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFGQualityReport>
+          }
+          groupBy: {
+            args: Prisma.FGQualityReportGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FGQualityReportGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FGQualityReportCountArgs<ExtArgs>
+            result: $Utils.Optional<FGQualityReportCountAggregateOutputType> | number
+          }
+        }
+      }
+      FGQualityParameter: {
+        payload: Prisma.$FGQualityParameterPayload<ExtArgs>
+        fields: Prisma.FGQualityParameterFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FGQualityParameterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FGQualityParameterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload>
+          }
+          findFirst: {
+            args: Prisma.FGQualityParameterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FGQualityParameterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload>
+          }
+          findMany: {
+            args: Prisma.FGQualityParameterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload>[]
+          }
+          create: {
+            args: Prisma.FGQualityParameterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload>
+          }
+          createMany: {
+            args: Prisma.FGQualityParameterCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FGQualityParameterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload>[]
+          }
+          delete: {
+            args: Prisma.FGQualityParameterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload>
+          }
+          update: {
+            args: Prisma.FGQualityParameterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload>
+          }
+          deleteMany: {
+            args: Prisma.FGQualityParameterDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FGQualityParameterUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FGQualityParameterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload>[]
+          }
+          upsert: {
+            args: Prisma.FGQualityParameterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGQualityParameterPayload>
+          }
+          aggregate: {
+            args: Prisma.FGQualityParameterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFGQualityParameter>
+          }
+          groupBy: {
+            args: Prisma.FGQualityParameterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FGQualityParameterGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FGQualityParameterCountArgs<ExtArgs>
+            result: $Utils.Optional<FGQualityParameterCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -8524,6 +8704,8 @@ export namespace Prisma {
     fGProductionMachineEntry?: FGProductionMachineEntryOmit
     machine?: MachineOmit
     fGProductionVerification?: FGProductionVerificationOmit
+    fGQualityReport?: FGQualityReportOmit
+    fGQualityParameter?: FGQualityParameterOmit
   }
 
   /* Types for Logging */
@@ -8953,6 +9135,7 @@ export namespace Prisma {
     createdChecklistItems: number
     responsibleForChecklistItems: number
     rmQualityReports: number
+    fgQualityReports: number
     createdGRNs: number
     StandardsCreated: number
     StandardsModified: number
@@ -8989,6 +9172,7 @@ export namespace Prisma {
     createdChecklistItems?: boolean | UserCountOutputTypeCountCreatedChecklistItemsArgs
     responsibleForChecklistItems?: boolean | UserCountOutputTypeCountResponsibleForChecklistItemsArgs
     rmQualityReports?: boolean | UserCountOutputTypeCountRmQualityReportsArgs
+    fgQualityReports?: boolean | UserCountOutputTypeCountFgQualityReportsArgs
     createdGRNs?: boolean | UserCountOutputTypeCountCreatedGRNsArgs
     StandardsCreated?: boolean | UserCountOutputTypeCountStandardsCreatedArgs
     StandardsModified?: boolean | UserCountOutputTypeCountStandardsModifiedArgs
@@ -9147,6 +9331,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountRmQualityReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: RMQualityReportWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFgQualityReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGQualityReportWhereInput
   }
 
   /**
@@ -10632,11 +10823,13 @@ export namespace Prisma {
   export type FGBatchCountOutputType = {
     consumptions: number
     productionEntries: number
+    fgQualityReports: number
   }
 
   export type FGBatchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     consumptions?: boolean | FGBatchCountOutputTypeCountConsumptionsArgs
     productionEntries?: boolean | FGBatchCountOutputTypeCountProductionEntriesArgs
+    fgQualityReports?: boolean | FGBatchCountOutputTypeCountFgQualityReportsArgs
   }
 
   // Custom InputTypes
@@ -10662,6 +10855,13 @@ export namespace Prisma {
    */
   export type FGBatchCountOutputTypeCountProductionEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FGProductionEntryWhereInput
+  }
+
+  /**
+   * FGBatchCountOutputType without action
+   */
+  export type FGBatchCountOutputTypeCountFgQualityReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGQualityReportWhereInput
   }
 
 
@@ -10733,6 +10933,37 @@ export namespace Prisma {
    */
   export type MachineCountOutputTypeCountProductionMachineEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FGProductionMachineEntryWhereInput
+  }
+
+
+  /**
+   * Count Type FGQualityReportCountOutputType
+   */
+
+  export type FGQualityReportCountOutputType = {
+    parameters: number
+  }
+
+  export type FGQualityReportCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parameters?: boolean | FGQualityReportCountOutputTypeCountParametersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FGQualityReportCountOutputType without action
+   */
+  export type FGQualityReportCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReportCountOutputType
+     */
+    select?: FGQualityReportCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FGQualityReportCountOutputType without action
+   */
+  export type FGQualityReportCountOutputTypeCountParametersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGQualityParameterWhereInput
   }
 
 
@@ -22326,6 +22557,7 @@ export namespace Prisma {
     createdChecklistItems?: boolean | User$createdChecklistItemsArgs<ExtArgs>
     responsibleForChecklistItems?: boolean | User$responsibleForChecklistItemsArgs<ExtArgs>
     rmQualityReports?: boolean | User$rmQualityReportsArgs<ExtArgs>
+    fgQualityReports?: boolean | User$fgQualityReportsArgs<ExtArgs>
     createdGRNs?: boolean | User$createdGRNsArgs<ExtArgs>
     StandardsCreated?: boolean | User$StandardsCreatedArgs<ExtArgs>
     StandardsModified?: boolean | User$StandardsModifiedArgs<ExtArgs>
@@ -22398,6 +22630,7 @@ export namespace Prisma {
     createdChecklistItems?: boolean | User$createdChecklistItemsArgs<ExtArgs>
     responsibleForChecklistItems?: boolean | User$responsibleForChecklistItemsArgs<ExtArgs>
     rmQualityReports?: boolean | User$rmQualityReportsArgs<ExtArgs>
+    fgQualityReports?: boolean | User$fgQualityReportsArgs<ExtArgs>
     createdGRNs?: boolean | User$createdGRNsArgs<ExtArgs>
     StandardsCreated?: boolean | User$StandardsCreatedArgs<ExtArgs>
     StandardsModified?: boolean | User$StandardsModifiedArgs<ExtArgs>
@@ -22445,6 +22678,7 @@ export namespace Prisma {
       createdChecklistItems: Prisma.$PreAuditChecklistItemPayload<ExtArgs>[]
       responsibleForChecklistItems: Prisma.$PreAuditChecklistItemPayload<ExtArgs>[]
       rmQualityReports: Prisma.$RMQualityReportPayload<ExtArgs>[]
+      fgQualityReports: Prisma.$FGQualityReportPayload<ExtArgs>[]
       createdGRNs: Prisma.$GRNbyPoPayload<ExtArgs>[]
       StandardsCreated: Prisma.$StandardPayload<ExtArgs>[]
       StandardsModified: Prisma.$StandardPayload<ExtArgs>[]
@@ -22883,6 +23117,7 @@ export namespace Prisma {
     createdChecklistItems<T extends User$createdChecklistItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdChecklistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreAuditChecklistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     responsibleForChecklistItems<T extends User$responsibleForChecklistItemsArgs<ExtArgs> = {}>(args?: Subset<T, User$responsibleForChecklistItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PreAuditChecklistItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     rmQualityReports<T extends User$rmQualityReportsArgs<ExtArgs> = {}>(args?: Subset<T, User$rmQualityReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RMQualityReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fgQualityReports<T extends User$fgQualityReportsArgs<ExtArgs> = {}>(args?: Subset<T, User$fgQualityReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     createdGRNs<T extends User$createdGRNsArgs<ExtArgs> = {}>(args?: Subset<T, User$createdGRNsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GRNbyPoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     StandardsCreated<T extends User$StandardsCreatedArgs<ExtArgs> = {}>(args?: Subset<T, User$StandardsCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     StandardsModified<T extends User$StandardsModifiedArgs<ExtArgs> = {}>(args?: Subset<T, User$StandardsModifiedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StandardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -23802,6 +24037,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RMQualityReportScalarFieldEnum | RMQualityReportScalarFieldEnum[]
+  }
+
+  /**
+   * User.fgQualityReports
+   */
+  export type User$fgQualityReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    where?: FGQualityReportWhereInput
+    orderBy?: FGQualityReportOrderByWithRelationInput | FGQualityReportOrderByWithRelationInput[]
+    cursor?: FGQualityReportWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FGQualityReportScalarFieldEnum | FGQualityReportScalarFieldEnum[]
   }
 
   /**
@@ -101842,6 +102101,7 @@ export namespace Prisma {
     updatedAt?: boolean
     consumptions?: boolean | FGBatch$consumptionsArgs<ExtArgs>
     productionEntries?: boolean | FGBatch$productionEntriesArgs<ExtArgs>
+    fgQualityReports?: boolean | FGBatch$fgQualityReportsArgs<ExtArgs>
     _count?: boolean | FGBatchCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fGBatch"]>
 
@@ -101906,6 +102166,7 @@ export namespace Prisma {
   export type FGBatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     consumptions?: boolean | FGBatch$consumptionsArgs<ExtArgs>
     productionEntries?: boolean | FGBatch$productionEntriesArgs<ExtArgs>
+    fgQualityReports?: boolean | FGBatch$fgQualityReportsArgs<ExtArgs>
     _count?: boolean | FGBatchCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FGBatchIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -101916,6 +102177,7 @@ export namespace Prisma {
     objects: {
       consumptions: Prisma.$FGBatchConsumptionPayload<ExtArgs>[]
       productionEntries: Prisma.$FGProductionEntryPayload<ExtArgs>[]
+      fgQualityReports: Prisma.$FGQualityReportPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -102330,6 +102592,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     consumptions<T extends FGBatch$consumptionsArgs<ExtArgs> = {}>(args?: Subset<T, FGBatch$consumptionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGBatchConsumptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     productionEntries<T extends FGBatch$productionEntriesArgs<ExtArgs> = {}>(args?: Subset<T, FGBatch$productionEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fgQualityReports<T extends FGBatch$fgQualityReportsArgs<ExtArgs> = {}>(args?: Subset<T, FGBatch$fgQualityReportsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -102808,6 +103071,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FGProductionEntryScalarFieldEnum | FGProductionEntryScalarFieldEnum[]
+  }
+
+  /**
+   * FGBatch.fgQualityReports
+   */
+  export type FGBatch$fgQualityReportsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    where?: FGQualityReportWhereInput
+    orderBy?: FGQualityReportOrderByWithRelationInput | FGQualityReportOrderByWithRelationInput[]
+    cursor?: FGQualityReportWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FGQualityReportScalarFieldEnum | FGQualityReportScalarFieldEnum[]
   }
 
   /**
@@ -104376,6 +104663,7 @@ export namespace Prisma {
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
     machineEntries?: boolean | FGProductionEntry$machineEntriesArgs<ExtArgs>
     verifications?: boolean | FGProductionEntry$verificationsArgs<ExtArgs>
+    qualityReport?: boolean | FGProductionEntry$qualityReportArgs<ExtArgs>
     _count?: boolean | FGProductionEntryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fGProductionEntry"]>
 
@@ -104461,6 +104749,7 @@ export namespace Prisma {
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
     machineEntries?: boolean | FGProductionEntry$machineEntriesArgs<ExtArgs>
     verifications?: boolean | FGProductionEntry$verificationsArgs<ExtArgs>
+    qualityReport?: boolean | FGProductionEntry$qualityReportArgs<ExtArgs>
     _count?: boolean | FGProductionEntryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FGProductionEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -104476,6 +104765,7 @@ export namespace Prisma {
       fgBatch: Prisma.$FGBatchPayload<ExtArgs>
       machineEntries: Prisma.$FGProductionMachineEntryPayload<ExtArgs>[]
       verifications: Prisma.$FGProductionVerificationPayload<ExtArgs>[]
+      qualityReport: Prisma.$FGQualityReportPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -104897,6 +105187,7 @@ export namespace Prisma {
     fgBatch<T extends FGBatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGBatchDefaultArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     machineEntries<T extends FGProductionEntry$machineEntriesArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntry$machineEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     verifications<T extends FGProductionEntry$verificationsArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntry$verificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    qualityReport<T extends FGProductionEntry$qualityReportArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntry$qualityReportArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -105389,6 +105680,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FGProductionVerificationScalarFieldEnum | FGProductionVerificationScalarFieldEnum[]
+  }
+
+  /**
+   * FGProductionEntry.qualityReport
+   */
+  export type FGProductionEntry$qualityReportArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    where?: FGQualityReportWhereInput
   }
 
   /**
@@ -109163,6 +109473,2265 @@ export namespace Prisma {
 
 
   /**
+   * Model FGQualityReport
+   */
+
+  export type AggregateFGQualityReport = {
+    _count: FGQualityReportCountAggregateOutputType | null
+    _min: FGQualityReportMinAggregateOutputType | null
+    _max: FGQualityReportMaxAggregateOutputType | null
+  }
+
+  export type FGQualityReportMinAggregateOutputType = {
+    id: string | null
+    reportNumber: string | null
+    fgBatchId: string | null
+    productionEntryId: string | null
+    productName: string | null
+    dateOfReport: Date | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGQualityReportMaxAggregateOutputType = {
+    id: string | null
+    reportNumber: string | null
+    fgBatchId: string | null
+    productionEntryId: string | null
+    productName: string | null
+    dateOfReport: Date | null
+    createdById: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGQualityReportCountAggregateOutputType = {
+    id: number
+    reportNumber: number
+    fgBatchId: number
+    productionEntryId: number
+    productName: number
+    dateOfReport: number
+    createdById: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FGQualityReportMinAggregateInputType = {
+    id?: true
+    reportNumber?: true
+    fgBatchId?: true
+    productionEntryId?: true
+    productName?: true
+    dateOfReport?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGQualityReportMaxAggregateInputType = {
+    id?: true
+    reportNumber?: true
+    fgBatchId?: true
+    productionEntryId?: true
+    productName?: true
+    dateOfReport?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGQualityReportCountAggregateInputType = {
+    id?: true
+    reportNumber?: true
+    fgBatchId?: true
+    productionEntryId?: true
+    productName?: true
+    dateOfReport?: true
+    createdById?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FGQualityReportAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGQualityReport to aggregate.
+     */
+    where?: FGQualityReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGQualityReports to fetch.
+     */
+    orderBy?: FGQualityReportOrderByWithRelationInput | FGQualityReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FGQualityReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGQualityReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGQualityReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FGQualityReports
+    **/
+    _count?: true | FGQualityReportCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FGQualityReportMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FGQualityReportMaxAggregateInputType
+  }
+
+  export type GetFGQualityReportAggregateType<T extends FGQualityReportAggregateArgs> = {
+        [P in keyof T & keyof AggregateFGQualityReport]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFGQualityReport[P]>
+      : GetScalarType<T[P], AggregateFGQualityReport[P]>
+  }
+
+
+
+
+  export type FGQualityReportGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGQualityReportWhereInput
+    orderBy?: FGQualityReportOrderByWithAggregationInput | FGQualityReportOrderByWithAggregationInput[]
+    by: FGQualityReportScalarFieldEnum[] | FGQualityReportScalarFieldEnum
+    having?: FGQualityReportScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FGQualityReportCountAggregateInputType | true
+    _min?: FGQualityReportMinAggregateInputType
+    _max?: FGQualityReportMaxAggregateInputType
+  }
+
+  export type FGQualityReportGroupByOutputType = {
+    id: string
+    reportNumber: string | null
+    fgBatchId: string | null
+    productionEntryId: string
+    productName: string
+    dateOfReport: Date
+    createdById: string
+    createdAt: Date
+    updatedAt: Date
+    _count: FGQualityReportCountAggregateOutputType | null
+    _min: FGQualityReportMinAggregateOutputType | null
+    _max: FGQualityReportMaxAggregateOutputType | null
+  }
+
+  type GetFGQualityReportGroupByPayload<T extends FGQualityReportGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FGQualityReportGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FGQualityReportGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FGQualityReportGroupByOutputType[P]>
+            : GetScalarType<T[P], FGQualityReportGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FGQualityReportSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reportNumber?: boolean
+    fgBatchId?: boolean
+    productionEntryId?: boolean
+    productName?: boolean
+    dateOfReport?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    parameters?: boolean | FGQualityReport$parametersArgs<ExtArgs>
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    fgBatch?: boolean | FGQualityReport$fgBatchArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | FGQualityReportCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGQualityReport"]>
+
+  export type FGQualityReportSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reportNumber?: boolean
+    fgBatchId?: boolean
+    productionEntryId?: boolean
+    productName?: boolean
+    dateOfReport?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    fgBatch?: boolean | FGQualityReport$fgBatchArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGQualityReport"]>
+
+  export type FGQualityReportSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reportNumber?: boolean
+    fgBatchId?: boolean
+    productionEntryId?: boolean
+    productName?: boolean
+    dateOfReport?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    fgBatch?: boolean | FGQualityReport$fgBatchArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGQualityReport"]>
+
+  export type FGQualityReportSelectScalar = {
+    id?: boolean
+    reportNumber?: boolean
+    fgBatchId?: boolean
+    productionEntryId?: boolean
+    productName?: boolean
+    dateOfReport?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FGQualityReportOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reportNumber" | "fgBatchId" | "productionEntryId" | "productName" | "dateOfReport" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["fGQualityReport"]>
+  export type FGQualityReportInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    parameters?: boolean | FGQualityReport$parametersArgs<ExtArgs>
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    fgBatch?: boolean | FGQualityReport$fgBatchArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+    _count?: boolean | FGQualityReportCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FGQualityReportIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    fgBatch?: boolean | FGQualityReport$fgBatchArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FGQualityReportIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
+    fgBatch?: boolean | FGQualityReport$fgBatchArgs<ExtArgs>
+    createdBy?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $FGQualityReportPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FGQualityReport"
+    objects: {
+      parameters: Prisma.$FGQualityParameterPayload<ExtArgs>[]
+      productionEntry: Prisma.$FGProductionEntryPayload<ExtArgs>
+      fgBatch: Prisma.$FGBatchPayload<ExtArgs> | null
+      createdBy: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      reportNumber: string | null
+      fgBatchId: string | null
+      productionEntryId: string
+      productName: string
+      dateOfReport: Date
+      createdById: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fGQualityReport"]>
+    composites: {}
+  }
+
+  type FGQualityReportGetPayload<S extends boolean | null | undefined | FGQualityReportDefaultArgs> = $Result.GetResult<Prisma.$FGQualityReportPayload, S>
+
+  type FGQualityReportCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FGQualityReportFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FGQualityReportCountAggregateInputType | true
+    }
+
+  export interface FGQualityReportDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FGQualityReport'], meta: { name: 'FGQualityReport' } }
+    /**
+     * Find zero or one FGQualityReport that matches the filter.
+     * @param {FGQualityReportFindUniqueArgs} args - Arguments to find a FGQualityReport
+     * @example
+     * // Get one FGQualityReport
+     * const fGQualityReport = await prisma.fGQualityReport.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FGQualityReportFindUniqueArgs>(args: SelectSubset<T, FGQualityReportFindUniqueArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FGQualityReport that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FGQualityReportFindUniqueOrThrowArgs} args - Arguments to find a FGQualityReport
+     * @example
+     * // Get one FGQualityReport
+     * const fGQualityReport = await prisma.fGQualityReport.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FGQualityReportFindUniqueOrThrowArgs>(args: SelectSubset<T, FGQualityReportFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGQualityReport that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityReportFindFirstArgs} args - Arguments to find a FGQualityReport
+     * @example
+     * // Get one FGQualityReport
+     * const fGQualityReport = await prisma.fGQualityReport.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FGQualityReportFindFirstArgs>(args?: SelectSubset<T, FGQualityReportFindFirstArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGQualityReport that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityReportFindFirstOrThrowArgs} args - Arguments to find a FGQualityReport
+     * @example
+     * // Get one FGQualityReport
+     * const fGQualityReport = await prisma.fGQualityReport.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FGQualityReportFindFirstOrThrowArgs>(args?: SelectSubset<T, FGQualityReportFindFirstOrThrowArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FGQualityReports that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityReportFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FGQualityReports
+     * const fGQualityReports = await prisma.fGQualityReport.findMany()
+     * 
+     * // Get first 10 FGQualityReports
+     * const fGQualityReports = await prisma.fGQualityReport.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fGQualityReportWithIdOnly = await prisma.fGQualityReport.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FGQualityReportFindManyArgs>(args?: SelectSubset<T, FGQualityReportFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FGQualityReport.
+     * @param {FGQualityReportCreateArgs} args - Arguments to create a FGQualityReport.
+     * @example
+     * // Create one FGQualityReport
+     * const FGQualityReport = await prisma.fGQualityReport.create({
+     *   data: {
+     *     // ... data to create a FGQualityReport
+     *   }
+     * })
+     * 
+     */
+    create<T extends FGQualityReportCreateArgs>(args: SelectSubset<T, FGQualityReportCreateArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FGQualityReports.
+     * @param {FGQualityReportCreateManyArgs} args - Arguments to create many FGQualityReports.
+     * @example
+     * // Create many FGQualityReports
+     * const fGQualityReport = await prisma.fGQualityReport.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FGQualityReportCreateManyArgs>(args?: SelectSubset<T, FGQualityReportCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FGQualityReports and returns the data saved in the database.
+     * @param {FGQualityReportCreateManyAndReturnArgs} args - Arguments to create many FGQualityReports.
+     * @example
+     * // Create many FGQualityReports
+     * const fGQualityReport = await prisma.fGQualityReport.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FGQualityReports and only return the `id`
+     * const fGQualityReportWithIdOnly = await prisma.fGQualityReport.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FGQualityReportCreateManyAndReturnArgs>(args?: SelectSubset<T, FGQualityReportCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FGQualityReport.
+     * @param {FGQualityReportDeleteArgs} args - Arguments to delete one FGQualityReport.
+     * @example
+     * // Delete one FGQualityReport
+     * const FGQualityReport = await prisma.fGQualityReport.delete({
+     *   where: {
+     *     // ... filter to delete one FGQualityReport
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FGQualityReportDeleteArgs>(args: SelectSubset<T, FGQualityReportDeleteArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FGQualityReport.
+     * @param {FGQualityReportUpdateArgs} args - Arguments to update one FGQualityReport.
+     * @example
+     * // Update one FGQualityReport
+     * const fGQualityReport = await prisma.fGQualityReport.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FGQualityReportUpdateArgs>(args: SelectSubset<T, FGQualityReportUpdateArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FGQualityReports.
+     * @param {FGQualityReportDeleteManyArgs} args - Arguments to filter FGQualityReports to delete.
+     * @example
+     * // Delete a few FGQualityReports
+     * const { count } = await prisma.fGQualityReport.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FGQualityReportDeleteManyArgs>(args?: SelectSubset<T, FGQualityReportDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGQualityReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityReportUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FGQualityReports
+     * const fGQualityReport = await prisma.fGQualityReport.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FGQualityReportUpdateManyArgs>(args: SelectSubset<T, FGQualityReportUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGQualityReports and returns the data updated in the database.
+     * @param {FGQualityReportUpdateManyAndReturnArgs} args - Arguments to update many FGQualityReports.
+     * @example
+     * // Update many FGQualityReports
+     * const fGQualityReport = await prisma.fGQualityReport.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FGQualityReports and only return the `id`
+     * const fGQualityReportWithIdOnly = await prisma.fGQualityReport.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FGQualityReportUpdateManyAndReturnArgs>(args: SelectSubset<T, FGQualityReportUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FGQualityReport.
+     * @param {FGQualityReportUpsertArgs} args - Arguments to update or create a FGQualityReport.
+     * @example
+     * // Update or create a FGQualityReport
+     * const fGQualityReport = await prisma.fGQualityReport.upsert({
+     *   create: {
+     *     // ... data to create a FGQualityReport
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FGQualityReport we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FGQualityReportUpsertArgs>(args: SelectSubset<T, FGQualityReportUpsertArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FGQualityReports.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityReportCountArgs} args - Arguments to filter FGQualityReports to count.
+     * @example
+     * // Count the number of FGQualityReports
+     * const count = await prisma.fGQualityReport.count({
+     *   where: {
+     *     // ... the filter for the FGQualityReports we want to count
+     *   }
+     * })
+    **/
+    count<T extends FGQualityReportCountArgs>(
+      args?: Subset<T, FGQualityReportCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FGQualityReportCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FGQualityReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityReportAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FGQualityReportAggregateArgs>(args: Subset<T, FGQualityReportAggregateArgs>): Prisma.PrismaPromise<GetFGQualityReportAggregateType<T>>
+
+    /**
+     * Group by FGQualityReport.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityReportGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FGQualityReportGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FGQualityReportGroupByArgs['orderBy'] }
+        : { orderBy?: FGQualityReportGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FGQualityReportGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFGQualityReportGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FGQualityReport model
+   */
+  readonly fields: FGQualityReportFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FGQualityReport.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FGQualityReportClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    parameters<T extends FGQualityReport$parametersArgs<ExtArgs> = {}>(args?: Subset<T, FGQualityReport$parametersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    productionEntry<T extends FGProductionEntryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntryDefaultArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    fgBatch<T extends FGQualityReport$fgBatchArgs<ExtArgs> = {}>(args?: Subset<T, FGQualityReport$fgBatchArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    createdBy<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FGQualityReport model
+   */
+  interface FGQualityReportFieldRefs {
+    readonly id: FieldRef<"FGQualityReport", 'String'>
+    readonly reportNumber: FieldRef<"FGQualityReport", 'String'>
+    readonly fgBatchId: FieldRef<"FGQualityReport", 'String'>
+    readonly productionEntryId: FieldRef<"FGQualityReport", 'String'>
+    readonly productName: FieldRef<"FGQualityReport", 'String'>
+    readonly dateOfReport: FieldRef<"FGQualityReport", 'DateTime'>
+    readonly createdById: FieldRef<"FGQualityReport", 'String'>
+    readonly createdAt: FieldRef<"FGQualityReport", 'DateTime'>
+    readonly updatedAt: FieldRef<"FGQualityReport", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FGQualityReport findUnique
+   */
+  export type FGQualityReportFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    /**
+     * Filter, which FGQualityReport to fetch.
+     */
+    where: FGQualityReportWhereUniqueInput
+  }
+
+  /**
+   * FGQualityReport findUniqueOrThrow
+   */
+  export type FGQualityReportFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    /**
+     * Filter, which FGQualityReport to fetch.
+     */
+    where: FGQualityReportWhereUniqueInput
+  }
+
+  /**
+   * FGQualityReport findFirst
+   */
+  export type FGQualityReportFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    /**
+     * Filter, which FGQualityReport to fetch.
+     */
+    where?: FGQualityReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGQualityReports to fetch.
+     */
+    orderBy?: FGQualityReportOrderByWithRelationInput | FGQualityReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGQualityReports.
+     */
+    cursor?: FGQualityReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGQualityReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGQualityReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGQualityReports.
+     */
+    distinct?: FGQualityReportScalarFieldEnum | FGQualityReportScalarFieldEnum[]
+  }
+
+  /**
+   * FGQualityReport findFirstOrThrow
+   */
+  export type FGQualityReportFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    /**
+     * Filter, which FGQualityReport to fetch.
+     */
+    where?: FGQualityReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGQualityReports to fetch.
+     */
+    orderBy?: FGQualityReportOrderByWithRelationInput | FGQualityReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGQualityReports.
+     */
+    cursor?: FGQualityReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGQualityReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGQualityReports.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGQualityReports.
+     */
+    distinct?: FGQualityReportScalarFieldEnum | FGQualityReportScalarFieldEnum[]
+  }
+
+  /**
+   * FGQualityReport findMany
+   */
+  export type FGQualityReportFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    /**
+     * Filter, which FGQualityReports to fetch.
+     */
+    where?: FGQualityReportWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGQualityReports to fetch.
+     */
+    orderBy?: FGQualityReportOrderByWithRelationInput | FGQualityReportOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FGQualityReports.
+     */
+    cursor?: FGQualityReportWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGQualityReports from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGQualityReports.
+     */
+    skip?: number
+    distinct?: FGQualityReportScalarFieldEnum | FGQualityReportScalarFieldEnum[]
+  }
+
+  /**
+   * FGQualityReport create
+   */
+  export type FGQualityReportCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FGQualityReport.
+     */
+    data: XOR<FGQualityReportCreateInput, FGQualityReportUncheckedCreateInput>
+  }
+
+  /**
+   * FGQualityReport createMany
+   */
+  export type FGQualityReportCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FGQualityReports.
+     */
+    data: FGQualityReportCreateManyInput | FGQualityReportCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FGQualityReport createManyAndReturn
+   */
+  export type FGQualityReportCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * The data used to create many FGQualityReports.
+     */
+    data: FGQualityReportCreateManyInput | FGQualityReportCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGQualityReport update
+   */
+  export type FGQualityReportUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FGQualityReport.
+     */
+    data: XOR<FGQualityReportUpdateInput, FGQualityReportUncheckedUpdateInput>
+    /**
+     * Choose, which FGQualityReport to update.
+     */
+    where: FGQualityReportWhereUniqueInput
+  }
+
+  /**
+   * FGQualityReport updateMany
+   */
+  export type FGQualityReportUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FGQualityReports.
+     */
+    data: XOR<FGQualityReportUpdateManyMutationInput, FGQualityReportUncheckedUpdateManyInput>
+    /**
+     * Filter which FGQualityReports to update
+     */
+    where?: FGQualityReportWhereInput
+    /**
+     * Limit how many FGQualityReports to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGQualityReport updateManyAndReturn
+   */
+  export type FGQualityReportUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * The data used to update FGQualityReports.
+     */
+    data: XOR<FGQualityReportUpdateManyMutationInput, FGQualityReportUncheckedUpdateManyInput>
+    /**
+     * Filter which FGQualityReports to update
+     */
+    where?: FGQualityReportWhereInput
+    /**
+     * Limit how many FGQualityReports to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGQualityReport upsert
+   */
+  export type FGQualityReportUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FGQualityReport to update in case it exists.
+     */
+    where: FGQualityReportWhereUniqueInput
+    /**
+     * In case the FGQualityReport found by the `where` argument doesn't exist, create a new FGQualityReport with this data.
+     */
+    create: XOR<FGQualityReportCreateInput, FGQualityReportUncheckedCreateInput>
+    /**
+     * In case the FGQualityReport was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FGQualityReportUpdateInput, FGQualityReportUncheckedUpdateInput>
+  }
+
+  /**
+   * FGQualityReport delete
+   */
+  export type FGQualityReportDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+    /**
+     * Filter which FGQualityReport to delete.
+     */
+    where: FGQualityReportWhereUniqueInput
+  }
+
+  /**
+   * FGQualityReport deleteMany
+   */
+  export type FGQualityReportDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGQualityReports to delete
+     */
+    where?: FGQualityReportWhereInput
+    /**
+     * Limit how many FGQualityReports to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGQualityReport.parameters
+   */
+  export type FGQualityReport$parametersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+    where?: FGQualityParameterWhereInput
+    orderBy?: FGQualityParameterOrderByWithRelationInput | FGQualityParameterOrderByWithRelationInput[]
+    cursor?: FGQualityParameterWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FGQualityParameterScalarFieldEnum | FGQualityParameterScalarFieldEnum[]
+  }
+
+  /**
+   * FGQualityReport.fgBatch
+   */
+  export type FGQualityReport$fgBatchArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGBatch
+     */
+    select?: FGBatchSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGBatch
+     */
+    omit?: FGBatchOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGBatchInclude<ExtArgs> | null
+    where?: FGBatchWhereInput
+  }
+
+  /**
+   * FGQualityReport without action
+   */
+  export type FGQualityReportDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityReport
+     */
+    select?: FGQualityReportSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityReport
+     */
+    omit?: FGQualityReportOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityReportInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FGQualityParameter
+   */
+
+  export type AggregateFGQualityParameter = {
+    _count: FGQualityParameterCountAggregateOutputType | null
+    _min: FGQualityParameterMinAggregateOutputType | null
+    _max: FGQualityParameterMaxAggregateOutputType | null
+  }
+
+  export type FGQualityParameterMinAggregateOutputType = {
+    id: string | null
+    reportId: string | null
+    parameter: string | null
+    standard: string | null
+    result: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGQualityParameterMaxAggregateOutputType = {
+    id: string | null
+    reportId: string | null
+    parameter: string | null
+    standard: string | null
+    result: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FGQualityParameterCountAggregateOutputType = {
+    id: number
+    reportId: number
+    parameter: number
+    standard: number
+    result: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FGQualityParameterMinAggregateInputType = {
+    id?: true
+    reportId?: true
+    parameter?: true
+    standard?: true
+    result?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGQualityParameterMaxAggregateInputType = {
+    id?: true
+    reportId?: true
+    parameter?: true
+    standard?: true
+    result?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FGQualityParameterCountAggregateInputType = {
+    id?: true
+    reportId?: true
+    parameter?: true
+    standard?: true
+    result?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FGQualityParameterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGQualityParameter to aggregate.
+     */
+    where?: FGQualityParameterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGQualityParameters to fetch.
+     */
+    orderBy?: FGQualityParameterOrderByWithRelationInput | FGQualityParameterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FGQualityParameterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGQualityParameters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGQualityParameters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FGQualityParameters
+    **/
+    _count?: true | FGQualityParameterCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FGQualityParameterMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FGQualityParameterMaxAggregateInputType
+  }
+
+  export type GetFGQualityParameterAggregateType<T extends FGQualityParameterAggregateArgs> = {
+        [P in keyof T & keyof AggregateFGQualityParameter]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFGQualityParameter[P]>
+      : GetScalarType<T[P], AggregateFGQualityParameter[P]>
+  }
+
+
+
+
+  export type FGQualityParameterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGQualityParameterWhereInput
+    orderBy?: FGQualityParameterOrderByWithAggregationInput | FGQualityParameterOrderByWithAggregationInput[]
+    by: FGQualityParameterScalarFieldEnum[] | FGQualityParameterScalarFieldEnum
+    having?: FGQualityParameterScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FGQualityParameterCountAggregateInputType | true
+    _min?: FGQualityParameterMinAggregateInputType
+    _max?: FGQualityParameterMaxAggregateInputType
+  }
+
+  export type FGQualityParameterGroupByOutputType = {
+    id: string
+    reportId: string
+    parameter: string
+    standard: string
+    result: string
+    createdAt: Date
+    updatedAt: Date
+    _count: FGQualityParameterCountAggregateOutputType | null
+    _min: FGQualityParameterMinAggregateOutputType | null
+    _max: FGQualityParameterMaxAggregateOutputType | null
+  }
+
+  type GetFGQualityParameterGroupByPayload<T extends FGQualityParameterGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FGQualityParameterGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FGQualityParameterGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FGQualityParameterGroupByOutputType[P]>
+            : GetScalarType<T[P], FGQualityParameterGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FGQualityParameterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reportId?: boolean
+    parameter?: boolean
+    standard?: boolean
+    result?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    report?: boolean | FGQualityReportDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGQualityParameter"]>
+
+  export type FGQualityParameterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reportId?: boolean
+    parameter?: boolean
+    standard?: boolean
+    result?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    report?: boolean | FGQualityReportDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGQualityParameter"]>
+
+  export type FGQualityParameterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    reportId?: boolean
+    parameter?: boolean
+    standard?: boolean
+    result?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    report?: boolean | FGQualityReportDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGQualityParameter"]>
+
+  export type FGQualityParameterSelectScalar = {
+    id?: boolean
+    reportId?: boolean
+    parameter?: boolean
+    standard?: boolean
+    result?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FGQualityParameterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "reportId" | "parameter" | "standard" | "result" | "createdAt" | "updatedAt", ExtArgs["result"]["fGQualityParameter"]>
+  export type FGQualityParameterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    report?: boolean | FGQualityReportDefaultArgs<ExtArgs>
+  }
+  export type FGQualityParameterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    report?: boolean | FGQualityReportDefaultArgs<ExtArgs>
+  }
+  export type FGQualityParameterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    report?: boolean | FGQualityReportDefaultArgs<ExtArgs>
+  }
+
+  export type $FGQualityParameterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FGQualityParameter"
+    objects: {
+      report: Prisma.$FGQualityReportPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      reportId: string
+      parameter: string
+      standard: string
+      result: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["fGQualityParameter"]>
+    composites: {}
+  }
+
+  type FGQualityParameterGetPayload<S extends boolean | null | undefined | FGQualityParameterDefaultArgs> = $Result.GetResult<Prisma.$FGQualityParameterPayload, S>
+
+  type FGQualityParameterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FGQualityParameterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FGQualityParameterCountAggregateInputType | true
+    }
+
+  export interface FGQualityParameterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FGQualityParameter'], meta: { name: 'FGQualityParameter' } }
+    /**
+     * Find zero or one FGQualityParameter that matches the filter.
+     * @param {FGQualityParameterFindUniqueArgs} args - Arguments to find a FGQualityParameter
+     * @example
+     * // Get one FGQualityParameter
+     * const fGQualityParameter = await prisma.fGQualityParameter.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FGQualityParameterFindUniqueArgs>(args: SelectSubset<T, FGQualityParameterFindUniqueArgs<ExtArgs>>): Prisma__FGQualityParameterClient<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FGQualityParameter that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FGQualityParameterFindUniqueOrThrowArgs} args - Arguments to find a FGQualityParameter
+     * @example
+     * // Get one FGQualityParameter
+     * const fGQualityParameter = await prisma.fGQualityParameter.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FGQualityParameterFindUniqueOrThrowArgs>(args: SelectSubset<T, FGQualityParameterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FGQualityParameterClient<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGQualityParameter that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityParameterFindFirstArgs} args - Arguments to find a FGQualityParameter
+     * @example
+     * // Get one FGQualityParameter
+     * const fGQualityParameter = await prisma.fGQualityParameter.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FGQualityParameterFindFirstArgs>(args?: SelectSubset<T, FGQualityParameterFindFirstArgs<ExtArgs>>): Prisma__FGQualityParameterClient<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGQualityParameter that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityParameterFindFirstOrThrowArgs} args - Arguments to find a FGQualityParameter
+     * @example
+     * // Get one FGQualityParameter
+     * const fGQualityParameter = await prisma.fGQualityParameter.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FGQualityParameterFindFirstOrThrowArgs>(args?: SelectSubset<T, FGQualityParameterFindFirstOrThrowArgs<ExtArgs>>): Prisma__FGQualityParameterClient<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FGQualityParameters that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityParameterFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FGQualityParameters
+     * const fGQualityParameters = await prisma.fGQualityParameter.findMany()
+     * 
+     * // Get first 10 FGQualityParameters
+     * const fGQualityParameters = await prisma.fGQualityParameter.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fGQualityParameterWithIdOnly = await prisma.fGQualityParameter.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FGQualityParameterFindManyArgs>(args?: SelectSubset<T, FGQualityParameterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FGQualityParameter.
+     * @param {FGQualityParameterCreateArgs} args - Arguments to create a FGQualityParameter.
+     * @example
+     * // Create one FGQualityParameter
+     * const FGQualityParameter = await prisma.fGQualityParameter.create({
+     *   data: {
+     *     // ... data to create a FGQualityParameter
+     *   }
+     * })
+     * 
+     */
+    create<T extends FGQualityParameterCreateArgs>(args: SelectSubset<T, FGQualityParameterCreateArgs<ExtArgs>>): Prisma__FGQualityParameterClient<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FGQualityParameters.
+     * @param {FGQualityParameterCreateManyArgs} args - Arguments to create many FGQualityParameters.
+     * @example
+     * // Create many FGQualityParameters
+     * const fGQualityParameter = await prisma.fGQualityParameter.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FGQualityParameterCreateManyArgs>(args?: SelectSubset<T, FGQualityParameterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FGQualityParameters and returns the data saved in the database.
+     * @param {FGQualityParameterCreateManyAndReturnArgs} args - Arguments to create many FGQualityParameters.
+     * @example
+     * // Create many FGQualityParameters
+     * const fGQualityParameter = await prisma.fGQualityParameter.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FGQualityParameters and only return the `id`
+     * const fGQualityParameterWithIdOnly = await prisma.fGQualityParameter.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FGQualityParameterCreateManyAndReturnArgs>(args?: SelectSubset<T, FGQualityParameterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FGQualityParameter.
+     * @param {FGQualityParameterDeleteArgs} args - Arguments to delete one FGQualityParameter.
+     * @example
+     * // Delete one FGQualityParameter
+     * const FGQualityParameter = await prisma.fGQualityParameter.delete({
+     *   where: {
+     *     // ... filter to delete one FGQualityParameter
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FGQualityParameterDeleteArgs>(args: SelectSubset<T, FGQualityParameterDeleteArgs<ExtArgs>>): Prisma__FGQualityParameterClient<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FGQualityParameter.
+     * @param {FGQualityParameterUpdateArgs} args - Arguments to update one FGQualityParameter.
+     * @example
+     * // Update one FGQualityParameter
+     * const fGQualityParameter = await prisma.fGQualityParameter.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FGQualityParameterUpdateArgs>(args: SelectSubset<T, FGQualityParameterUpdateArgs<ExtArgs>>): Prisma__FGQualityParameterClient<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FGQualityParameters.
+     * @param {FGQualityParameterDeleteManyArgs} args - Arguments to filter FGQualityParameters to delete.
+     * @example
+     * // Delete a few FGQualityParameters
+     * const { count } = await prisma.fGQualityParameter.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FGQualityParameterDeleteManyArgs>(args?: SelectSubset<T, FGQualityParameterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGQualityParameters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityParameterUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FGQualityParameters
+     * const fGQualityParameter = await prisma.fGQualityParameter.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FGQualityParameterUpdateManyArgs>(args: SelectSubset<T, FGQualityParameterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGQualityParameters and returns the data updated in the database.
+     * @param {FGQualityParameterUpdateManyAndReturnArgs} args - Arguments to update many FGQualityParameters.
+     * @example
+     * // Update many FGQualityParameters
+     * const fGQualityParameter = await prisma.fGQualityParameter.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FGQualityParameters and only return the `id`
+     * const fGQualityParameterWithIdOnly = await prisma.fGQualityParameter.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FGQualityParameterUpdateManyAndReturnArgs>(args: SelectSubset<T, FGQualityParameterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FGQualityParameter.
+     * @param {FGQualityParameterUpsertArgs} args - Arguments to update or create a FGQualityParameter.
+     * @example
+     * // Update or create a FGQualityParameter
+     * const fGQualityParameter = await prisma.fGQualityParameter.upsert({
+     *   create: {
+     *     // ... data to create a FGQualityParameter
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FGQualityParameter we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FGQualityParameterUpsertArgs>(args: SelectSubset<T, FGQualityParameterUpsertArgs<ExtArgs>>): Prisma__FGQualityParameterClient<$Result.GetResult<Prisma.$FGQualityParameterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FGQualityParameters.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityParameterCountArgs} args - Arguments to filter FGQualityParameters to count.
+     * @example
+     * // Count the number of FGQualityParameters
+     * const count = await prisma.fGQualityParameter.count({
+     *   where: {
+     *     // ... the filter for the FGQualityParameters we want to count
+     *   }
+     * })
+    **/
+    count<T extends FGQualityParameterCountArgs>(
+      args?: Subset<T, FGQualityParameterCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FGQualityParameterCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FGQualityParameter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityParameterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FGQualityParameterAggregateArgs>(args: Subset<T, FGQualityParameterAggregateArgs>): Prisma.PrismaPromise<GetFGQualityParameterAggregateType<T>>
+
+    /**
+     * Group by FGQualityParameter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGQualityParameterGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FGQualityParameterGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FGQualityParameterGroupByArgs['orderBy'] }
+        : { orderBy?: FGQualityParameterGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FGQualityParameterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFGQualityParameterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FGQualityParameter model
+   */
+  readonly fields: FGQualityParameterFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FGQualityParameter.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FGQualityParameterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    report<T extends FGQualityReportDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGQualityReportDefaultArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FGQualityParameter model
+   */
+  interface FGQualityParameterFieldRefs {
+    readonly id: FieldRef<"FGQualityParameter", 'String'>
+    readonly reportId: FieldRef<"FGQualityParameter", 'String'>
+    readonly parameter: FieldRef<"FGQualityParameter", 'String'>
+    readonly standard: FieldRef<"FGQualityParameter", 'String'>
+    readonly result: FieldRef<"FGQualityParameter", 'String'>
+    readonly createdAt: FieldRef<"FGQualityParameter", 'DateTime'>
+    readonly updatedAt: FieldRef<"FGQualityParameter", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FGQualityParameter findUnique
+   */
+  export type FGQualityParameterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+    /**
+     * Filter, which FGQualityParameter to fetch.
+     */
+    where: FGQualityParameterWhereUniqueInput
+  }
+
+  /**
+   * FGQualityParameter findUniqueOrThrow
+   */
+  export type FGQualityParameterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+    /**
+     * Filter, which FGQualityParameter to fetch.
+     */
+    where: FGQualityParameterWhereUniqueInput
+  }
+
+  /**
+   * FGQualityParameter findFirst
+   */
+  export type FGQualityParameterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+    /**
+     * Filter, which FGQualityParameter to fetch.
+     */
+    where?: FGQualityParameterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGQualityParameters to fetch.
+     */
+    orderBy?: FGQualityParameterOrderByWithRelationInput | FGQualityParameterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGQualityParameters.
+     */
+    cursor?: FGQualityParameterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGQualityParameters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGQualityParameters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGQualityParameters.
+     */
+    distinct?: FGQualityParameterScalarFieldEnum | FGQualityParameterScalarFieldEnum[]
+  }
+
+  /**
+   * FGQualityParameter findFirstOrThrow
+   */
+  export type FGQualityParameterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+    /**
+     * Filter, which FGQualityParameter to fetch.
+     */
+    where?: FGQualityParameterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGQualityParameters to fetch.
+     */
+    orderBy?: FGQualityParameterOrderByWithRelationInput | FGQualityParameterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGQualityParameters.
+     */
+    cursor?: FGQualityParameterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGQualityParameters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGQualityParameters.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGQualityParameters.
+     */
+    distinct?: FGQualityParameterScalarFieldEnum | FGQualityParameterScalarFieldEnum[]
+  }
+
+  /**
+   * FGQualityParameter findMany
+   */
+  export type FGQualityParameterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+    /**
+     * Filter, which FGQualityParameters to fetch.
+     */
+    where?: FGQualityParameterWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGQualityParameters to fetch.
+     */
+    orderBy?: FGQualityParameterOrderByWithRelationInput | FGQualityParameterOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FGQualityParameters.
+     */
+    cursor?: FGQualityParameterWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGQualityParameters from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGQualityParameters.
+     */
+    skip?: number
+    distinct?: FGQualityParameterScalarFieldEnum | FGQualityParameterScalarFieldEnum[]
+  }
+
+  /**
+   * FGQualityParameter create
+   */
+  export type FGQualityParameterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FGQualityParameter.
+     */
+    data: XOR<FGQualityParameterCreateInput, FGQualityParameterUncheckedCreateInput>
+  }
+
+  /**
+   * FGQualityParameter createMany
+   */
+  export type FGQualityParameterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FGQualityParameters.
+     */
+    data: FGQualityParameterCreateManyInput | FGQualityParameterCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FGQualityParameter createManyAndReturn
+   */
+  export type FGQualityParameterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * The data used to create many FGQualityParameters.
+     */
+    data: FGQualityParameterCreateManyInput | FGQualityParameterCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGQualityParameter update
+   */
+  export type FGQualityParameterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FGQualityParameter.
+     */
+    data: XOR<FGQualityParameterUpdateInput, FGQualityParameterUncheckedUpdateInput>
+    /**
+     * Choose, which FGQualityParameter to update.
+     */
+    where: FGQualityParameterWhereUniqueInput
+  }
+
+  /**
+   * FGQualityParameter updateMany
+   */
+  export type FGQualityParameterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FGQualityParameters.
+     */
+    data: XOR<FGQualityParameterUpdateManyMutationInput, FGQualityParameterUncheckedUpdateManyInput>
+    /**
+     * Filter which FGQualityParameters to update
+     */
+    where?: FGQualityParameterWhereInput
+    /**
+     * Limit how many FGQualityParameters to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGQualityParameter updateManyAndReturn
+   */
+  export type FGQualityParameterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * The data used to update FGQualityParameters.
+     */
+    data: XOR<FGQualityParameterUpdateManyMutationInput, FGQualityParameterUncheckedUpdateManyInput>
+    /**
+     * Filter which FGQualityParameters to update
+     */
+    where?: FGQualityParameterWhereInput
+    /**
+     * Limit how many FGQualityParameters to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGQualityParameter upsert
+   */
+  export type FGQualityParameterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FGQualityParameter to update in case it exists.
+     */
+    where: FGQualityParameterWhereUniqueInput
+    /**
+     * In case the FGQualityParameter found by the `where` argument doesn't exist, create a new FGQualityParameter with this data.
+     */
+    create: XOR<FGQualityParameterCreateInput, FGQualityParameterUncheckedCreateInput>
+    /**
+     * In case the FGQualityParameter was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FGQualityParameterUpdateInput, FGQualityParameterUncheckedUpdateInput>
+  }
+
+  /**
+   * FGQualityParameter delete
+   */
+  export type FGQualityParameterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+    /**
+     * Filter which FGQualityParameter to delete.
+     */
+    where: FGQualityParameterWhereUniqueInput
+  }
+
+  /**
+   * FGQualityParameter deleteMany
+   */
+  export type FGQualityParameterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGQualityParameters to delete
+     */
+    where?: FGQualityParameterWhereInput
+    /**
+     * Limit how many FGQualityParameters to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGQualityParameter without action
+   */
+  export type FGQualityParameterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGQualityParameter
+     */
+    select?: FGQualityParameterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGQualityParameter
+     */
+    omit?: FGQualityParameterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGQualityParameterInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -110483,6 +113052,34 @@ export namespace Prisma {
   export type FGProductionVerificationScalarFieldEnum = (typeof FGProductionVerificationScalarFieldEnum)[keyof typeof FGProductionVerificationScalarFieldEnum]
 
 
+  export const FGQualityReportScalarFieldEnum: {
+    id: 'id',
+    reportNumber: 'reportNumber',
+    fgBatchId: 'fgBatchId',
+    productionEntryId: 'productionEntryId',
+    productName: 'productName',
+    dateOfReport: 'dateOfReport',
+    createdById: 'createdById',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FGQualityReportScalarFieldEnum = (typeof FGQualityReportScalarFieldEnum)[keyof typeof FGQualityReportScalarFieldEnum]
+
+
+  export const FGQualityParameterScalarFieldEnum: {
+    id: 'id',
+    reportId: 'reportId',
+    parameter: 'parameter',
+    standard: 'standard',
+    result: 'result',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FGQualityParameterScalarFieldEnum = (typeof FGQualityParameterScalarFieldEnum)[keyof typeof FGQualityParameterScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -111695,6 +114292,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemListRelationFilter
     responsibleForChecklistItems?: PreAuditChecklistItemListRelationFilter
     rmQualityReports?: RMQualityReportListRelationFilter
+    fgQualityReports?: FGQualityReportListRelationFilter
     createdGRNs?: GRNbyPoListRelationFilter
     StandardsCreated?: StandardListRelationFilter
     StandardsModified?: StandardListRelationFilter
@@ -111740,6 +114338,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemOrderByRelationAggregateInput
     responsibleForChecklistItems?: PreAuditChecklistItemOrderByRelationAggregateInput
     rmQualityReports?: RMQualityReportOrderByRelationAggregateInput
+    fgQualityReports?: FGQualityReportOrderByRelationAggregateInput
     createdGRNs?: GRNbyPoOrderByRelationAggregateInput
     StandardsCreated?: StandardOrderByRelationAggregateInput
     StandardsModified?: StandardOrderByRelationAggregateInput
@@ -111788,6 +114387,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemListRelationFilter
     responsibleForChecklistItems?: PreAuditChecklistItemListRelationFilter
     rmQualityReports?: RMQualityReportListRelationFilter
+    fgQualityReports?: FGQualityReportListRelationFilter
     createdGRNs?: GRNbyPoListRelationFilter
     StandardsCreated?: StandardListRelationFilter
     StandardsModified?: StandardListRelationFilter
@@ -117532,6 +120132,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FGBatch"> | Date | string
     consumptions?: FGBatchConsumptionListRelationFilter
     productionEntries?: FGProductionEntryListRelationFilter
+    fgQualityReports?: FGQualityReportListRelationFilter
   }
 
   export type FGBatchOrderByWithRelationInput = {
@@ -117553,6 +120154,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     consumptions?: FGBatchConsumptionOrderByRelationAggregateInput
     productionEntries?: FGProductionEntryOrderByRelationAggregateInput
+    fgQualityReports?: FGQualityReportOrderByRelationAggregateInput
   }
 
   export type FGBatchWhereUniqueInput = Prisma.AtLeast<{
@@ -117577,6 +120179,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FGBatch"> | Date | string
     consumptions?: FGBatchConsumptionListRelationFilter
     productionEntries?: FGProductionEntryListRelationFilter
+    fgQualityReports?: FGQualityReportListRelationFilter
   }, "id" | "batchNumber">
 
   export type FGBatchOrderByWithAggregationInput = {
@@ -117741,6 +120344,7 @@ export namespace Prisma {
     fgBatch?: XOR<FGBatchScalarRelationFilter, FGBatchWhereInput>
     machineEntries?: FGProductionMachineEntryListRelationFilter
     verifications?: FGProductionVerificationListRelationFilter
+    qualityReport?: XOR<FGQualityReportNullableScalarRelationFilter, FGQualityReportWhereInput> | null
   }
 
   export type FGProductionEntryOrderByWithRelationInput = {
@@ -117769,6 +120373,7 @@ export namespace Prisma {
     fgBatch?: FGBatchOrderByWithRelationInput
     machineEntries?: FGProductionMachineEntryOrderByRelationAggregateInput
     verifications?: FGProductionVerificationOrderByRelationAggregateInput
+    qualityReport?: FGQualityReportOrderByWithRelationInput
   }
 
   export type FGProductionEntryWhereUniqueInput = Prisma.AtLeast<{
@@ -117800,6 +120405,7 @@ export namespace Prisma {
     fgBatch?: XOR<FGBatchScalarRelationFilter, FGBatchWhereInput>
     machineEntries?: FGProductionMachineEntryListRelationFilter
     verifications?: FGProductionVerificationListRelationFilter
+    qualityReport?: XOR<FGQualityReportNullableScalarRelationFilter, FGQualityReportWhereInput> | null
   }, "id" | "entryNumber">
 
   export type FGProductionEntryOrderByWithAggregationInput = {
@@ -118192,6 +120798,155 @@ export namespace Prisma {
     verifiedAt?: DateTimeNullableWithAggregatesFilter<"FGProductionVerification"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"FGProductionVerification"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FGProductionVerification"> | Date | string
+  }
+
+  export type FGQualityReportWhereInput = {
+    AND?: FGQualityReportWhereInput | FGQualityReportWhereInput[]
+    OR?: FGQualityReportWhereInput[]
+    NOT?: FGQualityReportWhereInput | FGQualityReportWhereInput[]
+    id?: StringFilter<"FGQualityReport"> | string
+    reportNumber?: StringNullableFilter<"FGQualityReport"> | string | null
+    fgBatchId?: StringNullableFilter<"FGQualityReport"> | string | null
+    productionEntryId?: StringFilter<"FGQualityReport"> | string
+    productName?: StringFilter<"FGQualityReport"> | string
+    dateOfReport?: DateTimeFilter<"FGQualityReport"> | Date | string
+    createdById?: StringFilter<"FGQualityReport"> | string
+    createdAt?: DateTimeFilter<"FGQualityReport"> | Date | string
+    updatedAt?: DateTimeFilter<"FGQualityReport"> | Date | string
+    parameters?: FGQualityParameterListRelationFilter
+    productionEntry?: XOR<FGProductionEntryScalarRelationFilter, FGProductionEntryWhereInput>
+    fgBatch?: XOR<FGBatchNullableScalarRelationFilter, FGBatchWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type FGQualityReportOrderByWithRelationInput = {
+    id?: SortOrder
+    reportNumber?: SortOrderInput | SortOrder
+    fgBatchId?: SortOrderInput | SortOrder
+    productionEntryId?: SortOrder
+    productName?: SortOrder
+    dateOfReport?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    parameters?: FGQualityParameterOrderByRelationAggregateInput
+    productionEntry?: FGProductionEntryOrderByWithRelationInput
+    fgBatch?: FGBatchOrderByWithRelationInput
+    createdBy?: UserOrderByWithRelationInput
+  }
+
+  export type FGQualityReportWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    reportNumber?: string
+    productionEntryId?: string
+    AND?: FGQualityReportWhereInput | FGQualityReportWhereInput[]
+    OR?: FGQualityReportWhereInput[]
+    NOT?: FGQualityReportWhereInput | FGQualityReportWhereInput[]
+    fgBatchId?: StringNullableFilter<"FGQualityReport"> | string | null
+    productName?: StringFilter<"FGQualityReport"> | string
+    dateOfReport?: DateTimeFilter<"FGQualityReport"> | Date | string
+    createdById?: StringFilter<"FGQualityReport"> | string
+    createdAt?: DateTimeFilter<"FGQualityReport"> | Date | string
+    updatedAt?: DateTimeFilter<"FGQualityReport"> | Date | string
+    parameters?: FGQualityParameterListRelationFilter
+    productionEntry?: XOR<FGProductionEntryScalarRelationFilter, FGProductionEntryWhereInput>
+    fgBatch?: XOR<FGBatchNullableScalarRelationFilter, FGBatchWhereInput> | null
+    createdBy?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "reportNumber" | "productionEntryId">
+
+  export type FGQualityReportOrderByWithAggregationInput = {
+    id?: SortOrder
+    reportNumber?: SortOrderInput | SortOrder
+    fgBatchId?: SortOrderInput | SortOrder
+    productionEntryId?: SortOrder
+    productName?: SortOrder
+    dateOfReport?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FGQualityReportCountOrderByAggregateInput
+    _max?: FGQualityReportMaxOrderByAggregateInput
+    _min?: FGQualityReportMinOrderByAggregateInput
+  }
+
+  export type FGQualityReportScalarWhereWithAggregatesInput = {
+    AND?: FGQualityReportScalarWhereWithAggregatesInput | FGQualityReportScalarWhereWithAggregatesInput[]
+    OR?: FGQualityReportScalarWhereWithAggregatesInput[]
+    NOT?: FGQualityReportScalarWhereWithAggregatesInput | FGQualityReportScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FGQualityReport"> | string
+    reportNumber?: StringNullableWithAggregatesFilter<"FGQualityReport"> | string | null
+    fgBatchId?: StringNullableWithAggregatesFilter<"FGQualityReport"> | string | null
+    productionEntryId?: StringWithAggregatesFilter<"FGQualityReport"> | string
+    productName?: StringWithAggregatesFilter<"FGQualityReport"> | string
+    dateOfReport?: DateTimeWithAggregatesFilter<"FGQualityReport"> | Date | string
+    createdById?: StringWithAggregatesFilter<"FGQualityReport"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FGQualityReport"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FGQualityReport"> | Date | string
+  }
+
+  export type FGQualityParameterWhereInput = {
+    AND?: FGQualityParameterWhereInput | FGQualityParameterWhereInput[]
+    OR?: FGQualityParameterWhereInput[]
+    NOT?: FGQualityParameterWhereInput | FGQualityParameterWhereInput[]
+    id?: StringFilter<"FGQualityParameter"> | string
+    reportId?: StringFilter<"FGQualityParameter"> | string
+    parameter?: StringFilter<"FGQualityParameter"> | string
+    standard?: StringFilter<"FGQualityParameter"> | string
+    result?: StringFilter<"FGQualityParameter"> | string
+    createdAt?: DateTimeFilter<"FGQualityParameter"> | Date | string
+    updatedAt?: DateTimeFilter<"FGQualityParameter"> | Date | string
+    report?: XOR<FGQualityReportScalarRelationFilter, FGQualityReportWhereInput>
+  }
+
+  export type FGQualityParameterOrderByWithRelationInput = {
+    id?: SortOrder
+    reportId?: SortOrder
+    parameter?: SortOrder
+    standard?: SortOrder
+    result?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    report?: FGQualityReportOrderByWithRelationInput
+  }
+
+  export type FGQualityParameterWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FGQualityParameterWhereInput | FGQualityParameterWhereInput[]
+    OR?: FGQualityParameterWhereInput[]
+    NOT?: FGQualityParameterWhereInput | FGQualityParameterWhereInput[]
+    reportId?: StringFilter<"FGQualityParameter"> | string
+    parameter?: StringFilter<"FGQualityParameter"> | string
+    standard?: StringFilter<"FGQualityParameter"> | string
+    result?: StringFilter<"FGQualityParameter"> | string
+    createdAt?: DateTimeFilter<"FGQualityParameter"> | Date | string
+    updatedAt?: DateTimeFilter<"FGQualityParameter"> | Date | string
+    report?: XOR<FGQualityReportScalarRelationFilter, FGQualityReportWhereInput>
+  }, "id">
+
+  export type FGQualityParameterOrderByWithAggregationInput = {
+    id?: SortOrder
+    reportId?: SortOrder
+    parameter?: SortOrder
+    standard?: SortOrder
+    result?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FGQualityParameterCountOrderByAggregateInput
+    _max?: FGQualityParameterMaxOrderByAggregateInput
+    _min?: FGQualityParameterMinOrderByAggregateInput
+  }
+
+  export type FGQualityParameterScalarWhereWithAggregatesInput = {
+    AND?: FGQualityParameterScalarWhereWithAggregatesInput | FGQualityParameterScalarWhereWithAggregatesInput[]
+    OR?: FGQualityParameterScalarWhereWithAggregatesInput[]
+    NOT?: FGQualityParameterScalarWhereWithAggregatesInput | FGQualityParameterScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FGQualityParameter"> | string
+    reportId?: StringWithAggregatesFilter<"FGQualityParameter"> | string
+    parameter?: StringWithAggregatesFilter<"FGQualityParameter"> | string
+    standard?: StringWithAggregatesFilter<"FGQualityParameter"> | string
+    result?: StringWithAggregatesFilter<"FGQualityParameter"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"FGQualityParameter"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FGQualityParameter"> | Date | string
   }
 
   export type ActivityLogCreateInput = {
@@ -118986,6 +121741,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -119031,6 +121787,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -119074,6 +121831,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -119119,6 +121877,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -125289,6 +128048,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     consumptions?: FGBatchConsumptionCreateNestedManyWithoutFgBatchInput
     productionEntries?: FGProductionEntryCreateNestedManyWithoutFgBatchInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutFgBatchInput
   }
 
   export type FGBatchUncheckedCreateInput = {
@@ -125310,6 +128070,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     consumptions?: FGBatchConsumptionUncheckedCreateNestedManyWithoutFgBatchInput
     productionEntries?: FGProductionEntryUncheckedCreateNestedManyWithoutFgBatchInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutFgBatchInput
   }
 
   export type FGBatchUpdateInput = {
@@ -125331,6 +128092,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     consumptions?: FGBatchConsumptionUpdateManyWithoutFgBatchNestedInput
     productionEntries?: FGProductionEntryUpdateManyWithoutFgBatchNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutFgBatchNestedInput
   }
 
   export type FGBatchUncheckedUpdateInput = {
@@ -125352,6 +128114,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     consumptions?: FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchNestedInput
     productionEntries?: FGProductionEntryUncheckedUpdateManyWithoutFgBatchNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutFgBatchNestedInput
   }
 
   export type FGBatchCreateManyInput = {
@@ -125533,6 +128296,7 @@ export namespace Prisma {
     fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
     machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
     verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
+    qualityReport?: FGQualityReportCreateNestedOneWithoutProductionEntryInput
   }
 
   export type FGProductionEntryUncheckedCreateInput = {
@@ -125560,6 +128324,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     machineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput
     verifications?: FGProductionVerificationUncheckedCreateNestedManyWithoutProductionEntryInput
+    qualityReport?: FGQualityReportUncheckedCreateNestedOneWithoutProductionEntryInput
   }
 
   export type FGProductionEntryUpdateInput = {
@@ -125587,6 +128352,7 @@ export namespace Prisma {
     fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
     machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
     verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
+    qualityReport?: FGQualityReportUpdateOneWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryUncheckedUpdateInput = {
@@ -125614,6 +128380,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     machineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput
     verifications?: FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryNestedInput
+    qualityReport?: FGQualityReportUncheckedUpdateOneWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryCreateManyInput = {
@@ -126079,6 +128846,160 @@ export namespace Prisma {
     dispatchedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     verifiedById?: NullableStringFieldUpdateOperationsInput | string | null
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGQualityReportCreateInput = {
+    id?: string
+    reportNumber?: string | null
+    productName: string
+    dateOfReport?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: FGQualityParameterCreateNestedManyWithoutReportInput
+    productionEntry: FGProductionEntryCreateNestedOneWithoutQualityReportInput
+    fgBatch?: FGBatchCreateNestedOneWithoutFgQualityReportsInput
+    createdBy: UserCreateNestedOneWithoutFgQualityReportsInput
+  }
+
+  export type FGQualityReportUncheckedCreateInput = {
+    id?: string
+    reportNumber?: string | null
+    fgBatchId?: string | null
+    productionEntryId: string
+    productName: string
+    dateOfReport?: Date | string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: FGQualityParameterUncheckedCreateNestedManyWithoutReportInput
+  }
+
+  export type FGQualityReportUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: FGQualityParameterUpdateManyWithoutReportNestedInput
+    productionEntry?: FGProductionEntryUpdateOneRequiredWithoutQualityReportNestedInput
+    fgBatch?: FGBatchUpdateOneWithoutFgQualityReportsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutFgQualityReportsNestedInput
+  }
+
+  export type FGQualityReportUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fgBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: FGQualityParameterUncheckedUpdateManyWithoutReportNestedInput
+  }
+
+  export type FGQualityReportCreateManyInput = {
+    id?: string
+    reportNumber?: string | null
+    fgBatchId?: string | null
+    productionEntryId: string
+    productName: string
+    dateOfReport?: Date | string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGQualityReportUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGQualityReportUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fgBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGQualityParameterCreateInput = {
+    id?: string
+    parameter: string
+    standard: string
+    result: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    report: FGQualityReportCreateNestedOneWithoutParametersInput
+  }
+
+  export type FGQualityParameterUncheckedCreateInput = {
+    id?: string
+    reportId: string
+    parameter: string
+    standard: string
+    result: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGQualityParameterUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    parameter?: StringFieldUpdateOperationsInput | string
+    standard?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    report?: FGQualityReportUpdateOneRequiredWithoutParametersNestedInput
+  }
+
+  export type FGQualityParameterUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportId?: StringFieldUpdateOperationsInput | string
+    parameter?: StringFieldUpdateOperationsInput | string
+    standard?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGQualityParameterCreateManyInput = {
+    id?: string
+    reportId: string
+    parameter: string
+    standard: string
+    result: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGQualityParameterUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    parameter?: StringFieldUpdateOperationsInput | string
+    standard?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGQualityParameterUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportId?: StringFieldUpdateOperationsInput | string
+    parameter?: StringFieldUpdateOperationsInput | string
+    standard?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -126818,6 +129739,12 @@ export namespace Prisma {
     none?: RMQualityReportWhereInput
   }
 
+  export type FGQualityReportListRelationFilter = {
+    every?: FGQualityReportWhereInput
+    some?: FGQualityReportWhereInput
+    none?: FGQualityReportWhereInput
+  }
+
   export type GRNbyPoListRelationFilter = {
     every?: GRNbyPoWhereInput
     some?: GRNbyPoWhereInput
@@ -126912,6 +129839,10 @@ export namespace Prisma {
   }
 
   export type RMQualityReportOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FGQualityReportOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -131035,6 +133966,11 @@ export namespace Prisma {
     none?: FGProductionVerificationWhereInput
   }
 
+  export type FGQualityReportNullableScalarRelationFilter = {
+    is?: FGQualityReportWhereInput | null
+    isNot?: FGQualityReportWhereInput | null
+  }
+
   export type FGProductionMachineEntryOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -131364,6 +134300,92 @@ export namespace Prisma {
     totalCartons?: SortOrder
     packetSize?: SortOrder
     cartonCapacity?: SortOrder
+  }
+
+  export type FGQualityParameterListRelationFilter = {
+    every?: FGQualityParameterWhereInput
+    some?: FGQualityParameterWhereInput
+    none?: FGQualityParameterWhereInput
+  }
+
+  export type FGBatchNullableScalarRelationFilter = {
+    is?: FGBatchWhereInput | null
+    isNot?: FGBatchWhereInput | null
+  }
+
+  export type FGQualityParameterOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FGQualityReportCountOrderByAggregateInput = {
+    id?: SortOrder
+    reportNumber?: SortOrder
+    fgBatchId?: SortOrder
+    productionEntryId?: SortOrder
+    productName?: SortOrder
+    dateOfReport?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGQualityReportMaxOrderByAggregateInput = {
+    id?: SortOrder
+    reportNumber?: SortOrder
+    fgBatchId?: SortOrder
+    productionEntryId?: SortOrder
+    productName?: SortOrder
+    dateOfReport?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGQualityReportMinOrderByAggregateInput = {
+    id?: SortOrder
+    reportNumber?: SortOrder
+    fgBatchId?: SortOrder
+    productionEntryId?: SortOrder
+    productName?: SortOrder
+    dateOfReport?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGQualityReportScalarRelationFilter = {
+    is?: FGQualityReportWhereInput
+    isNot?: FGQualityReportWhereInput
+  }
+
+  export type FGQualityParameterCountOrderByAggregateInput = {
+    id?: SortOrder
+    reportId?: SortOrder
+    parameter?: SortOrder
+    standard?: SortOrder
+    result?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGQualityParameterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    reportId?: SortOrder
+    parameter?: SortOrder
+    standard?: SortOrder
+    result?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FGQualityParameterMinOrderByAggregateInput = {
+    id?: SortOrder
+    reportId?: SortOrder
+    parameter?: SortOrder
+    standard?: SortOrder
+    result?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type BatchCreateNestedOneWithoutActivityLogInput = {
@@ -132557,6 +135579,13 @@ export namespace Prisma {
     connect?: RMQualityReportWhereUniqueInput | RMQualityReportWhereUniqueInput[]
   }
 
+  export type FGQualityReportCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<FGQualityReportCreateWithoutCreatedByInput, FGQualityReportUncheckedCreateWithoutCreatedByInput> | FGQualityReportCreateWithoutCreatedByInput[] | FGQualityReportUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutCreatedByInput | FGQualityReportCreateOrConnectWithoutCreatedByInput[]
+    createMany?: FGQualityReportCreateManyCreatedByInputEnvelope
+    connect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+  }
+
   export type GRNbyPoCreateNestedManyWithoutCreatedByInput = {
     create?: XOR<GRNbyPoCreateWithoutCreatedByInput, GRNbyPoUncheckedCreateWithoutCreatedByInput> | GRNbyPoCreateWithoutCreatedByInput[] | GRNbyPoUncheckedCreateWithoutCreatedByInput[]
     connectOrCreate?: GRNbyPoCreateOrConnectWithoutCreatedByInput | GRNbyPoCreateOrConnectWithoutCreatedByInput[]
@@ -132798,6 +135827,13 @@ export namespace Prisma {
     connectOrCreate?: RMQualityReportCreateOrConnectWithoutCreatedByInput | RMQualityReportCreateOrConnectWithoutCreatedByInput[]
     createMany?: RMQualityReportCreateManyCreatedByInputEnvelope
     connect?: RMQualityReportWhereUniqueInput | RMQualityReportWhereUniqueInput[]
+  }
+
+  export type FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<FGQualityReportCreateWithoutCreatedByInput, FGQualityReportUncheckedCreateWithoutCreatedByInput> | FGQualityReportCreateWithoutCreatedByInput[] | FGQualityReportUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutCreatedByInput | FGQualityReportCreateOrConnectWithoutCreatedByInput[]
+    createMany?: FGQualityReportCreateManyCreatedByInputEnvelope
+    connect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
   }
 
   export type GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput = {
@@ -133172,6 +136208,20 @@ export namespace Prisma {
     update?: RMQualityReportUpdateWithWhereUniqueWithoutCreatedByInput | RMQualityReportUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: RMQualityReportUpdateManyWithWhereWithoutCreatedByInput | RMQualityReportUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: RMQualityReportScalarWhereInput | RMQualityReportScalarWhereInput[]
+  }
+
+  export type FGQualityReportUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<FGQualityReportCreateWithoutCreatedByInput, FGQualityReportUncheckedCreateWithoutCreatedByInput> | FGQualityReportCreateWithoutCreatedByInput[] | FGQualityReportUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutCreatedByInput | FGQualityReportCreateOrConnectWithoutCreatedByInput[]
+    upsert?: FGQualityReportUpsertWithWhereUniqueWithoutCreatedByInput | FGQualityReportUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: FGQualityReportCreateManyCreatedByInputEnvelope
+    set?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    disconnect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    delete?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    connect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    update?: FGQualityReportUpdateWithWhereUniqueWithoutCreatedByInput | FGQualityReportUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: FGQualityReportUpdateManyWithWhereWithoutCreatedByInput | FGQualityReportUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: FGQualityReportScalarWhereInput | FGQualityReportScalarWhereInput[]
   }
 
   export type GRNbyPoUpdateManyWithoutCreatedByNestedInput = {
@@ -133652,6 +136702,20 @@ export namespace Prisma {
     update?: RMQualityReportUpdateWithWhereUniqueWithoutCreatedByInput | RMQualityReportUpdateWithWhereUniqueWithoutCreatedByInput[]
     updateMany?: RMQualityReportUpdateManyWithWhereWithoutCreatedByInput | RMQualityReportUpdateManyWithWhereWithoutCreatedByInput[]
     deleteMany?: RMQualityReportScalarWhereInput | RMQualityReportScalarWhereInput[]
+  }
+
+  export type FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<FGQualityReportCreateWithoutCreatedByInput, FGQualityReportUncheckedCreateWithoutCreatedByInput> | FGQualityReportCreateWithoutCreatedByInput[] | FGQualityReportUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutCreatedByInput | FGQualityReportCreateOrConnectWithoutCreatedByInput[]
+    upsert?: FGQualityReportUpsertWithWhereUniqueWithoutCreatedByInput | FGQualityReportUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: FGQualityReportCreateManyCreatedByInputEnvelope
+    set?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    disconnect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    delete?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    connect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    update?: FGQualityReportUpdateWithWhereUniqueWithoutCreatedByInput | FGQualityReportUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: FGQualityReportUpdateManyWithWhereWithoutCreatedByInput | FGQualityReportUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: FGQualityReportScalarWhereInput | FGQualityReportScalarWhereInput[]
   }
 
   export type GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput = {
@@ -139468,6 +142532,13 @@ export namespace Prisma {
     connect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
   }
 
+  export type FGQualityReportCreateNestedManyWithoutFgBatchInput = {
+    create?: XOR<FGQualityReportCreateWithoutFgBatchInput, FGQualityReportUncheckedCreateWithoutFgBatchInput> | FGQualityReportCreateWithoutFgBatchInput[] | FGQualityReportUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutFgBatchInput | FGQualityReportCreateOrConnectWithoutFgBatchInput[]
+    createMany?: FGQualityReportCreateManyFgBatchInputEnvelope
+    connect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+  }
+
   export type FGBatchConsumptionUncheckedCreateNestedManyWithoutFgBatchInput = {
     create?: XOR<FGBatchConsumptionCreateWithoutFgBatchInput, FGBatchConsumptionUncheckedCreateWithoutFgBatchInput> | FGBatchConsumptionCreateWithoutFgBatchInput[] | FGBatchConsumptionUncheckedCreateWithoutFgBatchInput[]
     connectOrCreate?: FGBatchConsumptionCreateOrConnectWithoutFgBatchInput | FGBatchConsumptionCreateOrConnectWithoutFgBatchInput[]
@@ -139480,6 +142551,13 @@ export namespace Prisma {
     connectOrCreate?: FGProductionEntryCreateOrConnectWithoutFgBatchInput | FGProductionEntryCreateOrConnectWithoutFgBatchInput[]
     createMany?: FGProductionEntryCreateManyFgBatchInputEnvelope
     connect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+  }
+
+  export type FGQualityReportUncheckedCreateNestedManyWithoutFgBatchInput = {
+    create?: XOR<FGQualityReportCreateWithoutFgBatchInput, FGQualityReportUncheckedCreateWithoutFgBatchInput> | FGQualityReportCreateWithoutFgBatchInput[] | FGQualityReportUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutFgBatchInput | FGQualityReportCreateOrConnectWithoutFgBatchInput[]
+    createMany?: FGQualityReportCreateManyFgBatchInputEnvelope
+    connect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
   }
 
   export type FGBatchConsumptionUpdateManyWithoutFgBatchNestedInput = {
@@ -139510,6 +142588,20 @@ export namespace Prisma {
     deleteMany?: FGProductionEntryScalarWhereInput | FGProductionEntryScalarWhereInput[]
   }
 
+  export type FGQualityReportUpdateManyWithoutFgBatchNestedInput = {
+    create?: XOR<FGQualityReportCreateWithoutFgBatchInput, FGQualityReportUncheckedCreateWithoutFgBatchInput> | FGQualityReportCreateWithoutFgBatchInput[] | FGQualityReportUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutFgBatchInput | FGQualityReportCreateOrConnectWithoutFgBatchInput[]
+    upsert?: FGQualityReportUpsertWithWhereUniqueWithoutFgBatchInput | FGQualityReportUpsertWithWhereUniqueWithoutFgBatchInput[]
+    createMany?: FGQualityReportCreateManyFgBatchInputEnvelope
+    set?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    disconnect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    delete?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    connect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    update?: FGQualityReportUpdateWithWhereUniqueWithoutFgBatchInput | FGQualityReportUpdateWithWhereUniqueWithoutFgBatchInput[]
+    updateMany?: FGQualityReportUpdateManyWithWhereWithoutFgBatchInput | FGQualityReportUpdateManyWithWhereWithoutFgBatchInput[]
+    deleteMany?: FGQualityReportScalarWhereInput | FGQualityReportScalarWhereInput[]
+  }
+
   export type FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchNestedInput = {
     create?: XOR<FGBatchConsumptionCreateWithoutFgBatchInput, FGBatchConsumptionUncheckedCreateWithoutFgBatchInput> | FGBatchConsumptionCreateWithoutFgBatchInput[] | FGBatchConsumptionUncheckedCreateWithoutFgBatchInput[]
     connectOrCreate?: FGBatchConsumptionCreateOrConnectWithoutFgBatchInput | FGBatchConsumptionCreateOrConnectWithoutFgBatchInput[]
@@ -139536,6 +142628,20 @@ export namespace Prisma {
     update?: FGProductionEntryUpdateWithWhereUniqueWithoutFgBatchInput | FGProductionEntryUpdateWithWhereUniqueWithoutFgBatchInput[]
     updateMany?: FGProductionEntryUpdateManyWithWhereWithoutFgBatchInput | FGProductionEntryUpdateManyWithWhereWithoutFgBatchInput[]
     deleteMany?: FGProductionEntryScalarWhereInput | FGProductionEntryScalarWhereInput[]
+  }
+
+  export type FGQualityReportUncheckedUpdateManyWithoutFgBatchNestedInput = {
+    create?: XOR<FGQualityReportCreateWithoutFgBatchInput, FGQualityReportUncheckedCreateWithoutFgBatchInput> | FGQualityReportCreateWithoutFgBatchInput[] | FGQualityReportUncheckedCreateWithoutFgBatchInput[]
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutFgBatchInput | FGQualityReportCreateOrConnectWithoutFgBatchInput[]
+    upsert?: FGQualityReportUpsertWithWhereUniqueWithoutFgBatchInput | FGQualityReportUpsertWithWhereUniqueWithoutFgBatchInput[]
+    createMany?: FGQualityReportCreateManyFgBatchInputEnvelope
+    set?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    disconnect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    delete?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    connect?: FGQualityReportWhereUniqueInput | FGQualityReportWhereUniqueInput[]
+    update?: FGQualityReportUpdateWithWhereUniqueWithoutFgBatchInput | FGQualityReportUpdateWithWhereUniqueWithoutFgBatchInput[]
+    updateMany?: FGQualityReportUpdateManyWithWhereWithoutFgBatchInput | FGQualityReportUpdateManyWithWhereWithoutFgBatchInput[]
+    deleteMany?: FGQualityReportScalarWhereInput | FGQualityReportScalarWhereInput[]
   }
 
   export type FGBatchCreateNestedOneWithoutConsumptionsInput = {
@@ -139572,6 +142678,12 @@ export namespace Prisma {
     connect?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
   }
 
+  export type FGQualityReportCreateNestedOneWithoutProductionEntryInput = {
+    create?: XOR<FGQualityReportCreateWithoutProductionEntryInput, FGQualityReportUncheckedCreateWithoutProductionEntryInput>
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutProductionEntryInput
+    connect?: FGQualityReportWhereUniqueInput
+  }
+
   export type FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput = {
     create?: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput> | FGProductionMachineEntryCreateWithoutProductionEntryInput[] | FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput[]
     connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput | FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput[]
@@ -139584,6 +142696,12 @@ export namespace Prisma {
     connectOrCreate?: FGProductionVerificationCreateOrConnectWithoutProductionEntryInput | FGProductionVerificationCreateOrConnectWithoutProductionEntryInput[]
     createMany?: FGProductionVerificationCreateManyProductionEntryInputEnvelope
     connect?: FGProductionVerificationWhereUniqueInput | FGProductionVerificationWhereUniqueInput[]
+  }
+
+  export type FGQualityReportUncheckedCreateNestedOneWithoutProductionEntryInput = {
+    create?: XOR<FGQualityReportCreateWithoutProductionEntryInput, FGQualityReportUncheckedCreateWithoutProductionEntryInput>
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutProductionEntryInput
+    connect?: FGQualityReportWhereUniqueInput
   }
 
   export type FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput = {
@@ -139622,6 +142740,16 @@ export namespace Prisma {
     deleteMany?: FGProductionVerificationScalarWhereInput | FGProductionVerificationScalarWhereInput[]
   }
 
+  export type FGQualityReportUpdateOneWithoutProductionEntryNestedInput = {
+    create?: XOR<FGQualityReportCreateWithoutProductionEntryInput, FGQualityReportUncheckedCreateWithoutProductionEntryInput>
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutProductionEntryInput
+    upsert?: FGQualityReportUpsertWithoutProductionEntryInput
+    disconnect?: FGQualityReportWhereInput | boolean
+    delete?: FGQualityReportWhereInput | boolean
+    connect?: FGQualityReportWhereUniqueInput
+    update?: XOR<XOR<FGQualityReportUpdateToOneWithWhereWithoutProductionEntryInput, FGQualityReportUpdateWithoutProductionEntryInput>, FGQualityReportUncheckedUpdateWithoutProductionEntryInput>
+  }
+
   export type FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput = {
     create?: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput> | FGProductionMachineEntryCreateWithoutProductionEntryInput[] | FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput[]
     connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput | FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput[]
@@ -139648,6 +142776,16 @@ export namespace Prisma {
     update?: FGProductionVerificationUpdateWithWhereUniqueWithoutProductionEntryInput | FGProductionVerificationUpdateWithWhereUniqueWithoutProductionEntryInput[]
     updateMany?: FGProductionVerificationUpdateManyWithWhereWithoutProductionEntryInput | FGProductionVerificationUpdateManyWithWhereWithoutProductionEntryInput[]
     deleteMany?: FGProductionVerificationScalarWhereInput | FGProductionVerificationScalarWhereInput[]
+  }
+
+  export type FGQualityReportUncheckedUpdateOneWithoutProductionEntryNestedInput = {
+    create?: XOR<FGQualityReportCreateWithoutProductionEntryInput, FGQualityReportUncheckedCreateWithoutProductionEntryInput>
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutProductionEntryInput
+    upsert?: FGQualityReportUpsertWithoutProductionEntryInput
+    disconnect?: FGQualityReportWhereInput | boolean
+    delete?: FGQualityReportWhereInput | boolean
+    connect?: FGQualityReportWhereUniqueInput
+    update?: XOR<XOR<FGQualityReportUpdateToOneWithWhereWithoutProductionEntryInput, FGQualityReportUpdateWithoutProductionEntryInput>, FGQualityReportUncheckedUpdateWithoutProductionEntryInput>
   }
 
   export type FGProductionEntryCreateNestedOneWithoutMachineEntriesInput = {
@@ -139732,6 +142870,106 @@ export namespace Prisma {
     upsert?: FGProductionEntryUpsertWithoutVerificationsInput
     connect?: FGProductionEntryWhereUniqueInput
     update?: XOR<XOR<FGProductionEntryUpdateToOneWithWhereWithoutVerificationsInput, FGProductionEntryUpdateWithoutVerificationsInput>, FGProductionEntryUncheckedUpdateWithoutVerificationsInput>
+  }
+
+  export type FGQualityParameterCreateNestedManyWithoutReportInput = {
+    create?: XOR<FGQualityParameterCreateWithoutReportInput, FGQualityParameterUncheckedCreateWithoutReportInput> | FGQualityParameterCreateWithoutReportInput[] | FGQualityParameterUncheckedCreateWithoutReportInput[]
+    connectOrCreate?: FGQualityParameterCreateOrConnectWithoutReportInput | FGQualityParameterCreateOrConnectWithoutReportInput[]
+    createMany?: FGQualityParameterCreateManyReportInputEnvelope
+    connect?: FGQualityParameterWhereUniqueInput | FGQualityParameterWhereUniqueInput[]
+  }
+
+  export type FGProductionEntryCreateNestedOneWithoutQualityReportInput = {
+    create?: XOR<FGProductionEntryCreateWithoutQualityReportInput, FGProductionEntryUncheckedCreateWithoutQualityReportInput>
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutQualityReportInput
+    connect?: FGProductionEntryWhereUniqueInput
+  }
+
+  export type FGBatchCreateNestedOneWithoutFgQualityReportsInput = {
+    create?: XOR<FGBatchCreateWithoutFgQualityReportsInput, FGBatchUncheckedCreateWithoutFgQualityReportsInput>
+    connectOrCreate?: FGBatchCreateOrConnectWithoutFgQualityReportsInput
+    connect?: FGBatchWhereUniqueInput
+  }
+
+  export type UserCreateNestedOneWithoutFgQualityReportsInput = {
+    create?: XOR<UserCreateWithoutFgQualityReportsInput, UserUncheckedCreateWithoutFgQualityReportsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFgQualityReportsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type FGQualityParameterUncheckedCreateNestedManyWithoutReportInput = {
+    create?: XOR<FGQualityParameterCreateWithoutReportInput, FGQualityParameterUncheckedCreateWithoutReportInput> | FGQualityParameterCreateWithoutReportInput[] | FGQualityParameterUncheckedCreateWithoutReportInput[]
+    connectOrCreate?: FGQualityParameterCreateOrConnectWithoutReportInput | FGQualityParameterCreateOrConnectWithoutReportInput[]
+    createMany?: FGQualityParameterCreateManyReportInputEnvelope
+    connect?: FGQualityParameterWhereUniqueInput | FGQualityParameterWhereUniqueInput[]
+  }
+
+  export type FGQualityParameterUpdateManyWithoutReportNestedInput = {
+    create?: XOR<FGQualityParameterCreateWithoutReportInput, FGQualityParameterUncheckedCreateWithoutReportInput> | FGQualityParameterCreateWithoutReportInput[] | FGQualityParameterUncheckedCreateWithoutReportInput[]
+    connectOrCreate?: FGQualityParameterCreateOrConnectWithoutReportInput | FGQualityParameterCreateOrConnectWithoutReportInput[]
+    upsert?: FGQualityParameterUpsertWithWhereUniqueWithoutReportInput | FGQualityParameterUpsertWithWhereUniqueWithoutReportInput[]
+    createMany?: FGQualityParameterCreateManyReportInputEnvelope
+    set?: FGQualityParameterWhereUniqueInput | FGQualityParameterWhereUniqueInput[]
+    disconnect?: FGQualityParameterWhereUniqueInput | FGQualityParameterWhereUniqueInput[]
+    delete?: FGQualityParameterWhereUniqueInput | FGQualityParameterWhereUniqueInput[]
+    connect?: FGQualityParameterWhereUniqueInput | FGQualityParameterWhereUniqueInput[]
+    update?: FGQualityParameterUpdateWithWhereUniqueWithoutReportInput | FGQualityParameterUpdateWithWhereUniqueWithoutReportInput[]
+    updateMany?: FGQualityParameterUpdateManyWithWhereWithoutReportInput | FGQualityParameterUpdateManyWithWhereWithoutReportInput[]
+    deleteMany?: FGQualityParameterScalarWhereInput | FGQualityParameterScalarWhereInput[]
+  }
+
+  export type FGProductionEntryUpdateOneRequiredWithoutQualityReportNestedInput = {
+    create?: XOR<FGProductionEntryCreateWithoutQualityReportInput, FGProductionEntryUncheckedCreateWithoutQualityReportInput>
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutQualityReportInput
+    upsert?: FGProductionEntryUpsertWithoutQualityReportInput
+    connect?: FGProductionEntryWhereUniqueInput
+    update?: XOR<XOR<FGProductionEntryUpdateToOneWithWhereWithoutQualityReportInput, FGProductionEntryUpdateWithoutQualityReportInput>, FGProductionEntryUncheckedUpdateWithoutQualityReportInput>
+  }
+
+  export type FGBatchUpdateOneWithoutFgQualityReportsNestedInput = {
+    create?: XOR<FGBatchCreateWithoutFgQualityReportsInput, FGBatchUncheckedCreateWithoutFgQualityReportsInput>
+    connectOrCreate?: FGBatchCreateOrConnectWithoutFgQualityReportsInput
+    upsert?: FGBatchUpsertWithoutFgQualityReportsInput
+    disconnect?: FGBatchWhereInput | boolean
+    delete?: FGBatchWhereInput | boolean
+    connect?: FGBatchWhereUniqueInput
+    update?: XOR<XOR<FGBatchUpdateToOneWithWhereWithoutFgQualityReportsInput, FGBatchUpdateWithoutFgQualityReportsInput>, FGBatchUncheckedUpdateWithoutFgQualityReportsInput>
+  }
+
+  export type UserUpdateOneRequiredWithoutFgQualityReportsNestedInput = {
+    create?: XOR<UserCreateWithoutFgQualityReportsInput, UserUncheckedCreateWithoutFgQualityReportsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFgQualityReportsInput
+    upsert?: UserUpsertWithoutFgQualityReportsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFgQualityReportsInput, UserUpdateWithoutFgQualityReportsInput>, UserUncheckedUpdateWithoutFgQualityReportsInput>
+  }
+
+  export type FGQualityParameterUncheckedUpdateManyWithoutReportNestedInput = {
+    create?: XOR<FGQualityParameterCreateWithoutReportInput, FGQualityParameterUncheckedCreateWithoutReportInput> | FGQualityParameterCreateWithoutReportInput[] | FGQualityParameterUncheckedCreateWithoutReportInput[]
+    connectOrCreate?: FGQualityParameterCreateOrConnectWithoutReportInput | FGQualityParameterCreateOrConnectWithoutReportInput[]
+    upsert?: FGQualityParameterUpsertWithWhereUniqueWithoutReportInput | FGQualityParameterUpsertWithWhereUniqueWithoutReportInput[]
+    createMany?: FGQualityParameterCreateManyReportInputEnvelope
+    set?: FGQualityParameterWhereUniqueInput | FGQualityParameterWhereUniqueInput[]
+    disconnect?: FGQualityParameterWhereUniqueInput | FGQualityParameterWhereUniqueInput[]
+    delete?: FGQualityParameterWhereUniqueInput | FGQualityParameterWhereUniqueInput[]
+    connect?: FGQualityParameterWhereUniqueInput | FGQualityParameterWhereUniqueInput[]
+    update?: FGQualityParameterUpdateWithWhereUniqueWithoutReportInput | FGQualityParameterUpdateWithWhereUniqueWithoutReportInput[]
+    updateMany?: FGQualityParameterUpdateManyWithWhereWithoutReportInput | FGQualityParameterUpdateManyWithWhereWithoutReportInput[]
+    deleteMany?: FGQualityParameterScalarWhereInput | FGQualityParameterScalarWhereInput[]
+  }
+
+  export type FGQualityReportCreateNestedOneWithoutParametersInput = {
+    create?: XOR<FGQualityReportCreateWithoutParametersInput, FGQualityReportUncheckedCreateWithoutParametersInput>
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutParametersInput
+    connect?: FGQualityReportWhereUniqueInput
+  }
+
+  export type FGQualityReportUpdateOneRequiredWithoutParametersNestedInput = {
+    create?: XOR<FGQualityReportCreateWithoutParametersInput, FGQualityReportUncheckedCreateWithoutParametersInput>
+    connectOrCreate?: FGQualityReportCreateOrConnectWithoutParametersInput
+    upsert?: FGQualityReportUpsertWithoutParametersInput
+    connect?: FGQualityReportWhereUniqueInput
+    update?: XOR<XOR<FGQualityReportUpdateToOneWithWhereWithoutParametersInput, FGQualityReportUpdateWithoutParametersInput>, FGQualityReportUncheckedUpdateWithoutParametersInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -140528,6 +143766,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -140572,6 +143811,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -140693,6 +143933,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -140737,6 +143978,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -140805,6 +144047,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -140849,6 +144092,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -140896,6 +144140,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -140940,6 +144185,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -141252,6 +144498,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -141296,6 +144543,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -141349,6 +144597,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -141393,6 +144642,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -141980,6 +145230,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -142024,6 +145275,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -142145,6 +145397,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -142189,6 +145442,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -142597,6 +145851,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -142640,6 +145895,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -143870,6 +147126,40 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FGQualityReportCreateWithoutCreatedByInput = {
+    id?: string
+    reportNumber?: string | null
+    productName: string
+    dateOfReport?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: FGQualityParameterCreateNestedManyWithoutReportInput
+    productionEntry: FGProductionEntryCreateNestedOneWithoutQualityReportInput
+    fgBatch?: FGBatchCreateNestedOneWithoutFgQualityReportsInput
+  }
+
+  export type FGQualityReportUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    reportNumber?: string | null
+    fgBatchId?: string | null
+    productionEntryId: string
+    productName: string
+    dateOfReport?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: FGQualityParameterUncheckedCreateNestedManyWithoutReportInput
+  }
+
+  export type FGQualityReportCreateOrConnectWithoutCreatedByInput = {
+    where: FGQualityReportWhereUniqueInput
+    create: XOR<FGQualityReportCreateWithoutCreatedByInput, FGQualityReportUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type FGQualityReportCreateManyCreatedByInputEnvelope = {
+    data: FGQualityReportCreateManyCreatedByInput | FGQualityReportCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type GRNbyPoCreateWithoutCreatedByInput = {
     id?: string
     grnNumber: string
@@ -144970,6 +148260,37 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"RMQualityReport"> | Date | string
   }
 
+  export type FGQualityReportUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: FGQualityReportWhereUniqueInput
+    update: XOR<FGQualityReportUpdateWithoutCreatedByInput, FGQualityReportUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<FGQualityReportCreateWithoutCreatedByInput, FGQualityReportUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type FGQualityReportUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: FGQualityReportWhereUniqueInput
+    data: XOR<FGQualityReportUpdateWithoutCreatedByInput, FGQualityReportUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type FGQualityReportUpdateManyWithWhereWithoutCreatedByInput = {
+    where: FGQualityReportScalarWhereInput
+    data: XOR<FGQualityReportUpdateManyMutationInput, FGQualityReportUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type FGQualityReportScalarWhereInput = {
+    AND?: FGQualityReportScalarWhereInput | FGQualityReportScalarWhereInput[]
+    OR?: FGQualityReportScalarWhereInput[]
+    NOT?: FGQualityReportScalarWhereInput | FGQualityReportScalarWhereInput[]
+    id?: StringFilter<"FGQualityReport"> | string
+    reportNumber?: StringNullableFilter<"FGQualityReport"> | string | null
+    fgBatchId?: StringNullableFilter<"FGQualityReport"> | string | null
+    productionEntryId?: StringFilter<"FGQualityReport"> | string
+    productName?: StringFilter<"FGQualityReport"> | string
+    dateOfReport?: DateTimeFilter<"FGQualityReport"> | Date | string
+    createdById?: StringFilter<"FGQualityReport"> | string
+    createdAt?: DateTimeFilter<"FGQualityReport"> | Date | string
+    updatedAt?: DateTimeFilter<"FGQualityReport"> | Date | string
+  }
+
   export type GRNbyPoUpsertWithWhereUniqueWithoutCreatedByInput = {
     where: GRNbyPoWhereUniqueInput
     update: XOR<GRNbyPoUpdateWithoutCreatedByInput, GRNbyPoUncheckedUpdateWithoutCreatedByInput>
@@ -145376,6 +148697,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -145420,6 +148742,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -145478,6 +148801,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -145522,6 +148846,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -145590,6 +148915,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -145634,6 +148960,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -145681,6 +149008,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -145725,6 +149053,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -145931,6 +149260,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -145975,6 +149305,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -146028,6 +149359,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -146072,6 +149404,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -146700,6 +150033,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -146744,6 +150078,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -146820,6 +150155,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -146864,6 +150200,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -146988,6 +150325,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -147032,6 +150370,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -147120,6 +150459,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -147164,6 +150504,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -147775,6 +151116,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -147819,6 +151161,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -147866,6 +151209,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -147910,6 +151254,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -148312,6 +151657,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -148356,6 +151702,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -148409,6 +151756,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -148453,6 +151801,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -148999,6 +152348,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -149043,6 +152393,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -149164,6 +152515,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -149208,6 +152560,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -150017,6 +153370,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -150061,6 +153415,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -150182,6 +153537,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -150226,6 +153582,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -150590,6 +153947,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -150634,6 +153992,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -150837,6 +154196,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -150881,6 +154241,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -150924,6 +154285,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -150968,6 +154330,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -151015,6 +154378,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -151059,6 +154423,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -151174,6 +154539,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -151218,6 +154584,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -151271,6 +154638,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -151315,6 +154683,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -151477,6 +154846,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -151521,6 +154891,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -151642,6 +155013,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -151686,6 +155058,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -151959,6 +155332,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -152003,6 +155377,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -152102,6 +155477,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -152146,6 +155522,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -152247,6 +155624,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -152291,6 +155669,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -152365,6 +155744,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -152409,6 +155789,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -152451,6 +155832,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -152495,6 +155877,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -152569,6 +155952,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -152613,6 +155997,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -152952,6 +156337,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -152996,6 +156382,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -153082,6 +156469,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -153126,6 +156514,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -153362,6 +156751,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -153406,6 +156796,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -153525,6 +156916,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -153569,6 +156961,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -153731,6 +157124,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -153775,6 +157169,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -153904,6 +157299,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -153948,6 +157344,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -154051,6 +157448,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -154095,6 +157493,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -154234,6 +157633,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -154278,6 +157678,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -154336,6 +157737,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -154380,6 +157782,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -154537,6 +157940,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -154581,6 +157985,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -154678,6 +158083,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -154722,6 +158128,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -154841,6 +158248,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -154885,6 +158293,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -154982,6 +158391,7 @@ export namespace Prisma {
     Notification?: NotificationCreateNestedManyWithoutUserInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -155026,6 +158436,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -155073,6 +158484,7 @@ export namespace Prisma {
     Notification?: NotificationCreateNestedManyWithoutUserInput
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -155117,6 +158529,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -155236,6 +158649,7 @@ export namespace Prisma {
     Notification?: NotificationUpdateManyWithoutUserNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -155280,6 +158694,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -155333,6 +158748,7 @@ export namespace Prisma {
     Notification?: NotificationUpdateManyWithoutUserNestedInput
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -155377,6 +158793,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -155474,6 +158891,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -155518,6 +158936,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -155565,6 +158984,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -155609,6 +159029,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -155728,6 +159149,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -155772,6 +159194,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -155825,6 +159248,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -155869,6 +159293,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -155966,6 +159391,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -156010,6 +159436,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -156129,6 +159556,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -156173,6 +159601,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -161799,6 +165228,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -161843,6 +165273,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -161901,6 +165332,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -161945,6 +165377,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -162110,6 +165543,7 @@ export namespace Prisma {
     Notification?: NotificationCreateNestedManyWithoutUserInput
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
@@ -162154,6 +165588,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
@@ -162286,6 +165721,7 @@ export namespace Prisma {
     Notification?: NotificationUpdateManyWithoutUserNestedInput
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -162330,6 +165766,7 @@ export namespace Prisma {
     Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -162599,6 +166036,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
@@ -162643,6 +166081,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
     rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
     StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
@@ -162920,6 +166359,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
@@ -162964,6 +166404,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
     standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -164695,6 +168136,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
     verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
+    qualityReport?: FGQualityReportCreateNestedOneWithoutProductionEntryInput
   }
 
   export type FGProductionEntryUncheckedCreateWithoutFgBatchInput = {
@@ -164721,6 +168163,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     machineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput
     verifications?: FGProductionVerificationUncheckedCreateNestedManyWithoutProductionEntryInput
+    qualityReport?: FGQualityReportUncheckedCreateNestedOneWithoutProductionEntryInput
   }
 
   export type FGProductionEntryCreateOrConnectWithoutFgBatchInput = {
@@ -164730,6 +168173,40 @@ export namespace Prisma {
 
   export type FGProductionEntryCreateManyFgBatchInputEnvelope = {
     data: FGProductionEntryCreateManyFgBatchInput | FGProductionEntryCreateManyFgBatchInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FGQualityReportCreateWithoutFgBatchInput = {
+    id?: string
+    reportNumber?: string | null
+    productName: string
+    dateOfReport?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: FGQualityParameterCreateNestedManyWithoutReportInput
+    productionEntry: FGProductionEntryCreateNestedOneWithoutQualityReportInput
+    createdBy: UserCreateNestedOneWithoutFgQualityReportsInput
+  }
+
+  export type FGQualityReportUncheckedCreateWithoutFgBatchInput = {
+    id?: string
+    reportNumber?: string | null
+    productionEntryId: string
+    productName: string
+    dateOfReport?: Date | string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: FGQualityParameterUncheckedCreateNestedManyWithoutReportInput
+  }
+
+  export type FGQualityReportCreateOrConnectWithoutFgBatchInput = {
+    where: FGQualityReportWhereUniqueInput
+    create: XOR<FGQualityReportCreateWithoutFgBatchInput, FGQualityReportUncheckedCreateWithoutFgBatchInput>
+  }
+
+  export type FGQualityReportCreateManyFgBatchInputEnvelope = {
+    data: FGQualityReportCreateManyFgBatchInput | FGQualityReportCreateManyFgBatchInput[]
     skipDuplicates?: boolean
   }
 
@@ -164810,6 +168287,22 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
   }
 
+  export type FGQualityReportUpsertWithWhereUniqueWithoutFgBatchInput = {
+    where: FGQualityReportWhereUniqueInput
+    update: XOR<FGQualityReportUpdateWithoutFgBatchInput, FGQualityReportUncheckedUpdateWithoutFgBatchInput>
+    create: XOR<FGQualityReportCreateWithoutFgBatchInput, FGQualityReportUncheckedCreateWithoutFgBatchInput>
+  }
+
+  export type FGQualityReportUpdateWithWhereUniqueWithoutFgBatchInput = {
+    where: FGQualityReportWhereUniqueInput
+    data: XOR<FGQualityReportUpdateWithoutFgBatchInput, FGQualityReportUncheckedUpdateWithoutFgBatchInput>
+  }
+
+  export type FGQualityReportUpdateManyWithWhereWithoutFgBatchInput = {
+    where: FGQualityReportScalarWhereInput
+    data: XOR<FGQualityReportUpdateManyMutationInput, FGQualityReportUncheckedUpdateManyWithoutFgBatchInput>
+  }
+
   export type FGBatchCreateWithoutConsumptionsInput = {
     id?: string
     batchNumber: string
@@ -164828,6 +168321,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     productionEntries?: FGProductionEntryCreateNestedManyWithoutFgBatchInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutFgBatchInput
   }
 
   export type FGBatchUncheckedCreateWithoutConsumptionsInput = {
@@ -164848,6 +168342,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     productionEntries?: FGProductionEntryUncheckedCreateNestedManyWithoutFgBatchInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutFgBatchInput
   }
 
   export type FGBatchCreateOrConnectWithoutConsumptionsInput = {
@@ -164884,6 +168379,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productionEntries?: FGProductionEntryUpdateManyWithoutFgBatchNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutFgBatchNestedInput
   }
 
   export type FGBatchUncheckedUpdateWithoutConsumptionsInput = {
@@ -164904,6 +168400,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productionEntries?: FGProductionEntryUncheckedUpdateManyWithoutFgBatchNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutFgBatchNestedInput
   }
 
   export type FGBatchCreateWithoutProductionEntriesInput = {
@@ -164924,6 +168421,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     consumptions?: FGBatchConsumptionCreateNestedManyWithoutFgBatchInput
+    fgQualityReports?: FGQualityReportCreateNestedManyWithoutFgBatchInput
   }
 
   export type FGBatchUncheckedCreateWithoutProductionEntriesInput = {
@@ -164944,6 +168442,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     consumptions?: FGBatchConsumptionUncheckedCreateNestedManyWithoutFgBatchInput
+    fgQualityReports?: FGQualityReportUncheckedCreateNestedManyWithoutFgBatchInput
   }
 
   export type FGBatchCreateOrConnectWithoutProductionEntriesInput = {
@@ -165057,6 +168556,35 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FGQualityReportCreateWithoutProductionEntryInput = {
+    id?: string
+    reportNumber?: string | null
+    productName: string
+    dateOfReport?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: FGQualityParameterCreateNestedManyWithoutReportInput
+    fgBatch?: FGBatchCreateNestedOneWithoutFgQualityReportsInput
+    createdBy: UserCreateNestedOneWithoutFgQualityReportsInput
+  }
+
+  export type FGQualityReportUncheckedCreateWithoutProductionEntryInput = {
+    id?: string
+    reportNumber?: string | null
+    fgBatchId?: string | null
+    productName: string
+    dateOfReport?: Date | string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parameters?: FGQualityParameterUncheckedCreateNestedManyWithoutReportInput
+  }
+
+  export type FGQualityReportCreateOrConnectWithoutProductionEntryInput = {
+    where: FGQualityReportWhereUniqueInput
+    create: XOR<FGQualityReportCreateWithoutProductionEntryInput, FGQualityReportUncheckedCreateWithoutProductionEntryInput>
+  }
+
   export type FGBatchUpsertWithoutProductionEntriesInput = {
     update: XOR<FGBatchUpdateWithoutProductionEntriesInput, FGBatchUncheckedUpdateWithoutProductionEntriesInput>
     create: XOR<FGBatchCreateWithoutProductionEntriesInput, FGBatchUncheckedCreateWithoutProductionEntriesInput>
@@ -165086,6 +168614,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     consumptions?: FGBatchConsumptionUpdateManyWithoutFgBatchNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutFgBatchNestedInput
   }
 
   export type FGBatchUncheckedUpdateWithoutProductionEntriesInput = {
@@ -165106,6 +168635,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     consumptions?: FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutFgBatchNestedInput
   }
 
   export type FGProductionMachineEntryUpsertWithWhereUniqueWithoutProductionEntryInput = {
@@ -165191,6 +168721,41 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"FGProductionVerification"> | Date | string
   }
 
+  export type FGQualityReportUpsertWithoutProductionEntryInput = {
+    update: XOR<FGQualityReportUpdateWithoutProductionEntryInput, FGQualityReportUncheckedUpdateWithoutProductionEntryInput>
+    create: XOR<FGQualityReportCreateWithoutProductionEntryInput, FGQualityReportUncheckedCreateWithoutProductionEntryInput>
+    where?: FGQualityReportWhereInput
+  }
+
+  export type FGQualityReportUpdateToOneWithWhereWithoutProductionEntryInput = {
+    where?: FGQualityReportWhereInput
+    data: XOR<FGQualityReportUpdateWithoutProductionEntryInput, FGQualityReportUncheckedUpdateWithoutProductionEntryInput>
+  }
+
+  export type FGQualityReportUpdateWithoutProductionEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: FGQualityParameterUpdateManyWithoutReportNestedInput
+    fgBatch?: FGBatchUpdateOneWithoutFgQualityReportsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutFgQualityReportsNestedInput
+  }
+
+  export type FGQualityReportUncheckedUpdateWithoutProductionEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fgBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: FGQualityParameterUncheckedUpdateManyWithoutReportNestedInput
+  }
+
   export type FGProductionEntryCreateWithoutMachineEntriesInput = {
     id?: string
     entryNumber: string
@@ -165215,6 +168780,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
     verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
+    qualityReport?: FGQualityReportCreateNestedOneWithoutProductionEntryInput
   }
 
   export type FGProductionEntryUncheckedCreateWithoutMachineEntriesInput = {
@@ -165241,6 +168807,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     verifications?: FGProductionVerificationUncheckedCreateNestedManyWithoutProductionEntryInput
+    qualityReport?: FGQualityReportUncheckedCreateNestedOneWithoutProductionEntryInput
   }
 
   export type FGProductionEntryCreateOrConnectWithoutMachineEntriesInput = {
@@ -165310,6 +168877,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
     verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
+    qualityReport?: FGQualityReportUpdateOneWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryUncheckedUpdateWithoutMachineEntriesInput = {
@@ -165336,6 +168904,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     verifications?: FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryNestedInput
+    qualityReport?: FGQualityReportUncheckedUpdateOneWithoutProductionEntryNestedInput
   }
 
   export type MachineUpsertWithoutProductionMachineEntriesInput = {
@@ -165461,6 +169030,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
     machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
+    qualityReport?: FGQualityReportCreateNestedOneWithoutProductionEntryInput
   }
 
   export type FGProductionEntryUncheckedCreateWithoutVerificationsInput = {
@@ -165487,6 +169057,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     machineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput
+    qualityReport?: FGQualityReportUncheckedCreateNestedOneWithoutProductionEntryInput
   }
 
   export type FGProductionEntryCreateOrConnectWithoutVerificationsInput = {
@@ -165529,6 +169100,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
     machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
+    qualityReport?: FGQualityReportUpdateOneWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryUncheckedUpdateWithoutVerificationsInput = {
@@ -165555,6 +169127,544 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     machineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput
+    qualityReport?: FGQualityReportUncheckedUpdateOneWithoutProductionEntryNestedInput
+  }
+
+  export type FGQualityParameterCreateWithoutReportInput = {
+    id?: string
+    parameter: string
+    standard: string
+    result: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGQualityParameterUncheckedCreateWithoutReportInput = {
+    id?: string
+    parameter: string
+    standard: string
+    result: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGQualityParameterCreateOrConnectWithoutReportInput = {
+    where: FGQualityParameterWhereUniqueInput
+    create: XOR<FGQualityParameterCreateWithoutReportInput, FGQualityParameterUncheckedCreateWithoutReportInput>
+  }
+
+  export type FGQualityParameterCreateManyReportInputEnvelope = {
+    data: FGQualityParameterCreateManyReportInput | FGQualityParameterCreateManyReportInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FGProductionEntryCreateWithoutQualityReportInput = {
+    id?: string
+    entryNumber: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    cartonCapacity?: number | null
+    totalPlannedPackets?: number
+    totalPlannedCartons?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    totalActualCartons?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
+    machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
+    verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
+  }
+
+  export type FGProductionEntryUncheckedCreateWithoutQualityReportInput = {
+    id?: string
+    entryNumber: string
+    fgBatchId: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    cartonCapacity?: number | null
+    totalPlannedPackets?: number
+    totalPlannedCartons?: number
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalActualPackets?: number
+    totalActualCartons?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    machineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput
+    verifications?: FGProductionVerificationUncheckedCreateNestedManyWithoutProductionEntryInput
+  }
+
+  export type FGProductionEntryCreateOrConnectWithoutQualityReportInput = {
+    where: FGProductionEntryWhereUniqueInput
+    create: XOR<FGProductionEntryCreateWithoutQualityReportInput, FGProductionEntryUncheckedCreateWithoutQualityReportInput>
+  }
+
+  export type FGBatchCreateWithoutFgQualityReportsInput = {
+    id?: string
+    batchNumber: string
+    bomId: string
+    fgProductName: string
+    productionQty: number
+    productionUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPackets?: number
+    cartonCapacity?: number | null
+    totalCartons?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consumptions?: FGBatchConsumptionCreateNestedManyWithoutFgBatchInput
+    productionEntries?: FGProductionEntryCreateNestedManyWithoutFgBatchInput
+  }
+
+  export type FGBatchUncheckedCreateWithoutFgQualityReportsInput = {
+    id?: string
+    batchNumber: string
+    bomId: string
+    fgProductName: string
+    productionQty: number
+    productionUnit: string
+    packetSize?: number | null
+    packetUnit?: string | null
+    totalPackets?: number
+    cartonCapacity?: number | null
+    totalCartons?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    consumptions?: FGBatchConsumptionUncheckedCreateNestedManyWithoutFgBatchInput
+    productionEntries?: FGProductionEntryUncheckedCreateNestedManyWithoutFgBatchInput
+  }
+
+  export type FGBatchCreateOrConnectWithoutFgQualityReportsInput = {
+    where: FGBatchWhereUniqueInput
+    create: XOR<FGBatchCreateWithoutFgQualityReportsInput, FGBatchUncheckedCreateWithoutFgQualityReportsInput>
+  }
+
+  export type UserCreateWithoutFgQualityReportsInput = {
+    id: string
+    email: string
+    name: string
+    password: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    ActivityLog?: ActivityLogCreateNestedManyWithoutUserInput
+    auditeeAudits?: AuditCreateNestedManyWithoutAuditeeInput
+    createdAudits?: AuditCreateNestedManyWithoutCreatedByInput
+    uploadedAuditDocuments?: AuditDocumentCreateNestedManyWithoutUploadedByInput
+    inspectedItems?: AuditInspectionItemCreateNestedManyWithoutInspectedByInput
+    auditNotifications?: AuditNotificationCreateNestedManyWithoutUserInput
+    createdReminders?: AuditReminderCreateNestedManyWithoutCreatedByInput
+    receivedReminders?: AuditReminderCreateNestedManyWithoutRecipientInput
+    auditorProfile?: AuditorCreateNestedOneWithoutUserInput
+    Batch_Batch_checkerIdToUser?: BatchCreateNestedManyWithoutUser_Batch_checkerIdToUserInput
+    Batch_Batch_makerIdToUser?: BatchCreateNestedManyWithoutUser_Batch_makerIdToUserInput
+    BatchDrafts?: BatchDraftCreateNestedManyWithoutMakerInput
+    assignedActions?: CorrectiveActionCreateNestedManyWithoutAssignedToInput
+    verifiedActions?: CorrectiveActionCreateNestedManyWithoutVerifiedByInput
+    uploadedFeedbackForms?: FeedbackFormCreateNestedManyWithoutUploadedByInput
+    assignedFindings?: FindingCreateNestedManyWithoutAssignedToInput
+    Notification?: NotificationCreateNestedManyWithoutUserInput
+    createdChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutCreatedByInput
+    responsibleForChecklistItems?: PreAuditChecklistItemCreateNestedManyWithoutResponsibleInput
+    rmQualityReports?: RMQualityReportCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoCreateNestedManyWithoutCreatedByInput
+    StandardsCreated?: StandardCreateNestedManyWithoutCreatedByInput
+    StandardsModified?: StandardCreateNestedManyWithoutModifiedByInput
+    standardDefinitionsCreated?: StandardDefinitionCreateNestedManyWithoutCreatedByInput
+    standardDefinitionsModified?: StandardDefinitionCreateNestedManyWithoutModifiedByInput
+    createdTrainings?: TrainingCreateNestedManyWithoutCreatedByInput
+    trainerTrainings?: TrainingCreateNestedManyWithoutTrainerInput
+    uploadedDocuments?: TrainingDocumentCreateNestedManyWithoutUploadedByInput
+    assignedFollowups?: TrainingFollowupCreateNestedManyWithoutAssignedToInput
+    createdFollowups?: TrainingFollowupCreateNestedManyWithoutCreatedByInput
+    trainingNotifications?: TrainingNotificationCreateNestedManyWithoutUserInput
+    uploadedPhotos?: TrainingPhotoCreateNestedManyWithoutUploadedByInput
+    uploadedSessionPhotos?: TrainingSessionPhotoCreateNestedManyWithoutUploadedByInput
+    transactionLogs?: TransactionLogCreateNestedManyWithoutUserInput
+    Role: RoleCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutFgQualityReportsInput = {
+    id: string
+    email: string
+    name: string
+    password: string
+    roleId: string
+    createdAt?: Date | string
+    updatedAt: Date | string
+    ActivityLog?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
+    auditeeAudits?: AuditUncheckedCreateNestedManyWithoutAuditeeInput
+    createdAudits?: AuditUncheckedCreateNestedManyWithoutCreatedByInput
+    uploadedAuditDocuments?: AuditDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    inspectedItems?: AuditInspectionItemUncheckedCreateNestedManyWithoutInspectedByInput
+    auditNotifications?: AuditNotificationUncheckedCreateNestedManyWithoutUserInput
+    createdReminders?: AuditReminderUncheckedCreateNestedManyWithoutCreatedByInput
+    receivedReminders?: AuditReminderUncheckedCreateNestedManyWithoutRecipientInput
+    auditorProfile?: AuditorUncheckedCreateNestedOneWithoutUserInput
+    Batch_Batch_checkerIdToUser?: BatchUncheckedCreateNestedManyWithoutUser_Batch_checkerIdToUserInput
+    Batch_Batch_makerIdToUser?: BatchUncheckedCreateNestedManyWithoutUser_Batch_makerIdToUserInput
+    BatchDrafts?: BatchDraftUncheckedCreateNestedManyWithoutMakerInput
+    assignedActions?: CorrectiveActionUncheckedCreateNestedManyWithoutAssignedToInput
+    verifiedActions?: CorrectiveActionUncheckedCreateNestedManyWithoutVerifiedByInput
+    uploadedFeedbackForms?: FeedbackFormUncheckedCreateNestedManyWithoutUploadedByInput
+    assignedFindings?: FindingUncheckedCreateNestedManyWithoutAssignedToInput
+    Notification?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    createdChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutCreatedByInput
+    responsibleForChecklistItems?: PreAuditChecklistItemUncheckedCreateNestedManyWithoutResponsibleInput
+    rmQualityReports?: RMQualityReportUncheckedCreateNestedManyWithoutCreatedByInput
+    createdGRNs?: GRNbyPoUncheckedCreateNestedManyWithoutCreatedByInput
+    StandardsCreated?: StandardUncheckedCreateNestedManyWithoutCreatedByInput
+    StandardsModified?: StandardUncheckedCreateNestedManyWithoutModifiedByInput
+    standardDefinitionsCreated?: StandardDefinitionUncheckedCreateNestedManyWithoutCreatedByInput
+    standardDefinitionsModified?: StandardDefinitionUncheckedCreateNestedManyWithoutModifiedByInput
+    createdTrainings?: TrainingUncheckedCreateNestedManyWithoutCreatedByInput
+    trainerTrainings?: TrainingUncheckedCreateNestedManyWithoutTrainerInput
+    uploadedDocuments?: TrainingDocumentUncheckedCreateNestedManyWithoutUploadedByInput
+    assignedFollowups?: TrainingFollowupUncheckedCreateNestedManyWithoutAssignedToInput
+    createdFollowups?: TrainingFollowupUncheckedCreateNestedManyWithoutCreatedByInput
+    trainingNotifications?: TrainingNotificationUncheckedCreateNestedManyWithoutUserInput
+    uploadedPhotos?: TrainingPhotoUncheckedCreateNestedManyWithoutUploadedByInput
+    uploadedSessionPhotos?: TrainingSessionPhotoUncheckedCreateNestedManyWithoutUploadedByInput
+    transactionLogs?: TransactionLogUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutFgQualityReportsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFgQualityReportsInput, UserUncheckedCreateWithoutFgQualityReportsInput>
+  }
+
+  export type FGQualityParameterUpsertWithWhereUniqueWithoutReportInput = {
+    where: FGQualityParameterWhereUniqueInput
+    update: XOR<FGQualityParameterUpdateWithoutReportInput, FGQualityParameterUncheckedUpdateWithoutReportInput>
+    create: XOR<FGQualityParameterCreateWithoutReportInput, FGQualityParameterUncheckedCreateWithoutReportInput>
+  }
+
+  export type FGQualityParameterUpdateWithWhereUniqueWithoutReportInput = {
+    where: FGQualityParameterWhereUniqueInput
+    data: XOR<FGQualityParameterUpdateWithoutReportInput, FGQualityParameterUncheckedUpdateWithoutReportInput>
+  }
+
+  export type FGQualityParameterUpdateManyWithWhereWithoutReportInput = {
+    where: FGQualityParameterScalarWhereInput
+    data: XOR<FGQualityParameterUpdateManyMutationInput, FGQualityParameterUncheckedUpdateManyWithoutReportInput>
+  }
+
+  export type FGQualityParameterScalarWhereInput = {
+    AND?: FGQualityParameterScalarWhereInput | FGQualityParameterScalarWhereInput[]
+    OR?: FGQualityParameterScalarWhereInput[]
+    NOT?: FGQualityParameterScalarWhereInput | FGQualityParameterScalarWhereInput[]
+    id?: StringFilter<"FGQualityParameter"> | string
+    reportId?: StringFilter<"FGQualityParameter"> | string
+    parameter?: StringFilter<"FGQualityParameter"> | string
+    standard?: StringFilter<"FGQualityParameter"> | string
+    result?: StringFilter<"FGQualityParameter"> | string
+    createdAt?: DateTimeFilter<"FGQualityParameter"> | Date | string
+    updatedAt?: DateTimeFilter<"FGQualityParameter"> | Date | string
+  }
+
+  export type FGProductionEntryUpsertWithoutQualityReportInput = {
+    update: XOR<FGProductionEntryUpdateWithoutQualityReportInput, FGProductionEntryUncheckedUpdateWithoutQualityReportInput>
+    create: XOR<FGProductionEntryCreateWithoutQualityReportInput, FGProductionEntryUncheckedCreateWithoutQualityReportInput>
+    where?: FGProductionEntryWhereInput
+  }
+
+  export type FGProductionEntryUpdateToOneWithWhereWithoutQualityReportInput = {
+    where?: FGProductionEntryWhereInput
+    data: XOR<FGProductionEntryUpdateWithoutQualityReportInput, FGProductionEntryUncheckedUpdateWithoutQualityReportInput>
+  }
+
+  export type FGProductionEntryUpdateWithoutQualityReportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
+    machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
+    verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
+  }
+
+  export type FGProductionEntryUncheckedUpdateWithoutQualityReportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgBatchId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
+    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalActualPackets?: IntFieldUpdateOperationsInput | number
+    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    machineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput
+    verifications?: FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryNestedInput
+  }
+
+  export type FGBatchUpsertWithoutFgQualityReportsInput = {
+    update: XOR<FGBatchUpdateWithoutFgQualityReportsInput, FGBatchUncheckedUpdateWithoutFgQualityReportsInput>
+    create: XOR<FGBatchCreateWithoutFgQualityReportsInput, FGBatchUncheckedCreateWithoutFgQualityReportsInput>
+    where?: FGBatchWhereInput
+  }
+
+  export type FGBatchUpdateToOneWithWhereWithoutFgQualityReportsInput = {
+    where?: FGBatchWhereInput
+    data: XOR<FGBatchUpdateWithoutFgQualityReportsInput, FGBatchUncheckedUpdateWithoutFgQualityReportsInput>
+  }
+
+  export type FGBatchUpdateWithoutFgQualityReportsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    productionQty?: FloatFieldUpdateOperationsInput | number
+    productionUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalCartons?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumptions?: FGBatchConsumptionUpdateManyWithoutFgBatchNestedInput
+    productionEntries?: FGProductionEntryUpdateManyWithoutFgBatchNestedInput
+  }
+
+  export type FGBatchUncheckedUpdateWithoutFgQualityReportsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    batchNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    productionQty?: FloatFieldUpdateOperationsInput | number
+    productionUnit?: StringFieldUpdateOperationsInput | string
+    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
+    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    totalPackets?: IntFieldUpdateOperationsInput | number
+    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalCartons?: IntFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    consumptions?: FGBatchConsumptionUncheckedUpdateManyWithoutFgBatchNestedInput
+    productionEntries?: FGProductionEntryUncheckedUpdateManyWithoutFgBatchNestedInput
+  }
+
+  export type UserUpsertWithoutFgQualityReportsInput = {
+    update: XOR<UserUpdateWithoutFgQualityReportsInput, UserUncheckedUpdateWithoutFgQualityReportsInput>
+    create: XOR<UserCreateWithoutFgQualityReportsInput, UserUncheckedCreateWithoutFgQualityReportsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFgQualityReportsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFgQualityReportsInput, UserUncheckedUpdateWithoutFgQualityReportsInput>
+  }
+
+  export type UserUpdateWithoutFgQualityReportsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ActivityLog?: ActivityLogUpdateManyWithoutUserNestedInput
+    auditeeAudits?: AuditUpdateManyWithoutAuditeeNestedInput
+    createdAudits?: AuditUpdateManyWithoutCreatedByNestedInput
+    uploadedAuditDocuments?: AuditDocumentUpdateManyWithoutUploadedByNestedInput
+    inspectedItems?: AuditInspectionItemUpdateManyWithoutInspectedByNestedInput
+    auditNotifications?: AuditNotificationUpdateManyWithoutUserNestedInput
+    createdReminders?: AuditReminderUpdateManyWithoutCreatedByNestedInput
+    receivedReminders?: AuditReminderUpdateManyWithoutRecipientNestedInput
+    auditorProfile?: AuditorUpdateOneWithoutUserNestedInput
+    Batch_Batch_checkerIdToUser?: BatchUpdateManyWithoutUser_Batch_checkerIdToUserNestedInput
+    Batch_Batch_makerIdToUser?: BatchUpdateManyWithoutUser_Batch_makerIdToUserNestedInput
+    BatchDrafts?: BatchDraftUpdateManyWithoutMakerNestedInput
+    assignedActions?: CorrectiveActionUpdateManyWithoutAssignedToNestedInput
+    verifiedActions?: CorrectiveActionUpdateManyWithoutVerifiedByNestedInput
+    uploadedFeedbackForms?: FeedbackFormUpdateManyWithoutUploadedByNestedInput
+    assignedFindings?: FindingUpdateManyWithoutAssignedToNestedInput
+    Notification?: NotificationUpdateManyWithoutUserNestedInput
+    createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
+    responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
+    rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
+    StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
+    StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
+    standardDefinitionsCreated?: StandardDefinitionUpdateManyWithoutCreatedByNestedInput
+    standardDefinitionsModified?: StandardDefinitionUpdateManyWithoutModifiedByNestedInput
+    createdTrainings?: TrainingUpdateManyWithoutCreatedByNestedInput
+    trainerTrainings?: TrainingUpdateManyWithoutTrainerNestedInput
+    uploadedDocuments?: TrainingDocumentUpdateManyWithoutUploadedByNestedInput
+    assignedFollowups?: TrainingFollowupUpdateManyWithoutAssignedToNestedInput
+    createdFollowups?: TrainingFollowupUpdateManyWithoutCreatedByNestedInput
+    trainingNotifications?: TrainingNotificationUpdateManyWithoutUserNestedInput
+    uploadedPhotos?: TrainingPhotoUpdateManyWithoutUploadedByNestedInput
+    uploadedSessionPhotos?: TrainingSessionPhotoUpdateManyWithoutUploadedByNestedInput
+    transactionLogs?: TransactionLogUpdateManyWithoutUserNestedInput
+    Role?: RoleUpdateOneRequiredWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFgQualityReportsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    roleId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    ActivityLog?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    auditeeAudits?: AuditUncheckedUpdateManyWithoutAuditeeNestedInput
+    createdAudits?: AuditUncheckedUpdateManyWithoutCreatedByNestedInput
+    uploadedAuditDocuments?: AuditDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    inspectedItems?: AuditInspectionItemUncheckedUpdateManyWithoutInspectedByNestedInput
+    auditNotifications?: AuditNotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdReminders?: AuditReminderUncheckedUpdateManyWithoutCreatedByNestedInput
+    receivedReminders?: AuditReminderUncheckedUpdateManyWithoutRecipientNestedInput
+    auditorProfile?: AuditorUncheckedUpdateOneWithoutUserNestedInput
+    Batch_Batch_checkerIdToUser?: BatchUncheckedUpdateManyWithoutUser_Batch_checkerIdToUserNestedInput
+    Batch_Batch_makerIdToUser?: BatchUncheckedUpdateManyWithoutUser_Batch_makerIdToUserNestedInput
+    BatchDrafts?: BatchDraftUncheckedUpdateManyWithoutMakerNestedInput
+    assignedActions?: CorrectiveActionUncheckedUpdateManyWithoutAssignedToNestedInput
+    verifiedActions?: CorrectiveActionUncheckedUpdateManyWithoutVerifiedByNestedInput
+    uploadedFeedbackForms?: FeedbackFormUncheckedUpdateManyWithoutUploadedByNestedInput
+    assignedFindings?: FindingUncheckedUpdateManyWithoutAssignedToNestedInput
+    Notification?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
+    responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
+    rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
+    StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
+    StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
+    standardDefinitionsCreated?: StandardDefinitionUncheckedUpdateManyWithoutCreatedByNestedInput
+    standardDefinitionsModified?: StandardDefinitionUncheckedUpdateManyWithoutModifiedByNestedInput
+    createdTrainings?: TrainingUncheckedUpdateManyWithoutCreatedByNestedInput
+    trainerTrainings?: TrainingUncheckedUpdateManyWithoutTrainerNestedInput
+    uploadedDocuments?: TrainingDocumentUncheckedUpdateManyWithoutUploadedByNestedInput
+    assignedFollowups?: TrainingFollowupUncheckedUpdateManyWithoutAssignedToNestedInput
+    createdFollowups?: TrainingFollowupUncheckedUpdateManyWithoutCreatedByNestedInput
+    trainingNotifications?: TrainingNotificationUncheckedUpdateManyWithoutUserNestedInput
+    uploadedPhotos?: TrainingPhotoUncheckedUpdateManyWithoutUploadedByNestedInput
+    uploadedSessionPhotos?: TrainingSessionPhotoUncheckedUpdateManyWithoutUploadedByNestedInput
+    transactionLogs?: TransactionLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type FGQualityReportCreateWithoutParametersInput = {
+    id?: string
+    reportNumber?: string | null
+    productName: string
+    dateOfReport?: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    productionEntry: FGProductionEntryCreateNestedOneWithoutQualityReportInput
+    fgBatch?: FGBatchCreateNestedOneWithoutFgQualityReportsInput
+    createdBy: UserCreateNestedOneWithoutFgQualityReportsInput
+  }
+
+  export type FGQualityReportUncheckedCreateWithoutParametersInput = {
+    id?: string
+    reportNumber?: string | null
+    fgBatchId?: string | null
+    productionEntryId: string
+    productName: string
+    dateOfReport?: Date | string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGQualityReportCreateOrConnectWithoutParametersInput = {
+    where: FGQualityReportWhereUniqueInput
+    create: XOR<FGQualityReportCreateWithoutParametersInput, FGQualityReportUncheckedCreateWithoutParametersInput>
+  }
+
+  export type FGQualityReportUpsertWithoutParametersInput = {
+    update: XOR<FGQualityReportUpdateWithoutParametersInput, FGQualityReportUncheckedUpdateWithoutParametersInput>
+    create: XOR<FGQualityReportCreateWithoutParametersInput, FGQualityReportUncheckedCreateWithoutParametersInput>
+    where?: FGQualityReportWhereInput
+  }
+
+  export type FGQualityReportUpdateToOneWithWhereWithoutParametersInput = {
+    where?: FGQualityReportWhereInput
+    data: XOR<FGQualityReportUpdateWithoutParametersInput, FGQualityReportUncheckedUpdateWithoutParametersInput>
+  }
+
+  export type FGQualityReportUpdateWithoutParametersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionEntry?: FGProductionEntryUpdateOneRequiredWithoutQualityReportNestedInput
+    fgBatch?: FGBatchUpdateOneWithoutFgQualityReportsNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutFgQualityReportsNestedInput
+  }
+
+  export type FGQualityReportUncheckedUpdateWithoutParametersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fgBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ActivityLogCreateManyBatchInput = {
@@ -166291,6 +170401,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUpdateManyWithoutModifiedByNestedInput
@@ -166334,6 +170445,7 @@ export namespace Prisma {
     createdChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutCreatedByNestedInput
     responsibleForChecklistItems?: PreAuditChecklistItemUncheckedUpdateManyWithoutResponsibleNestedInput
     rmQualityReports?: RMQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
+    fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutCreatedByNestedInput
     createdGRNs?: GRNbyPoUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsCreated?: StandardUncheckedUpdateManyWithoutCreatedByNestedInput
     StandardsModified?: StandardUncheckedUpdateManyWithoutModifiedByNestedInput
@@ -166932,6 +171044,17 @@ export namespace Prisma {
     purchaseOrderItemId?: string | null
     dateOfReport?: Date | string
     grn?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGQualityReportCreateManyCreatedByInput = {
+    id?: string
+    reportNumber?: string | null
+    fgBatchId?: string | null
+    productionEntryId: string
+    productName: string
+    dateOfReport?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -167982,6 +172105,41 @@ export namespace Prisma {
     purchaseOrderItemId?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
     grn?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGQualityReportUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: FGQualityParameterUpdateManyWithoutReportNestedInput
+    productionEntry?: FGProductionEntryUpdateOneRequiredWithoutQualityReportNestedInput
+    fgBatch?: FGBatchUpdateOneWithoutFgQualityReportsNestedInput
+  }
+
+  export type FGQualityReportUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fgBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: FGQualityParameterUncheckedUpdateManyWithoutReportNestedInput
+  }
+
+  export type FGQualityReportUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fgBatchId?: NullableStringFieldUpdateOperationsInput | string | null
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -173125,6 +177283,17 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type FGQualityReportCreateManyFgBatchInput = {
+    id?: string
+    reportNumber?: string | null
+    productionEntryId: string
+    productName: string
+    dateOfReport?: Date | string
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type FGBatchConsumptionUpdateWithoutFgBatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     rawMaterialId?: StringFieldUpdateOperationsInput | string
@@ -173188,6 +177357,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
     verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
+    qualityReport?: FGQualityReportUpdateOneWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryUncheckedUpdateWithoutFgBatchInput = {
@@ -173214,6 +177384,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     machineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput
     verifications?: FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryNestedInput
+    qualityReport?: FGQualityReportUncheckedUpdateOneWithoutProductionEntryNestedInput
   }
 
   export type FGProductionEntryUncheckedUpdateManyWithoutFgBatchInput = {
@@ -173235,6 +177406,41 @@ export namespace Prisma {
     totalActualCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGQualityReportUpdateWithoutFgBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: FGQualityParameterUpdateManyWithoutReportNestedInput
+    productionEntry?: FGProductionEntryUpdateOneRequiredWithoutQualityReportNestedInput
+    createdBy?: UserUpdateOneRequiredWithoutFgQualityReportsNestedInput
+  }
+
+  export type FGQualityReportUncheckedUpdateWithoutFgBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parameters?: FGQualityParameterUncheckedUpdateManyWithoutReportNestedInput
+  }
+
+  export type FGQualityReportUncheckedUpdateManyWithoutFgBatchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reportNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    productName?: StringFieldUpdateOperationsInput | string
+    dateOfReport?: DateTimeFieldUpdateOperationsInput | Date | string
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -173490,6 +177696,42 @@ export namespace Prisma {
     actualCartons?: IntFieldUpdateOperationsInput | number
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGQualityParameterCreateManyReportInput = {
+    id?: string
+    parameter: string
+    standard: string
+    result: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FGQualityParameterUpdateWithoutReportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    parameter?: StringFieldUpdateOperationsInput | string
+    standard?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGQualityParameterUncheckedUpdateWithoutReportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    parameter?: StringFieldUpdateOperationsInput | string
+    standard?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGQualityParameterUncheckedUpdateManyWithoutReportInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    parameter?: StringFieldUpdateOperationsInput | string
+    standard?: StringFieldUpdateOperationsInput | string
+    result?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

@@ -55,6 +55,13 @@ export class FGVerificationController {
       }
       const verificationNumber = `${prefix}${String(seq).padStart(4, '0')}`;
 
+      // Resolve user ID before transaction
+      let actingUserId = (req as any).user?.id;
+      if (!actingUserId) {
+        const fallbackUser = await prisma.user.findFirst();
+        actingUserId = fallbackUser?.id;
+      }
+
       const verification = await prisma.$transaction(async (tx) => {
         const created = await tx.fGProductionVerification.create({
           data: {
@@ -71,20 +78,22 @@ export class FGVerificationController {
             toLocationName: location.name,
             status: 'PENDING',
             notes: notes || null,
-            dispatchedById: (req as any).user?.id || 'system',
+            dispatchedById: actingUserId || 'system',
             dispatchedAt: new Date(),
           },
         });
 
-        await tx.transactionLog.create({
-          data: {
-            type: 'FG_DISPATCH',
-            entity: 'FGProductionVerification',
-            entityId: created.id,
-            userId: (req as any).user?.id || 'system',
-            description: `FG dispatch ${verificationNumber}: ${entry.fgProductName} (${entry.totalActualPackets} packets${entry.totalActualCartons ? `, ${entry.totalActualCartons} cartons` : ''}) to ${location.name}`,
-          },
-        });
+        if (actingUserId) {
+          await tx.transactionLog.create({
+            data: {
+              type: 'FG_DISPATCH',
+              entity: 'FGProductionVerification',
+              entityId: created.id,
+              userId: actingUserId,
+              description: `FG dispatch ${verificationNumber}: ${entry.fgProductName} (${entry.totalActualPackets} packets${entry.totalActualCartons ? `, ${entry.totalActualCartons} cartons` : ''}) to ${location.name}`,
+            },
+          });
+        }
 
         return created;
       }, { timeout: 15000 });
@@ -131,25 +140,34 @@ export class FGVerificationController {
         return;
       }
 
+      // Resolve user ID before transaction
+      let actingUserId = (req as any).user?.id;
+      if (!actingUserId) {
+        const fallbackUser = await prisma.user.findFirst();
+        actingUserId = fallbackUser?.id;
+      }
+
       const updated = await prisma.$transaction(async (tx) => {
         const result = await tx.fGProductionVerification.update({
           where: { id },
           data: {
             status: 'ACCEPTED',
-            verifiedById: (req as any).user?.id || 'system',
+            verifiedById: actingUserId || 'system',
             verifiedAt: new Date(),
           },
         });
 
-        await tx.transactionLog.create({
-          data: {
-            type: 'FG_VERIFICATION_ACCEPTED',
-            entity: 'FGProductionVerification',
-            entityId: result.id,
-            userId: (req as any).user?.id || 'system',
-            description: `FG verification ${result.verificationNumber} accepted at ${result.toLocationName}`,
-          },
-        });
+        if (actingUserId) {
+          await tx.transactionLog.create({
+            data: {
+              type: 'FG_VERIFICATION_ACCEPTED',
+              entity: 'FGProductionVerification',
+              entityId: result.id,
+              userId: actingUserId,
+              description: `FG verification ${result.verificationNumber} accepted at ${result.toLocationName}`,
+            },
+          });
+        }
 
         return result;
       }, { timeout: 15000 });
@@ -180,26 +198,35 @@ export class FGVerificationController {
         return;
       }
 
+      // Resolve user ID before transaction
+      let actingUserId = (req as any).user?.id;
+      if (!actingUserId) {
+        const fallbackUser = await prisma.user.findFirst();
+        actingUserId = fallbackUser?.id;
+      }
+
       const updated = await prisma.$transaction(async (tx) => {
         const result = await tx.fGProductionVerification.update({
           where: { id },
           data: {
             status: 'REJECTED',
             rejectionReason: rejectionReason || null,
-            verifiedById: (req as any).user?.id || 'system',
+            verifiedById: actingUserId || 'system',
             verifiedAt: new Date(),
           },
         });
 
-        await tx.transactionLog.create({
-          data: {
-            type: 'FG_VERIFICATION_REJECTED',
-            entity: 'FGProductionVerification',
-            entityId: result.id,
-            userId: (req as any).user?.id || 'system',
-            description: `FG verification ${result.verificationNumber} rejected. Reason: ${rejectionReason || 'N/A'}`,
-          },
-        });
+        if (actingUserId) {
+          await tx.transactionLog.create({
+            data: {
+              type: 'FG_VERIFICATION_REJECTED',
+              entity: 'FGProductionVerification',
+              entityId: result.id,
+              userId: actingUserId,
+              description: `FG verification ${result.verificationNumber} rejected. Reason: ${rejectionReason || 'N/A'}`,
+            },
+          });
+        }
 
         return result;
       }, { timeout: 15000 });

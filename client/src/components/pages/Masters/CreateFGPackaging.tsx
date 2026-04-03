@@ -144,7 +144,7 @@ export default function CreateFGPackaging() {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-black text-foreground mb-1">FG Packaging Master</h1>
+        <h1 className="text-3xl font-black text-foreground mb-1">FG UOM Master</h1>
         <p className="text-muted-foreground text-sm">Configure standard packet sizing and carton capacities for finished goods.</p>
       </div>
 

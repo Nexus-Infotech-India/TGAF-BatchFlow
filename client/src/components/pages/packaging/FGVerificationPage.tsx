@@ -146,45 +146,54 @@ const FGVerificationPage: React.FC = () => {
 
             {/* Table */}
             <div className="border border-border rounded-xl overflow-hidden">
-              <table className="min-w-full">
+              <table className="min-w-full table-fixed">
+                <colgroup>
+                  <col className="w-[18%]" />
+                  <col className="w-[20%]" />
+                  <col className="w-[12%]" />
+                  <col className="w-[15%]" />
+                  <col className="w-[13%]" />
+                  <col className="w-[22%]" />
+                </colgroup>
                 <thead>
                   <tr className="bg-muted/40">
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Verification #</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Entry #</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Product</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">Packets</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">Cartons</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Destination</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Dispatched</th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">Actions</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">FG Batch ID</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Product</th>
+                    <th className="px-5 py-3.5 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Cartons</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Destination</th>
+                    <th className="px-5 py-3.5 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Status</th>
+                    <th className="px-5 py-3.5 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {loading && (
-                    <tr><td colSpan={8} className="px-4 py-12 text-center text-muted-foreground">
+                    <tr><td colSpan={6} className="px-4 py-12 text-center text-muted-foreground">
                       <div className="inline-block w-6 h-6 border-[3px] rounded-full animate-spin mb-2" style={{ borderColor: 'var(--border)', borderTopColor: 'var(--primary)' }} />
                       <p className="text-sm">Loading…</p>
                     </td></tr>
                   )}
                   {!loading && paged.length === 0 && (
-                    <tr><td colSpan={9} className="px-4 py-12 text-center text-muted-foreground">
+                    <tr><td colSpan={6} className="px-4 py-12 text-center text-muted-foreground">
                       <Truck className="mx-auto mb-2 opacity-40" size={28} />
                       <p className="text-sm font-medium">No incoming FG batches</p>
                     </td></tr>
                   )}
                   {!loading && paged.map((v, idx) => (
                     <tr key={v.id} className={`hover:bg-muted/20 transition-colors ${idx % 2 === 0 ? 'bg-card' : 'bg-muted/5'}`}>
-                      <td className="px-4 py-3 text-sm font-mono font-semibold text-primary">{v.verificationNumber}</td>
-                      <td className="px-4 py-3 text-sm font-mono text-foreground">{v.entryNumber}</td>
-                      <td className="px-4 py-3 text-sm font-medium text-foreground">{v.fgProductName}</td>
-                      <td className="px-4 py-3 text-sm font-bold text-violet-600 text-right">{v.totalPackets.toLocaleString()}</td>
-                      <td className="px-4 py-3 text-sm font-bold text-amber-600 text-right">{v.totalCartons ? v.totalCartons.toLocaleString() : '-'}</td>
-                      <td className="px-4 py-3 text-sm text-foreground">
-                        <span className="inline-flex items-center gap-1"><MapPin size={12} className="text-muted-foreground" />{v.toLocationName}</span>
+                      <td className="px-5 py-3.5">
+                        <div className="text-sm font-mono font-bold text-primary">{v.verificationNumber}</div>
+                        <div className="text-[11px] text-muted-foreground mt-0.5">{new Date(v.dispatchedAt).toLocaleDateString()}</div>
                       </td>
-                      <td className="px-4 py-3 text-xs text-muted-foreground">{new Date(v.dispatchedAt).toLocaleDateString()}</td>
-                      <td className="px-4 py-3 text-center">
+                      <td className="px-5 py-3.5">
+                        <div className="text-sm font-semibold text-foreground truncate">{v.fgProductName}</div>
+                      </td>
+                      <td className="px-5 py-3.5 text-right">
+                        <span className="text-sm font-bold text-amber-600">{v.totalCartons ? v.totalCartons.toLocaleString() : '-'}</span>
+                      </td>
+                      <td className="px-5 py-3.5 text-sm text-foreground">
+                        <span className="inline-flex items-center gap-1.5"><MapPin size={13} className="text-muted-foreground shrink-0" />{v.toLocationName}</span>
+                      </td>
+                      <td className="px-5 py-3.5 text-center">
                         <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${statusBadge(v.status)}`}>
                           {v.status === 'PENDING' && <Clock size={10} />}
                           {v.status === 'ACCEPTED' && <CheckCircle size={10} />}
@@ -192,15 +201,15 @@ const FGVerificationPage: React.FC = () => {
                           {v.status}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-center">
+                      <td className="px-5 py-3.5 text-center">
                         {v.status === 'PENDING' ? (
-                          <div className="flex items-center justify-center gap-1.5">
+                          <div className="flex items-center justify-center gap-2 flex-wrap">
                             <Button
                               type="primary"
                               size="small"
                               onClick={() => handleAccept(v.id)}
                               style={{ background: '#10b981', border: 'none' }}
-                              className="rounded-lg"
+                              className="rounded-lg font-semibold min-w-[80px]"
                             >
                               <CheckCircle size={12} className="mr-1 inline" /> Accept
                             </Button>
@@ -208,7 +217,7 @@ const FGVerificationPage: React.FC = () => {
                               danger
                               size="small"
                               onClick={() => setRejectModal({ visible: true, verificationId: v.id, reason: '', loading: false })}
-                              className="rounded-lg"
+                              className="rounded-lg font-semibold min-w-[80px]"
                             >
                               <XCircle size={12} className="mr-1 inline" /> Reject
                             </Button>

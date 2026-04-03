@@ -5,10 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   CheckCircle,
   XCircle,
-  MapPin,
   Clock,
   ChevronDown,
   ChevronRight,
+  ChevronLeft,
   Package,
   Truck,
   ClipboardCheck,
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 
 const { TextArea } = Input;
+const PAGE_SIZE = 10;
 
 /* ─── Types ─── */
 interface FGBatchRecord {
@@ -48,6 +49,7 @@ const ReceiveMaterialsPage: React.FC = () => {
   const [fgBatches, setFgBatches] = useState<FGBatchRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [expandedFgId, setExpandedFgId] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
 
   const [fgRejectModal, setFgRejectModal] = useState<{
     visible: boolean;
@@ -66,7 +68,6 @@ const ReceiveMaterialsPage: React.FC = () => {
     // Fetch FG Batches
     try {
       const fgBatchesRes = await api.get(API_ROUTES.RAW.GET_FG_BATCHES);
-      console.log('FG Batches response:', fgBatchesRes.data);
       setFgBatches(fgBatchesRes.data?.data || []);
     } catch (err) {
       console.error('Failed to fetch FG batches:', err);
@@ -119,6 +120,8 @@ const ReceiveMaterialsPage: React.FC = () => {
 
   const sentCount = fgBatches.filter(b => b.status === 'CREATED').length;
   const acceptedCount = fgBatches.filter(b => b.status === 'ACCEPTED').length;
+  const totalPages = Math.max(1, Math.ceil(fgBatches.length / PAGE_SIZE));
+  const pagedBatches = fgBatches.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <motion.div className="min-h-screen bg-background">
@@ -185,7 +188,7 @@ const ReceiveMaterialsPage: React.FC = () => {
                   </div>
                 )}
 
-                {!loading && fgBatches.map(batch => (
+                {!loading && pagedBatches.map(batch => (
                   <motion.div
                     key={batch.id}
                     className="bg-card rounded-xl border border-border overflow-hidden"
@@ -327,6 +330,28 @@ const ReceiveMaterialsPage: React.FC = () => {
                   </motion.div>
                 ))}
               </div>
+
+              {/* Pagination */}
+              {fgBatches.length > PAGE_SIZE && (
+                <div className="flex items-center justify-between pt-2">
+                  <p className="text-xs text-muted-foreground">
+                    Showing {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, fgBatches.length)} of {fgBatches.length}
+                  </p>
+                  <div className="flex gap-1">
+                    <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-1.5 rounded-lg border border-border hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                      <ChevronLeft size={16} />
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
+                      <button key={n} onClick={() => setPage(n)} className={`w-8 h-8 rounded-lg text-xs font-semibold border transition-colors ${page === n ? 'bg-emerald-600 text-white border-emerald-600' : 'border-border hover:bg-muted/40 text-foreground'}`}>
+                        {n}
+                      </button>
+                    ))}
+                    <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages} className="p-1.5 rounded-lg border border-border hover:bg-muted/40 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>

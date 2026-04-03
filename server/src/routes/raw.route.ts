@@ -193,6 +193,7 @@ router.get('/fg-batch/accepted-batches', FGProductionController.getAcceptedBatch
 router.post('/fg-batch/production-entry', FGProductionController.createProductionEntry);
 router.get('/fg-batch/production-entries', FGProductionController.getProductionEntries);
 router.get('/fg-batch/production-entries/:id', FGProductionController.getProductionEntryById);
+router.post('/fg-batch/production-entries/:id/quality', FGProductionController.submitQualityCheck);
 router.put('/fg-batch/production-entries/:id/complete', FGProductionController.submitProductionOutput);
 
 // FG Batch by ID — :id wildcard must come last

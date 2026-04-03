@@ -32,6 +32,7 @@ interface Verification {
   entryNumber: string;
   fgProductName: string;
   totalPackets: number;
+  totalCartons?: number;
   packetSize?: number;
   packetUnit?: string;
   toLocationName?: string;
@@ -183,42 +184,52 @@ const OutboundToFGPage: React.FC = () => {
 
             {/* Table */}
             <div className="border border-border rounded-xl overflow-hidden">
-              <table className="min-w-full">
+              <table className="min-w-full table-fixed">
+                <colgroup>
+                  <col className="w-[22%]" />
+                  <col className="w-[24%]" />
+                  <col className="w-[14%]" />
+                  <col className="w-[18%]" />
+                  <col className="w-[22%]" />
+                </colgroup>
                 <thead>
                   <tr className="bg-muted/40">
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Verification #</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Entry #</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Product</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">Packets</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Destination</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">Dispatched</th>
-                    <th className="px-4 py-3 text-center text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">FG Batch ID</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Product</th>
+                    <th className="px-5 py-3.5 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Cartons</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Destination</th>
+                    <th className="px-5 py-3.5 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border">
                   {loading && (
-                    <tr><td colSpan={7} className="px-4 py-12 text-center text-muted-foreground">
+                    <tr><td colSpan={5} className="px-4 py-12 text-center text-muted-foreground">
                       <div className="inline-block w-6 h-6 border-[3px] rounded-full animate-spin mb-2" style={{ borderColor: 'var(--border)', borderTopColor: 'var(--primary)' }} />
                       <p className="text-sm">Loading…</p>
                     </td></tr>
                   )}
                   {!loading && paged.length === 0 && (
-                    <tr><td colSpan={7} className="px-4 py-12 text-center text-muted-foreground">
+                    <tr><td colSpan={5} className="px-4 py-12 text-center text-muted-foreground">
                       <Truck className="mx-auto mb-2 opacity-40" size={28} />
                       <p className="text-sm font-medium">No dispatches yet</p>
                     </td></tr>
                   )}
                   {!loading && paged.map((d, idx) => (
                     <tr key={d.id} className={`hover:bg-muted/20 transition-colors ${idx % 2 === 0 ? 'bg-card' : 'bg-muted/5'}`}>
-                      <td className="px-4 py-3 text-sm font-mono font-semibold text-primary">{d.verificationNumber}</td>
-                      <td className="px-4 py-3 text-sm font-mono text-foreground">{d.entryNumber}</td>
-                      <td className="px-4 py-3 text-sm font-medium text-foreground">{d.fgProductName}</td>
-                      <td className="px-4 py-3 text-sm font-bold text-violet-600 text-right">{d.totalPackets.toLocaleString()}</td>
-                      <td className="px-4 py-3 text-sm text-foreground">
-                        <span className="inline-flex items-center gap-1"><MapPin size={12} className="text-muted-foreground" />{d.toLocationName}</span>
+                      <td className="px-5 py-3.5">
+                        <div className="text-sm font-mono font-bold text-primary">{d.verificationNumber}</div>
+                        <div className="text-[11px] text-muted-foreground mt-0.5">{new Date(d.dispatchedAt).toLocaleDateString()}</div>
                       </td>
-                      <td className="px-4 py-3 text-xs text-muted-foreground">{new Date(d.dispatchedAt).toLocaleDateString()}</td>
-                      <td className="px-4 py-3 text-center">
+                      <td className="px-5 py-3.5">
+                        <div className="text-sm font-semibold text-foreground truncate">{d.fgProductName}</div>
+                      </td>
+                      <td className="px-5 py-3.5 text-right">
+                        <span className="text-sm font-bold text-amber-600">{d.totalCartons ? d.totalCartons.toLocaleString() : '-'}</span>
+                      </td>
+                      <td className="px-5 py-3.5 text-sm text-foreground">
+                        <span className="inline-flex items-center gap-1.5"><MapPin size={13} className="text-muted-foreground shrink-0" />{d.toLocationName}</span>
+                      </td>
+                      <td className="px-5 py-3.5 text-center">
                         <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold border ${statusBadge(d.status)}`}>
                           {d.status === 'PENDING' && <Clock size={10} />}
                           {d.status === 'ACCEPTED' && <CheckCircle size={10} />}

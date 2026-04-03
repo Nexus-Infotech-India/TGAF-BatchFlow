@@ -817,7 +817,7 @@ const App = () => {
                       permissionKey="manage_raw_materials"
                     />
                   }
-                  name="FG Packaging Master"
+                  name="FG UOM Master"
                   description="Manage FG packaging specifications"
                   permissionKey="manage_raw_materials"
                 />
