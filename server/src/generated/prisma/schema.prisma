@@ -170,6 +170,7 @@ model User {
   createdChecklistItems        PreAuditChecklistItem[] @relation("CreatedChecklistItems")
   responsibleForChecklistItems PreAuditChecklistItem[] @relation("ResponsibleForChecklistItems")
   rmQualityReports             RMQualityReport[]
+  fgQualityReports             FGQualityReport[]
   createdGRNs                  GRNbyPo[]               @relation("GRNCreatedBy")
   StandardsCreated             Standard[]              @relation("StandardCreatedBy")
   StandardsModified            Standard[]              @relation("StandardModifiedBy")
@@ -894,6 +895,7 @@ enum TransferStatus {
 enum TransferDirection {
   INBOUND_TO_GRINDING
   OUTBOUND_FROM_GRINDING
+  SFG_TO_PRODUCTION
 }
 
 enum TransferLineType {
@@ -1493,6 +1495,7 @@ model FGBatch {
 
   consumptions      FGBatchConsumption[]
   productionEntries FGProductionEntry[]
+  fgQualityReports  FGQualityReport[]
 }
 
 model FGBatchConsumption {
@@ -1540,27 +1543,35 @@ model FGProductionEntry {
   fgBatch        FGBatch                    @relation(fields: [fgBatchId], references: [id])
   machineEntries FGProductionMachineEntry[]
   verifications  FGProductionVerification[]
+  qualityReport  FGQualityReport?
 }
 
 model FGProductionMachineEntry {
-  id                  String   @id @default(uuid())
-  productionEntryId   String
-  machineId           String
-  machineName         String
-  allocatedQty        Float    @default(0)
-  allocatedUnit       String   @default("Ton")
-  plannedPackets      Int      @default(0)
-  plannedCartons      Int      @default(0)
-  actualFgQty         Float    @default(0)
-  actualFgUnit        String   @default("Ton")
-  actualByproduct     Float    @default(0)
-  actualByproductUnit String   @default("Ton")
-  actualScrap         Float    @default(0)
-  actualScrapUnit     String   @default("Ton")
-  actualPackets       Int      @default(0)
-  actualCartons       Int      @default(0)
-  notes               String?
-  createdAt           DateTime @default(now())
+  id                        String   @id @default(uuid())
+  productionEntryId         String
+  machineId                 String
+  machineName               String
+  allocatedQty              Float    @default(0)
+  allocatedUnit             String   @default("Ton")
+  plannedPackets            Int      @default(0)
+  plannedCartons            Int      @default(0)
+  actualFgQty               Float    @default(0)
+  actualFgUnit              String   @default("Ton")
+  actualByproduct           Float    @default(0)
+  actualByproductUnit       String   @default("Ton")
+  actualScrap               Float    @default(0)
+  actualScrapUnit           String   @default("Ton")
+  actualPackets             Int      @default(0)
+  actualCartons             Int      @default(0)
+  machineSpeed              String?
+  todayAchieve              Float?
+  laminateConsumption       Float?
+  sfgConsumption            Float?
+  laminateWastageKg         Float?
+  laminateWastagePercentage Float?
+  noManPower                Boolean  @default(false)
+  notes                     String?
+  createdAt                 DateTime @default(now())
 
   productionEntry FGProductionEntry @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
   machine         Machine           @relation(fields: [machineId], references: [id])
@@ -1575,6 +1586,7 @@ model Machine {
   location     String
   capacityQty  Float
   capacityUnit String   @default("KG_PER_SHIFT")
+  machineSpeed String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -1607,4 +1619,33 @@ model FGProductionVerification {
   updatedAt          DateTime  @updatedAt
 
   productionEntry FGProductionEntry @relation(fields: [productionEntryId], references: [id])
+}
+
+model FGQualityReport {
+  id                String   @id @default(uuid())
+  reportNumber      String?  @unique
+  fgBatchId         String?
+  productionEntryId String   @unique
+  productName       String
+  dateOfReport      DateTime @default(now())
+  createdById       String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  parameters      FGQualityParameter[]
+  productionEntry FGProductionEntry    @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
+  fgBatch         FGBatch?             @relation(fields: [fgBatchId], references: [id])
+  createdBy       User                 @relation(fields: [createdById], references: [id])
+}
+
+model FGQualityParameter {
+  id        String   @id @default(uuid())
+  reportId  String
+  parameter String
+  standard  String
+  result    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  report FGQualityReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
 }

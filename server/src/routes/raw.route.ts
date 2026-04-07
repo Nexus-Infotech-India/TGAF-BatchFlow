@@ -103,6 +103,8 @@ router.patch('/location/:id/status', LocationController.setLocationStatus);
 router.post('/transfers', TransferController.createTransfer);
 router.get('/transfers', TransferController.getTransfers);
 router.post('/transfers/outbound', TransferController.createOutboundTransfer);
+router.get('/transfers/sfg-warehouse-stock', TransferController.getSfgWarehouseStock);
+router.get('/transfers/outbound-stock-details', TransferController.getOutboundStockDetails);
 router.get('/transfers/:id', TransferController.getTransferById);
 router.put('/transfers/:id/accept', TransferController.acceptTransfer);
 router.put('/transfers/:id/reject', TransferController.rejectTransfer);

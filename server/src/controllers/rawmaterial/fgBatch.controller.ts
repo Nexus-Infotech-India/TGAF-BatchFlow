@@ -32,7 +32,7 @@ export class FGBatchController {
    */
   static async getFGBOMItems(req: Request, res: Response): Promise<void> {
     try {
-      const { bomId, productionQty, productionUnit } = req.query;
+      const { bomId, productionQty, productionUnit, locationId } = req.query;
 
       if (!bomId) {
         res.status(400).json({ error: 'bomId is required' });
@@ -60,12 +60,17 @@ export class FGBatchController {
       const prodQtyInGrams = toGrams(prodQty, prodUnit);
       const scaleFactor = prodQtyInGrams / bomOutputInGrams;
 
-      // Fetch ALL accepted outbound MaterialTransfers (TRF-OUT-*) heading to SFG_WAREHOUSE
+      // Fetch accepted SFG_TO_PRODUCTION transfers heading to the selected location
+      const whereClause: any = {
+        direction: 'SFG_TO_PRODUCTION',
+        status: 'ACCEPTED',
+      };
+      if (locationId) {
+        whereClause.toLocationId = locationId as string;
+      }
+
       const acceptedTransfers = await prisma.materialTransfer.findMany({
-        where: {
-          direction: 'OUTBOUND_FROM_GRINDING',
-          status: 'ACCEPTED',
-        },
+        where: whereClause,
         include: {
           lines: true,
           toLocation: true,

@@ -88,6 +88,13 @@ export default function ProductionOutputEntryPage() {
         actualScrap: 0,
         actualPackets: 0,
         actualCartons: 0,
+        machineSpeed: me.machine?.machineSpeed || null,
+        todayAchieve: null,
+        laminateConsumption: null,
+        sfgConsumption: null,
+        laminateWastageKg: null,
+        laminateWastagePercentage: 0,
+        noManPower: false,
       };
     });
     setMachineInputs(initInputs);
@@ -98,6 +105,16 @@ export default function ProductionOutputEntryPage() {
     setMachineInputs((prev) => {
       const next = [...prev];
       (next[index] as any)[field] = value;
+
+      if (field === 'laminateWastageKg' || field === 'laminateConsumption') {
+        const cons = next[index].laminateConsumption || 0;
+        const waste = next[index].laminateWastageKg || 0;
+        if (cons > 0) {
+          next[index].laminateWastagePercentage = Number(((waste / cons) * 100).toFixed(2));
+        } else {
+          next[index].laminateWastagePercentage = 0;
+        }
+      }
 
       // Remove auto-calc packets since user will input it manually
       return next;
@@ -170,7 +187,14 @@ export default function ProductionOutputEntryPage() {
           actualCartons: a.actualCartons,
           actualUnit: a.actualUnit || selectedEntry?.targetUnit,
           actualByproductUnit: a.actualByproductUnit || selectedEntry?.targetUnit,
-          actualScrapUnit: a.actualScrapUnit || selectedEntry?.targetUnit
+          actualScrapUnit: a.actualScrapUnit || selectedEntry?.targetUnit,
+          machineSpeed: a.machineSpeed,
+          todayAchieve: a.todayAchieve,
+          laminateConsumption: a.laminateConsumption,
+          sfgConsumption: a.sfgConsumption,
+          laminateWastageKg: a.laminateWastageKg,
+          laminateWastagePercentage: a.laminateWastagePercentage,
+          noManPower: a.noManPower
         })),
         qualityParameters: FG_QUALITY_PARAMETERS.map((p, i) => ({
           parameter: p.parameter,
@@ -431,7 +455,7 @@ export default function ProductionOutputEntryPage() {
                         )}
 
                         {/* Input fields */}
-                        <div className={`grid grid-cols-2 ${selectedEntry?.fgBatch?.cartonCapacity > 0 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-5`}>
+                        <div className={`grid grid-cols-2 ${selectedEntry?.fgBatch?.cartonCapacity > 0 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-5 mb-5`}>
                           <div className="space-y-2">
                             <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
                               <Zap size={12} className="text-emerald-500" />
@@ -551,6 +575,43 @@ export default function ProductionOutputEntryPage() {
                               />
                             </div>
                           )}
+                        </div>
+
+                        {/* New Operational Fields */}
+                        <div className="border-t border-border pt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div className="space-y-1.5 flex items-center justify-between col-span-2 md:col-span-4 bg-muted/20 p-2 rounded-lg mb-2 border border-border">
+                                <span className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-1.5"><Factory size={12}/> No Man Power (Machine Idle)</span>
+                                <input type="checkbox" checked={alloc.noManPower} onChange={(e) => updateInput(idx, 'noManPower', e.target.checked)} className="w-4 h-4 cursor-pointer accent-violet-600" />
+                            </div>
+
+                            {!alloc.noManPower && (
+                              <>
+                                <div className="space-y-1">
+                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Machine Speed (ppm)</label>
+                                  <InputNumber min={0} value={alloc.machineSpeed} onChange={(v) => updateInput(idx, 'machineSpeed', v)} className="w-full font-semibold" placeholder="0" />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Today Achievement</label>
+                                  <InputNumber min={0} step={0.001} value={alloc.todayAchieve} onChange={(v) => updateInput(idx, 'todayAchieve', v)} className="w-full font-semibold text-emerald-600" placeholder="0.00" />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">SFG Consumption</label>
+                                  <InputNumber min={0} step={0.001} value={alloc.sfgConsumption} onChange={(v) => updateInput(idx, 'sfgConsumption', v)} className="w-full font-semibold" placeholder="0.00" />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Laminate Consumption (Kg)</label>
+                                  <InputNumber min={0} step={0.001} value={alloc.laminateConsumption} onChange={(v) => updateInput(idx, 'laminateConsumption', v)} className="w-full font-semibold" placeholder="0.00" />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Laminate Wastage (Kg)</label>
+                                  <InputNumber min={0} step={0.001} value={alloc.laminateWastageKg} onChange={(v) => updateInput(idx, 'laminateWastageKg', v)} className="w-full font-semibold" placeholder="0.00" />
+                                </div>
+                                <div className="space-y-1">
+                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Laminate Wastage %</label>
+                                  <InputNumber value={alloc.laminateWastagePercentage} disabled className="w-full font-semibold bg-muted/30" />
+                                </div>
+                              </>
+                            )}
                         </div>
                       </motion.div>
                     );

@@ -8,6 +8,7 @@ type Machine = {
   location: string;
   capacityQty: number;
   capacityUnit: string;
+  machineSpeed?: string;
 };
 
 /* ───── tiny inline icons ───── */
@@ -50,6 +51,7 @@ const emptyForm = {
   location: '',
   capacityQty: '',
   capacityUnit: 'KG_PER_SHIFT',
+  machineSpeed: '',
 };
 
 /* ── Styled input helper ── */
@@ -159,6 +161,7 @@ const MachineMasterPage: React.FC = () => {
       location: machine.location,
       capacityQty: machine.capacityQty,
       capacityUnit: machine.capacityUnit,
+      machineSpeed: machine.machineSpeed || '',
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -283,6 +286,7 @@ const MachineMasterPage: React.FC = () => {
                 <StyledInput label="Machine Name" name="name" value={form.name} onChange={handleChange} placeholder="e.g. Packing Machine 1" required icon={<IconFactory />} />
                 <StyledInput label="Machine ID" name="machineId" value={form.machineId} onChange={handleChange} placeholder="e.g. MAC-001" required />
                 <StyledInput label="Location" name="location" value={form.location} onChange={handleChange} placeholder="e.g. Packaging Area" required />
+                <StyledInput label="Machine Speed (e.g. 60PPM)" name="machineSpeed" value={form.machineSpeed} onChange={handleChange} placeholder="e.g. 60PPM" />
                 <div className="flex gap-2">
                   <div className="flex-1">
                     <StyledInput label="Capacity" type="number" name="capacityQty" value={form.capacityQty} onChange={handleChange} placeholder="e.g. 500" required />
@@ -413,7 +417,7 @@ const MachineMasterPage: React.FC = () => {
             <table className="w-full table-auto">
               <thead>
                 <tr style={{ background: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
-                  {['Machine Details', 'Location', 'Capacity', 'Actions'].map((h) => (
+                  {['Machine Details', 'Location', 'Capacity', 'Speed', 'Actions'].map((h) => (
                     <th
                       key={h}
                       className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider"
@@ -501,6 +505,11 @@ const MachineMasterPage: React.FC = () => {
                       {/* Capacity */}
                       <td className="px-5 py-3.5 text-sm font-semibold" style={{ color: 'var(--primary)' }}>
                         {machine.capacityQty} <span className="text-xs opacity-80">{getCapacityUnitLabel(machine.capacityUnit)}</span>
+                      </td>
+
+                      {/* Speed */}
+                      <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>
+                        {machine.machineSpeed || '-'}
                       </td>
 
                       {/* Actions */}

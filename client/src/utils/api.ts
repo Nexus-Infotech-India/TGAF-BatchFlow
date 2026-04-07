@@ -378,6 +378,7 @@ export const API_ROUTES = {
     GET_TRANSFER_BY_ID: (id: string) => `${BASE_URL}/raw/transfers/${id}`,
     ACCEPT_TRANSFER: (id: string) => `${BASE_URL}/raw/transfers/${id}/accept`,
     REJECT_TRANSFER: (id: string) => `${BASE_URL}/raw/transfers/${id}/reject`,
+    GET_SFG_WAREHOUSE_STOCK: `${BASE_URL}/raw/transfers/sfg-warehouse-stock`,
 
     // Production Posting
     POST_PRODUCTION: `${BASE_URL}/raw/production/post`,

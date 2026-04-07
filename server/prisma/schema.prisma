@@ -895,6 +895,7 @@ enum TransferStatus {
 enum TransferDirection {
   INBOUND_TO_GRINDING
   OUTBOUND_FROM_GRINDING
+  SFG_TO_PRODUCTION
 }
 
 enum TransferLineType {
@@ -933,6 +934,8 @@ model MaterialTransferLine {
   productName         String?
   skuCode             String?
   quantity            Float
+  transferredQuantity Float?
+  transferredUnit     String?
   unitOfMeasurement   String
   batchNumber         String?
   cleaningLotId       String?
@@ -1563,6 +1566,13 @@ model FGProductionMachineEntry {
   actualScrapUnit   String   @default("Ton")
   actualPackets     Int      @default(0)
   actualCartons     Int      @default(0)
+  machineSpeed      String?
+  todayAchieve      Float?
+  laminateConsumption Float?
+  sfgConsumption    Float?
+  laminateWastageKg Float?
+  laminateWastagePercentage Float?
+  noManPower        Boolean  @default(false)
   notes             String?
   createdAt         DateTime @default(now())
 
@@ -1579,6 +1589,7 @@ model Machine {
   location     String
   capacityQty  Float
   capacityUnit String   @default("KG_PER_SHIFT")
+  machineSpeed String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

@@ -7,7 +7,7 @@ const VALID_CAPACITY_UNITS = ['TON_PER_SHIFT', 'KG_PER_SHIFT'];
 
 export const createMachine = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { machineId, name, location, capacityQty, capacityUnit } = req.body;
+    const { machineId, name, location, capacityQty, capacityUnit, machineSpeed } = req.body;
 
     if (!VALID_CAPACITY_UNITS.includes(capacityUnit)) {
       res.status(400).json({ success: false, error: 'Invalid capacity unit. Use TON_PER_SHIFT or KG_PER_SHIFT' });
@@ -27,6 +27,7 @@ export const createMachine = async (req: Request, res: Response): Promise<void> 
         location,
         capacityQty: Number(capacityQty),
         capacityUnit,
+        machineSpeed,
       },
     });
 
@@ -52,7 +53,7 @@ export const getMachines = async (req: Request, res: Response): Promise<void> =>
 export const updateMachine = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const { name, location, capacityQty, capacityUnit, machineId } = req.body;
+    const { name, location, capacityQty, capacityUnit, machineId, machineSpeed } = req.body;
 
     if (capacityUnit && !VALID_CAPACITY_UNITS.includes(capacityUnit)) {
       res.status(400).json({ success: false, error: 'Invalid capacity unit. Use TON_PER_SHIFT or KG_PER_SHIFT' });
@@ -67,6 +68,7 @@ export const updateMachine = async (req: Request, res: Response): Promise<void> 
         location,
         capacityQty: capacityQty ? Number(capacityQty) : undefined,
         capacityUnit,
+        machineSpeed,
       },
     });
 

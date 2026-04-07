@@ -768,6 +768,8 @@ exports.Prisma.MaterialTransferLineScalarFieldEnum = {
   productName: 'productName',
   skuCode: 'skuCode',
   quantity: 'quantity',
+  transferredQuantity: 'transferredQuantity',
+  transferredUnit: 'transferredUnit',
   unitOfMeasurement: 'unitOfMeasurement',
   batchNumber: 'batchNumber',
   cleaningLotId: 'cleaningLotId',
@@ -1143,6 +1145,13 @@ exports.Prisma.FGProductionMachineEntryScalarFieldEnum = {
   actualScrapUnit: 'actualScrapUnit',
   actualPackets: 'actualPackets',
   actualCartons: 'actualCartons',
+  machineSpeed: 'machineSpeed',
+  todayAchieve: 'todayAchieve',
+  laminateConsumption: 'laminateConsumption',
+  sfgConsumption: 'sfgConsumption',
+  laminateWastageKg: 'laminateWastageKg',
+  laminateWastagePercentage: 'laminateWastagePercentage',
+  noManPower: 'noManPower',
   notes: 'notes',
   createdAt: 'createdAt'
 };
@@ -1154,6 +1163,7 @@ exports.Prisma.MachineScalarFieldEnum = {
   location: 'location',
   capacityQty: 'capacityQty',
   capacityUnit: 'capacityUnit',
+  machineSpeed: 'machineSpeed',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -1375,7 +1385,8 @@ exports.LocationType = exports.$Enums.LocationType = {
 
 exports.TransferDirection = exports.$Enums.TransferDirection = {
   INBOUND_TO_GRINDING: 'INBOUND_TO_GRINDING',
-  OUTBOUND_FROM_GRINDING: 'OUTBOUND_FROM_GRINDING'
+  OUTBOUND_FROM_GRINDING: 'OUTBOUND_FROM_GRINDING',
+  SFG_TO_PRODUCTION: 'SFG_TO_PRODUCTION'
 };
 
 exports.TransferStatus = exports.$Enums.TransferStatus = {

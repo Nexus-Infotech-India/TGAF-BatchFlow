@@ -353,6 +353,14 @@ export class FGProductionController {
           const actualPackets = Number(input.actualPackets) || 0;
           const actualCartons = Number(input.actualCartons) || 0;
           
+          const machineSpeed = input.machineSpeed != null ? String(input.machineSpeed) : null;
+          const todayAchieve = input.todayAchieve != null ? Number(input.todayAchieve) : null;
+          const laminateConsumption = input.laminateConsumption != null ? Number(input.laminateConsumption) : null;
+          const sfgConsumption = input.sfgConsumption != null ? Number(input.sfgConsumption) : null;
+          const laminateWastageKg = input.laminateWastageKg != null ? Number(input.laminateWastageKg) : null;
+          const laminateWastagePercentage = input.laminateWastagePercentage != null ? Number(input.laminateWastagePercentage) : null;
+          const noManPower = Boolean(input.noManPower);
+          
           const actualUnit = input.actualUnit || existingEntry.targetUnit || 'Ton';
           const actualByproductUnit = input.actualByproductUnit || existingEntry.targetUnit || 'Ton';
           const actualScrapUnit = input.actualScrapUnit || existingEntry.targetUnit || 'Ton';
@@ -386,6 +394,13 @@ export class FGProductionController {
               actualScrapUnit,
               actualPackets,
               actualCartons,
+              machineSpeed,
+              todayAchieve,
+              laminateConsumption,
+              sfgConsumption,
+              laminateWastageKg,
+              laminateWastagePercentage,
+              noManPower,
             },
           });
         }

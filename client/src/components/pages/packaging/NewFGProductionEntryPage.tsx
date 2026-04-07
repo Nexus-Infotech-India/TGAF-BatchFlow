@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api, { API_ROUTES } from '../../../utils/api';
-import { Button, InputNumber, Input, message, Steps } from 'antd';
+import { Button, InputNumber, Input, message, Steps, Select } from 'antd';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -10,15 +10,16 @@ import {
   Factory,
   CheckCircle,
   Scale,
-  Hash,
+  MapPin,
+  Database,
+  Truck,
 } from 'lucide-react';
 
 /* ─── Unit conversion helpers ─── */
 const UNIT_TO_GRAMS: Record<string, number> = {
   gram: 1, grams: 1, g: 1,
   kg: 1000, KG: 1000, Kg: 1000,
-  ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000, tonne: 1_000_000,
-  quintal: 100_000, Quintal: 100_000,
+  ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000,
 };
 function toGrams(qty: number, unit: string): number {
   const factor = UNIT_TO_GRAMS[unit] ?? UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1;
@@ -30,119 +31,159 @@ function capacityInTon(machine: { capacityQty: number; capacityUnit: string }): 
   return machine.capacityQty;
 }
 
-/* ─── Types ─── */
-interface FGBatch {
-  id: string;
-  batchNumber: string;
-  fgProductName: string;
-  productionQty: number;
-  productionUnit: string;
-  packetSize?: number;
-  packetUnit?: string;
-  cartonCapacity?: number;
-  totalPackets: number;
-  totalCartons?: number;
-  status: string;
-  notes?: string;
-  createdAt: string;
-  hasProductionEntry?: boolean;
-  consumptions: any[];
-}
-
-interface MachineData {
-  id: string;
-  machineId: string;
-  name: string;
-  location: string;
-  capacityQty: number;
-  capacityUnit: string;
-}
-
-interface MachineAllocation {
-  machine: MachineData;
-  allocatedQty: number;
-  allocatedUnit: string;
-  plannedPackets: number;
-  plannedCartons: number;
-  notes: string;
-}
-
-/* ─── Component ─── */
 const NewFGProductionEntryPage: React.FC = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
 
-  // Step 1: FG Batch selection
-  const [batches, setBatches] = useState<FGBatch[]>([]);
-  const [loadingBatches, setLoadingBatches] = useState(false);
-  const [selectedBatch, setSelectedBatch] = useState<FGBatch | null>(null);
+  // General State
+  const [locations, setLocations] = useState<any[]>([]);
+  const [machines, setMachines] = useState<any[]>([]);
+  const [boms, setBoms] = useState<any[]>([]);
+
+  // Step 1: Selection & Planning
+  const [selectedLocationId, setSelectedLocationId] = useState('');
+  const [selectedBomId, setSelectedBomId] = useState('');
+  const [productionQty, setProductionQty] = useState<number | null>(null);
+  const [productionUnit, setProductionUnit] = useState('KG');
+
+  // Packaging Data
+  const [packetSize, setPacketSize] = useState<number | null>(null);
+  const [packetUnit, setPacketUnit] = useState('gram');
+  const [cartonCapacity, setCartonCapacity] = useState<number | null>(null);
+
+  // Materials & Consumptions
+  const [consumptionLines, setConsumptionLines] = useState<any[]>([]);
+  const [loadingItems, setLoadingItems] = useState(false);
 
   // Step 2: Auto allocation
-  const [machines, setMachines] = useState<MachineData[]>([]);
-  const [loadingMachines, setLoadingMachines] = useState(false);
-  const [allocations, setAllocations] = useState<MachineAllocation[]>([]);
-
-  // Step 4: Notes + Submit
+  const [allocations, setAllocations] = useState<any[]>([]);
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  /* ─── Fetch accepted batches ─── */
+  /* ─── Fetch Base Data ─── */
   useEffect(() => {
-    const fetch = async () => {
-      setLoadingBatches(true);
+    const fetchBase = async () => {
       try {
-        const res = await api.get(API_ROUTES.RAW.GET_ACCEPTED_FG_BATCHES);
-        setBatches((res.data?.data || []).filter((b: FGBatch) => !b.hasProductionEntry));
+        const [locRes, mchRes, bomRes] = await Promise.all([
+          api.get(API_ROUTES.RAW.GET_LOCATIONS),
+          api.get(API_ROUTES.MACHINE.GET_MACHINES),
+          api.get(API_ROUTES.RAW.GET_FG_BOMS),
+        ]);
+        setLocations(locRes.data?.data || []);
+        setMachines(mchRes.data?.data || []);
+        setBoms(bomRes.data?.data || []);
       } catch (err) {
-        message.error('Failed to load accepted FG batches');
-      }
-      setLoadingBatches(false);
-    };
-    fetch();
-  }, []);
-
-  /* ─── Fetch machines ─── */
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const res = await api.get(API_ROUTES.MACHINE.GET_MACHINES);
-        setMachines(res.data?.data || []);
-      } catch (err) {
-        message.error('Failed to load machines');
+        message.error('Failed to load initial data');
       }
     };
-    fetch();
+    fetchBase();
   }, []);
 
-  /* ─── Build allocations when batch and machines are ready ─── */
-  const buildAllocations = (batch: FGBatch, machineList: MachineData[]) => {
-    if (!batch || machineList.length === 0) return;
+  /* ─── Fetch BOM Items and Stock ─── */
+  const fetchBomItems = async (bomId: string, qty: number, unit: string, locationId: string) => {
+    if (!bomId || !qty || !locationId) return;
+    setLoadingItems(true);
+    try {
+      const res = await api.get(API_ROUTES.RAW.GET_FG_BOM_ITEMS, {
+        params: { bomId, productionQty: qty, productionUnit: unit, locationId }
+      });
+      if (res.data?.success && res.data?.items) {
+        const lines = res.data.items.map((item: any) => {
+          let sourceType = 'STOCK';
+          let batchNumber = '';
+          let dispatchId = '';
 
-    const totalCapTon = machineList.reduce((s, m) => s + capacityInTon(m), 0);
-    const packetSizeGrams =
-      batch.packetSize && batch.packetUnit ? toGrams(batch.packetSize, batch.packetUnit) : 0;
-    const cartonCapacity = batch.cartonCapacity || 0;
+          if (item.isSFG) {
+            sourceType = 'SFG_BATCH';
+            if (item.availableSfgBatches && item.availableSfgBatches.length > 0) {
+              const b = item.availableSfgBatches[0];
+              batchNumber = b.batchNumber;
+              dispatchId = b.dispatchId;
+            }
+          }
 
-    const allocs: MachineAllocation[] = machineList.map((machine) => {
-      const proportion = totalCapTon > 0 ? capacityInTon(machine) / totalCapTon : 1 / machineList.length;
-      const allocatedQty = Number((batch.productionQty * proportion).toFixed(3));
+          return {
+            rawMaterialId: item.rawMaterialId,
+            rawMaterialName: item.rawMaterialName,
+            skuCode: item.skuCode,
+            isSFG: item.isSFG,
+            expectedQuantity: item.expectedQuantity,
+            actualQuantity: item.expectedQuantity, // Auto-fill
+            unit: item.displayUnit,
+            sourceType,
+            batchNumber,
+            dispatchId,
+            availableSfgBatches: item.availableSfgBatches || [],
+            currentStockQty: item.currentStockQty || 0,
+            currentStockUnit: item.currentStockUnit || item.displayUnit,
+          };
+        });
+        setConsumptionLines(lines);
+
+        // Fetch packaging master
+        const selectedBom = boms.find(b => b.id === bomId);
+        if (selectedBom && selectedBom.fgProductId) {
+          try {
+            const pkgRes = await api.get(API_ROUTES.RAW.FG_PACKAGING_BY_PRODUCT(selectedBom.fgProductId));
+            if (pkgRes.data?.success && pkgRes.data?.data) {
+              setPacketSize(pkgRes.data.data.packetSize);
+              setPacketUnit(pkgRes.data.data.packetUnit);
+              setCartonCapacity(pkgRes.data.data.cartonCapacity);
+            }
+          } catch (e: any) {
+             // ignore 404
+          }
+        }
+      }
+    } catch (err) {
+      message.error('Failed to load BOM items');
+    }
+    setLoadingItems(false);
+  };
+
+  /* ─── Trigger BOM fetch when inputs change ─── */
+  useEffect(() => {
+    if (selectedBomId && productionQty && productionQty > 0 && selectedLocationId) {
+      fetchBomItems(selectedBomId, productionQty, productionUnit, selectedLocationId);
+    } else {
+      setConsumptionLines([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedBomId, productionQty, productionUnit, selectedLocationId]);
+
+  /* ─── Build Allocations ─── */
+  const buildAllocations = () => {
+    if (!productionQty || machines.length === 0) return;
+
+    // Filter machines by selected location
+    const locationName = locations.find(l => l.id === selectedLocationId)?.name || '';
+    const availableMachines = machines.filter(m => m.location === locationName || !m.location);
+    const mList = availableMachines.length > 0 ? availableMachines : machines;
+
+    const totalCapTon = mList.reduce((s, m) => s + capacityInTon(m), 0);
+    const packetSizeGrams = packetSize && packetUnit ? toGrams(packetSize, packetUnit) : 0;
+    const cCap = cartonCapacity || 0;
+
+    const allocs = mList.map((machine) => {
+      const proportion = totalCapTon > 0 ? capacityInTon(machine) / totalCapTon : 1 / mList.length;
+      const allocatedQty = Number((productionQty * proportion).toFixed(3));
 
       let plannedPackets = 0;
       let plannedCartons = 0;
       if (packetSizeGrams > 0) {
-        const allocGrams = toGrams(allocatedQty, batch.productionUnit);
+        const allocGrams = toGrams(allocatedQty, productionUnit);
         plannedPackets = Math.floor(allocGrams / packetSizeGrams);
-        if (cartonCapacity > 0) {
-          plannedCartons = Math.ceil(plannedPackets / cartonCapacity);
+        if (cCap > 0) {
+          plannedCartons = Math.ceil(plannedPackets / cCap);
         }
       }
 
       return {
         machine,
-        allocatedQty: 0,
-        allocatedUnit: batch.productionUnit,
-        plannedPackets: 0,
-        plannedCartons: 0,
+        allocatedQty,
+        allocatedUnit: productionUnit,
+        plannedPackets,
+        plannedCartons,
         notes: '',
       };
     });
@@ -150,9 +191,27 @@ const NewFGProductionEntryPage: React.FC = () => {
     setAllocations(allocs);
   };
 
-  const handleSelectBatch = (batch: FGBatch) => {
-    setSelectedBatch(batch);
-    buildAllocations(batch, machines);
+  const proceedToMachineAllocation = () => {
+    if (!selectedLocationId || !selectedBomId || !productionQty) {
+      message.error('Please complete all planning fields');
+      return;
+    }
+    
+    // Check material availability
+    for (const item of consumptionLines) {
+       if (item.isSFG) {
+          if (!item.availableSfgBatches || item.availableSfgBatches.length === 0) {
+             message.error(`No SFG transfer data available for ${item.rawMaterialName} at this location`);
+             return;
+          }
+       } else {
+          if (item.currentStockQty < item.expectedQuantity) {
+             message.warning(`Warning: Insufficient general stock for ${item.rawMaterialName}`);
+          }
+       }
+    }
+
+    buildAllocations();
     setStep(1);
   };
 
@@ -161,75 +220,64 @@ const NewFGProductionEntryPage: React.FC = () => {
       const next = [...prev];
       (next[index] as any)[field] = value;
 
-      // Auto-calc planned packets if allocated qty changes
-      if (field === 'allocatedQty' && selectedBatch) {
-        const packetSizeGrams =
-          selectedBatch.packetSize && selectedBatch.packetUnit
-            ? toGrams(selectedBatch.packetSize, selectedBatch.packetUnit)
-            : 0;
-        const cartonCapacity = selectedBatch.cartonCapacity || 0;
+      if (field === 'allocatedQty') {
+        const packetSizeGrams = packetSize && packetUnit ? toGrams(packetSize, packetUnit) : 0;
         if (packetSizeGrams > 0 && value > 0) {
-          const allocGrams = toGrams(value, selectedBatch.productionUnit);
+          const allocGrams = toGrams(value, productionUnit);
           next[index].plannedPackets = Math.floor(allocGrams / packetSizeGrams);
-          if (cartonCapacity > 0) {
+          if (cartonCapacity && cartonCapacity > 0) {
             next[index].plannedCartons = Math.ceil(next[index].plannedPackets / cartonCapacity);
-          } else {
-            next[index].plannedCartons = 0;
           }
         } else {
           next[index].plannedPackets = 0;
           next[index].plannedCartons = 0;
         }
       }
-
       return next;
     });
   };
 
-  /* ─── Summary calculations ─── */
-  const totalAllocatedQty = allocations.reduce((s, a) => s + (Number(a.allocatedQty) || 0), 0);
-  const totalPlannedPackets = allocations.reduce((s, a) => s + (Number(a.plannedPackets) || 0), 0);
-  const totalPlannedCartons = allocations.reduce((s, a) => s + (Number(a.plannedCartons) || 0), 0);
-  const remainingQty = selectedBatch ? Number((selectedBatch.productionQty - totalAllocatedQty).toFixed(3)) : 0;
-  const isFullyAllocated = selectedBatch ? Math.abs(remainingQty) < 0.001 : false;
-
-  /* Helper: get machine capacity in the same unit as the batch for comparison */
-  const getMachineCapacityInBatchUnit = (machine: MachineData): number => {
-    if (!selectedBatch) return 0;
-    const capTon = capacityInTon(machine);
-    const batchUnit = selectedBatch.productionUnit.toLowerCase();
-    if (batchUnit === 'ton' || batchUnit === 'tonne') return capTon;
-    if (batchUnit === 'kg') return capTon * 1000;
-    if (batchUnit === 'gram' || batchUnit === 'grams' || batchUnit === 'g') return capTon * 1_000_000;
-    if (batchUnit === 'quintal') return capTon * 10;
-    return capTon;
-  };
-
-  /* ─── Submit ─── */
+  /* ─── Submit (Creates both Batch & Entry) ─── */
   const handleSubmit = async () => {
-    if (!selectedBatch) return;
-
+    const totalAllocatedQty = allocations.reduce((s, a) => s + (Number(a.allocatedQty) || 0), 0);
+    const remain = productionQty ? productionQty - totalAllocatedQty : 0;
+    
     if (totalAllocatedQty <= 0) {
-      message.error('Please allocate production to at least one machine');
+      message.error('Please assign production to at least one machine');
       return;
     }
-
-    if (!isFullyAllocated) {
-      if (remainingQty > 0) {
-        message.error(`You still have ${remainingQty.toFixed(3)} ${selectedBatch.productionUnit} remaining. Please distribute the full quantity.`);
-      } else {
-        message.error(`Total allocated exceeds target by ${Math.abs(remainingQty).toFixed(3)} ${selectedBatch.productionUnit}. Please reduce allocation.`);
-      }
-      return;
+    if (Math.abs(remain) > 0.001) {
+       if (remain > 0) {
+          message.error(`You still have ${remain.toFixed(3)} ${productionUnit} remaining to distribute.`);
+       } else {
+          message.error(`You have exceeded the target by ${Math.abs(remain).toFixed(3)} ${productionUnit}.`);
+       }
+       return;
     }
 
     setSubmitting(true);
     try {
-      // Filter out zero allocations
-      const activeAllocations = allocations.filter(a => a.allocatedQty > 0);
+      // 1. Create FG Batch First
+      const batchRes = await api.post(API_ROUTES.RAW.CREATE_FG_BATCH, {
+        bomId: selectedBomId,
+        productionQty,
+        productionUnit,
+        packetSize,
+        packetUnit,
+        cartonCapacity,
+        notes: "Auto-created from Production Entry Flow",
+        consumptions: consumptionLines,
+      });
+      
+      const newBatchId = batchRes.data?.data?.id;
 
+      // 2. Accept the Batch instantly (so it can be used for production)
+      await api.put(API_ROUTES.RAW.ACCEPT_FG_BATCH(newBatchId));
+
+      // 3. Create FG Production Entry
+      const activeAllocations = allocations.filter(a => a.allocatedQty > 0);
       await api.post(API_ROUTES.RAW.CREATE_FG_PRODUCTION_ENTRY, {
-        fgBatchId: selectedBatch.id,
+        fgBatchId: newBatchId,
         notes,
         machineEntries: activeAllocations.map((a) => ({
           machineId: a.machine.id,
@@ -239,405 +287,172 @@ const NewFGProductionEntryPage: React.FC = () => {
           notes: a.notes,
         })),
       });
-      message.success('Production machine mapping created successfully!');
+
+      message.success('Production Entry and Allocations created successfully!');
       navigate('/packaging/fg-production');
     } catch (err: any) {
-      message.error(err?.response?.data?.error || 'Failed to create production mapping');
+      message.error(err?.response?.data?.error || 'Failed to complete production entry');
     }
     setSubmitting(false);
   };
 
   const stepItems = [
-    { title: 'Select Batch', icon: <Package size={16} /> },
+    { title: 'Location & Planning', icon: <MapPin size={16} /> },
     { title: 'Machine Assignment', icon: <Factory size={16} /> },
   ];
 
   return (
     <motion.div className="min-h-screen bg-background p-4 md:p-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="flex items-center gap-4 mb-6">
-          <Button
-            icon={<ArrowLeft size={18} />}
-            onClick={() => navigate('/packaging/fg-production')}
-            className="rounded-full shadow-sm hover:shadow-md transition-shadow"
-            size="large"
-          />
+          <Button icon={<ArrowLeft size={18} />} onClick={() => navigate('/packaging/fg-production')} className="rounded-full shadow-sm" size="large" />
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-              New Production Entry
+              New Production Plan
             </h1>
-            <p className="text-muted-foreground">Machine-wise FG production recording with auto-allocation</p>
+            <p className="text-muted-foreground">Select location, plan raw materials, and allocate to machines</p>
           </div>
         </div>
 
-        {/* Stepper */}
-        <motion.div
-          className="bg-card rounded-2xl p-4 mb-6 border border-border/80 shadow-sm"
-          initial={{ y: -10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.05 }}
-        >
-          <Steps
-            current={step}
-            items={stepItems.map((s, i) => ({
-              title: <span className="text-xs font-semibold">{s.title}</span>,
-              icon: (
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-                    i <= step
-                      ? 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-md shadow-emerald-500/30'
-                      : 'bg-muted/60 text-muted-foreground'
-                  }`}
-                >
-                  {i < step ? <CheckCircle size={16} /> : s.icon}
-                </div>
-              ),
-            }))}
-            className="px-2"
-          />
+        <motion.div className="bg-card rounded-2xl p-4 mb-6 border border-border mt-4 shadow-sm">
+          <Steps current={step} items={stepItems.map((s, i) => ({
+             title: <span className="text-xs font-semibold">{s.title}</span>,
+             icon: <div className={`w-8 h-8 rounded-full flex items-center justify-center ${i <= step ? 'bg-emerald-500 text-white' : 'bg-muted text-muted-foreground'}`}>{i < step ? <CheckCircle size={16} /> : s.icon}</div>
+          }))} />
         </motion.div>
 
-        {/* Step Content */}
-        <motion.div
-          className="bg-card rounded-2xl border border-border/80 shadow-xl overflow-hidden"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1 }}
-        >
+        <motion.div className="bg-card rounded-2xl border border-border shadow-md overflow-hidden">
           <AnimatePresence mode="wait">
-            {/* ═══ STEP 1: Select Accepted FG Batch ═══ */}
+            
+            {/* STEP 1: Planning */}
             {step === 0 && (
-              <motion.div
-                key="step-0"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                className="p-6 md:p-8"
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/20">
-                    <Package size={20} className="text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground">Select Accepted FG Batch</h2>
-                    <p className="text-sm text-muted-foreground">Choose an accepted batch from the Receive Materials flow</p>
-                  </div>
+              <motion.div key="step-0" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="p-6 md:p-8 space-y-6">
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 bg-muted/20 border border-border rounded-xl">
+                   <div>
+                      <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">1. Select Production Location</label>
+                      <Select 
+                        className="w-full" size="large" placeholder="E.g. Packaging Area"
+                        value={selectedLocationId || undefined} onChange={setSelectedLocationId}
+                        options={locations.map(l => ({ value: l.id, label: l.name }))}
+                      />
+                   </div>
+                   <div>
+                      <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">2. Target FG Item (BOM)</label>
+                      <Select 
+                        className="w-full" size="large" placeholder="Select Product"
+                        value={selectedBomId || undefined} onChange={setSelectedBomId}
+                        options={boms.map(b => ({ value: b.id, label: b.productName }))}
+                      />
+                   </div>
+                   <div className="md:col-span-2">
+                      <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">3. Total Planned Production</label>
+                      <div className="flex items-center gap-3">
+                         <InputNumber min={0.001} step={1} className="w-full font-semibold" size="large" value={productionQty} onChange={setProductionQty} placeholder="E.g. 500" />
+                         <Select className="w-40" size="large" value={productionUnit} onChange={setProductionUnit} options={['KG', 'Ton', 'gram'].map(u => ({ value: u, label: u }))} />
+                      </div>
+                   </div>
                 </div>
 
-                {loadingBatches ? (
-                  <div className="flex items-center justify-center py-20">
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-                      className="w-8 h-8 border-[3px] rounded-full border-t-emerald-600 border-emerald-200"
-                    />
-                  </div>
-                ) : batches.length === 0 ? (
-                  <div className="text-center py-16 text-muted-foreground">
-                    <Package className="mx-auto mb-3 opacity-30" size={48} />
-                    <p className="text-lg font-semibold">No accepted FG batches available</p>
-                    <p className="text-sm mt-1">Create and accept FG batches first from the Receive Materials page.</p>
-                  </div>
-                ) : (
-                  <div className="rounded-xl border border-border shadow-sm overflow-hidden bg-card">
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full">
-                        <thead className="bg-muted/50 border-b border-border">
-                          <tr>
-                            <th className="px-5 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Batch Number</th>
-                            <th className="px-5 py-4 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Product</th>
-                            <th className="px-5 py-4 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Target Qty</th>
-                            <th className="px-5 py-4 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Packets</th>
-                            <th className="px-5 py-4 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Created</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border">
-                          {batches.map((batch) => (
-                            <tr 
-                              key={batch.id} 
-                              onClick={() => handleSelectBatch(batch)}
-                              className={`cursor-pointer transition-colors ${
-                                selectedBatch?.id === batch.id
-                                  ? 'bg-emerald-500/10 hover:bg-emerald-500/20'
-                                  : 'hover:bg-muted/30'
-                              }`}
-                            >
-                              <td className="px-5 py-4">
-                                <div className="flex items-center gap-3">
-                                  {selectedBatch?.id === batch.id ? (
-                                    <div className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
-                                      <CheckCircle size={12} className="text-white" />
-                                    </div>
-                                  ) : (
-                                    <div className="p-2 rounded-lg bg-violet-500/10 shrink-0">
-                                      <Package size={16} className="text-violet-600" />
-                                    </div>
-                                  )}
-                                  <span className="font-bold font-mono text-primary">{batch.batchNumber}</span>
-                                </div>
-                              </td>
-                              <td className="px-5 py-4">
-                                <span className="font-semibold text-foreground">{batch.fgProductName}</span>
-                              </td>
-                              <td className="px-5 py-4 text-right">
-                                <span className="bg-indigo-500/10 text-indigo-600 px-3 py-1 rounded-lg text-xs font-bold border border-indigo-500/20 whitespace-nowrap">
-                                  <Scale size={10} className="inline mr-1" />
-                                  {batch.productionQty} {batch.productionUnit}
-                                </span>
-                              </td>
-                              <td className="px-5 py-4 text-right">
-                                {batch.totalPackets > 0 ? (
-                                  <span className="bg-violet-500/10 text-violet-600 px-3 py-1 rounded-lg text-xs font-bold border border-violet-500/20 whitespace-nowrap">
-                                    <Hash size={10} className="inline mr-1" />
-                                    {batch.totalPackets.toLocaleString()}
-                                  </span>
-                                ) : (
-                                  <span className="text-muted-foreground text-xs">-</span>
-                                )}
-                              </td>
-                              <td className="px-5 py-4 text-center text-[11px] text-muted-foreground">
-                                {new Date(batch.createdAt).toLocaleDateString()}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+                {/* Items Required Suggestion */}
+                {consumptionLines.length > 0 && (
+                   <div className="mt-6">
+                      <h3 className="text-lg font-bold text-foreground mb-4 border-b border-border pb-2">Material Requirements & Availability</h3>
+                      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
+                         <table className="min-w-full">
+                            <thead className="bg-muted/50 border-b border-border">
+                               <tr>
+                                 <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-muted-foreground">Material</th>
+                                 <th className="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">Source</th>
+                                 <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-muted-foreground">Required</th>
+                                 <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-muted-foreground">Available</th>
+                               </tr>
+                            </thead>
+                            <tbody className="divide-y divide-border">
+                               {consumptionLines.map((line, idx) => (
+                                  <tr key={idx} className="hover:bg-muted/30">
+                                     <td className="px-4 py-3 font-semibold text-sm">{line.rawMaterialName}</td>
+                                     <td className="px-4 py-3 text-center">
+                                       {line.isSFG ? <Truck size={14} className="inline text-violet-500 mr-1"/> : <Database size={14} className="inline text-blue-500 mr-1"/>}
+                                       <span className="text-xs font-bold">{line.isSFG ? 'SFG TRANSFER' : 'STOCK'}</span>
+                                     </td>
+                                     <td className="px-4 py-3 text-right font-bold text-amber-600">{line.expectedQuantity} {line.unit}</td>
+                                     <td className="px-4 py-3 text-right">
+                                        {line.isSFG ? (
+                                           line.availableSfgBatches.length > 0 ? (
+                                              <span className="text-emerald-600 font-bold">{line.availableSfgBatches[0].remainingQuantity} {line.availableSfgBatches[0].unit}</span>
+                                           ) : (
+                                              <span className="text-red-500 font-bold text-xs">No Transfer Available</span>
+                                           )
+                                        ) : (
+                                           <span className={line.currentStockQty >= line.expectedQuantity ? 'text-emerald-600 font-bold' : 'text-red-500 font-bold'}>
+                                              {line.currentStockQty.toLocaleString()} {line.currentStockUnit}
+                                           </span>
+                                        )}
+                                     </td>
+                                  </tr>
+                               ))}
+                            </tbody>
+                         </table>
+                      </div>
+                   </div>
                 )}
+                
               </motion.div>
             )}
 
-            {/* ═══ STEP 2: Machine Assignment ═══ */}
-            {step === 1 && selectedBatch && (
-              <motion.div
-                key="step-1"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                className="p-6 md:p-8"
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20">
-                    <Factory size={20} className="text-white" />
-                  </div>
+            {/* STEP 2: Allocation */}
+            {step === 1 && (
+              <motion.div key="step-1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="p-6 md:p-8 space-y-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg"><Factory size={20} className="text-white" /></div>
                   <div>
                     <h2 className="text-xl font-bold text-foreground">Machine Assignment</h2>
-                    <p className="text-sm text-muted-foreground">
-                      Assign target production quantities and estimated packets to machines
-                    </p>
+                    <p className="text-sm text-muted-foreground">Distribute the total {productionQty} {productionUnit} across available machines</p>
                   </div>
                 </div>
 
-                {/* Batch Info Card */}
-                <div className="mb-6 rounded-xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/5 to-teal-500/5 p-5">
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                      <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Batch</div>
-                      <div className="text-sm font-bold font-mono text-primary mt-1">{selectedBatch.batchNumber}</div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Product</div>
-                      <div className="text-sm font-bold text-foreground mt-1">{selectedBatch.fgProductName}</div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Target Production</div>
-                      <div className="text-sm font-bold text-emerald-600 mt-1">
-                        {selectedBatch.productionQty} {selectedBatch.productionUnit}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Total Allocated</div>
-                      <div className={`text-sm font-bold mt-1 ${isFullyAllocated ? 'text-emerald-600' : totalAllocatedQty > selectedBatch.productionQty ? 'text-red-500' : 'text-blue-600'}`}>
-                        {totalAllocatedQty.toFixed(3)} / {selectedBatch.productionQty} {selectedBatch.productionUnit}
-                      </div>
-                      {!isFullyAllocated && totalAllocatedQty > 0 && (
-                        <div className={`text-xs font-semibold mt-0.5 ${remainingQty > 0 ? 'text-amber-600' : 'text-red-500'}`}>
-                          {remainingQty > 0
-                            ? `⚠ ${remainingQty.toFixed(3)} ${selectedBatch.productionUnit} remaining`
-                            : `✕ Exceeds by ${Math.abs(remainingQty).toFixed(3)} ${selectedBatch.productionUnit}`
-                          }
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Machine Assignment Grid */}
                 <div className="space-y-4 mb-6">
                   {allocations.map((alloc, idx) => (
-                    <motion.div
-                      key={alloc.machine.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.05 }}
-                      className="flex flex-col md:flex-row gap-4 p-4 rounded-xl border-2 border-border bg-card hover:border-blue-500/30 transition-colors items-center"
-                    >
+                    <div key={idx} className="flex flex-col md:flex-row gap-4 p-4 rounded-xl border-2 border-border bg-card hover:border-blue-500/30 transition-colors items-center">
                       <div className="flex-1 flex gap-3 min-w-[200px]">
-                        <div className="p-2 rounded-lg bg-blue-500/10 shrink-0 h-10 w-10 flex items-center justify-center">
-                          <Factory size={18} className="text-blue-600" />
-                        </div>
+                        <div className="p-2 rounded-lg bg-blue-500/10 shrink-0 h-10 w-10 flex items-center justify-center"><Factory size={18} className="text-blue-600" /></div>
                         <div>
-                          <div className="font-bold text-foreground leading-tight">{alloc.machine.name}</div>
-                          <div className="text-xs text-muted-foreground font-mono mt-0.5">
-                            Capacity: {alloc.machine.capacityQty} {alloc.machine.capacityUnit === 'TON_PER_SHIFT' ? 'Ton/Shift' : 'KG/Shift'}
-                          </div>
+                          <div className="font-bold text-foreground">{alloc.machine.name}</div>
+                          <div className="text-xs text-muted-foreground font-mono mt-0.5">Capacity: {alloc.machine.capacityQty} {alloc.machine.capacityUnit}</div>
                         </div>
                       </div>
-
-                      <div className="flex gap-4 md:gap-8 min-w-[300px]">
+                      <div className="flex gap-4 md:gap-8">
                         <div className="space-y-1">
                           <div className="text-[10px] font-bold text-muted-foreground uppercase">Target Allocation</div>
                           <div className="flex items-center gap-2">
-                            <InputNumber
-                              min={0}
-                              step={0.1}
-                              precision={3}
-                              value={alloc.allocatedQty || undefined}
-                              onChange={(val) => updateAllocation(idx, 'allocatedQty', val || 0)}
-                              placeholder="0.00"
-                              className="w-28 font-semibold"
-                              status={alloc.allocatedQty > getMachineCapacityInBatchUnit(alloc.machine) ? 'warning' : undefined}
-                            />
-                            <span className="text-xs font-bold text-muted-foreground">{selectedBatch.productionUnit}</span>
+                            <InputNumber min={0} step={0.1} precision={3} value={alloc.allocatedQty} onChange={v => updateAllocation(idx, 'allocatedQty', v || 0)} className="w-28 font-semibold" />
+                            <span className="text-xs font-bold text-muted-foreground">{productionUnit}</span>
                           </div>
-                          {alloc.allocatedQty > getMachineCapacityInBatchUnit(alloc.machine) && (
-                            <div className="text-[10px] text-amber-600 font-semibold mt-1">
-                              ⚠ Exceeds capacity ({getMachineCapacityInBatchUnit(alloc.machine).toFixed(2)} {selectedBatch.productionUnit}/Shift)
-                            </div>
-                          )}
                         </div>
                         <div className="space-y-1">
                           <div className="text-[10px] font-bold text-muted-foreground uppercase">Est. Packets</div>
-                          <InputNumber
-                            min={0}
-                            step={1}
-                            precision={0}
-                            value={alloc.plannedPackets || undefined}
-                            onChange={(val) => updateAllocation(idx, 'plannedPackets', val || 0)}
-                            placeholder="0"
-                            className="w-24 font-semibold"
-                          />
+                          <InputNumber min={0} step={1} precision={0} value={alloc.plannedPackets} onChange={v => updateAllocation(idx, 'plannedPackets', v || 0)} className="w-24 font-semibold" />
                         </div>
-                        {selectedBatch?.cartonCapacity && selectedBatch.cartonCapacity > 0 && (
-                          <div className="space-y-1">
-                            <div className="text-[10px] font-bold text-muted-foreground uppercase">Est. Cartons</div>
-                            <InputNumber
-                              min={0}
-                              step={1}
-                              precision={0}
-                              value={alloc.plannedCartons || undefined}
-                              onChange={(val) => updateAllocation(idx, 'plannedCartons', val || 0)}
-                              placeholder="0"
-                              className="w-24 font-semibold border-amber-500/30"
-                            />
-                          </div>
-                        )}
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
-
-                <div className={`flex items-center justify-between p-4 rounded-xl border ${isFullyAllocated ? 'bg-emerald-500/5 border-emerald-500/30' : remainingQty < 0 ? 'bg-red-500/5 border-red-500/30' : 'bg-muted/30 border-border'}`}>
-                  <div>
-                    <span className="font-bold">Total Mapping:</span>
-                    {!isFullyAllocated && totalAllocatedQty > 0 && (
-                      <span className={`ml-3 text-xs font-semibold px-2 py-0.5 rounded-full ${remainingQty > 0 ? 'bg-amber-500/10 text-amber-600' : 'bg-red-500/10 text-red-500'}`}>
-                        {remainingQty > 0
-                          ? `${remainingQty.toFixed(3)} ${selectedBatch.productionUnit} remaining`
-                          : `Exceeds by ${Math.abs(remainingQty).toFixed(3)} ${selectedBatch.productionUnit}`
-                        }
-                      </span>
-                    )}
-                    {isFullyAllocated && (
-                      <span className="ml-3 text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600">
-                        ✓ Fully distributed
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex gap-8">
-                    <span className={`font-bold ${isFullyAllocated ? 'text-emerald-600' : remainingQty < 0 ? 'text-red-500' : 'text-blue-600'}`}>
-                      {totalAllocatedQty.toFixed(3)} {selectedBatch.productionUnit}
-                    </span>
-                    <span className="font-bold text-violet-600">
-                      {totalPlannedPackets.toLocaleString()} Packets
-                    </span>
-                    {selectedBatch?.cartonCapacity && selectedBatch.cartonCapacity > 0 && (
-                      <span className="font-bold text-amber-600">
-                        {totalPlannedCartons.toLocaleString()} Cartons
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Notes */}
+                
                 <div className="space-y-2 mt-6">
-                  <label className="text-sm font-bold text-foreground">Remarks (optional)</label>
-                  <Input.TextArea
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    placeholder="Add notes about machine allocation..."
-                    autoSize={{ minRows: 2, maxRows: 4 }}
-                    className="rounded-xl bg-muted/20 border-border/50"
-                  />
+                  <label className="text-sm font-bold text-foreground">Notes (optional)</label>
+                  <Input.TextArea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Supervisor notes..." className="rounded-xl" />
                 </div>
               </motion.div>
             )}
-
-
           </AnimatePresence>
 
-          {/* Navigation */}
           <div className="px-6 py-5 border-t border-border bg-muted/10 flex items-center justify-between">
-            <Button
-              size="large"
-              onClick={() => setStep(Math.max(0, step - 1))}
-              disabled={step === 0}
-              className="rounded-xl px-6 h-11 font-semibold"
-              icon={<ArrowLeft size={16} />}
-            >
-              Back
-            </Button>
-
-            <div className="text-sm text-muted-foreground font-medium">
-              Step {step + 1} of 2
-            </div>
-
+            <Button size="large" onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0} className="rounded-xl font-semibold"><ArrowLeft size={16} className="mr-1 inline" /> Back</Button>
             {step < 1 ? (
-              <Button
-                type="primary"
-                size="large"
-                onClick={() => {
-                  if (step === 0 && !selectedBatch) {
-                    message.warning('Please select an FG batch first');
-                    return;
-                  }
-                  if (step === 0 && machines.length === 0) {
-                    message.warning('No machines configured. Add machines first.');
-                    return;
-                  }
-                  setStep(step + 1);
-                }}
-                disabled={step === 0 && !selectedBatch}
-                className="rounded-xl px-6 h-11 font-bold shadow-lg border-0"
-                style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}
-              >
-                Next <ArrowRight size={16} className="ml-1 inline" />
-              </Button>
+              <Button type="primary" size="large" onClick={proceedToMachineAllocation} className="rounded-xl px-6 font-bold shadow-md" style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none' }}>Next Step <ArrowRight size={16} className="ml-1 inline" /></Button>
             ) : (
-              <Button
-                type="primary"
-                size="large"
-                loading={submitting}
-                onClick={handleSubmit}
-                disabled={!isFullyAllocated}
-                className="rounded-xl px-8 h-11 text-base font-bold shadow-lg shadow-emerald-500/30 border-0 transition-all hover:scale-105 active:scale-95"
-                style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}
-              >
-                {!submitting && <CheckCircle size={18} className="mr-2 inline" />}
-                Submit Allocation
-              </Button>
+              <Button type="primary" size="large" loading={submitting} onClick={handleSubmit} className="rounded-xl px-8 font-bold shadow-md" style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none' }}><CheckCircle size={18} className="mr-2 inline" /> Make Allocation</Button>
             )}
           </div>
         </motion.div>
