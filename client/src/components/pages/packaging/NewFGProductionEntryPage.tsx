@@ -69,7 +69,8 @@ const NewFGProductionEntryPage: React.FC = () => {
           api.get(API_ROUTES.MACHINE.GET_MACHINES),
           api.get(API_ROUTES.RAW.GET_FG_BOMS),
         ]);
-        setLocations(locRes.data?.data || []);
+        const locData = locRes.data;
+        setLocations(Array.isArray(locData) ? locData : locData?.data || []);
         setMachines(mchRes.data?.data || []);
         setBoms(bomRes.data?.data || []);
       } catch (err) {
@@ -87,7 +88,7 @@ const NewFGProductionEntryPage: React.FC = () => {
       const res = await api.get(API_ROUTES.RAW.GET_FG_BOM_ITEMS, {
         params: { bomId, productionQty: qty, productionUnit: unit, locationId }
       });
-      if (res.data?.success && res.data?.items) {
+      if (res.data?.items) {
         const lines = res.data.items.map((item: any) => {
           let sourceType = 'STOCK';
           let batchNumber = '';

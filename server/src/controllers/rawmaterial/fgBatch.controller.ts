@@ -119,32 +119,35 @@ export class FGBatchController {
 
         if (isSFG) {
           // Find matching SFG lines in accepted outbound transfers for this raw material
+          // Aggregate all lines per transfer for the same material (e.g. 3x25KG → 75KG)
           for (const transfer of acceptedTransfers) {
             const sfgLines = transfer.lines.filter(
               (line) => line.lineType === 'SFG' && (line.rawMaterialId === rm.id || line.productName === rm.name)
             );
 
-            for (const line of sfgLines) {
-              const transferNum = transfer.transferNumber;
-              const consumed = consumedMap[transferNum]?.[rm.id] || 0;
-              const remaining = line.quantity - consumed;
+            if (sfgLines.length === 0) continue;
 
-              if (remaining > 0) {
-                availableSfgBatches.push({
-                  transferId: transfer.id,
-                  transferNumber: transferNum,
-                  batchNumber: transferNum, // use transfer number as batch identifier
-                  dispatchId: transfer.id,
-                  lineId: line.id,
-                  totalQuantity: line.quantity,
-                  consumedQuantity: consumed,
-                  remainingQuantity: Math.round(remaining * 1000) / 1000,
-                  unit: line.unitOfMeasurement,
-                  fromLocation: transfer.fromLocation?.name || '',
-                  toLocation: transfer.toLocation?.name || '',
-                  acceptedAt: transfer.acceptedAt,
-                });
-              }
+            // Sum all line quantities for this material within this transfer
+            const totalLineQty = sfgLines.reduce((sum, line) => sum + line.quantity, 0);
+            const transferNum = transfer.transferNumber;
+            const consumed = consumedMap[transferNum]?.[rm.id] || 0;
+            const remaining = totalLineQty - consumed;
+
+            if (remaining > 0) {
+              availableSfgBatches.push({
+                transferId: transfer.id,
+                transferNumber: transferNum,
+                batchNumber: transferNum, // use transfer number as batch identifier
+                dispatchId: transfer.id,
+                lineId: sfgLines[0].id,
+                totalQuantity: Math.round(totalLineQty * 1000) / 1000,
+                consumedQuantity: consumed,
+                remainingQuantity: Math.round(remaining * 1000) / 1000,
+                unit: sfgLines[0].unitOfMeasurement,
+                fromLocation: transfer.fromLocation?.name || '',
+                toLocation: transfer.toLocation?.name || '',
+                acceptedAt: transfer.acceptedAt,
+              });
             }
           }
 
