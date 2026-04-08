@@ -340,10 +340,8 @@ const FGProductionPage: React.FC = () => {
                                     <tr className="bg-card">
                                       <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase rounded-tl-lg">Machine</th>
                                       <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Allocated</th>
-                                      <th className="px-3 py-2 text-right text-xs font-semibold text-emerald-600 uppercase">Actual FG</th>
-                                      <th className="px-3 py-2 text-right text-xs font-semibold text-amber-600 uppercase">Byproduct</th>
-                                      <th className="px-3 py-2 text-right text-xs font-semibold text-red-600 uppercase">Scrap</th>
-                                      <th className="px-3 py-2 text-right text-xs font-semibold text-violet-600 uppercase rounded-tr-lg">Packets</th>
+                                      <th className="px-3 py-2 text-right text-xs font-semibold text-emerald-600 uppercase">Today Achievement</th>
+                                      <th className="px-3 py-2 text-right text-xs font-semibold text-amber-600 uppercase rounded-tr-lg">Laminate Wastage</th>
                                     </tr>
                                   </thead>
                                   <tbody className="divide-y divide-border bg-card">
@@ -357,19 +355,16 @@ const FGProductionPage: React.FC = () => {
                                           {m.allocatedQty || 0} <span className="text-xs text-muted-foreground">{m.allocatedUnit}</span>
                                         </td>
                                         <td className="px-3 py-2 text-sm text-right font-bold text-emerald-600">
-                                          {m.actualFgQty || (entry.status === 'COMPLETED' ? '0' : '-')} 
-                                          {entry.status === 'COMPLETED' && m.actualFgUnit && <span className="text-xs text-emerald-600/50 ml-1">{m.actualFgUnit}</span>}
+                                          {m.todayAchieve || (entry.status === 'COMPLETED' ? '0' : '-')}
+                                          {entry.status === 'COMPLETED' && <span className="text-xs text-emerald-600/50 ml-1">Boxes/Unit</span>}
                                         </td>
                                         <td className="px-3 py-2 text-sm text-right text-amber-600 font-semibold">
-                                          {m.actualByproduct || (entry.status === 'COMPLETED' ? '0' : '-')}
-                                          {entry.status === 'COMPLETED' && m.actualByproductUnit && <span className="text-xs text-amber-600/50 ml-1">{m.actualByproductUnit}</span>}
-                                        </td>
-                                        <td className="px-3 py-2 text-sm text-right text-red-600 font-semibold">
-                                          {m.actualScrap || (entry.status === 'COMPLETED' ? '0' : '-')}
-                                          {entry.status === 'COMPLETED' && m.actualScrapUnit && <span className="text-xs text-red-600/50 ml-1">{m.actualScrapUnit}</span>}
-                                        </td>
-                                        <td className="px-3 py-2 text-sm text-right text-violet-600 font-bold">
-                                          {m.actualPackets > 0 ? m.actualPackets.toLocaleString() : (entry.status === 'COMPLETED' ? '0' : '-')}
+                                          {m.laminateWastageKg || (entry.status === 'COMPLETED' ? '0' : '-')}
+                                          {entry.status === 'COMPLETED' && (
+                                            <span className="text-xs text-amber-600/50 ml-1">
+                                              Kg ({m.laminateWastagePercentage || '0'}%)
+                                            </span>
+                                          )}
                                         </td>
                                       </tr>
                                     ))}

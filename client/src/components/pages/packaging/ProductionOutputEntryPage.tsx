@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, InputNumber, Input, message, Empty, Spin } from 'antd';
+import { Button, InputNumber, Input, message, Empty, Spin, Select } from 'antd';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -9,11 +9,6 @@ import {
   Factory,
   ClipboardCheck,
   CheckCircle,
-  Hash,
-  AlertTriangle,
-  Trash2,
-  Scale,
-  Zap,
   Beaker,
   FileCheck,
   ChevronLeft,
@@ -32,6 +27,16 @@ const FG_QUALITY_PARAMETERS = [
 ];
 
 const PAGE_SIZE = 10;
+
+const convertToKg = (qty: number, unit: string) => {
+  if (!qty) return 0;
+  const u = (unit || '').toUpperCase();
+  if (u === 'TON') return qty * 1000;
+  if (u === 'KG') return qty;
+  if (u === 'G' || u === 'GRAM' || u === 'GRAMS') return qty / 1000;
+  if (u === 'MG') return qty / 1000000;
+  return qty;
+};
 
 export default function ProductionOutputEntryPage() {
   const navigate = useNavigate();
@@ -81,20 +86,19 @@ export default function ProductionOutputEntryPage() {
         machine: me.machine,
         allocatedQty: me.allocatedQty,
         allocatedUnit: me.allocatedUnit,
-        plannedPackets: me.plannedPackets,
-        plannedCartons: me.plannedCartons,
-        actualFgQty: 0,
+        actualFgQty: me.allocatedQty,
         actualByproduct: 0,
         actualScrap: 0,
-        actualPackets: 0,
-        actualCartons: 0,
         machineSpeed: me.machine?.machineSpeed || null,
         todayAchieve: null,
-        laminateConsumption: null,
+        laminateConsumption: me.laminateConsumptionQty || null,
+        laminateConsumptionUnit: me.laminateConsumptionUnit || null,
         sfgConsumption: null,
         laminateWastageKg: null,
+        laminateWastageQty: null,
+        laminateWastageUnit: 'KG',
         laminateWastagePercentage: 0,
-        noManPower: false,
+        noManPower: me.manPower === false, // manPower=false means no man power available
       };
     });
     setMachineInputs(initInputs);
@@ -106,17 +110,37 @@ export default function ProductionOutputEntryPage() {
       const next = [...prev];
       (next[index] as any)[field] = value;
 
-      if (field === 'laminateWastageKg' || field === 'laminateConsumption') {
-        const cons = next[index].laminateConsumption || 0;
-        const waste = next[index].laminateWastageKg || 0;
-        if (cons > 0) {
-          next[index].laminateWastagePercentage = Number(((waste / cons) * 100).toFixed(2));
+      if (['laminateWastageQty', 'laminateWastageUnit', 'laminateConsumption', 'laminateConsumptionUnit'].includes(field)) {
+        const consQty = next[index].laminateConsumption || 0;
+        const consUnit = next[index].laminateConsumptionUnit || 'KG';
+        const wasteQty = next[index].laminateWastageQty || 0;
+        const wasteUnit = next[index].laminateWastageUnit || 'KG';
+
+        const consInKg = convertToKg(consQty, consUnit);
+        const wasteInKg = convertToKg(wasteQty, wasteUnit);
+
+        next[index].laminateWastageKg = wasteInKg;
+
+        if (consInKg > 0) {
+          next[index].laminateWastagePercentage = Number(((wasteInKg / consInKg) * 100).toFixed(2));
         } else {
           next[index].laminateWastagePercentage = 0;
         }
+      } else if (field === 'laminateWastagePercentage') {
+        const consQty = next[index].laminateConsumption || 0;
+        const consUnit = next[index].laminateConsumptionUnit || 'KG';
+        const wasteUnit = next[index].laminateWastageUnit || 'KG';
+        
+        const consInKg = convertToKg(consQty, consUnit);
+        if (consInKg > 0) {
+           const wasteInKg = (value / 100) * consInKg;
+           next[index].laminateWastageKg = wasteInKg;
+           
+           if (wasteUnit.toUpperCase() === 'KG') next[index].laminateWastageQty = Number(wasteInKg.toFixed(4));
+           else if (wasteUnit.toUpperCase() === 'G' || wasteUnit.toUpperCase() === 'GRAM' || wasteUnit.toUpperCase() === 'GRAMS') next[index].laminateWastageQty = Number((wasteInKg * 1000).toFixed(2));
+           else next[index].laminateWastageQty = Number(wasteInKg.toFixed(4));
+        }
       }
-
-      // Remove auto-calc packets since user will input it manually
       return next;
     });
   };
@@ -128,52 +152,10 @@ export default function ProductionOutputEntryPage() {
   };
 
   /* ─── Summary calculations ─── */
-  const getFactor = (unit: string) => {
-    if (!unit) return 1000;
-    const u = unit.toLowerCase();
-    if (u === 'ton') return 1000000;
-    if (u === 'kg') return 1000;
-    if (u === 'gram') return 1;
-    return 1000;
-  };
-
-  const getNormalized = (qty: number, fromUnit: string, toUnit: string) => {
-    if (!qty) return 0;
-    const fIn = getFactor(fromUnit);
-    const fOut = getFactor(toUnit);
-    return (Number(qty) * fIn) / fOut;
-  };
-
-  const displayFgUnit = machineInputs[0]?.actualUnit || selectedEntry?.targetUnit || 'KG';
-  const displayByproductUnit = machineInputs[0]?.actualByproductUnit || selectedEntry?.targetUnit || 'KG';
-  const displayScrapUnit = machineInputs[0]?.actualScrapUnit || selectedEntry?.targetUnit || 'KG';
-
-  const totalAllocated = machineInputs.reduce((s, a) => s + (Number(a.allocatedQty) || 0), 0);
-  const totalActualFg = machineInputs.reduce((s, a) => s + getNormalized(a.actualFgQty, a.actualUnit || selectedEntry?.targetUnit, displayFgUnit), 0);
-  const totalByproduct = machineInputs.reduce((s, a) => s + getNormalized(a.actualByproduct, a.actualByproductUnit || selectedEntry?.targetUnit, displayByproductUnit), 0);
-  const totalScrap = machineInputs.reduce((s, a) => s + getNormalized(a.actualScrap, a.actualScrapUnit || selectedEntry?.targetUnit, displayScrapUnit), 0);
-  const totalActualPackets = machineInputs.reduce((s, a) => s + (Number(a.actualPackets) || 0), 0);
-  const totalActualCartons = machineInputs.reduce((s, a) => s + (Number(a.actualCartons) || 0), 0);
-
   const handleSubmit = async () => {
     if (!selectedEntry) return;
 
-    // Validate
-    for (const alloc of machineInputs) {
-      if (alloc.actualFgQty > alloc.allocatedQty * 1.05) {
-        message.warning(`${alloc.machine.name}: Actual FG exceeds allocated by more than 5%. Will require approval if strict check is active.`);
-      }
-    }
-
-    if (totalActualFg <= 0) {
-      message.error('Please enter actual FG production for at least one machine');
-      return;
-    }
-
-    if (totalActualFg > selectedEntry.targetQty * 1.05) {
-      message.error(`Total actual FG exceeds batch target by more than 5%`);
-      return;
-    }
+    // Removed strict allocation validations since values are implicitly set or driven by backend
 
     setSubmitting(true);
     try {
@@ -183,8 +165,6 @@ export default function ProductionOutputEntryPage() {
           actualFgQty: a.actualFgQty,
           actualByproduct: a.actualByproduct,
           actualScrap: a.actualScrap,
-          actualPackets: a.actualPackets,
-          actualCartons: a.actualCartons,
           actualUnit: a.actualUnit || selectedEntry?.targetUnit,
           actualByproductUnit: a.actualByproductUnit || selectedEntry?.targetUnit,
           actualScrapUnit: a.actualScrapUnit || selectedEntry?.targetUnit,
@@ -234,14 +214,14 @@ export default function ProductionOutputEntryPage() {
               <span className="font-semibold text-sm">Select Running Allocation</span>
             </div>
             <div className="flex-1 max-w-[100px] h-0.5 bg-border mx-4" />
-            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-amber-600' : 'text-muted-foreground'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 1 ? 'bg-amber-600 text-white' : step > 1 ? 'bg-amber-600/20' : 'bg-muted'}`}>2</div>
-              <span className="font-semibold text-sm">FG Quality Check</span>
+            <div className={`flex items-center gap-2 ${step >= 1 ? 'text-blue-600' : 'text-muted-foreground'}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 1 ? 'bg-blue-600 text-white' : step > 1 ? 'bg-blue-600/20' : 'bg-muted'}`}>2</div>
+              <span className="font-semibold text-sm">Supervisor Output Entry</span>
             </div>
             <div className="flex-1 max-w-[100px] h-0.5 bg-border mx-4" />
-            <div className={`flex items-center gap-2 ${step >= 2 ? 'text-blue-600' : 'text-muted-foreground'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 2 ? 'bg-blue-600 text-white' : step > 2 ? 'bg-blue-600/20' : 'bg-muted'}`}>3</div>
-              <span className="font-semibold text-sm">Supervisor Output Entry</span>
+            <div className={`flex items-center gap-2 ${step >= 2 ? 'text-amber-600' : 'text-muted-foreground'}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 2 ? 'bg-amber-600 text-white' : step > 2 ? 'bg-amber-600/20' : 'bg-muted'}`}>3</div>
+              <span className="font-semibold text-sm">FG Quality Check</span>
             </div>
             <div className="flex-1 max-w-[100px] h-0.5 bg-border mx-4" />
             <div className={`flex items-center gap-2 ${step >= 3 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
@@ -347,10 +327,10 @@ export default function ProductionOutputEntryPage() {
               </motion.div>
             )}
 
-            {/* ═══ STEP 1: FG Quality Check ═══ */}
-            {step === 1 && selectedEntry && (
+            {/* ═══ STEP 2: FG Quality Check ═══ */}
+            {step === 2 && selectedEntry && (
               <motion.div
-                key="step-1"
+                key="step-quality"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
@@ -399,10 +379,10 @@ export default function ProductionOutputEntryPage() {
               </motion.div>
             )}
 
-            {/* ═══ STEP 2: Output Entry ═══ */}
-            {step === 2 && selectedEntry && (
+            {/* ═══ STEP 1: Output Entry ═══ */}
+            {step === 1 && selectedEntry && (
               <motion.div
-                key="step-1"
+                key="step-output"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
@@ -441,178 +421,105 @@ export default function ProductionOutputEntryPage() {
                             <div>
                               <div className="font-bold text-foreground text-lg">{alloc.machine.name}</div>
                               <div className="text-xs text-muted-foreground font-mono">
-                                {alloc.machine.machineId} • Allocated: <span className="font-bold text-foreground">{alloc.allocatedQty} {alloc.allocatedUnit}</span>
+                                {alloc.machine.machineId} • Product: <span className="font-bold text-primary">{selectedEntry.fgProductName}</span>
                               </div>
                             </div>
                           </div>
+                          <div className="text-right">
+                            <div className="text-xs text-muted-foreground font-semibold">Allocated</div>
+                            <div className="font-bold text-foreground">{alloc.allocatedQty} {alloc.allocatedUnit}</div>
+                          </div>
                         </div>
 
-                        {overAllocated && (
-                          <div className="mb-4 flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 text-red-600 text-xs font-bold">
-                            <AlertTriangle size={14} />
-                            Actual FG exceeds allocated quantity by more than 5%
+                        {/* Read-Only Machine Metrics */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5 p-3 rounded-lg bg-muted/20 border border-border">
+                          <div>
+                            <div className="text-[10px] font-bold text-muted-foreground uppercase">Installation Capacity</div>
+                            <div className="font-semibold text-foreground">{alloc.machine?.capacityQty || '-'} {alloc.machine?.capacityUnit === 'BOXES_PER_SHIFT' ? 'Boxes / Shift' : alloc.machine?.capacityUnit}</div>
                           </div>
-                        )}
+                          <div>
+                            <div className="text-[10px] font-bold text-muted-foreground uppercase">Machine Speed</div>
+                            <div className="font-semibold text-foreground">{alloc.machineSpeed || alloc.machine?.machineSpeed || '-'}</div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] font-bold text-muted-foreground uppercase">Laminate Cons.</div>
+                            <div className="font-semibold text-foreground">
+                              {alloc.laminateConsumption !== null ? `${alloc.laminateConsumption} ${alloc.laminateConsumptionUnit || '-'}` : '-'}
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-[10px] font-bold text-muted-foreground uppercase">Man Power Status</div>
+                            <div className="font-semibold text-amber-600">
+                              {alloc.noManPower ? 'NO MAN POWER       ' : 'MAN POWER APPLIED'}
+                            </div>
+                          </div>
+                        </div>
 
                         {/* Input fields */}
-                        <div className={`grid grid-cols-2 ${selectedEntry?.fgBatch?.cartonCapacity > 0 ? 'lg:grid-cols-5' : 'lg:grid-cols-4'} gap-5 mb-5`}>
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                              <Zap size={12} className="text-emerald-500" />
-                              Actual FG <span className="text-red-500">*</span>
-                            </label>
-                            <div className="flex items-center gap-1">
-                              <InputNumber
-                                min={0}
-                                step={0.001}
-                                precision={3}
-                                value={alloc.actualFgQty || undefined}
-                                onChange={(val) => updateInput(idx, 'actualFgQty', val || 0)}
-                                placeholder="0.000"
-                                size="large"
-                                className={`w-full font-semibold ${overAllocated ? 'border-red-400' : ''}`}
-                              />
-                              <select 
-                                className="h-10 px-2 text-sm font-bold bg-muted/20 border border-border rounded-lg outline-none"
-                                value={alloc.actualUnit || selectedEntry?.targetUnit || 'KG'}
-                                onChange={(e) => updateInput(idx, 'actualUnit', e.target.value)}
-                              >
-                                <option value="KG">KG</option>
-                                <option value="Ton">Ton</option>
-                                <option value="Gram">Gram</option>
-                              </select>
-                            </div>
-                          </div>
-
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                              <Trash2 size={12} className="text-amber-500" />
-                              Byproduct
-                            </label>
-                            <div className="flex items-center gap-1">
-                              <InputNumber
-                                min={0}
-                                step={0.001}
-                                precision={3}
-                                value={alloc.actualByproduct || undefined}
-                                onChange={(val) => updateInput(idx, 'actualByproduct', val || 0)}
-                                placeholder="0.000"
-                                size="large"
-                                className="w-full font-semibold"
-                              />
-                              <select 
-                                className="h-10 px-2 text-sm font-bold bg-muted/20 border border-border rounded-lg outline-none"
-                                value={alloc.actualByproductUnit || selectedEntry?.targetUnit || 'KG'}
-                                onChange={(e) => updateInput(idx, 'actualByproductUnit', e.target.value)}
-                              >
-                                <option value="KG">KG</option>
-                                <option value="Ton">Ton</option>
-                                <option value="Gram">Gram</option>
-                              </select>
-                            </div>
-                          </div>
-
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                              <AlertTriangle size={12} className="text-red-500" />
-                              Scrap
-                            </label>
-                            <div className="flex items-center gap-1">
-                              <InputNumber
-                                min={0}
-                                step={0.001}
-                                precision={3}
-                                value={alloc.actualScrap || undefined}
-                                onChange={(val) => updateInput(idx, 'actualScrap', val || 0)}
-                                placeholder="0.000"
-                                size="large"
-                                className="w-full font-semibold"
-                              />
-                              <select 
-                                className="h-10 px-2 text-sm font-bold bg-muted/20 border border-border rounded-lg outline-none"
-                                value={alloc.actualScrapUnit || selectedEntry?.targetUnit || 'KG'}
-                                onChange={(e) => updateInput(idx, 'actualScrapUnit', e.target.value)}
-                              >
-                                <option value="KG">KG</option>
-                                <option value="Ton">Ton</option>
-                                <option value="Gram">Gram</option>
-                              </select>
-                            </div>
-                          </div>
-
-                          <div className="space-y-2">
-                            <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                              <Hash size={12} className="text-violet-500" />
-                              Actual Packets
-                            </label>
-                            <InputNumber
-                              min={0}
-                              step={1}
-                              precision={0}
-                              value={alloc.actualPackets || undefined}
-                              onChange={(val) => updateInput(idx, 'actualPackets', val || 0)}
-                              placeholder="0"
-                              size="large"
-                              className="w-full font-semibold"
-                            />
-                          </div>
-                          
-                          {selectedEntry?.fgBatch?.cartonCapacity > 0 && (
-                            <div className="space-y-2">
-                              <label className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                                <Package size={12} className="text-amber-500" />
-                                Actual Cartons
+                          <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 mb-5 p-4 rounded-xl border border-primary/20 bg-primary/5`}>
+                            <div className="space-y-1.5">
+                              <label className="text-xs font-bold text-foreground uppercase tracking-wider">
+                                Today Achievement
                               </label>
-                              <InputNumber
-                                min={0}
-                                step={1}
-                                precision={0}
-                                value={alloc.actualCartons || undefined}
-                                onChange={(val) => updateInput(idx, 'actualCartons', val || 0)}
-                                placeholder="0"
-                                size="large"
-                                className="w-full font-semibold border-amber-500/30"
-                              />
+                              <div className="flex items-center gap-2">
+                                <InputNumber
+                                  min={0}
+                                  step={0.01}
+                                  value={alloc.todayAchieve}
+                                  onChange={(val) => updateInput(idx, 'todayAchieve', val || 0)}
+                                  placeholder="0.00"
+                                  size="large"
+                                  className={`w-full font-bold text-emerald-600`}
+                                />
+                                <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">Boxes / Unit</span>
+                              </div>
                             </div>
-                          )}
-                        </div>
-
-                        {/* New Operational Fields */}
-                        <div className="border-t border-border pt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div className="space-y-1.5 flex items-center justify-between col-span-2 md:col-span-4 bg-muted/20 p-2 rounded-lg mb-2 border border-border">
-                                <span className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-1.5"><Factory size={12}/> No Man Power (Machine Idle)</span>
-                                <input type="checkbox" checked={alloc.noManPower} onChange={(e) => updateInput(idx, 'noManPower', e.target.checked)} className="w-4 h-4 cursor-pointer accent-violet-600" />
+                            
+                            <div className="space-y-1.5">
+                              <label className="text-xs font-bold text-foreground uppercase tracking-wider">
+                                Laminate Wastage
+                              </label>
+                              <div className="flex items-center gap-2">
+                                <InputNumber
+                                  min={0}
+                                  step={0.001}
+                                  value={alloc.laminateWastageQty}
+                                  onChange={(val) => updateInput(idx, 'laminateWastageQty', val || 0)}
+                                  placeholder="0.000"
+                                  size="large"
+                                  className="w-full font-semibold flex-1"
+                                />
+                                <Select
+                                  value={alloc.laminateWastageUnit}
+                                  onChange={(val) => updateInput(idx, 'laminateWastageUnit', val)}
+                                  size="large"
+                                  options={[
+                                    { value: 'KG', label: 'KG' },
+                                    { value: 'G', label: 'Grams' }
+                                  ]}
+                                  className="w-24 shrink-0 font-bold"
+                                />
+                              </div>
                             </div>
 
-                            {!alloc.noManPower && (
-                              <>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Machine Speed (ppm)</label>
-                                  <InputNumber min={0} value={alloc.machineSpeed} onChange={(v) => updateInput(idx, 'machineSpeed', v)} className="w-full font-semibold" placeholder="0" />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Today Achievement</label>
-                                  <InputNumber min={0} step={0.001} value={alloc.todayAchieve} onChange={(v) => updateInput(idx, 'todayAchieve', v)} className="w-full font-semibold text-emerald-600" placeholder="0.00" />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">SFG Consumption</label>
-                                  <InputNumber min={0} step={0.001} value={alloc.sfgConsumption} onChange={(v) => updateInput(idx, 'sfgConsumption', v)} className="w-full font-semibold" placeholder="0.00" />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Laminate Consumption (Kg)</label>
-                                  <InputNumber min={0} step={0.001} value={alloc.laminateConsumption} onChange={(v) => updateInput(idx, 'laminateConsumption', v)} className="w-full font-semibold" placeholder="0.00" />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Laminate Wastage (Kg)</label>
-                                  <InputNumber min={0} step={0.001} value={alloc.laminateWastageKg} onChange={(v) => updateInput(idx, 'laminateWastageKg', v)} className="w-full font-semibold" placeholder="0.00" />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-muted-foreground uppercase">Laminate Wastage %</label>
-                                  <InputNumber value={alloc.laminateWastagePercentage} disabled className="w-full font-semibold bg-muted/30" />
-                                </div>
-                              </>
-                            )}
-                        </div>
+                            <div className="space-y-1.5">
+                              <label className="text-xs font-bold text-foreground uppercase tracking-wider">
+                                Laminate Wastage
+                              </label>
+                              <div className="flex items-center gap-2">
+                                <InputNumber
+                                  min={0}
+                                  step={0.01}
+                                  value={alloc.laminateWastagePercentage}
+                                  onChange={(val) => updateInput(idx, 'laminateWastagePercentage', val || 0)}
+                                  placeholder="0.00"
+                                  size="large"
+                                  className="w-full font-semibold"
+                                />
+                                <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">%</span>
+                              </div>
+                            </div>
+                          </div>
                       </motion.div>
                     );
                   })}
@@ -639,27 +546,7 @@ export default function ProductionOutputEntryPage() {
                   </div>
                 </div>
 
-                {/* Summary Cards */}
-                <div className={`grid grid-cols-2 ${selectedEntry?.fgBatch?.cartonCapacity > 0 ? 'md:grid-cols-3 lg:grid-cols-6' : 'md:grid-cols-5'} gap-3 mb-6`}>
-                  {[
-                    { label: 'Target FG', value: `${selectedEntry.targetQty} ${selectedEntry.targetUnit}`, color: 'from-blue-500 to-indigo-600', icon: <Scale size={16} /> },
-                    { label: 'Actual FG', value: `${totalActualFg.toFixed(3)} ${displayFgUnit}`, color: 'from-emerald-500 to-teal-600', icon: <Zap size={16} /> },
-                    { label: 'Byproduct', value: `${totalByproduct.toFixed(3)} ${displayByproductUnit}`, color: 'from-amber-500 to-orange-600', icon: <Trash2 size={16} /> },
-                    { label: 'Scrap', value: `${totalScrap.toFixed(3)} ${displayScrapUnit}`, color: 'from-red-500 to-rose-600', icon: <AlertTriangle size={16} /> },
-                    { label: 'Actual Packets', value: totalActualPackets.toLocaleString(), color: 'from-violet-500 to-purple-600', icon: <Hash size={16} /> },
-                    selectedEntry?.fgBatch?.cartonCapacity > 0 ? { label: 'Actual Cartons', value: totalActualCartons.toLocaleString(), color: 'from-amber-500 to-yellow-600', icon: <Package size={16} /> } : null,
-                  ].filter(Boolean).map((card: any, i) => (
-                    <div key={i} className={`rounded-xl p-4 bg-gradient-to-br ${card.color} text-white shadow-lg relative overflow-hidden`}>
-                      <div className="absolute -right-2 -top-2 w-12 h-12 bg-white/10 rounded-full blur-lg" />
-                      <div className="relative z-10">
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider opacity-80 mb-1">
-                          {card.icon} {card.label}
-                        </div>
-                        <div className="text-lg font-black">{card.value}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                {/* Removed Summary Cards as requested */}
 
                 {/* Detailed Table */}
                 <div className="rounded-xl border border-border shadow-sm overflow-hidden bg-card mb-6">
@@ -669,11 +556,8 @@ export default function ProductionOutputEntryPage() {
                         <tr>
                           <th className="px-4 py-3 text-left text-xs font-bold text-muted-foreground uppercase">Machine</th>
                           <th className="px-4 py-3 text-right text-xs font-bold text-muted-foreground uppercase">Allocated</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-emerald-600 uppercase">Actual FG</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-amber-600 uppercase">Byproduct</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-red-600 uppercase">Scrap</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-violet-600 uppercase">Packets</th>
-                          {selectedEntry?.fgBatch?.cartonCapacity > 0 && <th className="px-4 py-3 text-right text-xs font-bold text-amber-600 uppercase">Cartons</th>}
+                          <th className="px-4 py-3 text-right text-xs font-bold text-emerald-600 uppercase">Today Achievement</th>
+                          <th className="px-4 py-3 text-right text-xs font-bold text-amber-600 uppercase rounded-tr-lg">Laminate Wastage</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">
@@ -687,50 +571,14 @@ export default function ProductionOutputEntryPage() {
                               {alloc.allocatedQty} {alloc.allocatedUnit}
                             </td>
                             <td className="px-4 py-3 text-right font-bold text-emerald-600">
-                              {alloc.actualFgQty} {alloc.actualUnit || selectedEntry.targetUnit}
+                              {alloc.todayAchieve || '-'} <span className="text-xs">Boxes/Shift</span>
                             </td>
                             <td className="px-4 py-3 text-right font-semibold text-amber-600">
-                              {alloc.actualByproduct} {alloc.actualByproductUnit || selectedEntry.targetUnit}
+                              {alloc.laminateWastageQty || '-'} {alloc.laminateWastageUnit || 'KG'} <span className="text-xs">({alloc.laminateWastagePercentage || '0'}%)</span>
                             </td>
-                            <td className="px-4 py-3 text-right font-semibold text-red-600">
-                              {alloc.actualScrap} {alloc.actualScrapUnit || selectedEntry.targetUnit}
-                            </td>
-                            <td className="px-4 py-3 text-right font-bold text-violet-600">
-                              {alloc.actualPackets.toLocaleString()}
-                            </td>
-                            {selectedEntry?.fgBatch?.cartonCapacity > 0 && (
-                              <td className="px-4 py-3 text-right font-bold text-amber-600">
-                                {alloc.actualCartons.toLocaleString()}
-                              </td>
-                            )}
                           </tr>
                         ))}
                       </tbody>
-                      <tfoot className="bg-muted/40 border-t-2 border-border font-bold">
-                        <tr>
-                          <td className="px-4 py-3 text-foreground">TOTAL</td>
-                          <td className="px-4 py-3 text-right text-muted-foreground">
-                            {totalAllocated.toFixed(3)} {selectedEntry.targetUnit}
-                          </td>
-                          <td className="px-4 py-3 text-right text-emerald-600 text-base">
-                            {totalActualFg.toFixed(3)} {displayFgUnit}
-                          </td>
-                          <td className="px-4 py-3 text-right text-amber-600">
-                            {totalByproduct.toFixed(3)} {displayByproductUnit}
-                          </td>
-                          <td className="px-4 py-3 text-right text-red-600">
-                            {totalScrap.toFixed(3)} {displayScrapUnit}
-                          </td>
-                          <td className="px-4 py-3 text-right text-violet-600 text-base">
-                            {totalActualPackets.toLocaleString()}
-                          </td>
-                          {selectedEntry?.fgBatch?.cartonCapacity > 0 && (
-                            <td className="px-4 py-3 text-right text-amber-600 text-base">
-                              {totalActualCartons.toLocaleString()}
-                            </td>
-                          )}
-                        </tr>
-                      </tfoot>
                     </table>
                   </div>
                 </div>
@@ -795,6 +643,23 @@ export default function ProductionOutputEntryPage() {
                   type="primary"
                   size="large"
                   onClick={() => {
+                    const isValid = machineInputs.some(alloc => alloc.todayAchieve > 0 || alloc.noManPower);
+                    if (!isValid) {
+                      message.warning('Please enter Today Achievement for at least one active machine before proceeding');
+                      return;
+                    }
+                    setStep(step + 1);
+                  }}
+                  className="rounded-xl px-6 h-11 font-bold shadow-lg shadow-blue-500/20 border-0"
+                  style={{ background: 'linear-gradient(135deg, #3b82f6, #4f46e5)' }}
+                >
+                  Proceed to Quality Check <ArrowRight size={16} className="ml-1 inline" />
+                </Button>
+              ) : step === 2 ? (
+                <Button
+                  type="primary"
+                  size="large"
+                  onClick={() => {
                     const allFilled = qualityResults.every(r => r.trim() !== '');
                     if (!allFilled) {
                       message.warning('Please enter results for all quality parameters');
@@ -805,22 +670,6 @@ export default function ProductionOutputEntryPage() {
                   className="rounded-xl px-6 h-11 font-bold shadow-lg shadow-amber-500/20 border-0"
                   style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}
                 >
-                  Confirm Quality Results <ArrowRight size={16} className="ml-1 inline" />
-                </Button>
-              ) : step === 2 ? (
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={() => {
-                    if (totalActualFg <= 0) {
-                      message.warning('Please enter actual production quantities before proceeding');
-                      return;
-                    }
-                    setStep(step + 1);
-                  }}
-                  className="rounded-xl px-6 h-11 font-bold shadow-lg shadow-blue-500/20 border-0"
-                  style={{ background: 'linear-gradient(135deg, #3b82f6, #4f46e5)' }}
-                >
                   Review Details <ArrowRight size={16} className="ml-1 inline" />
                 </Button>
               ) : (
@@ -829,7 +678,7 @@ export default function ProductionOutputEntryPage() {
                   size="large"
                   loading={submitting}
                   onClick={handleSubmit}
-                  disabled={totalActualFg <= 0}
+                  disabled={false}
                   className="rounded-xl px-8 h-11 text-base font-bold shadow-lg shadow-emerald-500/30 border-0 transition-all hover:scale-105 active:scale-95"
                   style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}
                 >

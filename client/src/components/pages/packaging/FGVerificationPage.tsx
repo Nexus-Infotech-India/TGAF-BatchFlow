@@ -23,8 +23,8 @@ interface Verification {
   verificationNumber: string;
   entryNumber: string;
   fgProductName: string;
+  totalAchievedBoxes?: number;
   totalPackets: number;
-  totalCartons?: number;
   packetSize?: number;
   packetUnit?: string;
   cartonCapacity?: number;
@@ -34,6 +34,7 @@ interface Verification {
   rejectionReason?: string;
   dispatchedAt: string;
   verifiedAt?: string;
+  productionEntry?: any;
 }
 
 /* ─── Component ─── */
@@ -159,7 +160,7 @@ const FGVerificationPage: React.FC = () => {
                   <tr className="bg-muted/40">
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">FG Batch ID</th>
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Product</th>
-                    <th className="px-5 py-3.5 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Cartons</th>
+                    <th className="px-5 py-3.5 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Boxes / Shift</th>
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Destination</th>
                     <th className="px-5 py-3.5 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Status</th>
                     <th className="px-5 py-3.5 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Actions</th>
@@ -188,7 +189,12 @@ const FGVerificationPage: React.FC = () => {
                         <div className="text-sm font-semibold text-foreground truncate">{v.fgProductName}</div>
                       </td>
                       <td className="px-5 py-3.5 text-right">
-                        <span className="text-sm font-bold text-amber-600">{v.totalCartons ? v.totalCartons.toLocaleString() : '-'}</span>
+                        <span className="text-sm font-bold text-amber-600">
+                          {v.totalAchievedBoxes?.toLocaleString() ?? 
+                            (v.productionEntry?.machineEntries 
+                              ? v.productionEntry.machineEntries.reduce((sum: number, m: any) => sum + (Number(m.todayAchieve) || 0), 0).toLocaleString() 
+                              : '-')}
+                        </span>
                       </td>
                       <td className="px-5 py-3.5 text-sm text-foreground">
                         <span className="inline-flex items-center gap-1.5"><MapPin size={13} className="text-muted-foreground shrink-0" />{v.toLocationName}</span>

@@ -103,50 +103,39 @@ export class FGProductionController {
         where: { id: { in: machineIds } },
       });
 
-      let totalPlannedPackets = 0;
-      let totalPlannedCartons = 0;
       let totalAllocatedQty = 0;
-
-      const packetSizeGrams = fgBatch.packetSize && fgBatch.packetUnit
-        ? toGrams(fgBatch.packetSize, fgBatch.packetUnit)
-        : 0;
 
       const enrichedEntries = machineEntries.map((entry: any) => {
         const machine = machines.find(m => m.id === entry.machineId)!;
         const allocatedQty = Number(entry.allocatedQty) || 0;
-        const plannedPackets = Number(entry.plannedPackets) || 0;
-        const plannedCartons = Number(entry.plannedCartons) || 0;
 
         totalAllocatedQty += allocatedQty;
-        totalPlannedPackets += plannedPackets;
-        totalPlannedCartons += plannedCartons;
 
         return {
           machineId: machine.id,
           machineName: machine.name,
           allocatedQty,
           allocatedUnit: fgBatch.productionUnit,
-          plannedPackets,
-          plannedCartons,
           actualFgQty: 0,
           actualFgUnit: fgBatch.productionUnit,
           actualByproduct: 0,
           actualByproductUnit: fgBatch.productionUnit,
           actualScrap: 0,
           actualScrapUnit: fgBatch.productionUnit,
-          actualPackets: 0,
-          actualCartons: 0,
+          // Enhanced machine assignment fields
+          productName: entry.productName || null,
+          instulationCapacity: entry.instulationCapacity != null ? Number(entry.instulationCapacity) : null,
+          instulationCapacityUnit: entry.instulationCapacityUnit || null,
+          laminateConsumptionQty: entry.laminateConsumptionQty != null ? Number(entry.laminateConsumptionQty) : null,
+          laminateConsumptionUnit: entry.laminateConsumptionUnit || null,
+          sfgConsumptionQty: entry.sfgConsumptionQty != null ? Number(entry.sfgConsumptionQty) : null,
+          sfgConsumptionUnit: entry.sfgConsumptionUnit || null,
+          manPower: entry.manPower !== undefined ? Boolean(entry.manPower) : true,
           notes: entry.notes || null,
         };
       });
 
-      // Validation: total allocated shouldn't wildly exceed batch target
-      if (totalAllocatedQty > fgBatch.productionQty * 1.05) {
-        res.status(400).json({
-          error: `Total allocated quantity (${totalAllocatedQty}) exceeds batch target (${fgBatch.productionQty}) by more than 5%.`,
-        });
-        return;
-      }
+      // No capacity validation barrier - allow flexible allocation
 
       // Generate entry number
       const today = new Date();
@@ -161,7 +150,6 @@ export class FGProductionController {
         const lastSeq = parseInt(lastEntry.entryNumber.replace(prefix, ''), 10);
         if (!isNaN(lastSeq)) seq = lastSeq + 1;
       }
-      // We already calculated totalPlannedPackets during mapping from user input
       const entryNumber = `${prefix}${String(seq).padStart(4, '0')}`;
 
       // Resolve acting user before the transaction so FK constraints don't break
@@ -181,16 +169,9 @@ export class FGProductionController {
             fgProductName: fgBatch.fgProductName,
             targetQty: fgBatch.productionQty,
             targetUnit: fgBatch.productionUnit,
-            packetSize: fgBatch.packetSize,
-            packetUnit: fgBatch.packetUnit,
-            cartonCapacity: fgBatch.cartonCapacity,
-            totalPlannedPackets,
-            totalPlannedCartons,
             totalActualFg: 0,
             totalActualByproduct: 0,
             totalActualScrap: 0,
-            totalActualPackets: 0,
-            totalActualCartons: 0,
             status: 'PENDING',
             notes: notes || null,
             createdById: resolvedUserId,
@@ -230,7 +211,6 @@ export class FGProductionController {
           targetQty: fgBatch.productionQty,
           targetUnit: fgBatch.productionUnit,
           totalAllocatedQty,
-          totalPlannedPackets,
         },
       });
     } catch (error) {
@@ -342,16 +322,13 @@ export class FGProductionController {
       let totalActualFg = 0;
       let totalActualByproduct = 0;
       let totalActualScrap = 0;
-      let totalActualPackets = 0;
-      let totalActualCartons = 0;
+      let totalAchievedBoxes = 0;
 
       await prisma.$transaction(async (tx) => {
         for (const input of machineEntries) {
           const actualFgQty = Number(input.actualFgQty) || 0;
           const actualByproduct = Number(input.actualByproduct) || 0;
           const actualScrap = Number(input.actualScrap) || 0;
-          const actualPackets = Number(input.actualPackets) || 0;
-          const actualCartons = Number(input.actualCartons) || 0;
           
           const machineSpeed = input.machineSpeed != null ? String(input.machineSpeed) : null;
           const todayAchieve = input.todayAchieve != null ? Number(input.todayAchieve) : null;
@@ -380,8 +357,7 @@ export class FGProductionController {
           totalActualFg += (actualFgQty * factor(actualUnit)) / fOut;
           totalActualByproduct += (actualByproduct * factor(actualByproductUnit)) / fOut;
           totalActualScrap += (actualScrap * factor(actualScrapUnit)) / fOut;
-          totalActualPackets += actualPackets;
-          totalActualCartons += actualCartons;
+          totalAchievedBoxes += todayAchieve || 0;
 
           await tx.fGProductionMachineEntry.update({
             where: { id: input.id },
@@ -392,8 +368,6 @@ export class FGProductionController {
               actualByproductUnit,
               actualScrap,
               actualScrapUnit,
-              actualPackets,
-              actualCartons,
               machineSpeed,
               todayAchieve,
               laminateConsumption,
@@ -416,8 +390,7 @@ export class FGProductionController {
             totalActualFg,
             totalActualByproduct,
             totalActualScrap,
-            totalActualPackets,
-            totalActualCartons,
+            totalAchievedBoxes,
             status: 'COMPLETED',
           },
         });
@@ -466,7 +439,7 @@ export class FGProductionController {
             entity: 'FGProductionEntry',
             entityId: id,
             userId: actingUserId,
-            description: `FG Production Output submitted for ${existingEntry.entryNumber}. Actual FG: ${totalActualFg}, Packets: ${totalActualPackets}`,
+            description: `FG Production Output submitted for ${existingEntry.entryNumber}. Actual FG: ${totalActualFg}`,
           },
         });
       }, { timeout: 15000 });

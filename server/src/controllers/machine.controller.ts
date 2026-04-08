@@ -3,14 +3,14 @@ import { PrismaClient } from '../generated/prisma';
 
 const prisma = new PrismaClient();
 
-const VALID_CAPACITY_UNITS = ['TON_PER_SHIFT', 'KG_PER_SHIFT'];
+const VALID_CAPACITY_UNITS = ['BOXES_PER_SHIFT'];
 
 export const createMachine = async (req: Request, res: Response): Promise<void> => {
   try {
     const { machineId, name, location, capacityQty, capacityUnit, machineSpeed } = req.body;
 
     if (!VALID_CAPACITY_UNITS.includes(capacityUnit)) {
-      res.status(400).json({ success: false, error: 'Invalid capacity unit. Use TON_PER_SHIFT or KG_PER_SHIFT' });
+      res.status(400).json({ success: false, error: 'Invalid capacity unit. Use BOXES_PER_SHIFT' });
       return;
     }
     
@@ -56,7 +56,7 @@ export const updateMachine = async (req: Request, res: Response): Promise<void> 
     const { name, location, capacityQty, capacityUnit, machineId, machineSpeed } = req.body;
 
     if (capacityUnit && !VALID_CAPACITY_UNITS.includes(capacityUnit)) {
-      res.status(400).json({ success: false, error: 'Invalid capacity unit. Use TON_PER_SHIFT or KG_PER_SHIFT' });
+      res.status(400).json({ success: false, error: 'Invalid capacity unit. Use BOXES_PER_SHIFT' });
       return;
     }
 

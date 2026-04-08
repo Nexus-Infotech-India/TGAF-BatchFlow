@@ -927,21 +927,23 @@ model MaterialTransfer {
 }
 
 model MaterialTransferLine {
-  id                String           @id @default(uuid())
-  transferId        String
-  lineType          TransferLineType
-  rawMaterialId     String?
-  productName       String?
-  skuCode           String?
-  quantity          Float
-  unitOfMeasurement String
-  batchNumber       String?
-  cleaningLotId     String?
-  numberOfBags      Int?
-  bagSizeKg         Float?           @default(25)
-  totalPackedQty    Float?
-  totalPackedUnit   String?
-  createdAt         DateTime         @default(now())
+  id                  String           @id @default(uuid())
+  transferId          String
+  lineType            TransferLineType
+  rawMaterialId       String?
+  productName         String?
+  skuCode             String?
+  quantity            Float
+  transferredQuantity Float?
+  transferredUnit     String?
+  unitOfMeasurement   String
+  batchNumber         String?
+  cleaningLotId       String?
+  numberOfBags        Int?
+  bagSizeKg           Float?           @default(25)
+  totalPackedQty      Float?
+  totalPackedUnit     String?
+  createdAt           DateTime         @default(now())
 
   transfer MaterialTransfer @relation(fields: [transferId], references: [id], onDelete: Cascade)
 }
@@ -1476,22 +1478,18 @@ model GrindingDispatchLot {
 // ==================== FG BATCH (Finished Good Batch) ====================
 
 model FGBatch {
-  id             String   @id @default(uuid())
-  batchNumber    String   @unique
+  id             String @id @default(uuid())
+  batchNumber    String @unique
   bomId          String
   fgProductName  String
   productionQty  Float
   productionUnit String
-  packetSize     Float?
-  packetUnit     String?
-  totalPackets   Int      @default(0)
-  cartonCapacity Int?
-  totalCartons   Int      @default(0)
-  status         String   @default("CREATED")
-  notes          String?
-  createdById    String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+
+  status      String   @default("CREATED")
+  notes       String?
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   consumptions      FGBatchConsumption[]
   productionEntries FGProductionEntry[]
@@ -1517,28 +1515,24 @@ model FGBatchConsumption {
 // ==================== FG PRODUCTION ENTRY ====================
 
 model FGProductionEntry {
-  id                   String   @id @default(uuid())
-  entryNumber          String   @unique
-  fgBatchId            String
-  bomId                String
-  fgProductName        String
-  targetQty            Float
-  targetUnit           String
-  packetSize           Float?
-  packetUnit           String?
-  cartonCapacity       Int?
-  totalPlannedPackets  Int      @default(0)
-  totalPlannedCartons  Int      @default(0)
-  totalActualFg        Float    @default(0)
-  totalActualByproduct Float    @default(0)
-  totalActualScrap     Float    @default(0)
-  totalActualPackets   Int      @default(0)
-  totalActualCartons   Int      @default(0)
-  status               String   @default("DRAFT")
-  notes                String?
-  createdById          String
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id            String @id @default(uuid())
+  entryNumber   String @unique
+  fgBatchId     String
+  bomId         String
+  fgProductName String
+  targetQty     Float
+  targetUnit    String
+
+  totalActualFg        Float @default(0)
+  totalActualByproduct Float @default(0)
+  totalActualScrap     Float @default(0)
+  totalAchievedBoxes   Float @default(0)
+
+  status      String   @default("DRAFT")
+  notes       String?
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   fgBatch        FGBatch                    @relation(fields: [fgBatchId], references: [id])
   machineEntries FGProductionMachineEntry[]
@@ -1547,22 +1541,20 @@ model FGProductionEntry {
 }
 
 model FGProductionMachineEntry {
-  id                        String   @id @default(uuid())
-  productionEntryId         String
-  machineId                 String
-  machineName               String
-  allocatedQty              Float    @default(0)
-  allocatedUnit             String   @default("Ton")
-  plannedPackets            Int      @default(0)
-  plannedCartons            Int      @default(0)
-  actualFgQty               Float    @default(0)
-  actualFgUnit              String   @default("Ton")
-  actualByproduct           Float    @default(0)
-  actualByproductUnit       String   @default("Ton")
-  actualScrap               Float    @default(0)
-  actualScrapUnit           String   @default("Ton")
-  actualPackets             Int      @default(0)
-  actualCartons             Int      @default(0)
+  id                String @id @default(uuid())
+  productionEntryId String
+  machineId         String
+  machineName       String
+  allocatedQty      Float  @default(0)
+  allocatedUnit     String @default("Ton")
+
+  actualFgQty         Float  @default(0)
+  actualFgUnit        String @default("Ton")
+  actualByproduct     Float  @default(0)
+  actualByproductUnit String @default("Ton")
+  actualScrap         Float  @default(0)
+  actualScrapUnit     String @default("Ton")
+
   machineSpeed              String?
   todayAchieve              Float?
   laminateConsumption       Float?
@@ -1570,6 +1562,15 @@ model FGProductionMachineEntry {
   laminateWastageKg         Float?
   laminateWastagePercentage Float?
   noManPower                Boolean  @default(false)
+  // Enhanced machine assignment fields
+  productName               String?
+  instulationCapacity       Float?
+  instulationCapacityUnit   String?
+  laminateConsumptionQty    Float?
+  laminateConsumptionUnit   String?
+  sfgConsumptionQty         Float?
+  sfgConsumptionUnit        String?
+  manPower                  Boolean  @default(true)
   notes                     String?
   createdAt                 DateTime @default(now())
 
@@ -1585,7 +1586,7 @@ model Machine {
   name         String
   location     String
   capacityQty  Float
-  capacityUnit String   @default("KG_PER_SHIFT")
+  capacityUnit String   @default("BOXES_PER_SHIFT")
   machineSpeed String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -1601,11 +1602,9 @@ model FGProductionVerification {
   productionEntryId  String
   entryNumber        String
   fgProductName      String
-  totalPackets       Int       @default(0)
-  totalCartons       Int       @default(0)
-  packetSize         Float?
-  packetUnit         String?
-  cartonCapacity     Int?
+  totalActualFg      Float     @default(0)
+  actualFgUnit       String    @default("KG")
+  totalAchievedBoxes Float     @default(0)
   toLocationId       String
   toLocationName     String?
   status             String    @default("PENDING") // PENDING, ACCEPTED, REJECTED

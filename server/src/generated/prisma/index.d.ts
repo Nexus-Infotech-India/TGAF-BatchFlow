@@ -101842,18 +101842,10 @@ export namespace Prisma {
 
   export type FGBatchAvgAggregateOutputType = {
     productionQty: number | null
-    packetSize: number | null
-    totalPackets: number | null
-    cartonCapacity: number | null
-    totalCartons: number | null
   }
 
   export type FGBatchSumAggregateOutputType = {
     productionQty: number | null
-    packetSize: number | null
-    totalPackets: number | null
-    cartonCapacity: number | null
-    totalCartons: number | null
   }
 
   export type FGBatchMinAggregateOutputType = {
@@ -101863,11 +101855,6 @@ export namespace Prisma {
     fgProductName: string | null
     productionQty: number | null
     productionUnit: string | null
-    packetSize: number | null
-    packetUnit: string | null
-    totalPackets: number | null
-    cartonCapacity: number | null
-    totalCartons: number | null
     status: string | null
     notes: string | null
     createdById: string | null
@@ -101882,11 +101869,6 @@ export namespace Prisma {
     fgProductName: string | null
     productionQty: number | null
     productionUnit: string | null
-    packetSize: number | null
-    packetUnit: string | null
-    totalPackets: number | null
-    cartonCapacity: number | null
-    totalCartons: number | null
     status: string | null
     notes: string | null
     createdById: string | null
@@ -101901,11 +101883,6 @@ export namespace Prisma {
     fgProductName: number
     productionQty: number
     productionUnit: number
-    packetSize: number
-    packetUnit: number
-    totalPackets: number
-    cartonCapacity: number
-    totalCartons: number
     status: number
     notes: number
     createdById: number
@@ -101917,18 +101894,10 @@ export namespace Prisma {
 
   export type FGBatchAvgAggregateInputType = {
     productionQty?: true
-    packetSize?: true
-    totalPackets?: true
-    cartonCapacity?: true
-    totalCartons?: true
   }
 
   export type FGBatchSumAggregateInputType = {
     productionQty?: true
-    packetSize?: true
-    totalPackets?: true
-    cartonCapacity?: true
-    totalCartons?: true
   }
 
   export type FGBatchMinAggregateInputType = {
@@ -101938,11 +101907,6 @@ export namespace Prisma {
     fgProductName?: true
     productionQty?: true
     productionUnit?: true
-    packetSize?: true
-    packetUnit?: true
-    totalPackets?: true
-    cartonCapacity?: true
-    totalCartons?: true
     status?: true
     notes?: true
     createdById?: true
@@ -101957,11 +101921,6 @@ export namespace Prisma {
     fgProductName?: true
     productionQty?: true
     productionUnit?: true
-    packetSize?: true
-    packetUnit?: true
-    totalPackets?: true
-    cartonCapacity?: true
-    totalCartons?: true
     status?: true
     notes?: true
     createdById?: true
@@ -101976,11 +101935,6 @@ export namespace Prisma {
     fgProductName?: true
     productionQty?: true
     productionUnit?: true
-    packetSize?: true
-    packetUnit?: true
-    totalPackets?: true
-    cartonCapacity?: true
-    totalCartons?: true
     status?: true
     notes?: true
     createdById?: true
@@ -102082,11 +102036,6 @@ export namespace Prisma {
     fgProductName: string
     productionQty: number
     productionUnit: string
-    packetSize: number | null
-    packetUnit: string | null
-    totalPackets: number
-    cartonCapacity: number | null
-    totalCartons: number
     status: string
     notes: string | null
     createdById: string
@@ -102120,11 +102069,6 @@ export namespace Prisma {
     fgProductName?: boolean
     productionQty?: boolean
     productionUnit?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    totalPackets?: boolean
-    cartonCapacity?: boolean
-    totalCartons?: boolean
     status?: boolean
     notes?: boolean
     createdById?: boolean
@@ -102143,11 +102087,6 @@ export namespace Prisma {
     fgProductName?: boolean
     productionQty?: boolean
     productionUnit?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    totalPackets?: boolean
-    cartonCapacity?: boolean
-    totalCartons?: boolean
     status?: boolean
     notes?: boolean
     createdById?: boolean
@@ -102162,11 +102101,6 @@ export namespace Prisma {
     fgProductName?: boolean
     productionQty?: boolean
     productionUnit?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    totalPackets?: boolean
-    cartonCapacity?: boolean
-    totalCartons?: boolean
     status?: boolean
     notes?: boolean
     createdById?: boolean
@@ -102181,11 +102115,6 @@ export namespace Prisma {
     fgProductName?: boolean
     productionQty?: boolean
     productionUnit?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    totalPackets?: boolean
-    cartonCapacity?: boolean
-    totalCartons?: boolean
     status?: boolean
     notes?: boolean
     createdById?: boolean
@@ -102193,7 +102122,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FGBatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "bomId" | "fgProductName" | "productionQty" | "productionUnit" | "packetSize" | "packetUnit" | "totalPackets" | "cartonCapacity" | "totalCartons" | "status" | "notes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["fGBatch"]>
+  export type FGBatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "bomId" | "fgProductName" | "productionQty" | "productionUnit" | "status" | "notes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["fGBatch"]>
   export type FGBatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     consumptions?: boolean | FGBatch$consumptionsArgs<ExtArgs>
     productionEntries?: boolean | FGBatch$productionEntriesArgs<ExtArgs>
@@ -102217,11 +102146,6 @@ export namespace Prisma {
       fgProductName: string
       productionQty: number
       productionUnit: string
-      packetSize: number | null
-      packetUnit: string | null
-      totalPackets: number
-      cartonCapacity: number | null
-      totalCartons: number
       status: string
       notes: string | null
       createdById: string
@@ -102659,11 +102583,6 @@ export namespace Prisma {
     readonly fgProductName: FieldRef<"FGBatch", 'String'>
     readonly productionQty: FieldRef<"FGBatch", 'Float'>
     readonly productionUnit: FieldRef<"FGBatch", 'String'>
-    readonly packetSize: FieldRef<"FGBatch", 'Float'>
-    readonly packetUnit: FieldRef<"FGBatch", 'String'>
-    readonly totalPackets: FieldRef<"FGBatch", 'Int'>
-    readonly cartonCapacity: FieldRef<"FGBatch", 'Int'>
-    readonly totalCartons: FieldRef<"FGBatch", 'Int'>
     readonly status: FieldRef<"FGBatch", 'String'>
     readonly notes: FieldRef<"FGBatch", 'String'>
     readonly createdById: FieldRef<"FGBatch", 'String'>
@@ -104335,28 +104254,18 @@ export namespace Prisma {
 
   export type FGProductionEntryAvgAggregateOutputType = {
     targetQty: number | null
-    packetSize: number | null
-    cartonCapacity: number | null
-    totalPlannedPackets: number | null
-    totalPlannedCartons: number | null
     totalActualFg: number | null
     totalActualByproduct: number | null
     totalActualScrap: number | null
-    totalActualPackets: number | null
-    totalActualCartons: number | null
+    totalAchievedBoxes: number | null
   }
 
   export type FGProductionEntrySumAggregateOutputType = {
     targetQty: number | null
-    packetSize: number | null
-    cartonCapacity: number | null
-    totalPlannedPackets: number | null
-    totalPlannedCartons: number | null
     totalActualFg: number | null
     totalActualByproduct: number | null
     totalActualScrap: number | null
-    totalActualPackets: number | null
-    totalActualCartons: number | null
+    totalAchievedBoxes: number | null
   }
 
   export type FGProductionEntryMinAggregateOutputType = {
@@ -104367,16 +104276,10 @@ export namespace Prisma {
     fgProductName: string | null
     targetQty: number | null
     targetUnit: string | null
-    packetSize: number | null
-    packetUnit: string | null
-    cartonCapacity: number | null
-    totalPlannedPackets: number | null
-    totalPlannedCartons: number | null
     totalActualFg: number | null
     totalActualByproduct: number | null
     totalActualScrap: number | null
-    totalActualPackets: number | null
-    totalActualCartons: number | null
+    totalAchievedBoxes: number | null
     status: string | null
     notes: string | null
     createdById: string | null
@@ -104392,16 +104295,10 @@ export namespace Prisma {
     fgProductName: string | null
     targetQty: number | null
     targetUnit: string | null
-    packetSize: number | null
-    packetUnit: string | null
-    cartonCapacity: number | null
-    totalPlannedPackets: number | null
-    totalPlannedCartons: number | null
     totalActualFg: number | null
     totalActualByproduct: number | null
     totalActualScrap: number | null
-    totalActualPackets: number | null
-    totalActualCartons: number | null
+    totalAchievedBoxes: number | null
     status: string | null
     notes: string | null
     createdById: string | null
@@ -104417,16 +104314,10 @@ export namespace Prisma {
     fgProductName: number
     targetQty: number
     targetUnit: number
-    packetSize: number
-    packetUnit: number
-    cartonCapacity: number
-    totalPlannedPackets: number
-    totalPlannedCartons: number
     totalActualFg: number
     totalActualByproduct: number
     totalActualScrap: number
-    totalActualPackets: number
-    totalActualCartons: number
+    totalAchievedBoxes: number
     status: number
     notes: number
     createdById: number
@@ -104438,28 +104329,18 @@ export namespace Prisma {
 
   export type FGProductionEntryAvgAggregateInputType = {
     targetQty?: true
-    packetSize?: true
-    cartonCapacity?: true
-    totalPlannedPackets?: true
-    totalPlannedCartons?: true
     totalActualFg?: true
     totalActualByproduct?: true
     totalActualScrap?: true
-    totalActualPackets?: true
-    totalActualCartons?: true
+    totalAchievedBoxes?: true
   }
 
   export type FGProductionEntrySumAggregateInputType = {
     targetQty?: true
-    packetSize?: true
-    cartonCapacity?: true
-    totalPlannedPackets?: true
-    totalPlannedCartons?: true
     totalActualFg?: true
     totalActualByproduct?: true
     totalActualScrap?: true
-    totalActualPackets?: true
-    totalActualCartons?: true
+    totalAchievedBoxes?: true
   }
 
   export type FGProductionEntryMinAggregateInputType = {
@@ -104470,16 +104351,10 @@ export namespace Prisma {
     fgProductName?: true
     targetQty?: true
     targetUnit?: true
-    packetSize?: true
-    packetUnit?: true
-    cartonCapacity?: true
-    totalPlannedPackets?: true
-    totalPlannedCartons?: true
     totalActualFg?: true
     totalActualByproduct?: true
     totalActualScrap?: true
-    totalActualPackets?: true
-    totalActualCartons?: true
+    totalAchievedBoxes?: true
     status?: true
     notes?: true
     createdById?: true
@@ -104495,16 +104370,10 @@ export namespace Prisma {
     fgProductName?: true
     targetQty?: true
     targetUnit?: true
-    packetSize?: true
-    packetUnit?: true
-    cartonCapacity?: true
-    totalPlannedPackets?: true
-    totalPlannedCartons?: true
     totalActualFg?: true
     totalActualByproduct?: true
     totalActualScrap?: true
-    totalActualPackets?: true
-    totalActualCartons?: true
+    totalAchievedBoxes?: true
     status?: true
     notes?: true
     createdById?: true
@@ -104520,16 +104389,10 @@ export namespace Prisma {
     fgProductName?: true
     targetQty?: true
     targetUnit?: true
-    packetSize?: true
-    packetUnit?: true
-    cartonCapacity?: true
-    totalPlannedPackets?: true
-    totalPlannedCartons?: true
     totalActualFg?: true
     totalActualByproduct?: true
     totalActualScrap?: true
-    totalActualPackets?: true
-    totalActualCartons?: true
+    totalAchievedBoxes?: true
     status?: true
     notes?: true
     createdById?: true
@@ -104632,16 +104495,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize: number | null
-    packetUnit: string | null
-    cartonCapacity: number | null
-    totalPlannedPackets: number
-    totalPlannedCartons: number
     totalActualFg: number
     totalActualByproduct: number
     totalActualScrap: number
-    totalActualPackets: number
-    totalActualCartons: number
+    totalAchievedBoxes: number
     status: string
     notes: string | null
     createdById: string
@@ -104676,16 +104533,10 @@ export namespace Prisma {
     fgProductName?: boolean
     targetQty?: boolean
     targetUnit?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    cartonCapacity?: boolean
-    totalPlannedPackets?: boolean
-    totalPlannedCartons?: boolean
     totalActualFg?: boolean
     totalActualByproduct?: boolean
     totalActualScrap?: boolean
-    totalActualPackets?: boolean
-    totalActualCartons?: boolean
+    totalAchievedBoxes?: boolean
     status?: boolean
     notes?: boolean
     createdById?: boolean
@@ -104706,16 +104557,10 @@ export namespace Prisma {
     fgProductName?: boolean
     targetQty?: boolean
     targetUnit?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    cartonCapacity?: boolean
-    totalPlannedPackets?: boolean
-    totalPlannedCartons?: boolean
     totalActualFg?: boolean
     totalActualByproduct?: boolean
     totalActualScrap?: boolean
-    totalActualPackets?: boolean
-    totalActualCartons?: boolean
+    totalAchievedBoxes?: boolean
     status?: boolean
     notes?: boolean
     createdById?: boolean
@@ -104732,16 +104577,10 @@ export namespace Prisma {
     fgProductName?: boolean
     targetQty?: boolean
     targetUnit?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    cartonCapacity?: boolean
-    totalPlannedPackets?: boolean
-    totalPlannedCartons?: boolean
     totalActualFg?: boolean
     totalActualByproduct?: boolean
     totalActualScrap?: boolean
-    totalActualPackets?: boolean
-    totalActualCartons?: boolean
+    totalAchievedBoxes?: boolean
     status?: boolean
     notes?: boolean
     createdById?: boolean
@@ -104758,16 +104597,10 @@ export namespace Prisma {
     fgProductName?: boolean
     targetQty?: boolean
     targetUnit?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    cartonCapacity?: boolean
-    totalPlannedPackets?: boolean
-    totalPlannedCartons?: boolean
     totalActualFg?: boolean
     totalActualByproduct?: boolean
     totalActualScrap?: boolean
-    totalActualPackets?: boolean
-    totalActualCartons?: boolean
+    totalAchievedBoxes?: boolean
     status?: boolean
     notes?: boolean
     createdById?: boolean
@@ -104775,7 +104608,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FGProductionEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "entryNumber" | "fgBatchId" | "bomId" | "fgProductName" | "targetQty" | "targetUnit" | "packetSize" | "packetUnit" | "cartonCapacity" | "totalPlannedPackets" | "totalPlannedCartons" | "totalActualFg" | "totalActualByproduct" | "totalActualScrap" | "totalActualPackets" | "totalActualCartons" | "status" | "notes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["fGProductionEntry"]>
+  export type FGProductionEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "entryNumber" | "fgBatchId" | "bomId" | "fgProductName" | "targetQty" | "targetUnit" | "totalActualFg" | "totalActualByproduct" | "totalActualScrap" | "totalAchievedBoxes" | "status" | "notes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["fGProductionEntry"]>
   export type FGProductionEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
     machineEntries?: boolean | FGProductionEntry$machineEntriesArgs<ExtArgs>
@@ -104806,16 +104639,10 @@ export namespace Prisma {
       fgProductName: string
       targetQty: number
       targetUnit: string
-      packetSize: number | null
-      packetUnit: string | null
-      cartonCapacity: number | null
-      totalPlannedPackets: number
-      totalPlannedCartons: number
       totalActualFg: number
       totalActualByproduct: number
       totalActualScrap: number
-      totalActualPackets: number
-      totalActualCartons: number
+      totalAchievedBoxes: number
       status: string
       notes: string | null
       createdById: string
@@ -105255,16 +105082,10 @@ export namespace Prisma {
     readonly fgProductName: FieldRef<"FGProductionEntry", 'String'>
     readonly targetQty: FieldRef<"FGProductionEntry", 'Float'>
     readonly targetUnit: FieldRef<"FGProductionEntry", 'String'>
-    readonly packetSize: FieldRef<"FGProductionEntry", 'Float'>
-    readonly packetUnit: FieldRef<"FGProductionEntry", 'String'>
-    readonly cartonCapacity: FieldRef<"FGProductionEntry", 'Int'>
-    readonly totalPlannedPackets: FieldRef<"FGProductionEntry", 'Int'>
-    readonly totalPlannedCartons: FieldRef<"FGProductionEntry", 'Int'>
     readonly totalActualFg: FieldRef<"FGProductionEntry", 'Float'>
     readonly totalActualByproduct: FieldRef<"FGProductionEntry", 'Float'>
     readonly totalActualScrap: FieldRef<"FGProductionEntry", 'Float'>
-    readonly totalActualPackets: FieldRef<"FGProductionEntry", 'Int'>
-    readonly totalActualCartons: FieldRef<"FGProductionEntry", 'Int'>
+    readonly totalAchievedBoxes: FieldRef<"FGProductionEntry", 'Float'>
     readonly status: FieldRef<"FGProductionEntry", 'String'>
     readonly notes: FieldRef<"FGProductionEntry", 'String'>
     readonly createdById: FieldRef<"FGProductionEntry", 'String'>
@@ -105765,34 +105586,32 @@ export namespace Prisma {
 
   export type FGProductionMachineEntryAvgAggregateOutputType = {
     allocatedQty: number | null
-    plannedPackets: number | null
-    plannedCartons: number | null
     actualFgQty: number | null
     actualByproduct: number | null
     actualScrap: number | null
-    actualPackets: number | null
-    actualCartons: number | null
     todayAchieve: number | null
     laminateConsumption: number | null
     sfgConsumption: number | null
     laminateWastageKg: number | null
     laminateWastagePercentage: number | null
+    instulationCapacity: number | null
+    laminateConsumptionQty: number | null
+    sfgConsumptionQty: number | null
   }
 
   export type FGProductionMachineEntrySumAggregateOutputType = {
     allocatedQty: number | null
-    plannedPackets: number | null
-    plannedCartons: number | null
     actualFgQty: number | null
     actualByproduct: number | null
     actualScrap: number | null
-    actualPackets: number | null
-    actualCartons: number | null
     todayAchieve: number | null
     laminateConsumption: number | null
     sfgConsumption: number | null
     laminateWastageKg: number | null
     laminateWastagePercentage: number | null
+    instulationCapacity: number | null
+    laminateConsumptionQty: number | null
+    sfgConsumptionQty: number | null
   }
 
   export type FGProductionMachineEntryMinAggregateOutputType = {
@@ -105802,16 +105621,12 @@ export namespace Prisma {
     machineName: string | null
     allocatedQty: number | null
     allocatedUnit: string | null
-    plannedPackets: number | null
-    plannedCartons: number | null
     actualFgQty: number | null
     actualFgUnit: string | null
     actualByproduct: number | null
     actualByproductUnit: string | null
     actualScrap: number | null
     actualScrapUnit: string | null
-    actualPackets: number | null
-    actualCartons: number | null
     machineSpeed: string | null
     todayAchieve: number | null
     laminateConsumption: number | null
@@ -105819,6 +105634,14 @@ export namespace Prisma {
     laminateWastageKg: number | null
     laminateWastagePercentage: number | null
     noManPower: boolean | null
+    productName: string | null
+    instulationCapacity: number | null
+    instulationCapacityUnit: string | null
+    laminateConsumptionQty: number | null
+    laminateConsumptionUnit: string | null
+    sfgConsumptionQty: number | null
+    sfgConsumptionUnit: string | null
+    manPower: boolean | null
     notes: string | null
     createdAt: Date | null
   }
@@ -105830,16 +105653,12 @@ export namespace Prisma {
     machineName: string | null
     allocatedQty: number | null
     allocatedUnit: string | null
-    plannedPackets: number | null
-    plannedCartons: number | null
     actualFgQty: number | null
     actualFgUnit: string | null
     actualByproduct: number | null
     actualByproductUnit: string | null
     actualScrap: number | null
     actualScrapUnit: string | null
-    actualPackets: number | null
-    actualCartons: number | null
     machineSpeed: string | null
     todayAchieve: number | null
     laminateConsumption: number | null
@@ -105847,6 +105666,14 @@ export namespace Prisma {
     laminateWastageKg: number | null
     laminateWastagePercentage: number | null
     noManPower: boolean | null
+    productName: string | null
+    instulationCapacity: number | null
+    instulationCapacityUnit: string | null
+    laminateConsumptionQty: number | null
+    laminateConsumptionUnit: string | null
+    sfgConsumptionQty: number | null
+    sfgConsumptionUnit: string | null
+    manPower: boolean | null
     notes: string | null
     createdAt: Date | null
   }
@@ -105858,16 +105685,12 @@ export namespace Prisma {
     machineName: number
     allocatedQty: number
     allocatedUnit: number
-    plannedPackets: number
-    plannedCartons: number
     actualFgQty: number
     actualFgUnit: number
     actualByproduct: number
     actualByproductUnit: number
     actualScrap: number
     actualScrapUnit: number
-    actualPackets: number
-    actualCartons: number
     machineSpeed: number
     todayAchieve: number
     laminateConsumption: number
@@ -105875,6 +105698,14 @@ export namespace Prisma {
     laminateWastageKg: number
     laminateWastagePercentage: number
     noManPower: number
+    productName: number
+    instulationCapacity: number
+    instulationCapacityUnit: number
+    laminateConsumptionQty: number
+    laminateConsumptionUnit: number
+    sfgConsumptionQty: number
+    sfgConsumptionUnit: number
+    manPower: number
     notes: number
     createdAt: number
     _all: number
@@ -105883,34 +105714,32 @@ export namespace Prisma {
 
   export type FGProductionMachineEntryAvgAggregateInputType = {
     allocatedQty?: true
-    plannedPackets?: true
-    plannedCartons?: true
     actualFgQty?: true
     actualByproduct?: true
     actualScrap?: true
-    actualPackets?: true
-    actualCartons?: true
     todayAchieve?: true
     laminateConsumption?: true
     sfgConsumption?: true
     laminateWastageKg?: true
     laminateWastagePercentage?: true
+    instulationCapacity?: true
+    laminateConsumptionQty?: true
+    sfgConsumptionQty?: true
   }
 
   export type FGProductionMachineEntrySumAggregateInputType = {
     allocatedQty?: true
-    plannedPackets?: true
-    plannedCartons?: true
     actualFgQty?: true
     actualByproduct?: true
     actualScrap?: true
-    actualPackets?: true
-    actualCartons?: true
     todayAchieve?: true
     laminateConsumption?: true
     sfgConsumption?: true
     laminateWastageKg?: true
     laminateWastagePercentage?: true
+    instulationCapacity?: true
+    laminateConsumptionQty?: true
+    sfgConsumptionQty?: true
   }
 
   export type FGProductionMachineEntryMinAggregateInputType = {
@@ -105920,16 +105749,12 @@ export namespace Prisma {
     machineName?: true
     allocatedQty?: true
     allocatedUnit?: true
-    plannedPackets?: true
-    plannedCartons?: true
     actualFgQty?: true
     actualFgUnit?: true
     actualByproduct?: true
     actualByproductUnit?: true
     actualScrap?: true
     actualScrapUnit?: true
-    actualPackets?: true
-    actualCartons?: true
     machineSpeed?: true
     todayAchieve?: true
     laminateConsumption?: true
@@ -105937,6 +105762,14 @@ export namespace Prisma {
     laminateWastageKg?: true
     laminateWastagePercentage?: true
     noManPower?: true
+    productName?: true
+    instulationCapacity?: true
+    instulationCapacityUnit?: true
+    laminateConsumptionQty?: true
+    laminateConsumptionUnit?: true
+    sfgConsumptionQty?: true
+    sfgConsumptionUnit?: true
+    manPower?: true
     notes?: true
     createdAt?: true
   }
@@ -105948,16 +105781,12 @@ export namespace Prisma {
     machineName?: true
     allocatedQty?: true
     allocatedUnit?: true
-    plannedPackets?: true
-    plannedCartons?: true
     actualFgQty?: true
     actualFgUnit?: true
     actualByproduct?: true
     actualByproductUnit?: true
     actualScrap?: true
     actualScrapUnit?: true
-    actualPackets?: true
-    actualCartons?: true
     machineSpeed?: true
     todayAchieve?: true
     laminateConsumption?: true
@@ -105965,6 +105794,14 @@ export namespace Prisma {
     laminateWastageKg?: true
     laminateWastagePercentage?: true
     noManPower?: true
+    productName?: true
+    instulationCapacity?: true
+    instulationCapacityUnit?: true
+    laminateConsumptionQty?: true
+    laminateConsumptionUnit?: true
+    sfgConsumptionQty?: true
+    sfgConsumptionUnit?: true
+    manPower?: true
     notes?: true
     createdAt?: true
   }
@@ -105976,16 +105813,12 @@ export namespace Prisma {
     machineName?: true
     allocatedQty?: true
     allocatedUnit?: true
-    plannedPackets?: true
-    plannedCartons?: true
     actualFgQty?: true
     actualFgUnit?: true
     actualByproduct?: true
     actualByproductUnit?: true
     actualScrap?: true
     actualScrapUnit?: true
-    actualPackets?: true
-    actualCartons?: true
     machineSpeed?: true
     todayAchieve?: true
     laminateConsumption?: true
@@ -105993,6 +105826,14 @@ export namespace Prisma {
     laminateWastageKg?: true
     laminateWastagePercentage?: true
     noManPower?: true
+    productName?: true
+    instulationCapacity?: true
+    instulationCapacityUnit?: true
+    laminateConsumptionQty?: true
+    laminateConsumptionUnit?: true
+    sfgConsumptionQty?: true
+    sfgConsumptionUnit?: true
+    manPower?: true
     notes?: true
     createdAt?: true
     _all?: true
@@ -106091,16 +105932,12 @@ export namespace Prisma {
     machineName: string
     allocatedQty: number
     allocatedUnit: string
-    plannedPackets: number
-    plannedCartons: number
     actualFgQty: number
     actualFgUnit: string
     actualByproduct: number
     actualByproductUnit: string
     actualScrap: number
     actualScrapUnit: string
-    actualPackets: number
-    actualCartons: number
     machineSpeed: string | null
     todayAchieve: number | null
     laminateConsumption: number | null
@@ -106108,6 +105945,14 @@ export namespace Prisma {
     laminateWastageKg: number | null
     laminateWastagePercentage: number | null
     noManPower: boolean
+    productName: string | null
+    instulationCapacity: number | null
+    instulationCapacityUnit: string | null
+    laminateConsumptionQty: number | null
+    laminateConsumptionUnit: string | null
+    sfgConsumptionQty: number | null
+    sfgConsumptionUnit: string | null
+    manPower: boolean
     notes: string | null
     createdAt: Date
     _count: FGProductionMachineEntryCountAggregateOutputType | null
@@ -106138,16 +105983,12 @@ export namespace Prisma {
     machineName?: boolean
     allocatedQty?: boolean
     allocatedUnit?: boolean
-    plannedPackets?: boolean
-    plannedCartons?: boolean
     actualFgQty?: boolean
     actualFgUnit?: boolean
     actualByproduct?: boolean
     actualByproductUnit?: boolean
     actualScrap?: boolean
     actualScrapUnit?: boolean
-    actualPackets?: boolean
-    actualCartons?: boolean
     machineSpeed?: boolean
     todayAchieve?: boolean
     laminateConsumption?: boolean
@@ -106155,6 +105996,14 @@ export namespace Prisma {
     laminateWastageKg?: boolean
     laminateWastagePercentage?: boolean
     noManPower?: boolean
+    productName?: boolean
+    instulationCapacity?: boolean
+    instulationCapacityUnit?: boolean
+    laminateConsumptionQty?: boolean
+    laminateConsumptionUnit?: boolean
+    sfgConsumptionQty?: boolean
+    sfgConsumptionUnit?: boolean
+    manPower?: boolean
     notes?: boolean
     createdAt?: boolean
     productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
@@ -106168,16 +106017,12 @@ export namespace Prisma {
     machineName?: boolean
     allocatedQty?: boolean
     allocatedUnit?: boolean
-    plannedPackets?: boolean
-    plannedCartons?: boolean
     actualFgQty?: boolean
     actualFgUnit?: boolean
     actualByproduct?: boolean
     actualByproductUnit?: boolean
     actualScrap?: boolean
     actualScrapUnit?: boolean
-    actualPackets?: boolean
-    actualCartons?: boolean
     machineSpeed?: boolean
     todayAchieve?: boolean
     laminateConsumption?: boolean
@@ -106185,6 +106030,14 @@ export namespace Prisma {
     laminateWastageKg?: boolean
     laminateWastagePercentage?: boolean
     noManPower?: boolean
+    productName?: boolean
+    instulationCapacity?: boolean
+    instulationCapacityUnit?: boolean
+    laminateConsumptionQty?: boolean
+    laminateConsumptionUnit?: boolean
+    sfgConsumptionQty?: boolean
+    sfgConsumptionUnit?: boolean
+    manPower?: boolean
     notes?: boolean
     createdAt?: boolean
     productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
@@ -106198,16 +106051,12 @@ export namespace Prisma {
     machineName?: boolean
     allocatedQty?: boolean
     allocatedUnit?: boolean
-    plannedPackets?: boolean
-    plannedCartons?: boolean
     actualFgQty?: boolean
     actualFgUnit?: boolean
     actualByproduct?: boolean
     actualByproductUnit?: boolean
     actualScrap?: boolean
     actualScrapUnit?: boolean
-    actualPackets?: boolean
-    actualCartons?: boolean
     machineSpeed?: boolean
     todayAchieve?: boolean
     laminateConsumption?: boolean
@@ -106215,6 +106064,14 @@ export namespace Prisma {
     laminateWastageKg?: boolean
     laminateWastagePercentage?: boolean
     noManPower?: boolean
+    productName?: boolean
+    instulationCapacity?: boolean
+    instulationCapacityUnit?: boolean
+    laminateConsumptionQty?: boolean
+    laminateConsumptionUnit?: boolean
+    sfgConsumptionQty?: boolean
+    sfgConsumptionUnit?: boolean
+    manPower?: boolean
     notes?: boolean
     createdAt?: boolean
     productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
@@ -106228,16 +106085,12 @@ export namespace Prisma {
     machineName?: boolean
     allocatedQty?: boolean
     allocatedUnit?: boolean
-    plannedPackets?: boolean
-    plannedCartons?: boolean
     actualFgQty?: boolean
     actualFgUnit?: boolean
     actualByproduct?: boolean
     actualByproductUnit?: boolean
     actualScrap?: boolean
     actualScrapUnit?: boolean
-    actualPackets?: boolean
-    actualCartons?: boolean
     machineSpeed?: boolean
     todayAchieve?: boolean
     laminateConsumption?: boolean
@@ -106245,11 +106098,19 @@ export namespace Prisma {
     laminateWastageKg?: boolean
     laminateWastagePercentage?: boolean
     noManPower?: boolean
+    productName?: boolean
+    instulationCapacity?: boolean
+    instulationCapacityUnit?: boolean
+    laminateConsumptionQty?: boolean
+    laminateConsumptionUnit?: boolean
+    sfgConsumptionQty?: boolean
+    sfgConsumptionUnit?: boolean
+    manPower?: boolean
     notes?: boolean
     createdAt?: boolean
   }
 
-  export type FGProductionMachineEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productionEntryId" | "machineId" | "machineName" | "allocatedQty" | "allocatedUnit" | "plannedPackets" | "plannedCartons" | "actualFgQty" | "actualFgUnit" | "actualByproduct" | "actualByproductUnit" | "actualScrap" | "actualScrapUnit" | "actualPackets" | "actualCartons" | "machineSpeed" | "todayAchieve" | "laminateConsumption" | "sfgConsumption" | "laminateWastageKg" | "laminateWastagePercentage" | "noManPower" | "notes" | "createdAt", ExtArgs["result"]["fGProductionMachineEntry"]>
+  export type FGProductionMachineEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productionEntryId" | "machineId" | "machineName" | "allocatedQty" | "allocatedUnit" | "actualFgQty" | "actualFgUnit" | "actualByproduct" | "actualByproductUnit" | "actualScrap" | "actualScrapUnit" | "machineSpeed" | "todayAchieve" | "laminateConsumption" | "sfgConsumption" | "laminateWastageKg" | "laminateWastagePercentage" | "noManPower" | "productName" | "instulationCapacity" | "instulationCapacityUnit" | "laminateConsumptionQty" | "laminateConsumptionUnit" | "sfgConsumptionQty" | "sfgConsumptionUnit" | "manPower" | "notes" | "createdAt", ExtArgs["result"]["fGProductionMachineEntry"]>
   export type FGProductionMachineEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
     machine?: boolean | MachineDefaultArgs<ExtArgs>
@@ -106276,16 +106137,12 @@ export namespace Prisma {
       machineName: string
       allocatedQty: number
       allocatedUnit: string
-      plannedPackets: number
-      plannedCartons: number
       actualFgQty: number
       actualFgUnit: string
       actualByproduct: number
       actualByproductUnit: string
       actualScrap: number
       actualScrapUnit: string
-      actualPackets: number
-      actualCartons: number
       machineSpeed: string | null
       todayAchieve: number | null
       laminateConsumption: number | null
@@ -106293,6 +106150,14 @@ export namespace Prisma {
       laminateWastageKg: number | null
       laminateWastagePercentage: number | null
       noManPower: boolean
+      productName: string | null
+      instulationCapacity: number | null
+      instulationCapacityUnit: string | null
+      laminateConsumptionQty: number | null
+      laminateConsumptionUnit: string | null
+      sfgConsumptionQty: number | null
+      sfgConsumptionUnit: string | null
+      manPower: boolean
       notes: string | null
       createdAt: Date
     }, ExtArgs["result"]["fGProductionMachineEntry"]>
@@ -106726,16 +106591,12 @@ export namespace Prisma {
     readonly machineName: FieldRef<"FGProductionMachineEntry", 'String'>
     readonly allocatedQty: FieldRef<"FGProductionMachineEntry", 'Float'>
     readonly allocatedUnit: FieldRef<"FGProductionMachineEntry", 'String'>
-    readonly plannedPackets: FieldRef<"FGProductionMachineEntry", 'Int'>
-    readonly plannedCartons: FieldRef<"FGProductionMachineEntry", 'Int'>
     readonly actualFgQty: FieldRef<"FGProductionMachineEntry", 'Float'>
     readonly actualFgUnit: FieldRef<"FGProductionMachineEntry", 'String'>
     readonly actualByproduct: FieldRef<"FGProductionMachineEntry", 'Float'>
     readonly actualByproductUnit: FieldRef<"FGProductionMachineEntry", 'String'>
     readonly actualScrap: FieldRef<"FGProductionMachineEntry", 'Float'>
     readonly actualScrapUnit: FieldRef<"FGProductionMachineEntry", 'String'>
-    readonly actualPackets: FieldRef<"FGProductionMachineEntry", 'Int'>
-    readonly actualCartons: FieldRef<"FGProductionMachineEntry", 'Int'>
     readonly machineSpeed: FieldRef<"FGProductionMachineEntry", 'String'>
     readonly todayAchieve: FieldRef<"FGProductionMachineEntry", 'Float'>
     readonly laminateConsumption: FieldRef<"FGProductionMachineEntry", 'Float'>
@@ -106743,6 +106604,14 @@ export namespace Prisma {
     readonly laminateWastageKg: FieldRef<"FGProductionMachineEntry", 'Float'>
     readonly laminateWastagePercentage: FieldRef<"FGProductionMachineEntry", 'Float'>
     readonly noManPower: FieldRef<"FGProductionMachineEntry", 'Boolean'>
+    readonly productName: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly instulationCapacity: FieldRef<"FGProductionMachineEntry", 'Float'>
+    readonly instulationCapacityUnit: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly laminateConsumptionQty: FieldRef<"FGProductionMachineEntry", 'Float'>
+    readonly laminateConsumptionUnit: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly sfgConsumptionQty: FieldRef<"FGProductionMachineEntry", 'Float'>
+    readonly sfgConsumptionUnit: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly manPower: FieldRef<"FGProductionMachineEntry", 'Boolean'>
     readonly notes: FieldRef<"FGProductionMachineEntry", 'String'>
     readonly createdAt: FieldRef<"FGProductionMachineEntry", 'DateTime'>
   }
@@ -108328,17 +108197,13 @@ export namespace Prisma {
   }
 
   export type FGProductionVerificationAvgAggregateOutputType = {
-    totalPackets: number | null
-    totalCartons: number | null
-    packetSize: number | null
-    cartonCapacity: number | null
+    totalActualFg: number | null
+    totalAchievedBoxes: number | null
   }
 
   export type FGProductionVerificationSumAggregateOutputType = {
-    totalPackets: number | null
-    totalCartons: number | null
-    packetSize: number | null
-    cartonCapacity: number | null
+    totalActualFg: number | null
+    totalAchievedBoxes: number | null
   }
 
   export type FGProductionVerificationMinAggregateOutputType = {
@@ -108347,11 +108212,9 @@ export namespace Prisma {
     productionEntryId: string | null
     entryNumber: string | null
     fgProductName: string | null
-    totalPackets: number | null
-    totalCartons: number | null
-    packetSize: number | null
-    packetUnit: string | null
-    cartonCapacity: number | null
+    totalActualFg: number | null
+    actualFgUnit: string | null
+    totalAchievedBoxes: number | null
     toLocationId: string | null
     toLocationName: string | null
     status: string | null
@@ -108371,11 +108234,9 @@ export namespace Prisma {
     productionEntryId: string | null
     entryNumber: string | null
     fgProductName: string | null
-    totalPackets: number | null
-    totalCartons: number | null
-    packetSize: number | null
-    packetUnit: string | null
-    cartonCapacity: number | null
+    totalActualFg: number | null
+    actualFgUnit: string | null
+    totalAchievedBoxes: number | null
     toLocationId: string | null
     toLocationName: string | null
     status: string | null
@@ -108395,11 +108256,9 @@ export namespace Prisma {
     productionEntryId: number
     entryNumber: number
     fgProductName: number
-    totalPackets: number
-    totalCartons: number
-    packetSize: number
-    packetUnit: number
-    cartonCapacity: number
+    totalActualFg: number
+    actualFgUnit: number
+    totalAchievedBoxes: number
     toLocationId: number
     toLocationName: number
     status: number
@@ -108416,17 +108275,13 @@ export namespace Prisma {
 
 
   export type FGProductionVerificationAvgAggregateInputType = {
-    totalPackets?: true
-    totalCartons?: true
-    packetSize?: true
-    cartonCapacity?: true
+    totalActualFg?: true
+    totalAchievedBoxes?: true
   }
 
   export type FGProductionVerificationSumAggregateInputType = {
-    totalPackets?: true
-    totalCartons?: true
-    packetSize?: true
-    cartonCapacity?: true
+    totalActualFg?: true
+    totalAchievedBoxes?: true
   }
 
   export type FGProductionVerificationMinAggregateInputType = {
@@ -108435,11 +108290,9 @@ export namespace Prisma {
     productionEntryId?: true
     entryNumber?: true
     fgProductName?: true
-    totalPackets?: true
-    totalCartons?: true
-    packetSize?: true
-    packetUnit?: true
-    cartonCapacity?: true
+    totalActualFg?: true
+    actualFgUnit?: true
+    totalAchievedBoxes?: true
     toLocationId?: true
     toLocationName?: true
     status?: true
@@ -108459,11 +108312,9 @@ export namespace Prisma {
     productionEntryId?: true
     entryNumber?: true
     fgProductName?: true
-    totalPackets?: true
-    totalCartons?: true
-    packetSize?: true
-    packetUnit?: true
-    cartonCapacity?: true
+    totalActualFg?: true
+    actualFgUnit?: true
+    totalAchievedBoxes?: true
     toLocationId?: true
     toLocationName?: true
     status?: true
@@ -108483,11 +108334,9 @@ export namespace Prisma {
     productionEntryId?: true
     entryNumber?: true
     fgProductName?: true
-    totalPackets?: true
-    totalCartons?: true
-    packetSize?: true
-    packetUnit?: true
-    cartonCapacity?: true
+    totalActualFg?: true
+    actualFgUnit?: true
+    totalAchievedBoxes?: true
     toLocationId?: true
     toLocationName?: true
     status?: true
@@ -108594,11 +108443,9 @@ export namespace Prisma {
     productionEntryId: string
     entryNumber: string
     fgProductName: string
-    totalPackets: number
-    totalCartons: number
-    packetSize: number | null
-    packetUnit: string | null
-    cartonCapacity: number | null
+    totalActualFg: number
+    actualFgUnit: string
+    totalAchievedBoxes: number
     toLocationId: string
     toLocationName: string | null
     status: string
@@ -108637,11 +108484,9 @@ export namespace Prisma {
     productionEntryId?: boolean
     entryNumber?: boolean
     fgProductName?: boolean
-    totalPackets?: boolean
-    totalCartons?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    cartonCapacity?: boolean
+    totalActualFg?: boolean
+    actualFgUnit?: boolean
+    totalAchievedBoxes?: boolean
     toLocationId?: boolean
     toLocationName?: boolean
     status?: boolean
@@ -108662,11 +108507,9 @@ export namespace Prisma {
     productionEntryId?: boolean
     entryNumber?: boolean
     fgProductName?: boolean
-    totalPackets?: boolean
-    totalCartons?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    cartonCapacity?: boolean
+    totalActualFg?: boolean
+    actualFgUnit?: boolean
+    totalAchievedBoxes?: boolean
     toLocationId?: boolean
     toLocationName?: boolean
     status?: boolean
@@ -108687,11 +108530,9 @@ export namespace Prisma {
     productionEntryId?: boolean
     entryNumber?: boolean
     fgProductName?: boolean
-    totalPackets?: boolean
-    totalCartons?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    cartonCapacity?: boolean
+    totalActualFg?: boolean
+    actualFgUnit?: boolean
+    totalAchievedBoxes?: boolean
     toLocationId?: boolean
     toLocationName?: boolean
     status?: boolean
@@ -108712,11 +108553,9 @@ export namespace Prisma {
     productionEntryId?: boolean
     entryNumber?: boolean
     fgProductName?: boolean
-    totalPackets?: boolean
-    totalCartons?: boolean
-    packetSize?: boolean
-    packetUnit?: boolean
-    cartonCapacity?: boolean
+    totalActualFg?: boolean
+    actualFgUnit?: boolean
+    totalAchievedBoxes?: boolean
     toLocationId?: boolean
     toLocationName?: boolean
     status?: boolean
@@ -108730,7 +108569,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FGProductionVerificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "verificationNumber" | "productionEntryId" | "entryNumber" | "fgProductName" | "totalPackets" | "totalCartons" | "packetSize" | "packetUnit" | "cartonCapacity" | "toLocationId" | "toLocationName" | "status" | "rejectionReason" | "notes" | "dispatchedById" | "dispatchedAt" | "verifiedById" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["fGProductionVerification"]>
+  export type FGProductionVerificationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "verificationNumber" | "productionEntryId" | "entryNumber" | "fgProductName" | "totalActualFg" | "actualFgUnit" | "totalAchievedBoxes" | "toLocationId" | "toLocationName" | "status" | "rejectionReason" | "notes" | "dispatchedById" | "dispatchedAt" | "verifiedById" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["fGProductionVerification"]>
   export type FGProductionVerificationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
   }
@@ -108752,11 +108591,9 @@ export namespace Prisma {
       productionEntryId: string
       entryNumber: string
       fgProductName: string
-      totalPackets: number
-      totalCartons: number
-      packetSize: number | null
-      packetUnit: string | null
-      cartonCapacity: number | null
+      totalActualFg: number
+      actualFgUnit: string
+      totalAchievedBoxes: number
       toLocationId: string
       toLocationName: string | null
       status: string
@@ -109197,11 +109034,9 @@ export namespace Prisma {
     readonly productionEntryId: FieldRef<"FGProductionVerification", 'String'>
     readonly entryNumber: FieldRef<"FGProductionVerification", 'String'>
     readonly fgProductName: FieldRef<"FGProductionVerification", 'String'>
-    readonly totalPackets: FieldRef<"FGProductionVerification", 'Int'>
-    readonly totalCartons: FieldRef<"FGProductionVerification", 'Int'>
-    readonly packetSize: FieldRef<"FGProductionVerification", 'Float'>
-    readonly packetUnit: FieldRef<"FGProductionVerification", 'String'>
-    readonly cartonCapacity: FieldRef<"FGProductionVerification", 'Int'>
+    readonly totalActualFg: FieldRef<"FGProductionVerification", 'Float'>
+    readonly actualFgUnit: FieldRef<"FGProductionVerification", 'String'>
+    readonly totalAchievedBoxes: FieldRef<"FGProductionVerification", 'Float'>
     readonly toLocationId: FieldRef<"FGProductionVerification", 'String'>
     readonly toLocationName: FieldRef<"FGProductionVerification", 'String'>
     readonly status: FieldRef<"FGProductionVerification", 'String'>
@@ -113084,11 +112919,6 @@ export namespace Prisma {
     fgProductName: 'fgProductName',
     productionQty: 'productionQty',
     productionUnit: 'productionUnit',
-    packetSize: 'packetSize',
-    packetUnit: 'packetUnit',
-    totalPackets: 'totalPackets',
-    cartonCapacity: 'cartonCapacity',
-    totalCartons: 'totalCartons',
     status: 'status',
     notes: 'notes',
     createdById: 'createdById',
@@ -113124,16 +112954,10 @@ export namespace Prisma {
     fgProductName: 'fgProductName',
     targetQty: 'targetQty',
     targetUnit: 'targetUnit',
-    packetSize: 'packetSize',
-    packetUnit: 'packetUnit',
-    cartonCapacity: 'cartonCapacity',
-    totalPlannedPackets: 'totalPlannedPackets',
-    totalPlannedCartons: 'totalPlannedCartons',
     totalActualFg: 'totalActualFg',
     totalActualByproduct: 'totalActualByproduct',
     totalActualScrap: 'totalActualScrap',
-    totalActualPackets: 'totalActualPackets',
-    totalActualCartons: 'totalActualCartons',
+    totalAchievedBoxes: 'totalAchievedBoxes',
     status: 'status',
     notes: 'notes',
     createdById: 'createdById',
@@ -113151,16 +112975,12 @@ export namespace Prisma {
     machineName: 'machineName',
     allocatedQty: 'allocatedQty',
     allocatedUnit: 'allocatedUnit',
-    plannedPackets: 'plannedPackets',
-    plannedCartons: 'plannedCartons',
     actualFgQty: 'actualFgQty',
     actualFgUnit: 'actualFgUnit',
     actualByproduct: 'actualByproduct',
     actualByproductUnit: 'actualByproductUnit',
     actualScrap: 'actualScrap',
     actualScrapUnit: 'actualScrapUnit',
-    actualPackets: 'actualPackets',
-    actualCartons: 'actualCartons',
     machineSpeed: 'machineSpeed',
     todayAchieve: 'todayAchieve',
     laminateConsumption: 'laminateConsumption',
@@ -113168,6 +112988,14 @@ export namespace Prisma {
     laminateWastageKg: 'laminateWastageKg',
     laminateWastagePercentage: 'laminateWastagePercentage',
     noManPower: 'noManPower',
+    productName: 'productName',
+    instulationCapacity: 'instulationCapacity',
+    instulationCapacityUnit: 'instulationCapacityUnit',
+    laminateConsumptionQty: 'laminateConsumptionQty',
+    laminateConsumptionUnit: 'laminateConsumptionUnit',
+    sfgConsumptionQty: 'sfgConsumptionQty',
+    sfgConsumptionUnit: 'sfgConsumptionUnit',
+    manPower: 'manPower',
     notes: 'notes',
     createdAt: 'createdAt'
   };
@@ -113196,11 +113024,9 @@ export namespace Prisma {
     productionEntryId: 'productionEntryId',
     entryNumber: 'entryNumber',
     fgProductName: 'fgProductName',
-    totalPackets: 'totalPackets',
-    totalCartons: 'totalCartons',
-    packetSize: 'packetSize',
-    packetUnit: 'packetUnit',
-    cartonCapacity: 'cartonCapacity',
+    totalActualFg: 'totalActualFg',
+    actualFgUnit: 'actualFgUnit',
+    totalAchievedBoxes: 'totalAchievedBoxes',
     toLocationId: 'toLocationId',
     toLocationName: 'toLocationName',
     status: 'status',
@@ -120295,11 +120121,6 @@ export namespace Prisma {
     fgProductName?: StringFilter<"FGBatch"> | string
     productionQty?: FloatFilter<"FGBatch"> | number
     productionUnit?: StringFilter<"FGBatch"> | string
-    packetSize?: FloatNullableFilter<"FGBatch"> | number | null
-    packetUnit?: StringNullableFilter<"FGBatch"> | string | null
-    totalPackets?: IntFilter<"FGBatch"> | number
-    cartonCapacity?: IntNullableFilter<"FGBatch"> | number | null
-    totalCartons?: IntFilter<"FGBatch"> | number
     status?: StringFilter<"FGBatch"> | string
     notes?: StringNullableFilter<"FGBatch"> | string | null
     createdById?: StringFilter<"FGBatch"> | string
@@ -120317,11 +120138,6 @@ export namespace Prisma {
     fgProductName?: SortOrder
     productionQty?: SortOrder
     productionUnit?: SortOrder
-    packetSize?: SortOrderInput | SortOrder
-    packetUnit?: SortOrderInput | SortOrder
-    totalPackets?: SortOrder
-    cartonCapacity?: SortOrderInput | SortOrder
-    totalCartons?: SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdById?: SortOrder
@@ -120342,11 +120158,6 @@ export namespace Prisma {
     fgProductName?: StringFilter<"FGBatch"> | string
     productionQty?: FloatFilter<"FGBatch"> | number
     productionUnit?: StringFilter<"FGBatch"> | string
-    packetSize?: FloatNullableFilter<"FGBatch"> | number | null
-    packetUnit?: StringNullableFilter<"FGBatch"> | string | null
-    totalPackets?: IntFilter<"FGBatch"> | number
-    cartonCapacity?: IntNullableFilter<"FGBatch"> | number | null
-    totalCartons?: IntFilter<"FGBatch"> | number
     status?: StringFilter<"FGBatch"> | string
     notes?: StringNullableFilter<"FGBatch"> | string | null
     createdById?: StringFilter<"FGBatch"> | string
@@ -120364,11 +120175,6 @@ export namespace Prisma {
     fgProductName?: SortOrder
     productionQty?: SortOrder
     productionUnit?: SortOrder
-    packetSize?: SortOrderInput | SortOrder
-    packetUnit?: SortOrderInput | SortOrder
-    totalPackets?: SortOrder
-    cartonCapacity?: SortOrderInput | SortOrder
-    totalCartons?: SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdById?: SortOrder
@@ -120391,11 +120197,6 @@ export namespace Prisma {
     fgProductName?: StringWithAggregatesFilter<"FGBatch"> | string
     productionQty?: FloatWithAggregatesFilter<"FGBatch"> | number
     productionUnit?: StringWithAggregatesFilter<"FGBatch"> | string
-    packetSize?: FloatNullableWithAggregatesFilter<"FGBatch"> | number | null
-    packetUnit?: StringNullableWithAggregatesFilter<"FGBatch"> | string | null
-    totalPackets?: IntWithAggregatesFilter<"FGBatch"> | number
-    cartonCapacity?: IntNullableWithAggregatesFilter<"FGBatch"> | number | null
-    totalCartons?: IntWithAggregatesFilter<"FGBatch"> | number
     status?: StringWithAggregatesFilter<"FGBatch"> | string
     notes?: StringNullableWithAggregatesFilter<"FGBatch"> | string | null
     createdById?: StringWithAggregatesFilter<"FGBatch"> | string
@@ -120501,16 +120302,10 @@ export namespace Prisma {
     fgProductName?: StringFilter<"FGProductionEntry"> | string
     targetQty?: FloatFilter<"FGProductionEntry"> | number
     targetUnit?: StringFilter<"FGProductionEntry"> | string
-    packetSize?: FloatNullableFilter<"FGProductionEntry"> | number | null
-    packetUnit?: StringNullableFilter<"FGProductionEntry"> | string | null
-    cartonCapacity?: IntNullableFilter<"FGProductionEntry"> | number | null
-    totalPlannedPackets?: IntFilter<"FGProductionEntry"> | number
-    totalPlannedCartons?: IntFilter<"FGProductionEntry"> | number
     totalActualFg?: FloatFilter<"FGProductionEntry"> | number
     totalActualByproduct?: FloatFilter<"FGProductionEntry"> | number
     totalActualScrap?: FloatFilter<"FGProductionEntry"> | number
-    totalActualPackets?: IntFilter<"FGProductionEntry"> | number
-    totalActualCartons?: IntFilter<"FGProductionEntry"> | number
+    totalAchievedBoxes?: FloatFilter<"FGProductionEntry"> | number
     status?: StringFilter<"FGProductionEntry"> | string
     notes?: StringNullableFilter<"FGProductionEntry"> | string | null
     createdById?: StringFilter<"FGProductionEntry"> | string
@@ -120530,16 +120325,10 @@ export namespace Prisma {
     fgProductName?: SortOrder
     targetQty?: SortOrder
     targetUnit?: SortOrder
-    packetSize?: SortOrderInput | SortOrder
-    packetUnit?: SortOrderInput | SortOrder
-    cartonCapacity?: SortOrderInput | SortOrder
-    totalPlannedPackets?: SortOrder
-    totalPlannedCartons?: SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
-    totalActualPackets?: SortOrder
-    totalActualCartons?: SortOrder
+    totalAchievedBoxes?: SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdById?: SortOrder
@@ -120562,16 +120351,10 @@ export namespace Prisma {
     fgProductName?: StringFilter<"FGProductionEntry"> | string
     targetQty?: FloatFilter<"FGProductionEntry"> | number
     targetUnit?: StringFilter<"FGProductionEntry"> | string
-    packetSize?: FloatNullableFilter<"FGProductionEntry"> | number | null
-    packetUnit?: StringNullableFilter<"FGProductionEntry"> | string | null
-    cartonCapacity?: IntNullableFilter<"FGProductionEntry"> | number | null
-    totalPlannedPackets?: IntFilter<"FGProductionEntry"> | number
-    totalPlannedCartons?: IntFilter<"FGProductionEntry"> | number
     totalActualFg?: FloatFilter<"FGProductionEntry"> | number
     totalActualByproduct?: FloatFilter<"FGProductionEntry"> | number
     totalActualScrap?: FloatFilter<"FGProductionEntry"> | number
-    totalActualPackets?: IntFilter<"FGProductionEntry"> | number
-    totalActualCartons?: IntFilter<"FGProductionEntry"> | number
+    totalAchievedBoxes?: FloatFilter<"FGProductionEntry"> | number
     status?: StringFilter<"FGProductionEntry"> | string
     notes?: StringNullableFilter<"FGProductionEntry"> | string | null
     createdById?: StringFilter<"FGProductionEntry"> | string
@@ -120591,16 +120374,10 @@ export namespace Prisma {
     fgProductName?: SortOrder
     targetQty?: SortOrder
     targetUnit?: SortOrder
-    packetSize?: SortOrderInput | SortOrder
-    packetUnit?: SortOrderInput | SortOrder
-    cartonCapacity?: SortOrderInput | SortOrder
-    totalPlannedPackets?: SortOrder
-    totalPlannedCartons?: SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
-    totalActualPackets?: SortOrder
-    totalActualCartons?: SortOrder
+    totalAchievedBoxes?: SortOrder
     status?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdById?: SortOrder
@@ -120624,16 +120401,10 @@ export namespace Prisma {
     fgProductName?: StringWithAggregatesFilter<"FGProductionEntry"> | string
     targetQty?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
     targetUnit?: StringWithAggregatesFilter<"FGProductionEntry"> | string
-    packetSize?: FloatNullableWithAggregatesFilter<"FGProductionEntry"> | number | null
-    packetUnit?: StringNullableWithAggregatesFilter<"FGProductionEntry"> | string | null
-    cartonCapacity?: IntNullableWithAggregatesFilter<"FGProductionEntry"> | number | null
-    totalPlannedPackets?: IntWithAggregatesFilter<"FGProductionEntry"> | number
-    totalPlannedCartons?: IntWithAggregatesFilter<"FGProductionEntry"> | number
     totalActualFg?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
     totalActualByproduct?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
     totalActualScrap?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
-    totalActualPackets?: IntWithAggregatesFilter<"FGProductionEntry"> | number
-    totalActualCartons?: IntWithAggregatesFilter<"FGProductionEntry"> | number
+    totalAchievedBoxes?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
     status?: StringWithAggregatesFilter<"FGProductionEntry"> | string
     notes?: StringNullableWithAggregatesFilter<"FGProductionEntry"> | string | null
     createdById?: StringWithAggregatesFilter<"FGProductionEntry"> | string
@@ -120651,16 +120422,12 @@ export namespace Prisma {
     machineName?: StringFilter<"FGProductionMachineEntry"> | string
     allocatedQty?: FloatFilter<"FGProductionMachineEntry"> | number
     allocatedUnit?: StringFilter<"FGProductionMachineEntry"> | string
-    plannedPackets?: IntFilter<"FGProductionMachineEntry"> | number
-    plannedCartons?: IntFilter<"FGProductionMachineEntry"> | number
     actualFgQty?: FloatFilter<"FGProductionMachineEntry"> | number
     actualFgUnit?: StringFilter<"FGProductionMachineEntry"> | string
     actualByproduct?: FloatFilter<"FGProductionMachineEntry"> | number
     actualByproductUnit?: StringFilter<"FGProductionMachineEntry"> | string
     actualScrap?: FloatFilter<"FGProductionMachineEntry"> | number
     actualScrapUnit?: StringFilter<"FGProductionMachineEntry"> | string
-    actualPackets?: IntFilter<"FGProductionMachineEntry"> | number
-    actualCartons?: IntFilter<"FGProductionMachineEntry"> | number
     machineSpeed?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
     todayAchieve?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     laminateConsumption?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
@@ -120668,6 +120435,14 @@ export namespace Prisma {
     laminateWastageKg?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     laminateWastagePercentage?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     noManPower?: BoolFilter<"FGProductionMachineEntry"> | boolean
+    productName?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    instulationCapacity?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    instulationCapacityUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    laminateConsumptionQty?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    laminateConsumptionUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    sfgConsumptionQty?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    sfgConsumptionUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    manPower?: BoolFilter<"FGProductionMachineEntry"> | boolean
     notes?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
     createdAt?: DateTimeFilter<"FGProductionMachineEntry"> | Date | string
     productionEntry?: XOR<FGProductionEntryScalarRelationFilter, FGProductionEntryWhereInput>
@@ -120681,16 +120456,12 @@ export namespace Prisma {
     machineName?: SortOrder
     allocatedQty?: SortOrder
     allocatedUnit?: SortOrder
-    plannedPackets?: SortOrder
-    plannedCartons?: SortOrder
     actualFgQty?: SortOrder
     actualFgUnit?: SortOrder
     actualByproduct?: SortOrder
     actualByproductUnit?: SortOrder
     actualScrap?: SortOrder
     actualScrapUnit?: SortOrder
-    actualPackets?: SortOrder
-    actualCartons?: SortOrder
     machineSpeed?: SortOrderInput | SortOrder
     todayAchieve?: SortOrderInput | SortOrder
     laminateConsumption?: SortOrderInput | SortOrder
@@ -120698,6 +120469,14 @@ export namespace Prisma {
     laminateWastageKg?: SortOrderInput | SortOrder
     laminateWastagePercentage?: SortOrderInput | SortOrder
     noManPower?: SortOrder
+    productName?: SortOrderInput | SortOrder
+    instulationCapacity?: SortOrderInput | SortOrder
+    instulationCapacityUnit?: SortOrderInput | SortOrder
+    laminateConsumptionQty?: SortOrderInput | SortOrder
+    laminateConsumptionUnit?: SortOrderInput | SortOrder
+    sfgConsumptionQty?: SortOrderInput | SortOrder
+    sfgConsumptionUnit?: SortOrderInput | SortOrder
+    manPower?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     productionEntry?: FGProductionEntryOrderByWithRelationInput
@@ -120714,16 +120493,12 @@ export namespace Prisma {
     machineName?: StringFilter<"FGProductionMachineEntry"> | string
     allocatedQty?: FloatFilter<"FGProductionMachineEntry"> | number
     allocatedUnit?: StringFilter<"FGProductionMachineEntry"> | string
-    plannedPackets?: IntFilter<"FGProductionMachineEntry"> | number
-    plannedCartons?: IntFilter<"FGProductionMachineEntry"> | number
     actualFgQty?: FloatFilter<"FGProductionMachineEntry"> | number
     actualFgUnit?: StringFilter<"FGProductionMachineEntry"> | string
     actualByproduct?: FloatFilter<"FGProductionMachineEntry"> | number
     actualByproductUnit?: StringFilter<"FGProductionMachineEntry"> | string
     actualScrap?: FloatFilter<"FGProductionMachineEntry"> | number
     actualScrapUnit?: StringFilter<"FGProductionMachineEntry"> | string
-    actualPackets?: IntFilter<"FGProductionMachineEntry"> | number
-    actualCartons?: IntFilter<"FGProductionMachineEntry"> | number
     machineSpeed?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
     todayAchieve?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     laminateConsumption?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
@@ -120731,6 +120506,14 @@ export namespace Prisma {
     laminateWastageKg?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     laminateWastagePercentage?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     noManPower?: BoolFilter<"FGProductionMachineEntry"> | boolean
+    productName?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    instulationCapacity?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    instulationCapacityUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    laminateConsumptionQty?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    laminateConsumptionUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    sfgConsumptionQty?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    sfgConsumptionUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    manPower?: BoolFilter<"FGProductionMachineEntry"> | boolean
     notes?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
     createdAt?: DateTimeFilter<"FGProductionMachineEntry"> | Date | string
     productionEntry?: XOR<FGProductionEntryScalarRelationFilter, FGProductionEntryWhereInput>
@@ -120744,16 +120527,12 @@ export namespace Prisma {
     machineName?: SortOrder
     allocatedQty?: SortOrder
     allocatedUnit?: SortOrder
-    plannedPackets?: SortOrder
-    plannedCartons?: SortOrder
     actualFgQty?: SortOrder
     actualFgUnit?: SortOrder
     actualByproduct?: SortOrder
     actualByproductUnit?: SortOrder
     actualScrap?: SortOrder
     actualScrapUnit?: SortOrder
-    actualPackets?: SortOrder
-    actualCartons?: SortOrder
     machineSpeed?: SortOrderInput | SortOrder
     todayAchieve?: SortOrderInput | SortOrder
     laminateConsumption?: SortOrderInput | SortOrder
@@ -120761,6 +120540,14 @@ export namespace Prisma {
     laminateWastageKg?: SortOrderInput | SortOrder
     laminateWastagePercentage?: SortOrderInput | SortOrder
     noManPower?: SortOrder
+    productName?: SortOrderInput | SortOrder
+    instulationCapacity?: SortOrderInput | SortOrder
+    instulationCapacityUnit?: SortOrderInput | SortOrder
+    laminateConsumptionQty?: SortOrderInput | SortOrder
+    laminateConsumptionUnit?: SortOrderInput | SortOrder
+    sfgConsumptionQty?: SortOrderInput | SortOrder
+    sfgConsumptionUnit?: SortOrderInput | SortOrder
+    manPower?: SortOrder
     notes?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: FGProductionMachineEntryCountOrderByAggregateInput
@@ -120780,16 +120567,12 @@ export namespace Prisma {
     machineName?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
     allocatedQty?: FloatWithAggregatesFilter<"FGProductionMachineEntry"> | number
     allocatedUnit?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
-    plannedPackets?: IntWithAggregatesFilter<"FGProductionMachineEntry"> | number
-    plannedCartons?: IntWithAggregatesFilter<"FGProductionMachineEntry"> | number
     actualFgQty?: FloatWithAggregatesFilter<"FGProductionMachineEntry"> | number
     actualFgUnit?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
     actualByproduct?: FloatWithAggregatesFilter<"FGProductionMachineEntry"> | number
     actualByproductUnit?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
     actualScrap?: FloatWithAggregatesFilter<"FGProductionMachineEntry"> | number
     actualScrapUnit?: StringWithAggregatesFilter<"FGProductionMachineEntry"> | string
-    actualPackets?: IntWithAggregatesFilter<"FGProductionMachineEntry"> | number
-    actualCartons?: IntWithAggregatesFilter<"FGProductionMachineEntry"> | number
     machineSpeed?: StringNullableWithAggregatesFilter<"FGProductionMachineEntry"> | string | null
     todayAchieve?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
     laminateConsumption?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
@@ -120797,6 +120580,14 @@ export namespace Prisma {
     laminateWastageKg?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
     laminateWastagePercentage?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
     noManPower?: BoolWithAggregatesFilter<"FGProductionMachineEntry"> | boolean
+    productName?: StringNullableWithAggregatesFilter<"FGProductionMachineEntry"> | string | null
+    instulationCapacity?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
+    instulationCapacityUnit?: StringNullableWithAggregatesFilter<"FGProductionMachineEntry"> | string | null
+    laminateConsumptionQty?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
+    laminateConsumptionUnit?: StringNullableWithAggregatesFilter<"FGProductionMachineEntry"> | string | null
+    sfgConsumptionQty?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
+    sfgConsumptionUnit?: StringNullableWithAggregatesFilter<"FGProductionMachineEntry"> | string | null
+    manPower?: BoolWithAggregatesFilter<"FGProductionMachineEntry"> | boolean
     notes?: StringNullableWithAggregatesFilter<"FGProductionMachineEntry"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"FGProductionMachineEntry"> | Date | string
   }
@@ -120887,11 +120678,9 @@ export namespace Prisma {
     productionEntryId?: StringFilter<"FGProductionVerification"> | string
     entryNumber?: StringFilter<"FGProductionVerification"> | string
     fgProductName?: StringFilter<"FGProductionVerification"> | string
-    totalPackets?: IntFilter<"FGProductionVerification"> | number
-    totalCartons?: IntFilter<"FGProductionVerification"> | number
-    packetSize?: FloatNullableFilter<"FGProductionVerification"> | number | null
-    packetUnit?: StringNullableFilter<"FGProductionVerification"> | string | null
-    cartonCapacity?: IntNullableFilter<"FGProductionVerification"> | number | null
+    totalActualFg?: FloatFilter<"FGProductionVerification"> | number
+    actualFgUnit?: StringFilter<"FGProductionVerification"> | string
+    totalAchievedBoxes?: FloatFilter<"FGProductionVerification"> | number
     toLocationId?: StringFilter<"FGProductionVerification"> | string
     toLocationName?: StringNullableFilter<"FGProductionVerification"> | string | null
     status?: StringFilter<"FGProductionVerification"> | string
@@ -120912,11 +120701,9 @@ export namespace Prisma {
     productionEntryId?: SortOrder
     entryNumber?: SortOrder
     fgProductName?: SortOrder
-    totalPackets?: SortOrder
-    totalCartons?: SortOrder
-    packetSize?: SortOrderInput | SortOrder
-    packetUnit?: SortOrderInput | SortOrder
-    cartonCapacity?: SortOrderInput | SortOrder
+    totalActualFg?: SortOrder
+    actualFgUnit?: SortOrder
+    totalAchievedBoxes?: SortOrder
     toLocationId?: SortOrder
     toLocationName?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -120940,11 +120727,9 @@ export namespace Prisma {
     productionEntryId?: StringFilter<"FGProductionVerification"> | string
     entryNumber?: StringFilter<"FGProductionVerification"> | string
     fgProductName?: StringFilter<"FGProductionVerification"> | string
-    totalPackets?: IntFilter<"FGProductionVerification"> | number
-    totalCartons?: IntFilter<"FGProductionVerification"> | number
-    packetSize?: FloatNullableFilter<"FGProductionVerification"> | number | null
-    packetUnit?: StringNullableFilter<"FGProductionVerification"> | string | null
-    cartonCapacity?: IntNullableFilter<"FGProductionVerification"> | number | null
+    totalActualFg?: FloatFilter<"FGProductionVerification"> | number
+    actualFgUnit?: StringFilter<"FGProductionVerification"> | string
+    totalAchievedBoxes?: FloatFilter<"FGProductionVerification"> | number
     toLocationId?: StringFilter<"FGProductionVerification"> | string
     toLocationName?: StringNullableFilter<"FGProductionVerification"> | string | null
     status?: StringFilter<"FGProductionVerification"> | string
@@ -120965,11 +120750,9 @@ export namespace Prisma {
     productionEntryId?: SortOrder
     entryNumber?: SortOrder
     fgProductName?: SortOrder
-    totalPackets?: SortOrder
-    totalCartons?: SortOrder
-    packetSize?: SortOrderInput | SortOrder
-    packetUnit?: SortOrderInput | SortOrder
-    cartonCapacity?: SortOrderInput | SortOrder
+    totalActualFg?: SortOrder
+    actualFgUnit?: SortOrder
+    totalAchievedBoxes?: SortOrder
     toLocationId?: SortOrder
     toLocationName?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -120997,11 +120780,9 @@ export namespace Prisma {
     productionEntryId?: StringWithAggregatesFilter<"FGProductionVerification"> | string
     entryNumber?: StringWithAggregatesFilter<"FGProductionVerification"> | string
     fgProductName?: StringWithAggregatesFilter<"FGProductionVerification"> | string
-    totalPackets?: IntWithAggregatesFilter<"FGProductionVerification"> | number
-    totalCartons?: IntWithAggregatesFilter<"FGProductionVerification"> | number
-    packetSize?: FloatNullableWithAggregatesFilter<"FGProductionVerification"> | number | null
-    packetUnit?: StringNullableWithAggregatesFilter<"FGProductionVerification"> | string | null
-    cartonCapacity?: IntNullableWithAggregatesFilter<"FGProductionVerification"> | number | null
+    totalActualFg?: FloatWithAggregatesFilter<"FGProductionVerification"> | number
+    actualFgUnit?: StringWithAggregatesFilter<"FGProductionVerification"> | string
+    totalAchievedBoxes?: FloatWithAggregatesFilter<"FGProductionVerification"> | number
     toLocationId?: StringWithAggregatesFilter<"FGProductionVerification"> | string
     toLocationName?: StringNullableWithAggregatesFilter<"FGProductionVerification"> | string | null
     status?: StringWithAggregatesFilter<"FGProductionVerification"> | string
@@ -128265,11 +128046,6 @@ export namespace Prisma {
     fgProductName: string
     productionQty: number
     productionUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    totalPackets?: number
-    cartonCapacity?: number | null
-    totalCartons?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -128287,11 +128063,6 @@ export namespace Prisma {
     fgProductName: string
     productionQty: number
     productionUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    totalPackets?: number
-    cartonCapacity?: number | null
-    totalCartons?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -128309,11 +128080,6 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     productionQty?: FloatFieldUpdateOperationsInput | number
     productionUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -128331,11 +128097,6 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     productionQty?: FloatFieldUpdateOperationsInput | number
     productionUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -128353,11 +128114,6 @@ export namespace Prisma {
     fgProductName: string
     productionQty: number
     productionUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    totalPackets?: number
-    cartonCapacity?: number | null
-    totalCartons?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -128372,11 +128128,6 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     productionQty?: FloatFieldUpdateOperationsInput | number
     productionUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -128391,11 +128142,6 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     productionQty?: FloatFieldUpdateOperationsInput | number
     productionUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -128507,16 +128253,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -128536,16 +128276,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -128563,16 +128297,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -128592,16 +128320,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -128620,16 +128342,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -128644,16 +128360,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -128669,16 +128379,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -128691,16 +128395,12 @@ export namespace Prisma {
     machineName: string
     allocatedQty?: number
     allocatedUnit?: string
-    plannedPackets?: number
-    plannedCartons?: number
     actualFgQty?: number
     actualFgUnit?: string
     actualByproduct?: number
     actualByproductUnit?: string
     actualScrap?: number
     actualScrapUnit?: string
-    actualPackets?: number
-    actualCartons?: number
     machineSpeed?: string | null
     todayAchieve?: number | null
     laminateConsumption?: number | null
@@ -128708,6 +128408,14 @@ export namespace Prisma {
     laminateWastageKg?: number | null
     laminateWastagePercentage?: number | null
     noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
     notes?: string | null
     createdAt?: Date | string
     productionEntry: FGProductionEntryCreateNestedOneWithoutMachineEntriesInput
@@ -128721,16 +128429,12 @@ export namespace Prisma {
     machineName: string
     allocatedQty?: number
     allocatedUnit?: string
-    plannedPackets?: number
-    plannedCartons?: number
     actualFgQty?: number
     actualFgUnit?: string
     actualByproduct?: number
     actualByproductUnit?: string
     actualScrap?: number
     actualScrapUnit?: string
-    actualPackets?: number
-    actualCartons?: number
     machineSpeed?: string | null
     todayAchieve?: number | null
     laminateConsumption?: number | null
@@ -128738,6 +128442,14 @@ export namespace Prisma {
     laminateWastageKg?: number | null
     laminateWastagePercentage?: number | null
     noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
     notes?: string | null
     createdAt?: Date | string
   }
@@ -128747,16 +128459,12 @@ export namespace Prisma {
     machineName?: StringFieldUpdateOperationsInput | string
     allocatedQty?: FloatFieldUpdateOperationsInput | number
     allocatedUnit?: StringFieldUpdateOperationsInput | string
-    plannedPackets?: IntFieldUpdateOperationsInput | number
-    plannedCartons?: IntFieldUpdateOperationsInput | number
     actualFgQty?: FloatFieldUpdateOperationsInput | number
     actualFgUnit?: StringFieldUpdateOperationsInput | string
     actualByproduct?: FloatFieldUpdateOperationsInput | number
     actualByproductUnit?: StringFieldUpdateOperationsInput | string
     actualScrap?: FloatFieldUpdateOperationsInput | number
     actualScrapUnit?: StringFieldUpdateOperationsInput | string
-    actualPackets?: IntFieldUpdateOperationsInput | number
-    actualCartons?: IntFieldUpdateOperationsInput | number
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -128764,6 +128472,14 @@ export namespace Prisma {
     laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productionEntry?: FGProductionEntryUpdateOneRequiredWithoutMachineEntriesNestedInput
@@ -128777,16 +128493,12 @@ export namespace Prisma {
     machineName?: StringFieldUpdateOperationsInput | string
     allocatedQty?: FloatFieldUpdateOperationsInput | number
     allocatedUnit?: StringFieldUpdateOperationsInput | string
-    plannedPackets?: IntFieldUpdateOperationsInput | number
-    plannedCartons?: IntFieldUpdateOperationsInput | number
     actualFgQty?: FloatFieldUpdateOperationsInput | number
     actualFgUnit?: StringFieldUpdateOperationsInput | string
     actualByproduct?: FloatFieldUpdateOperationsInput | number
     actualByproductUnit?: StringFieldUpdateOperationsInput | string
     actualScrap?: FloatFieldUpdateOperationsInput | number
     actualScrapUnit?: StringFieldUpdateOperationsInput | string
-    actualPackets?: IntFieldUpdateOperationsInput | number
-    actualCartons?: IntFieldUpdateOperationsInput | number
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -128794,6 +128506,14 @@ export namespace Prisma {
     laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -128805,16 +128525,12 @@ export namespace Prisma {
     machineName: string
     allocatedQty?: number
     allocatedUnit?: string
-    plannedPackets?: number
-    plannedCartons?: number
     actualFgQty?: number
     actualFgUnit?: string
     actualByproduct?: number
     actualByproductUnit?: string
     actualScrap?: number
     actualScrapUnit?: string
-    actualPackets?: number
-    actualCartons?: number
     machineSpeed?: string | null
     todayAchieve?: number | null
     laminateConsumption?: number | null
@@ -128822,6 +128538,14 @@ export namespace Prisma {
     laminateWastageKg?: number | null
     laminateWastagePercentage?: number | null
     noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
     notes?: string | null
     createdAt?: Date | string
   }
@@ -128831,16 +128555,12 @@ export namespace Prisma {
     machineName?: StringFieldUpdateOperationsInput | string
     allocatedQty?: FloatFieldUpdateOperationsInput | number
     allocatedUnit?: StringFieldUpdateOperationsInput | string
-    plannedPackets?: IntFieldUpdateOperationsInput | number
-    plannedCartons?: IntFieldUpdateOperationsInput | number
     actualFgQty?: FloatFieldUpdateOperationsInput | number
     actualFgUnit?: StringFieldUpdateOperationsInput | string
     actualByproduct?: FloatFieldUpdateOperationsInput | number
     actualByproductUnit?: StringFieldUpdateOperationsInput | string
     actualScrap?: FloatFieldUpdateOperationsInput | number
     actualScrapUnit?: StringFieldUpdateOperationsInput | string
-    actualPackets?: IntFieldUpdateOperationsInput | number
-    actualCartons?: IntFieldUpdateOperationsInput | number
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -128848,6 +128568,14 @@ export namespace Prisma {
     laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -128859,16 +128587,12 @@ export namespace Prisma {
     machineName?: StringFieldUpdateOperationsInput | string
     allocatedQty?: FloatFieldUpdateOperationsInput | number
     allocatedUnit?: StringFieldUpdateOperationsInput | string
-    plannedPackets?: IntFieldUpdateOperationsInput | number
-    plannedCartons?: IntFieldUpdateOperationsInput | number
     actualFgQty?: FloatFieldUpdateOperationsInput | number
     actualFgUnit?: StringFieldUpdateOperationsInput | string
     actualByproduct?: FloatFieldUpdateOperationsInput | number
     actualByproductUnit?: StringFieldUpdateOperationsInput | string
     actualScrap?: FloatFieldUpdateOperationsInput | number
     actualScrapUnit?: StringFieldUpdateOperationsInput | string
-    actualPackets?: IntFieldUpdateOperationsInput | number
-    actualCartons?: IntFieldUpdateOperationsInput | number
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -128876,6 +128600,14 @@ export namespace Prisma {
     laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -128973,11 +128705,9 @@ export namespace Prisma {
     verificationNumber: string
     entryNumber: string
     fgProductName: string
-    totalPackets?: number
-    totalCartons?: number
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
+    totalActualFg?: number
+    actualFgUnit?: string
+    totalAchievedBoxes?: number
     toLocationId: string
     toLocationName?: string | null
     status?: string
@@ -128998,11 +128728,9 @@ export namespace Prisma {
     productionEntryId: string
     entryNumber: string
     fgProductName: string
-    totalPackets?: number
-    totalCartons?: number
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
+    totalActualFg?: number
+    actualFgUnit?: string
+    totalAchievedBoxes?: number
     toLocationId: string
     toLocationName?: string | null
     status?: string
@@ -129021,11 +128749,9 @@ export namespace Prisma {
     verificationNumber?: StringFieldUpdateOperationsInput | string
     entryNumber?: StringFieldUpdateOperationsInput | string
     fgProductName?: StringFieldUpdateOperationsInput | string
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    totalCartons?: IntFieldUpdateOperationsInput | number
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     toLocationId?: StringFieldUpdateOperationsInput | string
     toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -129046,11 +128772,9 @@ export namespace Prisma {
     productionEntryId?: StringFieldUpdateOperationsInput | string
     entryNumber?: StringFieldUpdateOperationsInput | string
     fgProductName?: StringFieldUpdateOperationsInput | string
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    totalCartons?: IntFieldUpdateOperationsInput | number
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     toLocationId?: StringFieldUpdateOperationsInput | string
     toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -129070,11 +128794,9 @@ export namespace Prisma {
     productionEntryId: string
     entryNumber: string
     fgProductName: string
-    totalPackets?: number
-    totalCartons?: number
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
+    totalActualFg?: number
+    actualFgUnit?: string
+    totalAchievedBoxes?: number
     toLocationId: string
     toLocationName?: string | null
     status?: string
@@ -129093,11 +128815,9 @@ export namespace Prisma {
     verificationNumber?: StringFieldUpdateOperationsInput | string
     entryNumber?: StringFieldUpdateOperationsInput | string
     fgProductName?: StringFieldUpdateOperationsInput | string
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    totalCartons?: IntFieldUpdateOperationsInput | number
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     toLocationId?: StringFieldUpdateOperationsInput | string
     toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -129117,11 +128837,9 @@ export namespace Prisma {
     productionEntryId?: StringFieldUpdateOperationsInput | string
     entryNumber?: StringFieldUpdateOperationsInput | string
     fgProductName?: StringFieldUpdateOperationsInput | string
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    totalCartons?: IntFieldUpdateOperationsInput | number
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     toLocationId?: StringFieldUpdateOperationsInput | string
     toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -134124,11 +133842,6 @@ export namespace Prisma {
     fgProductName?: SortOrder
     productionQty?: SortOrder
     productionUnit?: SortOrder
-    packetSize?: SortOrder
-    packetUnit?: SortOrder
-    totalPackets?: SortOrder
-    cartonCapacity?: SortOrder
-    totalCartons?: SortOrder
     status?: SortOrder
     notes?: SortOrder
     createdById?: SortOrder
@@ -134138,10 +133851,6 @@ export namespace Prisma {
 
   export type FGBatchAvgOrderByAggregateInput = {
     productionQty?: SortOrder
-    packetSize?: SortOrder
-    totalPackets?: SortOrder
-    cartonCapacity?: SortOrder
-    totalCartons?: SortOrder
   }
 
   export type FGBatchMaxOrderByAggregateInput = {
@@ -134151,11 +133860,6 @@ export namespace Prisma {
     fgProductName?: SortOrder
     productionQty?: SortOrder
     productionUnit?: SortOrder
-    packetSize?: SortOrder
-    packetUnit?: SortOrder
-    totalPackets?: SortOrder
-    cartonCapacity?: SortOrder
-    totalCartons?: SortOrder
     status?: SortOrder
     notes?: SortOrder
     createdById?: SortOrder
@@ -134170,11 +133874,6 @@ export namespace Prisma {
     fgProductName?: SortOrder
     productionQty?: SortOrder
     productionUnit?: SortOrder
-    packetSize?: SortOrder
-    packetUnit?: SortOrder
-    totalPackets?: SortOrder
-    cartonCapacity?: SortOrder
-    totalCartons?: SortOrder
     status?: SortOrder
     notes?: SortOrder
     createdById?: SortOrder
@@ -134184,10 +133883,6 @@ export namespace Prisma {
 
   export type FGBatchSumOrderByAggregateInput = {
     productionQty?: SortOrder
-    packetSize?: SortOrder
-    totalPackets?: SortOrder
-    cartonCapacity?: SortOrder
-    totalCartons?: SortOrder
   }
 
   export type FGBatchScalarRelationFilter = {
@@ -134280,16 +133975,10 @@ export namespace Prisma {
     fgProductName?: SortOrder
     targetQty?: SortOrder
     targetUnit?: SortOrder
-    packetSize?: SortOrder
-    packetUnit?: SortOrder
-    cartonCapacity?: SortOrder
-    totalPlannedPackets?: SortOrder
-    totalPlannedCartons?: SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
-    totalActualPackets?: SortOrder
-    totalActualCartons?: SortOrder
+    totalAchievedBoxes?: SortOrder
     status?: SortOrder
     notes?: SortOrder
     createdById?: SortOrder
@@ -134299,15 +133988,10 @@ export namespace Prisma {
 
   export type FGProductionEntryAvgOrderByAggregateInput = {
     targetQty?: SortOrder
-    packetSize?: SortOrder
-    cartonCapacity?: SortOrder
-    totalPlannedPackets?: SortOrder
-    totalPlannedCartons?: SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
-    totalActualPackets?: SortOrder
-    totalActualCartons?: SortOrder
+    totalAchievedBoxes?: SortOrder
   }
 
   export type FGProductionEntryMaxOrderByAggregateInput = {
@@ -134318,16 +134002,10 @@ export namespace Prisma {
     fgProductName?: SortOrder
     targetQty?: SortOrder
     targetUnit?: SortOrder
-    packetSize?: SortOrder
-    packetUnit?: SortOrder
-    cartonCapacity?: SortOrder
-    totalPlannedPackets?: SortOrder
-    totalPlannedCartons?: SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
-    totalActualPackets?: SortOrder
-    totalActualCartons?: SortOrder
+    totalAchievedBoxes?: SortOrder
     status?: SortOrder
     notes?: SortOrder
     createdById?: SortOrder
@@ -134343,16 +134021,10 @@ export namespace Prisma {
     fgProductName?: SortOrder
     targetQty?: SortOrder
     targetUnit?: SortOrder
-    packetSize?: SortOrder
-    packetUnit?: SortOrder
-    cartonCapacity?: SortOrder
-    totalPlannedPackets?: SortOrder
-    totalPlannedCartons?: SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
-    totalActualPackets?: SortOrder
-    totalActualCartons?: SortOrder
+    totalAchievedBoxes?: SortOrder
     status?: SortOrder
     notes?: SortOrder
     createdById?: SortOrder
@@ -134362,15 +134034,10 @@ export namespace Prisma {
 
   export type FGProductionEntrySumOrderByAggregateInput = {
     targetQty?: SortOrder
-    packetSize?: SortOrder
-    cartonCapacity?: SortOrder
-    totalPlannedPackets?: SortOrder
-    totalPlannedCartons?: SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
-    totalActualPackets?: SortOrder
-    totalActualCartons?: SortOrder
+    totalAchievedBoxes?: SortOrder
   }
 
   export type FGProductionEntryScalarRelationFilter = {
@@ -134390,16 +134057,12 @@ export namespace Prisma {
     machineName?: SortOrder
     allocatedQty?: SortOrder
     allocatedUnit?: SortOrder
-    plannedPackets?: SortOrder
-    plannedCartons?: SortOrder
     actualFgQty?: SortOrder
     actualFgUnit?: SortOrder
     actualByproduct?: SortOrder
     actualByproductUnit?: SortOrder
     actualScrap?: SortOrder
     actualScrapUnit?: SortOrder
-    actualPackets?: SortOrder
-    actualCartons?: SortOrder
     machineSpeed?: SortOrder
     todayAchieve?: SortOrder
     laminateConsumption?: SortOrder
@@ -134407,24 +134070,31 @@ export namespace Prisma {
     laminateWastageKg?: SortOrder
     laminateWastagePercentage?: SortOrder
     noManPower?: SortOrder
+    productName?: SortOrder
+    instulationCapacity?: SortOrder
+    instulationCapacityUnit?: SortOrder
+    laminateConsumptionQty?: SortOrder
+    laminateConsumptionUnit?: SortOrder
+    sfgConsumptionQty?: SortOrder
+    sfgConsumptionUnit?: SortOrder
+    manPower?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
   }
 
   export type FGProductionMachineEntryAvgOrderByAggregateInput = {
     allocatedQty?: SortOrder
-    plannedPackets?: SortOrder
-    plannedCartons?: SortOrder
     actualFgQty?: SortOrder
     actualByproduct?: SortOrder
     actualScrap?: SortOrder
-    actualPackets?: SortOrder
-    actualCartons?: SortOrder
     todayAchieve?: SortOrder
     laminateConsumption?: SortOrder
     sfgConsumption?: SortOrder
     laminateWastageKg?: SortOrder
     laminateWastagePercentage?: SortOrder
+    instulationCapacity?: SortOrder
+    laminateConsumptionQty?: SortOrder
+    sfgConsumptionQty?: SortOrder
   }
 
   export type FGProductionMachineEntryMaxOrderByAggregateInput = {
@@ -134434,16 +134104,12 @@ export namespace Prisma {
     machineName?: SortOrder
     allocatedQty?: SortOrder
     allocatedUnit?: SortOrder
-    plannedPackets?: SortOrder
-    plannedCartons?: SortOrder
     actualFgQty?: SortOrder
     actualFgUnit?: SortOrder
     actualByproduct?: SortOrder
     actualByproductUnit?: SortOrder
     actualScrap?: SortOrder
     actualScrapUnit?: SortOrder
-    actualPackets?: SortOrder
-    actualCartons?: SortOrder
     machineSpeed?: SortOrder
     todayAchieve?: SortOrder
     laminateConsumption?: SortOrder
@@ -134451,6 +134117,14 @@ export namespace Prisma {
     laminateWastageKg?: SortOrder
     laminateWastagePercentage?: SortOrder
     noManPower?: SortOrder
+    productName?: SortOrder
+    instulationCapacity?: SortOrder
+    instulationCapacityUnit?: SortOrder
+    laminateConsumptionQty?: SortOrder
+    laminateConsumptionUnit?: SortOrder
+    sfgConsumptionQty?: SortOrder
+    sfgConsumptionUnit?: SortOrder
+    manPower?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
   }
@@ -134462,16 +134136,12 @@ export namespace Prisma {
     machineName?: SortOrder
     allocatedQty?: SortOrder
     allocatedUnit?: SortOrder
-    plannedPackets?: SortOrder
-    plannedCartons?: SortOrder
     actualFgQty?: SortOrder
     actualFgUnit?: SortOrder
     actualByproduct?: SortOrder
     actualByproductUnit?: SortOrder
     actualScrap?: SortOrder
     actualScrapUnit?: SortOrder
-    actualPackets?: SortOrder
-    actualCartons?: SortOrder
     machineSpeed?: SortOrder
     todayAchieve?: SortOrder
     laminateConsumption?: SortOrder
@@ -134479,24 +134149,31 @@ export namespace Prisma {
     laminateWastageKg?: SortOrder
     laminateWastagePercentage?: SortOrder
     noManPower?: SortOrder
+    productName?: SortOrder
+    instulationCapacity?: SortOrder
+    instulationCapacityUnit?: SortOrder
+    laminateConsumptionQty?: SortOrder
+    laminateConsumptionUnit?: SortOrder
+    sfgConsumptionQty?: SortOrder
+    sfgConsumptionUnit?: SortOrder
+    manPower?: SortOrder
     notes?: SortOrder
     createdAt?: SortOrder
   }
 
   export type FGProductionMachineEntrySumOrderByAggregateInput = {
     allocatedQty?: SortOrder
-    plannedPackets?: SortOrder
-    plannedCartons?: SortOrder
     actualFgQty?: SortOrder
     actualByproduct?: SortOrder
     actualScrap?: SortOrder
-    actualPackets?: SortOrder
-    actualCartons?: SortOrder
     todayAchieve?: SortOrder
     laminateConsumption?: SortOrder
     sfgConsumption?: SortOrder
     laminateWastageKg?: SortOrder
     laminateWastagePercentage?: SortOrder
+    instulationCapacity?: SortOrder
+    laminateConsumptionQty?: SortOrder
+    sfgConsumptionQty?: SortOrder
   }
 
   export type MachineCountOrderByAggregateInput = {
@@ -134549,11 +134226,9 @@ export namespace Prisma {
     productionEntryId?: SortOrder
     entryNumber?: SortOrder
     fgProductName?: SortOrder
-    totalPackets?: SortOrder
-    totalCartons?: SortOrder
-    packetSize?: SortOrder
-    packetUnit?: SortOrder
-    cartonCapacity?: SortOrder
+    totalActualFg?: SortOrder
+    actualFgUnit?: SortOrder
+    totalAchievedBoxes?: SortOrder
     toLocationId?: SortOrder
     toLocationName?: SortOrder
     status?: SortOrder
@@ -134568,10 +134243,8 @@ export namespace Prisma {
   }
 
   export type FGProductionVerificationAvgOrderByAggregateInput = {
-    totalPackets?: SortOrder
-    totalCartons?: SortOrder
-    packetSize?: SortOrder
-    cartonCapacity?: SortOrder
+    totalActualFg?: SortOrder
+    totalAchievedBoxes?: SortOrder
   }
 
   export type FGProductionVerificationMaxOrderByAggregateInput = {
@@ -134580,11 +134253,9 @@ export namespace Prisma {
     productionEntryId?: SortOrder
     entryNumber?: SortOrder
     fgProductName?: SortOrder
-    totalPackets?: SortOrder
-    totalCartons?: SortOrder
-    packetSize?: SortOrder
-    packetUnit?: SortOrder
-    cartonCapacity?: SortOrder
+    totalActualFg?: SortOrder
+    actualFgUnit?: SortOrder
+    totalAchievedBoxes?: SortOrder
     toLocationId?: SortOrder
     toLocationName?: SortOrder
     status?: SortOrder
@@ -134604,11 +134275,9 @@ export namespace Prisma {
     productionEntryId?: SortOrder
     entryNumber?: SortOrder
     fgProductName?: SortOrder
-    totalPackets?: SortOrder
-    totalCartons?: SortOrder
-    packetSize?: SortOrder
-    packetUnit?: SortOrder
-    cartonCapacity?: SortOrder
+    totalActualFg?: SortOrder
+    actualFgUnit?: SortOrder
+    totalAchievedBoxes?: SortOrder
     toLocationId?: SortOrder
     toLocationName?: SortOrder
     status?: SortOrder
@@ -134623,10 +134292,8 @@ export namespace Prisma {
   }
 
   export type FGProductionVerificationSumOrderByAggregateInput = {
-    totalPackets?: SortOrder
-    totalCartons?: SortOrder
-    packetSize?: SortOrder
-    cartonCapacity?: SortOrder
+    totalActualFg?: SortOrder
+    totalAchievedBoxes?: SortOrder
   }
 
   export type FGQualityParameterListRelationFilter = {
@@ -168452,16 +168119,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -168479,16 +168140,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -168603,16 +168258,10 @@ export namespace Prisma {
     fgProductName?: StringFilter<"FGProductionEntry"> | string
     targetQty?: FloatFilter<"FGProductionEntry"> | number
     targetUnit?: StringFilter<"FGProductionEntry"> | string
-    packetSize?: FloatNullableFilter<"FGProductionEntry"> | number | null
-    packetUnit?: StringNullableFilter<"FGProductionEntry"> | string | null
-    cartonCapacity?: IntNullableFilter<"FGProductionEntry"> | number | null
-    totalPlannedPackets?: IntFilter<"FGProductionEntry"> | number
-    totalPlannedCartons?: IntFilter<"FGProductionEntry"> | number
     totalActualFg?: FloatFilter<"FGProductionEntry"> | number
     totalActualByproduct?: FloatFilter<"FGProductionEntry"> | number
     totalActualScrap?: FloatFilter<"FGProductionEntry"> | number
-    totalActualPackets?: IntFilter<"FGProductionEntry"> | number
-    totalActualCartons?: IntFilter<"FGProductionEntry"> | number
+    totalAchievedBoxes?: FloatFilter<"FGProductionEntry"> | number
     status?: StringFilter<"FGProductionEntry"> | string
     notes?: StringNullableFilter<"FGProductionEntry"> | string | null
     createdById?: StringFilter<"FGProductionEntry"> | string
@@ -168643,11 +168292,6 @@ export namespace Prisma {
     fgProductName: string
     productionQty: number
     productionUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    totalPackets?: number
-    cartonCapacity?: number | null
-    totalCartons?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -168664,11 +168308,6 @@ export namespace Prisma {
     fgProductName: string
     productionQty: number
     productionUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    totalPackets?: number
-    cartonCapacity?: number | null
-    totalCartons?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -168701,11 +168340,6 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     productionQty?: FloatFieldUpdateOperationsInput | number
     productionUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -168722,11 +168356,6 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     productionQty?: FloatFieldUpdateOperationsInput | number
     productionUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -168743,11 +168372,6 @@ export namespace Prisma {
     fgProductName: string
     productionQty: number
     productionUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    totalPackets?: number
-    cartonCapacity?: number | null
-    totalCartons?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -168764,11 +168388,6 @@ export namespace Prisma {
     fgProductName: string
     productionQty: number
     productionUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    totalPackets?: number
-    cartonCapacity?: number | null
-    totalCartons?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -168788,16 +168407,12 @@ export namespace Prisma {
     machineName: string
     allocatedQty?: number
     allocatedUnit?: string
-    plannedPackets?: number
-    plannedCartons?: number
     actualFgQty?: number
     actualFgUnit?: string
     actualByproduct?: number
     actualByproductUnit?: string
     actualScrap?: number
     actualScrapUnit?: string
-    actualPackets?: number
-    actualCartons?: number
     machineSpeed?: string | null
     todayAchieve?: number | null
     laminateConsumption?: number | null
@@ -168805,6 +168420,14 @@ export namespace Prisma {
     laminateWastageKg?: number | null
     laminateWastagePercentage?: number | null
     noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
     notes?: string | null
     createdAt?: Date | string
     machine: MachineCreateNestedOneWithoutProductionMachineEntriesInput
@@ -168816,16 +168439,12 @@ export namespace Prisma {
     machineName: string
     allocatedQty?: number
     allocatedUnit?: string
-    plannedPackets?: number
-    plannedCartons?: number
     actualFgQty?: number
     actualFgUnit?: string
     actualByproduct?: number
     actualByproductUnit?: string
     actualScrap?: number
     actualScrapUnit?: string
-    actualPackets?: number
-    actualCartons?: number
     machineSpeed?: string | null
     todayAchieve?: number | null
     laminateConsumption?: number | null
@@ -168833,6 +168452,14 @@ export namespace Prisma {
     laminateWastageKg?: number | null
     laminateWastagePercentage?: number | null
     noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
     notes?: string | null
     createdAt?: Date | string
   }
@@ -168852,11 +168479,9 @@ export namespace Prisma {
     verificationNumber: string
     entryNumber: string
     fgProductName: string
-    totalPackets?: number
-    totalCartons?: number
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
+    totalActualFg?: number
+    actualFgUnit?: string
+    totalAchievedBoxes?: number
     toLocationId: string
     toLocationName?: string | null
     status?: string
@@ -168875,11 +168500,9 @@ export namespace Prisma {
     verificationNumber: string
     entryNumber: string
     fgProductName: string
-    totalPackets?: number
-    totalCartons?: number
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
+    totalActualFg?: number
+    actualFgUnit?: string
+    totalAchievedBoxes?: number
     toLocationId: string
     toLocationName?: string | null
     status?: string
@@ -168950,11 +168573,6 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     productionQty?: FloatFieldUpdateOperationsInput | number
     productionUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -168971,11 +168589,6 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     productionQty?: FloatFieldUpdateOperationsInput | number
     productionUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -169011,16 +168624,12 @@ export namespace Prisma {
     machineName?: StringFilter<"FGProductionMachineEntry"> | string
     allocatedQty?: FloatFilter<"FGProductionMachineEntry"> | number
     allocatedUnit?: StringFilter<"FGProductionMachineEntry"> | string
-    plannedPackets?: IntFilter<"FGProductionMachineEntry"> | number
-    plannedCartons?: IntFilter<"FGProductionMachineEntry"> | number
     actualFgQty?: FloatFilter<"FGProductionMachineEntry"> | number
     actualFgUnit?: StringFilter<"FGProductionMachineEntry"> | string
     actualByproduct?: FloatFilter<"FGProductionMachineEntry"> | number
     actualByproductUnit?: StringFilter<"FGProductionMachineEntry"> | string
     actualScrap?: FloatFilter<"FGProductionMachineEntry"> | number
     actualScrapUnit?: StringFilter<"FGProductionMachineEntry"> | string
-    actualPackets?: IntFilter<"FGProductionMachineEntry"> | number
-    actualCartons?: IntFilter<"FGProductionMachineEntry"> | number
     machineSpeed?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
     todayAchieve?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     laminateConsumption?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
@@ -169028,6 +168637,14 @@ export namespace Prisma {
     laminateWastageKg?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     laminateWastagePercentage?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     noManPower?: BoolFilter<"FGProductionMachineEntry"> | boolean
+    productName?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    instulationCapacity?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    instulationCapacityUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    laminateConsumptionQty?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    laminateConsumptionUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    sfgConsumptionQty?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    sfgConsumptionUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    manPower?: BoolFilter<"FGProductionMachineEntry"> | boolean
     notes?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
     createdAt?: DateTimeFilter<"FGProductionMachineEntry"> | Date | string
   }
@@ -169057,11 +168674,9 @@ export namespace Prisma {
     productionEntryId?: StringFilter<"FGProductionVerification"> | string
     entryNumber?: StringFilter<"FGProductionVerification"> | string
     fgProductName?: StringFilter<"FGProductionVerification"> | string
-    totalPackets?: IntFilter<"FGProductionVerification"> | number
-    totalCartons?: IntFilter<"FGProductionVerification"> | number
-    packetSize?: FloatNullableFilter<"FGProductionVerification"> | number | null
-    packetUnit?: StringNullableFilter<"FGProductionVerification"> | string | null
-    cartonCapacity?: IntNullableFilter<"FGProductionVerification"> | number | null
+    totalActualFg?: FloatFilter<"FGProductionVerification"> | number
+    actualFgUnit?: StringFilter<"FGProductionVerification"> | string
+    totalAchievedBoxes?: FloatFilter<"FGProductionVerification"> | number
     toLocationId?: StringFilter<"FGProductionVerification"> | string
     toLocationName?: StringNullableFilter<"FGProductionVerification"> | string | null
     status?: StringFilter<"FGProductionVerification"> | string
@@ -169117,16 +168732,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -169145,16 +168754,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -169216,16 +168819,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -169244,16 +168841,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -169303,16 +168894,12 @@ export namespace Prisma {
     machineName: string
     allocatedQty?: number
     allocatedUnit?: string
-    plannedPackets?: number
-    plannedCartons?: number
     actualFgQty?: number
     actualFgUnit?: string
     actualByproduct?: number
     actualByproductUnit?: string
     actualScrap?: number
     actualScrapUnit?: string
-    actualPackets?: number
-    actualCartons?: number
     machineSpeed?: string | null
     todayAchieve?: number | null
     laminateConsumption?: number | null
@@ -169320,6 +168907,14 @@ export namespace Prisma {
     laminateWastageKg?: number | null
     laminateWastagePercentage?: number | null
     noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
     notes?: string | null
     createdAt?: Date | string
     productionEntry: FGProductionEntryCreateNestedOneWithoutMachineEntriesInput
@@ -169331,16 +168926,12 @@ export namespace Prisma {
     machineName: string
     allocatedQty?: number
     allocatedUnit?: string
-    plannedPackets?: number
-    plannedCartons?: number
     actualFgQty?: number
     actualFgUnit?: string
     actualByproduct?: number
     actualByproductUnit?: string
     actualScrap?: number
     actualScrapUnit?: string
-    actualPackets?: number
-    actualCartons?: number
     machineSpeed?: string | null
     todayAchieve?: number | null
     laminateConsumption?: number | null
@@ -169348,6 +168939,14 @@ export namespace Prisma {
     laminateWastageKg?: number | null
     laminateWastagePercentage?: number | null
     noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
     notes?: string | null
     createdAt?: Date | string
   }
@@ -169385,16 +168984,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -169413,16 +169006,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -169455,16 +169042,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -169483,16 +169064,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -169537,16 +169112,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -169565,16 +169134,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -169596,11 +169159,6 @@ export namespace Prisma {
     fgProductName: string
     productionQty: number
     productionUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    totalPackets?: number
-    cartonCapacity?: number | null
-    totalCartons?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -169617,11 +169175,6 @@ export namespace Prisma {
     fgProductName: string
     productionQty: number
     productionUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    totalPackets?: number
-    cartonCapacity?: number | null
-    totalCartons?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -169776,16 +169329,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -169804,16 +169351,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -169841,11 +169382,6 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     productionQty?: FloatFieldUpdateOperationsInput | number
     productionUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -169862,11 +169398,6 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     productionQty?: FloatFieldUpdateOperationsInput | number
     productionUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalCartons?: IntFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -177646,16 +177177,10 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
-    totalPlannedPackets?: number
-    totalPlannedCartons?: number
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
-    totalActualPackets?: number
-    totalActualCartons?: number
+    totalAchievedBoxes?: number
     status?: string
     notes?: string | null
     createdById: string
@@ -177720,16 +177245,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -177747,16 +177266,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -177774,16 +177287,10 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
-    totalPlannedPackets?: IntFieldUpdateOperationsInput | number
-    totalPlannedCartons?: IntFieldUpdateOperationsInput | number
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
-    totalActualPackets?: IntFieldUpdateOperationsInput | number
-    totalActualCartons?: IntFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     status?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdById?: StringFieldUpdateOperationsInput | string
@@ -177832,16 +177339,12 @@ export namespace Prisma {
     machineName: string
     allocatedQty?: number
     allocatedUnit?: string
-    plannedPackets?: number
-    plannedCartons?: number
     actualFgQty?: number
     actualFgUnit?: string
     actualByproduct?: number
     actualByproductUnit?: string
     actualScrap?: number
     actualScrapUnit?: string
-    actualPackets?: number
-    actualCartons?: number
     machineSpeed?: string | null
     todayAchieve?: number | null
     laminateConsumption?: number | null
@@ -177849,6 +177352,14 @@ export namespace Prisma {
     laminateWastageKg?: number | null
     laminateWastagePercentage?: number | null
     noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
     notes?: string | null
     createdAt?: Date | string
   }
@@ -177858,11 +177369,9 @@ export namespace Prisma {
     verificationNumber: string
     entryNumber: string
     fgProductName: string
-    totalPackets?: number
-    totalCartons?: number
-    packetSize?: number | null
-    packetUnit?: string | null
-    cartonCapacity?: number | null
+    totalActualFg?: number
+    actualFgUnit?: string
+    totalAchievedBoxes?: number
     toLocationId: string
     toLocationName?: string | null
     status?: string
@@ -177881,16 +177390,12 @@ export namespace Prisma {
     machineName?: StringFieldUpdateOperationsInput | string
     allocatedQty?: FloatFieldUpdateOperationsInput | number
     allocatedUnit?: StringFieldUpdateOperationsInput | string
-    plannedPackets?: IntFieldUpdateOperationsInput | number
-    plannedCartons?: IntFieldUpdateOperationsInput | number
     actualFgQty?: FloatFieldUpdateOperationsInput | number
     actualFgUnit?: StringFieldUpdateOperationsInput | string
     actualByproduct?: FloatFieldUpdateOperationsInput | number
     actualByproductUnit?: StringFieldUpdateOperationsInput | string
     actualScrap?: FloatFieldUpdateOperationsInput | number
     actualScrapUnit?: StringFieldUpdateOperationsInput | string
-    actualPackets?: IntFieldUpdateOperationsInput | number
-    actualCartons?: IntFieldUpdateOperationsInput | number
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -177898,6 +177403,14 @@ export namespace Prisma {
     laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     machine?: MachineUpdateOneRequiredWithoutProductionMachineEntriesNestedInput
@@ -177909,16 +177422,12 @@ export namespace Prisma {
     machineName?: StringFieldUpdateOperationsInput | string
     allocatedQty?: FloatFieldUpdateOperationsInput | number
     allocatedUnit?: StringFieldUpdateOperationsInput | string
-    plannedPackets?: IntFieldUpdateOperationsInput | number
-    plannedCartons?: IntFieldUpdateOperationsInput | number
     actualFgQty?: FloatFieldUpdateOperationsInput | number
     actualFgUnit?: StringFieldUpdateOperationsInput | string
     actualByproduct?: FloatFieldUpdateOperationsInput | number
     actualByproductUnit?: StringFieldUpdateOperationsInput | string
     actualScrap?: FloatFieldUpdateOperationsInput | number
     actualScrapUnit?: StringFieldUpdateOperationsInput | string
-    actualPackets?: IntFieldUpdateOperationsInput | number
-    actualCartons?: IntFieldUpdateOperationsInput | number
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -177926,6 +177435,14 @@ export namespace Prisma {
     laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -177936,16 +177453,12 @@ export namespace Prisma {
     machineName?: StringFieldUpdateOperationsInput | string
     allocatedQty?: FloatFieldUpdateOperationsInput | number
     allocatedUnit?: StringFieldUpdateOperationsInput | string
-    plannedPackets?: IntFieldUpdateOperationsInput | number
-    plannedCartons?: IntFieldUpdateOperationsInput | number
     actualFgQty?: FloatFieldUpdateOperationsInput | number
     actualFgUnit?: StringFieldUpdateOperationsInput | string
     actualByproduct?: FloatFieldUpdateOperationsInput | number
     actualByproductUnit?: StringFieldUpdateOperationsInput | string
     actualScrap?: FloatFieldUpdateOperationsInput | number
     actualScrapUnit?: StringFieldUpdateOperationsInput | string
-    actualPackets?: IntFieldUpdateOperationsInput | number
-    actualCartons?: IntFieldUpdateOperationsInput | number
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -177953,6 +177466,14 @@ export namespace Prisma {
     laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -177962,11 +177483,9 @@ export namespace Prisma {
     verificationNumber?: StringFieldUpdateOperationsInput | string
     entryNumber?: StringFieldUpdateOperationsInput | string
     fgProductName?: StringFieldUpdateOperationsInput | string
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    totalCartons?: IntFieldUpdateOperationsInput | number
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     toLocationId?: StringFieldUpdateOperationsInput | string
     toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -177985,11 +177504,9 @@ export namespace Prisma {
     verificationNumber?: StringFieldUpdateOperationsInput | string
     entryNumber?: StringFieldUpdateOperationsInput | string
     fgProductName?: StringFieldUpdateOperationsInput | string
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    totalCartons?: IntFieldUpdateOperationsInput | number
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     toLocationId?: StringFieldUpdateOperationsInput | string
     toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -178008,11 +177525,9 @@ export namespace Prisma {
     verificationNumber?: StringFieldUpdateOperationsInput | string
     entryNumber?: StringFieldUpdateOperationsInput | string
     fgProductName?: StringFieldUpdateOperationsInput | string
-    totalPackets?: IntFieldUpdateOperationsInput | number
-    totalCartons?: IntFieldUpdateOperationsInput | number
-    packetSize?: NullableFloatFieldUpdateOperationsInput | number | null
-    packetUnit?: NullableStringFieldUpdateOperationsInput | string | null
-    cartonCapacity?: NullableIntFieldUpdateOperationsInput | number | null
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
     toLocationId?: StringFieldUpdateOperationsInput | string
     toLocationName?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -178032,16 +177547,12 @@ export namespace Prisma {
     machineName: string
     allocatedQty?: number
     allocatedUnit?: string
-    plannedPackets?: number
-    plannedCartons?: number
     actualFgQty?: number
     actualFgUnit?: string
     actualByproduct?: number
     actualByproductUnit?: string
     actualScrap?: number
     actualScrapUnit?: string
-    actualPackets?: number
-    actualCartons?: number
     machineSpeed?: string | null
     todayAchieve?: number | null
     laminateConsumption?: number | null
@@ -178049,6 +177560,14 @@ export namespace Prisma {
     laminateWastageKg?: number | null
     laminateWastagePercentage?: number | null
     noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
     notes?: string | null
     createdAt?: Date | string
   }
@@ -178058,16 +177577,12 @@ export namespace Prisma {
     machineName?: StringFieldUpdateOperationsInput | string
     allocatedQty?: FloatFieldUpdateOperationsInput | number
     allocatedUnit?: StringFieldUpdateOperationsInput | string
-    plannedPackets?: IntFieldUpdateOperationsInput | number
-    plannedCartons?: IntFieldUpdateOperationsInput | number
     actualFgQty?: FloatFieldUpdateOperationsInput | number
     actualFgUnit?: StringFieldUpdateOperationsInput | string
     actualByproduct?: FloatFieldUpdateOperationsInput | number
     actualByproductUnit?: StringFieldUpdateOperationsInput | string
     actualScrap?: FloatFieldUpdateOperationsInput | number
     actualScrapUnit?: StringFieldUpdateOperationsInput | string
-    actualPackets?: IntFieldUpdateOperationsInput | number
-    actualCartons?: IntFieldUpdateOperationsInput | number
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -178075,6 +177590,14 @@ export namespace Prisma {
     laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productionEntry?: FGProductionEntryUpdateOneRequiredWithoutMachineEntriesNestedInput
@@ -178086,16 +177609,12 @@ export namespace Prisma {
     machineName?: StringFieldUpdateOperationsInput | string
     allocatedQty?: FloatFieldUpdateOperationsInput | number
     allocatedUnit?: StringFieldUpdateOperationsInput | string
-    plannedPackets?: IntFieldUpdateOperationsInput | number
-    plannedCartons?: IntFieldUpdateOperationsInput | number
     actualFgQty?: FloatFieldUpdateOperationsInput | number
     actualFgUnit?: StringFieldUpdateOperationsInput | string
     actualByproduct?: FloatFieldUpdateOperationsInput | number
     actualByproductUnit?: StringFieldUpdateOperationsInput | string
     actualScrap?: FloatFieldUpdateOperationsInput | number
     actualScrapUnit?: StringFieldUpdateOperationsInput | string
-    actualPackets?: IntFieldUpdateOperationsInput | number
-    actualCartons?: IntFieldUpdateOperationsInput | number
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -178103,6 +177622,14 @@ export namespace Prisma {
     laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -178113,16 +177640,12 @@ export namespace Prisma {
     machineName?: StringFieldUpdateOperationsInput | string
     allocatedQty?: FloatFieldUpdateOperationsInput | number
     allocatedUnit?: StringFieldUpdateOperationsInput | string
-    plannedPackets?: IntFieldUpdateOperationsInput | number
-    plannedCartons?: IntFieldUpdateOperationsInput | number
     actualFgQty?: FloatFieldUpdateOperationsInput | number
     actualFgUnit?: StringFieldUpdateOperationsInput | string
     actualByproduct?: FloatFieldUpdateOperationsInput | number
     actualByproductUnit?: StringFieldUpdateOperationsInput | string
     actualScrap?: FloatFieldUpdateOperationsInput | number
     actualScrapUnit?: StringFieldUpdateOperationsInput | string
-    actualPackets?: IntFieldUpdateOperationsInput | number
-    actualCartons?: IntFieldUpdateOperationsInput | number
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
@@ -178130,6 +177653,14 @@ export namespace Prisma {
     laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
     laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

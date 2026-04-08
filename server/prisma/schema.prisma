@@ -1485,11 +1485,7 @@ model FGBatch {
   fgProductName   String
   productionQty   Float
   productionUnit  String
-  packetSize      Float?
-  packetUnit      String?
-  totalPackets    Int                  @default(0)
-  cartonCapacity  Int?
-  totalCartons    Int                  @default(0)
+
   status          String               @default("CREATED")
   notes           String?
   createdById     String
@@ -1527,16 +1523,12 @@ model FGProductionEntry {
   fgProductName   String
   targetQty       Float
   targetUnit      String
-  packetSize      Float?
-  packetUnit      String?
-  cartonCapacity  Int?
-  totalPlannedPackets Int                    @default(0)
-  totalPlannedCartons Int                    @default(0)
+
   totalActualFg   Float                      @default(0)
   totalActualByproduct Float                 @default(0)
   totalActualScrap Float                     @default(0)
-  totalActualPackets Int                     @default(0)
-  totalActualCartons Int                     @default(0)
+  totalAchievedBoxes Float                   @default(0)
+
   status          String                     @default("DRAFT")
   notes           String?
   createdById     String
@@ -1556,16 +1548,14 @@ model FGProductionMachineEntry {
   machineName       String
   allocatedQty      Float    @default(0)
   allocatedUnit     String   @default("Ton")
-  plannedPackets    Int      @default(0)
-  plannedCartons    Int      @default(0)
+
   actualFgQty       Float    @default(0)
   actualFgUnit      String   @default("Ton")
   actualByproduct   Float    @default(0)
   actualByproductUnit String @default("Ton")
   actualScrap       Float    @default(0)
   actualScrapUnit   String   @default("Ton")
-  actualPackets     Int      @default(0)
-  actualCartons     Int      @default(0)
+
   machineSpeed      String?
   todayAchieve      Float?
   laminateConsumption Float?
@@ -1573,6 +1563,15 @@ model FGProductionMachineEntry {
   laminateWastageKg Float?
   laminateWastagePercentage Float?
   noManPower        Boolean  @default(false)
+  // Enhanced machine assignment fields
+  productName            String?
+  instulationCapacity    Float?
+  instulationCapacityUnit String?
+  laminateConsumptionQty Float?
+  laminateConsumptionUnit String?
+  sfgConsumptionQty      Float?
+  sfgConsumptionUnit     String?
+  manPower               Boolean  @default(true)
   notes             String?
   createdAt         DateTime @default(now())
 
@@ -1588,7 +1587,7 @@ model Machine {
   name         String
   location     String
   capacityQty  Float
-  capacityUnit String   @default("KG_PER_SHIFT")
+  capacityUnit String   @default("BOXES_PER_SHIFT")
   machineSpeed String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -1604,11 +1603,9 @@ model FGProductionVerification {
   productionEntryId   String
   entryNumber         String
   fgProductName       String
-  totalPackets        Int      @default(0)
-  totalCartons        Int      @default(0)
-  packetSize          Float?
-  packetUnit          String?
-  cartonCapacity      Int?
+  totalActualFg      Float     @default(0)
+  actualFgUnit       String    @default("KG")
+  totalAchievedBoxes Float     @default(0)
   toLocationId        String
   toLocationName      String?
   status              String   @default("PENDING") // PENDING, ACCEPTED, REJECTED

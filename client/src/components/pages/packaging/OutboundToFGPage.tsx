@@ -41,6 +41,7 @@ interface Verification {
   rejectionReason?: string;
   dispatchedAt: string;
   verifiedAt?: string;
+  productionEntry?: any;
 }
 
 /* ─── Component ─── */
@@ -196,7 +197,7 @@ const OutboundToFGPage: React.FC = () => {
                   <tr className="bg-muted/40">
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">FG Batch ID</th>
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Product</th>
-                    <th className="px-5 py-3.5 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Cartons</th>
+                    <th className="px-5 py-3.5 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Boxes / Shift</th>
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Destination</th>
                     <th className="px-5 py-3.5 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Status</th>
                   </tr>
@@ -224,7 +225,11 @@ const OutboundToFGPage: React.FC = () => {
                         <div className="text-sm font-semibold text-foreground truncate">{d.fgProductName}</div>
                       </td>
                       <td className="px-5 py-3.5 text-right">
-                        <span className="text-sm font-bold text-amber-600">{d.totalCartons ? d.totalCartons.toLocaleString() : '-'}</span>
+                        <span className="text-sm font-bold text-amber-600">
+                          {d.productionEntry?.machineEntries 
+                            ? d.productionEntry.machineEntries.reduce((sum: number, m: any) => sum + (Number(m.todayAchieve) || 0), 0).toLocaleString() 
+                            : '-'}
+                        </span>
                       </td>
                       <td className="px-5 py-3.5 text-sm text-foreground">
                         <span className="inline-flex items-center gap-1.5"><MapPin size={13} className="text-muted-foreground shrink-0" />{d.toLocationName}</span>
@@ -303,17 +308,14 @@ const OutboundToFGPage: React.FC = () => {
               <div className="text-sm font-semibold text-foreground mb-3">Dispatch Summary</div>
               <div className="flex justify-between items-center p-3 bg-card rounded-lg border border-border">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-500/10 text-violet-600">PACKETS</span>
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-500/10 text-violet-600">BOXES</span>
                   <span className="text-sm font-medium">{selectedEntry.fgProductName}</span>
                 </div>
                 <span className="font-bold text-lg text-violet-600">
-                  {(selectedEntry.totalActualPackets || 0).toLocaleString()}
-                  <span className="text-xs font-normal text-muted-foreground ml-1">packets</span>
+                  {selectedEntry.machineEntries?.reduce((sum: number, m: any) => sum + (Number(m.todayAchieve) || 0), 0).toLocaleString() || 0}
+                  <span className="text-xs font-normal text-muted-foreground ml-1">Boxes / Shift</span>
                 </span>
               </div>
-              {selectedEntry.packetSize && (
-                <div className="text-xs text-muted-foreground mt-2">Packet size: {selectedEntry.packetSize} {selectedEntry.packetUnit}</div>
-              )}
             </div>
           )}
 

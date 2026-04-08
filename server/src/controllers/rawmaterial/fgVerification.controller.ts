@@ -69,11 +69,9 @@ export class FGVerificationController {
             productionEntryId: entry.id,
             entryNumber: entry.entryNumber,
             fgProductName: entry.fgProductName,
-            totalPackets: entry.totalActualPackets,
-            totalCartons: entry.totalActualCartons,
-            packetSize: entry.packetSize,
-            packetUnit: entry.packetUnit,
-            cartonCapacity: entry.cartonCapacity,
+            totalActualFg: entry.totalActualFg || 0,
+            actualFgUnit: 'KG',
+            totalAchievedBoxes: entry.totalAchievedBoxes || 0,
             toLocationId,
             toLocationName: location.name,
             status: 'PENDING',
@@ -90,7 +88,7 @@ export class FGVerificationController {
               entity: 'FGProductionVerification',
               entityId: created.id,
               userId: actingUserId,
-              description: `FG dispatch ${verificationNumber}: ${entry.fgProductName} (${entry.totalActualPackets} packets${entry.totalActualCartons ? `, ${entry.totalActualCartons} cartons` : ''}) to ${location.name}`,
+              description: `FG dispatch ${verificationNumber}: ${entry.fgProductName} (${entry.totalActualFg || 0} KG) to ${location.name}`,
             },
           });
         }
@@ -112,7 +110,11 @@ export class FGVerificationController {
   static async getVerifications(req: Request, res: Response): Promise<void> {
     try {
       const verifications = await prisma.fGProductionVerification.findMany({
-        include: { productionEntry: true },
+        include: { 
+          productionEntry: {
+            include: { machineEntries: true }
+          } 
+        },
         orderBy: { createdAt: 'desc' },
       });
       res.json({ success: true, data: verifications });

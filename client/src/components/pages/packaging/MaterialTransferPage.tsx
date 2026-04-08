@@ -458,8 +458,7 @@ const MaterialTransferPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Stepper */}
-        <div className="flex items-center justify-center mb-8 px-4 mt-2">
+        <div className="flex items-center justify-center mb-5 px-4 mt-2">
           {['LOCATIONS', 'MATERIAL', 'SELECT LOTS'].map((label, index) => (
             <React.Fragment key={label}>
               <div className="flex flex-col items-center relative z-10 w-20">
@@ -486,7 +485,7 @@ const MaterialTransferPage: React.FC = () => {
           ))}
         </div>
 
-        <div className="space-y-4 min-h-[300px]">
+        <div className="space-y-4 min-h-[140px]">
           <AnimatePresence mode="wait">
             {currentStep === 0 && (
               <motion.div key="step0" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-5">

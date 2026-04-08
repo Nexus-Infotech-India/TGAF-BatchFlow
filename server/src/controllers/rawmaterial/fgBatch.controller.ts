@@ -163,6 +163,12 @@ export class FGBatchController {
           currentStockQty = stocks.reduce((sum, s) => sum + s.currentQuantity, 0);
           const stockWithUnit = stocks.find(s => s.quantityUnit && s.currentQuantity > 0) || stocks.find(s => s.quantityUnit) || stocks[0];
           currentStockUnit = stockWithUnit?.quantityUnit || rm.unitOfMeasurement;
+
+          if (rm.category === 'PACKAGING_MATERIAL' && currentStockUnit && ['ton', 'quintal'].includes(currentStockUnit.toLowerCase())) {
+             const stockInGrams = toGrams(currentStockQty, currentStockUnit);
+             currentStockQty = fromGrams(stockInGrams, 'KG');
+             currentStockUnit = 'KG';
+          }
         }
 
         const displayUnit = currentStockUnit;
@@ -271,9 +277,6 @@ export class FGBatchController {
         bomId,
         productionQty,
         productionUnit,
-        packetSize,
-        packetUnit,
-        cartonCapacity,
         notes,
         consumptions, // Array of { rawMaterialId, actualQuantity, unit, sourceType, batchNumber, dispatchId }
       } = req.body;
@@ -309,13 +312,17 @@ export class FGBatchController {
             return;
           }
 
-          const sfgLine = transfer.lines.find(
+          const sfgLines = transfer.lines.filter(
             (l) => l.lineType === 'SFG' && (l.rawMaterialId === c.rawMaterialId || l.productName === c.rawMaterialName)
           );
-          if (!sfgLine) {
+          if (sfgLines.length === 0) {
             res.status(400).json({ error: `No SFG line found for material in transfer ${c.batchNumber}` });
             return;
           }
+
+          // Sum total quantity across ALL matching SFG lines in this transfer
+          const totalTransferQty = sfgLines.reduce((sum, l) => sum + l.quantity, 0);
+          const sfgUnit = sfgLines[0].unitOfMeasurement;
 
           // Calculate already consumed
           const pastConsumed = await prisma.fGBatchConsumption.aggregate({
@@ -327,11 +334,11 @@ export class FGBatchController {
             _sum: { actualQuantity: true },
           });
           const alreadyConsumed = pastConsumed._sum.actualQuantity || 0;
-          const remaining = sfgLine.quantity - alreadyConsumed;
+          const remaining = totalTransferQty - alreadyConsumed;
 
           if (actualQty > remaining) {
             res.status(400).json({
-              error: `Insufficient SFG in transfer ${c.batchNumber}. Required: ${actualQty} ${c.unit}, Available: ${Math.round(remaining * 1000) / 1000} ${sfgLine.unitOfMeasurement}`,
+              error: `Insufficient SFG in transfer ${c.batchNumber}. Required: ${actualQty} ${c.unit}, Available: ${Math.round(remaining * 1000) / 1000} ${sfgUnit}`,
             });
             return;
           }
@@ -354,19 +361,6 @@ export class FGBatchController {
             return;
           }
         }
-      }
-
-      // Calculate packets and cartons
-      let totalPackets = 0;
-      let totalCartons = 0;
-      if (packetSize && packetSize > 0) {
-        const prodInGrams = toGrams(Number(productionQty), productionUnit || bom.unitOfMeasurement);
-        const packetInGrams = toGrams(Number(packetSize), packetUnit || 'gram');
-        totalPackets = Math.floor(prodInGrams / packetInGrams);
-      }
-      
-      if (cartonCapacity && cartonCapacity > 0 && totalPackets > 0) {
-        totalCartons = Math.ceil(totalPackets / Number(cartonCapacity));
       }
 
       // Generate batch number
@@ -392,11 +386,6 @@ export class FGBatchController {
             fgProductName: bom.productName,
             productionQty: Number(productionQty),
             productionUnit: productionUnit || bom.unitOfMeasurement,
-            packetSize: packetSize ? Number(packetSize) : null,
-            packetUnit: packetUnit || null,
-            totalPackets,
-            cartonCapacity: cartonCapacity ? Number(cartonCapacity) : null,
-            totalCartons,
             status: 'CREATED',
             notes: notes || null,
             createdById: (req as any).user?.id || 'system',
@@ -474,7 +463,7 @@ export class FGBatchController {
             entity: 'FGBatch',
             entityId: created.id,
             userId: (req as any).user?.id || 'system',
-            description: `FG Batch created: ${batchNumber}. Product: ${bom.productName}, Qty: ${productionQty} ${productionUnit || bom.unitOfMeasurement}, Packets: ${totalPackets}, Cartons: ${totalCartons}`,
+            description: `FG Batch created: ${batchNumber}. Product: ${bom.productName}, Qty: ${productionQty} ${productionUnit || bom.unitOfMeasurement}`,
           },
         });
 
@@ -489,11 +478,6 @@ export class FGBatchController {
           fgProductName: bom.productName,
           productionQty: Number(productionQty),
           productionUnit: productionUnit || bom.unitOfMeasurement,
-          totalPackets,
-          totalCartons,
-          packetSize: packetSize ? Number(packetSize) : null,
-          packetUnit: packetUnit || null,
-          cartonCapacity: cartonCapacity ? Number(cartonCapacity) : null,
         },
       });
     } catch (error) {

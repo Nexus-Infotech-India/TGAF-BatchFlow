@@ -121,8 +121,8 @@ const ReceiveMaterialsPage: React.FC = () => {
   };
 
   const renderTable = (transferList: Transfer[], showActions: boolean) => (
-    <div className="bg-white dark:bg-card rounded-xl border border-border shadow-sm overflow-hidden">
-      <table className="w-full text-left text-sm">
+    <div className="bg-white dark:bg-card rounded-xl border border-border shadow-sm overflow-x-auto">
+      <table className="w-full text-left text-sm whitespace-nowrap">
         <thead className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-muted/30 dark:to-muted/20 border-b border-border">
           <tr>
             <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Transfer #</th>
@@ -130,8 +130,8 @@ const ReceiveMaterialsPage: React.FC = () => {
             <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Product</th>
             <th className="px-4 py-3 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Bags</th>
             <th className="px-4 py-3 text-right text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Qty (KG)</th>
-            <th className="px-4 py-3 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Status</th>
-            <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Date</th>
+            {!showActions && <th className="px-4 py-3 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Status</th>}
+            {!showActions && <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Date</th>}
             {showActions && <th className="px-4 py-3 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Actions</th>}
             <th className="px-4 py-3 w-10"></th>
           </tr>
@@ -186,16 +186,20 @@ const ReceiveMaterialsPage: React.FC = () => {
                   <td className="px-4 py-3 text-right font-bold text-emerald-600 text-[13px]">
                     {totalQty.toLocaleString()} {unit}
                   </td>
-                  <td className="px-4 py-3 text-center">
-                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold border ${sc.bg}`}>
-                      {sc.icon} {sc.label}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="text-xs text-muted-foreground">
-                      {new Date(t.createdAt).toLocaleDateString()}
-                    </div>
-                  </td>
+                  {!showActions && (
+                    <td className="px-4 py-3 text-center">
+                      <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold border ${sc.bg}`}>
+                        {sc.icon} {sc.label}
+                      </span>
+                    </td>
+                  )}
+                  {!showActions && (
+                    <td className="px-4 py-3">
+                      <div className="text-xs text-muted-foreground">
+                        {new Date(t.createdAt).toLocaleDateString()}
+                      </div>
+                    </td>
+                  )}
                   {showActions && (
                     <td className="px-4 py-3 text-center" onClick={(e) => e.stopPropagation()}>
                       <div className="flex items-center justify-center gap-1.5">
@@ -252,7 +256,6 @@ const ReceiveMaterialsPage: React.FC = () => {
                                 <th className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Product</th>
                                 <th className="px-4 py-2 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Bags</th>
                                 <th className="px-4 py-2 text-right text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Quantity</th>
-                                <th className="px-4 py-2 text-right text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Unit</th>
                               </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
@@ -274,8 +277,10 @@ const ReceiveMaterialsPage: React.FC = () => {
                                       </span>
                                     ) : '—'}
                                   </td>
-                                  <td className="px-4 py-2.5 text-right font-bold text-sm">{Number(line.quantity).toLocaleString()}</td>
-                                  <td className="px-4 py-2.5 text-right text-xs text-muted-foreground font-medium uppercase">{line.unitOfMeasurement}</td>
+                                  <td className="px-4 py-2.5 text-right font-bold text-sm">
+                                    {Number(line.quantity).toLocaleString()}
+                                    <span className="text-xs text-muted-foreground font-medium uppercase ml-1">{line.unitOfMeasurement}</span>
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>

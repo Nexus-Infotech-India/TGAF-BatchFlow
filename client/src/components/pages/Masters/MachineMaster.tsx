@@ -38,19 +38,24 @@ const IconTrash = () => (
   );
 
 const CAPACITY_UNIT_OPTIONS = [
-  { value: 'TON_PER_SHIFT', label: 'Ton / Shift' },
-  { value: 'KG_PER_SHIFT', label: 'KG / Shift' },
+  { value: 'BOXES_PER_SHIFT', label: 'Boxes / Shift' },
 ];
 
-const getCapacityUnitLabel = (value: string) =>
-  CAPACITY_UNIT_OPTIONS.find(o => o.value === value)?.label || value;
+const getCapacityUnitLabel = (value: string) => {
+  const found = CAPACITY_UNIT_OPTIONS.find(o => o.value === value);
+  if (found) return found.label;
+  // Handle legacy values
+  if (value === 'TON_PER_SHIFT') return 'Boxes / Shift';
+  if (value === 'KG_PER_SHIFT') return 'Boxes / Shift';
+  return 'Boxes / Shift';
+};
 
 const emptyForm = {
   machineId: '',
   name: '',
   location: '',
   capacityQty: '',
-  capacityUnit: 'KG_PER_SHIFT',
+  capacityUnit: 'BOXES_PER_SHIFT',
   machineSpeed: '',
 };
 
@@ -160,7 +165,7 @@ const MachineMasterPage: React.FC = () => {
       name: machine.name,
       location: machine.location,
       capacityQty: machine.capacityQty,
-      capacityUnit: machine.capacityUnit,
+      capacityUnit: 'BOXES_PER_SHIFT',
       machineSpeed: machine.machineSpeed || '',
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -289,7 +294,7 @@ const MachineMasterPage: React.FC = () => {
                 <StyledInput label="Machine Speed (e.g. 60PPM)" name="machineSpeed" value={form.machineSpeed} onChange={handleChange} placeholder="e.g. 60PPM" />
                 <div className="flex gap-2">
                   <div className="flex-1">
-                    <StyledInput label="Capacity" type="number" name="capacityQty" value={form.capacityQty} onChange={handleChange} placeholder="e.g. 500" required />
+                    <StyledInput label="Instulation Capacity" type="number" name="capacityQty" value={form.capacityQty} onChange={handleChange} placeholder="e.g. 500" required />
                   </div>
                   <div className="w-1/3">
                     <div>
@@ -417,7 +422,7 @@ const MachineMasterPage: React.FC = () => {
             <table className="w-full table-auto">
               <thead>
                 <tr style={{ background: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
-                  {['Machine Details', 'Location', 'Capacity', 'Speed', 'Actions'].map((h) => (
+                  {['Machine Details', 'Location', 'Instulation Capacity', 'Speed', 'Actions'].map((h) => (
                     <th
                       key={h}
                       className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider"
