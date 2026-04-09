@@ -443,6 +443,7 @@ export namespace $Enums {
   CLEANING: 'CLEANING',
   GRINDING: 'GRINDING',
   SFG_WAREHOUSE: 'SFG_WAREHOUSE',
+  FG_PACKAGING: 'FG_PACKAGING',
   OTHER: 'OTHER'
 };
 
@@ -471,7 +472,8 @@ export const TransferLineType: {
   RAW_MATERIAL: 'RAW_MATERIAL',
   SFG: 'SFG',
   BYPRODUCT: 'BYPRODUCT',
-  SCRAP: 'SCRAP'
+  SCRAP: 'SCRAP',
+  PACKAGING_MATERIAL: 'PACKAGING_MATERIAL'
 };
 
 export type TransferLineType = (typeof TransferLineType)[keyof typeof TransferLineType]

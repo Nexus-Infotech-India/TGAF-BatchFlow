@@ -13,7 +13,17 @@ import {
   Database,
   Truck,
   Plus,
-  Trash2
+  Trash2,
+  ClipboardList,
+  Target,
+  Scale,
+  Sparkles,
+  Boxes,
+  Cog,
+  Settings,
+  Gauge,
+  Users,
+  Activity
 } from 'lucide-react';
 
 /* ─── Unit conversion helpers ─── */
@@ -60,6 +70,8 @@ const NewFGProductionEntryPage: React.FC = () => {
 
   // SFG transfers for SFG consumption column
   const [sfgTransfers, setSfgTransfers] = useState<any[]>([]);
+  // Packaging transfers for Laminate/Packaging consumption column
+  const [pkgTransfers, setPkgTransfers] = useState<any[]>([]);
 
   /* ─── Fetch Base Data ─── */
   useEffect(() => {
@@ -97,25 +109,39 @@ const NewFGProductionEntryPage: React.FC = () => {
     fetchPrevEntries();
   }, []);
 
-  /* ─── Fetch SFG transfers (accepted) for the selected location ─── */
+  /* ─── Fetch SFG & Packaging transfers (accepted) for the selected location ─── */
   useEffect(() => {
     if (!selectedLocationId) return;
-    const fetchSfgTransfers = async () => {
+    const fetchTransfers = async () => {
       try {
         const res = await api.get(API_ROUTES.RAW.GET_TRANSFERS, {
           params: { direction: 'SFG_TO_PRODUCTION', status: 'ACCEPTED' }
         });
         const transfers = res.data?.data || res.data || [];
-        // Filter to only transfers going to our location
         const filtered = Array.isArray(transfers)
           ? transfers.filter((t: any) => t.toLocationId === selectedLocationId)
           : [];
-        setSfgTransfers(filtered);
+        // Split into SFG-only and Packaging-only based on lineType
+        const sfgOnly = filtered.filter((t: any) =>
+          t.lines?.some((l: any) => !l.lineType || l.lineType === 'SFG')
+        ).map((t: any) => ({
+          ...t,
+          lines: t.lines?.filter((l: any) => !l.lineType || l.lineType === 'SFG') || []
+        }));
+        const pkgOnly = filtered.filter((t: any) =>
+          t.lines?.some((l: any) => l.lineType === 'PACKAGING_MATERIAL')
+        ).map((t: any) => ({
+          ...t,
+          lines: t.lines?.filter((l: any) => l.lineType === 'PACKAGING_MATERIAL') || []
+        }));
+        setSfgTransfers(sfgOnly);
+        setPkgTransfers(pkgOnly);
       } catch {
         setSfgTransfers([]);
+        setPkgTransfers([]);
       }
     };
-    fetchSfgTransfers();
+    fetchTransfers();
   }, [selectedLocationId]);
 
   /* ─── Fetch BOM Items and Stock ─── */
@@ -225,6 +251,67 @@ const NewFGProductionEntryPage: React.FC = () => {
      };
   };
 
+  /* ─── Packaging Transfer helpers ─── */
+  const getPkgConsumptionInfo = (): { transferNumbers: string[] } => {
+    const transferNumbers: string[] = [];
+    for (const transfer of pkgTransfers) {
+      if (!transferNumbers.includes(transfer.transferNumber)) {
+        transferNumbers.push(transfer.transferNumber);
+      }
+    }
+    return { transferNumbers };
+  };
+
+  const getPkgTransferAvailable = (transferNumber: string) => {
+     if (!transferNumber) return { qty: 0, unit: 'KG', productName: '' };
+     const transfer = pkgTransfers.find(t => t.transferNumber === transferNumber);
+     if (!transfer) return { qty: 0, unit: 'KG', productName: '' };
+     let sum = 0;
+     let un = 'KG';
+     let name = '';
+     transfer.lines?.forEach((l: any) => {
+         sum += l.quantity || 0;
+         un = l.unitOfMeasurement || 'KG';
+         name = l.productName || name;
+     });
+     return { qty: sum, unit: un, productName: name };
+  };
+
+  const getPkgOptionsForRow = (currentIndex: number) => {
+     return getPkgConsumptionInfo().transferNumbers.filter(t => {
+        if (allocations[currentIndex]?.pkgTransferNumber === t) return true;
+
+        // Hide this packaging transfer if it's already picked in any other row
+        // (each packaging batch can only be allocated to a single machine row).
+        const isUsedElsewhere = allocations.some((alloc, i) =>
+           i !== currentIndex && alloc.pkgTransferNumber === t
+        );
+        if (isUsedElsewhere) return false;
+
+        // Also hide if the batch has no remaining availability on the backend
+        const avail = getPkgTransferAvailable(t);
+        const availGrams = toGrams(avail.qty, avail.unit);
+        return availGrams > 0;
+     }).map(t => {
+        const info = getPkgTransferAvailable(t);
+        return { value: t, label: `${t} — ${info.productName || 'Packaging'}` };
+     });
+  };
+
+  const getRemainingPkgTransferForRow = (transferNumber: string, currentIndex: number) => {
+      if (!transferNumber) return { qty: 0, unit: 'KG' };
+      const avail = getPkgTransferAvailable(transferNumber);
+      const availGrams = toGrams(avail.qty, avail.unit);
+      let usedGrams = 0;
+      allocations.forEach((alloc, i) => {
+         if (i !== currentIndex && alloc.pkgTransferNumber === transferNumber) {
+             usedGrams += toGrams(alloc.laminateConsumptionQty || 0, alloc.laminateConsumptionUnit || 'KG');
+         }
+      });
+      const remGrams = Math.max(0, availGrams - usedGrams);
+      return { qty: remGrams / 1000, unit: 'KG' };
+  };
+
   /* ─── Create a blank allocation for a machine ─── */
   const createBlankAllocation = (machine: any) => {
     const lastProduct = getLastProductForMachine(machine.id);
@@ -244,6 +331,7 @@ const NewFGProductionEntryPage: React.FC = () => {
       instulationCapacityUnit: machine.capacityUnit === 'BOXES_PER_SHIFT' ? 'Boxes/Shift' : machine.capacityUnit,
       laminateConsumptionQty: null as any,
       laminateConsumptionUnit: laminateLine?.unit || 'KG',
+      pkgTransferNumber: null as any,
       sfgConsumptionQty: null as any,
       sfgConsumptionUnit: 'KG', // Fixed to KG
       sfgTransferNumber: null as any,
@@ -518,16 +606,17 @@ const NewFGProductionEntryPage: React.FC = () => {
         // If it's the currently selected one for this row, always show it
         if (allocations[currentIndex]?.sfgTransferNumber === t) return true;
 
-        // Otherwise, check if it has remaining availability
+        // Hide this transfer if it's already picked in any other row
+        // (each SFG batch can only be allocated to a single machine row).
+        const isUsedElsewhere = allocations.some((alloc, i) =>
+           i !== currentIndex && alloc.sfgTransferNumber === t
+        );
+        if (isUsedElsewhere) return false;
+
+        // Also hide if the batch has no remaining availability on the backend
         const avail = getSfgTransferAvailable(t);
         const availGrams = toGrams(avail.qty, avail.unit);
-        let usedGrams = 0;
-        allocations.forEach((alloc, i) => {
-           if (i !== currentIndex && alloc.sfgTransferNumber === t) {
-               usedGrams += toGrams(alloc.sfgConsumptionQty || 0, alloc.sfgConsumptionUnit || 'KG');
-           }
-        });
-        return (availGrams - usedGrams) > 0;
+        return availGrams > 0;
      }).map(t => ({ value: t, label: t }));
   };
 
@@ -547,19 +636,36 @@ const NewFGProductionEntryPage: React.FC = () => {
   };
 
   return (
-    <motion.div className="min-h-screen bg-background p-4 md:p-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <motion.div className="min-h-screen bg-gradient-to-br from-emerald-50/40 via-background to-teal-50/30 p-4 md:p-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center gap-4 mb-6">
-          <Button icon={<ArrowLeft size={18} />} onClick={() => navigate('/packaging/fg-production')} className="rounded-sm shadow-sm" size="large" />
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-              New Production Plan
-            </h1>
-            <p className="text-muted-foreground">Select location, plan raw materials, and allocate to machines</p>
+        {/* Page Header */}
+        <div className="relative mb-6 overflow-hidden rounded-md border border-emerald-100 bg-gradient-to-r from-white via-emerald-50/50 to-teal-50/60 shadow-sm">
+          <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="absolute -bottom-16 left-1/3 h-40 w-40 rounded-full bg-teal-400/10 blur-3xl" />
+          <div className="relative flex items-center gap-4 p-5 md:p-6">
+            <Button
+              icon={<ArrowLeft size={18} />}
+              onClick={() => navigate('/packaging/fg-production')}
+              className="rounded-sm shadow-sm border-emerald-200 hover:border-emerald-400"
+              size="large"
+            />
+            <div className="flex h-12 w-12 items-center justify-center rounded-md bg-gradient-to-br from-emerald-500 to-teal-600 shadow-md">
+              <Sparkles size={22} className="text-white" />
+            </div>
+            <div className="flex-1">
+              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                New Production Plan
+              </h1>
+              <p className="text-sm text-muted-foreground mt-0.5">Select location, plan raw materials, and allocate to machines</p>
+            </div>
+            <div className="hidden md:flex items-center gap-2 rounded-md border border-emerald-200 bg-white/70 backdrop-blur px-3 py-2 shadow-sm">
+              <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs font-bold text-emerald-700">Step {step + 1} of {stepItems.length}</span>
+            </div>
           </div>
         </div>
 
-        <motion.div className="bg-card rounded-sm p-4 mb-6 border border-border mt-4 shadow-sm">
+        <motion.div className="bg-card rounded-sm p-4 mb-6 border border-border shadow-sm">
           <Steps current={step} items={stepItems.map((s, i) => ({
              title: <span className="text-xs font-semibold">{s.title}</span>,
              icon: <div className={`w-8 h-8 flex items-center justify-center rounded-sm ${i <= step ? 'bg-emerald-500 text-white' : 'bg-muted text-muted-foreground'}`}>{i < step ? <CheckCircle size={16} /> : s.icon}</div>
@@ -572,41 +678,119 @@ const NewFGProductionEntryPage: React.FC = () => {
             {/* STEP 1: Planning */}
             {step === 0 && (
               <motion.div key="step-0" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="p-6 md:p-8 space-y-6">
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 bg-muted/20 border border-border rounded-sm">
-                   <div>
-                      <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">1. Select Production Location</label>
-                      <Select 
+
+                {/* Section Header */}
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="p-2 rounded-sm bg-gradient-to-br from-emerald-500 to-teal-600 shadow-sm">
+                    <ClipboardList size={20} className="text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-foreground">Planning Details</h2>
+                    <p className="text-sm text-muted-foreground">Choose where, what, and how much to produce</p>
+                  </div>
+                </div>
+
+                {/* Form Card */}
+                <div className="relative rounded-md border border-border bg-gradient-to-br from-emerald-50/40 via-card to-teal-50/30 p-5 md:p-6 shadow-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    {/* Field 1: Location */}
+                    <div className="group rounded-md border border-border bg-card p-4 shadow-sm transition-all hover:border-emerald-400 hover:shadow-md">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-emerald-100 text-emerald-700 font-bold text-xs">01</div>
+                        <MapPin size={16} className="text-emerald-600" />
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Production Location</label>
+                      </div>
+                      <Select
                         className="w-full rounded-sm" size="large" placeholder="E.g. Packaging Area"
                         value={selectedLocationId || undefined} onChange={setSelectedLocationId}
                         options={locations.map(l => ({ value: l.id, label: l.name }))}
                         loading={fetchingBase}
                       />
-                   </div>
-                   <div>
-                      <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">2. Target FG Item (BOM)</label>
-                      <Select 
+                      <p className="mt-2 text-[11px] text-muted-foreground">Where the production will take place</p>
+                    </div>
+
+                    {/* Field 2: Target BOM */}
+                    <div className="group rounded-md border border-border bg-card p-4 shadow-sm transition-all hover:border-emerald-400 hover:shadow-md">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-violet-100 text-violet-700 font-bold text-xs">02</div>
+                        <Target size={16} className="text-violet-600" />
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Target FG Item (BOM)</label>
+                      </div>
+                      <Select
                         className="w-full rounded-sm" size="large" placeholder="Select Product"
                         value={selectedBomId || undefined} onChange={setSelectedBomId}
                         options={boms.map(b => ({ value: b.id, label: b.productName }))}
                         loading={fetchingBase}
                       />
-                   </div>
-                   <div className="md:col-span-2">
-                      <label className="block text-xs font-bold uppercase text-muted-foreground mb-1.5">3. Total Planned Production</label>
-                      <div className="flex items-center gap-3">
-                         <InputNumber min={0.001} step={1} className="w-full font-semibold rounded-sm" size="large" value={productionQty} onChange={setProductionQty} placeholder="E.g. 500" />
-                         <Select className="w-40 rounded-sm" size="large" value={productionUnit} onChange={setProductionUnit} options={['KG', 'Ton', 'gram'].map(u => ({ value: u, label: u }))} />
+                      <p className="mt-2 text-[11px] text-muted-foreground">Finished good you want to produce</p>
+                    </div>
+
+                    {/* Field 3: Planned Production */}
+                    <div className="md:col-span-2 group rounded-md border border-border bg-card p-4 shadow-sm transition-all hover:border-emerald-400 hover:shadow-md">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-amber-100 text-amber-700 font-bold text-xs">03</div>
+                        <Scale size={16} className="text-amber-600" />
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Planned Production</label>
                       </div>
-                   </div>
+                      <div className="flex items-center gap-3">
+                        <InputNumber min={0.001} step={1} className="w-full font-semibold rounded-sm" size="large" value={productionQty} onChange={setProductionQty} placeholder="E.g. 500" />
+                        <Select className="w-32 rounded-sm" size="large" value={productionUnit} onChange={setProductionUnit} options={['KG', 'Ton', 'gram'].map(u => ({ value: u, label: u }))} />
+                      </div>
+                      <p className="mt-2 text-[11px] text-muted-foreground">Planned output quantity for this batch</p>
+                    </div>
+                  </div>
+
+                  {/* Plan Summary */}
+                  {selectedLocationId && selectedBomId && productionQty && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-5 flex flex-wrap items-center gap-3 rounded-md border border-emerald-200 bg-emerald-50/60 px-4 py-3"
+                    >
+                      <div className="flex items-center gap-2">
+                        <CheckCircle size={16} className="text-emerald-600" />
+                        <span className="text-xs font-bold uppercase text-emerald-700">Plan Ready</span>
+                      </div>
+                      <div className="h-4 w-px bg-emerald-200" />
+                      <div className="flex items-center gap-1.5 text-xs text-emerald-800">
+                        <MapPin size={12} />
+                        <span className="font-semibold">{locations.find(l => l.id === selectedLocationId)?.name}</span>
+                      </div>
+                      <div className="h-4 w-px bg-emerald-200" />
+                      <div className="flex items-center gap-1.5 text-xs text-emerald-800">
+                        <Package size={12} />
+                        <span className="font-semibold">{boms.find(b => b.id === selectedBomId)?.productName}</span>
+                      </div>
+                      <div className="h-4 w-px bg-emerald-200" />
+                      <div className="flex items-center gap-1.5 text-xs text-emerald-800">
+                        <Boxes size={12} />
+                        <span className="font-semibold">{productionQty} {productionUnit}</span>
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
 
                 {/* Loading Indicator for Quantity Calculation */}
                 {loadingItems && (
-                   <div className="mt-8 flex flex-col justify-center items-center py-6 border border-dashed border-border rounded-sm bg-muted/10">
-                      <div className="w-8 h-8 rounded-full border-[3px] border-emerald-500 border-t-transparent animate-spin mb-3" />
-                      <p className="text-sm font-semibold text-muted-foreground animate-pulse">Calculating material requirements and available stock...</p>
+                   <div className="mt-8 flex flex-col justify-center items-center py-8 border border-dashed border-emerald-300 rounded-md bg-gradient-to-br from-emerald-50/40 to-teal-50/30">
+                      <div className="relative w-12 h-12 mb-3">
+                        <div className="absolute inset-0 rounded-full border-[3px] border-emerald-200" />
+                        <div className="absolute inset-0 rounded-full border-[3px] border-emerald-500 border-t-transparent animate-spin" />
+                        <Boxes size={16} className="absolute inset-0 m-auto text-emerald-600" />
+                      </div>
+                      <p className="text-sm font-semibold text-emerald-700 animate-pulse">Calculating material requirements and available stock...</p>
                    </div>
+                )}
+
+                {/* Empty State */}
+                {!loadingItems && consumptionLines.length === 0 && (
+                  <div className="mt-6 flex flex-col items-center justify-center py-10 border border-dashed border-border rounded-md bg-muted/10">
+                    <div className="p-3 rounded-full bg-muted/40 mb-3">
+                      <Package size={28} className="text-muted-foreground" />
+                    </div>
+                    <p className="text-sm font-semibold text-foreground">No materials calculated yet</p>
+                    <p className="text-xs text-muted-foreground mt-1">Fill in all three fields above to see material requirements</p>
+                  </div>
                 )}
 
                 {/* Items Required Suggestion */}
@@ -624,7 +808,16 @@ const NewFGProductionEntryPage: React.FC = () => {
                                </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
-                               {consumptionLines.map((line, idx) => (
+                               {consumptionLines.map((line, idx) => {
+                                  // Sum remaining quantity across ALL accepted SFG transfers for this material
+                                  // at the selected FG Packaging location — not just the first batch.
+                                  const totalSfgAvailable = (line.availableSfgBatches || []).reduce(
+                                     (sum: number, b: any) => sum + (b.remainingQuantity || 0),
+                                     0
+                                  );
+                                  const sfgUnit = line.availableSfgBatches?.[0]?.unit || line.unit;
+                                  const sfgBatchCount = line.availableSfgBatches?.length || 0;
+                                  return (
                                   <tr key={idx} className="hover:bg-muted/30">
                                      <td className="px-4 py-3 font-semibold text-sm">{line.rawMaterialName}</td>
                                      <td className="px-4 py-3 text-center">
@@ -634,8 +827,15 @@ const NewFGProductionEntryPage: React.FC = () => {
                                      <td className="px-4 py-3 text-right font-bold text-amber-600">{line.expectedQuantity} {line.unit}</td>
                                      <td className="px-4 py-3 text-right">
                                         {line.isSFG ? (
-                                           line.availableSfgBatches.length > 0 ? (
-                                              <span className="text-emerald-600 font-bold">{line.availableSfgBatches[0].remainingQuantity} {line.availableSfgBatches[0].unit}</span>
+                                           sfgBatchCount > 0 ? (
+                                              <div className="flex flex-col items-end">
+                                                 <span className={totalSfgAvailable >= line.expectedQuantity ? 'text-emerald-600 font-bold' : 'text-red-500 font-bold'}>
+                                                    {Number(totalSfgAvailable.toFixed(3)).toLocaleString()} {sfgUnit}
+                                                 </span>
+                                                 <span className="text-[10px] text-muted-foreground">
+                                                    across {sfgBatchCount} transfer{sfgBatchCount > 1 ? 's' : ''}
+                                                 </span>
+                                              </div>
                                            ) : (
                                               <span className="text-red-500 font-bold text-xs">No Transfer Available</span>
                                            )
@@ -646,7 +846,8 @@ const NewFGProductionEntryPage: React.FC = () => {
                                         )}
                                      </td>
                                   </tr>
-                               ))}
+                                  );
+                               })}
                             </tbody>
                          </table>
                       </div>
@@ -659,57 +860,150 @@ const NewFGProductionEntryPage: React.FC = () => {
             {/* STEP 2: Machine Assignment - Row Layout */}
             {step === 1 && (
               <motion.div key="step-1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="p-6 md:p-8 space-y-4">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 rounded-sm bg-gradient-to-br from-blue-500 to-indigo-600 shadow-sm"><Factory size={20} className="text-white" /></div>
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground">Machine Assignment & Allocation</h2>
-                    <p className="text-sm text-muted-foreground">Add machines and assign production quantities</p>
+                {/* Animated Section Header */}
+                <div className="relative overflow-hidden rounded-md border border-blue-100 bg-gradient-to-r from-blue-50/70 via-indigo-50/40 to-violet-50/60 p-5 shadow-sm">
+                  {/* Decorative animated background cogs */}
+                  <motion.div
+                    className="absolute -right-8 -top-8 text-blue-200/40"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                  >
+                    <Cog size={140} strokeWidth={1.2} />
+                  </motion.div>
+                  <motion.div
+                    className="absolute -left-6 -bottom-10 text-indigo-200/40"
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
+                  >
+                    <Settings size={110} strokeWidth={1.2} />
+                  </motion.div>
+
+                  <div className="relative flex items-center gap-4">
+                    <motion.div
+                      className="p-3 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 shadow-md"
+                      animate={{ y: [0, -2, 0] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                      <Factory size={24} className="text-white" />
+                    </motion.div>
+                    <div className="flex-1">
+                      <h2 className="text-xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
+                        Machine Assignment & Allocation
+                      </h2>
+                      <p className="text-sm text-muted-foreground mt-0.5">Add machines and assign production quantities</p>
+                    </div>
+
+                    {/* Live stats pill */}
+                    <div className="hidden md:flex items-center gap-3">
+                      <div className="flex items-center gap-2 rounded-md border border-blue-200 bg-white/80 backdrop-blur px-3 py-2 shadow-sm">
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+                        >
+                          <Cog size={14} className="text-blue-600" />
+                        </motion.div>
+                        <span className="text-xs font-bold text-blue-700">{allocations.length} Machine{allocations.length !== 1 ? 's' : ''}</span>
+                      </div>
+                      <div className="flex items-center gap-2 rounded-md border border-emerald-200 bg-white/80 backdrop-blur px-3 py-2 shadow-sm">
+                        <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                        <span className="text-xs font-bold text-emerald-700">
+                          {allocations.filter(a => a.machineId).length} Configured
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 {/* Table Header */}
                 <div className="w-full overflow-x-auto pb-4">
-                   <div className="min-w-[1100px] border border-border rounded-sm bg-card shadow-sm">
+                   <div className="min-w-[1100px] border border-border rounded-md bg-gradient-to-br from-slate-50/30 via-card to-blue-50/20 shadow-sm">
                      {/* Headings */}
-                     <div className="grid grid-cols-12 gap-3 p-3 bg-muted/40 border-b border-border items-center">
-                        <div className="text-[10px] font-bold text-muted-foreground uppercase col-span-2">Machine Details</div>
-                        <div className="text-[10px] font-bold text-muted-foreground uppercase col-span-2">Man Power & Status</div>
-                        <div className="text-[10px] font-bold text-emerald-600 uppercase col-span-3">SFG Consumption & TRF #</div>
-                        <div className="text-[10px] font-bold text-muted-foreground uppercase col-span-2">Laminate Consumption</div>
+                     <div className="grid grid-cols-12 gap-3 p-3 bg-gradient-to-r from-blue-50 via-indigo-50/60 to-violet-50/60 border-b border-border items-center">
+                        <div className="text-[10px] font-bold text-indigo-700 uppercase col-span-2 flex items-center gap-1"><Factory size={11} /> Machine Details</div>
+                        <div className="text-[10px] font-bold text-violet-700 uppercase col-span-2 flex items-center gap-1"><Users size={11} /> Man Power & Status</div>
+                        <div className="text-[10px] font-bold text-emerald-600 uppercase col-span-3 flex items-center gap-1"><Truck size={11} /> SFG Consumption & TRF #</div>
+                        <div className="text-[10px] font-bold text-blue-600 uppercase col-span-2 flex items-center gap-1"><Package size={11} /> Packaging Consumption</div>
                         <div className="text-[10px] font-bold text-muted-foreground uppercase col-span-2">Row Notes</div>
                         <div className="text-[10px] font-bold text-muted-foreground uppercase col-span-1 text-center">Action</div>
                      </div>
 
                      {/* Rows */}
                      <div className="divide-y divide-border">
-                        {allocations.map((alloc, idx) => (
-                           <div key={idx} className="grid grid-cols-12 gap-3 p-3 items-start bg-card hover:bg-muted/10 transition-colors">
-                              
+                        {allocations.map((alloc, idx) => {
+                          const isActive = !!alloc.machineId;
+                          const isRunning = isActive && alloc.manPower && (alloc.sfgConsumptionQty > 0 || alloc.laminateConsumptionQty > 0);
+                          return (
+                           <motion.div
+                              key={idx}
+                              initial={{ opacity: 0, y: 6 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: idx * 0.04 }}
+                              className={`relative grid grid-cols-12 gap-3 p-3 items-start transition-all ${isRunning ? 'bg-gradient-to-r from-emerald-50/30 via-card to-blue-50/20' : isActive ? 'bg-gradient-to-r from-blue-50/20 to-transparent' : 'bg-card'} hover:shadow-inner`}
+                           >
+                              {/* Row Index Badge */}
+                              <div className="absolute left-0 top-3 bottom-3 w-1 rounded-r-sm overflow-hidden">
+                                <div className={`h-full w-full ${isRunning ? 'bg-gradient-to-b from-emerald-400 to-emerald-600' : isActive ? 'bg-gradient-to-b from-blue-400 to-indigo-500' : 'bg-muted'}`} />
+                              </div>
+
                               {/* Machine Selection (Col 1-2) */}
-                              <div className="col-span-2 space-y-2">
-                                <Select
-                                  className="w-full font-bold [&_.ant-select-selector]:rounded-sm"
-                                  value={alloc.machineId || undefined}
-                                  onChange={v => updateAllocationField(idx, 'machineId', v)}
-                                  options={machines.map(m => ({ value: m.id, label: m.name }))}
-                                  placeholder="Select Machine"
-                                />
+                              <div className="col-span-2 space-y-2 pl-1">
+                                <div className="relative">
+                                  <Select
+                                    className="w-full font-bold [&_.ant-select-selector]:rounded-sm"
+                                    value={alloc.machineId || undefined}
+                                    onChange={v => updateAllocationField(idx, 'machineId', v)}
+                                    options={machines.map(m => ({ value: m.id, label: m.name }))}
+                                    placeholder="Select Machine"
+                                  />
+                                  {/* Animated machine indicator */}
+                                  <div className="absolute -left-2 -top-2 z-10">
+                                    <motion.div
+                                      className={`flex h-6 w-6 items-center justify-center rounded-full border-2 shadow-md ${isRunning ? 'bg-gradient-to-br from-emerald-400 to-emerald-600 border-white' : isActive ? 'bg-gradient-to-br from-blue-400 to-indigo-600 border-white' : 'bg-muted border-border'}`}
+                                      animate={isRunning ? { scale: [1, 1.08, 1] } : {}}
+                                      transition={isRunning ? { duration: 1.6, repeat: Infinity, ease: 'easeInOut' } : {}}
+                                    >
+                                      <motion.div
+                                        animate={isActive ? { rotate: 360 } : {}}
+                                        transition={isActive ? { duration: isRunning ? 3 : 6, repeat: Infinity, ease: 'linear' } : {}}
+                                      >
+                                        <Cog size={12} className="text-white" />
+                                      </motion.div>
+                                    </motion.div>
+                                  </div>
+                                </div>
                                 {alloc.machine && (
-                                   <div className="text-xs text-muted-foreground bg-muted/30 p-1.5 rounded-sm border border-border/50">
-                                      <div className="flex justify-between items-center"><span className="opacity-70">M/C No:</span> <span className="font-mono text-foreground">{alloc.machine.machineId}</span></div>
-                                      <div className="flex justify-between items-center"><span className="opacity-70">Speed:</span> <span>{alloc.machine.machineSpeed || 'N/A'}</span></div>
-                                      <div className="flex justify-between items-center"><span className="opacity-70">Capacity:</span> <span>{alloc.instulationCapacity} {getCapacityLabel(alloc.machine.capacityUnit)}</span></div>
-                                   </div>
+                                   <motion.div
+                                     initial={{ opacity: 0, height: 0 }}
+                                     animate={{ opacity: 1, height: 'auto' }}
+                                     className="text-xs text-muted-foreground bg-gradient-to-br from-slate-50 to-blue-50/50 p-2 rounded-sm border border-blue-100 shadow-sm"
+                                   >
+                                      <div className="flex justify-between items-center"><span className="opacity-70 flex items-center gap-1"><Factory size={9} /> M/C No:</span> <span className="font-mono font-bold text-blue-700">{alloc.machine.machineId}</span></div>
+                                      <div className="flex justify-between items-center"><span className="opacity-70 flex items-center gap-1"><Gauge size={9} /> Speed:</span> <span className="font-semibold">{alloc.machine.machineSpeed || 'N/A'}</span></div>
+                                      <div className="flex justify-between items-center"><span className="opacity-70 flex items-center gap-1"><Boxes size={9} /> Capacity:</span> <span className="font-semibold">{alloc.instulationCapacity} {getCapacityLabel(alloc.machine.capacityUnit)}</span></div>
+                                   </motion.div>
                                 )}
                               </div>
 
                               {/* Man Power (Col 3-4) */}
                               <div className="col-span-2 space-y-2 flex flex-col justify-start">
-                                 <div className={`p-2 border rounded-sm flex items-center justify-between ${alloc.manPower ? 'border-emerald-500/30 bg-emerald-50/50' : 'border-red-500/30 bg-red-50/50'}`}>
-                                    <span className={`text-xs font-bold ${alloc.manPower ? 'text-emerald-700' : 'text-red-700'}`}>Man Power Available</span>
+                                 <div className={`p-2 border rounded-sm flex items-center justify-between transition-all ${alloc.manPower ? 'border-emerald-500/40 bg-gradient-to-r from-emerald-50 to-emerald-50/30 shadow-sm' : 'border-red-500/30 bg-gradient-to-r from-red-50 to-red-50/30'}`}>
+                                    <div className="flex items-center gap-1.5">
+                                      <motion.div
+                                        animate={alloc.manPower ? { scale: [1, 1.15, 1] } : {}}
+                                        transition={alloc.manPower ? { duration: 1.8, repeat: Infinity, ease: 'easeInOut' } : {}}
+                                      >
+                                        <Users size={12} className={alloc.manPower ? 'text-emerald-700' : 'text-red-700'} />
+                                      </motion.div>
+                                      <span className={`text-[11px] font-bold ${alloc.manPower ? 'text-emerald-700' : 'text-red-700'}`}>Man Power</span>
+                                    </div>
                                     <Switch size="small" checked={alloc.manPower} onChange={c => updateAllocationField(idx, 'manPower', c)} />
                                  </div>
-                                 <div className="text-[10px] font-bold text-violet-700 opacity-90 truncate bg-violet-50 p-1.5 rounded-sm border border-violet-100" title={alloc.productName}>
+                                 {/* Status badge */}
+                                 <div className={`flex items-center gap-1.5 px-2 py-1 rounded-sm border text-[10px] font-bold ${isRunning ? 'bg-gradient-to-r from-emerald-50 to-emerald-100/50 border-emerald-300 text-emerald-800' : isActive ? 'bg-gradient-to-r from-blue-50 to-blue-100/50 border-blue-200 text-blue-800' : 'bg-muted/30 border-border text-muted-foreground'}`}>
+                                    <Activity size={10} className={isRunning ? 'animate-pulse' : ''} />
+                                    <span>{isRunning ? 'RUNNING' : isActive ? 'CONFIGURED' : 'IDLE'}</span>
+                                 </div>
+                                 <div className="text-[10px] font-bold text-violet-700 opacity-90 truncate bg-gradient-to-r from-violet-50 to-violet-100/30 p-1.5 rounded-sm border border-violet-100" title={alloc.productName}>
                                     Product: {alloc.productName || 'N/A'}
                                  </div>
                               </div>
@@ -741,15 +1035,23 @@ const NewFGProductionEntryPage: React.FC = () => {
                                  </div>
                               </div>
 
-                              {/* Laminate Consumption (Col 8-9) */}
+                              {/* Laminate / Packaging Consumption (Col 8-9) */}
                               <div className="col-span-2 space-y-2">
+                                <Select
+                                  placeholder="Select PKG TRF #"
+                                  value={alloc.pkgTransferNumber || undefined}
+                                  onChange={v => updateAllocationField(idx, 'pkgTransferNumber', v)}
+                                  options={getPkgOptionsForRow(idx)}
+                                  className="w-full text-xs [&_.ant-select-selector]:rounded-sm font-semibold"
+                                  allowClear
+                                />
                                 <div className="flex gap-1 h-[32px]">
                                   <InputNumber 
                                     min={0} precision={3} 
                                     value={alloc.laminateConsumptionQty} 
                                     onChange={v => updateAllocationField(idx, 'laminateConsumptionQty', v)} 
                                     className="w-full font-semibold [&_.ant-input-number-input]:rounded-sm" 
-                                    placeholder="Lam Qty" 
+                                    placeholder="Qty" 
                                   />
                                   <Select
                                     value={alloc.laminateConsumptionUnit}
@@ -759,7 +1061,7 @@ const NewFGProductionEntryPage: React.FC = () => {
                                   />
                                 </div>
                                 <div className="text-[10px] text-muted-foreground bg-muted/30 px-2 py-0.5 rounded-sm border border-border mt-1">
-                                    Available: <span className="font-bold text-blue-600">{getLaminateAvailable().qty} {getLaminateAvailable().unit}</span>
+                                    Available: <span className="font-bold text-blue-600">{getRemainingPkgTransferForRow(alloc.pkgTransferNumber, idx).qty} {getRemainingPkgTransferForRow(alloc.pkgTransferNumber, idx).unit}</span>
                                 </div>
                               </div>
 
@@ -772,13 +1074,14 @@ const NewFGProductionEntryPage: React.FC = () => {
                               <div className="col-span-1 flex justify-center items-center h-full pt-1">
                                  <Button danger type="text" onClick={() => removeMachine(idx)} disabled={allocations.length === 1} icon={<Trash2 size={16} />} className="rounded-sm hover:bg-red-50" />
                               </div>
-                           </div>
-                        ))}
+                           </motion.div>
+                          );
+                        })}
                      </div>
                    </div>
                 </div>
 
-                <Button type="dashed" onClick={addMachine} icon={<Plus size={16} />} className="w-full h-12 rounded-sm border-2 border-border/50 text-muted-foreground font-semibold hover:border-primary hover:text-primary transition-colors">
+                <Button type="dashed" onClick={addMachine} icon={<Plus size={16} />} className="group w-full h-12 rounded-md border-2 border-dashed border-blue-200 bg-gradient-to-r from-blue-50/30 via-indigo-50/20 to-violet-50/30 text-blue-600 font-bold hover:border-blue-500 hover:text-blue-700 hover:shadow-md transition-all">
                    Add Machine Row
                 </Button>
 

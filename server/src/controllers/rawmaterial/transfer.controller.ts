@@ -44,17 +44,39 @@ export class TransferController {
       // ═══════════════════════════════════════════════════════════════
       if (direction === 'SFG_TO_PRODUCTION') {
         const transfer = await prisma.$transaction(async (tx) => {
-          // For each line in the request, find the source outbound transfer line
-          // and update its transferredQuantity/transferredBags
+          // For each line in the request, handle based on lineType
           const lineCreates: any[] = [];
 
           for (const line of lines) {
+            // ── PACKAGING_MATERIAL lines: simply record qty + unit ──
+            if (line.lineType === 'PACKAGING_MATERIAL') {
+              const transferQty = Number(line.quantity || 0);
+              if (transferQty <= 0) continue;
+
+              lineCreates.push({
+                lineType: 'PACKAGING_MATERIAL',
+                rawMaterialId: line.rawMaterialId || null,
+                productName: line.productName || null,
+                skuCode: line.skuCode || null,
+                quantity: transferQty,
+                unitOfMeasurement: line.unitOfMeasurement || 'KG',
+                batchNumber: null,
+                cleaningLotId: null,
+                transferredQuantity: transferQty,
+                transferredUnit: line.unitOfMeasurement || 'KG',
+                numberOfBags: line.numberOfBags != null ? Number(line.numberOfBags) : null,
+                bagSizeKg: line.bagSizeKg != null ? Number(line.bagSizeKg) : null,
+              });
+              continue;
+            }
+
+            // ── SFG lines: existing deduction logic ──
             const batchNumber = line.batchNumber; // This is the source transfer number
             const transferBags = Number(line.numberOfBags || 0);
             const transferQty = Number(line.quantity || 0);
 
             if (!batchNumber) {
-              throw new Error('batchNumber (source transfer number) is required for SFG_TO_PRODUCTION lines');
+              throw new Error('batchNumber (source transfer number) is required for SFG lines');
             }
 
             // Find the source outbound transfer by its transfer number
@@ -68,7 +90,6 @@ export class TransferController {
             }
 
             // Find the matching SFG line for this raw material in the source transfer
-            // Match by rawMaterialId first, fallback to productName (some outbound lines have rawMaterialId=NULL)
             const sourceRmId = line.rawMaterialId;
             const sourceProductName = line.productName;
             const sourceLine = sourceTransfer.lines.find(
@@ -96,7 +117,6 @@ export class TransferController {
             }
 
             // Update the source line: add to transferred quantity
-            // We track "transferredQuantity" as the cumulative amount sent out (in source unit)
             const newTransferredQty = existingTransferredQty + transferQtyInSourceUnit;
 
             await tx.materialTransferLine.update({
@@ -108,7 +128,6 @@ export class TransferController {
             });
 
             // Still create line entries in the new transfer for tracking purposes
-            // Quantity is always in KG from the frontend
             lineCreates.push({
               lineType: 'SFG',
               rawMaterialId: sourceRmId || null,
@@ -123,6 +142,10 @@ export class TransferController {
               numberOfBags: transferBags > 0 ? transferBags : null,
               bagSizeKg: line.bagSizeKg != null ? Number(line.bagSizeKg) : 25,
             });
+          }
+
+          if (lineCreates.length === 0) {
+            throw new Error('No valid transfer lines to create');
           }
 
           const created = await tx.materialTransfer.create({
@@ -146,14 +169,19 @@ export class TransferController {
             },
           });
 
+          // Determine what was transferred for logging
+          const sfgCount = lineCreates.filter((l: any) => l.lineType === 'SFG').length;
+          const pkgCount = lineCreates.filter((l: any) => l.lineType === 'PACKAGING_MATERIAL').length;
+          const desc = `Material dispatch ${transferNumber} from ${created.fromLocation.name} to ${created.toLocation.name}. SFG: ${sfgCount} lines, Packaging: ${pkgCount} lines.`;
+
           // Transaction log
           await tx.transactionLog.create({
             data: {
-              type: 'SFG_DISPATCH_SENT',
+              type: 'MATERIAL_DISPATCH_SENT',
               entity: 'MaterialTransfer',
               entityId: created.id,
               userId: req.user?.id || 'system',
-              description: `SFG dispatch ${transferNumber} from ${created.fromLocation.name} to ${created.toLocation.name}. Updated source transfer lines. Lines: ${lines.length}`,
+              description: desc,
             },
           });
 
@@ -398,6 +426,7 @@ export class TransferController {
         // we need to reverse the deduction from the source outbound lines
         if (transfer.direction === 'SFG_TO_PRODUCTION') {
           for (const line of transfer.lines) {
+            // Only reverse SFG lines (packaging lines don't deduct from a source)
             if (line.lineType !== 'SFG' || !line.batchNumber) continue;
 
             // Find the source outbound transfer
@@ -745,6 +774,115 @@ export class TransferController {
       res.json({ success: true, data: transfer });
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch transfer', details: error });
+    }
+  }
+  /**
+   * GET /raw/transfers/packaging-stock
+   * Returns packaging materials available at a given location.
+   * Looks at ACCEPTED SFG_TO_PRODUCTION transfers that have PACKAGING_MATERIAL lines,
+   * minus any already consumed by FGBatch consumptions.
+   */
+  static async getPackagingStock(req: Request, res: Response) {
+    try {
+      const { locationId } = req.query;
+
+      // 1) Find all accepted transfers at this location with packaging lines
+      const whereClause: any = {
+        direction: 'SFG_TO_PRODUCTION',
+        status: 'ACCEPTED',
+      };
+      if (locationId) {
+        whereClause.toLocationId = locationId as string;
+      }
+
+      const transfers = await prisma.materialTransfer.findMany({
+        where: whereClause,
+        include: {
+          lines: true,
+          toLocation: true,
+          fromLocation: true,
+        },
+        orderBy: { acceptedAt: 'desc' },
+      });
+
+      // 2) Pull already-consumed packaging material from FGBatch consumptions
+      const pastConsumptions = await prisma.fGBatchConsumption.findMany({
+        where: {
+          sourceType: 'PKG_TRANSFER',
+          batchNumber: { not: null },
+        },
+        select: {
+          batchNumber: true,
+          actualQuantity: true,
+          rawMaterialId: true,
+        },
+      });
+
+      const consumedMap: Record<string, Record<string, number>> = {};
+      for (const c of pastConsumptions) {
+        if (!c.batchNumber) continue;
+        if (!consumedMap[c.batchNumber]) consumedMap[c.batchNumber] = {};
+        if (!consumedMap[c.batchNumber][c.rawMaterialId]) consumedMap[c.batchNumber][c.rawMaterialId] = 0;
+        consumedMap[c.batchNumber][c.rawMaterialId] += c.actualQuantity;
+      }
+
+      // 3) Build per-material stock aggregation
+      const itemMap: Record<string, {
+        rawMaterialId: string;
+        productName: string;
+        skuCode: string;
+        unit: string;
+        totalAvailableQty: number;
+        batches: Array<{
+          transferNumber: string;
+          transferId: string;
+          acceptedAt: Date | null;
+          unit: string;
+          receivedQty: number;
+          consumedQty: number;
+          availableQty: number;
+        }>;
+      }> = {};
+
+      for (const transfer of transfers) {
+        for (const line of transfer.lines) {
+          if (line.lineType !== 'PACKAGING_MATERIAL') continue;
+          const rmId = line.rawMaterialId || '';
+          if (!rmId) continue;
+
+          if (!itemMap[rmId]) {
+            itemMap[rmId] = {
+              rawMaterialId: rmId,
+              productName: line.productName || '',
+              skuCode: line.skuCode || '',
+              unit: line.unitOfMeasurement,
+              totalAvailableQty: 0,
+              batches: [],
+            };
+          }
+
+          const consumed = consumedMap[transfer.transferNumber]?.[rmId] || 0;
+          const available = Math.max(0, Math.round((line.quantity - consumed) * 1000) / 1000);
+          if (available <= 0) continue;
+
+          itemMap[rmId].totalAvailableQty = Math.round((itemMap[rmId].totalAvailableQty + available) * 1000) / 1000;
+          itemMap[rmId].batches.push({
+            transferNumber: transfer.transferNumber,
+            transferId: transfer.id,
+            acceptedAt: transfer.acceptedAt,
+            unit: line.unitOfMeasurement,
+            receivedQty: Math.round(line.quantity * 1000) / 1000,
+            consumedQty: Math.round(consumed * 1000) / 1000,
+            availableQty: available,
+          });
+        }
+      }
+
+      const stockItems = Object.values(itemMap).filter(i => i.totalAvailableQty > 0);
+      res.json({ success: true, data: stockItems });
+    } catch (error) {
+      console.error('Error fetching packaging stock:', error);
+      res.status(500).json({ error: 'Failed to fetch packaging stock', details: error });
     }
   }
 }

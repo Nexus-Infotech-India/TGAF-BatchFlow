@@ -18,6 +18,8 @@ import {
   Boxes,
   ShieldCheck,
   AlertTriangle,
+  Tag,
+  Layers,
 } from 'lucide-react';
 
 const { TextArea } = Input;
@@ -37,6 +39,7 @@ interface Transfer {
     quantity: number;
     unitOfMeasurement: string;
     numberOfBags?: number;
+    lineType?: string;
     batchNumber?: string;
   }[];
 }
@@ -152,6 +155,8 @@ const ReceiveMaterialsPage: React.FC = () => {
             const unit = t.lines[0]?.unitOfMeasurement || 'KG';
             const productNames = [...new Set(t.lines.map(l => l.productName).filter(Boolean))];
             const sc = statusConfig[t.status] || statusConfig.SENT;
+            const hasSfg = t.lines.some(l => !l.lineType || l.lineType === 'SFG');
+            const hasPkg = t.lines.some(l => l.lineType === 'PACKAGING_MATERIAL');
 
             return (
               <React.Fragment key={t.id}>
@@ -174,7 +179,13 @@ const ReceiveMaterialsPage: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="font-semibold text-[13px]">{productNames.join(', ') || '—'}</span>
+                    <div className="flex flex-col gap-0.5">
+                      <span className="font-semibold text-[12px] truncate max-w-[180px]">{productNames.join(', ') || '—'}</span>
+                      <div className="flex gap-1">
+                        {hasSfg && <span className="text-[9px] font-bold px-1.5 py-0.5 bg-violet-50 text-violet-600 border border-violet-200 rounded">SFG</span>}
+                        {hasPkg && <span className="text-[9px] font-bold px-1.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 rounded">PKG</span>}
+                      </div>
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-center">
                     {totalBags > 0 ? (
@@ -252,6 +263,7 @@ const ReceiveMaterialsPage: React.FC = () => {
                           <table className="w-full text-left text-sm">
                             <thead className="bg-muted/20 border-b border-border">
                               <tr>
+                                <th className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Type</th>
                                 <th className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Source Batch</th>
                                 <th className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Product</th>
                                 <th className="px-4 py-2 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Bags</th>
@@ -262,9 +274,17 @@ const ReceiveMaterialsPage: React.FC = () => {
                               {t.lines.map((line, idx) => (
                                 <tr key={line.id || idx} className="hover:bg-muted/10">
                                   <td className="px-4 py-2.5">
-                                    <span className="font-mono text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
-                                      {line.batchNumber || '—'}
-                                    </span>
+                                    {line.lineType === 'PACKAGING_MATERIAL'
+                                      ? <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded text-[9px] font-bold border border-blue-200"><Tag size={8} /> PKG</span>
+                                      : <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-violet-50 text-violet-600 rounded text-[9px] font-bold border border-violet-200"><Layers size={8} /> SFG</span>
+                                    }
+                                  </td>
+                                  <td className="px-4 py-2.5">
+                                    {line.batchNumber ? (
+                                      <span className="font-mono text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                                        {line.batchNumber}
+                                      </span>
+                                    ) : '—'}
                                   </td>
                                   <td className="px-4 py-2.5">
                                     <div className="font-semibold text-[13px]">{line.productName || '—'}</div>
@@ -320,7 +340,7 @@ const ReceiveMaterialsPage: React.FC = () => {
           <ClipboardCheck className="text-emerald-600" />
           Receive Materials
         </h1>
-        <p className="text-muted-foreground mt-1">Accept or reject incoming SFG transfers at production line</p>
+        <p className="text-muted-foreground mt-1">Accept or reject incoming material transfers at production line</p>
       </div>
 
       {/* Stats Row */}

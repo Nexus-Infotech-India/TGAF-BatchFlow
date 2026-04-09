@@ -863,6 +863,7 @@ enum LocationType {
   CLEANING
   GRINDING
   SFG_WAREHOUSE
+  FG_PACKAGING
   OTHER
 }
 
@@ -903,6 +904,7 @@ enum TransferLineType {
   SFG
   BYPRODUCT
   SCRAP
+  PACKAGING_MATERIAL
 }
 
 model MaterialTransfer {

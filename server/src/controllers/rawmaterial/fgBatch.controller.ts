@@ -154,6 +154,61 @@ export class FGBatchController {
           currentStockUnit = availableSfgBatches.length > 0
             ? availableSfgBatches[0].unit
             : rm.unitOfMeasurement;
+        } else if (rm.category === 'PACKAGING_MATERIAL') {
+          // For PACKAGING_MATERIAL: only count stock available AT the selected FG Packaging
+          // location — i.e. sum remaining qty from accepted SFG_TO_PRODUCTION transfers
+          // (received at this location) minus what was already consumed by prior FG batches.
+          // We intentionally do NOT fall back to global CurrentStock, since that would
+          // surface material sitting in other warehouses that isn't actually usable here.
+          let pkgLocationStockQty = 0;
+          let pkgLocationStockUnit: string | null = null;
+
+          for (const transfer of acceptedTransfers) {
+            const pkgLines = transfer.lines.filter(
+              (line) => line.lineType === 'PACKAGING_MATERIAL' && (line.rawMaterialId === rm.id || line.productName === rm.name)
+            );
+
+            if (pkgLines.length === 0) continue;
+
+            const totalLineQty = pkgLines.reduce((sum, line) => sum + line.quantity, 0);
+            const transferNum = transfer.transferNumber;
+
+            // Check consumed from FGBatch consumptions for PKG_TRANSFER type
+            const pkgConsumed = await prisma.fGBatchConsumption.aggregate({
+              where: {
+                sourceType: 'PKG_TRANSFER',
+                batchNumber: transferNum,
+                rawMaterialId: rm.id,
+              },
+              _sum: { actualQuantity: true },
+            });
+            const consumed = pkgConsumed._sum.actualQuantity || 0;
+            const remaining = totalLineQty - consumed;
+
+            if (remaining > 0) {
+              const lineUnit = pkgLines[0].unitOfMeasurement;
+              if (!pkgLocationStockUnit) pkgLocationStockUnit = lineUnit;
+              pkgLocationStockQty += remaining;
+
+              availableSfgBatches.push({
+                transferId: transfer.id,
+                transferNumber: transferNum,
+                batchNumber: transferNum,
+                dispatchId: transfer.id,
+                lineId: pkgLines[0].id,
+                totalQuantity: Math.round(totalLineQty * 1000) / 1000,
+                consumedQuantity: consumed,
+                remainingQuantity: Math.round(remaining * 1000) / 1000,
+                unit: lineUnit,
+                fromLocation: transfer.fromLocation?.name || '',
+                toLocation: transfer.toLocation?.name || '',
+                acceptedAt: transfer.acceptedAt,
+              });
+            }
+          }
+
+          currentStockQty = pkgLocationStockQty;
+          currentStockUnit = pkgLocationStockUnit || rm.unitOfMeasurement;
         } else {
           // No SFG — fetch from current stock
           const stocks = await prisma.currentStock.findMany({
@@ -164,7 +219,7 @@ export class FGBatchController {
           const stockWithUnit = stocks.find(s => s.quantityUnit && s.currentQuantity > 0) || stocks.find(s => s.quantityUnit) || stocks[0];
           currentStockUnit = stockWithUnit?.quantityUnit || rm.unitOfMeasurement;
 
-          if (rm.category === 'PACKAGING_MATERIAL' && currentStockUnit && ['ton', 'quintal'].includes(currentStockUnit.toLowerCase())) {
+          if (currentStockUnit && ['ton', 'quintal'].includes(currentStockUnit.toLowerCase())) {
              const stockInGrams = toGrams(currentStockQty, currentStockUnit);
              currentStockQty = fromGrams(stockInGrams, 'KG');
              currentStockUnit = 'KG';
@@ -175,6 +230,9 @@ export class FGBatchController {
         const expectedQty = fromGrams(scaledGrams, displayUnit);
         const roundedExpected = Number(expectedQty.toFixed(5));
 
+        const isPackaging = rm.category === 'PACKAGING_MATERIAL';
+        const hasTransferBatches = availableSfgBatches.length > 0;
+
         items.push({
           bomItemId: bomItem.id,
           rawMaterialId: rm.id,
@@ -182,6 +240,8 @@ export class FGBatchController {
           skuCode: rm.skuCode,
           category: rm.category,
           isSFG,
+          isPackaging,
+          hasTransferBatches,
           bomQuantity: bomItem.quantity,
           bomUnit: bomItem.unitOfMeasurement,
           expectedQuantity: roundedExpected,

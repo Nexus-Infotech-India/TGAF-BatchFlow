@@ -1371,6 +1371,7 @@ exports.LocationType = exports.$Enums.LocationType = {
   CLEANING: 'CLEANING',
   GRINDING: 'GRINDING',
   SFG_WAREHOUSE: 'SFG_WAREHOUSE',
+  FG_PACKAGING: 'FG_PACKAGING',
   OTHER: 'OTHER'
 };
 
@@ -1390,7 +1391,8 @@ exports.TransferLineType = exports.$Enums.TransferLineType = {
   RAW_MATERIAL: 'RAW_MATERIAL',
   SFG: 'SFG',
   BYPRODUCT: 'BYPRODUCT',
-  SCRAP: 'SCRAP'
+  SCRAP: 'SCRAP',
+  PACKAGING_MATERIAL: 'PACKAGING_MATERIAL'
 };
 
 exports.OutputType = exports.$Enums.OutputType = {

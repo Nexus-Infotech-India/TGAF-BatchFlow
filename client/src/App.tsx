@@ -42,6 +42,7 @@ import SFGProcessingPage from './components/pages/processing/SFGProcessingPage';
 import OutboundToSFGPage from './components/pages/processing/OutboundToSFGPage';
 import StockVerificationPage from './components/pages/processing/StockVerificationPage';
 import MaterialTransferPage from './components/pages/packaging/MaterialTransferPage';
+import CreateMaterialTransferPage from './components/pages/packaging/CreateMaterialTransferPage';
 import CreateFGBatchPage from './components/pages/packaging/CreateFGBatchPage';
 import ReceiveMaterialsPage from './components/pages/packaging/ReceiveMaterialsPage';
 import FGProductionPage from './components/pages/packaging/FGProductionPage';
@@ -1057,6 +1058,24 @@ const App = () => {
                   }
                   name="Material Transfer"
                   description="Transfer SFG & packing materials to packaging production"
+                  permissionKey="manage_pkg_material_transfer"
+                />
+              }
+            />
+
+            <Route
+              path="/packaging/material-transfer/create"
+              element={
+                <PermissionedRoute
+                  path="/packaging/material-transfer/create"
+                  element={
+                    <SecureRoute
+                      element={<CreateMaterialTransferPage />}
+                      permissionKey="manage_pkg_material_transfer"
+                    />
+                  }
+                  name="Create Transfer"
+                  description="Create new material transfer for production"
                   permissionKey="manage_pkg_material_transfer"
                 />
               }
