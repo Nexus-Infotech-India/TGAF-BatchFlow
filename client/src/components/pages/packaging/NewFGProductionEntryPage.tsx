@@ -172,6 +172,7 @@ const NewFGProductionEntryPage: React.FC = () => {
             rawMaterialName: item.rawMaterialName,
             skuCode: item.skuCode,
             isSFG: item.isSFG,
+            isPackaging: item.isPackaging,
             expectedQuantity: item.expectedQuantity,
             actualQuantity: item.expectedQuantity,
             unit: item.displayUnit,
@@ -216,6 +217,31 @@ const NewFGProductionEntryPage: React.FC = () => {
     return '';
   };
 
+  /* ─── Helper: Look up a batch (with remaining qty already net of prior consumption)
+     from consumptionLines for a given transfer number. Returns null if the transfer
+     has been fully consumed by prior FG batches (backend excludes it) or isn't
+     relevant to any BOM material in the current plan. ─── */
+  const findSfgBatchByTransfer = (transferNumber: string): any | null => {
+    for (const line of consumptionLines) {
+      if (!line?.isSFG) continue;
+      const batch = (line.availableSfgBatches || []).find(
+        (b: any) => b?.transferNumber === transferNumber
+      );
+      if (batch) return batch;
+    }
+    return null;
+  };
+  const findPkgBatchByTransfer = (transferNumber: string): any | null => {
+    for (const line of consumptionLines) {
+      if (!line?.isPackaging) continue;
+      const batch = (line.availableSfgBatches || []).find(
+        (b: any) => b?.transferNumber === transferNumber
+      );
+      if (batch) return batch;
+    }
+    return null;
+  };
+
   /* ─── Helper: Get SFG consumption info ─── */
   const getSfgConsumptionInfo = (): { transferNumbers: string[] } => {
     const transferNumbers: string[] = [];
@@ -230,6 +256,12 @@ const NewFGProductionEntryPage: React.FC = () => {
   /* ─── Helper: Get Available Transfer Stock ─── */
   const getSfgTransferAvailable = (transferNumber: string) => {
      if (!transferNumber) return { qty: 0, unit: 'KG' };
+     // Prefer the backend-computed remaining qty (already net of past allocations)
+     const batch = findSfgBatchByTransfer(transferNumber);
+     if (batch) {
+       return { qty: batch.remainingQuantity || 0, unit: batch.unit || 'KG' };
+     }
+     // Fallback to raw transfer qty if consumption data is unavailable
      const transfer = sfgTransfers.find(t => t.transferNumber === transferNumber);
      if (!transfer) return { qty: 0, unit: 'KG' };
      let sum = 0;
@@ -264,15 +296,22 @@ const NewFGProductionEntryPage: React.FC = () => {
 
   const getPkgTransferAvailable = (transferNumber: string) => {
      if (!transferNumber) return { qty: 0, unit: 'KG', productName: '' };
+     // Prefer the backend-computed remaining qty (already net of past allocations)
+     const batch = findPkgBatchByTransfer(transferNumber);
      const transfer = pkgTransfers.find(t => t.transferNumber === transferNumber);
+     // Pull product name from raw transfer lines if present
+     let name = '';
+     transfer?.lines?.forEach((l: any) => { name = l.productName || name; });
+     if (batch) {
+       return { qty: batch.remainingQuantity || 0, unit: batch.unit || 'KG', productName: name };
+     }
+     // Fallback to raw transfer qty if consumption data is unavailable
      if (!transfer) return { qty: 0, unit: 'KG', productName: '' };
      let sum = 0;
      let un = 'KG';
-     let name = '';
      transfer.lines?.forEach((l: any) => {
          sum += l.quantity || 0;
          un = l.unitOfMeasurement || 'KG';
-         name = l.productName || name;
      });
      return { qty: sum, unit: un, productName: name };
   };
@@ -281,17 +320,23 @@ const NewFGProductionEntryPage: React.FC = () => {
      return getPkgConsumptionInfo().transferNumbers.filter(t => {
         if (allocations[currentIndex]?.pkgTransferNumber === t) return true;
 
-        // Hide this packaging transfer if it's already picked in any other row
-        // (each packaging batch can only be allocated to a single machine row).
-        const isUsedElsewhere = allocations.some((alloc, i) =>
-           i !== currentIndex && alloc.pkgTransferNumber === t
-        );
-        if (isUsedElsewhere) return false;
+        // Require backend confirmation that the packaging batch is still available
+        // (i.e. prior saved FG batches haven't fully consumed it). The backend only
+        // populates availableSfgBatches on packaging lines with remainingQuantity > 0.
+        const batch = findPkgBatchByTransfer(t);
+        if (!batch || (batch.remainingQuantity || 0) <= 0) return false;
 
-        // Also hide if the batch has no remaining availability on the backend
-        const avail = getPkgTransferAvailable(t);
-        const availGrams = toGrams(avail.qty, avail.unit);
-        return availGrams > 0;
+        // Allow splitting a packaging batch across multiple machine rows: only hide
+        // once the sum of qty allocated in other rows equals/exceeds the backend
+        // remaining qty (fully exhausted within this form).
+        const availGrams = toGrams(batch.remainingQuantity || 0, batch.unit || 'KG');
+        let usedGrams = 0;
+        allocations.forEach((alloc, i) => {
+           if (i !== currentIndex && alloc.pkgTransferNumber === t) {
+             usedGrams += toGrams(alloc.laminateConsumptionQty || 0, alloc.laminateConsumptionUnit || 'KG');
+           }
+        });
+        return (availGrams - usedGrams) > 0;
      }).map(t => {
         const info = getPkgTransferAvailable(t);
         return { value: t, label: `${t} — ${info.productName || 'Packaging'}` };
@@ -448,14 +493,14 @@ const NewFGProductionEntryPage: React.FC = () => {
     // Build consumption payload directly from what machine rows have
     const payloadConsumptions: any[] = [];
 
-    // 1) Non-SFG, non-Laminate items (general stock)
-    const otherLines = consumptionLines.filter(c => !c.isSFG && !c.rawMaterialName?.toLowerCase().includes('laminate'));
+    // 1) Non-SFG, non-Packaging items (general stock from other warehouses)
+    const otherLines = consumptionLines.filter(c => !c.isSFG && !c.isPackaging);
     for (const line of otherLines) {
-       payloadConsumptions.push({ 
+       payloadConsumptions.push({
            rawMaterialId: line.rawMaterialId,
            rawMaterialName: line.rawMaterialName,
            expectedQuantity: line.expectedQuantity,
-           actualQuantity: line.expectedQuantity, 
+           actualQuantity: line.expectedQuantity,
            unit: line.unit,
            sourceType: 'STOCK',
            batchNumber: '',
@@ -463,23 +508,36 @@ const NewFGProductionEntryPage: React.FC = () => {
        });
     }
 
-    // 2) Laminate line — sum from machine rows
-    const laminateLine = consumptionLines.find(c => !c.isSFG && c.rawMaterialName?.toLowerCase().includes('laminate'));
-    if (laminateLine) {
-       const totalLamGrams = activeAllocations.reduce((sum, a) => sum + toGrams(Number(a.laminateConsumptionQty) || 0, a.laminateConsumptionUnit || 'KG'), 0);
-       const lamFactor = UNIT_TO_GRAMS[laminateLine.unit] ?? UNIT_TO_GRAMS[laminateLine.unit?.toLowerCase()] ?? 1000;
-       const lamQty = lamFactor > 0 ? totalLamGrams / lamFactor : 0;
-       if (lamQty > 0) {
-         payloadConsumptions.push({ 
-             rawMaterialId: laminateLine.rawMaterialId,
-             rawMaterialName: laminateLine.rawMaterialName,
-             expectedQuantity: laminateLine.expectedQuantity,
-             actualQuantity: lamQty, 
-             unit: laminateLine.unit,
-             sourceType: 'STOCK',
-             batchNumber: '',
-             dispatchId: '',
-         });
+    // 2) Packaging lines — group by PKG transfer number from machine rows so the
+    //    backend can correctly decrement remaining qty on future production entries.
+    //    Each (packaging material, transfer number) pair gets its own consumption
+    //    record with sourceType: 'PKG_TRANSFER'.
+    const packagingLines = consumptionLines.filter(c => c.isPackaging);
+    for (const pkgLine of packagingLines) {
+       const pkgByTransfer: Record<string, number> = {};
+       for (const a of activeAllocations) {
+          const trf = a.pkgTransferNumber;
+          const qtyGrams = toGrams(Number(a.laminateConsumptionQty) || 0, a.laminateConsumptionUnit || 'KG');
+          if (trf && qtyGrams > 0) {
+             pkgByTransfer[trf] = (pkgByTransfer[trf] || 0) + qtyGrams;
+          }
+       }
+
+       const unitFactor = UNIT_TO_GRAMS[pkgLine.unit] ?? UNIT_TO_GRAMS[pkgLine.unit?.toLowerCase()] ?? 1000;
+       for (const [trf, totalGrams] of Object.entries(pkgByTransfer)) {
+          const qtyInBomUnit = unitFactor > 0 ? totalGrams / unitFactor : 0;
+          if (qtyInBomUnit > 0) {
+             payloadConsumptions.push({
+                rawMaterialId: pkgLine.rawMaterialId,
+                rawMaterialName: pkgLine.rawMaterialName,
+                expectedQuantity: pkgLine.expectedQuantity,
+                actualQuantity: qtyInBomUnit,
+                unit: pkgLine.unit,
+                sourceType: 'PKG_TRANSFER',
+                batchNumber: trf,
+                dispatchId: '',
+             });
+          }
        }
     }
 
@@ -606,17 +664,23 @@ const NewFGProductionEntryPage: React.FC = () => {
         // If it's the currently selected one for this row, always show it
         if (allocations[currentIndex]?.sfgTransferNumber === t) return true;
 
-        // Hide this transfer if it's already picked in any other row
-        // (each SFG batch can only be allocated to a single machine row).
-        const isUsedElsewhere = allocations.some((alloc, i) =>
-           i !== currentIndex && alloc.sfgTransferNumber === t
-        );
-        if (isUsedElsewhere) return false;
+        // Require backend confirmation that the batch is still available (i.e.
+        // prior saved FG batches haven't fully consumed it). The backend only
+        // populates availableSfgBatches for batches with remainingQuantity > 0.
+        const batch = findSfgBatchByTransfer(t);
+        if (!batch || (batch.remainingQuantity || 0) <= 0) return false;
 
-        // Also hide if the batch has no remaining availability on the backend
-        const avail = getSfgTransferAvailable(t);
-        const availGrams = toGrams(avail.qty, avail.unit);
-        return availGrams > 0;
+        // Allow splitting a batch across multiple machine rows: only hide the
+        // batch once the sum of qty allocated in other rows equals/exceeds the
+        // backend remaining qty (fully exhausted in this form).
+        const availGrams = toGrams(batch.remainingQuantity || 0, batch.unit || 'KG');
+        let usedGrams = 0;
+        allocations.forEach((alloc, i) => {
+           if (i !== currentIndex && alloc.sfgTransferNumber === t) {
+             usedGrams += toGrams(alloc.sfgConsumptionQty || 0, alloc.sfgConsumptionUnit || 'KG');
+           }
+        });
+        return (availGrams - usedGrams) > 0;
      }).map(t => ({ value: t, label: t }));
   };
 

@@ -402,6 +402,47 @@ export class FGBatchController {
             });
             return;
           }
+        } else if (c.sourceType === 'PKG_TRANSFER' && c.batchNumber) {
+          // Validate packaging transfer consumption against the remaining qty of the
+          // specific packaging line on the accepted transfer at this location.
+          const transfer = await prisma.materialTransfer.findFirst({
+            where: { transferNumber: c.batchNumber, status: 'ACCEPTED' },
+            include: { lines: true },
+          });
+          if (!transfer) {
+            res.status(400).json({ error: `Packaging transfer ${c.batchNumber} not found or not accepted` });
+            return;
+          }
+
+          const pkgLines = transfer.lines.filter(
+            (l) => l.lineType === 'PACKAGING_MATERIAL' && (l.rawMaterialId === c.rawMaterialId || l.productName === c.rawMaterialName)
+          );
+          if (pkgLines.length === 0) {
+            res.status(400).json({ error: `No packaging line found for material in transfer ${c.batchNumber}` });
+            return;
+          }
+
+          const totalTransferQty = pkgLines.reduce((sum, l) => sum + l.quantity, 0);
+          const pkgUnit = pkgLines[0].unitOfMeasurement;
+
+          // Sum previously consumed packaging from this transfer line
+          const pastConsumed = await prisma.fGBatchConsumption.aggregate({
+            where: {
+              sourceType: 'PKG_TRANSFER',
+              batchNumber: c.batchNumber,
+              rawMaterialId: c.rawMaterialId,
+            },
+            _sum: { actualQuantity: true },
+          });
+          const alreadyConsumed = pastConsumed._sum.actualQuantity || 0;
+          const remaining = totalTransferQty - alreadyConsumed;
+
+          if (actualQty > remaining + 1e-6) {
+            res.status(400).json({
+              error: `Insufficient packaging in transfer ${c.batchNumber}. Required: ${actualQty} ${c.unit}, Available: ${Math.round(remaining * 1000) / 1000} ${pkgUnit}`,
+            });
+            return;
+          }
         } else if (c.sourceType === 'STOCK') {
           const stocks = await prisma.currentStock.findMany({
             where: { rawMaterialId: c.rawMaterialId },
