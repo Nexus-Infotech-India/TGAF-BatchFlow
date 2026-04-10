@@ -9,22 +9,16 @@ import {
   Factory,
   ClipboardCheck,
   CheckCircle,
-  Beaker,
-  FileCheck,
   ChevronLeft,
   ChevronRight,
+  Plus,
+  Trash2,
+  Clock,
+  Users,
+  Sun,
+  AlertTriangle,
 } from 'lucide-react';
 import api, { API_ROUTES } from '../../../utils/api';
-
-const FG_QUALITY_PARAMETERS = [
-  { parameter: 'Moisture', standard: 'max 10%' },
-  { parameter: 'ASTA Color', standard: 'min 40' },
-  { parameter: 'Acid Insoluble Ash', standard: 'max 1.5%' },
-  { parameter: 'Total Ash', standard: 'max 8%' },
-  { parameter: 'Aflatoxin', standard: 'max 20 ppb' },
-  { parameter: 'TPC', standard: 'max 10 million cfu' },
-  { parameter: 'YM', standard: '10,000 cfu' },
-];
 
 const PAGE_SIZE = 10;
 
@@ -52,10 +46,6 @@ export default function ProductionOutputEntryPage() {
   const [submitting, setSubmitting] = useState(false);
   const [page, setPage] = useState(1);
 
-  // Quality check form state (Step 1)
-  const [qualityResults, setQualityResults] = useState<string[]>(
-    Array(FG_QUALITY_PARAMETERS.length).fill('')
-  );
 
   /* ─── Fetch Pending Entries ─── */
   useEffect(() => {
@@ -93,12 +83,21 @@ export default function ProductionOutputEntryPage() {
         todayAchieve: null,
         laminateConsumption: me.laminateConsumptionQty || null,
         laminateConsumptionUnit: me.laminateConsumptionUnit || null,
-        sfgConsumption: null,
+        sfgConsumption: me.sfgConsumptionQty || null,
+        sfgConsumptionUnit: me.sfgConsumptionUnit || 'KG',
         laminateWastageKg: null,
         laminateWastageQty: null,
         laminateWastageUnit: 'KG',
         laminateWastagePercentage: 0,
-        noManPower: me.manPower === false, // manPower=false means no man power available
+        noManPower: me.manPower === false,
+        // New fields
+        powderWastageKg: null,
+        powderWastagePercentage: null,
+        manPowerCount: null,
+        shift: null,
+        machineUtilizedHrs: null,
+        machineNotUtilizedHrs: null,
+        downtimeRecords: [] as { startTime: string; stopTime: string; breakdownReason: string; remark: string }[],
       };
     });
     setMachineInputs(initInputs);
@@ -130,25 +129,60 @@ export default function ProductionOutputEntryPage() {
         const consQty = next[index].laminateConsumption || 0;
         const consUnit = next[index].laminateConsumptionUnit || 'KG';
         const wasteUnit = next[index].laminateWastageUnit || 'KG';
-        
+
         const consInKg = convertToKg(consQty, consUnit);
         if (consInKg > 0) {
            const wasteInKg = (value / 100) * consInKg;
            next[index].laminateWastageKg = wasteInKg;
-           
+
            if (wasteUnit.toUpperCase() === 'KG') next[index].laminateWastageQty = Number(wasteInKg.toFixed(4));
            else if (wasteUnit.toUpperCase() === 'G' || wasteUnit.toUpperCase() === 'GRAM' || wasteUnit.toUpperCase() === 'GRAMS') next[index].laminateWastageQty = Number((wasteInKg * 1000).toFixed(2));
            else next[index].laminateWastageQty = Number(wasteInKg.toFixed(4));
         }
       }
+
+      // Auto-calculate powder wastage percentage from KG
+      if (field === 'powderWastageKg') {
+        const sfgCons = convertToKg(next[index].sfgConsumption || 0, next[index].sfgConsumptionUnit || 'KG');
+        if (sfgCons > 0) {
+          next[index].powderWastagePercentage = Number(((Number(value) / sfgCons) * 100).toFixed(2));
+        }
+      }
+
       return next;
     });
   };
 
-  const handleQualityResultChange = (index: number, value: string) => {
-    const next = [...qualityResults];
-    next[index] = value;
-    setQualityResults(next);
+  /* ─── Downtime record helpers ─── */
+  const addDowntimeRecord = (machineIdx: number) => {
+    setMachineInputs(prev => {
+      const next = [...prev];
+      next[machineIdx] = {
+        ...next[machineIdx],
+        downtimeRecords: [...(next[machineIdx].downtimeRecords || []), { startTime: '', stopTime: '', breakdownReason: '', remark: '' }],
+      };
+      return next;
+    });
+  };
+
+  const updateDowntimeRecord = (machineIdx: number, dtIdx: number, field: string, value: string) => {
+    setMachineInputs(prev => {
+      const next = [...prev];
+      const records = [...(next[machineIdx].downtimeRecords || [])];
+      records[dtIdx] = { ...records[dtIdx], [field]: value };
+      next[machineIdx] = { ...next[machineIdx], downtimeRecords: records };
+      return next;
+    });
+  };
+
+  const removeDowntimeRecord = (machineIdx: number, dtIdx: number) => {
+    setMachineInputs(prev => {
+      const next = [...prev];
+      const records = [...(next[machineIdx].downtimeRecords || [])];
+      records.splice(dtIdx, 1);
+      next[machineIdx] = { ...next[machineIdx], downtimeRecords: records };
+      return next;
+    });
   };
 
   /* ─── Summary calculations ─── */
@@ -174,12 +208,14 @@ export default function ProductionOutputEntryPage() {
           sfgConsumption: a.sfgConsumption,
           laminateWastageKg: a.laminateWastageKg,
           laminateWastagePercentage: a.laminateWastagePercentage,
-          noManPower: a.noManPower
-        })),
-        qualityParameters: FG_QUALITY_PARAMETERS.map((p, i) => ({
-          parameter: p.parameter,
-          standard: p.standard,
-          result: qualityResults[i]
+          noManPower: a.noManPower,
+          powderWastageKg: a.powderWastageKg,
+          powderWastagePercentage: a.powderWastagePercentage,
+          manPowerCount: a.manPowerCount,
+          shift: a.shift,
+          machineUtilizedHrs: a.machineUtilizedHrs,
+          machineNotUtilizedHrs: a.machineNotUtilizedHrs,
+          downtimeRecords: a.downtimeRecords || [],
         })),
         notes
       });
@@ -219,13 +255,8 @@ export default function ProductionOutputEntryPage() {
               <span className="font-semibold text-sm">Supervisor Output Entry</span>
             </div>
             <div className="flex-1 max-w-[100px] h-0.5 bg-border mx-4" />
-            <div className={`flex items-center gap-2 ${step >= 2 ? 'text-amber-600' : 'text-muted-foreground'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 2 ? 'bg-amber-600 text-white' : step > 2 ? 'bg-amber-600/20' : 'bg-muted'}`}>3</div>
-              <span className="font-semibold text-sm">FG Quality Check</span>
-            </div>
-            <div className="flex-1 max-w-[100px] h-0.5 bg-border mx-4" />
-            <div className={`flex items-center gap-2 ${step >= 3 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 3 ? 'bg-emerald-600 text-white' : 'bg-muted'}`}>4</div>
+            <div className={`flex items-center gap-2 ${step >= 2 ? 'text-emerald-600' : 'text-muted-foreground'}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${step === 2 ? 'bg-emerald-600 text-white' : 'bg-muted'}`}>3</div>
               <span className="font-semibold text-sm">Review & Submit</span>
             </div>
           </div>
@@ -327,58 +358,6 @@ export default function ProductionOutputEntryPage() {
               </motion.div>
             )}
 
-            {/* ═══ STEP 2: FG Quality Check ═══ */}
-            {step === 2 && selectedEntry && (
-              <motion.div
-                key="step-quality"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                className="p-6 md:p-8"
-              >
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-amber-500/20">
-                    <Beaker size={20} className="text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-foreground">FG Quality Check</h2>
-                    <p className="text-sm text-muted-foreground">Perform quality checks on the finished good batch before supervisor entry</p>
-                  </div>
-                </div>
-
-                <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
-                  <div className="px-5 py-4 bg-muted/30 border-b border-border flex items-center gap-2">
-                    <FileCheck size={16} className="text-primary" />
-                    <h3 className="font-bold text-foreground text-sm">Quality Parameters</h3>
-                  </div>
-                  
-                  <div className="divide-y divide-border">
-                    {FG_QUALITY_PARAMETERS.map((param, idx) => (
-                      <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 items-center hover:bg-muted/10 transition-colors">
-                        <div className="col-span-1 md:col-span-2">
-                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1 block">Parameter</label>
-                          <div className="font-semibold text-foreground">{param.parameter}</div>
-                        </div>
-                        <div className="col-span-1">
-                          <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1 block">Standard</label>
-                          <div className="text-sm text-primary font-medium">{param.standard}</div>
-                        </div>
-                        <div className="col-span-1">
-                          <Input
-                            placeholder="Result *"
-                            value={qualityResults[idx]}
-                            onChange={(e) => handleQualityResultChange(idx, e.target.value)}
-                            className="font-semibold"
-                            status={qualityResults[idx].trim() === '' ? 'warning' : ''}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
             {/* ═══ STEP 1: Output Entry ═══ */}
             {step === 1 && selectedEntry && (
               <motion.div
@@ -444,82 +423,194 @@ export default function ProductionOutputEntryPage() {
                           <div>
                             <div className="text-[10px] font-bold text-muted-foreground uppercase">Laminate Cons.</div>
                             <div className="font-semibold text-foreground">
-                              {alloc.laminateConsumption !== null ? `${alloc.laminateConsumption} ${alloc.laminateConsumptionUnit || '-'}` : '-'}
+                              {alloc.laminateConsumption !== null ? `${alloc.laminateConsumption} ${alloc.laminateConsumptionUnit || 'KG'}` : '-'}
                             </div>
                           </div>
                           <div>
-                            <div className="text-[10px] font-bold text-muted-foreground uppercase">Man Power Status</div>
-                            <div className="font-semibold text-amber-600">
-                              {alloc.noManPower ? 'NO MAN POWER       ' : 'MAN POWER APPLIED'}
+                            <div className="text-[10px] font-bold text-muted-foreground uppercase">SFG Cons.</div>
+                            <div className="font-semibold text-foreground">
+                              {alloc.sfgConsumption !== null ? `${alloc.sfgConsumption} ${alloc.sfgConsumptionUnit || 'KG'}` : '-'}
                             </div>
                           </div>
                         </div>
 
-                        {/* Input fields */}
-                          <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 mb-5 p-4 rounded-xl border border-primary/20 bg-primary/5`}>
-                            <div className="space-y-1.5">
-                              <label className="text-xs font-bold text-foreground uppercase tracking-wider">
-                                Today Achievement
-                              </label>
-                              <div className="flex items-center gap-2">
-                                <InputNumber
-                                  min={0}
-                                  step={0.01}
-                                  value={alloc.todayAchieve}
-                                  onChange={(val) => updateInput(idx, 'todayAchieve', val || 0)}
-                                  placeholder="0.00"
-                                  size="large"
-                                  className={`w-full font-bold text-emerald-600`}
-                                />
-                                <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">Boxes / Unit</span>
-                              </div>
-                            </div>
-                            
-                            <div className="space-y-1.5">
-                              <label className="text-xs font-bold text-foreground uppercase tracking-wider">
-                                Laminate Wastage
-                              </label>
-                              <div className="flex items-center gap-2">
-                                <InputNumber
-                                  min={0}
-                                  step={0.001}
-                                  value={alloc.laminateWastageQty}
-                                  onChange={(val) => updateInput(idx, 'laminateWastageQty', val || 0)}
-                                  placeholder="0.000"
-                                  size="large"
-                                  className="w-full font-semibold flex-1"
-                                />
-                                <Select
-                                  value={alloc.laminateWastageUnit}
-                                  onChange={(val) => updateInput(idx, 'laminateWastageUnit', val)}
-                                  size="large"
-                                  options={[
-                                    { value: 'KG', label: 'KG' },
-                                    { value: 'G', label: 'Grams' }
-                                  ]}
-                                  className="w-24 shrink-0 font-bold"
-                                />
-                              </div>
-                            </div>
-
-                            <div className="space-y-1.5">
-                              <label className="text-xs font-bold text-foreground uppercase tracking-wider">
-                                Laminate Wastage
-                              </label>
-                              <div className="flex items-center gap-2">
-                                <InputNumber
-                                  min={0}
-                                  step={0.01}
-                                  value={alloc.laminateWastagePercentage}
-                                  onChange={(val) => updateInput(idx, 'laminateWastagePercentage', val || 0)}
-                                  placeholder="0.00"
-                                  size="large"
-                                  className="w-full font-semibold"
-                                />
-                                <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">%</span>
-                              </div>
+                        {/* Row 1: Today Achievement + Shift + Man Power */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4 p-4 rounded-xl border border-primary/20 bg-primary/5">
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-foreground uppercase tracking-wider">Today Achievement</label>
+                            <div className="flex items-center gap-2">
+                              <InputNumber min={0} step={0.01} value={alloc.todayAchieve} onChange={(val) => updateInput(idx, 'todayAchieve', val || 0)} placeholder="0.00" size="large" className="w-full font-bold text-emerald-600" />
+                              <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">Boxes / Unit</span>
                             </div>
                           </div>
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-foreground uppercase tracking-wider flex items-center gap-1">
+                              <Sun size={12} /> Shift
+                            </label>
+                            <Select
+                              value={alloc.shift || undefined}
+                              onChange={(val) => updateInput(idx, 'shift', val)}
+                              placeholder="Select shift..."
+                              size="large"
+                              className="w-full font-semibold"
+                              options={[
+                                { value: 'DAY', label: '☀️ Day Shift' },
+                                { value: 'NOON', label: '🌤️ Noon Shift' },
+                                { value: 'NIGHT', label: '🌙 Night Shift' },
+                              ]}
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-foreground uppercase tracking-wider flex items-center gap-1">
+                              <Users size={12} /> Man Power (Persons)
+                            </label>
+                            <InputNumber min={0} step={1} value={alloc.manPowerCount} onChange={(val) => updateInput(idx, 'manPowerCount', val)} placeholder="No. of persons" size="large" className="w-full font-semibold" />
+                          </div>
+                        </div>
+
+                        {/* Row 2: Powder Wastage + Laminate Wastage */}
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-4 p-4 rounded-xl border border-amber-200 bg-amber-50/30">
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-amber-700 uppercase tracking-wider">Powder Wastage</label>
+                            <div className="flex items-center gap-2">
+                              <InputNumber min={0} step={0.001} value={alloc.powderWastageKg} onChange={(val) => updateInput(idx, 'powderWastageKg', val)} placeholder="0.000" size="large" className="w-full font-semibold" />
+                              <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">KG</span>
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-amber-700 uppercase tracking-wider">Powder Wastage %</label>
+                            <div className="flex items-center gap-2">
+                              <InputNumber min={0} step={0.01} value={alloc.powderWastagePercentage} disabled placeholder="Auto" size="large" className="w-full font-semibold bg-muted/30" />
+                              <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">%</span>
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-blue-700 uppercase tracking-wider">Laminate Wastage</label>
+                            <div className="flex items-center gap-2">
+                              <InputNumber min={0} step={0.001} value={alloc.laminateWastageQty} onChange={(val) => updateInput(idx, 'laminateWastageQty', val || 0)} placeholder="0.000" size="large" className="w-full font-semibold flex-1" />
+                              <Select value={alloc.laminateWastageUnit} onChange={(val) => updateInput(idx, 'laminateWastageUnit', val)} size="large" options={[{ value: 'KG', label: 'KG' }, { value: 'G', label: 'G' }]} className="w-20 shrink-0 font-bold" />
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-blue-700 uppercase tracking-wider">Laminate Wastage %</label>
+                            <div className="flex items-center gap-2">
+                              <InputNumber min={0} step={0.01} value={alloc.laminateWastagePercentage} onChange={(val) => updateInput(idx, 'laminateWastagePercentage', val || 0)} placeholder="0.00" size="large" className="w-full font-semibold" />
+                              <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">%</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Row 3: Machine Utilization (Hours + Minutes) */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4 p-4 rounded-xl border border-emerald-200 bg-emerald-50/30">
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1">
+                              <Clock size={12} /> Machine Utilized Time
+                            </label>
+                            <div className="flex items-center gap-2">
+                              <Select
+                                value={Math.floor((alloc.machineUtilizedHrs || 0) / 60)}
+                                onChange={(val) => {
+                                  const mins = (alloc.machineUtilizedHrs || 0) % 60;
+                                  updateInput(idx, 'machineUtilizedHrs', (val * 60) + mins);
+                                }}
+                                size="large"
+                                className="flex-1 font-semibold"
+                                placeholder="Hrs"
+                                options={Array.from({ length: 25 }, (_, i) => ({ value: i, label: `${i} hr${i !== 1 ? 's' : ''}` }))}
+                              />
+                              <Select
+                                value={(alloc.machineUtilizedHrs || 0) % 60}
+                                onChange={(val) => {
+                                  const hrs = Math.floor((alloc.machineUtilizedHrs || 0) / 60);
+                                  updateInput(idx, 'machineUtilizedHrs', (hrs * 60) + val);
+                                }}
+                                size="large"
+                                className="flex-1 font-semibold"
+                                placeholder="Min"
+                                options={Array.from({ length: 60 }, (_, i) => ({ value: i, label: `${i} min` }))}
+                              />
+                              <span className="text-xs font-bold text-muted-foreground whitespace-nowrap">
+                                = {alloc.machineUtilizedHrs || 0} min
+                              </span>
+                            </div>
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="text-xs font-bold text-red-600 uppercase tracking-wider flex items-center gap-1">
+                              <AlertTriangle size={12} /> Machine Not Utilized Time
+                            </label>
+                            <div className="flex items-center gap-2">
+                              <Select
+                                value={Math.floor((alloc.machineNotUtilizedHrs || 0) / 60)}
+                                onChange={(val) => {
+                                  const mins = (alloc.machineNotUtilizedHrs || 0) % 60;
+                                  updateInput(idx, 'machineNotUtilizedHrs', (val * 60) + mins);
+                                }}
+                                size="large"
+                                className="flex-1 font-semibold"
+                                placeholder="Hrs"
+                                options={Array.from({ length: 25 }, (_, i) => ({ value: i, label: `${i} hr${i !== 1 ? 's' : ''}` }))}
+                              />
+                              <Select
+                                value={(alloc.machineNotUtilizedHrs || 0) % 60}
+                                onChange={(val) => {
+                                  const hrs = Math.floor((alloc.machineNotUtilizedHrs || 0) / 60);
+                                  updateInput(idx, 'machineNotUtilizedHrs', (hrs * 60) + val);
+                                }}
+                                size="large"
+                                className="flex-1 font-semibold"
+                                placeholder="Min"
+                                options={Array.from({ length: 60 }, (_, i) => ({ value: i, label: `${i} min` }))}
+                              />
+                              <span className="text-xs font-bold text-muted-foreground whitespace-nowrap">
+                                = {alloc.machineNotUtilizedHrs || 0} min
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Downtime Records — shown when machine has not-utilized hours */}
+                        {alloc.machineNotUtilizedHrs > 0 && (
+                          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mb-4 p-4 rounded-xl border-2 border-red-200 bg-red-50/30">
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="text-sm font-bold text-red-700 flex items-center gap-2">
+                                <AlertTriangle size={14} /> Downtime Records
+                              </h4>
+                              <Button size="small" type="dashed" onClick={() => addDowntimeRecord(idx)} icon={<Plus size={14} />} className="rounded-lg font-semibold text-red-600 border-red-300">
+                                Add Record
+                              </Button>
+                            </div>
+
+                            {(!alloc.downtimeRecords || alloc.downtimeRecords.length === 0) && (
+                              <p className="text-xs text-red-500 font-semibold">Please add at least one downtime record for the not-utilized hours.</p>
+                            )}
+
+                            <div className="space-y-3">
+                              {(alloc.downtimeRecords || []).map((dt: any, dtIdx: number) => (
+                                <div key={dtIdx} className="grid grid-cols-1 md:grid-cols-5 gap-3 p-3 rounded-lg bg-white/60 border border-red-100 items-end">
+                                  <div className="space-y-1">
+                                    <label className="text-[10px] font-bold text-red-600 uppercase">Start Time</label>
+                                    <Input type="time" value={dt.startTime} onChange={(e) => updateDowntimeRecord(idx, dtIdx, 'startTime', e.target.value)} size="large" className="font-semibold" />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label className="text-[10px] font-bold text-red-600 uppercase">Stop Time</label>
+                                    <Input type="time" value={dt.stopTime} onChange={(e) => updateDowntimeRecord(idx, dtIdx, 'stopTime', e.target.value)} size="large" className="font-semibold" />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label className="text-[10px] font-bold text-red-600 uppercase">Breakdown Reason</label>
+                                    <Input.TextArea value={dt.breakdownReason} onChange={(e) => updateDowntimeRecord(idx, dtIdx, 'breakdownReason', e.target.value)} placeholder="Reason..." autoSize={{ minRows: 1, maxRows: 2 }} className="font-semibold" />
+                                  </div>
+                                  <div className="space-y-1">
+                                    <label className="text-[10px] font-bold text-muted-foreground uppercase">Remark</label>
+                                    <Input value={dt.remark} onChange={(e) => updateDowntimeRecord(idx, dtIdx, 'remark', e.target.value)} placeholder="Optional..." className="font-semibold" />
+                                  </div>
+                                  <div className="flex justify-end">
+                                    <Button danger size="small" onClick={() => removeDowntimeRecord(idx, dtIdx)} icon={<Trash2 size={14} />} className="rounded-lg" />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
                       </motion.div>
                     );
                   })}
@@ -527,8 +618,8 @@ export default function ProductionOutputEntryPage() {
               </motion.div>
             )}
 
-            {/* ═══ STEP 3: Review & Submit ═══ */}
-            {step === 3 && selectedEntry && (
+            {/* ═══ STEP 2: Review & Submit ═══ */}
+            {step === 2 && selectedEntry && (
               <motion.div
                 key="step-2"
                 initial={{ opacity: 0, x: -20 }}
@@ -548,67 +639,54 @@ export default function ProductionOutputEntryPage() {
 
                 {/* Removed Summary Cards as requested */}
 
-                {/* Detailed Table */}
-                <div className="rounded-xl border border-border shadow-sm overflow-hidden bg-card mb-6">
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full">
-                      <thead className="bg-muted/50 border-b border-border">
-                        <tr>
-                          <th className="px-4 py-3 text-left text-xs font-bold text-muted-foreground uppercase">Machine</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-muted-foreground uppercase">Allocated</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-emerald-600 uppercase">Today Achievement</th>
-                          <th className="px-4 py-3 text-right text-xs font-bold text-amber-600 uppercase rounded-tr-lg">Laminate Wastage</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-border">
-                        {machineInputs.map((alloc, idx) => (
-                          <tr key={idx} className="hover:bg-muted/20">
-                            <td className="px-4 py-3">
-                              <div className="font-bold text-foreground">{alloc.machine.name}</div>
-                              <div className="text-[10px] text-muted-foreground font-mono">{alloc.machine.machineId}</div>
-                            </td>
-                            <td className="px-4 py-3 text-right font-semibold text-muted-foreground">
-                              {alloc.allocatedQty} {alloc.allocatedUnit}
-                            </td>
-                            <td className="px-4 py-3 text-right font-bold text-emerald-600">
-                              {alloc.todayAchieve || '-'} <span className="text-xs">Boxes/Shift</span>
-                            </td>
-                            <td className="px-4 py-3 text-right font-semibold text-amber-600">
-                              {alloc.laminateWastageQty || '-'} {alloc.laminateWastageUnit || 'KG'} <span className="text-xs">({alloc.laminateWastagePercentage || '0'}%)</span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-
-                {/* Quality Check Review Table */}
-                <div className="rounded-xl border border-border shadow-sm overflow-hidden bg-card mb-6">
-                  <div className="px-5 py-3 bg-muted/40 border-b border-border flex items-center gap-2">
-                    <Beaker size={16} className="text-amber-600" />
-                    <h3 className="font-bold text-foreground text-sm">Quality Report Details</h3>
-                  </div>
-                  <div className="overflow-x-auto">
-                    <table className="min-w-full">
-                      <thead className="bg-muted/20 border-b border-border">
-                        <tr>
-                          <th className="px-4 py-3 text-left text-xs font-bold text-muted-foreground uppercase">Parameter</th>
-                          <th className="px-4 py-3 text-left text-xs font-bold text-muted-foreground uppercase">Standard</th>
-                          <th className="px-4 py-3 text-left text-xs font-bold text-primary uppercase">Result</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-border">
-                        {FG_QUALITY_PARAMETERS.map((p, i) => (
-                          <tr key={i} className="hover:bg-muted/10">
-                            <td className="px-4 py-3 font-semibold text-foreground text-sm">{p.parameter}</td>
-                            <td className="px-4 py-3 text-amber-600 text-sm">{p.standard}</td>
-                            <td className="px-4 py-3 font-bold text-emerald-600 text-sm">{qualityResults[i]}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                {/* Detailed Review */}
+                <div className="space-y-4 mb-6">
+                  {machineInputs.map((alloc, idx) => (
+                    <div key={idx} className="rounded-xl border border-border shadow-sm bg-card p-5">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <div className="font-bold text-foreground text-lg">{alloc.machine.name}</div>
+                          <div className="text-xs text-muted-foreground font-mono">{alloc.machine.machineId} • Allocated: {alloc.allocatedQty} {alloc.allocatedUnit}</div>
+                        </div>
+                        {alloc.shift && <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">{alloc.shift} Shift</span>}
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                        <div><span className="text-muted-foreground">Achievement:</span> <span className="font-bold text-emerald-600">{alloc.todayAchieve || '-'} Boxes</span></div>
+                        <div><span className="text-muted-foreground">Man Power:</span> <span className="font-bold">{alloc.manPowerCount || '-'} persons</span></div>
+                        <div><span className="text-muted-foreground">Powder Wastage:</span> <span className="font-bold text-amber-600">{alloc.powderWastageKg || '-'} KG ({alloc.powderWastagePercentage || 0}%)</span></div>
+                        <div><span className="text-muted-foreground">Laminate Wastage:</span> <span className="font-bold text-amber-600">{alloc.laminateWastageQty || '-'} {alloc.laminateWastageUnit || 'KG'} ({alloc.laminateWastagePercentage || 0}%)</span></div>
+                        <div><span className="text-muted-foreground">Utilized:</span> <span className="font-bold text-emerald-600">{alloc.machineUtilizedHrs ? `${Math.floor(alloc.machineUtilizedHrs / 60)}h ${alloc.machineUtilizedHrs % 60}m (${alloc.machineUtilizedHrs} min)` : '-'}</span></div>
+                        <div><span className="text-muted-foreground">Not Utilized:</span> <span className="font-bold text-red-600">{alloc.machineNotUtilizedHrs ? `${Math.floor(alloc.machineNotUtilizedHrs / 60)}h ${alloc.machineNotUtilizedHrs % 60}m (${alloc.machineNotUtilizedHrs} min)` : '-'}</span></div>
+                      </div>
+                      {alloc.downtimeRecords?.length > 0 && (
+                        <div className="mt-3 border-t border-border pt-3">
+                          <h4 className="text-xs font-bold text-red-600 uppercase mb-2">Downtime Records</h4>
+                          <div className="overflow-x-auto">
+                            <table className="min-w-full text-xs">
+                              <thead>
+                                <tr className="text-muted-foreground">
+                                  <th className="text-left py-1 pr-3 font-bold">Start</th>
+                                  <th className="text-left py-1 pr-3 font-bold">Stop</th>
+                                  <th className="text-left py-1 pr-3 font-bold">Reason</th>
+                                  <th className="text-left py-1 font-bold">Remark</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {alloc.downtimeRecords.map((dt: any, di: number) => (
+                                  <tr key={di}>
+                                    <td className="py-1 pr-3 font-mono font-semibold">{dt.startTime || '-'}</td>
+                                    <td className="py-1 pr-3 font-mono font-semibold">{dt.stopTime || '-'}</td>
+                                    <td className="py-1 pr-3 font-semibold">{dt.breakdownReason || '-'}</td>
+                                    <td className="py-1 font-semibold text-muted-foreground">{dt.remark || '-'}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
 
                 {/* Notes */}
@@ -648,27 +726,10 @@ export default function ProductionOutputEntryPage() {
                       message.warning('Please enter Today Achievement for at least one active machine before proceeding');
                       return;
                     }
-                    setStep(step + 1);
+                    setStep(2);
                   }}
                   className="rounded-xl px-6 h-11 font-bold shadow-lg shadow-blue-500/20 border-0"
                   style={{ background: 'linear-gradient(135deg, #3b82f6, #4f46e5)' }}
-                >
-                  Proceed to Quality Check <ArrowRight size={16} className="ml-1 inline" />
-                </Button>
-              ) : step === 2 ? (
-                <Button
-                  type="primary"
-                  size="large"
-                  onClick={() => {
-                    const allFilled = qualityResults.every(r => r.trim() !== '');
-                    if (!allFilled) {
-                      message.warning('Please enter results for all quality parameters');
-                      return;
-                    }
-                    setStep(step + 1);
-                  }}
-                  className="rounded-xl px-6 h-11 font-bold shadow-lg shadow-amber-500/20 border-0"
-                  style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)' }}
                 >
                   Review Details <ArrowRight size={16} className="ml-1 inline" />
                 </Button>

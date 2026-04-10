@@ -18,7 +18,8 @@ import {
   MoreVertical,
   Download,
   Eye,
-  FileCheck
+  FileCheck,
+  FileText
 } from 'lucide-react';
 
 const PAGE_SIZE = 10;
@@ -134,9 +135,153 @@ const FGProductionPage: React.FC = () => {
     }
   };
 
+  const handleDownloadProductionReport = (entry: any) => {
+    const me = entry.machineEntries?.[0]; // Single machine per entry now
+    if (!me) {
+      message.warning('No machine data available for this entry');
+      return;
+    }
+
+    const machine = me.machine || {};
+    const entryDate = new Date(entry.createdAt).toLocaleDateString('en-GB');
+    const capacityLabel = machine.capacityUnit === 'BOXES_PER_SHIFT' ? 'Boxes/Shift' : (machine.capacityUnit || '');
+
+    const downtimeRows = (me.downtimeRecords || []).map((dt: any) =>
+      `<tr>
+         <td style="border:1px solid #000;padding:6px 10px;font-size:12px;">${dt.stopTime || '-'}</td>
+         <td style="border:1px solid #000;padding:6px 10px;font-size:12px;">${dt.startTime || '-'}</td>
+         <td style="border:1px solid #000;padding:6px 10px;font-size:12px;">${dt.breakdownReason || '-'}</td>
+         <td style="border:1px solid #000;padding:6px 10px;font-size:12px;">${dt.remark || '-'}</td>
+       </tr>`
+    ).join('') || `<tr><td colspan="4" style="border:1px solid #000;padding:8px;text-align:center;color:#999;font-size:11px;">No downtime records</td></tr>`;
+
+    const html = `
+      <html><head><title>Production Report - ${entry.entryNumber}</title>
+      <style>
+        @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } @page { margin: 15mm; } }
+        body { font-family: 'Arial', sans-serif; margin: 0; padding: 30px; color: #000; background: #fff; }
+        .header-table { width: 100%; border-collapse: collapse; border: 2px solid #000; margin-bottom: 0; }
+        .header-table td { border: 1px solid #000; padding: 6px 10px; font-size: 12px; }
+        .header-table .company { font-size: 16px; font-weight: bold; text-align: center; }
+        .header-table .subtitle { font-size: 11px; font-weight: bold; text-align: center; text-transform: uppercase; }
+        .header-table .label { font-weight: bold; font-size: 11px; color: #333; white-space: nowrap; width: 120px; }
+        .header-table .value { font-size: 13px; font-weight: 600; color: #000; }
+        .section-title { font-size: 14px; font-weight: bold; margin: 20px 0 8px 0; border-bottom: 2px solid #000; padding-bottom: 4px; }
+        .dt-table { width: 100%; border-collapse: collapse; border: 2px solid #000; }
+        .dt-table th { border: 1px solid #000; padding: 8px 10px; font-size: 11px; text-transform: uppercase; font-weight: bold; background: #f0f0f0; text-align: left; }
+        .dt-table td { border: 1px solid #000; padding: 6px 10px; }
+        .footer { margin-top: 30px; font-size: 10px; color: #666; text-align: center; border-top: 1px solid #ccc; padding-top: 10px; }
+      </style></head><body>
+      <table class="header-table">
+        <tr>
+          <td rowspan="3" style="width:180px;text-align:center;vertical-align:middle;">
+            <div style="font-size:18px;font-weight:bold;color:#2d5016;">Goodearth</div>
+            <div style="font-size:10px;color:#666;">Agriventures</div>
+          </td>
+          <td colspan="4" class="company">TG AGRI FARM LIMITED</td>
+        </tr>
+        <tr>
+          <td colspan="4" class="subtitle">Packing Machine Utilization, DPR & Wastage Record</td>
+        </tr>
+        <tr>
+          <td colspan="2"><span class="label">Page Number:</span> <span class="value">${entry.entryNumber}</span></td>
+          <td colspan="2"><span class="label">Date of Number:</span> <span class="value">${entry.entryNumber}</span></td>
+        </tr>
+        <tr>
+          <td><span class="label">Location:</span></td>
+          <td class="value">${machine.location || '-'}</td>
+          <td><span class="label">Capacity:</span></td>
+          <td class="value">${machine.capacityQty || '-'} ${capacityLabel}</td>
+          <td><span class="label">Department:</span></td>
+          <td class="value">Production</td>
+        </tr>
+        <tr>
+          <td><span class="label">M/c Name & Co:</span></td>
+          <td class="value">${machine.name || '-'} (${machine.machineId || '-'})</td>
+          <td><span class="label">Achieve:</span></td>
+          <td class="value">${me.todayAchieve || '-'} Boxes</td>
+          <td><span class="label">Date:</span></td>
+          <td class="value">${entryDate}</td>
+        </tr>
+        <tr>
+          <td><span class="label">Product Name:</span></td>
+          <td class="value">${entry.fgProductName || '-'}</td>
+          <td><span class="label">Powder Wastage KG:</span></td>
+          <td class="value">${me.powderWastageKg != null ? me.powderWastageKg + ' KG' : '-'}</td>
+          <td><span class="label">Manpower:</span></td>
+          <td class="value">${me.manPowerCount || '-'}</td>
+        </tr>
+        <tr>
+          <td><span class="label">Pack Size:</span></td>
+          <td class="value">${me.productName || entry.fgProductName || '-'}</td>
+          <td><span class="label">Laminate Wastage KG:</span></td>
+          <td class="value">${me.laminateWastageKg != null ? Number(me.laminateWastageKg).toFixed(2) + ' KG' : '-'}</td>
+          <td><span class="label">Shift:</span></td>
+          <td class="value">${me.shift || '-'}</td>
+        </tr>
+        <tr>
+          <td><span class="label">Batch No:</span></td>
+          <td class="value">${entry.fgBatch?.batchNumber || '-'}</td>
+          <td><span class="label">Powder Wastage %:</span></td>
+          <td class="value">${me.powderWastagePercentage != null ? me.powderWastagePercentage + '%' : '-'}</td>
+          <td><span class="label">M/c Utilized:</span></td>
+          <td class="value">${me.machineUtilizedHrs != null ? me.machineUtilizedHrs + ' minutes' : '-'}</td>
+        </tr>
+        <tr>
+          <td><span class="label">Allocated Qty:</span></td>
+          <td class="value">${me.allocatedQty || '-'} ${me.allocatedUnit || ''}</td>
+          <td><span class="label">Laminate Wastage %:</span></td>
+          <td class="value">${me.laminateWastagePercentage != null ? me.laminateWastagePercentage + '%' : '-'}</td>
+          <td><span class="label">Non Utilized:</span></td>
+          <td class="value">${me.machineNotUtilizedHrs != null ? me.machineNotUtilizedHrs + ' minutes' : '-'}</td>
+        </tr>
+      </table>
+
+      <div class="section-title">Down Time Status</div>
+      <table class="dt-table">
+        <thead>
+          <tr>
+            <th style="width:15%">Stop Time</th>
+            <th style="width:15%">Start Time</th>
+            <th style="width:45%">Break Down</th>
+            <th style="width:25%">Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${downtimeRows}
+          ${Array(Math.max(0, 5 - (me.downtimeRecords?.length || 0))).fill('<tr><td style="border:1px solid #000;padding:10px;">&nbsp;</td><td style="border:1px solid #000;padding:10px;">&nbsp;</td><td style="border:1px solid #000;padding:10px;">&nbsp;</td><td style="border:1px solid #000;padding:10px;">&nbsp;</td></tr>').join('')}
+        </tbody>
+      </table>
+
+      <div class="footer">
+        Generated by TGAF BatchFlow &copy; ${new Date().getFullYear()} &middot; Printed on ${new Date().toLocaleString()}
+      </div>
+      </body></html>
+    `;
+
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(html);
+      printWindow.document.close();
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 500);
+    }
+  };
+
   const getDropdownMenuItems = (entry: any) => {
     const items = [];
     
+    if (entry.status === 'COMPLETED' && entry.machineEntries?.length > 0) {
+      items.push({
+        key: 'download-production',
+        icon: <FileText size={16} />,
+        label: 'Download Production Report',
+        onClick: (e: any) => { e.domEvent.stopPropagation(); handleDownloadProductionReport(entry); }
+      });
+    }
+
     if (entry.qualityReport) {
       items.push({
         key: 'view-quality',

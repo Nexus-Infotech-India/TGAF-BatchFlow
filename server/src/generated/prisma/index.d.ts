@@ -414,6 +414,11 @@ export type FGProductionEntry = $Result.DefaultSelection<Prisma.$FGProductionEnt
  */
 export type FGProductionMachineEntry = $Result.DefaultSelection<Prisma.$FGProductionMachineEntryPayload>
 /**
+ * Model FGDowntimeRecord
+ * 
+ */
+export type FGDowntimeRecord = $Result.DefaultSelection<Prisma.$FGDowntimeRecordPayload>
+/**
  * Model Machine
  * 
  */
@@ -1728,6 +1733,16 @@ export class PrismaClient<
   get fGProductionMachineEntry(): Prisma.FGProductionMachineEntryDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.fGDowntimeRecord`: Exposes CRUD operations for the **FGDowntimeRecord** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FGDowntimeRecords
+    * const fGDowntimeRecords = await prisma.fGDowntimeRecord.findMany()
+    * ```
+    */
+  get fGDowntimeRecord(): Prisma.FGDowntimeRecordDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.machine`: Exposes CRUD operations for the **Machine** model.
     * Example usage:
     * ```ts
@@ -2287,6 +2302,7 @@ export namespace Prisma {
     FGBatchConsumption: 'FGBatchConsumption',
     FGProductionEntry: 'FGProductionEntry',
     FGProductionMachineEntry: 'FGProductionMachineEntry',
+    FGDowntimeRecord: 'FGDowntimeRecord',
     Machine: 'Machine',
     FGProductionVerification: 'FGProductionVerification',
     FGQualityReport: 'FGQualityReport',
@@ -2309,7 +2325,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "fGPackagingMaster" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "machine" | "fGProductionVerification" | "fGQualityReport" | "fGQualityParameter"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "fGPackagingMaster" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "fGDowntimeRecord" | "machine" | "fGProductionVerification" | "fGQualityReport" | "fGQualityParameter"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -8233,6 +8249,80 @@ export namespace Prisma {
           }
         }
       }
+      FGDowntimeRecord: {
+        payload: Prisma.$FGDowntimeRecordPayload<ExtArgs>
+        fields: Prisma.FGDowntimeRecordFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FGDowntimeRecordFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FGDowntimeRecordFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload>
+          }
+          findFirst: {
+            args: Prisma.FGDowntimeRecordFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FGDowntimeRecordFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload>
+          }
+          findMany: {
+            args: Prisma.FGDowntimeRecordFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload>[]
+          }
+          create: {
+            args: Prisma.FGDowntimeRecordCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload>
+          }
+          createMany: {
+            args: Prisma.FGDowntimeRecordCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FGDowntimeRecordCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload>[]
+          }
+          delete: {
+            args: Prisma.FGDowntimeRecordDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload>
+          }
+          update: {
+            args: Prisma.FGDowntimeRecordUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload>
+          }
+          deleteMany: {
+            args: Prisma.FGDowntimeRecordDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FGDowntimeRecordUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FGDowntimeRecordUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload>[]
+          }
+          upsert: {
+            args: Prisma.FGDowntimeRecordUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FGDowntimeRecordPayload>
+          }
+          aggregate: {
+            args: Prisma.FGDowntimeRecordAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFGDowntimeRecord>
+          }
+          groupBy: {
+            args: Prisma.FGDowntimeRecordGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FGDowntimeRecordGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FGDowntimeRecordCountArgs<ExtArgs>
+            result: $Utils.Optional<FGDowntimeRecordCountAggregateOutputType> | number
+          }
+        }
+      }
       Machine: {
         payload: Prisma.$MachinePayload<ExtArgs>
         fields: Prisma.MachineFieldRefs
@@ -8705,6 +8795,7 @@ export namespace Prisma {
     fGBatchConsumption?: FGBatchConsumptionOmit
     fGProductionEntry?: FGProductionEntryOmit
     fGProductionMachineEntry?: FGProductionMachineEntryOmit
+    fGDowntimeRecord?: FGDowntimeRecordOmit
     machine?: MachineOmit
     fGProductionVerification?: FGProductionVerificationOmit
     fGQualityReport?: FGQualityReportOmit
@@ -10905,6 +10996,37 @@ export namespace Prisma {
    */
   export type FGProductionEntryCountOutputTypeCountVerificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FGProductionVerificationWhereInput
+  }
+
+
+  /**
+   * Count Type FGProductionMachineEntryCountOutputType
+   */
+
+  export type FGProductionMachineEntryCountOutputType = {
+    downtimeRecords: number
+  }
+
+  export type FGProductionMachineEntryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    downtimeRecords?: boolean | FGProductionMachineEntryCountOutputTypeCountDowntimeRecordsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FGProductionMachineEntryCountOutputType without action
+   */
+  export type FGProductionMachineEntryCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionMachineEntryCountOutputType
+     */
+    select?: FGProductionMachineEntryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FGProductionMachineEntryCountOutputType without action
+   */
+  export type FGProductionMachineEntryCountOutputTypeCountDowntimeRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGDowntimeRecordWhereInput
   }
 
 
@@ -105661,6 +105783,11 @@ export namespace Prisma {
     instulationCapacity: number | null
     laminateConsumptionQty: number | null
     sfgConsumptionQty: number | null
+    powderWastageKg: number | null
+    powderWastagePercentage: number | null
+    manPowerCount: number | null
+    machineUtilizedHrs: number | null
+    machineNotUtilizedHrs: number | null
   }
 
   export type FGProductionMachineEntrySumAggregateOutputType = {
@@ -105676,6 +105803,11 @@ export namespace Prisma {
     instulationCapacity: number | null
     laminateConsumptionQty: number | null
     sfgConsumptionQty: number | null
+    powderWastageKg: number | null
+    powderWastagePercentage: number | null
+    manPowerCount: number | null
+    machineUtilizedHrs: number | null
+    machineNotUtilizedHrs: number | null
   }
 
   export type FGProductionMachineEntryMinAggregateOutputType = {
@@ -105707,6 +105839,12 @@ export namespace Prisma {
     sfgConsumptionUnit: string | null
     manPower: boolean | null
     notes: string | null
+    powderWastageKg: number | null
+    powderWastagePercentage: number | null
+    manPowerCount: number | null
+    shift: string | null
+    machineUtilizedHrs: number | null
+    machineNotUtilizedHrs: number | null
     createdAt: Date | null
   }
 
@@ -105739,6 +105877,12 @@ export namespace Prisma {
     sfgConsumptionUnit: string | null
     manPower: boolean | null
     notes: string | null
+    powderWastageKg: number | null
+    powderWastagePercentage: number | null
+    manPowerCount: number | null
+    shift: string | null
+    machineUtilizedHrs: number | null
+    machineNotUtilizedHrs: number | null
     createdAt: Date | null
   }
 
@@ -105771,6 +105915,12 @@ export namespace Prisma {
     sfgConsumptionUnit: number
     manPower: number
     notes: number
+    powderWastageKg: number
+    powderWastagePercentage: number
+    manPowerCount: number
+    shift: number
+    machineUtilizedHrs: number
+    machineNotUtilizedHrs: number
     createdAt: number
     _all: number
   }
@@ -105789,6 +105939,11 @@ export namespace Prisma {
     instulationCapacity?: true
     laminateConsumptionQty?: true
     sfgConsumptionQty?: true
+    powderWastageKg?: true
+    powderWastagePercentage?: true
+    manPowerCount?: true
+    machineUtilizedHrs?: true
+    machineNotUtilizedHrs?: true
   }
 
   export type FGProductionMachineEntrySumAggregateInputType = {
@@ -105804,6 +105959,11 @@ export namespace Prisma {
     instulationCapacity?: true
     laminateConsumptionQty?: true
     sfgConsumptionQty?: true
+    powderWastageKg?: true
+    powderWastagePercentage?: true
+    manPowerCount?: true
+    machineUtilizedHrs?: true
+    machineNotUtilizedHrs?: true
   }
 
   export type FGProductionMachineEntryMinAggregateInputType = {
@@ -105835,6 +105995,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: true
     manPower?: true
     notes?: true
+    powderWastageKg?: true
+    powderWastagePercentage?: true
+    manPowerCount?: true
+    shift?: true
+    machineUtilizedHrs?: true
+    machineNotUtilizedHrs?: true
     createdAt?: true
   }
 
@@ -105867,6 +106033,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: true
     manPower?: true
     notes?: true
+    powderWastageKg?: true
+    powderWastagePercentage?: true
+    manPowerCount?: true
+    shift?: true
+    machineUtilizedHrs?: true
+    machineNotUtilizedHrs?: true
     createdAt?: true
   }
 
@@ -105899,6 +106071,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: true
     manPower?: true
     notes?: true
+    powderWastageKg?: true
+    powderWastagePercentage?: true
+    manPowerCount?: true
+    shift?: true
+    machineUtilizedHrs?: true
+    machineNotUtilizedHrs?: true
     createdAt?: true
     _all?: true
   }
@@ -106018,6 +106196,12 @@ export namespace Prisma {
     sfgConsumptionUnit: string | null
     manPower: boolean
     notes: string | null
+    powderWastageKg: number | null
+    powderWastagePercentage: number | null
+    manPowerCount: number | null
+    shift: string | null
+    machineUtilizedHrs: number | null
+    machineNotUtilizedHrs: number | null
     createdAt: Date
     _count: FGProductionMachineEntryCountAggregateOutputType | null
     _avg: FGProductionMachineEntryAvgAggregateOutputType | null
@@ -106069,9 +106253,17 @@ export namespace Prisma {
     sfgConsumptionUnit?: boolean
     manPower?: boolean
     notes?: boolean
+    powderWastageKg?: boolean
+    powderWastagePercentage?: boolean
+    manPowerCount?: boolean
+    shift?: boolean
+    machineUtilizedHrs?: boolean
+    machineNotUtilizedHrs?: boolean
     createdAt?: boolean
     productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
     machine?: boolean | MachineDefaultArgs<ExtArgs>
+    downtimeRecords?: boolean | FGProductionMachineEntry$downtimeRecordsArgs<ExtArgs>
+    _count?: boolean | FGProductionMachineEntryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fGProductionMachineEntry"]>
 
   export type FGProductionMachineEntrySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -106103,6 +106295,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: boolean
     manPower?: boolean
     notes?: boolean
+    powderWastageKg?: boolean
+    powderWastagePercentage?: boolean
+    manPowerCount?: boolean
+    shift?: boolean
+    machineUtilizedHrs?: boolean
+    machineNotUtilizedHrs?: boolean
     createdAt?: boolean
     productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
     machine?: boolean | MachineDefaultArgs<ExtArgs>
@@ -106137,6 +106335,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: boolean
     manPower?: boolean
     notes?: boolean
+    powderWastageKg?: boolean
+    powderWastagePercentage?: boolean
+    manPowerCount?: boolean
+    shift?: boolean
+    machineUtilizedHrs?: boolean
+    machineNotUtilizedHrs?: boolean
     createdAt?: boolean
     productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
     machine?: boolean | MachineDefaultArgs<ExtArgs>
@@ -106171,13 +106375,21 @@ export namespace Prisma {
     sfgConsumptionUnit?: boolean
     manPower?: boolean
     notes?: boolean
+    powderWastageKg?: boolean
+    powderWastagePercentage?: boolean
+    manPowerCount?: boolean
+    shift?: boolean
+    machineUtilizedHrs?: boolean
+    machineNotUtilizedHrs?: boolean
     createdAt?: boolean
   }
 
-  export type FGProductionMachineEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productionEntryId" | "machineId" | "machineName" | "allocatedQty" | "allocatedUnit" | "actualFgQty" | "actualFgUnit" | "actualByproduct" | "actualByproductUnit" | "actualScrap" | "actualScrapUnit" | "machineSpeed" | "todayAchieve" | "laminateConsumption" | "sfgConsumption" | "laminateWastageKg" | "laminateWastagePercentage" | "noManPower" | "productName" | "instulationCapacity" | "instulationCapacityUnit" | "laminateConsumptionQty" | "laminateConsumptionUnit" | "sfgConsumptionQty" | "sfgConsumptionUnit" | "manPower" | "notes" | "createdAt", ExtArgs["result"]["fGProductionMachineEntry"]>
+  export type FGProductionMachineEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "productionEntryId" | "machineId" | "machineName" | "allocatedQty" | "allocatedUnit" | "actualFgQty" | "actualFgUnit" | "actualByproduct" | "actualByproductUnit" | "actualScrap" | "actualScrapUnit" | "machineSpeed" | "todayAchieve" | "laminateConsumption" | "sfgConsumption" | "laminateWastageKg" | "laminateWastagePercentage" | "noManPower" | "productName" | "instulationCapacity" | "instulationCapacityUnit" | "laminateConsumptionQty" | "laminateConsumptionUnit" | "sfgConsumptionQty" | "sfgConsumptionUnit" | "manPower" | "notes" | "powderWastageKg" | "powderWastagePercentage" | "manPowerCount" | "shift" | "machineUtilizedHrs" | "machineNotUtilizedHrs" | "createdAt", ExtArgs["result"]["fGProductionMachineEntry"]>
   export type FGProductionMachineEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
     machine?: boolean | MachineDefaultArgs<ExtArgs>
+    downtimeRecords?: boolean | FGProductionMachineEntry$downtimeRecordsArgs<ExtArgs>
+    _count?: boolean | FGProductionMachineEntryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FGProductionMachineEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     productionEntry?: boolean | FGProductionEntryDefaultArgs<ExtArgs>
@@ -106193,6 +106405,7 @@ export namespace Prisma {
     objects: {
       productionEntry: Prisma.$FGProductionEntryPayload<ExtArgs>
       machine: Prisma.$MachinePayload<ExtArgs>
+      downtimeRecords: Prisma.$FGDowntimeRecordPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -106223,6 +106436,12 @@ export namespace Prisma {
       sfgConsumptionUnit: string | null
       manPower: boolean
       notes: string | null
+      powderWastageKg: number | null
+      powderWastagePercentage: number | null
+      manPowerCount: number | null
+      shift: string | null
+      machineUtilizedHrs: number | null
+      machineNotUtilizedHrs: number | null
       createdAt: Date
     }, ExtArgs["result"]["fGProductionMachineEntry"]>
     composites: {}
@@ -106620,6 +106839,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     productionEntry<T extends FGProductionEntryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntryDefaultArgs<ExtArgs>>): Prisma__FGProductionEntryClient<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     machine<T extends MachineDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MachineDefaultArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    downtimeRecords<T extends FGProductionMachineEntry$downtimeRecordsArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionMachineEntry$downtimeRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -106677,6 +106897,12 @@ export namespace Prisma {
     readonly sfgConsumptionUnit: FieldRef<"FGProductionMachineEntry", 'String'>
     readonly manPower: FieldRef<"FGProductionMachineEntry", 'Boolean'>
     readonly notes: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly powderWastageKg: FieldRef<"FGProductionMachineEntry", 'Float'>
+    readonly powderWastagePercentage: FieldRef<"FGProductionMachineEntry", 'Float'>
+    readonly manPowerCount: FieldRef<"FGProductionMachineEntry", 'Int'>
+    readonly shift: FieldRef<"FGProductionMachineEntry", 'String'>
+    readonly machineUtilizedHrs: FieldRef<"FGProductionMachineEntry", 'Float'>
+    readonly machineNotUtilizedHrs: FieldRef<"FGProductionMachineEntry", 'Float'>
     readonly createdAt: FieldRef<"FGProductionMachineEntry", 'DateTime'>
   }
     
@@ -107074,6 +107300,30 @@ export namespace Prisma {
   }
 
   /**
+   * FGProductionMachineEntry.downtimeRecords
+   */
+  export type FGProductionMachineEntry$downtimeRecordsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
+    where?: FGDowntimeRecordWhereInput
+    orderBy?: FGDowntimeRecordOrderByWithRelationInput | FGDowntimeRecordOrderByWithRelationInput[]
+    cursor?: FGDowntimeRecordWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FGDowntimeRecordScalarFieldEnum | FGDowntimeRecordScalarFieldEnum[]
+  }
+
+  /**
    * FGProductionMachineEntry without action
    */
   export type FGProductionMachineEntryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -107089,6 +107339,1090 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: FGProductionMachineEntryInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FGDowntimeRecord
+   */
+
+  export type AggregateFGDowntimeRecord = {
+    _count: FGDowntimeRecordCountAggregateOutputType | null
+    _min: FGDowntimeRecordMinAggregateOutputType | null
+    _max: FGDowntimeRecordMaxAggregateOutputType | null
+  }
+
+  export type FGDowntimeRecordMinAggregateOutputType = {
+    id: string | null
+    machineEntryId: string | null
+    startTime: string | null
+    stopTime: string | null
+    breakdownReason: string | null
+    remark: string | null
+    createdAt: Date | null
+  }
+
+  export type FGDowntimeRecordMaxAggregateOutputType = {
+    id: string | null
+    machineEntryId: string | null
+    startTime: string | null
+    stopTime: string | null
+    breakdownReason: string | null
+    remark: string | null
+    createdAt: Date | null
+  }
+
+  export type FGDowntimeRecordCountAggregateOutputType = {
+    id: number
+    machineEntryId: number
+    startTime: number
+    stopTime: number
+    breakdownReason: number
+    remark: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FGDowntimeRecordMinAggregateInputType = {
+    id?: true
+    machineEntryId?: true
+    startTime?: true
+    stopTime?: true
+    breakdownReason?: true
+    remark?: true
+    createdAt?: true
+  }
+
+  export type FGDowntimeRecordMaxAggregateInputType = {
+    id?: true
+    machineEntryId?: true
+    startTime?: true
+    stopTime?: true
+    breakdownReason?: true
+    remark?: true
+    createdAt?: true
+  }
+
+  export type FGDowntimeRecordCountAggregateInputType = {
+    id?: true
+    machineEntryId?: true
+    startTime?: true
+    stopTime?: true
+    breakdownReason?: true
+    remark?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FGDowntimeRecordAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGDowntimeRecord to aggregate.
+     */
+    where?: FGDowntimeRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGDowntimeRecords to fetch.
+     */
+    orderBy?: FGDowntimeRecordOrderByWithRelationInput | FGDowntimeRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FGDowntimeRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGDowntimeRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGDowntimeRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FGDowntimeRecords
+    **/
+    _count?: true | FGDowntimeRecordCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FGDowntimeRecordMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FGDowntimeRecordMaxAggregateInputType
+  }
+
+  export type GetFGDowntimeRecordAggregateType<T extends FGDowntimeRecordAggregateArgs> = {
+        [P in keyof T & keyof AggregateFGDowntimeRecord]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFGDowntimeRecord[P]>
+      : GetScalarType<T[P], AggregateFGDowntimeRecord[P]>
+  }
+
+
+
+
+  export type FGDowntimeRecordGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGDowntimeRecordWhereInput
+    orderBy?: FGDowntimeRecordOrderByWithAggregationInput | FGDowntimeRecordOrderByWithAggregationInput[]
+    by: FGDowntimeRecordScalarFieldEnum[] | FGDowntimeRecordScalarFieldEnum
+    having?: FGDowntimeRecordScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FGDowntimeRecordCountAggregateInputType | true
+    _min?: FGDowntimeRecordMinAggregateInputType
+    _max?: FGDowntimeRecordMaxAggregateInputType
+  }
+
+  export type FGDowntimeRecordGroupByOutputType = {
+    id: string
+    machineEntryId: string
+    startTime: string
+    stopTime: string
+    breakdownReason: string
+    remark: string | null
+    createdAt: Date
+    _count: FGDowntimeRecordCountAggregateOutputType | null
+    _min: FGDowntimeRecordMinAggregateOutputType | null
+    _max: FGDowntimeRecordMaxAggregateOutputType | null
+  }
+
+  type GetFGDowntimeRecordGroupByPayload<T extends FGDowntimeRecordGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FGDowntimeRecordGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FGDowntimeRecordGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FGDowntimeRecordGroupByOutputType[P]>
+            : GetScalarType<T[P], FGDowntimeRecordGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FGDowntimeRecordSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    machineEntryId?: boolean
+    startTime?: boolean
+    stopTime?: boolean
+    breakdownReason?: boolean
+    remark?: boolean
+    createdAt?: boolean
+    machineEntry?: boolean | FGProductionMachineEntryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGDowntimeRecord"]>
+
+  export type FGDowntimeRecordSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    machineEntryId?: boolean
+    startTime?: boolean
+    stopTime?: boolean
+    breakdownReason?: boolean
+    remark?: boolean
+    createdAt?: boolean
+    machineEntry?: boolean | FGProductionMachineEntryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGDowntimeRecord"]>
+
+  export type FGDowntimeRecordSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    machineEntryId?: boolean
+    startTime?: boolean
+    stopTime?: boolean
+    breakdownReason?: boolean
+    remark?: boolean
+    createdAt?: boolean
+    machineEntry?: boolean | FGProductionMachineEntryDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fGDowntimeRecord"]>
+
+  export type FGDowntimeRecordSelectScalar = {
+    id?: boolean
+    machineEntryId?: boolean
+    startTime?: boolean
+    stopTime?: boolean
+    breakdownReason?: boolean
+    remark?: boolean
+    createdAt?: boolean
+  }
+
+  export type FGDowntimeRecordOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "machineEntryId" | "startTime" | "stopTime" | "breakdownReason" | "remark" | "createdAt", ExtArgs["result"]["fGDowntimeRecord"]>
+  export type FGDowntimeRecordInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    machineEntry?: boolean | FGProductionMachineEntryDefaultArgs<ExtArgs>
+  }
+  export type FGDowntimeRecordIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    machineEntry?: boolean | FGProductionMachineEntryDefaultArgs<ExtArgs>
+  }
+  export type FGDowntimeRecordIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    machineEntry?: boolean | FGProductionMachineEntryDefaultArgs<ExtArgs>
+  }
+
+  export type $FGDowntimeRecordPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FGDowntimeRecord"
+    objects: {
+      machineEntry: Prisma.$FGProductionMachineEntryPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      machineEntryId: string
+      startTime: string
+      stopTime: string
+      breakdownReason: string
+      remark: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["fGDowntimeRecord"]>
+    composites: {}
+  }
+
+  type FGDowntimeRecordGetPayload<S extends boolean | null | undefined | FGDowntimeRecordDefaultArgs> = $Result.GetResult<Prisma.$FGDowntimeRecordPayload, S>
+
+  type FGDowntimeRecordCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FGDowntimeRecordFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FGDowntimeRecordCountAggregateInputType | true
+    }
+
+  export interface FGDowntimeRecordDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FGDowntimeRecord'], meta: { name: 'FGDowntimeRecord' } }
+    /**
+     * Find zero or one FGDowntimeRecord that matches the filter.
+     * @param {FGDowntimeRecordFindUniqueArgs} args - Arguments to find a FGDowntimeRecord
+     * @example
+     * // Get one FGDowntimeRecord
+     * const fGDowntimeRecord = await prisma.fGDowntimeRecord.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FGDowntimeRecordFindUniqueArgs>(args: SelectSubset<T, FGDowntimeRecordFindUniqueArgs<ExtArgs>>): Prisma__FGDowntimeRecordClient<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FGDowntimeRecord that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FGDowntimeRecordFindUniqueOrThrowArgs} args - Arguments to find a FGDowntimeRecord
+     * @example
+     * // Get one FGDowntimeRecord
+     * const fGDowntimeRecord = await prisma.fGDowntimeRecord.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FGDowntimeRecordFindUniqueOrThrowArgs>(args: SelectSubset<T, FGDowntimeRecordFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FGDowntimeRecordClient<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGDowntimeRecord that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGDowntimeRecordFindFirstArgs} args - Arguments to find a FGDowntimeRecord
+     * @example
+     * // Get one FGDowntimeRecord
+     * const fGDowntimeRecord = await prisma.fGDowntimeRecord.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FGDowntimeRecordFindFirstArgs>(args?: SelectSubset<T, FGDowntimeRecordFindFirstArgs<ExtArgs>>): Prisma__FGDowntimeRecordClient<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FGDowntimeRecord that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGDowntimeRecordFindFirstOrThrowArgs} args - Arguments to find a FGDowntimeRecord
+     * @example
+     * // Get one FGDowntimeRecord
+     * const fGDowntimeRecord = await prisma.fGDowntimeRecord.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FGDowntimeRecordFindFirstOrThrowArgs>(args?: SelectSubset<T, FGDowntimeRecordFindFirstOrThrowArgs<ExtArgs>>): Prisma__FGDowntimeRecordClient<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FGDowntimeRecords that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGDowntimeRecordFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FGDowntimeRecords
+     * const fGDowntimeRecords = await prisma.fGDowntimeRecord.findMany()
+     * 
+     * // Get first 10 FGDowntimeRecords
+     * const fGDowntimeRecords = await prisma.fGDowntimeRecord.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fGDowntimeRecordWithIdOnly = await prisma.fGDowntimeRecord.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FGDowntimeRecordFindManyArgs>(args?: SelectSubset<T, FGDowntimeRecordFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FGDowntimeRecord.
+     * @param {FGDowntimeRecordCreateArgs} args - Arguments to create a FGDowntimeRecord.
+     * @example
+     * // Create one FGDowntimeRecord
+     * const FGDowntimeRecord = await prisma.fGDowntimeRecord.create({
+     *   data: {
+     *     // ... data to create a FGDowntimeRecord
+     *   }
+     * })
+     * 
+     */
+    create<T extends FGDowntimeRecordCreateArgs>(args: SelectSubset<T, FGDowntimeRecordCreateArgs<ExtArgs>>): Prisma__FGDowntimeRecordClient<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FGDowntimeRecords.
+     * @param {FGDowntimeRecordCreateManyArgs} args - Arguments to create many FGDowntimeRecords.
+     * @example
+     * // Create many FGDowntimeRecords
+     * const fGDowntimeRecord = await prisma.fGDowntimeRecord.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FGDowntimeRecordCreateManyArgs>(args?: SelectSubset<T, FGDowntimeRecordCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FGDowntimeRecords and returns the data saved in the database.
+     * @param {FGDowntimeRecordCreateManyAndReturnArgs} args - Arguments to create many FGDowntimeRecords.
+     * @example
+     * // Create many FGDowntimeRecords
+     * const fGDowntimeRecord = await prisma.fGDowntimeRecord.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FGDowntimeRecords and only return the `id`
+     * const fGDowntimeRecordWithIdOnly = await prisma.fGDowntimeRecord.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FGDowntimeRecordCreateManyAndReturnArgs>(args?: SelectSubset<T, FGDowntimeRecordCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FGDowntimeRecord.
+     * @param {FGDowntimeRecordDeleteArgs} args - Arguments to delete one FGDowntimeRecord.
+     * @example
+     * // Delete one FGDowntimeRecord
+     * const FGDowntimeRecord = await prisma.fGDowntimeRecord.delete({
+     *   where: {
+     *     // ... filter to delete one FGDowntimeRecord
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FGDowntimeRecordDeleteArgs>(args: SelectSubset<T, FGDowntimeRecordDeleteArgs<ExtArgs>>): Prisma__FGDowntimeRecordClient<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FGDowntimeRecord.
+     * @param {FGDowntimeRecordUpdateArgs} args - Arguments to update one FGDowntimeRecord.
+     * @example
+     * // Update one FGDowntimeRecord
+     * const fGDowntimeRecord = await prisma.fGDowntimeRecord.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FGDowntimeRecordUpdateArgs>(args: SelectSubset<T, FGDowntimeRecordUpdateArgs<ExtArgs>>): Prisma__FGDowntimeRecordClient<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FGDowntimeRecords.
+     * @param {FGDowntimeRecordDeleteManyArgs} args - Arguments to filter FGDowntimeRecords to delete.
+     * @example
+     * // Delete a few FGDowntimeRecords
+     * const { count } = await prisma.fGDowntimeRecord.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FGDowntimeRecordDeleteManyArgs>(args?: SelectSubset<T, FGDowntimeRecordDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGDowntimeRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGDowntimeRecordUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FGDowntimeRecords
+     * const fGDowntimeRecord = await prisma.fGDowntimeRecord.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FGDowntimeRecordUpdateManyArgs>(args: SelectSubset<T, FGDowntimeRecordUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FGDowntimeRecords and returns the data updated in the database.
+     * @param {FGDowntimeRecordUpdateManyAndReturnArgs} args - Arguments to update many FGDowntimeRecords.
+     * @example
+     * // Update many FGDowntimeRecords
+     * const fGDowntimeRecord = await prisma.fGDowntimeRecord.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FGDowntimeRecords and only return the `id`
+     * const fGDowntimeRecordWithIdOnly = await prisma.fGDowntimeRecord.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FGDowntimeRecordUpdateManyAndReturnArgs>(args: SelectSubset<T, FGDowntimeRecordUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FGDowntimeRecord.
+     * @param {FGDowntimeRecordUpsertArgs} args - Arguments to update or create a FGDowntimeRecord.
+     * @example
+     * // Update or create a FGDowntimeRecord
+     * const fGDowntimeRecord = await prisma.fGDowntimeRecord.upsert({
+     *   create: {
+     *     // ... data to create a FGDowntimeRecord
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FGDowntimeRecord we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FGDowntimeRecordUpsertArgs>(args: SelectSubset<T, FGDowntimeRecordUpsertArgs<ExtArgs>>): Prisma__FGDowntimeRecordClient<$Result.GetResult<Prisma.$FGDowntimeRecordPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FGDowntimeRecords.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGDowntimeRecordCountArgs} args - Arguments to filter FGDowntimeRecords to count.
+     * @example
+     * // Count the number of FGDowntimeRecords
+     * const count = await prisma.fGDowntimeRecord.count({
+     *   where: {
+     *     // ... the filter for the FGDowntimeRecords we want to count
+     *   }
+     * })
+    **/
+    count<T extends FGDowntimeRecordCountArgs>(
+      args?: Subset<T, FGDowntimeRecordCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FGDowntimeRecordCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FGDowntimeRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGDowntimeRecordAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FGDowntimeRecordAggregateArgs>(args: Subset<T, FGDowntimeRecordAggregateArgs>): Prisma.PrismaPromise<GetFGDowntimeRecordAggregateType<T>>
+
+    /**
+     * Group by FGDowntimeRecord.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FGDowntimeRecordGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FGDowntimeRecordGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FGDowntimeRecordGroupByArgs['orderBy'] }
+        : { orderBy?: FGDowntimeRecordGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FGDowntimeRecordGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFGDowntimeRecordGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FGDowntimeRecord model
+   */
+  readonly fields: FGDowntimeRecordFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FGDowntimeRecord.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FGDowntimeRecordClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    machineEntry<T extends FGProductionMachineEntryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionMachineEntryDefaultArgs<ExtArgs>>): Prisma__FGProductionMachineEntryClient<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FGDowntimeRecord model
+   */
+  interface FGDowntimeRecordFieldRefs {
+    readonly id: FieldRef<"FGDowntimeRecord", 'String'>
+    readonly machineEntryId: FieldRef<"FGDowntimeRecord", 'String'>
+    readonly startTime: FieldRef<"FGDowntimeRecord", 'String'>
+    readonly stopTime: FieldRef<"FGDowntimeRecord", 'String'>
+    readonly breakdownReason: FieldRef<"FGDowntimeRecord", 'String'>
+    readonly remark: FieldRef<"FGDowntimeRecord", 'String'>
+    readonly createdAt: FieldRef<"FGDowntimeRecord", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FGDowntimeRecord findUnique
+   */
+  export type FGDowntimeRecordFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which FGDowntimeRecord to fetch.
+     */
+    where: FGDowntimeRecordWhereUniqueInput
+  }
+
+  /**
+   * FGDowntimeRecord findUniqueOrThrow
+   */
+  export type FGDowntimeRecordFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which FGDowntimeRecord to fetch.
+     */
+    where: FGDowntimeRecordWhereUniqueInput
+  }
+
+  /**
+   * FGDowntimeRecord findFirst
+   */
+  export type FGDowntimeRecordFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which FGDowntimeRecord to fetch.
+     */
+    where?: FGDowntimeRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGDowntimeRecords to fetch.
+     */
+    orderBy?: FGDowntimeRecordOrderByWithRelationInput | FGDowntimeRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGDowntimeRecords.
+     */
+    cursor?: FGDowntimeRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGDowntimeRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGDowntimeRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGDowntimeRecords.
+     */
+    distinct?: FGDowntimeRecordScalarFieldEnum | FGDowntimeRecordScalarFieldEnum[]
+  }
+
+  /**
+   * FGDowntimeRecord findFirstOrThrow
+   */
+  export type FGDowntimeRecordFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which FGDowntimeRecord to fetch.
+     */
+    where?: FGDowntimeRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGDowntimeRecords to fetch.
+     */
+    orderBy?: FGDowntimeRecordOrderByWithRelationInput | FGDowntimeRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FGDowntimeRecords.
+     */
+    cursor?: FGDowntimeRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGDowntimeRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGDowntimeRecords.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FGDowntimeRecords.
+     */
+    distinct?: FGDowntimeRecordScalarFieldEnum | FGDowntimeRecordScalarFieldEnum[]
+  }
+
+  /**
+   * FGDowntimeRecord findMany
+   */
+  export type FGDowntimeRecordFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
+    /**
+     * Filter, which FGDowntimeRecords to fetch.
+     */
+    where?: FGDowntimeRecordWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FGDowntimeRecords to fetch.
+     */
+    orderBy?: FGDowntimeRecordOrderByWithRelationInput | FGDowntimeRecordOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FGDowntimeRecords.
+     */
+    cursor?: FGDowntimeRecordWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FGDowntimeRecords from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FGDowntimeRecords.
+     */
+    skip?: number
+    distinct?: FGDowntimeRecordScalarFieldEnum | FGDowntimeRecordScalarFieldEnum[]
+  }
+
+  /**
+   * FGDowntimeRecord create
+   */
+  export type FGDowntimeRecordCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FGDowntimeRecord.
+     */
+    data: XOR<FGDowntimeRecordCreateInput, FGDowntimeRecordUncheckedCreateInput>
+  }
+
+  /**
+   * FGDowntimeRecord createMany
+   */
+  export type FGDowntimeRecordCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FGDowntimeRecords.
+     */
+    data: FGDowntimeRecordCreateManyInput | FGDowntimeRecordCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FGDowntimeRecord createManyAndReturn
+   */
+  export type FGDowntimeRecordCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * The data used to create many FGDowntimeRecords.
+     */
+    data: FGDowntimeRecordCreateManyInput | FGDowntimeRecordCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGDowntimeRecord update
+   */
+  export type FGDowntimeRecordUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FGDowntimeRecord.
+     */
+    data: XOR<FGDowntimeRecordUpdateInput, FGDowntimeRecordUncheckedUpdateInput>
+    /**
+     * Choose, which FGDowntimeRecord to update.
+     */
+    where: FGDowntimeRecordWhereUniqueInput
+  }
+
+  /**
+   * FGDowntimeRecord updateMany
+   */
+  export type FGDowntimeRecordUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FGDowntimeRecords.
+     */
+    data: XOR<FGDowntimeRecordUpdateManyMutationInput, FGDowntimeRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which FGDowntimeRecords to update
+     */
+    where?: FGDowntimeRecordWhereInput
+    /**
+     * Limit how many FGDowntimeRecords to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGDowntimeRecord updateManyAndReturn
+   */
+  export type FGDowntimeRecordUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * The data used to update FGDowntimeRecords.
+     */
+    data: XOR<FGDowntimeRecordUpdateManyMutationInput, FGDowntimeRecordUncheckedUpdateManyInput>
+    /**
+     * Filter which FGDowntimeRecords to update
+     */
+    where?: FGDowntimeRecordWhereInput
+    /**
+     * Limit how many FGDowntimeRecords to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FGDowntimeRecord upsert
+   */
+  export type FGDowntimeRecordUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FGDowntimeRecord to update in case it exists.
+     */
+    where: FGDowntimeRecordWhereUniqueInput
+    /**
+     * In case the FGDowntimeRecord found by the `where` argument doesn't exist, create a new FGDowntimeRecord with this data.
+     */
+    create: XOR<FGDowntimeRecordCreateInput, FGDowntimeRecordUncheckedCreateInput>
+    /**
+     * In case the FGDowntimeRecord was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FGDowntimeRecordUpdateInput, FGDowntimeRecordUncheckedUpdateInput>
+  }
+
+  /**
+   * FGDowntimeRecord delete
+   */
+  export type FGDowntimeRecordDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
+    /**
+     * Filter which FGDowntimeRecord to delete.
+     */
+    where: FGDowntimeRecordWhereUniqueInput
+  }
+
+  /**
+   * FGDowntimeRecord deleteMany
+   */
+  export type FGDowntimeRecordDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FGDowntimeRecords to delete
+     */
+    where?: FGDowntimeRecordWhereInput
+    /**
+     * Limit how many FGDowntimeRecords to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FGDowntimeRecord without action
+   */
+  export type FGDowntimeRecordDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGDowntimeRecord
+     */
+    select?: FGDowntimeRecordSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGDowntimeRecord
+     */
+    omit?: FGDowntimeRecordOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGDowntimeRecordInclude<ExtArgs> | null
   }
 
 
@@ -113091,10 +114425,29 @@ export namespace Prisma {
     sfgConsumptionUnit: 'sfgConsumptionUnit',
     manPower: 'manPower',
     notes: 'notes',
+    powderWastageKg: 'powderWastageKg',
+    powderWastagePercentage: 'powderWastagePercentage',
+    manPowerCount: 'manPowerCount',
+    shift: 'shift',
+    machineUtilizedHrs: 'machineUtilizedHrs',
+    machineNotUtilizedHrs: 'machineNotUtilizedHrs',
     createdAt: 'createdAt'
   };
 
   export type FGProductionMachineEntryScalarFieldEnum = (typeof FGProductionMachineEntryScalarFieldEnum)[keyof typeof FGProductionMachineEntryScalarFieldEnum]
+
+
+  export const FGDowntimeRecordScalarFieldEnum: {
+    id: 'id',
+    machineEntryId: 'machineEntryId',
+    startTime: 'startTime',
+    stopTime: 'stopTime',
+    breakdownReason: 'breakdownReason',
+    remark: 'remark',
+    createdAt: 'createdAt'
+  };
+
+  export type FGDowntimeRecordScalarFieldEnum = (typeof FGDowntimeRecordScalarFieldEnum)[keyof typeof FGDowntimeRecordScalarFieldEnum]
 
 
   export const MachineScalarFieldEnum: {
@@ -120551,9 +121904,16 @@ export namespace Prisma {
     sfgConsumptionUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
     manPower?: BoolFilter<"FGProductionMachineEntry"> | boolean
     notes?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    powderWastageKg?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    powderWastagePercentage?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    manPowerCount?: IntNullableFilter<"FGProductionMachineEntry"> | number | null
+    shift?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    machineUtilizedHrs?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    machineNotUtilizedHrs?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     createdAt?: DateTimeFilter<"FGProductionMachineEntry"> | Date | string
     productionEntry?: XOR<FGProductionEntryScalarRelationFilter, FGProductionEntryWhereInput>
     machine?: XOR<MachineScalarRelationFilter, MachineWhereInput>
+    downtimeRecords?: FGDowntimeRecordListRelationFilter
   }
 
   export type FGProductionMachineEntryOrderByWithRelationInput = {
@@ -120585,9 +121945,16 @@ export namespace Prisma {
     sfgConsumptionUnit?: SortOrderInput | SortOrder
     manPower?: SortOrder
     notes?: SortOrderInput | SortOrder
+    powderWastageKg?: SortOrderInput | SortOrder
+    powderWastagePercentage?: SortOrderInput | SortOrder
+    manPowerCount?: SortOrderInput | SortOrder
+    shift?: SortOrderInput | SortOrder
+    machineUtilizedHrs?: SortOrderInput | SortOrder
+    machineNotUtilizedHrs?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     productionEntry?: FGProductionEntryOrderByWithRelationInput
     machine?: MachineOrderByWithRelationInput
+    downtimeRecords?: FGDowntimeRecordOrderByRelationAggregateInput
   }
 
   export type FGProductionMachineEntryWhereUniqueInput = Prisma.AtLeast<{
@@ -120622,9 +121989,16 @@ export namespace Prisma {
     sfgConsumptionUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
     manPower?: BoolFilter<"FGProductionMachineEntry"> | boolean
     notes?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    powderWastageKg?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    powderWastagePercentage?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    manPowerCount?: IntNullableFilter<"FGProductionMachineEntry"> | number | null
+    shift?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    machineUtilizedHrs?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    machineNotUtilizedHrs?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     createdAt?: DateTimeFilter<"FGProductionMachineEntry"> | Date | string
     productionEntry?: XOR<FGProductionEntryScalarRelationFilter, FGProductionEntryWhereInput>
     machine?: XOR<MachineScalarRelationFilter, MachineWhereInput>
+    downtimeRecords?: FGDowntimeRecordListRelationFilter
   }, "id">
 
   export type FGProductionMachineEntryOrderByWithAggregationInput = {
@@ -120656,6 +122030,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: SortOrderInput | SortOrder
     manPower?: SortOrder
     notes?: SortOrderInput | SortOrder
+    powderWastageKg?: SortOrderInput | SortOrder
+    powderWastagePercentage?: SortOrderInput | SortOrder
+    manPowerCount?: SortOrderInput | SortOrder
+    shift?: SortOrderInput | SortOrder
+    machineUtilizedHrs?: SortOrderInput | SortOrder
+    machineNotUtilizedHrs?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: FGProductionMachineEntryCountOrderByAggregateInput
     _avg?: FGProductionMachineEntryAvgOrderByAggregateInput
@@ -120696,7 +122076,78 @@ export namespace Prisma {
     sfgConsumptionUnit?: StringNullableWithAggregatesFilter<"FGProductionMachineEntry"> | string | null
     manPower?: BoolWithAggregatesFilter<"FGProductionMachineEntry"> | boolean
     notes?: StringNullableWithAggregatesFilter<"FGProductionMachineEntry"> | string | null
+    powderWastageKg?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
+    powderWastagePercentage?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
+    manPowerCount?: IntNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
+    shift?: StringNullableWithAggregatesFilter<"FGProductionMachineEntry"> | string | null
+    machineUtilizedHrs?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
+    machineNotUtilizedHrs?: FloatNullableWithAggregatesFilter<"FGProductionMachineEntry"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"FGProductionMachineEntry"> | Date | string
+  }
+
+  export type FGDowntimeRecordWhereInput = {
+    AND?: FGDowntimeRecordWhereInput | FGDowntimeRecordWhereInput[]
+    OR?: FGDowntimeRecordWhereInput[]
+    NOT?: FGDowntimeRecordWhereInput | FGDowntimeRecordWhereInput[]
+    id?: StringFilter<"FGDowntimeRecord"> | string
+    machineEntryId?: StringFilter<"FGDowntimeRecord"> | string
+    startTime?: StringFilter<"FGDowntimeRecord"> | string
+    stopTime?: StringFilter<"FGDowntimeRecord"> | string
+    breakdownReason?: StringFilter<"FGDowntimeRecord"> | string
+    remark?: StringNullableFilter<"FGDowntimeRecord"> | string | null
+    createdAt?: DateTimeFilter<"FGDowntimeRecord"> | Date | string
+    machineEntry?: XOR<FGProductionMachineEntryScalarRelationFilter, FGProductionMachineEntryWhereInput>
+  }
+
+  export type FGDowntimeRecordOrderByWithRelationInput = {
+    id?: SortOrder
+    machineEntryId?: SortOrder
+    startTime?: SortOrder
+    stopTime?: SortOrder
+    breakdownReason?: SortOrder
+    remark?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    machineEntry?: FGProductionMachineEntryOrderByWithRelationInput
+  }
+
+  export type FGDowntimeRecordWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FGDowntimeRecordWhereInput | FGDowntimeRecordWhereInput[]
+    OR?: FGDowntimeRecordWhereInput[]
+    NOT?: FGDowntimeRecordWhereInput | FGDowntimeRecordWhereInput[]
+    machineEntryId?: StringFilter<"FGDowntimeRecord"> | string
+    startTime?: StringFilter<"FGDowntimeRecord"> | string
+    stopTime?: StringFilter<"FGDowntimeRecord"> | string
+    breakdownReason?: StringFilter<"FGDowntimeRecord"> | string
+    remark?: StringNullableFilter<"FGDowntimeRecord"> | string | null
+    createdAt?: DateTimeFilter<"FGDowntimeRecord"> | Date | string
+    machineEntry?: XOR<FGProductionMachineEntryScalarRelationFilter, FGProductionMachineEntryWhereInput>
+  }, "id">
+
+  export type FGDowntimeRecordOrderByWithAggregationInput = {
+    id?: SortOrder
+    machineEntryId?: SortOrder
+    startTime?: SortOrder
+    stopTime?: SortOrder
+    breakdownReason?: SortOrder
+    remark?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: FGDowntimeRecordCountOrderByAggregateInput
+    _max?: FGDowntimeRecordMaxOrderByAggregateInput
+    _min?: FGDowntimeRecordMinOrderByAggregateInput
+  }
+
+  export type FGDowntimeRecordScalarWhereWithAggregatesInput = {
+    AND?: FGDowntimeRecordScalarWhereWithAggregatesInput | FGDowntimeRecordScalarWhereWithAggregatesInput[]
+    OR?: FGDowntimeRecordScalarWhereWithAggregatesInput[]
+    NOT?: FGDowntimeRecordScalarWhereWithAggregatesInput | FGDowntimeRecordScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FGDowntimeRecord"> | string
+    machineEntryId?: StringWithAggregatesFilter<"FGDowntimeRecord"> | string
+    startTime?: StringWithAggregatesFilter<"FGDowntimeRecord"> | string
+    stopTime?: StringWithAggregatesFilter<"FGDowntimeRecord"> | string
+    breakdownReason?: StringWithAggregatesFilter<"FGDowntimeRecord"> | string
+    remark?: StringNullableWithAggregatesFilter<"FGDowntimeRecord"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"FGDowntimeRecord"> | Date | string
   }
 
   export type MachineWhereInput = {
@@ -128540,9 +129991,16 @@ export namespace Prisma {
     sfgConsumptionUnit?: string | null
     manPower?: boolean
     notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
     createdAt?: Date | string
     productionEntry: FGProductionEntryCreateNestedOneWithoutMachineEntriesInput
     machine: MachineCreateNestedOneWithoutProductionMachineEntriesInput
+    downtimeRecords?: FGDowntimeRecordCreateNestedManyWithoutMachineEntryInput
   }
 
   export type FGProductionMachineEntryUncheckedCreateInput = {
@@ -128574,7 +130032,14 @@ export namespace Prisma {
     sfgConsumptionUnit?: string | null
     manPower?: boolean
     notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
     createdAt?: Date | string
+    downtimeRecords?: FGDowntimeRecordUncheckedCreateNestedManyWithoutMachineEntryInput
   }
 
   export type FGProductionMachineEntryUpdateInput = {
@@ -128604,9 +130069,16 @@ export namespace Prisma {
     sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productionEntry?: FGProductionEntryUpdateOneRequiredWithoutMachineEntriesNestedInput
     machine?: MachineUpdateOneRequiredWithoutProductionMachineEntriesNestedInput
+    downtimeRecords?: FGDowntimeRecordUpdateManyWithoutMachineEntryNestedInput
   }
 
   export type FGProductionMachineEntryUncheckedUpdateInput = {
@@ -128638,7 +130110,14 @@ export namespace Prisma {
     sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    downtimeRecords?: FGDowntimeRecordUncheckedUpdateManyWithoutMachineEntryNestedInput
   }
 
   export type FGProductionMachineEntryCreateManyInput = {
@@ -128670,6 +130149,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: string | null
     manPower?: boolean
     notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
     createdAt?: Date | string
   }
 
@@ -128700,6 +130185,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -128732,6 +130223,81 @@ export namespace Prisma {
     sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGDowntimeRecordCreateInput = {
+    id?: string
+    startTime: string
+    stopTime: string
+    breakdownReason: string
+    remark?: string | null
+    createdAt?: Date | string
+    machineEntry: FGProductionMachineEntryCreateNestedOneWithoutDowntimeRecordsInput
+  }
+
+  export type FGDowntimeRecordUncheckedCreateInput = {
+    id?: string
+    machineEntryId: string
+    startTime: string
+    stopTime: string
+    breakdownReason: string
+    remark?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGDowntimeRecordUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    stopTime?: StringFieldUpdateOperationsInput | string
+    breakdownReason?: StringFieldUpdateOperationsInput | string
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    machineEntry?: FGProductionMachineEntryUpdateOneRequiredWithoutDowntimeRecordsNestedInput
+  }
+
+  export type FGDowntimeRecordUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineEntryId?: StringFieldUpdateOperationsInput | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    stopTime?: StringFieldUpdateOperationsInput | string
+    breakdownReason?: StringFieldUpdateOperationsInput | string
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGDowntimeRecordCreateManyInput = {
+    id?: string
+    machineEntryId: string
+    startTime: string
+    stopTime: string
+    breakdownReason: string
+    remark?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGDowntimeRecordUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    stopTime?: StringFieldUpdateOperationsInput | string
+    breakdownReason?: StringFieldUpdateOperationsInput | string
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGDowntimeRecordUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineEntryId?: StringFieldUpdateOperationsInput | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    stopTime?: StringFieldUpdateOperationsInput | string
+    breakdownReason?: StringFieldUpdateOperationsInput | string
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -134188,6 +135754,16 @@ export namespace Prisma {
     isNot?: MachineWhereInput
   }
 
+  export type FGDowntimeRecordListRelationFilter = {
+    every?: FGDowntimeRecordWhereInput
+    some?: FGDowntimeRecordWhereInput
+    none?: FGDowntimeRecordWhereInput
+  }
+
+  export type FGDowntimeRecordOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type FGProductionMachineEntryCountOrderByAggregateInput = {
     id?: SortOrder
     productionEntryId?: SortOrder
@@ -134217,6 +135793,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: SortOrder
     manPower?: SortOrder
     notes?: SortOrder
+    powderWastageKg?: SortOrder
+    powderWastagePercentage?: SortOrder
+    manPowerCount?: SortOrder
+    shift?: SortOrder
+    machineUtilizedHrs?: SortOrder
+    machineNotUtilizedHrs?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -134233,6 +135815,11 @@ export namespace Prisma {
     instulationCapacity?: SortOrder
     laminateConsumptionQty?: SortOrder
     sfgConsumptionQty?: SortOrder
+    powderWastageKg?: SortOrder
+    powderWastagePercentage?: SortOrder
+    manPowerCount?: SortOrder
+    machineUtilizedHrs?: SortOrder
+    machineNotUtilizedHrs?: SortOrder
   }
 
   export type FGProductionMachineEntryMaxOrderByAggregateInput = {
@@ -134264,6 +135851,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: SortOrder
     manPower?: SortOrder
     notes?: SortOrder
+    powderWastageKg?: SortOrder
+    powderWastagePercentage?: SortOrder
+    manPowerCount?: SortOrder
+    shift?: SortOrder
+    machineUtilizedHrs?: SortOrder
+    machineNotUtilizedHrs?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -134296,6 +135889,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: SortOrder
     manPower?: SortOrder
     notes?: SortOrder
+    powderWastageKg?: SortOrder
+    powderWastagePercentage?: SortOrder
+    manPowerCount?: SortOrder
+    shift?: SortOrder
+    machineUtilizedHrs?: SortOrder
+    machineNotUtilizedHrs?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -134312,6 +135911,46 @@ export namespace Prisma {
     instulationCapacity?: SortOrder
     laminateConsumptionQty?: SortOrder
     sfgConsumptionQty?: SortOrder
+    powderWastageKg?: SortOrder
+    powderWastagePercentage?: SortOrder
+    manPowerCount?: SortOrder
+    machineUtilizedHrs?: SortOrder
+    machineNotUtilizedHrs?: SortOrder
+  }
+
+  export type FGProductionMachineEntryScalarRelationFilter = {
+    is?: FGProductionMachineEntryWhereInput
+    isNot?: FGProductionMachineEntryWhereInput
+  }
+
+  export type FGDowntimeRecordCountOrderByAggregateInput = {
+    id?: SortOrder
+    machineEntryId?: SortOrder
+    startTime?: SortOrder
+    stopTime?: SortOrder
+    breakdownReason?: SortOrder
+    remark?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FGDowntimeRecordMaxOrderByAggregateInput = {
+    id?: SortOrder
+    machineEntryId?: SortOrder
+    startTime?: SortOrder
+    stopTime?: SortOrder
+    breakdownReason?: SortOrder
+    remark?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FGDowntimeRecordMinOrderByAggregateInput = {
+    id?: SortOrder
+    machineEntryId?: SortOrder
+    startTime?: SortOrder
+    stopTime?: SortOrder
+    breakdownReason?: SortOrder
+    remark?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type MachineCountOrderByAggregateInput = {
@@ -142948,6 +144587,20 @@ export namespace Prisma {
     connect?: MachineWhereUniqueInput
   }
 
+  export type FGDowntimeRecordCreateNestedManyWithoutMachineEntryInput = {
+    create?: XOR<FGDowntimeRecordCreateWithoutMachineEntryInput, FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput> | FGDowntimeRecordCreateWithoutMachineEntryInput[] | FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput[]
+    connectOrCreate?: FGDowntimeRecordCreateOrConnectWithoutMachineEntryInput | FGDowntimeRecordCreateOrConnectWithoutMachineEntryInput[]
+    createMany?: FGDowntimeRecordCreateManyMachineEntryInputEnvelope
+    connect?: FGDowntimeRecordWhereUniqueInput | FGDowntimeRecordWhereUniqueInput[]
+  }
+
+  export type FGDowntimeRecordUncheckedCreateNestedManyWithoutMachineEntryInput = {
+    create?: XOR<FGDowntimeRecordCreateWithoutMachineEntryInput, FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput> | FGDowntimeRecordCreateWithoutMachineEntryInput[] | FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput[]
+    connectOrCreate?: FGDowntimeRecordCreateOrConnectWithoutMachineEntryInput | FGDowntimeRecordCreateOrConnectWithoutMachineEntryInput[]
+    createMany?: FGDowntimeRecordCreateManyMachineEntryInputEnvelope
+    connect?: FGDowntimeRecordWhereUniqueInput | FGDowntimeRecordWhereUniqueInput[]
+  }
+
   export type FGProductionEntryUpdateOneRequiredWithoutMachineEntriesNestedInput = {
     create?: XOR<FGProductionEntryCreateWithoutMachineEntriesInput, FGProductionEntryUncheckedCreateWithoutMachineEntriesInput>
     connectOrCreate?: FGProductionEntryCreateOrConnectWithoutMachineEntriesInput
@@ -142962,6 +144615,48 @@ export namespace Prisma {
     upsert?: MachineUpsertWithoutProductionMachineEntriesInput
     connect?: MachineWhereUniqueInput
     update?: XOR<XOR<MachineUpdateToOneWithWhereWithoutProductionMachineEntriesInput, MachineUpdateWithoutProductionMachineEntriesInput>, MachineUncheckedUpdateWithoutProductionMachineEntriesInput>
+  }
+
+  export type FGDowntimeRecordUpdateManyWithoutMachineEntryNestedInput = {
+    create?: XOR<FGDowntimeRecordCreateWithoutMachineEntryInput, FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput> | FGDowntimeRecordCreateWithoutMachineEntryInput[] | FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput[]
+    connectOrCreate?: FGDowntimeRecordCreateOrConnectWithoutMachineEntryInput | FGDowntimeRecordCreateOrConnectWithoutMachineEntryInput[]
+    upsert?: FGDowntimeRecordUpsertWithWhereUniqueWithoutMachineEntryInput | FGDowntimeRecordUpsertWithWhereUniqueWithoutMachineEntryInput[]
+    createMany?: FGDowntimeRecordCreateManyMachineEntryInputEnvelope
+    set?: FGDowntimeRecordWhereUniqueInput | FGDowntimeRecordWhereUniqueInput[]
+    disconnect?: FGDowntimeRecordWhereUniqueInput | FGDowntimeRecordWhereUniqueInput[]
+    delete?: FGDowntimeRecordWhereUniqueInput | FGDowntimeRecordWhereUniqueInput[]
+    connect?: FGDowntimeRecordWhereUniqueInput | FGDowntimeRecordWhereUniqueInput[]
+    update?: FGDowntimeRecordUpdateWithWhereUniqueWithoutMachineEntryInput | FGDowntimeRecordUpdateWithWhereUniqueWithoutMachineEntryInput[]
+    updateMany?: FGDowntimeRecordUpdateManyWithWhereWithoutMachineEntryInput | FGDowntimeRecordUpdateManyWithWhereWithoutMachineEntryInput[]
+    deleteMany?: FGDowntimeRecordScalarWhereInput | FGDowntimeRecordScalarWhereInput[]
+  }
+
+  export type FGDowntimeRecordUncheckedUpdateManyWithoutMachineEntryNestedInput = {
+    create?: XOR<FGDowntimeRecordCreateWithoutMachineEntryInput, FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput> | FGDowntimeRecordCreateWithoutMachineEntryInput[] | FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput[]
+    connectOrCreate?: FGDowntimeRecordCreateOrConnectWithoutMachineEntryInput | FGDowntimeRecordCreateOrConnectWithoutMachineEntryInput[]
+    upsert?: FGDowntimeRecordUpsertWithWhereUniqueWithoutMachineEntryInput | FGDowntimeRecordUpsertWithWhereUniqueWithoutMachineEntryInput[]
+    createMany?: FGDowntimeRecordCreateManyMachineEntryInputEnvelope
+    set?: FGDowntimeRecordWhereUniqueInput | FGDowntimeRecordWhereUniqueInput[]
+    disconnect?: FGDowntimeRecordWhereUniqueInput | FGDowntimeRecordWhereUniqueInput[]
+    delete?: FGDowntimeRecordWhereUniqueInput | FGDowntimeRecordWhereUniqueInput[]
+    connect?: FGDowntimeRecordWhereUniqueInput | FGDowntimeRecordWhereUniqueInput[]
+    update?: FGDowntimeRecordUpdateWithWhereUniqueWithoutMachineEntryInput | FGDowntimeRecordUpdateWithWhereUniqueWithoutMachineEntryInput[]
+    updateMany?: FGDowntimeRecordUpdateManyWithWhereWithoutMachineEntryInput | FGDowntimeRecordUpdateManyWithWhereWithoutMachineEntryInput[]
+    deleteMany?: FGDowntimeRecordScalarWhereInput | FGDowntimeRecordScalarWhereInput[]
+  }
+
+  export type FGProductionMachineEntryCreateNestedOneWithoutDowntimeRecordsInput = {
+    create?: XOR<FGProductionMachineEntryCreateWithoutDowntimeRecordsInput, FGProductionMachineEntryUncheckedCreateWithoutDowntimeRecordsInput>
+    connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutDowntimeRecordsInput
+    connect?: FGProductionMachineEntryWhereUniqueInput
+  }
+
+  export type FGProductionMachineEntryUpdateOneRequiredWithoutDowntimeRecordsNestedInput = {
+    create?: XOR<FGProductionMachineEntryCreateWithoutDowntimeRecordsInput, FGProductionMachineEntryUncheckedCreateWithoutDowntimeRecordsInput>
+    connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutDowntimeRecordsInput
+    upsert?: FGProductionMachineEntryUpsertWithoutDowntimeRecordsInput
+    connect?: FGProductionMachineEntryWhereUniqueInput
+    update?: XOR<XOR<FGProductionMachineEntryUpdateToOneWithWhereWithoutDowntimeRecordsInput, FGProductionMachineEntryUpdateWithoutDowntimeRecordsInput>, FGProductionMachineEntryUncheckedUpdateWithoutDowntimeRecordsInput>
   }
 
   export type FGProductionMachineEntryCreateNestedManyWithoutMachineInput = {
@@ -168662,8 +170357,15 @@ export namespace Prisma {
     sfgConsumptionUnit?: string | null
     manPower?: boolean
     notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
     createdAt?: Date | string
     machine: MachineCreateNestedOneWithoutProductionMachineEntriesInput
+    downtimeRecords?: FGDowntimeRecordCreateNestedManyWithoutMachineEntryInput
   }
 
   export type FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput = {
@@ -168694,7 +170396,14 @@ export namespace Prisma {
     sfgConsumptionUnit?: string | null
     manPower?: boolean
     notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
     createdAt?: Date | string
+    downtimeRecords?: FGDowntimeRecordUncheckedCreateNestedManyWithoutMachineEntryInput
   }
 
   export type FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput = {
@@ -168916,6 +170625,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
     manPower?: BoolFilter<"FGProductionMachineEntry"> | boolean
     notes?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    powderWastageKg?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    powderWastagePercentage?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    manPowerCount?: IntNullableFilter<"FGProductionMachineEntry"> | number | null
+    shift?: StringNullableFilter<"FGProductionMachineEntry"> | string | null
+    machineUtilizedHrs?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
+    machineNotUtilizedHrs?: FloatNullableFilter<"FGProductionMachineEntry"> | number | null
     createdAt?: DateTimeFilter<"FGProductionMachineEntry"> | Date | string
   }
 
@@ -169077,6 +170792,34 @@ export namespace Prisma {
     create: XOR<MachineCreateWithoutProductionMachineEntriesInput, MachineUncheckedCreateWithoutProductionMachineEntriesInput>
   }
 
+  export type FGDowntimeRecordCreateWithoutMachineEntryInput = {
+    id?: string
+    startTime: string
+    stopTime: string
+    breakdownReason: string
+    remark?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput = {
+    id?: string
+    startTime: string
+    stopTime: string
+    breakdownReason: string
+    remark?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGDowntimeRecordCreateOrConnectWithoutMachineEntryInput = {
+    where: FGDowntimeRecordWhereUniqueInput
+    create: XOR<FGDowntimeRecordCreateWithoutMachineEntryInput, FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput>
+  }
+
+  export type FGDowntimeRecordCreateManyMachineEntryInputEnvelope = {
+    data: FGDowntimeRecordCreateManyMachineEntryInput | FGDowntimeRecordCreateManyMachineEntryInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FGProductionEntryUpsertWithoutMachineEntriesInput = {
     update: XOR<FGProductionEntryUpdateWithoutMachineEntriesInput, FGProductionEntryUncheckedUpdateWithoutMachineEntriesInput>
     create: XOR<FGProductionEntryCreateWithoutMachineEntriesInput, FGProductionEntryUncheckedCreateWithoutMachineEntriesInput>
@@ -169171,6 +170914,203 @@ export namespace Prisma {
     productionEntries?: FGProductionEntryUncheckedUpdateManyWithoutMachineNestedInput
   }
 
+  export type FGDowntimeRecordUpsertWithWhereUniqueWithoutMachineEntryInput = {
+    where: FGDowntimeRecordWhereUniqueInput
+    update: XOR<FGDowntimeRecordUpdateWithoutMachineEntryInput, FGDowntimeRecordUncheckedUpdateWithoutMachineEntryInput>
+    create: XOR<FGDowntimeRecordCreateWithoutMachineEntryInput, FGDowntimeRecordUncheckedCreateWithoutMachineEntryInput>
+  }
+
+  export type FGDowntimeRecordUpdateWithWhereUniqueWithoutMachineEntryInput = {
+    where: FGDowntimeRecordWhereUniqueInput
+    data: XOR<FGDowntimeRecordUpdateWithoutMachineEntryInput, FGDowntimeRecordUncheckedUpdateWithoutMachineEntryInput>
+  }
+
+  export type FGDowntimeRecordUpdateManyWithWhereWithoutMachineEntryInput = {
+    where: FGDowntimeRecordScalarWhereInput
+    data: XOR<FGDowntimeRecordUpdateManyMutationInput, FGDowntimeRecordUncheckedUpdateManyWithoutMachineEntryInput>
+  }
+
+  export type FGDowntimeRecordScalarWhereInput = {
+    AND?: FGDowntimeRecordScalarWhereInput | FGDowntimeRecordScalarWhereInput[]
+    OR?: FGDowntimeRecordScalarWhereInput[]
+    NOT?: FGDowntimeRecordScalarWhereInput | FGDowntimeRecordScalarWhereInput[]
+    id?: StringFilter<"FGDowntimeRecord"> | string
+    machineEntryId?: StringFilter<"FGDowntimeRecord"> | string
+    startTime?: StringFilter<"FGDowntimeRecord"> | string
+    stopTime?: StringFilter<"FGDowntimeRecord"> | string
+    breakdownReason?: StringFilter<"FGDowntimeRecord"> | string
+    remark?: StringNullableFilter<"FGDowntimeRecord"> | string | null
+    createdAt?: DateTimeFilter<"FGDowntimeRecord"> | Date | string
+  }
+
+  export type FGProductionMachineEntryCreateWithoutDowntimeRecordsInput = {
+    id?: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    machineSpeed?: string | null
+    todayAchieve?: number | null
+    laminateConsumption?: number | null
+    sfgConsumption?: number | null
+    laminateWastageKg?: number | null
+    laminateWastagePercentage?: number | null
+    noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
+    notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
+    createdAt?: Date | string
+    productionEntry: FGProductionEntryCreateNestedOneWithoutMachineEntriesInput
+    machine: MachineCreateNestedOneWithoutProductionMachineEntriesInput
+  }
+
+  export type FGProductionMachineEntryUncheckedCreateWithoutDowntimeRecordsInput = {
+    id?: string
+    productionEntryId: string
+    machineId: string
+    machineName: string
+    allocatedQty?: number
+    allocatedUnit?: string
+    actualFgQty?: number
+    actualFgUnit?: string
+    actualByproduct?: number
+    actualByproductUnit?: string
+    actualScrap?: number
+    actualScrapUnit?: string
+    machineSpeed?: string | null
+    todayAchieve?: number | null
+    laminateConsumption?: number | null
+    sfgConsumption?: number | null
+    laminateWastageKg?: number | null
+    laminateWastagePercentage?: number | null
+    noManPower?: boolean
+    productName?: string | null
+    instulationCapacity?: number | null
+    instulationCapacityUnit?: string | null
+    laminateConsumptionQty?: number | null
+    laminateConsumptionUnit?: string | null
+    sfgConsumptionQty?: number | null
+    sfgConsumptionUnit?: string | null
+    manPower?: boolean
+    notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
+    createdAt?: Date | string
+  }
+
+  export type FGProductionMachineEntryCreateOrConnectWithoutDowntimeRecordsInput = {
+    where: FGProductionMachineEntryWhereUniqueInput
+    create: XOR<FGProductionMachineEntryCreateWithoutDowntimeRecordsInput, FGProductionMachineEntryUncheckedCreateWithoutDowntimeRecordsInput>
+  }
+
+  export type FGProductionMachineEntryUpsertWithoutDowntimeRecordsInput = {
+    update: XOR<FGProductionMachineEntryUpdateWithoutDowntimeRecordsInput, FGProductionMachineEntryUncheckedUpdateWithoutDowntimeRecordsInput>
+    create: XOR<FGProductionMachineEntryCreateWithoutDowntimeRecordsInput, FGProductionMachineEntryUncheckedCreateWithoutDowntimeRecordsInput>
+    where?: FGProductionMachineEntryWhereInput
+  }
+
+  export type FGProductionMachineEntryUpdateToOneWithWhereWithoutDowntimeRecordsInput = {
+    where?: FGProductionMachineEntryWhereInput
+    data: XOR<FGProductionMachineEntryUpdateWithoutDowntimeRecordsInput, FGProductionMachineEntryUncheckedUpdateWithoutDowntimeRecordsInput>
+  }
+
+  export type FGProductionMachineEntryUpdateWithoutDowntimeRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
+    todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionEntry?: FGProductionEntryUpdateOneRequiredWithoutMachineEntriesNestedInput
+    machine?: MachineUpdateOneRequiredWithoutProductionMachineEntriesNestedInput
+  }
+
+  export type FGProductionMachineEntryUncheckedUpdateWithoutDowntimeRecordsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    productionEntryId?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    machineName?: StringFieldUpdateOperationsInput | string
+    allocatedQty?: FloatFieldUpdateOperationsInput | number
+    allocatedUnit?: StringFieldUpdateOperationsInput | string
+    actualFgQty?: FloatFieldUpdateOperationsInput | number
+    actualFgUnit?: StringFieldUpdateOperationsInput | string
+    actualByproduct?: FloatFieldUpdateOperationsInput | number
+    actualByproductUnit?: StringFieldUpdateOperationsInput | string
+    actualScrap?: FloatFieldUpdateOperationsInput | number
+    actualScrapUnit?: StringFieldUpdateOperationsInput | string
+    machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
+    todayAchieve?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumption?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    noManPower?: BoolFieldUpdateOperationsInput | boolean
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    instulationCapacity?: NullableFloatFieldUpdateOperationsInput | number | null
+    instulationCapacityUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    laminateConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    laminateConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    sfgConsumptionQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
+    manPower?: BoolFieldUpdateOperationsInput | boolean
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FGProductionMachineEntryCreateWithoutMachineInput = {
     id?: string
     machineName: string
@@ -169198,8 +171138,15 @@ export namespace Prisma {
     sfgConsumptionUnit?: string | null
     manPower?: boolean
     notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
     createdAt?: Date | string
     productionEntry: FGProductionEntryCreateNestedOneWithoutMachineEntriesInput
+    downtimeRecords?: FGDowntimeRecordCreateNestedManyWithoutMachineEntryInput
   }
 
   export type FGProductionMachineEntryUncheckedCreateWithoutMachineInput = {
@@ -169230,7 +171177,14 @@ export namespace Prisma {
     sfgConsumptionUnit?: string | null
     manPower?: boolean
     notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
     createdAt?: Date | string
+    downtimeRecords?: FGDowntimeRecordUncheckedCreateNestedManyWithoutMachineEntryInput
   }
 
   export type FGProductionMachineEntryCreateOrConnectWithoutMachineInput = {
@@ -177739,6 +179693,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: string | null
     manPower?: boolean
     notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
     createdAt?: Date | string
   }
 
@@ -177790,8 +179750,15 @@ export namespace Prisma {
     sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     machine?: MachineUpdateOneRequiredWithoutProductionMachineEntriesNestedInput
+    downtimeRecords?: FGDowntimeRecordUpdateManyWithoutMachineEntryNestedInput
   }
 
   export type FGProductionMachineEntryUncheckedUpdateWithoutProductionEntryInput = {
@@ -177822,7 +179789,14 @@ export namespace Prisma {
     sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    downtimeRecords?: FGDowntimeRecordUncheckedUpdateManyWithoutMachineEntryNestedInput
   }
 
   export type FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryInput = {
@@ -177853,6 +179827,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -177919,6 +179899,42 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FGDowntimeRecordCreateManyMachineEntryInput = {
+    id?: string
+    startTime: string
+    stopTime: string
+    breakdownReason: string
+    remark?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FGDowntimeRecordUpdateWithoutMachineEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    stopTime?: StringFieldUpdateOperationsInput | string
+    breakdownReason?: StringFieldUpdateOperationsInput | string
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGDowntimeRecordUncheckedUpdateWithoutMachineEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    stopTime?: StringFieldUpdateOperationsInput | string
+    breakdownReason?: StringFieldUpdateOperationsInput | string
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGDowntimeRecordUncheckedUpdateManyWithoutMachineEntryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startTime?: StringFieldUpdateOperationsInput | string
+    stopTime?: StringFieldUpdateOperationsInput | string
+    breakdownReason?: StringFieldUpdateOperationsInput | string
+    remark?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FGProductionMachineEntryCreateManyMachineInput = {
     id?: string
     productionEntryId: string
@@ -177947,6 +179963,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: string | null
     manPower?: boolean
     notes?: string | null
+    powderWastageKg?: number | null
+    powderWastagePercentage?: number | null
+    manPowerCount?: number | null
+    shift?: string | null
+    machineUtilizedHrs?: number | null
+    machineNotUtilizedHrs?: number | null
     createdAt?: Date | string
   }
 
@@ -177997,8 +180019,15 @@ export namespace Prisma {
     sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productionEntry?: FGProductionEntryUpdateOneRequiredWithoutMachineEntriesNestedInput
+    downtimeRecords?: FGDowntimeRecordUpdateManyWithoutMachineEntryNestedInput
   }
 
   export type FGProductionMachineEntryUncheckedUpdateWithoutMachineInput = {
@@ -178029,7 +180058,14 @@ export namespace Prisma {
     sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    downtimeRecords?: FGDowntimeRecordUncheckedUpdateManyWithoutMachineEntryNestedInput
   }
 
   export type FGProductionMachineEntryUncheckedUpdateManyWithoutMachineInput = {
@@ -178060,6 +180096,12 @@ export namespace Prisma {
     sfgConsumptionUnit?: NullableStringFieldUpdateOperationsInput | string | null
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    powderWastageKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    powderWastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
+    manPowerCount?: NullableIntFieldUpdateOperationsInput | number | null
+    shift?: NullableStringFieldUpdateOperationsInput | string | null
+    machineUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
+    machineNotUtilizedHrs?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

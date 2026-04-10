@@ -1568,7 +1568,7 @@ model FGProductionMachineEntry {
   sfgConsumption            Float?
   laminateWastageKg         Float?
   laminateWastagePercentage Float?
-  noManPower                Boolean  @default(false)
+  noManPower                Boolean @default(false)
   // Enhanced machine assignment fields
   productName               String?
   instulationCapacity       Float?
@@ -1577,12 +1577,33 @@ model FGProductionMachineEntry {
   laminateConsumptionUnit   String?
   sfgConsumptionQty         Float?
   sfgConsumptionUnit        String?
-  manPower                  Boolean  @default(true)
+  manPower                  Boolean @default(true)
   notes                     String?
-  createdAt                 DateTime @default(now())
+  // Supervisor output fields
+  powderWastageKg           Float?
+  powderWastagePercentage   Float?
+  manPowerCount             Int?
+  shift                     String? // DAY, NOON, NIGHT
+  machineUtilizedHrs        Float?
+  machineNotUtilizedHrs     Float?
 
-  productionEntry FGProductionEntry @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
-  machine         Machine           @relation(fields: [machineId], references: [id])
+  createdAt DateTime @default(now())
+
+  productionEntry FGProductionEntry  @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
+  machine         Machine            @relation(fields: [machineId], references: [id])
+  downtimeRecords FGDowntimeRecord[]
+}
+
+model FGDowntimeRecord {
+  id              String   @id @default(uuid())
+  machineEntryId  String
+  startTime       String
+  stopTime        String
+  breakdownReason String
+  remark          String?
+  createdAt       DateTime @default(now())
+
+  machineEntry FGProductionMachineEntry @relation(fields: [machineEntryId], references: [id], onDelete: Cascade)
 }
 
 // ==================== MACHINE MASTER ====================

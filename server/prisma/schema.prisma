@@ -1580,10 +1580,31 @@ model FGProductionMachineEntry {
   sfgConsumptionUnit     String?
   manPower               Boolean  @default(true)
   notes             String?
+  // Supervisor output fields
+  powderWastageKg          Float?
+  powderWastagePercentage  Float?
+  manPowerCount            Int?
+  shift                    String?   // DAY, NOON, NIGHT
+  machineUtilizedHrs       Float?
+  machineNotUtilizedHrs    Float?
+
   createdAt         DateTime @default(now())
 
   productionEntry FGProductionEntry @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
   machine         Machine           @relation(fields: [machineId], references: [id])
+  downtimeRecords FGDowntimeRecord[]
+}
+
+model FGDowntimeRecord {
+  id                    String   @id @default(uuid())
+  machineEntryId        String
+  startTime             String
+  stopTime              String
+  breakdownReason       String
+  remark                String?
+  createdAt             DateTime @default(now())
+
+  machineEntry FGProductionMachineEntry @relation(fields: [machineEntryId], references: [id], onDelete: Cascade)
 }
 
 // ==================== MACHINE MASTER ====================

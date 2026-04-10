@@ -90,7 +90,10 @@ const OutboundToFGPage: React.FC = () => {
         api.get(API_ROUTES.RAW.GET_FG_PRODUCTION_ENTRIES),
         api.get(API_ROUTES.RAW.GET_FG_VERIFICATIONS),
       ]);
-      const allCompleted = (entriesRes.data?.data || []).filter((e: any) => e.status === 'COMPLETED');
+      // Only show COMPLETED entries that have passed quality check and not yet dispatched
+      const allCompleted = (entriesRes.data?.data || []).filter(
+        (e: any) => e.status === 'COMPLETED' && e.qualityReport
+      );
       const dispatchedEntryIds = new Set(
         (verificationsRes.data?.data || []).map((v: any) => v.productionEntryId)
       );

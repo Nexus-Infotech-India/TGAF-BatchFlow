@@ -235,7 +235,7 @@ export class FGProductionController {
         include: {
           machine: true,
           machineEntries: {
-            include: { machine: true },
+            include: { machine: true, downtimeRecords: true },
           },
           fgBatch: true,
           qualityReport: { include: { parameters: true } },
@@ -309,10 +309,7 @@ export class FGProductionController {
         return;
       }
 
-      if (!Array.isArray(qualityParameters) || qualityParameters.length === 0) {
-        res.status(400).json({ error: 'Quality parameters are strictly required before completing production.' });
-        return;
-      }
+      // Quality parameters are now optional — submitted separately via FG Quality Check page
 
       // Resolve acting user before the transaction so FK constraints don't break
       const tokenUserId = (req as any).user?.id;
@@ -366,6 +363,13 @@ export class FGProductionController {
           totalActualScrap += (actualScrap * factor(actualScrapUnit)) / fOut;
           totalAchievedBoxes += todayAchieve || 0;
 
+          const powderWastageKg = input.powderWastageKg != null ? Number(input.powderWastageKg) : null;
+          const powderWastagePercentage = input.powderWastagePercentage != null ? Number(input.powderWastagePercentage) : null;
+          const manPowerCount = input.manPowerCount != null ? Number(input.manPowerCount) : null;
+          const shift = input.shift || null;
+          const machineUtilizedHrs = input.machineUtilizedHrs != null ? Number(input.machineUtilizedHrs) : null;
+          const machineNotUtilizedHrs = input.machineNotUtilizedHrs != null ? Number(input.machineNotUtilizedHrs) : null;
+
           await tx.fGProductionMachineEntry.update({
             where: { id: input.id },
             data: {
@@ -382,8 +386,27 @@ export class FGProductionController {
               laminateWastageKg,
               laminateWastagePercentage,
               noManPower,
+              powderWastageKg,
+              powderWastagePercentage,
+              manPowerCount,
+              shift,
+              machineUtilizedHrs,
+              machineNotUtilizedHrs,
             },
           });
+
+          // Create downtime records if machine has not-utilized hours
+          if (Array.isArray(input.downtimeRecords) && input.downtimeRecords.length > 0) {
+            await tx.fGDowntimeRecord.createMany({
+              data: input.downtimeRecords.map((dt: any) => ({
+                machineEntryId: input.id,
+                startTime: dt.startTime || '',
+                stopTime: dt.stopTime || '',
+                breakdownReason: dt.breakdownReason || '',
+                remark: dt.remark || null,
+              })),
+            });
+          }
         }
 
         // Validate total against batch target
@@ -407,38 +430,39 @@ export class FGProductionController {
           data: { status: 'PRODUCTION_COMPLETED' },
         });
 
-        // Add quality report since we strictly required it above
-        // Generate report number
-        const today = new Date();
-        const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
-        const prefix = `FGQ-${dateStr}-`;
-        const lastReport = await tx.fGQualityReport.findFirst({
-          where: { reportNumber: { startsWith: prefix } },
-          orderBy: { reportNumber: 'desc' },
-        });
-        let seq = 1;
-        if (lastReport?.reportNumber) {
-          const lastSeq = parseInt(lastReport.reportNumber.replace(prefix, ''), 10);
-          if (!isNaN(lastSeq)) seq = lastSeq + 1;
-        }
-        const reportNumber = `${prefix}${String(seq).padStart(4, '0')}`;
+        // Create quality report only if qualityParameters were provided (legacy flow)
+        if (Array.isArray(qualityParameters) && qualityParameters.length > 0) {
+          const today = new Date();
+          const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
+          const prefix = `FGQ-${dateStr}-`;
+          const lastReport = await tx.fGQualityReport.findFirst({
+            where: { reportNumber: { startsWith: prefix } },
+            orderBy: { reportNumber: 'desc' },
+          });
+          let seq = 1;
+          if (lastReport?.reportNumber) {
+            const lastSeq = parseInt(lastReport.reportNumber.replace(prefix, ''), 10);
+            if (!isNaN(lastSeq)) seq = lastSeq + 1;
+          }
+          const reportNumber = `${prefix}${String(seq).padStart(4, '0')}`;
 
-        await tx.fGQualityReport.create({
-          data: {
-            reportNumber,
-            productionEntryId: id,
-            fgBatchId: existingEntry.fgBatchId,
-            productName: existingEntry.fgProductName,
-            createdById: actingUserId,
-            parameters: {
-              create: qualityParameters.map((p: any) => ({
-                parameter: p.parameter,
-                standard: p.standard,
-                result: p.result || '-',
-              })),
+          await tx.fGQualityReport.create({
+            data: {
+              reportNumber,
+              productionEntryId: id,
+              fgBatchId: existingEntry.fgBatchId,
+              productName: existingEntry.fgProductName,
+              createdById: actingUserId,
+              parameters: {
+                create: qualityParameters.map((p: any) => ({
+                  parameter: p.parameter,
+                  standard: p.standard,
+                  result: p.result || '-',
+                })),
+              },
             },
-          },
-        });
+          });
+        }
 
         await tx.transactionLog.create({
           data: {

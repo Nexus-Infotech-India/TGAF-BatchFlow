@@ -27,7 +27,8 @@ import {
   BoxSelect,
   ClipboardCheck,
   Settings2,
-  ShieldCheck
+  ShieldCheck,
+  Beaker
 } from "lucide-react";
 import { usePermissions } from "../../hooks/permission";
 
@@ -316,6 +317,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           path: "/packaging/production-output-entry",
           name: "Production Output Entry",
           icon: <ClipboardCheck className="sidebar-icon" size={18} />,
+          permissionKey: "manage_fg_production"
+        },
+        {
+          path: "/packaging/fg-quality-check",
+          name: "FG Quality Check",
+          icon: <Beaker className="sidebar-icon" size={18} />,
           permissionKey: "manage_fg_production"
         },
         {

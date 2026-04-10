@@ -275,12 +275,24 @@ const NewFGProductionEntryPage: React.FC = () => {
     return null;
   };
 
-  /* ─── Helper: Get SFG consumption info ─── */
+  /* ─── Helper: Get SFG consumption info — only transfers with available qty > 0 ─── */
   const getSfgConsumptionInfo = (): { transferNumbers: string[] } => {
     const transferNumbers: string[] = [];
-    for (const transfer of sfgTransfers) {
-      if (!transferNumbers.includes(transfer.transferNumber)) {
-        transferNumbers.push(transfer.transferNumber);
+    // Primary: use BOM-computed available batches (has accurate remainingQuantity)
+    for (const line of consumptionLines) {
+      if (!line?.isSFG) continue;
+      for (const batch of (line.availableSfgBatches || [])) {
+        if (batch?.transferNumber && (batch.remainingQuantity || 0) > 0 && !transferNumbers.includes(batch.transferNumber)) {
+          transferNumbers.push(batch.transferNumber);
+        }
+      }
+    }
+    // Fallback: if no consumption lines loaded yet, use raw transfers
+    if (transferNumbers.length === 0 && consumptionLines.length === 0) {
+      for (const transfer of sfgTransfers) {
+        if (!transferNumbers.includes(transfer.transferNumber)) {
+          transferNumbers.push(transfer.transferNumber);
+        }
       }
     }
     return { transferNumbers };
@@ -309,9 +321,21 @@ const NewFGProductionEntryPage: React.FC = () => {
   /* ─── Packaging Transfer helpers ─── */
   const getPkgConsumptionInfo = (): { transferNumbers: string[] } => {
     const transferNumbers: string[] = [];
-    for (const transfer of pkgTransfers) {
-      if (!transferNumbers.includes(transfer.transferNumber)) {
-        transferNumbers.push(transfer.transferNumber);
+    // Primary: use BOM-computed available batches (has accurate remainingQuantity)
+    for (const line of consumptionLines) {
+      if (!line?.isPackaging) continue;
+      for (const batch of (line.availableSfgBatches || [])) {
+        if (batch?.transferNumber && (batch.remainingQuantity || 0) > 0 && !transferNumbers.includes(batch.transferNumber)) {
+          transferNumbers.push(batch.transferNumber);
+        }
+      }
+    }
+    // Fallback: if no consumption lines loaded yet, use raw transfers
+    if (transferNumbers.length === 0 && consumptionLines.length === 0) {
+      for (const transfer of pkgTransfers) {
+        if (!transferNumbers.includes(transfer.transferNumber)) {
+          transferNumbers.push(transfer.transferNumber);
+        }
       }
     }
     return { transferNumbers };
@@ -894,10 +918,13 @@ const NewFGProductionEntryPage: React.FC = () => {
                       <Truck size={14} /> SFG Consumption
                     </label>
                     <Select
-                      placeholder="Select SFG Batch "
+                      placeholder="Select SFG Batch"
                       value={sfgTransferNumber || undefined}
                       onChange={v => setSfgTransferNumber(v)}
-                      options={getSfgConsumptionInfo().transferNumbers.map(t => ({ value: t, label: t }))}
+                      options={getSfgConsumptionInfo().transferNumbers.map(t => {
+                        const avail = getSfgTransferAvailable(t);
+                        return { value: t, label: `${t} — ${avail.qty} ${avail.unit} available` };
+                      })}
                       className="w-full text-sm [&_.ant-select-selector]:rounded-sm font-semibold"
                       allowClear
                     />
@@ -930,7 +957,7 @@ const NewFGProductionEntryPage: React.FC = () => {
                       onChange={v => setPkgTransferNumber(v)}
                       options={getPkgConsumptionInfo().transferNumbers.map(t => {
                         const info = getPkgTransferAvailable(t);
-                        return { value: t, label: `${t} — ${info.productName || 'Packaging'}` };
+                        return { value: t, label: `${t} — ${info.productName || 'Packaging'} (${info.qty} ${info.unit})` };
                       })}
                       className="w-full text-sm [&_.ant-select-selector]:rounded-sm font-semibold"
                       allowClear

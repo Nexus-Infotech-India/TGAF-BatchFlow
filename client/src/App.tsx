@@ -48,6 +48,7 @@ import ReceiveMaterialsPage from './components/pages/packaging/ReceiveMaterialsP
 import FGProductionPage from './components/pages/packaging/FGProductionPage';
 import NewFGProductionEntryPage from './components/pages/packaging/NewFGProductionEntryPage';
 import ProductionOutputEntryPage from './components/pages/packaging/ProductionOutputEntryPage';
+import FGQualityCheckPage from './components/pages/packaging/FGQualityCheckPage';
 import OutboundToFGPage from './components/pages/packaging/OutboundToFGPage';
 import FGVerificationPage from './components/pages/packaging/FGVerificationPage';
 import RawDashboard from './components/pages/Dashboard/rawDashboard';
@@ -115,6 +116,7 @@ const App = () => {
     { path: '/packaging/fg-production', name: 'FG Production Entry', description: 'Machine-wise FG production with BOM-based input tracking', permissionKey: 'manage_fg_production' },
     { path: '/packaging/new-production-entry', name: 'New Production Entry', description: 'Create new machine-wise FG production entry', permissionKey: 'manage_fg_production' },
     { path: '/packaging/production-output-entry', name: 'Production Output Entry', description: 'Record actual machine-wise FG output', permissionKey: 'manage_fg_production' },
+    { path: '/packaging/fg-quality-check', name: 'FG Quality Check', description: 'Perform quality checks on completed FG production', permissionKey: 'manage_fg_production' },
     { path: '/packaging/outbound-fg', name: 'Outbound to FG WH', description: 'Dispatch FG from machine locations to FG warehouse', permissionKey: 'manage_pkg_outbound_fg' },
     { path: '/packaging/fg-verification', name: 'FG Verification', description: 'Accept or reject FG and scrap at FG warehouse', permissionKey: 'manage_fg_verification' },
     { path: '/masters/bom/create', name: 'Bill of Material', description: 'Create and manage Bill of Materials', permissionKey: 'manage_bom' },
@@ -1166,6 +1168,24 @@ const App = () => {
                   }
                   name="Production Output Entry"
                   description="Record actual machine-wise FG output"
+                  permissionKey="manage_fg_production"
+                />
+              }
+            />
+
+            <Route
+              path="/packaging/fg-quality-check"
+              element={
+                <PermissionedRoute
+                  path="/packaging/fg-quality-check"
+                  element={
+                    <SecureRoute
+                      element={<FGQualityCheckPage />}
+                      permissionKey="manage_fg_production"
+                    />
+                  }
+                  name="FG Quality Check"
+                  description="Perform quality checks on completed FG production"
                   permissionKey="manage_fg_production"
                 />
               }

@@ -1148,6 +1148,22 @@ exports.Prisma.FGProductionMachineEntryScalarFieldEnum = {
   sfgConsumptionUnit: 'sfgConsumptionUnit',
   manPower: 'manPower',
   notes: 'notes',
+  powderWastageKg: 'powderWastageKg',
+  powderWastagePercentage: 'powderWastagePercentage',
+  manPowerCount: 'manPowerCount',
+  shift: 'shift',
+  machineUtilizedHrs: 'machineUtilizedHrs',
+  machineNotUtilizedHrs: 'machineNotUtilizedHrs',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FGDowntimeRecordScalarFieldEnum = {
+  id: 'id',
+  machineEntryId: 'machineEntryId',
+  startTime: 'startTime',
+  stopTime: 'stopTime',
+  breakdownReason: 'breakdownReason',
+  remark: 'remark',
   createdAt: 'createdAt'
 };
 
@@ -1496,6 +1512,7 @@ exports.Prisma.ModelName = {
   FGBatchConsumption: 'FGBatchConsumption',
   FGProductionEntry: 'FGProductionEntry',
   FGProductionMachineEntry: 'FGProductionMachineEntry',
+  FGDowntimeRecord: 'FGDowntimeRecord',
   Machine: 'Machine',
   FGProductionVerification: 'FGProductionVerification',
   FGQualityReport: 'FGQualityReport',
