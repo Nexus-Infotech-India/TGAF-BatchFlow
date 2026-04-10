@@ -14,6 +14,7 @@ router.get('/me', authMiddleware_1.authenticate, auth_controller_1.default.getCu
 router.put('/change-password', authMiddleware_1.authenticate, auth_controller_1.default.changePassword); // Change password
 // User management routes
 router.get('/users', authMiddleware_1.authenticate, auth_controller_1.default.getAllUsers); // Get all users
+router.put('/users/:id', authMiddleware_1.authenticate, auth_controller_1.default.updateUser); // Update a user
 // Role management routes
 router.post('/roles', authMiddleware_1.authenticate, auth_controller_1.default.createRole); // Create a new role
 router.get('/roles', authMiddleware_1.authenticate, auth_controller_1.default.getRoles); // Get all roles

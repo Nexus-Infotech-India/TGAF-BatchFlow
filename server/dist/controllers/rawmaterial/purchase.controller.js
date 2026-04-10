@@ -4,6 +4,61 @@ exports.PurchaseOrderController = void 0;
 const prisma_1 = require("../../generated/prisma");
 const prisma = new prisma_1.PrismaClient();
 class PurchaseOrderController {
+    static async resolveWarehouseIdFromLocationId(locationId) {
+        const location = await prisma.location.findUnique({ where: { id: locationId } });
+        if (!location)
+            return null;
+        const locationMarker = `LOC:${location.id}`;
+        const existingWarehouse = await prisma.warehouse.findFirst({
+            where: { location: locationMarker },
+            select: { id: true },
+        });
+        if (existingWarehouse)
+            return existingWarehouse.id;
+        const createdWarehouse = await prisma.warehouse.create({
+            data: {
+                name: location.name,
+                location: locationMarker,
+            },
+            select: { id: true },
+        });
+        return createdWarehouse.id;
+    }
+    static async resolveLocationIdFromInput(locationId, warehouseId) {
+        if (locationId) {
+            const location = await prisma.location.findUnique({ where: { id: locationId } });
+            return location && location.enabled ? location.id : null;
+        }
+        if (!warehouseId)
+            return null;
+        const warehouse = await prisma.warehouse.findUnique({
+            where: { id: warehouseId },
+            select: { id: true, name: true, location: true },
+        });
+        if (!warehouse)
+            return null;
+        if (warehouse.location?.startsWith('LOC:')) {
+            const mappedLocationId = warehouse.location.replace('LOC:', '');
+            const mappedLocation = await prisma.location.findUnique({ where: { id: mappedLocationId } });
+            if (mappedLocation)
+                return mappedLocation.id;
+        }
+        const code = `LOC-${Date.now()}`;
+        const createdLocation = await prisma.location.create({
+            data: {
+                code,
+                name: warehouse.name,
+                type: 'WAREHOUSE',
+                enabled: true,
+            },
+            select: { id: true },
+        });
+        await prisma.warehouse.update({
+            where: { id: warehouse.id },
+            data: { location: `LOC:${createdLocation.id}` },
+        });
+        return createdLocation.id;
+    }
     // Create a new purchase order with items
     static async createPurchaseOrder(req, res) {
         try {
@@ -20,6 +75,7 @@ class PurchaseOrderController {
                         create: items.map((item) => ({
                             rawMaterialId: item.rawMaterialId,
                             quantityOrdered: item.quantityOrdered,
+                            quantityUnit: item.quantityUnit || 'KG',
                             rate: item.rate,
                             status: 'PENDING',
                             totalReceived: 0,
@@ -163,7 +219,7 @@ class PurchaseOrderController {
     static async updatePurchaseOrderItem(req, res) {
         try {
             const { itemId } = req.params;
-            const { warehouseId, weightMode, bags, totalWeight, numberOfBags, notes, finalizeWithoutReceival, } = req.body;
+            const { warehouseId, locationId, weightMode, bags, totalWeight, numberOfBags, notes, finalizeWithoutReceival, } = req.body;
             // 1. Fetch the current item with its receivals
             const item = await prisma.purchaseOrderItem.findUnique({
                 where: { id: itemId },
@@ -215,8 +271,14 @@ class PurchaseOrderController {
                 res.json(updatedItem);
                 return;
             }
-            if (!warehouseId) {
-                res.status(400).json({ error: 'warehouseId is required' });
+            const effectiveLocationId = await PurchaseOrderController.resolveLocationIdFromInput(locationId, warehouseId);
+            if (!effectiveLocationId) {
+                res.status(400).json({ error: 'locationId or a valid warehouseId is required' });
+                return;
+            }
+            const effectiveWarehouseId = await PurchaseOrderController.resolveWarehouseIdFromLocationId(effectiveLocationId);
+            if (!effectiveWarehouseId) {
+                res.status(400).json({ error: 'Unable to resolve warehouse mapping for selected location' });
                 return;
             }
             // 3. Calculate weight for this receival
@@ -264,7 +326,8 @@ class PurchaseOrderController {
                 const receivalEntry = await tx.receivalEntry.create({
                     data: {
                         purchaseOrderItemId: itemId,
-                        warehouseId,
+                        locationId: effectiveLocationId,
+                        warehouseId: effectiveWarehouseId,
                         weightMode: weightMode === 'INDIVIDUAL' ? 'INDIVIDUAL' : 'TOTAL',
                         totalWeight: receivalWeight,
                         notes,
@@ -293,7 +356,7 @@ class PurchaseOrderController {
                     where: {
                         rawMaterialId_warehouseId: {
                             rawMaterialId: item.rawMaterialId,
-                            warehouseId,
+                            warehouseId: effectiveWarehouseId,
                         },
                     },
                 });
@@ -302,11 +365,12 @@ class PurchaseOrderController {
                         where: {
                             rawMaterialId_warehouseId: {
                                 rawMaterialId: item.rawMaterialId,
-                                warehouseId,
+                                warehouseId: effectiveWarehouseId,
                             },
                         },
                         data: {
                             currentQuantity: { increment: receivalWeight },
+                            quantityUnit: item.quantityUnit || 'KG',
                         },
                     });
                 }
@@ -314,15 +378,16 @@ class PurchaseOrderController {
                     await tx.currentStock.create({
                         data: {
                             rawMaterialId: item.rawMaterialId,
-                            warehouseId,
+                            warehouseId: effectiveWarehouseId,
                             currentQuantity: receivalWeight,
+                            quantityUnit: item.quantityUnit || 'KG',
                         },
                     });
                 }
                 await tx.stockEntry.create({
                     data: {
                         rawMaterialId: item.rawMaterialId,
-                        warehouseId,
+                        warehouseId: effectiveWarehouseId,
                         quantity: receivalWeight,
                         entryType: 'IN',
                         referenceId: receivalEntry.id,
@@ -394,7 +459,8 @@ class PurchaseOrderController {
                 warehouseName: stock.warehouse.name,
                 currentQuantity: stock.currentQuantity,
                 lastUpdated: stock.lastUpdated,
-                unitOfMeasurement: stock.rawMaterial.unitOfMeasurement,
+                unitOfMeasurement: stock.quantityUnit || stock.rawMaterial.unitOfMeasurement,
+                quantityUnit: stock.quantityUnit,
             }));
             res.json(result);
         }

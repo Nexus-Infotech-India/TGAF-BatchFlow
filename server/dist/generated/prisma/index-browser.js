@@ -659,6 +659,16 @@ exports.Prisma.RawMaterialProductScalarFieldEnum = {
   vendorId: 'vendorId'
 };
 
+exports.Prisma.FGPackagingMasterScalarFieldEnum = {
+  id: 'id',
+  rawMaterialId: 'rawMaterialId',
+  packetSize: 'packetSize',
+  packetUnit: 'packetUnit',
+  cartonCapacity: 'cartonCapacity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.PurchaseOrderScalarFieldEnum = {
   id: 'id',
   poNumber: 'poNumber',
@@ -675,6 +685,7 @@ exports.Prisma.PurchaseOrderItemScalarFieldEnum = {
   purchaseOrderId: 'purchaseOrderId',
   rawMaterialId: 'rawMaterialId',
   quantityOrdered: 'quantityOrdered',
+  quantityUnit: 'quantityUnit',
   rate: 'rate',
   totalReceived: 'totalReceived',
   status: 'status'
@@ -683,6 +694,7 @@ exports.Prisma.PurchaseOrderItemScalarFieldEnum = {
 exports.Prisma.ReceivalEntryScalarFieldEnum = {
   id: 'id',
   purchaseOrderItemId: 'purchaseOrderItemId',
+  locationId: 'locationId',
   warehouseId: 'warehouseId',
   weightMode: 'weightMode',
   totalWeight: 'totalWeight',
@@ -719,6 +731,98 @@ exports.Prisma.WarehouseScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LocationScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  type: 'type',
+  address: 'address',
+  description: 'description',
+  enabled: 'enabled',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MaterialTransferScalarFieldEnum = {
+  id: 'id',
+  transferNumber: 'transferNumber',
+  direction: 'direction',
+  fromLocationId: 'fromLocationId',
+  toLocationId: 'toLocationId',
+  status: 'status',
+  sentById: 'sentById',
+  sentAt: 'sentAt',
+  acceptedById: 'acceptedById',
+  acceptedAt: 'acceptedAt',
+  rejectionReason: 'rejectionReason',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MaterialTransferLineScalarFieldEnum = {
+  id: 'id',
+  transferId: 'transferId',
+  lineType: 'lineType',
+  rawMaterialId: 'rawMaterialId',
+  productName: 'productName',
+  skuCode: 'skuCode',
+  quantity: 'quantity',
+  transferredQuantity: 'transferredQuantity',
+  transferredUnit: 'transferredUnit',
+  unitOfMeasurement: 'unitOfMeasurement',
+  batchNumber: 'batchNumber',
+  cleaningLotId: 'cleaningLotId',
+  numberOfBags: 'numberOfBags',
+  bagSizeKg: 'bagSizeKg',
+  totalPackedQty: 'totalPackedQty',
+  totalPackedUnit: 'totalPackedUnit',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProductionPostingScalarFieldEnum = {
+  id: 'id',
+  postingNumber: 'postingNumber',
+  sfgProductId: 'sfgProductId',
+  bomId: 'bomId',
+  locationId: 'locationId',
+  shiftDate: 'shiftDate',
+  productionQty: 'productionQty',
+  productionUnit: 'productionUnit',
+  status: 'status',
+  notes: 'notes',
+  postedById: 'postedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductionConsumptionScalarFieldEnum = {
+  id: 'id',
+  postingId: 'postingId',
+  rawMaterialId: 'rawMaterialId',
+  rawMaterialName: 'rawMaterialName',
+  expectedQuantity: 'expectedQuantity',
+  actualQuantity: 'actualQuantity',
+  unit: 'unit',
+  sourceType: 'sourceType',
+  batchNumber: 'batchNumber',
+  dispatchId: 'dispatchId',
+  cleaningLotId: 'cleaningLotId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ProductionOutputScalarFieldEnum = {
+  id: 'id',
+  postingId: 'postingId',
+  outputType: 'outputType',
+  productName: 'productName',
+  skuCode: 'skuCode',
+  quantity: 'quantity',
+  unit: 'unit',
+  batchNumber: 'batchNumber',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.CleaningJobScalarFieldEnum = {
   id: 'id',
   rawMaterialId: 'rawMaterialId',
@@ -733,6 +837,8 @@ exports.Prisma.CleaningJobScalarFieldEnum = {
   stoneWastageUnit: 'stoneWastageUnit',
   seedWastageQty: 'seedWastageQty',
   seedWastageUnit: 'seedWastageUnit',
+  cleanedQuantity: 'cleanedQuantity',
+  cleanedQuantityUnit: 'cleanedQuantityUnit',
   wastagePercentage: 'wastagePercentage',
   wastageType: 'wastageType'
 };
@@ -800,6 +906,7 @@ exports.Prisma.CurrentStockScalarFieldEnum = {
   rawMaterialId: 'rawMaterialId',
   warehouseId: 'warehouseId',
   currentQuantity: 'currentQuantity',
+  quantityUnit: 'quantityUnit',
   lastUpdated: 'lastUpdated'
 };
 
@@ -876,6 +983,7 @@ exports.Prisma.CleaningLotScalarFieldEnum = {
   warehouseId: 'warehouseId',
   quantity: 'quantity',
   cleanedQuantity: 'cleanedQuantity',
+  cleanedQuantityUnit: 'cleanedQuantityUnit',
   status: 'status',
   stoneWastageQty: 'stoneWastageQty',
   stoneWastageUnit: 'stoneWastageUnit',
@@ -901,6 +1009,7 @@ exports.Prisma.BillOfMaterialScalarFieldEnum = {
   bomCode: 'bomCode',
   productName: 'productName',
   productCode: 'productCode',
+  sfgProductId: 'sfgProductId',
   unitOfMeasurement: 'unitOfMeasurement',
   outputQuantity: 'outputQuantity',
   description: 'description',
@@ -932,6 +1041,186 @@ exports.Prisma.SeedWastageRecordScalarFieldEnum = {
   unit: 'unit',
   source: 'source',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.GrindingDispatchScalarFieldEnum = {
+  id: 'id',
+  batchNumber: 'batchNumber',
+  inputRawMaterialId: 'inputRawMaterialId',
+  fromLocationId: 'fromLocationId',
+  toLocationId: 'toLocationId',
+  totalQuantity: 'totalQuantity',
+  consumedQuantity: 'consumedQuantity',
+  status: 'status',
+  sentAt: 'sentAt',
+  acceptedAt: 'acceptedAt',
+  rejectedAt: 'rejectedAt',
+  rejectionReason: 'rejectionReason',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.GrindingDispatchLotScalarFieldEnum = {
+  id: 'id',
+  dispatchId: 'dispatchId',
+  cleaningLotId: 'cleaningLotId',
+  allocatedQuantity: 'allocatedQuantity',
+  seedWastageAllocated: 'seedWastageAllocated',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FGBatchScalarFieldEnum = {
+  id: 'id',
+  batchNumber: 'batchNumber',
+  bomId: 'bomId',
+  fgProductName: 'fgProductName',
+  productionQty: 'productionQty',
+  productionUnit: 'productionUnit',
+  status: 'status',
+  notes: 'notes',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FGBatchConsumptionScalarFieldEnum = {
+  id: 'id',
+  fgBatchId: 'fgBatchId',
+  rawMaterialId: 'rawMaterialId',
+  rawMaterialName: 'rawMaterialName',
+  expectedQuantity: 'expectedQuantity',
+  actualQuantity: 'actualQuantity',
+  unit: 'unit',
+  sourceType: 'sourceType',
+  batchNumber: 'batchNumber',
+  dispatchId: 'dispatchId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FGProductionEntryScalarFieldEnum = {
+  id: 'id',
+  entryNumber: 'entryNumber',
+  fgBatchId: 'fgBatchId',
+  bomId: 'bomId',
+  fgProductName: 'fgProductName',
+  targetQty: 'targetQty',
+  targetUnit: 'targetUnit',
+  machineId: 'machineId',
+  machineName: 'machineName',
+  totalActualFg: 'totalActualFg',
+  totalActualByproduct: 'totalActualByproduct',
+  totalActualScrap: 'totalActualScrap',
+  totalAchievedBoxes: 'totalAchievedBoxes',
+  status: 'status',
+  notes: 'notes',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FGProductionMachineEntryScalarFieldEnum = {
+  id: 'id',
+  productionEntryId: 'productionEntryId',
+  machineId: 'machineId',
+  machineName: 'machineName',
+  allocatedQty: 'allocatedQty',
+  allocatedUnit: 'allocatedUnit',
+  actualFgQty: 'actualFgQty',
+  actualFgUnit: 'actualFgUnit',
+  actualByproduct: 'actualByproduct',
+  actualByproductUnit: 'actualByproductUnit',
+  actualScrap: 'actualScrap',
+  actualScrapUnit: 'actualScrapUnit',
+  machineSpeed: 'machineSpeed',
+  todayAchieve: 'todayAchieve',
+  laminateConsumption: 'laminateConsumption',
+  sfgConsumption: 'sfgConsumption',
+  laminateWastageKg: 'laminateWastageKg',
+  laminateWastagePercentage: 'laminateWastagePercentage',
+  noManPower: 'noManPower',
+  productName: 'productName',
+  instulationCapacity: 'instulationCapacity',
+  instulationCapacityUnit: 'instulationCapacityUnit',
+  laminateConsumptionQty: 'laminateConsumptionQty',
+  laminateConsumptionUnit: 'laminateConsumptionUnit',
+  sfgConsumptionQty: 'sfgConsumptionQty',
+  sfgConsumptionUnit: 'sfgConsumptionUnit',
+  manPower: 'manPower',
+  notes: 'notes',
+  powderWastageKg: 'powderWastageKg',
+  powderWastagePercentage: 'powderWastagePercentage',
+  manPowerCount: 'manPowerCount',
+  shift: 'shift',
+  machineUtilizedHrs: 'machineUtilizedHrs',
+  machineNotUtilizedHrs: 'machineNotUtilizedHrs',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FGDowntimeRecordScalarFieldEnum = {
+  id: 'id',
+  machineEntryId: 'machineEntryId',
+  startTime: 'startTime',
+  stopTime: 'stopTime',
+  breakdownReason: 'breakdownReason',
+  remark: 'remark',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MachineScalarFieldEnum = {
+  id: 'id',
+  machineId: 'machineId',
+  name: 'name',
+  location: 'location',
+  capacityQty: 'capacityQty',
+  capacityUnit: 'capacityUnit',
+  machineSpeed: 'machineSpeed',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FGProductionVerificationScalarFieldEnum = {
+  id: 'id',
+  verificationNumber: 'verificationNumber',
+  productionEntryId: 'productionEntryId',
+  entryNumber: 'entryNumber',
+  fgProductName: 'fgProductName',
+  totalActualFg: 'totalActualFg',
+  actualFgUnit: 'actualFgUnit',
+  totalAchievedBoxes: 'totalAchievedBoxes',
+  toLocationId: 'toLocationId',
+  toLocationName: 'toLocationName',
+  status: 'status',
+  rejectionReason: 'rejectionReason',
+  notes: 'notes',
+  dispatchedById: 'dispatchedById',
+  dispatchedAt: 'dispatchedAt',
+  verifiedById: 'verifiedById',
+  verifiedAt: 'verifiedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FGQualityReportScalarFieldEnum = {
+  id: 'id',
+  reportNumber: 'reportNumber',
+  fgBatchId: 'fgBatchId',
+  productionEntryId: 'productionEntryId',
+  productName: 'productName',
+  dateOfReport: 'dateOfReport',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FGQualityParameterScalarFieldEnum = {
+  id: 'id',
+  reportId: 'reportId',
+  parameter: 'parameter',
+  standard: 'standard',
+  result: 'result',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -1095,10 +1384,51 @@ exports.WeightMode = exports.$Enums.WeightMode = {
   TOTAL: 'TOTAL'
 };
 
+exports.LocationType = exports.$Enums.LocationType = {
+  WAREHOUSE: 'WAREHOUSE',
+  CLEANING: 'CLEANING',
+  GRINDING: 'GRINDING',
+  SFG_WAREHOUSE: 'SFG_WAREHOUSE',
+  FG_PACKAGING: 'FG_PACKAGING',
+  OTHER: 'OTHER'
+};
+
+exports.TransferDirection = exports.$Enums.TransferDirection = {
+  INBOUND_TO_GRINDING: 'INBOUND_TO_GRINDING',
+  OUTBOUND_FROM_GRINDING: 'OUTBOUND_FROM_GRINDING',
+  SFG_TO_PRODUCTION: 'SFG_TO_PRODUCTION'
+};
+
+exports.TransferStatus = exports.$Enums.TransferStatus = {
+  SENT: 'SENT',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+};
+
+exports.TransferLineType = exports.$Enums.TransferLineType = {
+  RAW_MATERIAL: 'RAW_MATERIAL',
+  SFG: 'SFG',
+  BYPRODUCT: 'BYPRODUCT',
+  SCRAP: 'SCRAP',
+  PACKAGING_MATERIAL: 'PACKAGING_MATERIAL'
+};
+
+exports.OutputType = exports.$Enums.OutputType = {
+  SFG: 'SFG',
+  BYPRODUCT: 'BYPRODUCT',
+  SCRAP: 'SCRAP'
+};
+
 exports.BOMStatus = exports.$Enums.BOMStatus = {
   ACTIVE: 'ACTIVE',
   INACTIVE: 'INACTIVE',
   DRAFT: 'DRAFT'
+};
+
+exports.GrindingDispatchStatus = exports.$Enums.GrindingDispatchStatus = {
+  SENT: 'SENT',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
 };
 
 exports.Prisma.ModelName = {
@@ -1146,12 +1476,19 @@ exports.Prisma.ModelName = {
   AuditNotification: 'AuditNotification',
   Vendor: 'Vendor',
   RawMaterialProduct: 'RawMaterialProduct',
+  FGPackagingMaster: 'FGPackagingMaster',
   PurchaseOrder: 'PurchaseOrder',
   PurchaseOrderItem: 'PurchaseOrderItem',
   ReceivalEntry: 'ReceivalEntry',
   ReceivalBag: 'ReceivalBag',
   StockEntry: 'StockEntry',
   Warehouse: 'Warehouse',
+  Location: 'Location',
+  MaterialTransfer: 'MaterialTransfer',
+  MaterialTransferLine: 'MaterialTransferLine',
+  ProductionPosting: 'ProductionPosting',
+  ProductionConsumption: 'ProductionConsumption',
+  ProductionOutput: 'ProductionOutput',
   CleaningJob: 'CleaningJob',
   CleaningLog: 'CleaningLog',
   UnfinishedStock: 'UnfinishedStock',
@@ -1168,7 +1505,18 @@ exports.Prisma.ModelName = {
   ProcessingBatchLot: 'ProcessingBatchLot',
   BillOfMaterial: 'BillOfMaterial',
   BOMItem: 'BOMItem',
-  SeedWastageRecord: 'SeedWastageRecord'
+  SeedWastageRecord: 'SeedWastageRecord',
+  GrindingDispatch: 'GrindingDispatch',
+  GrindingDispatchLot: 'GrindingDispatchLot',
+  FGBatch: 'FGBatch',
+  FGBatchConsumption: 'FGBatchConsumption',
+  FGProductionEntry: 'FGProductionEntry',
+  FGProductionMachineEntry: 'FGProductionMachineEntry',
+  FGDowntimeRecord: 'FGDowntimeRecord',
+  Machine: 'Machine',
+  FGProductionVerification: 'FGProductionVerification',
+  FGQualityReport: 'FGQualityReport',
+  FGQualityParameter: 'FGQualityParameter'
 };
 
 /**

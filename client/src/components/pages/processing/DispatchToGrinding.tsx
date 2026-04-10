@@ -120,7 +120,6 @@ const DispatchToGrinding: React.FC = () => {
 
   // ── Dispatch data ──
   const [dispatches, setDispatches] = useState<GrindingDispatch[]>([]);
-  const [warehouses, setWarehouses] = useState<WarehouseType[]>([]);
   const [locations, setLocations] = useState<LocationType[]>([]);
   const [rawMaterials, setRawMaterials] = useState<RawMaterial[]>([]);
   const [availableLots, setAvailableLots] = useState<CleaningLot[]>([]);
@@ -134,8 +133,6 @@ const DispatchToGrinding: React.FC = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return dispatches.slice(startIndex, startIndex + itemsPerPage);
   }, [dispatches, currentPage]);
-
-  const [expandedSections, setExpandedSections] = useState<Record<string, { cleaned: boolean; seedWastage: boolean }>>({});
 
   // ── Create Batch Modal ──
   const [batchModal, setBatchModal] = useState<{
@@ -313,13 +310,6 @@ const DispatchToGrinding: React.FC = () => {
       if (newSeedWastage[lotId] !== undefined) { delete newSeedWastage[lotId]; }
       else { newSeedWastage[lotId] = lot.availableSeedWastage ?? 0; }
       return { ...prev, seedWastageLots: newSeedWastage };
-    });
-  };
-
-  const toggleSection = (jobId: string, section: 'cleaned' | 'seedWastage') => {
-    setExpandedSections((prev) => {
-      const current = prev[jobId] || { cleaned: true, seedWastage: true };
-      return { ...prev, [jobId]: { ...current, [section]: !current[section] } };
     });
   };
 

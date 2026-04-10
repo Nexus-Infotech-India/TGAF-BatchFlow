@@ -59,6 +59,62 @@ class BOMController {
             res.status(500).json({ error: 'Failed to create BOM', details: error.message });
         }
     }
+    // Get BOM by SFG product ID
+    static async getBOMBySFG(req, res) {
+        try {
+            const { productId } = req.params;
+            // First try: find by sfgProductId FK
+            let bom = await prisma.billOfMaterial.findFirst({
+                where: {
+                    sfgProductId: productId,
+                    status: 'ACTIVE',
+                },
+                include: {
+                    items: {
+                        include: {
+                            rawMaterial: true,
+                        },
+                    },
+                    sfgProduct: true,
+                },
+            });
+            // Fallback: try matching by productCode or productName
+            if (!bom) {
+                const product = await prisma.rawMaterialProduct.findUnique({
+                    where: { id: productId },
+                    select: { name: true, skuCode: true },
+                });
+                if (product) {
+                    bom = await prisma.billOfMaterial.findFirst({
+                        where: {
+                            OR: [
+                                { productCode: product.skuCode },
+                                { productName: product.name },
+                            ],
+                            status: 'ACTIVE',
+                        },
+                        include: {
+                            items: {
+                                include: {
+                                    rawMaterial: true,
+                                },
+                            },
+                            sfgProduct: true,
+                        },
+                    });
+                }
+            }
+            if (!bom) {
+                res.status(404).json({ error: 'No active BOM found for this SFG product' });
+                return;
+            }
+            res.json(bom);
+        }
+        catch (error) {
+            console.error('Get BOM by SFG Error:', error);
+            res.status(500).json({ error: 'Failed to fetch BOM by SFG', details: error });
+        }
+    }
     // Get all BOMs
     static async getBOMs(req, res) {
         try {

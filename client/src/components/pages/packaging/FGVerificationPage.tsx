@@ -7,7 +7,6 @@ import {
   XCircle,
   MapPin,
   Clock,
-  Package,
   Truck,
   ShieldCheck,
   ChevronLeft,

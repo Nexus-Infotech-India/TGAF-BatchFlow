@@ -98,7 +98,11 @@ class StockEntryController {
                     warehouse: true,
                 },
             });
-            res.json(stocks);
+            const result = stocks.map(s => ({
+                ...s,
+                unitOfMeasurement: s.quantityUnit || s.rawMaterial.unitOfMeasurement
+            }));
+            res.json(result);
         }
         catch (error) {
             res.status(500).json({ error: 'Failed to fetch current stock distribution', details: error });

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
 import { Button, Modal, Input, message } from 'antd';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   CheckCircle,
   XCircle,
@@ -11,7 +11,6 @@ import {
   ClipboardCheck,
   Package,
   Calendar,
-  Truck,
   ArrowRight,
   Loader2,
   Inbox,

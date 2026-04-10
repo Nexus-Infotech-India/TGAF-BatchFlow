@@ -170,6 +170,7 @@ model User {
   createdChecklistItems        PreAuditChecklistItem[] @relation("CreatedChecklistItems")
   responsibleForChecklistItems PreAuditChecklistItem[] @relation("ResponsibleForChecklistItems")
   rmQualityReports             RMQualityReport[]
+  fgQualityReports             FGQualityReport[]
   createdGRNs                  GRNbyPo[]               @relation("GRNCreatedBy")
   StandardsCreated             Standard[]              @relation("StandardCreatedBy")
   StandardsModified            Standard[]              @relation("StandardModifiedBy")
@@ -749,6 +750,21 @@ model RawMaterialProduct {
   vendor             Vendor?             @relation(fields: [vendorId], references: [id])
   stockEntries       StockEntry[]
   bomItems           BOMItem[]
+  bomsAsSfg          BillOfMaterial[]    @relation("BOMSfgProduct")
+  grindingDispatches GrindingDispatch[]
+  fgPackagingMaster  FGPackagingMaster?
+}
+
+model FGPackagingMaster {
+  id             String   @id @default(uuid())
+  rawMaterialId  String   @unique
+  packetSize     Float
+  packetUnit     String
+  cartonCapacity Int
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  rawMaterial RawMaterialProduct @relation(fields: [rawMaterialId], references: [id], onDelete: Cascade)
 }
 
 model PurchaseOrder {
@@ -770,6 +786,7 @@ model PurchaseOrderItem {
   purchaseOrderId String
   rawMaterialId   String
   quantityOrdered Float
+  quantityUnit    String                  @default("KG")
   rate            Float
   totalReceived   Float                   @default(0)
   status          PurchaseOrderItemStatus @default(PENDING)
@@ -782,14 +799,16 @@ model PurchaseOrderItem {
 model ReceivalEntry {
   id                  String            @id @default(uuid())
   purchaseOrderItemId String
-  warehouseId         String
+  locationId          String?
+  warehouseId         String?
   weightMode          WeightMode        @default(INDIVIDUAL)
   totalWeight         Float
   notes               String?
   receivedDate        DateTime          @default(now())
   bags                ReceivalBag[]
   purchaseOrderItem   PurchaseOrderItem @relation(fields: [purchaseOrderItemId], references: [id])
-  warehouse           Warehouse         @relation(fields: [warehouseId], references: [id])
+  location            Location?         @relation(fields: [locationId], references: [id])
+  warehouse           Warehouse?        @relation(fields: [warehouseId], references: [id])
 }
 
 model ReceivalBag {
@@ -837,28 +856,182 @@ model Warehouse {
   processingJobs   ProcessingJob[]
 }
 
+// ==================== LOCATION MASTER ====================
+
+enum LocationType {
+  WAREHOUSE
+  CLEANING
+  GRINDING
+  SFG_WAREHOUSE
+  FG_PACKAGING
+  OTHER
+}
+
+model Location {
+  id          String       @id @default(uuid())
+  code        String       @unique
+  name        String
+  type        LocationType
+  address     String?
+  description String?
+  enabled     Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  receivalEntries ReceivalEntry[]
+  transfersFrom   MaterialTransfer[] @relation("TransferFromLocation")
+  transfersTo     MaterialTransfer[] @relation("TransferToLocation")
+  dispatchesFrom  GrindingDispatch[] @relation("DispatchFromLocation")
+  dispatchesTo    GrindingDispatch[] @relation("DispatchToLocation")
+}
+
+// ==================== MATERIAL TRANSFER ====================
+
+enum TransferStatus {
+  SENT
+  ACCEPTED
+  REJECTED
+}
+
+enum TransferDirection {
+  INBOUND_TO_GRINDING
+  OUTBOUND_FROM_GRINDING
+  SFG_TO_PRODUCTION
+}
+
+enum TransferLineType {
+  RAW_MATERIAL
+  SFG
+  BYPRODUCT
+  SCRAP
+  PACKAGING_MATERIAL
+}
+
+model MaterialTransfer {
+  id              String            @id @default(uuid())
+  transferNumber  String            @unique
+  direction       TransferDirection
+  fromLocationId  String
+  toLocationId    String
+  status          TransferStatus    @default(SENT)
+  sentById        String
+  sentAt          DateTime          @default(now())
+  acceptedById    String?
+  acceptedAt      DateTime?
+  rejectionReason String?
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  fromLocation Location               @relation("TransferFromLocation", fields: [fromLocationId], references: [id])
+  toLocation   Location               @relation("TransferToLocation", fields: [toLocationId], references: [id])
+  lines        MaterialTransferLine[]
+}
+
+model MaterialTransferLine {
+  id                  String           @id @default(uuid())
+  transferId          String
+  lineType            TransferLineType
+  rawMaterialId       String?
+  productName         String?
+  skuCode             String?
+  quantity            Float
+  transferredQuantity Float?
+  transferredUnit     String?
+  unitOfMeasurement   String
+  batchNumber         String?
+  cleaningLotId       String?
+  numberOfBags        Int?
+  bagSizeKg           Float?           @default(25)
+  totalPackedQty      Float?
+  totalPackedUnit     String?
+  createdAt           DateTime         @default(now())
+
+  transfer MaterialTransfer @relation(fields: [transferId], references: [id], onDelete: Cascade)
+}
+
+// ==================== PRODUCTION POSTING ====================
+
+enum OutputType {
+  SFG
+  BYPRODUCT
+  SCRAP
+}
+
+model ProductionPosting {
+  id             String   @id @default(uuid())
+  postingNumber  String   @unique
+  sfgProductId   String
+  bomId          String
+  locationId     String
+  shiftDate      DateTime
+  productionQty  Float?
+  productionUnit String?
+  status         String   @default("POSTED")
+  notes          String?
+  postedById     String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  consumptions ProductionConsumption[]
+  outputs      ProductionOutput[]
+}
+
+model ProductionConsumption {
+  id               String   @id @default(uuid())
+  postingId        String
+  rawMaterialId    String
+  rawMaterialName  String?
+  expectedQuantity Float
+  actualQuantity   Float
+  unit             String?
+  sourceType       String? // 'BATCH' or 'STOCK'
+  batchNumber      String?
+  dispatchId       String? // Reference to GrindingDispatch used
+  cleaningLotId    String?
+  createdAt        DateTime @default(now())
+
+  posting ProductionPosting @relation(fields: [postingId], references: [id], onDelete: Cascade)
+}
+
+model ProductionOutput {
+  id          String     @id @default(uuid())
+  postingId   String
+  outputType  OutputType
+  productName String
+  skuCode     String?
+  quantity    Float
+  unit        String
+  batchNumber String?
+  createdAt   DateTime   @default(now())
+
+  posting ProductionPosting @relation(fields: [postingId], references: [id], onDelete: Cascade)
+}
+
 model CleaningJob {
-  id                String             @id
-  rawMaterialId     String
-  fromWarehouseId   String
-  toWarehouseId     String
-  quantity          Float
-  status            String
-  startedAt         DateTime
-  finishedAt        DateTime?
-  grnId             String?
-  stoneWastageQty   Float?             @default(0)
-  stoneWastageUnit  String?            @default("kg")
-  seedWastageQty    Float?             @default(0)
-  seedWastageUnit   String?            @default("kg")
-  wastagePercentage Float?             @default(0)
-  wastageType       String?
-  fromWarehouse     Warehouse          @relation("CleaningFromWarehouse", fields: [fromWarehouseId], references: [id])
-  rawMaterial       RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
-  toWarehouse       Warehouse          @relation("CleaningToWarehouse", fields: [toWarehouseId], references: [id])
-  grn               GRNbyPo?           @relation(fields: [grnId], references: [id])
-  cleaningLogs      CleaningLog[]
-  cleaningLots      CleaningLot[]
+  id                  String             @id
+  rawMaterialId       String
+  fromWarehouseId     String
+  toWarehouseId       String
+  quantity            Float
+  status              String
+  startedAt           DateTime
+  finishedAt          DateTime?
+  grnId               String?
+  stoneWastageQty     Float?             @default(0)
+  stoneWastageUnit    String?            @default("kg")
+  seedWastageQty      Float?             @default(0)
+  seedWastageUnit     String?            @default("kg")
+  cleanedQuantity     Float?             @default(0)
+  cleanedQuantityUnit String?            @default("kg")
+  wastagePercentage   Float?             @default(0)
+  wastageType         String?
+  fromWarehouse       Warehouse          @relation("CleaningFromWarehouse", fields: [fromWarehouseId], references: [id])
+  rawMaterial         RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
+  toWarehouse         Warehouse          @relation("CleaningToWarehouse", fields: [toWarehouseId], references: [id])
+  grn                 GRNbyPo?           @relation(fields: [grnId], references: [id])
+  cleaningLogs        CleaningLog[]
+  cleaningLots        CleaningLot[]
 }
 
 model CleaningLog {
@@ -937,6 +1110,7 @@ model CurrentStock {
   rawMaterialId   String
   warehouseId     String
   currentQuantity Float
+  quantityUnit    String?
   lastUpdated     DateTime           @updatedAt
   rawMaterial     RawMaterialProduct @relation(fields: [rawMaterialId], references: [id])
   warehouse       Warehouse          @relation(fields: [warehouseId], references: [id])
@@ -1000,6 +1174,8 @@ enum MaterialCategory {
   SEMI_FINISHED_GOOD
   FINISHED_GOOD
   PACKAGING_MATERIAL
+  BYPRODUCT
+  WASTAGE
 }
 
 enum BatchStatus {
@@ -1161,29 +1337,31 @@ model GRNbyPo {
 }
 
 model CleaningLot {
-  id                String   @id @default(uuid())
-  lotNumber         String   @unique
-  cleaningJobId     String
-  grnId             String
-  rawMaterialId     String
-  warehouseId       String
-  quantity          Float
-  cleanedQuantity   Float?   @default(0)
-  status            String   @default("Active")
-  stoneWastageQty   Float?   @default(0)
-  stoneWastageUnit  String?  @default("kg")
-  seedWastageQty    Float?   @default(0)
-  seedWastageUnit   String?  @default("kg")
-  wastagePercentage Float?   @default(0)
-  wastageType       String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  id                  String   @id @default(uuid())
+  lotNumber           String   @unique
+  cleaningJobId       String
+  grnId               String
+  rawMaterialId       String
+  warehouseId         String
+  quantity            Float
+  cleanedQuantity     Float?   @default(0)
+  cleanedQuantityUnit String?  @default("kg")
+  status              String   @default("Active")
+  stoneWastageQty     Float?   @default(0)
+  stoneWastageUnit    String?  @default("kg")
+  seedWastageQty      Float?   @default(0)
+  seedWastageUnit     String?  @default("kg")
+  wastagePercentage   Float?   @default(0)
+  wastageType         String?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
-  cleaningJob         CleaningJob          @relation(fields: [cleaningJobId], references: [id])
-  grn                 GRNbyPo              @relation(fields: [grnId], references: [id])
-  rawMaterial         RawMaterialProduct   @relation(fields: [rawMaterialId], references: [id])
-  warehouse           Warehouse            @relation(fields: [warehouseId], references: [id])
-  processingBatchLots ProcessingBatchLot[]
+  cleaningJob          CleaningJob           @relation(fields: [cleaningJobId], references: [id])
+  grn                  GRNbyPo               @relation(fields: [grnId], references: [id])
+  rawMaterial          RawMaterialProduct    @relation(fields: [rawMaterialId], references: [id])
+  warehouse            Warehouse             @relation(fields: [warehouseId], references: [id])
+  processingBatchLots  ProcessingBatchLot[]
+  grindingDispatchLots GrindingDispatchLot[]
 }
 
 model ProcessingBatchLot {
@@ -1207,17 +1385,19 @@ enum BOMStatus {
 }
 
 model BillOfMaterial {
-  id                String    @id @default(uuid())
-  bomCode           String    @unique
+  id                String              @id @default(uuid())
+  bomCode           String              @unique
   productName       String
   productCode       String?
+  sfgProductId      String?
   unitOfMeasurement String
-  outputQuantity    Float     @default(1)
+  outputQuantity    Float               @default(1)
   description       String?
-  status            BOMStatus @default(DRAFT)
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  status            BOMStatus           @default(DRAFT)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
   items             BOMItem[]
+  sfgProduct        RawMaterialProduct? @relation("BOMSfgProduct", fields: [sfgProductId], references: [id])
 }
 
 model BOMItem {
@@ -1252,4 +1432,248 @@ model SeedWastageRecord {
   createdAt         DateTime @default(now())
 
   batch Batch? @relation(fields: [batchId], references: [id])
+}
+
+// ==================== GRINDING DISPATCH (Transfer with Approval) ====================
+
+enum GrindingDispatchStatus {
+  SENT
+  ACCEPTED
+  REJECTED
+}
+
+model GrindingDispatch {
+  id                 String                 @id @default(uuid())
+  batchNumber        String                 @unique
+  inputRawMaterialId String
+  fromLocationId     String
+  toLocationId       String
+  totalQuantity      Float
+  consumedQuantity   Float                  @default(0)
+  status             GrindingDispatchStatus @default(SENT)
+  sentAt             DateTime               @default(now())
+  acceptedAt         DateTime?
+  rejectedAt         DateTime?
+  rejectionReason    String?
+  notes              String?
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+
+  inputRawMaterial RawMaterialProduct    @relation(fields: [inputRawMaterialId], references: [id])
+  fromLocation     Location              @relation("DispatchFromLocation", fields: [fromLocationId], references: [id])
+  toLocation       Location              @relation("DispatchToLocation", fields: [toLocationId], references: [id])
+  lots             GrindingDispatchLot[]
+}
+
+model GrindingDispatchLot {
+  id                   String   @id @default(uuid())
+  dispatchId           String
+  cleaningLotId        String
+  allocatedQuantity    Float
+  seedWastageAllocated Float    @default(0)
+  createdAt            DateTime @default(now())
+
+  dispatch    GrindingDispatch @relation(fields: [dispatchId], references: [id], onDelete: Cascade)
+  cleaningLot CleaningLot      @relation(fields: [cleaningLotId], references: [id])
+}
+
+// ==================== FG BATCH (Finished Good Batch) ====================
+
+model FGBatch {
+  id             String @id @default(uuid())
+  batchNumber    String @unique
+  bomId          String
+  fgProductName  String
+  productionQty  Float
+  productionUnit String
+
+  status      String   @default("CREATED")
+  notes       String?
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  consumptions      FGBatchConsumption[]
+  productionEntries FGProductionEntry[]
+  fgQualityReports  FGQualityReport[]
+}
+
+model FGBatchConsumption {
+  id               String   @id @default(uuid())
+  fgBatchId        String
+  rawMaterialId    String
+  rawMaterialName  String?
+  expectedQuantity Float
+  actualQuantity   Float
+  unit             String?
+  sourceType       String? // 'SFG_BATCH' or 'STOCK'
+  batchNumber      String?
+  dispatchId       String?
+  createdAt        DateTime @default(now())
+
+  fgBatch FGBatch @relation(fields: [fgBatchId], references: [id], onDelete: Cascade)
+}
+
+// ==================== FG PRODUCTION ENTRY ====================
+
+model FGProductionEntry {
+  id            String @id @default(uuid())
+  entryNumber   String @unique
+  fgBatchId     String
+  bomId         String
+  fgProductName String
+  targetQty     Float
+  targetUnit    String
+
+  // Single machine allocation
+  machineId   String?
+  machineName String?
+
+  totalActualFg        Float @default(0)
+  totalActualByproduct Float @default(0)
+  totalActualScrap     Float @default(0)
+  totalAchievedBoxes   Float @default(0)
+
+  status      String   @default("DRAFT")
+  notes       String?
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  fgBatch        FGBatch                    @relation(fields: [fgBatchId], references: [id])
+  machine        Machine?                   @relation("FGProductionEntryMachine", fields: [machineId], references: [id])
+  machineEntries FGProductionMachineEntry[]
+  verifications  FGProductionVerification[]
+  qualityReport  FGQualityReport?
+}
+
+model FGProductionMachineEntry {
+  id                String @id @default(uuid())
+  productionEntryId String
+  machineId         String
+  machineName       String
+  allocatedQty      Float  @default(0)
+  allocatedUnit     String @default("Ton")
+
+  actualFgQty         Float  @default(0)
+  actualFgUnit        String @default("Ton")
+  actualByproduct     Float  @default(0)
+  actualByproductUnit String @default("Ton")
+  actualScrap         Float  @default(0)
+  actualScrapUnit     String @default("Ton")
+
+  machineSpeed              String?
+  todayAchieve              Float?
+  laminateConsumption       Float?
+  sfgConsumption            Float?
+  laminateWastageKg         Float?
+  laminateWastagePercentage Float?
+  noManPower                Boolean @default(false)
+  // Enhanced machine assignment fields
+  productName               String?
+  instulationCapacity       Float?
+  instulationCapacityUnit   String?
+  laminateConsumptionQty    Float?
+  laminateConsumptionUnit   String?
+  sfgConsumptionQty         Float?
+  sfgConsumptionUnit        String?
+  manPower                  Boolean @default(true)
+  notes                     String?
+  // Supervisor output fields
+  powderWastageKg           Float?
+  powderWastagePercentage   Float?
+  manPowerCount             Int?
+  shift                     String? // DAY, NOON, NIGHT
+  machineUtilizedHrs        Float?
+  machineNotUtilizedHrs     Float?
+
+  createdAt DateTime @default(now())
+
+  productionEntry FGProductionEntry  @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
+  machine         Machine            @relation(fields: [machineId], references: [id])
+  downtimeRecords FGDowntimeRecord[]
+}
+
+model FGDowntimeRecord {
+  id              String   @id @default(uuid())
+  machineEntryId  String
+  startTime       String
+  stopTime        String
+  breakdownReason String
+  remark          String?
+  createdAt       DateTime @default(now())
+
+  machineEntry FGProductionMachineEntry @relation(fields: [machineEntryId], references: [id], onDelete: Cascade)
+}
+
+// ==================== MACHINE MASTER ====================
+
+model Machine {
+  id           String   @id @default(uuid())
+  machineId    String   @unique
+  name         String
+  location     String
+  capacityQty  Float
+  capacityUnit String   @default("BOXES_PER_SHIFT")
+  machineSpeed String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  productionMachineEntries FGProductionMachineEntry[]
+  productionEntries        FGProductionEntry[]        @relation("FGProductionEntryMachine")
+}
+
+// ==================== FG PRODUCTION VERIFICATION ====================
+
+model FGProductionVerification {
+  id                 String    @id @default(uuid())
+  verificationNumber String    @unique
+  productionEntryId  String
+  entryNumber        String
+  fgProductName      String
+  totalActualFg      Float     @default(0)
+  actualFgUnit       String    @default("KG")
+  totalAchievedBoxes Float     @default(0)
+  toLocationId       String
+  toLocationName     String?
+  status             String    @default("PENDING") // PENDING, ACCEPTED, REJECTED
+  rejectionReason    String?
+  notes              String?
+  dispatchedById     String?
+  dispatchedAt       DateTime  @default(now())
+  verifiedById       String?
+  verifiedAt         DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  productionEntry FGProductionEntry @relation(fields: [productionEntryId], references: [id])
+}
+
+model FGQualityReport {
+  id                String   @id @default(uuid())
+  reportNumber      String?  @unique
+  fgBatchId         String?
+  productionEntryId String   @unique
+  productName       String
+  dateOfReport      DateTime @default(now())
+  createdById       String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  parameters      FGQualityParameter[]
+  productionEntry FGProductionEntry    @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
+  fgBatch         FGBatch?             @relation(fields: [fgBatchId], references: [id])
+  createdBy       User                 @relation(fields: [createdById], references: [id])
+}
+
+model FGQualityParameter {
+  id        String   @id @default(uuid())
+  reportId  String
+  parameter String
+  standard  String
+  result    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  report FGQualityReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
 }

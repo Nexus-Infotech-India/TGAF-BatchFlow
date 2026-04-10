@@ -4,6 +4,88 @@ exports.CleaningGrnController = void 0;
 const prisma_1 = require("../../generated/prisma");
 const prisma = new prisma_1.PrismaClient();
 class CleaningGrnController {
+    static extractLocationIdFromWarehouseField(warehouseLocationField) {
+        if (!warehouseLocationField)
+            return null;
+        if (!warehouseLocationField.startsWith('LOC:'))
+            return null;
+        const locationId = warehouseLocationField.replace('LOC:', '').trim();
+        return locationId || null;
+    }
+    static convertWeight(val, fromU, toU) {
+        const f = fromU.toLowerCase();
+        const t = toU.toLowerCase();
+        if (f === t)
+            return val;
+        let valInKg = val;
+        if (f === 'gram' || f === 'grams')
+            valInKg = val / 1000;
+        else if (f === 'ton' || f === 'tons')
+            valInKg = val * 1000;
+        if (t === 'gram' || t === 'grams')
+            return valInKg * 1000;
+        else if (t === 'ton' || t === 'tons')
+            return valInKg / 1000;
+        return valInKg;
+    }
+    static async resolveWarehouseIdFromLocationId(locationId) {
+        const location = await prisma.location.findUnique({ where: { id: locationId } });
+        if (!location || !location.enabled)
+            return null;
+        const locationMarker = `LOC:${location.id}`;
+        const mappedWarehouse = await prisma.warehouse.findFirst({
+            where: { location: locationMarker },
+            select: { id: true },
+        });
+        if (mappedWarehouse)
+            return mappedWarehouse.id;
+        const legacyWarehouse = await prisma.warehouse.findFirst({
+            where: { name: location.name },
+            select: { id: true },
+        });
+        if (legacyWarehouse) {
+            await prisma.warehouse.update({
+                where: { id: legacyWarehouse.id },
+                data: { location: locationMarker },
+            });
+            return legacyWarehouse.id;
+        }
+        const createdWarehouse = await prisma.warehouse.create({
+            data: {
+                name: location.name,
+                location: locationMarker,
+            },
+            select: { id: true },
+        });
+        return createdWarehouse.id;
+    }
+    static async getLocationNameMapFromGrns(grns) {
+        const locationIds = new Set();
+        for (const grn of grns) {
+            for (const receival of grn.purchaseOrderItem?.receivals || []) {
+                if (receival.locationId)
+                    locationIds.add(receival.locationId);
+                const mappedFromWarehouse = CleaningGrnController.extractLocationIdFromWarehouseField(receival.warehouse?.location);
+                if (mappedFromWarehouse)
+                    locationIds.add(mappedFromWarehouse);
+            }
+            for (const job of grn.cleaningJobs || []) {
+                const fromLocationId = CleaningGrnController.extractLocationIdFromWarehouseField(job.fromWarehouse?.location);
+                const toLocationId = CleaningGrnController.extractLocationIdFromWarehouseField(job.toWarehouse?.location);
+                if (fromLocationId)
+                    locationIds.add(fromLocationId);
+                if (toLocationId)
+                    locationIds.add(toLocationId);
+            }
+        }
+        if (locationIds.size === 0)
+            return new Map();
+        const locations = await prisma.location.findMany({
+            where: { id: { in: Array.from(locationIds) } },
+            select: { id: true, name: true },
+        });
+        return new Map(locations.map((l) => [l.id, l.name]));
+    }
     /**
      * Get all GRNs with their materials for cleaning
      * Returns GRN details along with received quantity & how much has been transferred to cleaning
@@ -24,7 +106,7 @@ class CleaningGrnController {
                         include: {
                             rawMaterial: true,
                             receivals: {
-                                include: { bags: true, warehouse: true },
+                                include: { bags: true, warehouse: true, location: true },
                             },
                         },
                     },
@@ -46,6 +128,7 @@ class CleaningGrnController {
                 },
                 orderBy: { createdAt: 'desc' },
             });
+            const locationNameMap = await CleaningGrnController.getLocationNameMapFromGrns(grns);
             // Calculate transfer details for each GRN
             const result = grns.map((grn) => {
                 const totalReceived = grn.purchaseOrderItem.totalReceived || 0;
@@ -56,6 +139,35 @@ class CleaningGrnController {
                     grn.cleaningJobs.every((job) => job.status === 'Cleaned' || job.status === 'Finished');
                 return {
                     ...grn,
+                    purchaseOrderItem: {
+                        ...grn.purchaseOrderItem,
+                        receivals: (grn.purchaseOrderItem?.receivals || []).map((receival) => {
+                            const fallbackFromWarehouseLocationId = CleaningGrnController.extractLocationIdFromWarehouseField(receival.warehouse?.location);
+                            const effectiveFromLocationId = receival.locationId || fallbackFromWarehouseLocationId;
+                            const effectiveFromLocationName = effectiveFromLocationId
+                                ? locationNameMap.get(effectiveFromLocationId) || receival.warehouse?.name || null
+                                : receival.warehouse?.name || null;
+                            return {
+                                ...receival,
+                                fromLocation: effectiveFromLocationId
+                                    ? { id: effectiveFromLocationId, name: effectiveFromLocationName }
+                                    : null,
+                            };
+                        }),
+                    },
+                    cleaningJobs: (grn.cleaningJobs || []).map((job) => {
+                        const fromLocationId = CleaningGrnController.extractLocationIdFromWarehouseField(job.fromWarehouse?.location);
+                        const toLocationId = CleaningGrnController.extractLocationIdFromWarehouseField(job.toWarehouse?.location);
+                        return {
+                            ...job,
+                            fromLocation: fromLocationId
+                                ? { id: fromLocationId, name: locationNameMap.get(fromLocationId) || job.fromWarehouse?.name || null }
+                                : null,
+                            toLocation: toLocationId
+                                ? { id: toLocationId, name: locationNameMap.get(toLocationId) || job.toWarehouse?.name || null }
+                                : null,
+                        };
+                    }),
                     totalReceived,
                     totalTransferred,
                     leftQuantity,
@@ -85,7 +197,7 @@ class CleaningGrnController {
                         include: {
                             rawMaterial: true,
                             receivals: {
-                                include: { bags: true, warehouse: true },
+                                include: { bags: true, warehouse: true, location: true },
                             },
                         },
                     },
@@ -114,6 +226,7 @@ class CleaningGrnController {
                 res.status(404).json({ success: false, error: 'GRN not found' });
                 return;
             }
+            const locationNameMap = await CleaningGrnController.getLocationNameMapFromGrns([grn]);
             const totalReceived = grn.purchaseOrderItem.totalReceived || 0;
             const totalTransferred = grn.cleaningJobs.reduce((sum, job) => sum + job.quantity, 0);
             const leftQuantity = Math.max(totalReceived - totalTransferred, 0);
@@ -123,6 +236,35 @@ class CleaningGrnController {
                 success: true,
                 data: {
                     ...grn,
+                    purchaseOrderItem: {
+                        ...grn.purchaseOrderItem,
+                        receivals: (grn.purchaseOrderItem?.receivals || []).map((receival) => {
+                            const fallbackFromWarehouseLocationId = CleaningGrnController.extractLocationIdFromWarehouseField(receival.warehouse?.location);
+                            const effectiveFromLocationId = receival.locationId || fallbackFromWarehouseLocationId;
+                            const effectiveFromLocationName = effectiveFromLocationId
+                                ? locationNameMap.get(effectiveFromLocationId) || receival.warehouse?.name || null
+                                : receival.warehouse?.name || null;
+                            return {
+                                ...receival,
+                                fromLocation: effectiveFromLocationId
+                                    ? { id: effectiveFromLocationId, name: effectiveFromLocationName }
+                                    : null,
+                            };
+                        }),
+                    },
+                    cleaningJobs: (grn.cleaningJobs || []).map((job) => {
+                        const fromLocationId = CleaningGrnController.extractLocationIdFromWarehouseField(job.fromWarehouse?.location);
+                        const toLocationId = CleaningGrnController.extractLocationIdFromWarehouseField(job.toWarehouse?.location);
+                        return {
+                            ...job,
+                            fromLocation: fromLocationId
+                                ? { id: fromLocationId, name: locationNameMap.get(fromLocationId) || job.fromWarehouse?.name || null }
+                                : null,
+                            toLocation: toLocationId
+                                ? { id: toLocationId, name: locationNameMap.get(toLocationId) || job.toWarehouse?.name || null }
+                                : null,
+                        };
+                    }),
                     totalReceived,
                     totalTransferred,
                     leftQuantity,
@@ -142,9 +284,14 @@ class CleaningGrnController {
      */
     static async createGRNCleaningTransfer(req, res) {
         try {
-            const { grnId, toWarehouseId, quantity } = req.body;
-            if (!grnId || !toWarehouseId || !quantity || quantity <= 0) {
-                res.status(400).json({ error: 'grnId, toWarehouseId, and a positive quantity are required' });
+            const { grnId, toWarehouseId, toLocationId, quantity } = req.body;
+            if (!grnId || (!toWarehouseId && !toLocationId) || !quantity || quantity <= 0) {
+                res.status(400).json({ error: 'grnId, toLocationId (or toWarehouseId), and a positive quantity are required' });
+                return;
+            }
+            const effectiveToWarehouseId = toWarehouseId || (toLocationId ? await CleaningGrnController.resolveWarehouseIdFromLocationId(toLocationId) : null);
+            if (!effectiveToWarehouseId) {
+                res.status(400).json({ error: 'Could not resolve destination warehouse from toLocationId' });
                 return;
             }
             // Fetch GRN with item details
@@ -154,7 +301,7 @@ class CleaningGrnController {
                     purchaseOrderItem: {
                         include: {
                             rawMaterial: true,
-                            receivals: { include: { warehouse: true } },
+                            receivals: { include: { warehouse: true, location: true } },
                         },
                     },
                     cleaningJobs: true,
@@ -180,7 +327,16 @@ class CleaningGrnController {
                 res.status(400).json({ error: 'No receival entry found for this GRN' });
                 return;
             }
-            const fromWarehouseId = latestReceival.warehouseId;
+            let fromWarehouseId = latestReceival.warehouseId ?? null;
+            if (!fromWarehouseId && latestReceival.locationId) {
+                fromWarehouseId = await CleaningGrnController.resolveWarehouseIdFromLocationId(latestReceival.locationId);
+            }
+            if (!fromWarehouseId) {
+                res.status(400).json({
+                    error: 'Could not resolve source warehouse from receival entry location',
+                });
+                return;
+            }
             // Generate cleaning job ID
             const lastJob = await prisma.cleaningJob.findFirst({
                 orderBy: { id: 'desc' },
@@ -215,7 +371,7 @@ class CleaningGrnController {
                         id: newJobId,
                         rawMaterialId,
                         fromWarehouseId,
-                        toWarehouseId,
+                        toWarehouseId: effectiveToWarehouseId,
                         quantity,
                         status: 'Sent',
                         startedAt: new Date(),
@@ -229,7 +385,7 @@ class CleaningGrnController {
                         cleaningJobId: cleaningJob.id,
                         grnId,
                         rawMaterialId,
-                        warehouseId: toWarehouseId,
+                        warehouseId: effectiveToWarehouseId,
                         quantity,
                         status: 'Active',
                     },
@@ -297,6 +453,7 @@ class CleaningGrnController {
                             grn: { select: { grnNumber: true } },
                         },
                     },
+                    rawMaterial: true,
                 },
             });
             if (!cleaningJob) {
@@ -307,8 +464,11 @@ class CleaningGrnController {
             const parsedStoneWastageUnit = stoneWastageUnit || 'kg';
             const parsedSeedWastageQty = seedWastageQty ? parseFloat(seedWastageQty) : 0;
             const parsedSeedWastageUnit = seedWastageUnit || 'kg';
+            const nativeUnit = cleaningJob.rawMaterial?.unitOfMeasurement || 'kg';
+            const baseStoneWastage = CleaningGrnController.convertWeight(parsedStoneWastageQty, parsedStoneWastageUnit, nativeUnit);
+            const baseSeedWastage = CleaningGrnController.convertWeight(parsedSeedWastageQty, parsedSeedWastageUnit, nativeUnit);
             // Calculate wastage percentage and type
-            const totalWastage = parsedStoneWastageQty + parsedSeedWastageQty;
+            const totalWastage = baseStoneWastage + baseSeedWastage;
             const transferQty = cleaningJob.quantity || 1; // avoid division by zero
             const wastagePercentage = parseFloat(((totalWastage / transferQty) * 100).toFixed(2));
             // ≤3% => Normal Loss, >3% => Abnormal Loss
@@ -331,6 +491,8 @@ class CleaningGrnController {
             }
             await prisma.$transaction(async (tx) => {
                 // Update cleaning job status + persist stone & seed wastage fields + wastage %
+                const jobQty = cleaningJob.quantity || 0;
+                const jobCleanedQty = Math.max(0, jobQty - baseStoneWastage - baseSeedWastage);
                 await tx.cleaningJob.update({
                     where: { id },
                     data: {
@@ -340,6 +502,8 @@ class CleaningGrnController {
                         stoneWastageUnit: parsedStoneWastageUnit,
                         seedWastageQty: parsedSeedWastageQty,
                         seedWastageUnit: parsedSeedWastageUnit,
+                        cleanedQuantity: jobCleanedQty,
+                        cleanedQuantityUnit: nativeUnit,
                         wastagePercentage,
                         wastageType,
                     },
@@ -348,9 +512,9 @@ class CleaningGrnController {
                 // Calculate cleaned quantity per lot = lot quantity - stone wastage - seed wastage
                 for (const lot of cleaningJob.cleaningLots) {
                     const lotQty = lot.quantity || 0;
-                    const cleanedQty = Math.max(0, lotQty - parsedStoneWastageQty - parsedSeedWastageQty);
+                    const cleanedQty = Math.max(0, lotQty - baseStoneWastage - baseSeedWastage);
                     // Calculate lot-level wastage percentage
-                    const lotTotalWastage = parsedStoneWastageQty + parsedSeedWastageQty;
+                    const lotTotalWastage = baseStoneWastage + baseSeedWastage;
                     const lotWastagePercentage = parseFloat(((lotTotalWastage / (lotQty || 1)) * 100).toFixed(2));
                     const lotWastageType = lotWastagePercentage > 3 ? 'Abnormal Loss' : 'Normal Loss';
                     await tx.cleaningLot.update({
@@ -358,6 +522,7 @@ class CleaningGrnController {
                         data: {
                             status: 'Cleaned',
                             cleanedQuantity: cleanedQty,
+                            cleanedQuantityUnit: nativeUnit,
                             stoneWastageQty: parsedStoneWastageQty,
                             stoneWastageUnit: parsedStoneWastageUnit,
                             seedWastageQty: parsedSeedWastageQty,

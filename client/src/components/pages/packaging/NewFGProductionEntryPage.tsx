@@ -19,7 +19,8 @@ import {
   Boxes,
   Cog,
   Gauge,
-  Users
+  Users,
+  Search
 } from 'lucide-react';
 
 /* ─── Unit conversion helpers ─── */
@@ -40,7 +41,6 @@ function formatQty(val: number): string {
   return rounded.toLocaleString(undefined, { maximumFractionDigits: 3 });
 }
 
-const UNIT_OPTIONS = ['KG', 'Ton', 'gram', 'Boxes', 'Pcs', 'Bags'].map(u => ({ value: u, label: u }));
 const LAMINATE_UNIT_OPTIONS = ['KG', 'Ton', 'gram'].map(u => ({ value: u, label: u }));
 
 const NewFGProductionEntryPage: React.FC = () => {
@@ -49,7 +49,6 @@ const NewFGProductionEntryPage: React.FC = () => {
 
   // General State
   const [locations, setLocations] = useState<any[]>([]);
-  const [machines, setMachines] = useState<any[]>([]);
   const [boms, setBoms] = useState<any[]>([]);
   const [fetchingBase, setFetchingBase] = useState(true);
 
@@ -62,6 +61,7 @@ const NewFGProductionEntryPage: React.FC = () => {
   // Materials & Consumptions
   const [consumptionLines, setConsumptionLines] = useState<any[]>([]);
   const [loadingItems, setLoadingItems] = useState(false);
+  const [showAvailability, setShowAvailability] = useState(false);
 
   // Step 2: Single machine allocation
   const [selectedMachineId, setSelectedMachineId] = useState('');
@@ -75,7 +75,6 @@ const NewFGProductionEntryPage: React.FC = () => {
   const [machineManPower, setMachineManPower] = useState(true);
   const [machineNotes, setMachineNotes] = useState('');
   const [outputMachines, setOutputMachines] = useState<any[]>([]);
-  const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   // Previous production entries for "Product" column
@@ -222,15 +221,21 @@ const NewFGProductionEntryPage: React.FC = () => {
     setLoadingItems(false);
   };
 
-  /* ─── Trigger BOM fetch when inputs change ─── */
+  /* ─── Reset availability when inputs change ─── */
   useEffect(() => {
-    if (selectedBomId && productionQty && productionQty > 0 && selectedLocationId) {
-      fetchBomItems(selectedBomId, productionQty, productionUnit, selectedLocationId);
-    } else {
-      setConsumptionLines([]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setShowAvailability(false);
+    setConsumptionLines([]);
   }, [selectedBomId, productionQty, productionUnit, selectedLocationId]);
+
+  /* ─── Handle Check Availability button click ─── */
+  const handleCheckAvailability = () => {
+    if (!selectedBomId || !productionQty || productionQty <= 0 || !selectedLocationId) {
+      message.warning('Please fill in Location, Target BOM, and Production Quantity first.');
+      return;
+    }
+    setShowAvailability(true);
+    fetchBomItems(selectedBomId, productionQty, productionUnit, selectedLocationId);
+  };
 
   /* ─── Helper: Get last product for a given machine ─── */
   const getLastProductForMachine = (machineId: string): string => {
@@ -655,6 +660,18 @@ const NewFGProductionEntryPage: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <InputNumber min={0.001} step={1} className="w-full font-semibold rounded-sm" size="large" value={productionQty} onChange={setProductionQty} placeholder="E.g. 500" />
                         <Select className="w-32 rounded-sm" size="large" value={productionUnit} onChange={setProductionUnit} options={['KG', 'Ton', 'gram'].map(u => ({ value: u, label: u }))} />
+                        <Button
+                          type="primary"
+                          size="large"
+                          onClick={handleCheckAvailability}
+                          loading={loadingItems}
+                          disabled={!selectedLocationId || !selectedBomId || !productionQty || productionQty <= 0}
+                          className="rounded-sm font-bold shadow-md border-0 whitespace-nowrap"
+                          style={{ background: (!selectedLocationId || !selectedBomId || !productionQty || productionQty <= 0) ? undefined : 'linear-gradient(135deg, #8b5cf6, #6d28d9)' }}
+                          icon={<Search size={16} />}
+                        >
+                          Check Availability
+                        </Button>
                       </div>
                       <p className="mt-2 text-[11px] text-muted-foreground">Planned output quantity for this batch</p>
                     </div>
@@ -690,32 +707,25 @@ const NewFGProductionEntryPage: React.FC = () => {
                   )}
                 </div>
 
-                {/* Loading Indicator for Quantity Calculation */}
-                {loadingItems && (
-                   <div className="mt-8 flex flex-col justify-center items-center py-8 border border-dashed border-emerald-300 rounded-md bg-gradient-to-br from-emerald-50/40 to-teal-50/30">
+                {/* Items Required Suggestion — shown only after clicking Check Availability */}
+                <AnimatePresence mode="wait">
+                {showAvailability && loadingItems && (
+                   <motion.div
+                      key="loading-availability"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="mt-8 flex flex-col justify-center items-center py-8 border border-dashed border-emerald-300 rounded-md bg-gradient-to-br from-emerald-50/40 to-teal-50/30"
+                   >
                       <div className="relative w-12 h-12 mb-3">
                         <div className="absolute inset-0 rounded-full border-[3px] border-emerald-200" />
                         <div className="absolute inset-0 rounded-full border-[3px] border-emerald-500 border-t-transparent animate-spin" />
                         <Boxes size={16} className="absolute inset-0 m-auto text-emerald-600" />
                       </div>
                       <p className="text-sm font-semibold text-emerald-700 animate-pulse">Calculating material requirements and available stock...</p>
-                   </div>
+                   </motion.div>
                 )}
-
-                {/* Empty State */}
-                {!loadingItems && consumptionLines.length === 0 && (
-                  <div className="mt-6 flex flex-col items-center justify-center py-10 border border-dashed border-border rounded-md bg-muted/10">
-                    <div className="p-3 rounded-full bg-muted/40 mb-3">
-                      <Package size={28} className="text-muted-foreground" />
-                    </div>
-                    <p className="text-sm font-semibold text-foreground">No materials calculated yet</p>
-                    <p className="text-xs text-muted-foreground mt-1">Fill in all three fields above to see material requirements</p>
-                  </div>
-                )}
-
-                {/* Items Required Suggestion */}
-                <AnimatePresence mode="wait">
-                {!loadingItems && consumptionLines.length > 0 && (
+                {showAvailability && !loadingItems && consumptionLines.length > 0 && (
                    <motion.div
                       className="mt-6"
                       key="material-requirements"

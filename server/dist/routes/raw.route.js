@@ -21,6 +21,14 @@ const qualityExportFiltered_controller_1 = require("../controllers/rawmaterial/q
 const sendPurchaseOrderMail_controller_1 = require("../controllers/rawmaterial/sendPurchaseOrderMail.controller");
 const grn_controller_1 = require("../controllers/rawmaterial/grn.controller");
 const bom_controller_1 = require("../controllers/rawmaterial/bom.controller");
+const location_controller_1 = require("../controllers/rawmaterial/location.controller");
+const transfer_controller_1 = require("../controllers/rawmaterial/transfer.controller");
+const production_controller_1 = require("../controllers/rawmaterial/production.controller");
+const grindingDispatch_controller_1 = require("../controllers/rawmaterial/grindingDispatch.controller");
+const fgBatch_controller_1 = require("../controllers/rawmaterial/fgBatch.controller");
+const fgProduction_controller_1 = require("../controllers/rawmaterial/fgProduction.controller");
+const fgVerification_controller_1 = require("../controllers/rawmaterial/fgVerification.controller");
+const fgPackaging_controller_1 = require("../controllers/rawmaterial/fgPackaging.controller");
 const router = (0, express_1.Router)();
 // Apply authentication middleware to all routes below
 router.use(authMiddleware_1.authenticate);
@@ -75,6 +83,29 @@ router.get('/warehouse', warehouse_controller_1.WarehouseController.getWarehouse
 router.get('/warehouse/:id', warehouse_controller_1.WarehouseController.getWarehouseById);
 router.put('/warehouse/:id', warehouse_controller_1.WarehouseController.updateWarehouse);
 router.delete('/warehouse/:id', warehouse_controller_1.WarehouseController.deleteWarehouse);
+// Locations
+router.post('/location', location_controller_1.LocationController.createLocation);
+router.get('/location', location_controller_1.LocationController.getLocations);
+router.get('/location/:id', location_controller_1.LocationController.getLocationById);
+router.put('/location/:id', location_controller_1.LocationController.updateLocation);
+router.patch('/location/:id/status', location_controller_1.LocationController.setLocationStatus);
+// Material Transfers
+router.post('/transfers', transfer_controller_1.TransferController.createTransfer);
+router.get('/transfers', transfer_controller_1.TransferController.getTransfers);
+router.post('/transfers/outbound', transfer_controller_1.TransferController.createOutboundTransfer);
+router.get('/transfers/sfg-warehouse-stock', transfer_controller_1.TransferController.getSfgWarehouseStock);
+router.get('/transfers/outbound-stock-details', transfer_controller_1.TransferController.getOutboundStockDetails);
+router.get('/transfers/packaging-stock', transfer_controller_1.TransferController.getPackagingStock);
+router.get('/transfers/:id', transfer_controller_1.TransferController.getTransferById);
+router.put('/transfers/:id/accept', transfer_controller_1.TransferController.acceptTransfer);
+router.put('/transfers/:id/reject', transfer_controller_1.TransferController.rejectTransfer);
+// Production Posting
+router.get('/production/consumption-data', production_controller_1.ProductionController.getConsumptionData);
+router.post('/production/post', production_controller_1.ProductionController.postProduction);
+router.get('/production/postings', production_controller_1.ProductionController.getPostings);
+router.get('/production/completed-for-outbound', production_controller_1.ProductionController.getCompletedForOutbound);
+router.get('/production/postings/:id', production_controller_1.ProductionController.getPostingById);
+router.put('/production/postings/:id/complete', production_controller_1.ProductionController.completeProduction);
 router.get('/stock', stock_controller_1.StockEntryController.getCurrentStockDistribution);
 router.get('/purchase-order-items', purchase_controller_1.PurchaseOrderController.getAllPurchaseOrderItems);
 router.get('/transaction-logs', log_controller_1.TransactionLogController.getAllTransactionLogs);
@@ -123,7 +154,40 @@ router.put('/cleaning-grn/finish/:id', cleaningGrn_controller_1.CleaningGrnContr
 // Bill of Material (BOM)
 router.post('/bom', bom_controller_1.BOMController.createBOM);
 router.get('/bom', bom_controller_1.BOMController.getBOMs);
+router.get('/bom/by-sfg/:productId', bom_controller_1.BOMController.getBOMBySFG);
 router.get('/bom/:id', bom_controller_1.BOMController.getBOMById);
 router.put('/bom/:id', bom_controller_1.BOMController.updateBOM);
 router.delete('/bom/:id', bom_controller_1.BOMController.deleteBOM);
+// Grinding Dispatch (Transfer with Approval)
+router.post('/grinding/dispatch', grindingDispatch_controller_1.GrindingDispatchController.createDispatch);
+router.get('/grinding/dispatches', grindingDispatch_controller_1.GrindingDispatchController.getDispatches);
+router.get('/grinding/dispatch/:id', grindingDispatch_controller_1.GrindingDispatchController.getDispatchById);
+router.put('/grinding/dispatch/:id/accept', grindingDispatch_controller_1.GrindingDispatchController.acceptDispatch);
+router.put('/grinding/dispatch/:id/reject', grindingDispatch_controller_1.GrindingDispatchController.rejectDispatch);
+// FG Batch (Finished Good Batch Production)
+router.get('/fg-batch/boms', fgBatch_controller_1.FGBatchController.getFGBOMs);
+router.get('/fg-batch/bom-items', fgBatch_controller_1.FGBatchController.getFGBOMItems);
+router.post('/fg-batch/create', fgBatch_controller_1.FGBatchController.createFGBatch);
+router.get('/fg-batch/list', fgBatch_controller_1.FGBatchController.getFGBatches);
+// FG Production Entry (Machine-wise Production) — must be before :id wildcard
+router.get('/fg-batch/accepted-batches', fgProduction_controller_1.FGProductionController.getAcceptedBatches);
+router.post('/fg-batch/production-entry', fgProduction_controller_1.FGProductionController.createProductionEntry);
+router.get('/fg-batch/production-entries', fgProduction_controller_1.FGProductionController.getProductionEntries);
+router.get('/fg-batch/production-entries/:id', fgProduction_controller_1.FGProductionController.getProductionEntryById);
+router.post('/fg-batch/production-entries/:id/quality', fgProduction_controller_1.FGProductionController.submitQualityCheck);
+router.put('/fg-batch/production-entries/:id/complete', fgProduction_controller_1.FGProductionController.submitProductionOutput);
+// FG Batch by ID — :id wildcard must come last
+router.get('/fg-batch/:id', fgBatch_controller_1.FGBatchController.getFGBatchById);
+router.put('/fg-batch/:id/accept', fgBatch_controller_1.FGBatchController.acceptFGBatch);
+router.put('/fg-batch/:id/reject', fgBatch_controller_1.FGBatchController.rejectFGBatch);
+// FG Production Verification (Dispatch & Warehouse Accept/Reject)
+router.post('/fg-verification/dispatch', fgVerification_controller_1.FGVerificationController.dispatchToWarehouse);
+router.get('/fg-verification', fgVerification_controller_1.FGVerificationController.getVerifications);
+router.put('/fg-verification/:id/accept', fgVerification_controller_1.FGVerificationController.acceptVerification);
+router.put('/fg-verification/:id/reject', fgVerification_controller_1.FGVerificationController.rejectVerification);
+// FG Packaging Master
+router.get('/fg-packaging', fgPackaging_controller_1.FGPackagingController.getFGPackagingSettings);
+router.get('/fg-packaging/product/:productId', fgPackaging_controller_1.FGPackagingController.getFGPackagingByProductId);
+router.post('/fg-packaging', fgPackaging_controller_1.FGPackagingController.upsertFGPackagingSetting);
+router.delete('/fg-packaging/:id', fgPackaging_controller_1.FGPackagingController.deleteFGPackagingSetting);
 exports.default = router;

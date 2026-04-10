@@ -15,6 +15,7 @@ const training_route_1 = __importDefault(require("./routes/training.route"));
 const audit_route_1 = __importDefault(require("./routes/audit.route"));
 const raw_route_1 = __importDefault(require("./routes/raw.route"));
 const draft_route_1 = __importDefault(require("./routes/draft.route"));
+const machine_route_1 = __importDefault(require("./routes/machine.route"));
 const updateauditstatus_1 = require("./jobs/updateauditstatus");
 const app = (0, express_1.default)();
 const PORT = process.env.PORT;
@@ -38,6 +39,7 @@ app.use('/training', training_route_1.default);
 app.use('/audit', audit_route_1.default);
 app.use('/raw', raw_route_1.default);
 app.use('/draft', draft_route_1.default);
+app.use('/machine', machine_route_1.default);
 // Schedule background jobs
 // Run once at startup and then every 6 hours
 // This frequency balances timely updates with minimal performance impact
