@@ -49,6 +49,7 @@ const NewFGProductionEntryPage: React.FC = () => {
 
   // General State
   const [locations, setLocations] = useState<any[]>([]);
+  const [, setMachines] = useState<any[]>([]);
   const [boms, setBoms] = useState<any[]>([]);
   const [fetchingBase, setFetchingBase] = useState(true);
 

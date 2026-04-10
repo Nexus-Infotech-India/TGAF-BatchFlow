@@ -120,6 +120,7 @@ const DispatchToGrinding: React.FC = () => {
 
   // ── Dispatch data ──
   const [dispatches, setDispatches] = useState<GrindingDispatch[]>([]);
+  const [, setWarehouses] = useState<WarehouseType[]>([]);
   const [locations, setLocations] = useState<LocationType[]>([]);
   const [rawMaterials, setRawMaterials] = useState<RawMaterial[]>([]);
   const [availableLots, setAvailableLots] = useState<CleaningLot[]>([]);
