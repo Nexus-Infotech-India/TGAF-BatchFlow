@@ -10914,10 +10914,12 @@ export namespace Prisma {
 
   export type MachineCountOutputType = {
     productionMachineEntries: number
+    productionEntries: number
   }
 
   export type MachineCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     productionMachineEntries?: boolean | MachineCountOutputTypeCountProductionMachineEntriesArgs
+    productionEntries?: boolean | MachineCountOutputTypeCountProductionEntriesArgs
   }
 
   // Custom InputTypes
@@ -10936,6 +10938,13 @@ export namespace Prisma {
    */
   export type MachineCountOutputTypeCountProductionMachineEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FGProductionMachineEntryWhereInput
+  }
+
+  /**
+   * MachineCountOutputType without action
+   */
+  export type MachineCountOutputTypeCountProductionEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FGProductionEntryWhereInput
   }
 
 
@@ -104278,6 +104287,8 @@ export namespace Prisma {
     fgProductName: string | null
     targetQty: number | null
     targetUnit: string | null
+    machineId: string | null
+    machineName: string | null
     totalActualFg: number | null
     totalActualByproduct: number | null
     totalActualScrap: number | null
@@ -104297,6 +104308,8 @@ export namespace Prisma {
     fgProductName: string | null
     targetQty: number | null
     targetUnit: string | null
+    machineId: string | null
+    machineName: string | null
     totalActualFg: number | null
     totalActualByproduct: number | null
     totalActualScrap: number | null
@@ -104316,6 +104329,8 @@ export namespace Prisma {
     fgProductName: number
     targetQty: number
     targetUnit: number
+    machineId: number
+    machineName: number
     totalActualFg: number
     totalActualByproduct: number
     totalActualScrap: number
@@ -104353,6 +104368,8 @@ export namespace Prisma {
     fgProductName?: true
     targetQty?: true
     targetUnit?: true
+    machineId?: true
+    machineName?: true
     totalActualFg?: true
     totalActualByproduct?: true
     totalActualScrap?: true
@@ -104372,6 +104389,8 @@ export namespace Prisma {
     fgProductName?: true
     targetQty?: true
     targetUnit?: true
+    machineId?: true
+    machineName?: true
     totalActualFg?: true
     totalActualByproduct?: true
     totalActualScrap?: true
@@ -104391,6 +104410,8 @@ export namespace Prisma {
     fgProductName?: true
     targetQty?: true
     targetUnit?: true
+    machineId?: true
+    machineName?: true
     totalActualFg?: true
     totalActualByproduct?: true
     totalActualScrap?: true
@@ -104497,6 +104518,8 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineId: string | null
+    machineName: string | null
     totalActualFg: number
     totalActualByproduct: number
     totalActualScrap: number
@@ -104535,6 +104558,8 @@ export namespace Prisma {
     fgProductName?: boolean
     targetQty?: boolean
     targetUnit?: boolean
+    machineId?: boolean
+    machineName?: boolean
     totalActualFg?: boolean
     totalActualByproduct?: boolean
     totalActualScrap?: boolean
@@ -104545,6 +104570,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+    machine?: boolean | FGProductionEntry$machineArgs<ExtArgs>
     machineEntries?: boolean | FGProductionEntry$machineEntriesArgs<ExtArgs>
     verifications?: boolean | FGProductionEntry$verificationsArgs<ExtArgs>
     qualityReport?: boolean | FGProductionEntry$qualityReportArgs<ExtArgs>
@@ -104559,6 +104585,8 @@ export namespace Prisma {
     fgProductName?: boolean
     targetQty?: boolean
     targetUnit?: boolean
+    machineId?: boolean
+    machineName?: boolean
     totalActualFg?: boolean
     totalActualByproduct?: boolean
     totalActualScrap?: boolean
@@ -104569,6 +104597,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+    machine?: boolean | FGProductionEntry$machineArgs<ExtArgs>
   }, ExtArgs["result"]["fGProductionEntry"]>
 
   export type FGProductionEntrySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -104579,6 +104608,8 @@ export namespace Prisma {
     fgProductName?: boolean
     targetQty?: boolean
     targetUnit?: boolean
+    machineId?: boolean
+    machineName?: boolean
     totalActualFg?: boolean
     totalActualByproduct?: boolean
     totalActualScrap?: boolean
@@ -104589,6 +104620,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+    machine?: boolean | FGProductionEntry$machineArgs<ExtArgs>
   }, ExtArgs["result"]["fGProductionEntry"]>
 
   export type FGProductionEntrySelectScalar = {
@@ -104599,6 +104631,8 @@ export namespace Prisma {
     fgProductName?: boolean
     targetQty?: boolean
     targetUnit?: boolean
+    machineId?: boolean
+    machineName?: boolean
     totalActualFg?: boolean
     totalActualByproduct?: boolean
     totalActualScrap?: boolean
@@ -104610,9 +104644,10 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type FGProductionEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "entryNumber" | "fgBatchId" | "bomId" | "fgProductName" | "targetQty" | "targetUnit" | "totalActualFg" | "totalActualByproduct" | "totalActualScrap" | "totalAchievedBoxes" | "status" | "notes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["fGProductionEntry"]>
+  export type FGProductionEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "entryNumber" | "fgBatchId" | "bomId" | "fgProductName" | "targetQty" | "targetUnit" | "machineId" | "machineName" | "totalActualFg" | "totalActualByproduct" | "totalActualScrap" | "totalAchievedBoxes" | "status" | "notes" | "createdById" | "createdAt" | "updatedAt", ExtArgs["result"]["fGProductionEntry"]>
   export type FGProductionEntryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+    machine?: boolean | FGProductionEntry$machineArgs<ExtArgs>
     machineEntries?: boolean | FGProductionEntry$machineEntriesArgs<ExtArgs>
     verifications?: boolean | FGProductionEntry$verificationsArgs<ExtArgs>
     qualityReport?: boolean | FGProductionEntry$qualityReportArgs<ExtArgs>
@@ -104620,15 +104655,18 @@ export namespace Prisma {
   }
   export type FGProductionEntryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+    machine?: boolean | FGProductionEntry$machineArgs<ExtArgs>
   }
   export type FGProductionEntryIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     fgBatch?: boolean | FGBatchDefaultArgs<ExtArgs>
+    machine?: boolean | FGProductionEntry$machineArgs<ExtArgs>
   }
 
   export type $FGProductionEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "FGProductionEntry"
     objects: {
       fgBatch: Prisma.$FGBatchPayload<ExtArgs>
+      machine: Prisma.$MachinePayload<ExtArgs> | null
       machineEntries: Prisma.$FGProductionMachineEntryPayload<ExtArgs>[]
       verifications: Prisma.$FGProductionVerificationPayload<ExtArgs>[]
       qualityReport: Prisma.$FGQualityReportPayload<ExtArgs> | null
@@ -104641,6 +104679,8 @@ export namespace Prisma {
       fgProductName: string
       targetQty: number
       targetUnit: string
+      machineId: string | null
+      machineName: string | null
       totalActualFg: number
       totalActualByproduct: number
       totalActualScrap: number
@@ -105045,6 +105085,7 @@ export namespace Prisma {
   export interface Prisma__FGProductionEntryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     fgBatch<T extends FGBatchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FGBatchDefaultArgs<ExtArgs>>): Prisma__FGBatchClient<$Result.GetResult<Prisma.$FGBatchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    machine<T extends FGProductionEntry$machineArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntry$machineArgs<ExtArgs>>): Prisma__MachineClient<$Result.GetResult<Prisma.$MachinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     machineEntries<T extends FGProductionEntry$machineEntriesArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntry$machineEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     verifications<T extends FGProductionEntry$verificationsArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntry$verificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionVerificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     qualityReport<T extends FGProductionEntry$qualityReportArgs<ExtArgs> = {}>(args?: Subset<T, FGProductionEntry$qualityReportArgs<ExtArgs>>): Prisma__FGQualityReportClient<$Result.GetResult<Prisma.$FGQualityReportPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -105084,6 +105125,8 @@ export namespace Prisma {
     readonly fgProductName: FieldRef<"FGProductionEntry", 'String'>
     readonly targetQty: FieldRef<"FGProductionEntry", 'Float'>
     readonly targetUnit: FieldRef<"FGProductionEntry", 'String'>
+    readonly machineId: FieldRef<"FGProductionEntry", 'String'>
+    readonly machineName: FieldRef<"FGProductionEntry", 'String'>
     readonly totalActualFg: FieldRef<"FGProductionEntry", 'Float'>
     readonly totalActualByproduct: FieldRef<"FGProductionEntry", 'Float'>
     readonly totalActualScrap: FieldRef<"FGProductionEntry", 'Float'>
@@ -105486,6 +105529,25 @@ export namespace Prisma {
      * Limit how many FGProductionEntries to delete.
      */
     limit?: number
+  }
+
+  /**
+   * FGProductionEntry.machine
+   */
+  export type FGProductionEntry$machineArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Machine
+     */
+    select?: MachineSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Machine
+     */
+    omit?: MachineOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MachineInclude<ExtArgs> | null
+    where?: MachineWhereInput
   }
 
   /**
@@ -107261,6 +107323,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     productionMachineEntries?: boolean | Machine$productionMachineEntriesArgs<ExtArgs>
+    productionEntries?: boolean | Machine$productionEntriesArgs<ExtArgs>
     _count?: boolean | MachineCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["machine"]>
 
@@ -107303,6 +107366,7 @@ export namespace Prisma {
   export type MachineOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "machineId" | "name" | "location" | "capacityQty" | "capacityUnit" | "machineSpeed" | "createdAt" | "updatedAt", ExtArgs["result"]["machine"]>
   export type MachineInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     productionMachineEntries?: boolean | Machine$productionMachineEntriesArgs<ExtArgs>
+    productionEntries?: boolean | Machine$productionEntriesArgs<ExtArgs>
     _count?: boolean | MachineCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MachineIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -107312,6 +107376,7 @@ export namespace Prisma {
     name: "Machine"
     objects: {
       productionMachineEntries: Prisma.$FGProductionMachineEntryPayload<ExtArgs>[]
+      productionEntries: Prisma.$FGProductionEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -107718,6 +107783,7 @@ export namespace Prisma {
   export interface Prisma__MachineClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     productionMachineEntries<T extends Machine$productionMachineEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Machine$productionMachineEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionMachineEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    productionEntries<T extends Machine$productionEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Machine$productionEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FGProductionEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -108165,6 +108231,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: FGProductionMachineEntryScalarFieldEnum | FGProductionMachineEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Machine.productionEntries
+   */
+  export type Machine$productionEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FGProductionEntry
+     */
+    select?: FGProductionEntrySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FGProductionEntry
+     */
+    omit?: FGProductionEntryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FGProductionEntryInclude<ExtArgs> | null
+    where?: FGProductionEntryWhereInput
+    orderBy?: FGProductionEntryOrderByWithRelationInput | FGProductionEntryOrderByWithRelationInput[]
+    cursor?: FGProductionEntryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FGProductionEntryScalarFieldEnum | FGProductionEntryScalarFieldEnum[]
   }
 
   /**
@@ -112956,6 +113046,8 @@ export namespace Prisma {
     fgProductName: 'fgProductName',
     targetQty: 'targetQty',
     targetUnit: 'targetUnit',
+    machineId: 'machineId',
+    machineName: 'machineName',
     totalActualFg: 'totalActualFg',
     totalActualByproduct: 'totalActualByproduct',
     totalActualScrap: 'totalActualScrap',
@@ -120304,6 +120396,8 @@ export namespace Prisma {
     fgProductName?: StringFilter<"FGProductionEntry"> | string
     targetQty?: FloatFilter<"FGProductionEntry"> | number
     targetUnit?: StringFilter<"FGProductionEntry"> | string
+    machineId?: StringNullableFilter<"FGProductionEntry"> | string | null
+    machineName?: StringNullableFilter<"FGProductionEntry"> | string | null
     totalActualFg?: FloatFilter<"FGProductionEntry"> | number
     totalActualByproduct?: FloatFilter<"FGProductionEntry"> | number
     totalActualScrap?: FloatFilter<"FGProductionEntry"> | number
@@ -120314,6 +120408,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
     updatedAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
     fgBatch?: XOR<FGBatchScalarRelationFilter, FGBatchWhereInput>
+    machine?: XOR<MachineNullableScalarRelationFilter, MachineWhereInput> | null
     machineEntries?: FGProductionMachineEntryListRelationFilter
     verifications?: FGProductionVerificationListRelationFilter
     qualityReport?: XOR<FGQualityReportNullableScalarRelationFilter, FGQualityReportWhereInput> | null
@@ -120327,6 +120422,8 @@ export namespace Prisma {
     fgProductName?: SortOrder
     targetQty?: SortOrder
     targetUnit?: SortOrder
+    machineId?: SortOrderInput | SortOrder
+    machineName?: SortOrderInput | SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
@@ -120337,6 +120434,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     fgBatch?: FGBatchOrderByWithRelationInput
+    machine?: MachineOrderByWithRelationInput
     machineEntries?: FGProductionMachineEntryOrderByRelationAggregateInput
     verifications?: FGProductionVerificationOrderByRelationAggregateInput
     qualityReport?: FGQualityReportOrderByWithRelationInput
@@ -120353,6 +120451,8 @@ export namespace Prisma {
     fgProductName?: StringFilter<"FGProductionEntry"> | string
     targetQty?: FloatFilter<"FGProductionEntry"> | number
     targetUnit?: StringFilter<"FGProductionEntry"> | string
+    machineId?: StringNullableFilter<"FGProductionEntry"> | string | null
+    machineName?: StringNullableFilter<"FGProductionEntry"> | string | null
     totalActualFg?: FloatFilter<"FGProductionEntry"> | number
     totalActualByproduct?: FloatFilter<"FGProductionEntry"> | number
     totalActualScrap?: FloatFilter<"FGProductionEntry"> | number
@@ -120363,6 +120463,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
     updatedAt?: DateTimeFilter<"FGProductionEntry"> | Date | string
     fgBatch?: XOR<FGBatchScalarRelationFilter, FGBatchWhereInput>
+    machine?: XOR<MachineNullableScalarRelationFilter, MachineWhereInput> | null
     machineEntries?: FGProductionMachineEntryListRelationFilter
     verifications?: FGProductionVerificationListRelationFilter
     qualityReport?: XOR<FGQualityReportNullableScalarRelationFilter, FGQualityReportWhereInput> | null
@@ -120376,6 +120477,8 @@ export namespace Prisma {
     fgProductName?: SortOrder
     targetQty?: SortOrder
     targetUnit?: SortOrder
+    machineId?: SortOrderInput | SortOrder
+    machineName?: SortOrderInput | SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
@@ -120403,6 +120506,8 @@ export namespace Prisma {
     fgProductName?: StringWithAggregatesFilter<"FGProductionEntry"> | string
     targetQty?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
     targetUnit?: StringWithAggregatesFilter<"FGProductionEntry"> | string
+    machineId?: StringNullableWithAggregatesFilter<"FGProductionEntry"> | string | null
+    machineName?: StringNullableWithAggregatesFilter<"FGProductionEntry"> | string | null
     totalActualFg?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
     totalActualByproduct?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
     totalActualScrap?: FloatWithAggregatesFilter<"FGProductionEntry"> | number
@@ -120608,6 +120713,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Machine"> | Date | string
     updatedAt?: DateTimeFilter<"Machine"> | Date | string
     productionMachineEntries?: FGProductionMachineEntryListRelationFilter
+    productionEntries?: FGProductionEntryListRelationFilter
   }
 
   export type MachineOrderByWithRelationInput = {
@@ -120621,6 +120727,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     productionMachineEntries?: FGProductionMachineEntryOrderByRelationAggregateInput
+    productionEntries?: FGProductionEntryOrderByRelationAggregateInput
   }
 
   export type MachineWhereUniqueInput = Prisma.AtLeast<{
@@ -120637,6 +120744,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Machine"> | Date | string
     updatedAt?: DateTimeFilter<"Machine"> | Date | string
     productionMachineEntries?: FGProductionMachineEntryListRelationFilter
+    productionEntries?: FGProductionEntryListRelationFilter
   }, "id" | "machineId">
 
   export type MachineOrderByWithAggregationInput = {
@@ -128255,6 +128363,7 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -128265,6 +128374,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
+    machine?: MachineCreateNestedOneWithoutProductionEntriesInput
     machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
     verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
     qualityReport?: FGQualityReportCreateNestedOneWithoutProductionEntryInput
@@ -128278,6 +128388,8 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineId?: string | null
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -128299,6 +128411,7 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -128309,6 +128422,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
+    machine?: MachineUpdateOneWithoutProductionEntriesNestedInput
     machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
     verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
     qualityReport?: FGQualityReportUpdateOneWithoutProductionEntryNestedInput
@@ -128322,6 +128436,8 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineId?: NullableStringFieldUpdateOperationsInput | string | null
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -128344,6 +128460,8 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineId?: string | null
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -128362,6 +128480,7 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -128381,6 +128500,8 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineId?: NullableStringFieldUpdateOperationsInput | string | null
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -128625,6 +128746,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     productionMachineEntries?: FGProductionMachineEntryCreateNestedManyWithoutMachineInput
+    productionEntries?: FGProductionEntryCreateNestedManyWithoutMachineInput
   }
 
   export type MachineUncheckedCreateInput = {
@@ -128638,6 +128760,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     productionMachineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutMachineInput
+    productionEntries?: FGProductionEntryUncheckedCreateNestedManyWithoutMachineInput
   }
 
   export type MachineUpdateInput = {
@@ -128651,6 +128774,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productionMachineEntries?: FGProductionMachineEntryUpdateManyWithoutMachineNestedInput
+    productionEntries?: FGProductionEntryUpdateManyWithoutMachineNestedInput
   }
 
   export type MachineUncheckedUpdateInput = {
@@ -128664,6 +128788,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     productionMachineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutMachineNestedInput
+    productionEntries?: FGProductionEntryUncheckedUpdateManyWithoutMachineNestedInput
   }
 
   export type MachineCreateManyInput = {
@@ -133944,6 +134069,11 @@ export namespace Prisma {
     actualQuantity?: SortOrder
   }
 
+  export type MachineNullableScalarRelationFilter = {
+    is?: MachineWhereInput | null
+    isNot?: MachineWhereInput | null
+  }
+
   export type FGProductionMachineEntryListRelationFilter = {
     every?: FGProductionMachineEntryWhereInput
     some?: FGProductionMachineEntryWhereInput
@@ -133977,6 +134107,8 @@ export namespace Prisma {
     fgProductName?: SortOrder
     targetQty?: SortOrder
     targetUnit?: SortOrder
+    machineId?: SortOrder
+    machineName?: SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
@@ -134004,6 +134136,8 @@ export namespace Prisma {
     fgProductName?: SortOrder
     targetQty?: SortOrder
     targetUnit?: SortOrder
+    machineId?: SortOrder
+    machineName?: SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
@@ -134023,6 +134157,8 @@ export namespace Prisma {
     fgProductName?: SortOrder
     targetQty?: SortOrder
     targetUnit?: SortOrder
+    machineId?: SortOrder
+    machineName?: SortOrder
     totalActualFg?: SortOrder
     totalActualByproduct?: SortOrder
     totalActualScrap?: SortOrder
@@ -142660,6 +142796,12 @@ export namespace Prisma {
     connect?: FGBatchWhereUniqueInput
   }
 
+  export type MachineCreateNestedOneWithoutProductionEntriesInput = {
+    create?: XOR<MachineCreateWithoutProductionEntriesInput, MachineUncheckedCreateWithoutProductionEntriesInput>
+    connectOrCreate?: MachineCreateOrConnectWithoutProductionEntriesInput
+    connect?: MachineWhereUniqueInput
+  }
+
   export type FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput = {
     create?: XOR<FGProductionMachineEntryCreateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput> | FGProductionMachineEntryCreateWithoutProductionEntryInput[] | FGProductionMachineEntryUncheckedCreateWithoutProductionEntryInput[]
     connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput | FGProductionMachineEntryCreateOrConnectWithoutProductionEntryInput[]
@@ -142706,6 +142848,16 @@ export namespace Prisma {
     upsert?: FGBatchUpsertWithoutProductionEntriesInput
     connect?: FGBatchWhereUniqueInput
     update?: XOR<XOR<FGBatchUpdateToOneWithWhereWithoutProductionEntriesInput, FGBatchUpdateWithoutProductionEntriesInput>, FGBatchUncheckedUpdateWithoutProductionEntriesInput>
+  }
+
+  export type MachineUpdateOneWithoutProductionEntriesNestedInput = {
+    create?: XOR<MachineCreateWithoutProductionEntriesInput, MachineUncheckedCreateWithoutProductionEntriesInput>
+    connectOrCreate?: MachineCreateOrConnectWithoutProductionEntriesInput
+    upsert?: MachineUpsertWithoutProductionEntriesInput
+    disconnect?: MachineWhereInput | boolean
+    delete?: MachineWhereInput | boolean
+    connect?: MachineWhereUniqueInput
+    update?: XOR<XOR<MachineUpdateToOneWithWhereWithoutProductionEntriesInput, MachineUpdateWithoutProductionEntriesInput>, MachineUncheckedUpdateWithoutProductionEntriesInput>
   }
 
   export type FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput = {
@@ -142819,11 +142971,25 @@ export namespace Prisma {
     connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
   }
 
+  export type FGProductionEntryCreateNestedManyWithoutMachineInput = {
+    create?: XOR<FGProductionEntryCreateWithoutMachineInput, FGProductionEntryUncheckedCreateWithoutMachineInput> | FGProductionEntryCreateWithoutMachineInput[] | FGProductionEntryUncheckedCreateWithoutMachineInput[]
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutMachineInput | FGProductionEntryCreateOrConnectWithoutMachineInput[]
+    createMany?: FGProductionEntryCreateManyMachineInputEnvelope
+    connect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+  }
+
   export type FGProductionMachineEntryUncheckedCreateNestedManyWithoutMachineInput = {
     create?: XOR<FGProductionMachineEntryCreateWithoutMachineInput, FGProductionMachineEntryUncheckedCreateWithoutMachineInput> | FGProductionMachineEntryCreateWithoutMachineInput[] | FGProductionMachineEntryUncheckedCreateWithoutMachineInput[]
     connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutMachineInput | FGProductionMachineEntryCreateOrConnectWithoutMachineInput[]
     createMany?: FGProductionMachineEntryCreateManyMachineInputEnvelope
     connect?: FGProductionMachineEntryWhereUniqueInput | FGProductionMachineEntryWhereUniqueInput[]
+  }
+
+  export type FGProductionEntryUncheckedCreateNestedManyWithoutMachineInput = {
+    create?: XOR<FGProductionEntryCreateWithoutMachineInput, FGProductionEntryUncheckedCreateWithoutMachineInput> | FGProductionEntryCreateWithoutMachineInput[] | FGProductionEntryUncheckedCreateWithoutMachineInput[]
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutMachineInput | FGProductionEntryCreateOrConnectWithoutMachineInput[]
+    createMany?: FGProductionEntryCreateManyMachineInputEnvelope
+    connect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
   }
 
   export type FGProductionMachineEntryUpdateManyWithoutMachineNestedInput = {
@@ -142840,6 +143006,20 @@ export namespace Prisma {
     deleteMany?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
   }
 
+  export type FGProductionEntryUpdateManyWithoutMachineNestedInput = {
+    create?: XOR<FGProductionEntryCreateWithoutMachineInput, FGProductionEntryUncheckedCreateWithoutMachineInput> | FGProductionEntryCreateWithoutMachineInput[] | FGProductionEntryUncheckedCreateWithoutMachineInput[]
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutMachineInput | FGProductionEntryCreateOrConnectWithoutMachineInput[]
+    upsert?: FGProductionEntryUpsertWithWhereUniqueWithoutMachineInput | FGProductionEntryUpsertWithWhereUniqueWithoutMachineInput[]
+    createMany?: FGProductionEntryCreateManyMachineInputEnvelope
+    set?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    disconnect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    delete?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    connect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    update?: FGProductionEntryUpdateWithWhereUniqueWithoutMachineInput | FGProductionEntryUpdateWithWhereUniqueWithoutMachineInput[]
+    updateMany?: FGProductionEntryUpdateManyWithWhereWithoutMachineInput | FGProductionEntryUpdateManyWithWhereWithoutMachineInput[]
+    deleteMany?: FGProductionEntryScalarWhereInput | FGProductionEntryScalarWhereInput[]
+  }
+
   export type FGProductionMachineEntryUncheckedUpdateManyWithoutMachineNestedInput = {
     create?: XOR<FGProductionMachineEntryCreateWithoutMachineInput, FGProductionMachineEntryUncheckedCreateWithoutMachineInput> | FGProductionMachineEntryCreateWithoutMachineInput[] | FGProductionMachineEntryUncheckedCreateWithoutMachineInput[]
     connectOrCreate?: FGProductionMachineEntryCreateOrConnectWithoutMachineInput | FGProductionMachineEntryCreateOrConnectWithoutMachineInput[]
@@ -142852,6 +143032,20 @@ export namespace Prisma {
     update?: FGProductionMachineEntryUpdateWithWhereUniqueWithoutMachineInput | FGProductionMachineEntryUpdateWithWhereUniqueWithoutMachineInput[]
     updateMany?: FGProductionMachineEntryUpdateManyWithWhereWithoutMachineInput | FGProductionMachineEntryUpdateManyWithWhereWithoutMachineInput[]
     deleteMany?: FGProductionMachineEntryScalarWhereInput | FGProductionMachineEntryScalarWhereInput[]
+  }
+
+  export type FGProductionEntryUncheckedUpdateManyWithoutMachineNestedInput = {
+    create?: XOR<FGProductionEntryCreateWithoutMachineInput, FGProductionEntryUncheckedCreateWithoutMachineInput> | FGProductionEntryCreateWithoutMachineInput[] | FGProductionEntryUncheckedCreateWithoutMachineInput[]
+    connectOrCreate?: FGProductionEntryCreateOrConnectWithoutMachineInput | FGProductionEntryCreateOrConnectWithoutMachineInput[]
+    upsert?: FGProductionEntryUpsertWithWhereUniqueWithoutMachineInput | FGProductionEntryUpsertWithWhereUniqueWithoutMachineInput[]
+    createMany?: FGProductionEntryCreateManyMachineInputEnvelope
+    set?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    disconnect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    delete?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    connect?: FGProductionEntryWhereUniqueInput | FGProductionEntryWhereUniqueInput[]
+    update?: FGProductionEntryUpdateWithWhereUniqueWithoutMachineInput | FGProductionEntryUpdateWithWhereUniqueWithoutMachineInput[]
+    updateMany?: FGProductionEntryUpdateManyWithWhereWithoutMachineInput | FGProductionEntryUpdateManyWithWhereWithoutMachineInput[]
+    deleteMany?: FGProductionEntryScalarWhereInput | FGProductionEntryScalarWhereInput[]
   }
 
   export type FGProductionEntryCreateNestedOneWithoutVerificationsInput = {
@@ -168121,6 +168315,7 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -168130,6 +168325,7 @@ export namespace Prisma {
     createdById: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    machine?: MachineCreateNestedOneWithoutProductionEntriesInput
     machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
     verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
     qualityReport?: FGQualityReportCreateNestedOneWithoutProductionEntryInput
@@ -168142,6 +168338,8 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineId?: string | null
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -168260,6 +168458,8 @@ export namespace Prisma {
     fgProductName?: StringFilter<"FGProductionEntry"> | string
     targetQty?: FloatFilter<"FGProductionEntry"> | number
     targetUnit?: StringFilter<"FGProductionEntry"> | string
+    machineId?: StringNullableFilter<"FGProductionEntry"> | string | null
+    machineName?: StringNullableFilter<"FGProductionEntry"> | string | null
     totalActualFg?: FloatFilter<"FGProductionEntry"> | number
     totalActualByproduct?: FloatFilter<"FGProductionEntry"> | number
     totalActualScrap?: FloatFilter<"FGProductionEntry"> | number
@@ -168402,6 +168602,37 @@ export namespace Prisma {
   export type FGBatchCreateOrConnectWithoutProductionEntriesInput = {
     where: FGBatchWhereUniqueInput
     create: XOR<FGBatchCreateWithoutProductionEntriesInput, FGBatchUncheckedCreateWithoutProductionEntriesInput>
+  }
+
+  export type MachineCreateWithoutProductionEntriesInput = {
+    id?: string
+    machineId: string
+    name: string
+    location: string
+    capacityQty: number
+    capacityUnit?: string
+    machineSpeed?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    productionMachineEntries?: FGProductionMachineEntryCreateNestedManyWithoutMachineInput
+  }
+
+  export type MachineUncheckedCreateWithoutProductionEntriesInput = {
+    id?: string
+    machineId: string
+    name: string
+    location: string
+    capacityQty: number
+    capacityUnit?: string
+    machineSpeed?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    productionMachineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutMachineInput
+  }
+
+  export type MachineCreateOrConnectWithoutProductionEntriesInput = {
+    where: MachineWhereUniqueInput
+    create: XOR<MachineCreateWithoutProductionEntriesInput, MachineUncheckedCreateWithoutProductionEntriesInput>
   }
 
   export type FGProductionMachineEntryCreateWithoutProductionEntryInput = {
@@ -168600,6 +168831,43 @@ export namespace Prisma {
     fgQualityReports?: FGQualityReportUncheckedUpdateManyWithoutFgBatchNestedInput
   }
 
+  export type MachineUpsertWithoutProductionEntriesInput = {
+    update: XOR<MachineUpdateWithoutProductionEntriesInput, MachineUncheckedUpdateWithoutProductionEntriesInput>
+    create: XOR<MachineCreateWithoutProductionEntriesInput, MachineUncheckedCreateWithoutProductionEntriesInput>
+    where?: MachineWhereInput
+  }
+
+  export type MachineUpdateToOneWithWhereWithoutProductionEntriesInput = {
+    where?: MachineWhereInput
+    data: XOR<MachineUpdateWithoutProductionEntriesInput, MachineUncheckedUpdateWithoutProductionEntriesInput>
+  }
+
+  export type MachineUpdateWithoutProductionEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    capacityQty?: FloatFieldUpdateOperationsInput | number
+    capacityUnit?: StringFieldUpdateOperationsInput | string
+    machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionMachineEntries?: FGProductionMachineEntryUpdateManyWithoutMachineNestedInput
+  }
+
+  export type MachineUncheckedUpdateWithoutProductionEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    machineId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: StringFieldUpdateOperationsInput | string
+    capacityQty?: FloatFieldUpdateOperationsInput | number
+    capacityUnit?: StringFieldUpdateOperationsInput | string
+    machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionMachineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutMachineNestedInput
+  }
+
   export type FGProductionMachineEntryUpsertWithWhereUniqueWithoutProductionEntryInput = {
     where: FGProductionMachineEntryWhereUniqueInput
     update: XOR<FGProductionMachineEntryUpdateWithoutProductionEntryInput, FGProductionMachineEntryUncheckedUpdateWithoutProductionEntryInput>
@@ -168734,6 +169002,7 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -168744,6 +169013,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
+    machine?: MachineCreateNestedOneWithoutProductionEntriesInput
     verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
     qualityReport?: FGQualityReportCreateNestedOneWithoutProductionEntryInput
   }
@@ -168756,6 +169026,8 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineId?: string | null
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -168784,6 +169056,7 @@ export namespace Prisma {
     machineSpeed?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    productionEntries?: FGProductionEntryCreateNestedManyWithoutMachineInput
   }
 
   export type MachineUncheckedCreateWithoutProductionMachineEntriesInput = {
@@ -168796,6 +169069,7 @@ export namespace Prisma {
     machineSpeed?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    productionEntries?: FGProductionEntryUncheckedCreateNestedManyWithoutMachineInput
   }
 
   export type MachineCreateOrConnectWithoutProductionMachineEntriesInput = {
@@ -168821,6 +169095,7 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -168831,6 +169106,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
+    machine?: MachineUpdateOneWithoutProductionEntriesNestedInput
     verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
     qualityReport?: FGQualityReportUpdateOneWithoutProductionEntryNestedInput
   }
@@ -168843,6 +169119,8 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineId?: NullableStringFieldUpdateOperationsInput | string | null
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -168877,6 +169155,7 @@ export namespace Prisma {
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionEntries?: FGProductionEntryUpdateManyWithoutMachineNestedInput
   }
 
   export type MachineUncheckedUpdateWithoutProductionMachineEntriesInput = {
@@ -168889,6 +169168,7 @@ export namespace Prisma {
     machineSpeed?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    productionEntries?: FGProductionEntryUncheckedUpdateManyWithoutMachineNestedInput
   }
 
   export type FGProductionMachineEntryCreateWithoutMachineInput = {
@@ -168963,6 +169243,62 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type FGProductionEntryCreateWithoutMachineInput = {
+    id?: string
+    entryNumber: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    machineName?: string | null
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalAchievedBoxes?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
+    machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
+    verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
+    qualityReport?: FGQualityReportCreateNestedOneWithoutProductionEntryInput
+  }
+
+  export type FGProductionEntryUncheckedCreateWithoutMachineInput = {
+    id?: string
+    entryNumber: string
+    fgBatchId: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    machineName?: string | null
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalAchievedBoxes?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    machineEntries?: FGProductionMachineEntryUncheckedCreateNestedManyWithoutProductionEntryInput
+    verifications?: FGProductionVerificationUncheckedCreateNestedManyWithoutProductionEntryInput
+    qualityReport?: FGQualityReportUncheckedCreateNestedOneWithoutProductionEntryInput
+  }
+
+  export type FGProductionEntryCreateOrConnectWithoutMachineInput = {
+    where: FGProductionEntryWhereUniqueInput
+    create: XOR<FGProductionEntryCreateWithoutMachineInput, FGProductionEntryUncheckedCreateWithoutMachineInput>
+  }
+
+  export type FGProductionEntryCreateManyMachineInputEnvelope = {
+    data: FGProductionEntryCreateManyMachineInput | FGProductionEntryCreateManyMachineInput[]
+    skipDuplicates?: boolean
+  }
+
   export type FGProductionMachineEntryUpsertWithWhereUniqueWithoutMachineInput = {
     where: FGProductionMachineEntryWhereUniqueInput
     update: XOR<FGProductionMachineEntryUpdateWithoutMachineInput, FGProductionMachineEntryUncheckedUpdateWithoutMachineInput>
@@ -168979,6 +169315,22 @@ export namespace Prisma {
     data: XOR<FGProductionMachineEntryUpdateManyMutationInput, FGProductionMachineEntryUncheckedUpdateManyWithoutMachineInput>
   }
 
+  export type FGProductionEntryUpsertWithWhereUniqueWithoutMachineInput = {
+    where: FGProductionEntryWhereUniqueInput
+    update: XOR<FGProductionEntryUpdateWithoutMachineInput, FGProductionEntryUncheckedUpdateWithoutMachineInput>
+    create: XOR<FGProductionEntryCreateWithoutMachineInput, FGProductionEntryUncheckedCreateWithoutMachineInput>
+  }
+
+  export type FGProductionEntryUpdateWithWhereUniqueWithoutMachineInput = {
+    where: FGProductionEntryWhereUniqueInput
+    data: XOR<FGProductionEntryUpdateWithoutMachineInput, FGProductionEntryUncheckedUpdateWithoutMachineInput>
+  }
+
+  export type FGProductionEntryUpdateManyWithWhereWithoutMachineInput = {
+    where: FGProductionEntryScalarWhereInput
+    data: XOR<FGProductionEntryUpdateManyMutationInput, FGProductionEntryUncheckedUpdateManyWithoutMachineInput>
+  }
+
   export type FGProductionEntryCreateWithoutVerificationsInput = {
     id?: string
     entryNumber: string
@@ -168986,6 +169338,7 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -168996,6 +169349,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
+    machine?: MachineCreateNestedOneWithoutProductionEntriesInput
     machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
     qualityReport?: FGQualityReportCreateNestedOneWithoutProductionEntryInput
   }
@@ -169008,6 +169362,8 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineId?: string | null
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -169044,6 +169400,7 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -169054,6 +169411,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
+    machine?: MachineUpdateOneWithoutProductionEntriesNestedInput
     machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
     qualityReport?: FGQualityReportUpdateOneWithoutProductionEntryNestedInput
   }
@@ -169066,6 +169424,8 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineId?: NullableStringFieldUpdateOperationsInput | string | null
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -169114,6 +169474,7 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -169124,6 +169485,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     fgBatch: FGBatchCreateNestedOneWithoutProductionEntriesInput
+    machine?: MachineCreateNestedOneWithoutProductionEntriesInput
     machineEntries?: FGProductionMachineEntryCreateNestedManyWithoutProductionEntryInput
     verifications?: FGProductionVerificationCreateNestedManyWithoutProductionEntryInput
   }
@@ -169136,6 +169498,8 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineId?: string | null
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -169331,6 +169695,7 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -169341,6 +169706,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
+    machine?: MachineUpdateOneWithoutProductionEntriesNestedInput
     machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
     verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
   }
@@ -169353,6 +169719,8 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineId?: NullableStringFieldUpdateOperationsInput | string | null
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -177179,6 +177547,8 @@ export namespace Prisma {
     fgProductName: string
     targetQty: number
     targetUnit: string
+    machineId?: string | null
+    machineName?: string | null
     totalActualFg?: number
     totalActualByproduct?: number
     totalActualScrap?: number
@@ -177247,6 +177617,7 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -177256,6 +177627,7 @@ export namespace Prisma {
     createdById?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    machine?: MachineUpdateOneWithoutProductionEntriesNestedInput
     machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
     verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
     qualityReport?: FGQualityReportUpdateOneWithoutProductionEntryNestedInput
@@ -177268,6 +177640,8 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineId?: NullableStringFieldUpdateOperationsInput | string | null
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -177289,6 +177663,8 @@ export namespace Prisma {
     fgProductName?: StringFieldUpdateOperationsInput | string
     targetQty?: FloatFieldUpdateOperationsInput | number
     targetUnit?: StringFieldUpdateOperationsInput | string
+    machineId?: NullableStringFieldUpdateOperationsInput | string | null
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
     totalActualFg?: FloatFieldUpdateOperationsInput | number
     totalActualByproduct?: FloatFieldUpdateOperationsInput | number
     totalActualScrap?: FloatFieldUpdateOperationsInput | number
@@ -177574,6 +177950,26 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type FGProductionEntryCreateManyMachineInput = {
+    id?: string
+    entryNumber: string
+    fgBatchId: string
+    bomId: string
+    fgProductName: string
+    targetQty: number
+    targetUnit: string
+    machineName?: string | null
+    totalActualFg?: number
+    totalActualByproduct?: number
+    totalActualScrap?: number
+    totalAchievedBoxes?: number
+    status?: string
+    notes?: string | null
+    createdById: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type FGProductionMachineEntryUpdateWithoutMachineInput = {
     id?: StringFieldUpdateOperationsInput | string
     machineName?: StringFieldUpdateOperationsInput | string
@@ -177665,6 +178061,72 @@ export namespace Prisma {
     manPower?: BoolFieldUpdateOperationsInput | boolean
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FGProductionEntryUpdateWithoutMachineInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fgBatch?: FGBatchUpdateOneRequiredWithoutProductionEntriesNestedInput
+    machineEntries?: FGProductionMachineEntryUpdateManyWithoutProductionEntryNestedInput
+    verifications?: FGProductionVerificationUpdateManyWithoutProductionEntryNestedInput
+    qualityReport?: FGQualityReportUpdateOneWithoutProductionEntryNestedInput
+  }
+
+  export type FGProductionEntryUncheckedUpdateWithoutMachineInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgBatchId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    machineEntries?: FGProductionMachineEntryUncheckedUpdateManyWithoutProductionEntryNestedInput
+    verifications?: FGProductionVerificationUncheckedUpdateManyWithoutProductionEntryNestedInput
+    qualityReport?: FGQualityReportUncheckedUpdateOneWithoutProductionEntryNestedInput
+  }
+
+  export type FGProductionEntryUncheckedUpdateManyWithoutMachineInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    entryNumber?: StringFieldUpdateOperationsInput | string
+    fgBatchId?: StringFieldUpdateOperationsInput | string
+    bomId?: StringFieldUpdateOperationsInput | string
+    fgProductName?: StringFieldUpdateOperationsInput | string
+    targetQty?: FloatFieldUpdateOperationsInput | number
+    targetUnit?: StringFieldUpdateOperationsInput | string
+    machineName?: NullableStringFieldUpdateOperationsInput | string | null
+    totalActualFg?: FloatFieldUpdateOperationsInput | number
+    totalActualByproduct?: FloatFieldUpdateOperationsInput | number
+    totalActualScrap?: FloatFieldUpdateOperationsInput | number
+    totalAchievedBoxes?: FloatFieldUpdateOperationsInput | number
+    status?: StringFieldUpdateOperationsInput | string
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FGQualityParameterCreateManyReportInput = {

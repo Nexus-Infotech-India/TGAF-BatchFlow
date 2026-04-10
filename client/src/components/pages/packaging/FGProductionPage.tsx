@@ -272,6 +272,11 @@ const FGProductionPage: React.FC = () => {
                               Batch: {entry.fgBatch.batchNumber}
                             </span>
                           )}
+                          {entry.machineName && (
+                            <span className="px-1.5 py-0.5 rounded text-[10px] bg-blue-500/10 text-blue-700 flex items-center gap-1">
+                              <Cpu size={9} /> {entry.machineName}
+                            </span>
+                          )}
                         </div>
                         <div className="text-xs text-muted-foreground mt-0.5">
                           {entry.fgProductName} • {new Date(entry.createdAt).toLocaleDateString()}
@@ -333,44 +338,44 @@ const FGProductionPage: React.FC = () => {
                         <div className="border-t border-border p-4 bg-muted/20">
                           {entry.machineEntries && entry.machineEntries.length > 0 ? (
                             <div>
-                              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Machine-wise Breakdown</div>
-                              <div className="overflow-x-auto">
-                                <table className="min-w-full">
-                                  <thead>
-                                    <tr className="bg-card">
-                                      <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase rounded-tl-lg">Machine</th>
-                                      <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Allocated</th>
-                                      <th className="px-3 py-2 text-right text-xs font-semibold text-emerald-600 uppercase">Today Achievement</th>
-                                      <th className="px-3 py-2 text-right text-xs font-semibold text-amber-600 uppercase rounded-tr-lg">Laminate Wastage</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody className="divide-y divide-border bg-card">
-                                    {entry.machineEntries.map((m: any, idx: number) => (
-                                      <tr key={idx} className="hover:bg-muted/30">
-                                        <td className="px-3 py-2 text-sm font-medium text-foreground">
-                                          <Cpu size={12} className="inline mr-2 text-amber-500" />
-                                          {m.machine?.name || 'Unknown'} <span className="text-[10px] text-muted-foreground ml-1">({m.machine?.machineId})</span>
-                                        </td>
-                                        <td className="px-3 py-2 text-sm text-right font-medium text-foreground">
-                                          {m.allocatedQty || 0} <span className="text-xs text-muted-foreground">{m.allocatedUnit}</span>
-                                        </td>
-                                        <td className="px-3 py-2 text-sm text-right font-bold text-emerald-600">
-                                          {m.todayAchieve || (entry.status === 'COMPLETED' ? '0' : '-')}
-                                          {entry.status === 'COMPLETED' && <span className="text-xs text-emerald-600/50 ml-1">Boxes/Unit</span>}
-                                        </td>
-                                        <td className="px-3 py-2 text-sm text-right text-amber-600 font-semibold">
-                                          {m.laminateWastageKg || (entry.status === 'COMPLETED' ? '0' : '-')}
-                                          {entry.status === 'COMPLETED' && (
-                                            <span className="text-xs text-amber-600/50 ml-1">
-                                              Kg ({m.laminateWastagePercentage || '0'}%)
-                                            </span>
-                                          )}
-                                        </td>
-                                      </tr>
-                                    ))}
-                                  </tbody>
-                                </table>
-                              </div>
+                              <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Machine Allocation Details</div>
+                              {(() => {
+                                const m = entry.machineEntries[0];
+                                return (
+                                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-card p-4 rounded-lg border border-border">
+                                    <div>
+                                      <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Machine</div>
+                                      <div className="text-sm font-semibold flex items-center gap-1.5">
+                                        <Cpu size={12} className="text-amber-500" />
+                                        {m.machine?.name || entry.machineName || 'Unknown'}
+                                        <span className="text-[10px] text-muted-foreground">({m.machine?.machineId || ''})</span>
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Allocated</div>
+                                      <div className="text-sm font-bold text-foreground">{m.allocatedQty || 0} {m.allocatedUnit}</div>
+                                    </div>
+                                    <div>
+                                      <div className="text-[10px] text-emerald-600 uppercase tracking-wider mb-1">Today Achievement</div>
+                                      <div className="text-sm font-bold text-emerald-600">
+                                        {m.todayAchieve || (entry.status === 'COMPLETED' ? '0' : '-')}
+                                        {entry.status === 'COMPLETED' && <span className="text-xs text-emerald-600/50 ml-1">Boxes</span>}
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <div className="text-[10px] text-amber-600 uppercase tracking-wider mb-1">Laminate Wastage</div>
+                                      <div className="text-sm font-semibold text-amber-600">
+                                        {m.laminateWastageKg || (entry.status === 'COMPLETED' ? '0' : '-')}
+                                        {entry.status === 'COMPLETED' && (
+                                          <span className="text-xs text-amber-600/50 ml-1">
+                                            Kg ({m.laminateWastagePercentage || '0'}%)
+                                          </span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })()}
                             </div>
                           ) : (
                             <div className="text-center py-4 text-muted-foreground text-sm">

@@ -1525,6 +1525,10 @@ model FGProductionEntry {
   targetQty     Float
   targetUnit    String
 
+  // Single machine allocation
+  machineId   String?
+  machineName String?
+
   totalActualFg        Float @default(0)
   totalActualByproduct Float @default(0)
   totalActualScrap     Float @default(0)
@@ -1537,6 +1541,7 @@ model FGProductionEntry {
   updatedAt   DateTime @updatedAt
 
   fgBatch        FGBatch                    @relation(fields: [fgBatchId], references: [id])
+  machine        Machine?                   @relation("FGProductionEntryMachine", fields: [machineId], references: [id])
   machineEntries FGProductionMachineEntry[]
   verifications  FGProductionVerification[]
   qualityReport  FGQualityReport?
@@ -1594,6 +1599,7 @@ model Machine {
   updatedAt    DateTime @updatedAt
 
   productionMachineEntries FGProductionMachineEntry[]
+  productionEntries        FGProductionEntry[]        @relation("FGProductionEntryMachine")
 }
 
 // ==================== FG PRODUCTION VERIFICATION ====================

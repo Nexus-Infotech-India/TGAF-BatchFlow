@@ -433,6 +433,7 @@ export const API_ROUTES = {
   MACHINE: {
     CREATE_MACHINE: `${BASE_URL}/machine`,
     GET_MACHINES: `${BASE_URL}/machine`,
+    GET_MACHINES_WITH_OUTPUT: `${BASE_URL}/machine/with-output`,
     UPDATE_MACHINE: (id: string) => `${BASE_URL}/machine/${id}`,
     DELETE_MACHINE: (id: string) => `${BASE_URL}/machine/${id}`,
   },

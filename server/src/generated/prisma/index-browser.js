@@ -1106,6 +1106,8 @@ exports.Prisma.FGProductionEntryScalarFieldEnum = {
   fgProductName: 'fgProductName',
   targetQty: 'targetQty',
   targetUnit: 'targetUnit',
+  machineId: 'machineId',
+  machineName: 'machineName',
   totalActualFg: 'totalActualFg',
   totalActualByproduct: 'totalActualByproduct',
   totalActualScrap: 'totalActualScrap',

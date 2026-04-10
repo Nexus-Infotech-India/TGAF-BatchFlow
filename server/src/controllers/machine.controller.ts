@@ -79,6 +79,61 @@ export const updateMachine = async (req: Request, res: Response): Promise<void> 
   }
 };
 
+/**
+ * GET /machine/with-output
+ * Returns only machines that have at least one completed FGProductionMachineEntry.
+ * Each machine includes a `hasPendingAllocation` flag indicating if it currently
+ * has a PENDING production entry (output not yet recorded).
+ */
+export const getMachinesWithOutput = async (req: Request, res: Response): Promise<void> => {
+  try {
+    // 1. Get machines that have at least one completed production output
+    const machines = await prisma.machine.findMany({
+      where: {
+        OR: [
+          { productionMachineEntries: { some: { actualFgQty: { gt: 0 } } } },
+          { productionEntries: { some: { status: 'COMPLETED' } } },
+        ],
+      },
+      orderBy: { name: 'asc' },
+    });
+
+    const machineIds = machines.map(m => m.id);
+
+    // 2. Check for pending entries via direct relation (new single-machine flow)
+    const pendingDirectEntries = await prisma.fGProductionEntry.findMany({
+      where: {
+        machineId: { in: machineIds },
+        status: 'PENDING',
+      },
+      select: { machineId: true, entryNumber: true, fgProductName: true },
+    });
+
+    // Build a map: machineId → pending entry info
+    const pendingMap: Record<string, { entryNumber: string; productName: string }> = {};
+    for (const pe of pendingDirectEntries) {
+      if (pe.machineId && !pendingMap[pe.machineId]) {
+        pendingMap[pe.machineId] = {
+          entryNumber: pe.entryNumber,
+          productName: pe.fgProductName,
+        };
+      }
+    }
+
+    const result = machines.map(m => ({
+      ...m,
+      hasPendingAllocation: !!pendingMap[m.id],
+      pendingEntryNumber: pendingMap[m.id]?.entryNumber || null,
+      pendingProductName: pendingMap[m.id]?.productName || null,
+    }));
+
+    res.status(200).json({ success: true, data: result });
+  } catch (error: any) {
+    console.error('Error fetching machines with output:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch machines with output' });
+  }
+};
+
 export const deleteMachine = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;

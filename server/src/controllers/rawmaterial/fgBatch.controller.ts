@@ -227,8 +227,20 @@ export class FGBatchController {
         }
 
         const displayUnit = currentStockUnit;
-        const expectedQty = fromGrams(scaledGrams, displayUnit);
-        const roundedExpected = Number(expectedQty.toFixed(5));
+        // For non-weight units (Pcs, Boxes, Bags, etc.) skip gram conversion —
+        // just scale the BOM quantity directly to avoid nonsensical gram-based math.
+        const NON_WEIGHT_UNITS = ['pcs', 'boxes', 'bags', 'packets', 'rolls', 'sheets', 'units'];
+        const bomUnitLower = bomItem.unitOfMeasurement.toLowerCase();
+        const displayUnitLower = displayUnit.toLowerCase();
+        const isNonWeight = NON_WEIGHT_UNITS.includes(bomUnitLower) || NON_WEIGHT_UNITS.includes(displayUnitLower);
+        let expectedQty: number;
+        if (isNonWeight) {
+          // Direct scale — no gram conversion needed for count-based units
+          expectedQty = bomItem.quantity * scaleFactor;
+        } else {
+          expectedQty = fromGrams(scaledGrams, displayUnit);
+        }
+        const roundedExpected = Math.round(expectedQty * 1000) / 1000;
 
         const isPackaging = rm.category === 'PACKAGING_MATERIAL';
         const hasTransferBatches = availableSfgBatches.length > 0;
