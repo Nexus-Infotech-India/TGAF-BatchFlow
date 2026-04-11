@@ -117,8 +117,7 @@ export class GrindingDispatchController {
         const allocUnit = lot.cleanedQuantityUnit || 'KG';
         const allocGrams = toGrams(allocatedQuantity, allocUnit);
         const seedGrams = toGrams(seedWastageAllocated, seedUnit);
-        const targetUnit = rawMaterial.unitOfMeasurement || 'KG';
-        totalQuantity += fromGrams(allocGrams + seedGrams, targetUnit);
+        totalQuantity += fromGrams(allocGrams + seedGrams, allocUnit);
       }
 
       // Generate batch number: GD-YYYYMMDD-XXXX

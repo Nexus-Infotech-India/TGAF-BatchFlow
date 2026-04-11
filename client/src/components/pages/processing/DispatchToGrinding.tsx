@@ -323,7 +323,7 @@ const DispatchToGrinding: React.FC = () => {
     const toGrams = (qty: number, unit: string) => qty * (UNIT_TO_GRAMS[unit] ?? UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1);
     const fromGrams = (grams: number, unit: string) => grams / (UNIT_TO_GRAMS[unit] ?? UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1);
 
-    const targetUnit = availableLots[0]?.rawMaterial?.unitOfMeasurement || availableSeedWastageLots[0]?.rawMaterial?.unitOfMeasurement || 'KG';
+    const targetUnit = availableLots[0]?.cleanedQuantityUnit || availableSeedWastageLots[0]?.seedWastageUnit || 'KG';
 
     let totalGrams = 0;
     Object.entries(batchModal.selectedLots).forEach(([lotId, qty]) => {
@@ -420,7 +420,7 @@ const DispatchToGrinding: React.FC = () => {
       batchNumber: dispatch.batchNumber,
       rawMaterialName: dispatch.inputRawMaterial?.name || '-',
       skuCode: dispatch.inputRawMaterial?.skuCode || '-',
-      unit: dispatch.inputRawMaterial?.unitOfMeasurement || '',
+      unit: dispatch.lots?.[0]?.cleaningLot?.cleanedQuantityUnit || dispatch.inputRawMaterial?.unitOfMeasurement || '',
       fromLocation: dispatch.fromLocation?.name || '-',
       toLocation: dispatch.toLocation?.name || '-',
       totalQuantity: dispatch.totalQuantity,
@@ -622,7 +622,7 @@ const DispatchToGrinding: React.FC = () => {
                             </div>
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-sm text-foreground text-right font-semibold">
-                            {dispatch.totalQuantity} {dispatch.inputRawMaterial?.unitOfMeasurement || ''}
+                            {dispatch.totalQuantity} {dispatch.lots?.[0]?.cleaningLot?.cleanedQuantityUnit || dispatch.inputRawMaterial?.unitOfMeasurement || ''}
                           </td>
                           <td className="px-4 py-4 text-center">
                             {getStatusBadge(dispatch.status)}
@@ -872,7 +872,7 @@ const DispatchToGrinding: React.FC = () => {
                        <Scale className="w-4 h-4" /> Selected Quantity:
                     </div>
                     <div className="text-lg font-bold text-indigo-600 bg-white px-4 py-1 rounded-lg border shadow-sm">
-                      {totalSelectedQuantity.toLocaleString()} {filteredLots[0]?.rawMaterial?.unitOfMeasurement || filteredSeedWastageLots[0]?.rawMaterial?.unitOfMeasurement || ''}
+                      {totalSelectedQuantity.toLocaleString()} {filteredLots[0]?.cleanedQuantityUnit || filteredSeedWastageLots[0]?.seedWastageUnit || 'KG'}
                     </div>
                   </div>
 
@@ -1097,7 +1097,7 @@ const DispatchToGrinding: React.FC = () => {
               </div>
               <div className="bg-muted/20 rounded-xl p-3 border border-border/50">
                 <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">Total Quantity</div>
-                <div className="text-sm font-bold">{viewModal.dispatch.totalQuantity} {viewModal.dispatch.inputRawMaterial?.unitOfMeasurement || ''}</div>
+                <div className="text-sm font-bold">{viewModal.dispatch.totalQuantity} {viewModal.dispatch.lots?.[0]?.cleaningLot?.cleanedQuantityUnit || viewModal.dispatch.inputRawMaterial?.unitOfMeasurement || ''}</div>
               </div>
               <div className="bg-muted/20 rounded-xl p-3 border border-border/50">
                 <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">From Location</div>

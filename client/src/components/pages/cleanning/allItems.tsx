@@ -282,6 +282,7 @@ interface GRNItem {
   purchaseOrder: { poNumber: string; vendor: { name: string } };
   purchaseOrderItem: {
     rawMaterialId: string;
+    quantityUnit?: string;
     rawMaterial: { name: string; skuCode: string; unitOfMeasurement: string; category: string };
     totalReceived: number;
     receivals: {
@@ -409,7 +410,7 @@ const CleaningRawMaterialList: React.FC = () => {
     setSelectedGrn(grn);
     setTransferQty(0);
     setToLocationId('');
-    setTransferUnit(grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG');
+    setTransferUnit(grn.purchaseOrderItem?.quantityUnit || grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG');
     setTransferModalOpen(true);
   };
 
@@ -431,7 +432,7 @@ const CleaningRawMaterialList: React.FC = () => {
       message.warning('Please fill all fields correctly');
       return;
     }
-    const unit = selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
+    const unit = selectedGrn.purchaseOrderItem?.quantityUnit || selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
     const convertedQty = convertWeight(transferQty, transferUnit, unit);
 
     if (convertedQty > selectedGrn.leftQuantity) {
@@ -502,7 +503,7 @@ const CleaningRawMaterialList: React.FC = () => {
   // ─── Export Cleaning History PDF ───────────────────────────────────
   const handleExportPDF = () => {
     if (!historyGrn) return;
-    const unit = historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
+    const unit = historyGrn.purchaseOrderItem?.quantityUnit || historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
     generateCleaningHistoryPDF({
       grnNumber: historyGrn.grnNumber,
       rawMaterialName: historyGrn.rawMaterialName,
@@ -654,7 +655,7 @@ const CleaningRawMaterialList: React.FC = () => {
                   {filteredGrns
                     .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
                     .map((grn, idx) => {
-                      const unit = grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
+                      const unit = grn.purchaseOrderItem?.quantityUnit || grn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
                       return (
                         <motion.tr
                           key={grn.id}
@@ -823,7 +824,7 @@ const CleaningRawMaterialList: React.FC = () => {
             <div className="rounded-xl p-4 space-y-2" style={{ background: 'color-mix(in srgb, var(--primary) 4%, var(--card))', border: '1px solid var(--border)' }}>
               <InfoRow label="GRN" value={selectedGrn.grnNumber} />
               <InfoRow label="Material" value={selectedGrn.rawMaterialName} />
-              <InfoRow label="Available Qty" value={`${selectedGrn.leftQuantity} ${selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}`} valueColor="#d97706" />
+              <InfoRow label="Available Qty" value={`${selectedGrn.leftQuantity} ${selectedGrn.purchaseOrderItem?.quantityUnit || selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}`} valueColor="#d97706" />
             </div>
 
             <div className="space-y-1.5">
@@ -831,9 +832,9 @@ const CleaningRawMaterialList: React.FC = () => {
                 <label className="block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>
                   Transfer Quantity <span style={{ color: 'var(--destructive)' }}>*</span>
                 </label>
-                {transferUnit !== (selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG') && (
+                {transferUnit !== (selectedGrn.purchaseOrderItem?.quantityUnit || selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG') && (
                   <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded">
-                    = {convertWeight(transferQty, transferUnit, selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG').toFixed(2)} {selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
+                    = {convertWeight(transferQty, transferUnit, selectedGrn.purchaseOrderItem?.quantityUnit || selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG').toFixed(2)} {selectedGrn.purchaseOrderItem?.quantityUnit || selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
                   </span>
                 )}
               </div>
@@ -852,7 +853,7 @@ const CleaningRawMaterialList: React.FC = () => {
                   value={transferUnit}
                   onChange={(e) => setTransferUnit(e.target.value)}
                 >
-                  {Array.from(new Set([selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG', 'gram', 'KG', 'Ton'])).map(u => (
+                  {Array.from(new Set([selectedGrn.purchaseOrderItem?.quantityUnit || selectedGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG', 'gram', 'KG', 'Ton'])).map(u => (
                     <option key={u} value={u}>{u}</option>
                   ))}
                 </select>
@@ -951,9 +952,9 @@ const CleaningRawMaterialList: React.FC = () => {
                 value={stoneWastageUnit}
                 onChange={(e) => setStoneWastageUnit(e.target.value)}
               >
-                <option value="Ton">Ton</option>
                 <option value="KG">KG</option>
                 <option value="gram">gram</option>
+                <option value="Ton">Ton</option>
               </select>
             </div>
           </div>
@@ -978,9 +979,9 @@ const CleaningRawMaterialList: React.FC = () => {
                 value={seedWastageUnit}
                 onChange={(e) => setSeedWastageUnit(e.target.value)}
               >
-                <option value="Ton">Ton</option>
                 <option value="KG">KG</option>
                 <option value="gram">gram</option>
+                <option value="Ton">Ton</option>
               </select>
             </div>
           </div>
@@ -1052,19 +1053,19 @@ const CleaningRawMaterialList: React.FC = () => {
               <QuantityCard
                 label="Total Received"
                 value={historyGrn.totalReceived}
-                unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
+                unit={historyGrn.purchaseOrderItem?.quantityUnit || historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
                 color="var(--primary)"
               />
               <QuantityCard
                 label="Transferred"
                 value={historyGrn.totalTransferred}
-                unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
+                unit={historyGrn.purchaseOrderItem?.quantityUnit || historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
                 color="var(--secondary)"
               />
               <QuantityCard
                 label="Remaining"
                 value={historyGrn.leftQuantity}
-                unit={historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
+                unit={historyGrn.purchaseOrderItem?.quantityUnit || historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG'}
                 color={historyGrn.leftQuantity > 0 ? '#d97706' : '#059669'}
               />
             </div>
@@ -1079,7 +1080,7 @@ const CleaningRawMaterialList: React.FC = () => {
               {historyGrn.cleaningJobs?.length > 0 ? (
                 <div className="space-y-4">
                   {historyGrn.cleaningJobs.map((job) => {
-                    const unit = historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
+                    const unit = historyGrn.purchaseOrderItem?.quantityUnit || historyGrn.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || 'KG';
                     const stoneWastageInBase = convertWeight((job.stoneWastageQty || 0), (job.stoneWastageUnit || 'kg'), unit);
                     const seedWastageInBase = convertWeight((job.seedWastageQty || 0), (job.seedWastageUnit || 'kg'), unit);
                     const netQty = Math.max(0, (job.quantity || 0) - stoneWastageInBase - seedWastageInBase);

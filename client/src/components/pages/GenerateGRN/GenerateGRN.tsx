@@ -56,6 +56,7 @@ interface ReportEntry {
   purchaseOrderItem: {
     rawMaterial: { name: string; skuCode: string; unitOfMeasurement?: string };
     quantityOrdered: number;
+    quantityUnit?: string;
     quantityReceived: number;
     totalReceived?: number;
     receivals?: Array<{
@@ -177,7 +178,7 @@ const GenerateGRN: React.FC = () => {
     const supplier = report.supplier;
     const rawMaterial = report.rawMaterialName;
     const skuCode = report.purchaseOrderItem?.rawMaterial?.skuCode || '-';
-    const uom = report.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '-';
+    const uom = report.purchaseOrderItem?.quantityUnit || report.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '-';
     const qtyOrdered = report.purchaseOrderItem?.quantityOrdered ?? '-';
     const qtyReceived = report.purchaseOrderItem?.totalReceived ?? report.purchaseOrderItem?.quantityReceived ?? '-';
     const truckNumber = grn.truckNumber || '-';
@@ -651,7 +652,7 @@ const GenerateGRN: React.FC = () => {
                       { icon: Building, label: 'Supplier', value: grnFormReport.supplier },
                       { icon: Package, label: 'Raw Material', value: grnFormReport.rawMaterialName },
                       { icon: Hash, label: 'Material Code', value: grnFormReport.purchaseOrderItem?.rawMaterial?.skuCode || '-' },
-                      { icon: ClipboardList, label: 'UOM', value: grnFormReport.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '-' },
+                      { icon: ClipboardList, label: 'UOM', value: grnFormReport.purchaseOrderItem?.quantityUnit || grnFormReport.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '-' },
                       { icon: Calendar, label: 'Date', value: grnFormReport.createdAt ? format(new Date(grnFormReport.createdAt), 'dd MMM yyyy') : 'N/A' },
                       { icon: Package, label: 'Qty Ordered', value: grnFormReport.purchaseOrderItem?.quantityOrdered ?? '-' },
                       { icon: Check, label: 'Qty Received', value: grnFormReport.purchaseOrderItem?.totalReceived ?? grnFormReport.purchaseOrderItem?.quantityReceived ?? '-' },
@@ -879,7 +880,7 @@ const GenerateGRN: React.FC = () => {
                         <tr>
                           <td className="px-3 py-3 text-xs font-mono font-semibold" style={{ color: 'var(--primary)' }}>{viewReport.purchaseOrderItem?.rawMaterial?.skuCode || '-'}</td>
                           <td className="px-3 py-3 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{viewReport.rawMaterialName}</td>
-                          <td className="px-3 py-3 text-sm" style={{ color: 'var(--muted-foreground)' }}>{viewReport.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '-'}</td>
+                          <td className="px-3 py-3 text-sm" style={{ color: 'var(--muted-foreground)' }}>{viewReport.purchaseOrderItem?.quantityUnit || viewReport.purchaseOrderItem?.rawMaterial?.unitOfMeasurement || '-'}</td>
                           <td className="px-3 py-3 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{viewReport.purchaseOrderItem?.quantityOrdered ?? '-'}</td>
                           <td className="px-3 py-3 text-sm font-semibold" style={{ color: 'var(--primary)' }}>{viewReport.purchaseOrderItem?.totalReceived ?? '-'}</td>
                         </tr>

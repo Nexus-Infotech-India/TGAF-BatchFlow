@@ -24,7 +24,9 @@ app.use((0, cors_1.default)({
     origin: [
         'https://tgaf.inventory.nexusinfotech.co',
         'http://localhost:5173',
-        'https://batch-flow-one.vercel.app' // <-- Add this line
+        'https://batch-flow-one.vercel.app',
+        'https://tgaf-batchflow-client.onrender.com',
+        'https://tgaf-batchflow-1.onrender.com',
     ],
     credentials: true,
 }));

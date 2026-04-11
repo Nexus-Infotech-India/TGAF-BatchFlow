@@ -454,6 +454,11 @@ class CleaningGrnController {
                         },
                     },
                     rawMaterial: true,
+                    grn: {
+                        include: {
+                            purchaseOrderItem: { select: { quantityUnit: true } },
+                        },
+                    },
                 },
             });
             if (!cleaningJob) {
@@ -464,7 +469,7 @@ class CleaningGrnController {
             const parsedStoneWastageUnit = stoneWastageUnit || 'kg';
             const parsedSeedWastageQty = seedWastageQty ? parseFloat(seedWastageQty) : 0;
             const parsedSeedWastageUnit = seedWastageUnit || 'kg';
-            const nativeUnit = cleaningJob.rawMaterial?.unitOfMeasurement || 'kg';
+            const nativeUnit = cleaningJob.grn?.purchaseOrderItem?.quantityUnit || cleaningJob.rawMaterial?.unitOfMeasurement || 'kg';
             const baseStoneWastage = CleaningGrnController.convertWeight(parsedStoneWastageQty, parsedStoneWastageUnit, nativeUnit);
             const baseSeedWastage = CleaningGrnController.convertWeight(parsedSeedWastageQty, parsedSeedWastageUnit, nativeUnit);
             // Calculate wastage percentage and type
