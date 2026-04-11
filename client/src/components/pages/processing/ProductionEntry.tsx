@@ -18,6 +18,7 @@ import {
   Truck,
   Info,
   ClipboardCheck,
+  Search,
 } from 'lucide-react';
 
 const { Option } = Select;
@@ -314,10 +315,16 @@ const ProductionEntry: React.FC = () => {
 
   const handleProductionQtyChange = (value: number | null) => {
     setProductionQty(value);
-    if (value && value > 0) {
-      fetchConsumptionData(value);
-    } else {
+    if (!value || value <= 0) {
       setConsumptionLines([]);
+    }
+  };
+
+  const handleCheckAvailability = () => {
+    if (productionQty && productionQty > 0) {
+      fetchConsumptionData(productionQty);
+    } else {
+      message.warning('Please enter a valid production quantity first');
     }
   };
 
@@ -689,9 +696,8 @@ const ProductionEntry: React.FC = () => {
                                   line.outputType === 'SFG' ? { ...line, unit: val } : line
                                 )
                               );
-                              if (productionQty && productionQty > 0) {
-                                fetchConsumptionData(productionQty, val);
-                              }
+                              // Clear consumption lines when unit changes - user must re-check availability
+                              setConsumptionLines([]);
                             }}
                             size="large"
                             className="shadow-sm hover:border-emerald-400 focus:border-emerald-500 transition-colors"
@@ -701,16 +707,24 @@ const ProductionEntry: React.FC = () => {
                             ))}
                           </Select>
                         </div>
-                        {consumptionLoading && (
-                          <div className="flex items-center gap-2 text-emerald-600 pb-2 pl-2">
-                            <motion.div 
-                              animate={{ rotate: 360 }}
-                              transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-                              className="w-4 h-4 border-2 rounded-full border-t-emerald-500 border-emerald-200"
-                            />
-                            <span className="text-xs font-semibold animate-pulse">Calculating...</span>
-                          </div>
-                        )}
+                        <div className="pb-0.5">
+                          <Button
+                            type="primary"
+                            size="large"
+                            icon={<Search size={16} />}
+                            onClick={handleCheckAvailability}
+                            loading={consumptionLoading}
+                            disabled={!productionQty || productionQty <= 0}
+                            className="shadow-sm font-semibold"
+                            style={{
+                              background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                              borderColor: '#059669',
+                              height: 40,
+                            }}
+                          >
+                            Check Availability
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </motion.div>
