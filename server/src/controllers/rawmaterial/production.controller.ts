@@ -97,6 +97,7 @@ export class ProductionController {
           status: 'ACCEPTED',
           ...(locationId ? { toLocationId: locationId as string } : {}),
         },
+        
         include: {
           inputRawMaterial: true,
           lots: {
@@ -137,17 +138,30 @@ export class ProductionController {
           sourceType = 'BATCH';
           currentStockUnit = matchingDispatches[0].inputRawMaterial.unitOfMeasurement;
           // ── FIX: Show remaining quantity (total - consumed) for each batch ──
+          // Convert from stored unit (lot's cleanedQuantityUnit) to display unit (raw material's UoM)
           availableBatches = matchingDispatches
             .map((d) => {
               const consumed = (d as any).consumedQuantity || 0;
-              const remaining = d.totalQuantity - consumed;
+              // Determine the unit in which totalQuantity was stored (from the cleaning lots)
+              const storedUnit = (d as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit || 'KG';
+              const displayUnit = d.inputRawMaterial.unitOfMeasurement;
+
+              // Convert totalQuantity and consumed from stored unit to display unit
+              const totalInGrams = toGrams(d.totalQuantity, storedUnit);
+              const consumedInGrams = toGrams(consumed, storedUnit);
+              const remainingInGrams = totalInGrams - consumedInGrams;
+
+              const totalConverted = fromGrams(totalInGrams, displayUnit);
+              const consumedConverted = fromGrams(consumedInGrams, displayUnit);
+              const remainingConverted = fromGrams(remainingInGrams, displayUnit);
+
               return {
                 dispatchId: d.id,
                 batchNumber: d.batchNumber,
-                totalQuantity: d.totalQuantity,
-                consumedQuantity: consumed,
-                remainingQuantity: Math.round(remaining * 1000) / 1000,
-                unit: d.inputRawMaterial.unitOfMeasurement,
+                totalQuantity: Math.round(totalConverted * 1000) / 1000,
+                consumedQuantity: Math.round(consumedConverted * 1000) / 1000,
+                remainingQuantity: Math.round(remainingConverted * 1000) / 1000,
+                unit: displayUnit,
               };
             })
             .filter((b) => b.remainingQuantity > 0); // Only show batches with remaining qty
@@ -270,7 +284,10 @@ export class ProductionController {
           // Check batch has enough remaining quantity
           const dispatch = await prisma.grindingDispatch.findUnique({
             where: { batchNumber: c.batchNumber },
-            include: { inputRawMaterial: true },
+            include: {
+              inputRawMaterial: true,
+              lots: { include: { cleaningLot: true }, take: 1 },
+            },
           });
 
           if (!dispatch) {
@@ -280,16 +297,19 @@ export class ProductionController {
             return;
           }
 
-          const dUnit = dispatch.inputRawMaterial.unitOfMeasurement;
-          const consumedInGrams = toGrams(actualQty, c.unit || dUnit);
-          const consumedInDispatchUnit = fromGrams(consumedInGrams, dUnit);
+          // totalQuantity is stored in the lot's cleanedQuantityUnit (e.g. KG)
+          const storedUnit = (dispatch as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit || 'KG';
+          const displayUnit = dispatch.inputRawMaterial.unitOfMeasurement;
+          const consumedInGrams = toGrams(actualQty, c.unit || displayUnit);
+          const consumedInStoredUnit = fromGrams(consumedInGrams, storedUnit);
           const remaining = dispatch.totalQuantity - (dispatch.consumedQuantity || 0);
+          const remainingInDisplayUnit = fromGrams(toGrams(remaining, storedUnit), displayUnit);
 
-          if (consumedInDispatchUnit > remaining) {
+          if (consumedInStoredUnit > remaining) {
             const bomItem = bom.items.find((i) => i.rawMaterialId === c.rawMaterialId);
             const materialName = bomItem?.rawMaterial?.name || c.rawMaterialId;
             res.status(400).json({
-              error: `Insufficient batch quantity for ${materialName}. Required: ${actualQty} ${c.unit || 'KG'}, Available in batch ${c.batchNumber}: ${Math.round(remaining * 1000) / 1000} ${dUnit}`,
+              error: `Insufficient batch quantity for ${materialName}. Required: ${actualQty} ${c.unit || displayUnit}, Available in batch ${c.batchNumber}: ${Math.round(remainingInDisplayUnit * 1000) / 1000} ${displayUnit}`,
             });
             return;
           }
@@ -383,17 +403,21 @@ export class ProductionController {
           if (actualQty <= 0) continue;
 
           if (c.sourceType === 'BATCH' && c.batchNumber) {
-            // Find the dispatch by batch number with its raw material to know the unit
+            // Find the dispatch by batch number with its raw material and lots to know the stored unit
             const dispatchWithMaterial = await tx.grindingDispatch.findUnique({
               where: { batchNumber: c.batchNumber },
-              include: { inputRawMaterial: true },
+              include: {
+                inputRawMaterial: true,
+                lots: { include: { cleaningLot: true }, take: 1 },
+              },
             });
 
             if (dispatchWithMaterial) {
-              const dUnit = dispatchWithMaterial.inputRawMaterial.unitOfMeasurement;
-              const consumedInGrams = toGrams(actualQty, c.unit || dUnit);
-              const consumedInDispatchUnit = fromGrams(consumedInGrams, dUnit);
-              const newConsumed = (dispatchWithMaterial.consumedQuantity || 0) + consumedInDispatchUnit;
+              // totalQuantity is stored in the lot's cleanedQuantityUnit (e.g. KG)
+              const storedUnit = (dispatchWithMaterial as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit || 'KG';
+              const consumedInGrams = toGrams(actualQty, c.unit || storedUnit);
+              const consumedInStoredUnit = fromGrams(consumedInGrams, storedUnit);
+              const newConsumed = (dispatchWithMaterial.consumedQuantity || 0) + consumedInStoredUnit;
 
               await tx.grindingDispatch.update({
                 where: { id: dispatchWithMaterial.id },
