@@ -124,6 +124,59 @@ async function main() {
   }
 
   console.log(`\nDone. Fixed ${fixedJobs} jobs and ${fixedLots} lots.`);
+
+  // ── Phase 2: Fix GrindingDispatch totalQuantity ──────────────────────
+  // The dispatch's totalQuantity was computed using the old (wrong) lot unit.
+  // Recalculate it using each lot's corrected cleanedQuantityUnit.
+  console.log('\n── Phase 2: Fixing Grinding Dispatch totalQuantity ──\n');
+
+  const UNIT_TO_GRAMS: Record<string, number> = {
+    kg: 1000, gram: 1, g: 1, ton: 1_000_000, tonne: 1_000_000,
+    quintal: 100_000, lb: 453.592, oz: 28.3495,
+  };
+  const toGrams = (qty: number, unit: string) => qty * (UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1);
+  const fromGrams = (grams: number, unit: string) => grams / (UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1);
+
+  const dispatches = await prisma.grindingDispatch.findMany({
+    include: {
+      lots: {
+        include: {
+          cleaningLot: { select: { cleanedQuantityUnit: true, seedWastageUnit: true } },
+        },
+      },
+    },
+  });
+
+  let fixedDispatches = 0;
+
+  for (const dispatch of dispatches) {
+    if (!dispatch.lots || dispatch.lots.length === 0) continue;
+
+    // Determine the target unit from the first lot's corrected unit
+    const targetUnit = dispatch.lots[0]?.cleaningLot?.cleanedQuantityUnit || 'KG';
+
+    // Recalculate totalQuantity: sum each lot's allocation converted to the target unit
+    let newTotal = 0;
+    for (const dl of dispatch.lots) {
+      const lotUnit = dl.cleaningLot?.cleanedQuantityUnit || 'KG';
+      const seedUnit = dl.cleaningLot?.seedWastageUnit || 'KG';
+      const allocGrams = toGrams(dl.allocatedQuantity, lotUnit);
+      const seedGrams = toGrams(dl.seedWastageAllocated, seedUnit);
+      newTotal += fromGrams(allocGrams + seedGrams, targetUnit);
+    }
+    newTotal = Number(newTotal.toFixed(4));
+
+    if (Math.abs(newTotal - dispatch.totalQuantity) > 0.001) {
+      console.log(`Dispatch ${dispatch.batchNumber}: ${dispatch.totalQuantity} → ${newTotal} ${targetUnit}`);
+      await prisma.grindingDispatch.update({
+        where: { id: dispatch.id },
+        data: { totalQuantity: newTotal },
+      });
+      fixedDispatches++;
+    }
+  }
+
+  console.log(`\nDone. Fixed ${fixedDispatches} dispatches.`);
 }
 
 main()

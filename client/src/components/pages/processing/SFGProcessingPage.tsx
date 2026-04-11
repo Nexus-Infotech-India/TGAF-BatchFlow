@@ -306,7 +306,7 @@ const SFGProcessingPage: React.FC = () => {
                               </div>
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap text-sm text-foreground text-right font-semibold">
-                              {dispatch.totalQuantity} {dispatch.inputRawMaterial?.unitOfMeasurement || ''}
+                              {dispatch.totalQuantity} {dispatch.lots?.[0]?.cleaningLot?.cleanedQuantityUnit || dispatch.inputRawMaterial?.unitOfMeasurement || ''}
                             </td>
                             <td className="px-4 py-3 text-center">
                               {getStatusBadge(dispatch.status)}
