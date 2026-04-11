@@ -292,7 +292,7 @@ const OutboundToFGPage: React.FC = () => {
                 Completed FG Entry
               </div>
               <Select style={{ width: '100%' }} placeholder="Select completed production entry" value={sendModal.productionEntryId || undefined} onChange={val => setSendModal(p => ({ ...p, productionEntryId: val }))} showSearch filterOption={(input, option) => (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())}>
-                {productionEntries.map((e: any) => (<Option key={e.id} value={e.id}>{e.entryNumber} - {e.fgProductName}</Option>))}
+                {productionEntries.map((e: any) => (<Option key={e.id} value={e.id}>{e.fgBatch?.batchNumber || e.entryNumber} - {e.fgProductName}</Option>))}
               </Select>
             </div>
             <div className="p-4 rounded-xl border hover:border-emerald-300 transition-all">
