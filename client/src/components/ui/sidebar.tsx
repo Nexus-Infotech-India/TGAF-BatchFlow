@@ -16,7 +16,6 @@ import {
   LayoutDashboardIcon,
   FileStack,
   ClipboardEdit,
-  SwitchCamera,
   FileText,
   Hash,
   MapPin,
