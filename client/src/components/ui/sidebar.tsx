@@ -203,12 +203,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "Machine Master",
           icon: <Factory className="sidebar-icon" size={18} />,
           permissionKey: "manage_locations"
-        },
-        {
-          path: "/masters/fg-packaging",
-          name: "FG UOM Master",
-          icon: <PackageOpen className="sidebar-icon" size={18} />,
-          permissionKey: "manage_raw_materials"
         }
       ]
     },
@@ -247,13 +241,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "Cleaning",
           icon: <ClipboardEdit className="sidebar-icon" size={18} />,
           permissionKey: "manage_cleaning_rawmaterials"
-        },
-
-        {
-          path: "/stock-distribution",
-          name: "Stock Distribution",
-          icon: <SwitchCamera className="sidebar-icon" size={18} />,
-          permissionKey: "view_stock_distribution"
         }
       ]
     },
@@ -336,38 +323,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "FG Verification",
           icon: <ShieldCheck className="sidebar-icon" size={18} />,
           permissionKey: "manage_fg_verification"
-        }
-      ]
-    },
-
-    {
-      key: "batch-management",
-      name: "FG Quality Report",
-      icon: <PackageOpen className="sidebar-icon" size={20} />,
-      children: [
-        {
-          path: "/operation-dashboard",
-          name: "Dashboard",
-          icon: <LucideLayoutDashboard className="sidebar-icon" size={18} />,
-          permissionKey: "view_operation_dashboard"
-        },
-        {
-          path: "/batches",
-          name: "Batches",
-          icon: <PackageOpen className="sidebar-icon" size={18} />,
-          permissionKey: "view_batches"
-        },
-        {
-          path: "/standards",
-          name: "Standards",
-          icon: <Award className="sidebar-icon" size={18} />,
-          permissionKey: "manage_standards"
-        },
-        {
-          path: "/batches/verification",
-          name: "Batch Verification",
-          icon: <Award className="sidebar-icon" size={18} />,
-          permissionKey: "verify_batches"
         }
       ]
     },
