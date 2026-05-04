@@ -98,8 +98,6 @@ const NewFGProductionEntryPage: React.FC = () => {
   const [outputMachines, setOutputMachines] = useState<any[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
-  // Previous production entries for "Product" column
-  const [previousEntries, setPreviousEntries] = useState<any[]>([]);
 
   // SFG transfers for SFG consumption column
   const [sfgTransfers, setSfgTransfers] = useState<any[]>([]);
@@ -144,18 +142,6 @@ const NewFGProductionEntryPage: React.FC = () => {
     fetchOutputMachines();
   }, []);
 
-  /* ─── Fetch previous production entries for product info ─── */
-  useEffect(() => {
-    const fetchPrevEntries = async () => {
-      try {
-        const res = await api.get(API_ROUTES.RAW.GET_FG_PRODUCTION_ENTRIES);
-        setPreviousEntries(res.data?.data || []);
-      } catch {
-        /* ignore */
-      }
-    };
-    fetchPrevEntries();
-  }, []);
 
   /* ─── Fetch SFG & Packaging transfers (accepted) for the selected location ─── */
   useEffect(() => {
@@ -258,23 +244,6 @@ const NewFGProductionEntryPage: React.FC = () => {
     fetchBomItems(selectedBomId, productionQty, productionUnit, selectedLocationId);
   };
 
-  /* ─── Helper: Get last product for a given machine ─── */
-  const _getLastProductForMachine = (machineId: string): string => {
-    for (const entry of previousEntries) {
-      // Check new direct machineId on FGProductionEntry
-      if (entry.machineId === machineId) {
-        return entry.fgProductName || '';
-      }
-      // Check old machineEntries relation
-      if (entry.machineEntries) {
-        const machineEntry = entry.machineEntries.find((me: any) => me.machineId === machineId);
-        if (machineEntry) {
-          return entry.fgProductName || machineEntry.productName || '';
-        }
-      }
-    }
-    return '';
-  };
 
   /* ─── Helper: Look up a batch (with remaining qty already net of prior consumption)
      from consumptionLines for a given transfer number. Returns null if the transfer
@@ -1295,30 +1264,10 @@ const NewFGProductionEntryPage: React.FC = () => {
                                   className="w-[80px] shrink-0 [&_.ant-select-selector]:rounded-sm"
                                 />
                               </div>
-                              {row.pkgTransferNumber && (() => {
-                                const pkgRemaining = getPkgRemainingForRow(row.id, row.pkgTransferNumber);
-                                // Compute remaining after THIS row's own consumption
-                                const rowQtyKg = row.laminateConsumptionQty != null
-                                  ? toGrams(Number(row.laminateConsumptionQty), row.laminateConsumptionUnit || 'KG') / 1000
-                                  : 0;
-                                const remainingKgBeforeRow = pkgRemaining.unit !== 'KG'
-                                  ? toGrams(pkgRemaining.qty, pkgRemaining.unit) / 1000
-                                  : pkgRemaining.qty;
-                                const afterThisEntryKg = Math.max(0, Number((remainingKgBeforeRow - rowQtyKg).toFixed(3)));
-                                // Convert back to transfer's display unit
-                                let _afterThisEntryDisplay = afterThisEntryKg;
-                                let _afterThisEntryUnit = 'KG';
-                                if (pkgRemaining.unit && pkgRemaining.unit !== 'KG') {
-                                  const factor = UNIT_TO_GRAMS[pkgRemaining.unit] ?? UNIT_TO_GRAMS[pkgRemaining.unit.toLowerCase()] ?? 1000;
-                                  _afterThisEntryDisplay = Number(((afterThisEntryKg * 1000) / factor).toFixed(3));
-                                  _afterThisEntryUnit = pkgRemaining.unit;
-                                }
-                                return (
-                                  <div className="text-[11px] text-muted-foreground space-y-0.5">
-                                    
-                                  </div>
-                                );
-                              })()}
+                              {row.pkgTransferNumber && (
+                                <div className="text-[11px] text-muted-foreground space-y-0.5">
+                                </div>
+                              )}
                             </div>
                           </div>
 
