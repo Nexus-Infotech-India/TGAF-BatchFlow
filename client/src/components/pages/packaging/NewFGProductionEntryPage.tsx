@@ -259,7 +259,7 @@ const NewFGProductionEntryPage: React.FC = () => {
   };
 
   /* ─── Helper: Get last product for a given machine ─── */
-  const getLastProductForMachine = (machineId: string): string => {
+  const _getLastProductForMachine = (machineId: string): string => {
     for (const entry of previousEntries) {
       // Check new direct machineId on FGProductionEntry
       if (entry.machineId === machineId) {
@@ -1306,12 +1306,12 @@ const NewFGProductionEntryPage: React.FC = () => {
                                   : pkgRemaining.qty;
                                 const afterThisEntryKg = Math.max(0, Number((remainingKgBeforeRow - rowQtyKg).toFixed(3)));
                                 // Convert back to transfer's display unit
-                                let afterThisEntryDisplay = afterThisEntryKg;
-                                let afterThisEntryUnit = 'KG';
+                                let _afterThisEntryDisplay = afterThisEntryKg;
+                                let _afterThisEntryUnit = 'KG';
                                 if (pkgRemaining.unit && pkgRemaining.unit !== 'KG') {
                                   const factor = UNIT_TO_GRAMS[pkgRemaining.unit] ?? UNIT_TO_GRAMS[pkgRemaining.unit.toLowerCase()] ?? 1000;
-                                  afterThisEntryDisplay = Number(((afterThisEntryKg * 1000) / factor).toFixed(3));
-                                  afterThisEntryUnit = pkgRemaining.unit;
+                                  _afterThisEntryDisplay = Number(((afterThisEntryKg * 1000) / factor).toFixed(3));
+                                  _afterThisEntryUnit = pkgRemaining.unit;
                                 }
                                 return (
                                   <div className="text-[11px] text-muted-foreground space-y-0.5">

@@ -3,7 +3,6 @@ import { Button, Input, message, Empty, Spin, Select, Tag } from 'antd';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
-  ArrowRight,
   Beaker,
   FileCheck,
   CheckCircle,
