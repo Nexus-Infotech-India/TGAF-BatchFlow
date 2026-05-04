@@ -73,6 +73,7 @@ export default function ProductionOutputEntryPage() {
     const initInputs = entry.machineEntries.map((me: any) => {
       return {
         id: me.id,
+        machineBatchId: me.machineBatchId || null,
         machine: me.machine,
         allocatedQty: me.allocatedQty,
         allocatedUnit: me.allocatedUnit,
@@ -96,7 +97,7 @@ export default function ProductionOutputEntryPage() {
         manPowerCount: null,
         shift: null,
         machineUtilizedHrs: null,
-        machineNotUtilizedHrs: null,
+        machineNotUtilizedHrs: 720, // default: full 12hr shift not utilized
         downtimeRecords: [] as { startTime: string; stopTime: string; breakdownReason: string; remark: string }[],
       };
     });
@@ -147,6 +148,13 @@ export default function ProductionOutputEntryPage() {
         if (sfgCons > 0) {
           next[index].powderWastagePercentage = Number(((Number(value) / sfgCons) * 100).toFixed(2));
         }
+      }
+
+      // Auto-calculate Machine Not Utilized = 720 (12hrs) - Utilized
+      if (field === 'machineUtilizedHrs') {
+        const utilized = Number(value) || 0;
+        const totalShiftMinutes = 720; // 12 hours per shift
+        next[index].machineNotUtilizedHrs = Math.max(0, totalShiftMinutes - utilized);
       }
 
       return next;
@@ -298,7 +306,8 @@ export default function ProductionOutputEntryPage() {
                             <th className="px-5 py-4 text-left text-xs font-bold text-muted-foreground uppercase">Batch</th>
                             <th className="px-5 py-4 text-left text-xs font-bold text-muted-foreground uppercase">Product</th>
                             <th className="px-5 py-4 text-right text-xs font-bold text-muted-foreground uppercase">Target Qty</th>
-                            <th className="px-5 py-4 text-center text-xs font-bold text-muted-foreground uppercase">Machines</th>
+                            <th className="px-5 py-4 text-center text-xs font-bold text-muted-foreground uppercase">Machines 
+                              (In Use)</th>
                             <th className="px-5 py-4 text-center text-xs font-bold text-muted-foreground uppercase">Action</th>
                           </tr>
                         </thead>
@@ -402,6 +411,11 @@ export default function ProductionOutputEntryPage() {
                               <div className="text-xs text-muted-foreground font-mono">
                                 {alloc.machine.machineId} • Product: <span className="font-bold text-primary">{selectedEntry.fgProductName}</span>
                               </div>
+                              {alloc.machineBatchId && (
+                                <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-violet-500/10 text-violet-700 border border-violet-200 font-mono">
+                                  {alloc.machineBatchId}
+                                </span>
+                              )}
                             </div>
                           </div>
                           <div className="text-right">
@@ -454,9 +468,8 @@ export default function ProductionOutputEntryPage() {
                               size="large"
                               className="w-full font-semibold"
                               options={[
-                                { value: 'DAY', label: '☀️ Day Shift' },
-                                { value: 'NOON', label: '🌤️ Noon Shift' },
-                                { value: 'NIGHT', label: '🌙 Night Shift' },
+                                { value: 'DAY', label: ' Day Shift' },
+                                { value: 'NIGHT', label: 'Night Shift' },
                               ]}
                             />
                           </div>
@@ -500,70 +513,58 @@ export default function ProductionOutputEntryPage() {
                           </div>
                         </div>
 
-                        {/* Row 3: Machine Utilization (Hours + Minutes) */}
+                        {/* Row 3: Machine Utilization (Hours + Minutes) — 12hr shift */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4 p-4 rounded-xl border border-emerald-200 bg-emerald-50/30">
                           <div className="space-y-1.5">
                             <label className="text-xs font-bold text-emerald-700 uppercase tracking-wider flex items-center gap-1">
-                              <Clock size={12} /> Machine Utilized Time
+                              <Clock size={12} /> Machine Utilized Time <span className="text-[10px] text-muted-foreground font-normal">(of 12 hrs)</span>
                             </label>
                             <div className="flex items-center gap-2">
                               <Select
                                 value={Math.floor((alloc.machineUtilizedHrs || 0) / 60)}
                                 onChange={(val) => {
                                   const mins = (alloc.machineUtilizedHrs || 0) % 60;
-                                  updateInput(idx, 'machineUtilizedHrs', (val * 60) + mins);
+                                  const total = Math.min(720, (val * 60) + mins);
+                                  updateInput(idx, 'machineUtilizedHrs', total);
                                 }}
                                 size="large"
                                 className="flex-1 font-semibold"
                                 placeholder="Hrs"
-                                options={Array.from({ length: 25 }, (_, i) => ({ value: i, label: `${i} hr${i !== 1 ? 's' : ''}` }))}
+                                options={Array.from({ length: 13 }, (_, i) => ({ value: i, label: `${i} hr${i !== 1 ? 's' : ''}` }))}
                               />
                               <Select
                                 value={(alloc.machineUtilizedHrs || 0) % 60}
                                 onChange={(val) => {
                                   const hrs = Math.floor((alloc.machineUtilizedHrs || 0) / 60);
-                                  updateInput(idx, 'machineUtilizedHrs', (hrs * 60) + val);
+                                  const total = Math.min(720, (hrs * 60) + val);
+                                  updateInput(idx, 'machineUtilizedHrs', total);
                                 }}
                                 size="large"
                                 className="flex-1 font-semibold"
                                 placeholder="Min"
                                 options={Array.from({ length: 60 }, (_, i) => ({ value: i, label: `${i} min` }))}
                               />
-                              <span className="text-xs font-bold text-muted-foreground whitespace-nowrap">
+                              <span className="text-xs font-bold text-emerald-700 whitespace-nowrap">
                                 = {alloc.machineUtilizedHrs || 0} min
                               </span>
                             </div>
                           </div>
                           <div className="space-y-1.5">
                             <label className="text-xs font-bold text-red-600 uppercase tracking-wider flex items-center gap-1">
-                              <AlertTriangle size={12} /> Machine Not Utilized Time
+                              <AlertTriangle size={12} /> Machine Not Utilized Time <span className="text-[10px] text-muted-foreground font-normal">(auto)</span>
                             </label>
-                            <div className="flex items-center gap-2">
-                              <Select
-                                value={Math.floor((alloc.machineNotUtilizedHrs || 0) / 60)}
-                                onChange={(val) => {
-                                  const mins = (alloc.machineNotUtilizedHrs || 0) % 60;
-                                  updateInput(idx, 'machineNotUtilizedHrs', (val * 60) + mins);
-                                }}
-                                size="large"
-                                className="flex-1 font-semibold"
-                                placeholder="Hrs"
-                                options={Array.from({ length: 25 }, (_, i) => ({ value: i, label: `${i} hr${i !== 1 ? 's' : ''}` }))}
-                              />
-                              <Select
-                                value={(alloc.machineNotUtilizedHrs || 0) % 60}
-                                onChange={(val) => {
-                                  const hrs = Math.floor((alloc.machineNotUtilizedHrs || 0) / 60);
-                                  updateInput(idx, 'machineNotUtilizedHrs', (hrs * 60) + val);
-                                }}
-                                size="large"
-                                className="flex-1 font-semibold"
-                                placeholder="Min"
-                                options={Array.from({ length: 60 }, (_, i) => ({ value: i, label: `${i} min` }))}
-                              />
-                              <span className="text-xs font-bold text-muted-foreground whitespace-nowrap">
+                            <div className="flex items-center gap-2 p-2.5 rounded-lg bg-red-50 border border-red-200">
+                              <span className="text-sm font-bold text-red-700">
+                                {Math.floor((alloc.machineNotUtilizedHrs || 0) / 60)} hrs {(alloc.machineNotUtilizedHrs || 0) % 60} min
+                              </span>
+                              <span className="text-xs font-bold text-red-500 whitespace-nowrap">
                                 = {alloc.machineNotUtilizedHrs || 0} min
                               </span>
+                              {(alloc.machineNotUtilizedHrs || 0) > 0 && (
+                                <span className="ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-600 border border-red-200">
+                                  ⚠ Downtime
+                                </span>
+                              )}
                             </div>
                           </div>
                         </div>

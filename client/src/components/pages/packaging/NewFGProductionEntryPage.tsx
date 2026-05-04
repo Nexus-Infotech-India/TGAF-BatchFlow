@@ -20,8 +20,37 @@ import {
   Cog,
   Gauge,
   Users,
-  Search
+  Search,
+  Plus,
+  X,
+  AlertCircle
 } from 'lucide-react';
+
+const genId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+
+interface MachineAllocation {
+  id: string;
+  machineId: string;
+  manPower: boolean;
+  sfgTransferNumber: string | null;
+  sfgConsumptionQty: number | null;
+  pkgTransferNumber: string | null;
+  laminateConsumptionQty: number | null;
+  laminateConsumptionUnit: string;
+  notes: string;
+}
+
+const newEmptyAllocation = (): MachineAllocation => ({
+  id: genId(),
+  machineId: '',
+  manPower: true,
+  sfgTransferNumber: null,
+  sfgConsumptionQty: null,
+  pkgTransferNumber: null,
+  laminateConsumptionQty: null,
+  laminateConsumptionUnit: 'KG',
+  notes: '',
+});
 
 /* ─── Unit conversion helpers ─── */
 const UNIT_TO_GRAMS: Record<string, number> = {
@@ -64,17 +93,8 @@ const NewFGProductionEntryPage: React.FC = () => {
   const [loadingItems, setLoadingItems] = useState(false);
   const [showAvailability, setShowAvailability] = useState(false);
 
-  // Step 2: Single machine allocation
-  const [selectedMachineId, setSelectedMachineId] = useState('');
-  const [selectedMachine, setSelectedMachine] = useState<any>(null);
-  const [machineProductName, setMachineProductName] = useState('');
-  const [sfgTransferNumber, setSfgTransferNumber] = useState<string | null>(null);
-  const [sfgConsumptionQty, setSfgConsumptionQty] = useState<number | null>(null);
-  const [pkgTransferNumber, setPkgTransferNumber] = useState<string | null>(null);
-  const [laminateConsumptionQty, setLaminateConsumptionQty] = useState<number | null>(null);
-  const [laminateConsumptionUnit, setLaminateConsumptionUnit] = useState('KG');
-  const [machineManPower, setMachineManPower] = useState(true);
-  const [machineNotes, setMachineNotes] = useState('');
+  // Step 2: Multi-machine allocation
+  const [allocations, setAllocations] = useState<MachineAllocation[]>([newEmptyAllocation()]);
   const [outputMachines, setOutputMachines] = useState<any[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
@@ -369,30 +389,140 @@ const NewFGProductionEntryPage: React.FC = () => {
      return { qty: sum, unit: un, productName: name };
   };
 
-  /* ─── Handle machine selection ─── */
-  const handleMachineSelect = (machineId: string) => {
+  /* ─── Allocation row helpers ─── */
+  const updateAllocation = (id: string, patch: Partial<MachineAllocation>) => {
+    setAllocations(prev => prev.map(a => (a.id === id ? { ...a, ...patch } : a)));
+  };
+  const addAllocation = () => {
+    setAllocations(prev => [...prev, newEmptyAllocation()]);
+  };
+  const removeAllocation = (id: string) => {
+    setAllocations(prev => (prev.length === 1 ? prev : prev.filter(a => a.id !== id)));
+  };
+
+  const handleMachineSelectForRow = (rowId: string, machineId: string) => {
+    if (!machineId) {
+      updateAllocation(rowId, { machineId: '' });
+      return;
+    }
     const m = outputMachines.find(mac => mac.id === machineId);
     if (!m) return;
-
-    // Check if machine has a pending allocation (output not yet recorded)
     if (m.hasPendingAllocation) {
-      setSelectedMachineId('');
-      setSelectedMachine(null);
-      setMachineProductName('');
-      message.warning(`${m.name} has a pending allocation (${m.pendingEntryNumber || ''}) — output not yet recorded. Please complete existing work first.`);
       Modal.warning({
         title: 'Machine Has Pending Work',
         content: `${m.name} already has an active allocation (${m.pendingEntryNumber || 'N/A'}) that is still pending output recording.${m.pendingProductName ? ' Product: ' + m.pendingProductName + '.' : ''} Please complete the existing production output first, or select a different machine.`,
-        okText: 'OK, I\'ll choose another',
+        okText: 'OK',
         centered: true,
       });
       return;
     }
+    updateAllocation(rowId, { machineId });
+  };
 
-    setSelectedMachineId(machineId);
-    setSelectedMachine(m);
-    const selectedBom = boms.find(b => b.id === selectedBomId);
-    setMachineProductName(selectedBom?.productName || getLastProductForMachine(m.id) || '');
+  /* Machines available for a given row: free machines, excluding ones used in
+     other rows. The row's own machineId is always included so the dropdown
+     keeps showing the current selection. */
+  const availableMachinesForRow = (rowId: string) => {
+    const usedIds = new Set(
+      allocations.filter(a => a.id !== rowId && a.machineId).map(a => a.machineId)
+    );
+    return outputMachines.filter(m => !m.hasPendingAllocation && !usedIds.has(m.id));
+  };
+
+  /* Plan qty is auto-split via per-row SFG consumption — sum (in KG) must match. */
+  const planQtyKg = productionQty != null ? toGrams(productionQty, productionUnit) / 1000 : 0;
+  const totalAllocatedKg = allocations.reduce(
+    (sum, a) => sum + (Number(a.sfgConsumptionQty) || 0),
+    0
+  );
+  const allocationDelta = Number((totalAllocatedKg - planQtyKg).toFixed(3));
+  const allocationsMatchPlan = Math.abs(allocationDelta) < 0.001;
+  const planProductName = boms.find(b => b.id === selectedBomId)?.productName || '';
+
+  /* ─── Live remaining helpers (UI-only — DB is updated only on submit) ─── */
+
+  /* SFG transfer KG already consumed by OTHER rows (excludes the given row).
+     Used to (a) show remaining qty per transfer in the dropdown/caption,
+     and (b) cap the InputNumber max so a row can't exceed transfer stock. */
+  const sfgKgUsedByOtherRows = (rowId: string, transferNumber: string): number => {
+    if (!transferNumber) return 0;
+    return allocations
+      .filter(a => a.id !== rowId && a.sfgTransferNumber === transferNumber)
+      .reduce((s, a) => s + (Number(a.sfgConsumptionQty) || 0), 0);
+  };
+
+  /* Remaining KG of an SFG transfer after accounting for everything other rows
+     have already allocated to that transfer. */
+  const getSfgRemainingForRow = (rowId: string, transferNumber: string) => {
+    const totalAvail = getSfgTransferAvailable(transferNumber).qty;
+    const used = sfgKgUsedByOtherRows(rowId, transferNumber);
+    return Math.max(0, Number((totalAvail - used).toFixed(3)));
+  };
+
+  /* Remaining KG of plan after other rows' SFG consumption. */
+  const planRemainingForRow = (rowId: string): number => {
+    const otherSum = allocations
+      .filter(a => a.id !== rowId)
+      .reduce((s, a) => s + (Number(a.sfgConsumptionQty) || 0), 0);
+    return Math.max(0, Number((planQtyKg - otherSum).toFixed(3)));
+  };
+
+  /* Per-row SFG max: capped by both transfer remaining and plan remaining. */
+  const getRowSfgMaxKg = (rowId: string, transferNumber: string | null): number | undefined => {
+    const planLeft = planRemainingForRow(rowId);
+    if (!transferNumber) return planLeft || undefined;
+    const transferLeft = getSfgRemainingForRow(rowId, transferNumber);
+    return Math.min(transferLeft, planLeft);
+  };
+
+  /* PKG transfer KG already consumed by OTHER rows (excludes the given row).
+     Each row's laminate qty is in its own unit; we normalize to KG via toGrams. */
+  const pkgKgUsedByOtherRows = (rowId: string, transferNumber: string): number => {
+    if (!transferNumber) return 0;
+    return allocations
+      .filter(a => a.id !== rowId && a.pkgTransferNumber === transferNumber)
+      .reduce(
+        (s, a) =>
+          s +
+          (a.laminateConsumptionQty != null
+            ? toGrams(Number(a.laminateConsumptionQty), a.laminateConsumptionUnit || 'KG') / 1000
+            : 0),
+        0
+      );
+  };
+
+  /* Remaining qty of a PKG transfer (in transfer's own unit, typically KG)
+     after accounting for everything other rows have allocated. */
+  const getPkgRemainingForRow = (rowId: string, transferNumber: string) => {
+    const info = getPkgTransferAvailable(transferNumber);
+    const totalAvailKg =
+      info.unit && info.unit !== 'KG'
+        ? toGrams(info.qty, info.unit) / 1000
+        : info.qty;
+    const usedKg = pkgKgUsedByOtherRows(rowId, transferNumber);
+    const remainingKg = Math.max(0, totalAvailKg - usedKg);
+    // Convert back into transfer's display unit
+    if (info.unit && info.unit !== 'KG') {
+      const factor =
+        UNIT_TO_GRAMS[info.unit] ?? UNIT_TO_GRAMS[info.unit.toLowerCase()] ?? 1000;
+      return { qty: Number(((remainingKg * 1000) / factor).toFixed(3)), unit: info.unit };
+    }
+    return { qty: Number(remainingKg.toFixed(3)), unit: 'KG' };
+  };
+
+  /* Per-row laminate max in the row's selected unit. */
+  const getRowLaminateMax = (
+    rowId: string,
+    transferNumber: string | null,
+    rowUnit: string
+  ): number | undefined => {
+    if (!transferNumber) return undefined;
+    const remaining = getPkgRemainingForRow(rowId, transferNumber);
+    // remaining is in transfer's unit (typically KG); convert to row's unit
+    const remainingGrams = toGrams(remaining.qty, remaining.unit);
+    const rowFactor =
+      UNIT_TO_GRAMS[rowUnit] ?? UNIT_TO_GRAMS[rowUnit.toLowerCase()] ?? 1000;
+    return Number((remainingGrams / rowFactor).toFixed(3));
   };
 
   const proceedToMachineAllocation = () => {
@@ -423,118 +553,214 @@ const NewFGProductionEntryPage: React.FC = () => {
     setStep(1);
   };
 
-  /* ─── Submit (Creates both Batch & Entry) — single machine ─── */
+  /* ─── Submit — multi-machine: one FG Batch with N machine entries ─── */
   const handleSubmit = async () => {
-    if (!selectedMachineId) {
-      message.error('Please select a machine for allocation.');
+    if (allocations.length === 0) {
+      message.error('Add at least one machine allocation.');
       return;
     }
 
-    const sfgQty = Number(sfgConsumptionQty) || 0;
-    if (sfgQty <= 0) {
-      message.error('Please enter the SFG Consumption quantity.');
+    // Per-row required fields
+    for (let i = 0; i < allocations.length; i++) {
+      const a = allocations[i];
+      if (!a.machineId) {
+        message.error(`Row ${i + 1}: select a machine.`);
+        return;
+      }
+      if (!a.sfgConsumptionQty || a.sfgConsumptionQty <= 0) {
+        message.error(`Row ${i + 1}: enter the SFG consumption quantity.`);
+        return;
+      }
+      if (!a.sfgTransferNumber) {
+        message.error(`Row ${i + 1}: select an SFG transfer.`);
+        return;
+      }
+    }
+
+    if (totalAllocatedKg > planQtyKg + 0.001) {
+      message.error(
+        `Total allocated (${formatQty(totalAllocatedKg)} KG) exceeds planned production (${formatQty(planQtyKg)} KG). Reduce a row before submitting.`
+      );
+      return;
+    }
+    if (!allocationsMatchPlan) {
+      message.error(
+        `Total allocated (${formatQty(totalAllocatedKg)} KG) must equal planned production (${formatQty(planQtyKg)} KG).`
+      );
       return;
     }
 
-    // Build consumption payload
+    // Per-transfer SFG availability check
+    const sfgPerTransfer: Record<string, number> = {};
+    for (const a of allocations) {
+      if (a.sfgTransferNumber) {
+        sfgPerTransfer[a.sfgTransferNumber] =
+          (sfgPerTransfer[a.sfgTransferNumber] || 0) + (Number(a.sfgConsumptionQty) || 0);
+      }
+    }
+    for (const [trf, used] of Object.entries(sfgPerTransfer)) {
+      const avail = getSfgTransferAvailable(trf);
+      if (used > avail.qty + 0.001) {
+        message.error(
+          `SFG transfer ${trf}: total allocated (${formatQty(used)} KG) exceeds available (${formatQty(avail.qty)} ${avail.unit}).`
+        );
+        return;
+      }
+    }
+
+    // Per-transfer PKG availability check (normalize all rows to KG)
+    const pkgKgPerTransfer: Record<string, number> = {};
+    for (const a of allocations) {
+      if (!a.pkgTransferNumber) continue;
+      const rowKg =
+        a.laminateConsumptionQty != null
+          ? toGrams(Number(a.laminateConsumptionQty), a.laminateConsumptionUnit || 'KG') / 1000
+          : 0;
+      pkgKgPerTransfer[a.pkgTransferNumber] =
+        (pkgKgPerTransfer[a.pkgTransferNumber] || 0) + rowKg;
+    }
+    for (const [trf, usedKg] of Object.entries(pkgKgPerTransfer)) {
+      const info = getPkgTransferAvailable(trf);
+      const availKg =
+        info.unit && info.unit !== 'KG'
+          ? toGrams(info.qty, info.unit) / 1000
+          : info.qty;
+      if (usedKg > availKg + 0.001) {
+        message.error(
+          `Packaging transfer ${trf}: total allocated (${formatQty(usedKg)} KG) exceeds available (${formatQty(availKg)} KG).`
+        );
+        return;
+      }
+    }
+
+    // Build batch consumptions
     const payloadConsumptions: any[] = [];
 
-    // 1) Non-SFG, non-Packaging items (general stock)
+    // 1) General-stock items: aggregated at batch level (BOM expected qty)
     const otherLines = consumptionLines.filter(c => !c.isSFG && !c.isPackaging);
     for (const line of otherLines) {
-       payloadConsumptions.push({
-           rawMaterialId: line.rawMaterialId,
-           rawMaterialName: line.rawMaterialName,
-           expectedQuantity: line.expectedQuantity,
-           actualQuantity: line.expectedQuantity,
-           unit: line.unit,
-           sourceType: 'STOCK',
-           batchNumber: '',
-           dispatchId: '',
-       });
+      payloadConsumptions.push({
+        rawMaterialId: line.rawMaterialId,
+        rawMaterialName: line.rawMaterialName,
+        expectedQuantity: line.expectedQuantity,
+        actualQuantity: line.expectedQuantity,
+        unit: line.unit,
+        sourceType: 'STOCK',
+        batchNumber: '',
+        dispatchId: '',
+      });
     }
 
-    // 2) Packaging lines
-    const packagingLines = consumptionLines.filter(c => c.isPackaging);
-    for (const pkgLine of packagingLines) {
-       if (pkgTransferNumber && (Number(laminateConsumptionQty) || 0) > 0) {
-          const qtyGrams = toGrams(Number(laminateConsumptionQty) || 0, laminateConsumptionUnit || 'KG');
-          const unitFactor = UNIT_TO_GRAMS[pkgLine.unit] ?? UNIT_TO_GRAMS[pkgLine.unit?.toLowerCase()] ?? 1000;
-          const qtyInBomUnit = unitFactor > 0 ? qtyGrams / unitFactor : 0;
-          if (qtyInBomUnit > 0) {
-             payloadConsumptions.push({
-                rawMaterialId: pkgLine.rawMaterialId,
-                rawMaterialName: pkgLine.rawMaterialName,
-                expectedQuantity: pkgLine.expectedQuantity,
-                actualQuantity: qtyInBomUnit,
-                unit: pkgLine.unit,
-                sourceType: 'PKG_TRANSFER',
-                batchNumber: pkgTransferNumber,
-                dispatchId: '',
-             });
-          }
-       }
-    }
-
-    // 3) SFG lines
+    // 2) SFG lines: one record per (sfgRawMaterial × transfer) summed across rows
     const sfgLine = consumptionLines.find(c => c.isSFG);
     if (sfgLine) {
-       const trf = sfgTransferNumber || sfgLine.batchNumber || sfgTransfers[0]?.transferNumber;
-       if (trf && sfgQty > 0) {
+      for (const [trf, qty] of Object.entries(sfgPerTransfer)) {
+        if (qty > 0) {
           payloadConsumptions.push({
-             rawMaterialId: sfgLine.rawMaterialId,
-             rawMaterialName: sfgLine.rawMaterialName,
-             expectedQuantity: sfgLine.expectedQuantity,
-             actualQuantity: sfgQty,
-             unit: 'KG',
-             sourceType: 'SFG_BATCH',
-             batchNumber: trf,
-             dispatchId: '',
+            rawMaterialId: sfgLine.rawMaterialId,
+            rawMaterialName: sfgLine.rawMaterialName,
+            expectedQuantity: sfgLine.expectedQuantity,
+            actualQuantity: qty,
+            unit: 'KG',
+            sourceType: 'SFG_BATCH',
+            batchNumber: trf,
+            dispatchId: '',
           });
-       } else if (sfgQty > 0 && !trf) {
-          message.error('No SFG Transfer batch selected. Please select an SFG Transfer.');
-          return;
-       }
+        }
+      }
+    }
+
+    // 3) Packaging lines: per pkgLine, one record per (pkgRawMaterial × transfer)
+    //    summed across rows, with each row's qty converted to that line's BOM unit.
+    const packagingLines = consumptionLines.filter(c => c.isPackaging);
+    for (const pkgLine of packagingLines) {
+      const pkgPerTransfer: Record<string, number> = {};
+      for (const a of allocations) {
+        if (!a.pkgTransferNumber) continue;
+        const rowQty = Number(a.laminateConsumptionQty) || 0;
+        if (rowQty <= 0) continue;
+        const qtyGrams = toGrams(rowQty, a.laminateConsumptionUnit || 'KG');
+        const unitFactor =
+          UNIT_TO_GRAMS[pkgLine.unit] ??
+          UNIT_TO_GRAMS[pkgLine.unit?.toLowerCase()] ??
+          1000;
+        const qtyInBomUnit = unitFactor > 0 ? qtyGrams / unitFactor : 0;
+        if (qtyInBomUnit > 0) {
+          pkgPerTransfer[a.pkgTransferNumber] =
+            (pkgPerTransfer[a.pkgTransferNumber] || 0) + qtyInBomUnit;
+        }
+      }
+      for (const [trf, qty] of Object.entries(pkgPerTransfer)) {
+        payloadConsumptions.push({
+          rawMaterialId: pkgLine.rawMaterialId,
+          rawMaterialName: pkgLine.rawMaterialName,
+          expectedQuantity: pkgLine.expectedQuantity,
+          actualQuantity: qty,
+          unit: pkgLine.unit,
+          sourceType: 'PKG_TRANSFER',
+          batchNumber: trf,
+          dispatchId: '',
+        });
+      }
     }
 
     if (payloadConsumptions.length === 0) {
-       message.error('No consumption data to submit. Please ensure materials are configured.');
-       return;
+      message.error('No consumption data to submit. Please ensure materials are configured.');
+      return;
     }
+
+    // Convert each row's SFG qty (KG) into the plan's production unit so the
+    // backend's "sum of allocatedQty == fgBatch.productionQty" check passes.
+    const planUnitFactor =
+      UNIT_TO_GRAMS[productionUnit] ??
+      UNIT_TO_GRAMS[productionUnit.toLowerCase()] ??
+      1000;
+    const kgToPlanUnit = (kg: number) => (kg * 1000) / planUnitFactor;
+
+    // Build per-machine allocation payload for the production entry
+    const machineAllocations = allocations.map(a => {
+      const m = outputMachines.find(om => om.id === a.machineId);
+      const transferNote = a.sfgTransferNumber ? `SFG Transfer: ${a.sfgTransferNumber}` : '';
+      const combinedNotes =
+        transferNote + (transferNote && a.notes ? ' | ' : '') + (a.notes || '');
+      const sfgKg = Number(a.sfgConsumptionQty) || 0;
+      return {
+        machineId: a.machineId,
+        allocatedQty: kgToPlanUnit(sfgKg),
+        productName: planProductName,
+        instulationCapacity: m?.capacityQty || 0,
+        instulationCapacityUnit:
+          m?.capacityUnit === 'BOXES_PER_SHIFT' ? 'Boxes/Shift' : m?.capacityUnit,
+        laminateConsumptionQty: Number(a.laminateConsumptionQty) || 0,
+        laminateConsumptionUnit: a.laminateConsumptionUnit,
+        sfgConsumptionQty: sfgKg,
+        sfgConsumptionUnit: 'KG',
+        manPower: a.manPower,
+        notes: combinedNotes,
+      };
+    });
 
     setSubmitting(true);
     try {
-      // 1. Create FG Batch
       const batchRes = await api.post(API_ROUTES.RAW.CREATE_FG_BATCH, {
         bomId: selectedBomId,
         productionQty,
         productionUnit,
-        notes: "Auto-created from Production Entry Flow",
+        notes: 'Auto-created from Production Entry Flow',
         consumptions: payloadConsumptions,
       });
-
       const newBatchId = batchRes.data?.data?.id;
 
-      // 2. Accept the Batch
       await api.put(API_ROUTES.RAW.ACCEPT_FG_BATCH(newBatchId));
 
-      // 3. Create FG Production Entry with single machine
       await api.post(API_ROUTES.RAW.CREATE_FG_PRODUCTION_ENTRY, {
         fgBatchId: newBatchId,
-        machineId: selectedMachineId,
-        allocatedQty: sfgQty,
-        productName: machineProductName,
-        instulationCapacity: selectedMachine?.capacityQty || 0,
-        instulationCapacityUnit: selectedMachine?.capacityUnit === 'BOXES_PER_SHIFT' ? 'Boxes/Shift' : selectedMachine?.capacityUnit,
-        laminateConsumptionQty: laminateConsumptionQty || 0,
-        laminateConsumptionUnit: laminateConsumptionUnit,
-        sfgConsumptionQty: sfgQty,
-        sfgConsumptionUnit: 'KG',
-        manPower: machineManPower,
-        notes: (sfgTransferNumber ? `SFG Transfer: ${sfgTransferNumber}` : '') + (sfgTransferNumber && machineNotes ? ' | ' : '') + (machineNotes || ''),
+        machineAllocations,
       });
 
-      message.success('Production Entry created successfully!');
+      message.success(
+        `Production Entry created with ${machineAllocations.length} machine${machineAllocations.length > 1 ? 's' : ''}.`
+      );
       navigate('/packaging/fg-production');
     } catch (err: any) {
       console.error('[Make Allocation] Error:', err?.response?.data || err);
@@ -821,7 +1047,7 @@ const NewFGProductionEntryPage: React.FC = () => {
               </motion.div>
             )}
 
-            {/* STEP 2: Single Machine Assignment */}
+            {/* STEP 2: Multi-Machine Allocation */}
             {step === 1 && (
               <motion.div key="step-1" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="p-6 md:p-8 space-y-6">
                 {/* Section Header */}
@@ -846,161 +1072,284 @@ const NewFGProductionEntryPage: React.FC = () => {
                       <h2 className="text-xl font-bold bg-gradient-to-r from-blue-700 to-indigo-700 bg-clip-text text-transparent">
                         Machine Selection & Allocation
                       </h2>
-                      <p className="text-sm text-muted-foreground mt-0.5">Select a machine and assign production quantity</p>
+                      <p className="text-sm text-muted-foreground mt-0.5">Split the planned production across one or more free machines</p>
                     </div>
-                    {selectedMachine && (
-                      <div className="hidden md:flex items-center gap-2 rounded-md border border-emerald-200 bg-white/80 backdrop-blur px-3 py-2 shadow-sm">
-                        <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                        <span className="text-xs font-bold text-emerald-700">{selectedMachine.name} Selected</span>
-                      </div>
-                    )}
                   </div>
                 </div>
 
-                {/* Machine Selection */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label className="text-sm font-bold text-foreground flex items-center gap-2">
-                      <Factory size={14} className="text-blue-600" /> Select Machine
-                    </label>
-                    {outputMachines.length === 0 ? (
-                      <div className="p-4 border border-amber-200 rounded-md bg-amber-50/50 text-sm text-amber-700 font-semibold">
-                        No machines with production output records found. Machines must have at least one completed production output to appear here.
-                      </div>
+                {/* Allocation Totals Bar */}
+                <div className={`flex flex-wrap items-center gap-3 rounded-md border px-4 py-3 ${allocationsMatchPlan ? 'border-emerald-200 bg-emerald-50/60' : 'border-amber-200 bg-amber-50/60'}`}>
+                  <div className="flex items-center gap-2">
+                    {allocationsMatchPlan ? (
+                      <CheckCircle size={16} className="text-emerald-600" />
                     ) : (
-                      <Select
-                        className="w-full font-bold [&_.ant-select-selector]:rounded-sm"
-                        value={selectedMachineId || undefined}
-                        onChange={(val: string) => handleMachineSelect(val)}
-                        placeholder="Choose a machine..."
-                        size="large"
-                        showSearch
-                        allowClear
-                        onClear={() => { setSelectedMachineId(''); setSelectedMachine(null); setMachineProductName(''); }}
-                        filterOption={(input, option) => (option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())}
+                      <AlertCircle size={16} className="text-amber-600" />
+                    )}
+                    <span className={`text-xs font-bold uppercase ${allocationsMatchPlan ? 'text-emerald-700' : 'text-amber-700'}`}>
+                      Allocated {formatQty(totalAllocatedKg)} / {formatQty(planQtyKg)} KG
+                    </span>
+                  </div>
+                  {!allocationsMatchPlan && (
+                    <span className="text-xs font-semibold text-amber-700">
+                      {allocationDelta > 0
+                        ? `Over by ${formatQty(allocationDelta)} KG`
+                        : `Remaining ${formatQty(-allocationDelta)} KG`}
+                    </span>
+                  )}
+                  {planProductName && (
+                    <span className="text-[11px] text-muted-foreground">
+                      Product: <span className="font-semibold">{planProductName}</span>
+                    </span>
+                  )}
+                  <div className="ml-auto text-[11px] text-muted-foreground">
+                    {allocations.length} machine{allocations.length > 1 ? 's' : ''} added
+                  </div>
+                </div>
+
+                {outputMachines.length === 0 ? (
+                  <div className="p-4 border border-amber-200 rounded-md bg-amber-50/50 text-sm text-amber-700 font-semibold flex items-start gap-2">
+                    <AlertCircle size={16} className="mt-0.5 shrink-0" />
+                    <span>
+                      No machines found in the master. Add machines via Masters → Machine Master before allocating production.
+                    </span>
+                  </div>
+                ) : outputMachines.filter(m => !m.hasPendingAllocation).length === 0 ? (
+                  <div className="p-4 border border-amber-200 rounded-md bg-amber-50/50 text-sm text-amber-700 space-y-2">
+                    <div className="flex items-start gap-2 font-semibold">
+                      <AlertCircle size={16} className="mt-0.5 shrink-0" />
+                      <span>
+                        No free machines. Every machine ({outputMachines.length}) has a pending production entry. Record output (or remove) the entries below before allocating new work.
+                      </span>
+                    </div>
+                    <ul className="ml-7 text-xs font-medium space-y-0.5">
+                      {outputMachines.filter(m => m.hasPendingAllocation).map(m => (
+                        <li key={m.id}>
+                          <span className="font-bold">{m.name}</span> ({m.machineId}) — blocked by{' '}
+                          <span className="font-mono">{m.pendingEntryNumber || 'unknown entry'}</span>
+                          {m.pendingProductName ? <> · {m.pendingProductName}</> : null}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="ml-7 text-xs">
+                      Go to <span className="font-semibold">FG Production → Production Output Entry</span> to complete any of these.
+                    </div>
+                  </div>
+                ) : null}
+
+                {/* Allocation Rows */}
+                <div className="space-y-4">
+                  {allocations.map((row, idx) => {
+                    const machineOpts = availableMachinesForRow(row.id);
+                    const selectedMachine = outputMachines.find(m => m.id === row.machineId);
+                    return (
+                      <motion.div
+                        key={row.id}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="rounded-md border border-border bg-card shadow-sm"
                       >
-                        {outputMachines.map(m => (
-                          <Select.Option key={m.id} value={m.id} disabled={!!m.hasPendingAllocation} label={`${m.name} (${m.machineId})`}>
-                            <div className="flex items-center justify-between">
-                              <span>{m.name} ({m.machineId})</span>
-                              {m.hasPendingAllocation && (
-                                <span style={{ color: '#d97706', fontSize: '11px', fontWeight: 600 }}>
-                                  Pending Output
-                                </span>
+                        {/* Card Header */}
+                        <div className="flex items-center gap-3 px-4 py-3 border-b border-border bg-muted/20 rounded-t-md">
+                          <div className="flex h-7 w-7 items-center justify-center rounded-sm bg-blue-100 text-blue-700 font-bold text-xs">
+                            {idx + 1}
+                          </div>
+                          <span className="text-sm font-bold text-foreground">
+                            Machine Allocation
+                          </span>
+                          {selectedMachine && (
+                            <span className="px-2 py-0.5 rounded-sm text-[11px] bg-emerald-500/10 text-emerald-700 font-semibold">
+                              {selectedMachine.name}
+                            </span>
+                          )}
+                          <div className="ml-auto">
+                            <Button
+                              icon={<X size={14} />}
+                              size="small"
+                              danger
+                              disabled={allocations.length === 1}
+                              onClick={() => removeAllocation(row.id)}
+                              className="rounded-sm"
+                            >
+                              Remove
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Card Body */}
+                        <div className="p-4 space-y-4">
+                          {/* Machine + Man Power */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+                            <div>
+                              <label className="text-xs font-bold text-muted-foreground uppercase flex items-center gap-1.5 mb-1.5">
+                                <Factory size={12} className="text-blue-600" /> Machine
+                              </label>
+                              <Select
+                                className="w-full [&_.ant-select-selector]:rounded-sm"
+                                value={row.machineId || undefined}
+                                onChange={(val: string) => handleMachineSelectForRow(row.id, val)}
+                                placeholder="Choose a free machine..."
+                                size="large"
+                                showSearch
+                                allowClear
+                                onClear={() => updateAllocation(row.id, { machineId: '' })}
+                                filterOption={(input, option) => (option?.label ?? '').toString().toLowerCase().includes(input.toLowerCase())}
+                                notFoundContent={machineOpts.length === 0 ? 'No free machines left' : undefined}
+                              >
+                                {machineOpts.map(m => (
+                                  <Select.Option key={m.id} value={m.id} label={`${m.name} (${m.machineId})`}>
+                                    {m.name} ({m.machineId})
+                                  </Select.Option>
+                                ))}
+                              </Select>
+                              {selectedMachine && (
+                                <div className="mt-2 grid grid-cols-2 gap-2 text-[11px] text-muted-foreground bg-muted/20 rounded-sm border border-border p-2">
+                                  <div className="flex items-center gap-1"><Factory size={11} /> <span className="font-mono font-semibold">{selectedMachine.machineId}</span></div>
+                                  <div className="flex items-center gap-1"><Gauge size={11} /> {selectedMachine.machineSpeed || 'N/A'}</div>
+                                  <div className="flex items-center gap-1"><Boxes size={11} /> {selectedMachine.capacityQty} {getCapacityLabel(selectedMachine.capacityUnit)}</div>
+                                  <div className="flex items-center gap-1"><MapPin size={11} /> {selectedMachine.location || 'N/A'}</div>
+                                </div>
                               )}
                             </div>
-                          </Select.Option>
-                        ))}
-                      </Select>
-                    )}
 
-                    {/* Machine Details Card */}
-                    {selectedMachine && (
-                      <div className="bg-gradient-to-br from-slate-50 to-blue-50/50 p-4 rounded-md border border-blue-100 shadow-sm space-y-2 mt-3 transition-all duration-300">
-                        <div className="flex justify-between items-center text-sm"><span className="opacity-70 flex items-center gap-1"><Factory size={12} /> Machine ID:</span> <span className="font-mono font-bold text-blue-700">{selectedMachine.machineId}</span></div>
-                        <div className="flex justify-between items-center text-sm"><span className="opacity-70 flex items-center gap-1"><Gauge size={12} /> Speed:</span> <span className="font-semibold">{selectedMachine.machineSpeed || 'N/A'}</span></div>
-                        <div className="flex justify-between items-center text-sm"><span className="opacity-70 flex items-center gap-1"><Boxes size={12} /> Capacity:</span> <span className="font-semibold">{selectedMachine.capacityQty} {getCapacityLabel(selectedMachine.capacityUnit)}</span></div>
-                        <div className="flex justify-between items-center text-sm"><span className="opacity-70 flex items-center gap-1"><MapPin size={12} /> Location:</span> <span className="font-semibold">{selectedMachine.location || 'N/A'}</span></div>
-                      </div>
-                    )}
-                  </div>
+                            <div className={`p-2.5 border rounded-sm flex items-center justify-between transition-all ${row.manPower ? 'border-emerald-500/40 bg-emerald-50/40' : 'border-red-500/30 bg-red-50/40'}`}>
+                              <div className="flex items-center gap-2">
+                                <Users size={13} className={row.manPower ? 'text-emerald-700' : 'text-red-700'} />
+                                <span className={`text-xs font-bold ${row.manPower ? 'text-emerald-700' : 'text-red-700'}`}>Man Power</span>
+                              </div>
+                              <Switch checked={row.manPower} onChange={v => updateAllocation(row.id, { manPower: v })} />
+                            </div>
+                          </div>
 
-                  {/* Man Power & Product */}
-                  <div className="space-y-3">
-                    <div className={`p-3 border rounded-md flex items-center justify-between transition-all ${machineManPower ? 'border-emerald-500/40 bg-gradient-to-r from-emerald-50 to-emerald-50/30 shadow-sm' : 'border-red-500/30 bg-gradient-to-r from-red-50 to-red-50/30'}`}>
-                      <div className="flex items-center gap-2">
-                        <Users size={14} className={machineManPower ? 'text-emerald-700' : 'text-red-700'} />
-                        <span className={`text-sm font-bold ${machineManPower ? 'text-emerald-700' : 'text-red-700'}`}>Man Power</span>
-                      </div>
-                      <Switch checked={machineManPower} onChange={setMachineManPower} />
-                    </div>
-                    <div>
-                      <label className="text-xs font-bold text-muted-foreground uppercase">Product Name</label>
-                      <Input value={machineProductName} onChange={e => setMachineProductName(e.target.value)} placeholder="Product name..." className="mt-1 rounded-sm" />
-                    </div>
-                  </div>
+                          {/* SFG & Packaging Consumption per row */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-border">
+                            {/* SFG */}
+                            <div className="space-y-2">
+                              <label className="text-xs font-bold text-emerald-700 flex items-center gap-1.5 uppercase">
+                                <Truck size={12} /> SFG Consumption
+                              </label>
+                              <Select
+                                placeholder="Select SFG Batch"
+                                value={row.sfgTransferNumber || undefined}
+                                onChange={v => updateAllocation(row.id, { sfgTransferNumber: v, sfgConsumptionQty: null })}
+                                options={getSfgConsumptionInfo().transferNumbers.map(t => {
+                                  const remaining = getSfgRemainingForRow(row.id, t);
+                                  return { value: t, label: `${t} — ${formatQty(remaining)} KG remaining` };
+                                })}
+                                className="w-full text-sm [&_.ant-select-selector]:rounded-sm"
+                                allowClear
+                              />
+                              <div className="flex gap-2">
+                                <InputNumber
+                                  min={0}
+                                  precision={3}
+                                  max={getRowSfgMaxKg(row.id, row.sfgTransferNumber)}
+                                  value={row.sfgConsumptionQty}
+                                  onChange={v => updateAllocation(row.id, { sfgConsumptionQty: v })}
+                                  className="w-full [&_.ant-input-number-input]:rounded-sm"
+                                  placeholder="Allocate Qty"
+                                  size="large"
+                                  disabled={!row.sfgTransferNumber}
+                                />
+                                <div className="flex items-center justify-center font-bold text-muted-foreground text-xs bg-muted px-3 rounded-sm border border-border">KG</div>
+                              </div>
+                              {row.sfgTransferNumber && (
+                                <div className="text-[11px] text-muted-foreground space-y-0.5">
+                                  
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Packaging */}
+                            <div className="space-y-2">
+                              <label className="text-xs font-bold text-blue-700 flex items-center gap-1.5 uppercase">
+                                <Package size={12} /> Packaging Consumption
+                              </label>
+                              <Select
+                                placeholder="Select PKG Batch"
+                                value={row.pkgTransferNumber || undefined}
+                                onChange={v => updateAllocation(row.id, { pkgTransferNumber: v, laminateConsumptionQty: null })}
+                                options={getPkgConsumptionInfo().transferNumbers.map(t => {
+                                  const info = getPkgTransferAvailable(t);
+                                  const remaining = getPkgRemainingForRow(row.id, t);
+                                  return { value: t, label: `${t} — ${info.productName || 'Packaging'} (${formatQty(remaining.qty)} ${remaining.unit} remaining)` };
+                                })}
+                                className="w-full text-sm [&_.ant-select-selector]:rounded-sm"
+                                allowClear
+                              />
+                              <div className="flex gap-2">
+                                <InputNumber
+                                  min={0}
+                                  precision={3}
+                                  max={getRowLaminateMax(row.id, row.pkgTransferNumber, row.laminateConsumptionUnit)}
+                                  value={row.laminateConsumptionQty}
+                                  onChange={v => updateAllocation(row.id, { laminateConsumptionQty: v })}
+                                  className="w-full [&_.ant-input-number-input]:rounded-sm"
+                                  placeholder="Qty"
+                                  size="large"
+                                  disabled={!row.pkgTransferNumber}
+                                />
+                                <Select
+                                  value={row.laminateConsumptionUnit}
+                                  onChange={v => updateAllocation(row.id, { laminateConsumptionUnit: v })}
+                                  options={LAMINATE_UNIT_OPTIONS}
+                                  className="w-[80px] shrink-0 [&_.ant-select-selector]:rounded-sm"
+                                />
+                              </div>
+                              {row.pkgTransferNumber && (() => {
+                                const pkgRemaining = getPkgRemainingForRow(row.id, row.pkgTransferNumber);
+                                // Compute remaining after THIS row's own consumption
+                                const rowQtyKg = row.laminateConsumptionQty != null
+                                  ? toGrams(Number(row.laminateConsumptionQty), row.laminateConsumptionUnit || 'KG') / 1000
+                                  : 0;
+                                const remainingKgBeforeRow = pkgRemaining.unit !== 'KG'
+                                  ? toGrams(pkgRemaining.qty, pkgRemaining.unit) / 1000
+                                  : pkgRemaining.qty;
+                                const afterThisEntryKg = Math.max(0, Number((remainingKgBeforeRow - rowQtyKg).toFixed(3)));
+                                // Convert back to transfer's display unit
+                                let afterThisEntryDisplay = afterThisEntryKg;
+                                let afterThisEntryUnit = 'KG';
+                                if (pkgRemaining.unit && pkgRemaining.unit !== 'KG') {
+                                  const factor = UNIT_TO_GRAMS[pkgRemaining.unit] ?? UNIT_TO_GRAMS[pkgRemaining.unit.toLowerCase()] ?? 1000;
+                                  afterThisEntryDisplay = Number(((afterThisEntryKg * 1000) / factor).toFixed(3));
+                                  afterThisEntryUnit = pkgRemaining.unit;
+                                }
+                                return (
+                                  <div className="text-[11px] text-muted-foreground space-y-0.5">
+                                    
+                                  </div>
+                                );
+                              })()}
+                            </div>
+                          </div>
+
+                          {/* Notes */}
+                          <div>
+                            <label className="text-xs font-bold text-muted-foreground uppercase">Notes (optional)</label>
+                            <Input.TextArea
+                              rows={2}
+                              value={row.notes}
+                              onChange={e => updateAllocation(row.id, { notes: e.target.value })}
+                              placeholder="Notes for this machine..."
+                              className="rounded-sm mt-1"
+                            />
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </div>
 
-                {/* SFG & Packaging Consumption */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-border pt-6">
-                  {/* SFG Consumption */}
-                  <div className="space-y-3">
-                    <label className="text-sm font-bold text-emerald-700 flex items-center gap-2">
-                      <Truck size={14} /> SFG Consumption
-                    </label>
-                    <Select
-                      placeholder="Select SFG Batch"
-                      value={sfgTransferNumber || undefined}
-                      onChange={v => setSfgTransferNumber(v)}
-                      options={getSfgConsumptionInfo().transferNumbers.map(t => {
-                        const avail = getSfgTransferAvailable(t);
-                        return { value: t, label: `${t} — ${avail.qty} ${avail.unit} available` };
-                      })}
-                      className="w-full text-sm [&_.ant-select-selector]:rounded-sm font-semibold"
-                      allowClear
-                    />
-                    <div className="flex gap-2">
-                      <InputNumber
-                        min={0} precision={3}
-                        value={sfgConsumptionQty}
-                        onChange={v => setSfgConsumptionQty(v)}
-                        className="w-full font-semibold [&_.ant-input-number-input]:rounded-sm"
-                        placeholder="Allocate Qty"
-                        size="large"
-                      />
-                      <div className="flex items-center justify-center font-bold text-muted-foreground text-sm bg-muted px-4 rounded-sm border border-border">KG</div>
-                    </div>
-                    {sfgTransferNumber && (
-                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-muted-foreground bg-muted/30 px-3 py-1.5 rounded-sm border border-border">
-                        Available: <span className="font-bold text-emerald-600">{getSfgTransferAvailable(sfgTransferNumber).qty} {getSfgTransferAvailable(sfgTransferNumber).unit}</span>
-                      </motion.div>
-                    )}
-                  </div>
-
-                  {/* Packaging Consumption */}
-                  <div className="space-y-3">
-                    <label className="text-sm font-bold text-blue-700 flex items-center gap-2">
-                      <Package size={14} /> Packaging Consumption
-                    </label>
-                    <Select
-                      placeholder="Select PKG Batch"
-                      value={pkgTransferNumber || undefined}
-                      onChange={v => setPkgTransferNumber(v)}
-                      options={getPkgConsumptionInfo().transferNumbers.map(t => {
-                        const info = getPkgTransferAvailable(t);
-                        return { value: t, label: `${t} — ${info.productName || 'Packaging'} (${info.qty} ${info.unit})` };
-                      })}
-                      className="w-full text-sm [&_.ant-select-selector]:rounded-sm font-semibold"
-                      allowClear
-                    />
-                    <div className="flex gap-2">
-                      <InputNumber
-                        min={0} precision={3}
-                        value={laminateConsumptionQty}
-                        onChange={v => setLaminateConsumptionQty(v)}
-                        className="w-full font-semibold [&_.ant-input-number-input]:rounded-sm"
-                        placeholder="Qty"
-                        size="large"
-                      />
-                      <Select
-                        value={laminateConsumptionUnit}
-                        onChange={v => setLaminateConsumptionUnit(v)}
-                        options={LAMINATE_UNIT_OPTIONS}
-                        className="w-[90px] shrink-0 [&_.ant-select-selector]:rounded-sm font-semibold"
-                      />
-                    </div>
-                    {pkgTransferNumber && (
-                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-xs text-muted-foreground bg-muted/30 px-3 py-1.5 rounded-sm border border-border">
-                        Available: <span className="font-bold text-blue-600">{getPkgTransferAvailable(pkgTransferNumber).qty} {getPkgTransferAvailable(pkgTransferNumber).unit}</span>
-                      </motion.div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Notes */}
-                <div className="space-y-2 border-t border-border pt-4">
-                  <label className="text-sm font-bold text-foreground">Notes (optional)</label>
-                  <Input.TextArea value={machineNotes} onChange={(e) => setMachineNotes(e.target.value)} placeholder="Production notes..." className="rounded-sm" />
+                {/* Add Row */}
+                <div className="flex justify-center">
+                  <Button
+                    icon={<Plus size={16} />}
+                    size="large"
+                    onClick={addAllocation}
+                    disabled={availableMachinesForRow('').length === 0}
+                    className="rounded-sm font-semibold border-dashed"
+                  >
+                    Add Machine Allocation
+                  </Button>
                 </div>
               </motion.div>
             )}
@@ -1011,7 +1360,21 @@ const NewFGProductionEntryPage: React.FC = () => {
             {step < 1 ? (
               <Button type="primary" size="large" onClick={proceedToMachineAllocation} className="rounded-sm px-6 font-bold shadow-md" style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none' }}>Next Step <ArrowRight size={16} className="ml-1 inline" /></Button>
             ) : (
-              <Button type="primary" size="large" loading={submitting} onClick={handleSubmit} className="rounded-sm px-8 font-bold shadow-md" style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none' }}><CheckCircle size={18} className="mr-2 inline" /> Make Allocation</Button>
+              <Button
+                type="primary"
+                size="large"
+                loading={submitting}
+                onClick={handleSubmit}
+                disabled={!allocationsMatchPlan}
+                className="rounded-sm px-8 font-bold shadow-md"
+                style={
+                  allocationsMatchPlan
+                    ? { background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none' }
+                    : undefined
+                }
+              >
+                <CheckCircle size={18} className="mr-2 inline" /> Make Allocation
+              </Button>
             )}
           </div>
         </motion.div>

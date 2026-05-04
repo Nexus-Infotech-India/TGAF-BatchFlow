@@ -92,7 +92,13 @@ const OutboundToFGPage: React.FC = () => {
       ]);
       // Only show COMPLETED entries that have passed quality check and not yet dispatched
       const allCompleted = (entriesRes.data?.data || []).filter(
-        (e: any) => e.status === 'COMPLETED' && e.qualityReport
+        (e: any) => {
+          if (e.status !== 'COMPLETED') return false;
+          // Entry passes quality check if all machine entries have quality reports
+          const machineEntries = e.machineEntries || [];
+          if (machineEntries.length === 0) return (e.qualityReports || []).length > 0;
+          return machineEntries.every((me: any) => me.qualityReport);
+        }
       );
       const dispatchedEntryIds = new Set(
         (verificationsRes.data?.data || []).map((v: any) => v.productionEntryId)

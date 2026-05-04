@@ -1545,11 +1545,12 @@ model FGProductionEntry {
   machine         Machine?                   @relation("FGProductionEntryMachine", fields: [machineId], references: [id])
   machineEntries  FGProductionMachineEntry[]
   verifications   FGProductionVerification[]
-  qualityReport   FGQualityReport?
+  qualityReports  FGQualityReport[]
 }
 
 model FGProductionMachineEntry {
   id                String   @id @default(uuid())
+  machineBatchId    String?  @unique
   productionEntryId String
   machineId         String
   machineName       String
@@ -1593,6 +1594,7 @@ model FGProductionMachineEntry {
   productionEntry FGProductionEntry @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
   machine         Machine           @relation(fields: [machineId], references: [id])
   downtimeRecords FGDowntimeRecord[]
+  qualityReport   FGQualityReport?
 }
 
 model FGDowntimeRecord {
@@ -1654,17 +1656,20 @@ model FGQualityReport {
   id                  String               @id @default(uuid())
   reportNumber        String?              @unique
   fgBatchId           String?
-  productionEntryId   String               @unique
+  productionEntryId   String
+  machineEntryId      String?              @unique
   productName         String
+  machineName         String?
   dateOfReport        DateTime             @default(now())
   createdById         String
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
 
   parameters          FGQualityParameter[]
-  productionEntry     FGProductionEntry    @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
-  fgBatch             FGBatch?             @relation(fields: [fgBatchId], references: [id])
-  createdBy           User                 @relation(fields: [createdById], references: [id])
+  productionEntry     FGProductionEntry        @relation(fields: [productionEntryId], references: [id], onDelete: Cascade)
+  machineEntry        FGProductionMachineEntry? @relation(fields: [machineEntryId], references: [id])
+  fgBatch             FGBatch?                 @relation(fields: [fgBatchId], references: [id])
+  createdBy           User                     @relation(fields: [createdById], references: [id])
 }
 
 model FGQualityParameter {

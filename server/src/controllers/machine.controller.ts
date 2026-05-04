@@ -87,20 +87,15 @@ export const updateMachine = async (req: Request, res: Response): Promise<void> 
  */
 export const getMachinesWithOutput = async (req: Request, res: Response): Promise<void> => {
   try {
-    // 1. Get machines that have at least one completed production output
+    // 1. Return all machines from the master, annotated with pending-allocation
+    //    status. Callers (e.g. New Production Entry) decide which to show as free.
     const machines = await prisma.machine.findMany({
-      where: {
-        OR: [
-          { productionMachineEntries: { some: { actualFgQty: { gt: 0 } } } },
-          { productionEntries: { some: { status: 'COMPLETED' } } },
-        ],
-      },
       orderBy: { name: 'asc' },
     });
 
     const machineIds = machines.map(m => m.id);
 
-    // 2. Check for pending entries via direct relation (new single-machine flow)
+    // 2a. Pending via direct relation (single-machine flow — parent.machineId set)
     const pendingDirectEntries = await prisma.fGProductionEntry.findMany({
       where: {
         machineId: { in: machineIds },
@@ -109,13 +104,33 @@ export const getMachinesWithOutput = async (req: Request, res: Response): Promis
       select: { machineId: true, entryNumber: true, fgProductName: true },
     });
 
-    // Build a map: machineId → pending entry info
+    // 2b. Pending via machineEntries relation (multi-machine flow — parent.machineId null)
+    const pendingMachineEntries = await prisma.fGProductionMachineEntry.findMany({
+      where: {
+        machineId: { in: machineIds },
+        productionEntry: { status: 'PENDING' },
+      },
+      select: {
+        machineId: true,
+        productionEntry: { select: { entryNumber: true, fgProductName: true } },
+      },
+    });
+
+    // Build a map: machineId → pending entry info (first hit wins)
     const pendingMap: Record<string, { entryNumber: string; productName: string }> = {};
     for (const pe of pendingDirectEntries) {
       if (pe.machineId && !pendingMap[pe.machineId]) {
         pendingMap[pe.machineId] = {
           entryNumber: pe.entryNumber,
           productName: pe.fgProductName,
+        };
+      }
+    }
+    for (const me of pendingMachineEntries) {
+      if (!pendingMap[me.machineId]) {
+        pendingMap[me.machineId] = {
+          entryNumber: me.productionEntry.entryNumber,
+          productName: me.productionEntry.fgProductName,
         };
       }
     }

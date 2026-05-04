@@ -54,69 +54,135 @@ class FGProductionController {
     }
     /**
      * POST /fg-batch/production-entry
-     * Creates a new FG production entry with automatic machine allocation
-     * and supervisor's actual output per machine.
+     * Creates a new FG production entry. Supports either a single machine
+     * (legacy `machineId` body) or multi-machine allocation via
+     * `machineAllocations: [{ machineId, allocatedQty, ... }]`.
+     * Each allocation becomes one FGProductionMachineEntry; output is recorded
+     * per-machine downstream.
      */
     static async createProductionEntry(req, res) {
         try {
-            const { fgBatchId, machineId, // Single machine ID
-            allocatedQty, // Qty allocated to this machine
-            productName, instulationCapacity, instulationCapacityUnit, laminateConsumptionQty, laminateConsumptionUnit, sfgConsumptionQty, sfgConsumptionUnit, manPower, notes, } = req.body;
+            const body = req.body || {};
+            const { fgBatchId } = body;
             if (!fgBatchId) {
                 res.status(400).json({ error: 'fgBatchId is required' });
                 return;
             }
-            if (!machineId) {
-                res.status(400).json({ error: 'machineId is required — select a machine for allocation' });
+            // Normalize payload into an array of allocations
+            const rawAllocations = Array.isArray(body.machineAllocations) && body.machineAllocations.length > 0
+                ? body.machineAllocations
+                : (body.machineId
+                    ? [{
+                            machineId: body.machineId,
+                            allocatedQty: body.allocatedQty,
+                            productName: body.productName,
+                            instulationCapacity: body.instulationCapacity,
+                            instulationCapacityUnit: body.instulationCapacityUnit,
+                            laminateConsumptionQty: body.laminateConsumptionQty,
+                            laminateConsumptionUnit: body.laminateConsumptionUnit,
+                            sfgConsumptionQty: body.sfgConsumptionQty,
+                            sfgConsumptionUnit: body.sfgConsumptionUnit,
+                            manPower: body.manPower,
+                            notes: body.notes,
+                        }]
+                    : []);
+            if (rawAllocations.length === 0) {
+                res.status(400).json({ error: 'At least one machine allocation is required' });
                 return;
             }
-            // Fetch the FG batch
-            const fgBatch = await prisma.fGBatch.findUnique({
-                where: { id: fgBatchId },
-            });
+            // Reject duplicate machineIds within the same plan
+            const machineIds = rawAllocations.map(a => a.machineId).filter(Boolean);
+            if (machineIds.length !== new Set(machineIds).size) {
+                res.status(400).json({ error: 'A machine cannot be allocated more than once in the same plan' });
+                return;
+            }
+            if (machineIds.length !== rawAllocations.length) {
+                res.status(400).json({ error: 'Every allocation must include a machineId' });
+                return;
+            }
+            const fgBatch = await prisma.fGBatch.findUnique({ where: { id: fgBatchId } });
             if (!fgBatch) {
                 res.status(404).json({ error: 'FG Batch not found' });
                 return;
             }
-            // Check if production entry already exists for this batch
-            const existingEntry = await prisma.fGProductionEntry.findFirst({
-                where: { fgBatchId },
-            });
+            const existingEntry = await prisma.fGProductionEntry.findFirst({ where: { fgBatchId } });
             if (existingEntry) {
                 res.status(400).json({ error: 'A production allocation already exists for this FG Batch' });
                 return;
             }
-            // Fetch the selected machine
-            const machine = await prisma.machine.findUnique({
-                where: { id: machineId },
-            });
-            if (!machine) {
-                res.status(404).json({ error: 'Machine not found' });
+            // Fetch all selected machines in one go
+            const machines = await prisma.machine.findMany({ where: { id: { in: machineIds } } });
+            if (machines.length !== machineIds.length) {
+                res.status(404).json({ error: 'One or more selected machines were not found' });
                 return;
             }
-            const allocQty = Number(allocatedQty) || fgBatch.productionQty;
-            // Build the single machine entry data
-            const machineEntryData = {
-                machineId: machine.id,
-                machineName: machine.name,
-                allocatedQty: allocQty,
-                allocatedUnit: fgBatch.productionUnit,
-                actualFgQty: 0,
-                actualFgUnit: fgBatch.productionUnit,
-                actualByproduct: 0,
-                actualByproductUnit: fgBatch.productionUnit,
-                actualScrap: 0,
-                actualScrapUnit: fgBatch.productionUnit,
-                productName: productName || null,
-                instulationCapacity: instulationCapacity != null ? Number(instulationCapacity) : null,
-                instulationCapacityUnit: instulationCapacityUnit || null,
-                laminateConsumptionQty: laminateConsumptionQty != null ? Number(laminateConsumptionQty) : null,
-                laminateConsumptionUnit: laminateConsumptionUnit || null,
-                sfgConsumptionQty: sfgConsumptionQty != null ? Number(sfgConsumptionQty) : null,
-                sfgConsumptionUnit: sfgConsumptionUnit || null,
-                manPower: manPower !== undefined ? Boolean(manPower) : true,
-                notes: notes || null,
-            };
+            const machineById = {};
+            machines.forEach(m => { machineById[m.id] = m; });
+            // Reject machines that already have a PENDING allocation (busy)
+            const busyDirect = await prisma.fGProductionEntry.findMany({
+                where: { machineId: { in: machineIds }, status: 'PENDING' },
+                select: { machineId: true, entryNumber: true },
+            });
+            const busyViaEntries = await prisma.fGProductionMachineEntry.findMany({
+                where: {
+                    machineId: { in: machineIds },
+                    productionEntry: { status: 'PENDING' },
+                },
+                select: { machineId: true, productionEntry: { select: { entryNumber: true } } },
+            });
+            const busyMachineIds = new Set([
+                ...busyDirect.map(b => b.machineId).filter((x) => !!x),
+                ...busyViaEntries.map(b => b.machineId),
+            ]);
+            if (busyMachineIds.size > 0) {
+                const busyNames = Array.from(busyMachineIds).map(id => machineById[id]?.name || id);
+                res.status(400).json({
+                    error: `Cannot allocate — these machines have pending output: ${busyNames.join(', ')}`,
+                });
+                return;
+            }
+            // Validate per-row allocatedQty
+            let totalAllocated = 0;
+            for (const a of rawAllocations) {
+                const q = Number(a.allocatedQty);
+                if (!q || q <= 0) {
+                    res.status(400).json({ error: `Each machine must have a positive allocatedQty (machine: ${machineById[a.machineId]?.name || a.machineId})` });
+                    return;
+                }
+                totalAllocated += q;
+            }
+            // Allow small float tolerance against the FG batch target
+            if (Math.abs(totalAllocated - fgBatch.productionQty) > 0.001) {
+                res.status(400).json({
+                    error: `Sum of machine allocations (${totalAllocated}) must equal planned production (${fgBatch.productionQty} ${fgBatch.productionUnit})`,
+                });
+                return;
+            }
+            // Build per-machine entry payloads
+            const machineEntryDatas = rawAllocations.map(a => {
+                const m = machineById[a.machineId];
+                return {
+                    machineId: m.id,
+                    machineName: m.name,
+                    allocatedQty: Number(a.allocatedQty),
+                    allocatedUnit: fgBatch.productionUnit,
+                    actualFgQty: 0,
+                    actualFgUnit: fgBatch.productionUnit,
+                    actualByproduct: 0,
+                    actualByproductUnit: fgBatch.productionUnit,
+                    actualScrap: 0,
+                    actualScrapUnit: fgBatch.productionUnit,
+                    productName: a.productName || null,
+                    instulationCapacity: a.instulationCapacity != null ? Number(a.instulationCapacity) : null,
+                    instulationCapacityUnit: a.instulationCapacityUnit || null,
+                    laminateConsumptionQty: a.laminateConsumptionQty != null ? Number(a.laminateConsumptionQty) : null,
+                    laminateConsumptionUnit: a.laminateConsumptionUnit || null,
+                    sfgConsumptionQty: a.sfgConsumptionQty != null ? Number(a.sfgConsumptionQty) : null,
+                    sfgConsumptionUnit: a.sfgConsumptionUnit || null,
+                    manPower: a.manPower !== undefined ? Boolean(a.manPower) : true,
+                    notes: a.notes || null,
+                };
+            });
             // Generate entry number
             const today = new Date();
             const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
@@ -132,13 +198,18 @@ class FGProductionController {
                     seq = lastSeq + 1;
             }
             const entryNumber = `${prefix}${String(seq).padStart(4, '0')}`;
-            // Resolve acting user
             const tokenUserId = req.user?.id;
             let resolvedUserId = tokenUserId;
             if (!resolvedUserId) {
                 const fallbackUser = await prisma.user.findFirst();
                 resolvedUserId = fallbackUser?.id || 'system';
             }
+            // Single-machine: keep parent.machineId/machineName populated for legacy display.
+            // Multi-machine: leave them null — downstream UI iterates machineEntries[].
+            const isSingle = rawAllocations.length === 1;
+            const parentMachineId = isSingle ? machineEntryDatas[0].machineId : null;
+            const parentMachineName = isSingle ? machineEntryDatas[0].machineName : null;
+            const parentNotes = isSingle ? machineEntryDatas[0].notes : null;
             const productionEntry = await prisma.$transaction(async (tx) => {
                 const created = await tx.fGProductionEntry.create({
                     data: {
@@ -148,33 +219,32 @@ class FGProductionController {
                         fgProductName: fgBatch.fgProductName,
                         targetQty: fgBatch.productionQty,
                         targetUnit: fgBatch.productionUnit,
-                        machineId: machine.id,
-                        machineName: machine.name,
+                        machineId: parentMachineId,
+                        machineName: parentMachineName,
                         totalActualFg: 0,
                         totalActualByproduct: 0,
                         totalActualScrap: 0,
                         status: 'PENDING',
-                        notes: notes || null,
+                        notes: parentNotes,
                         createdById: resolvedUserId,
-                        machineEntries: {
-                            create: [machineEntryData],
-                        },
+                        machineEntries: { create: machineEntryDatas },
                     },
                     include: { machineEntries: true, machine: true },
                 });
-                // Update FG Batch status
                 await tx.fGBatch.update({
                     where: { id: fgBatchId },
                     data: { status: 'IN_PRODUCTION' },
                 });
-                // Log the transaction
+                const machineSummary = machineEntryDatas
+                    .map(me => `${me.machineName} (${me.allocatedQty} ${fgBatch.productionUnit})`)
+                    .join(', ');
                 await tx.transactionLog.create({
                     data: {
                         type: 'FG_PRODUCTION_ENTRY',
                         entity: 'FGProductionEntry',
                         entityId: created.id,
                         userId: resolvedUserId,
-                        description: `FG Production Allocation created: ${entryNumber}. Product: ${fgBatch.fgProductName}. Machine: ${machine.name} (${machine.machineId}). Allocated: ${allocQty} ${fgBatch.productionUnit}.`,
+                        description: `FG Production Allocation created: ${entryNumber}. Product: ${fgBatch.fgProductName}. Machines: ${machineSummary}.`,
                     },
                 });
                 return created;
@@ -187,8 +257,8 @@ class FGProductionController {
                     fgProductName: fgBatch.fgProductName,
                     targetQty: fgBatch.productionQty,
                     targetUnit: fgBatch.productionUnit,
-                    machineName: machine.name,
-                    allocatedQty: allocQty,
+                    machineCount: machineEntryDatas.length,
+                    totalAllocatedQty: totalAllocated,
                 },
             });
         }

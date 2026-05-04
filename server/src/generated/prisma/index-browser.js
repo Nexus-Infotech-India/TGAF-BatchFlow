@@ -1121,6 +1121,7 @@ exports.Prisma.FGProductionEntryScalarFieldEnum = {
 
 exports.Prisma.FGProductionMachineEntryScalarFieldEnum = {
   id: 'id',
+  machineBatchId: 'machineBatchId',
   productionEntryId: 'productionEntryId',
   machineId: 'machineId',
   machineName: 'machineName',
@@ -1206,7 +1207,9 @@ exports.Prisma.FGQualityReportScalarFieldEnum = {
   reportNumber: 'reportNumber',
   fgBatchId: 'fgBatchId',
   productionEntryId: 'productionEntryId',
+  machineEntryId: 'machineEntryId',
   productName: 'productName',
+  machineName: 'machineName',
   dateOfReport: 'dateOfReport',
   createdById: 'createdById',
   createdAt: 'createdAt',
