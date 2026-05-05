@@ -668,13 +668,18 @@ export class ProductionController {
         orderBy: { createdAt: 'desc' },
       });
 
-      // Check which postings have already been dispatched (via outbound transfers)
+      // Check which postings have already been dispatched (via outbound transfers).
+      // REJECTED transfers (rejected during stock verification) are excluded so
+      // that the corresponding posting becomes available for dispatch again.
       const allTransfers = await prisma.materialTransfer.findMany({
-        where: { direction: 'OUTBOUND_FROM_GRINDING' },
+        where: {
+          direction: 'OUTBOUND_FROM_GRINDING',
+          status: { not: 'REJECTED' },
+        },
         include: { lines: true },
       });
 
-      // Build a Set of posting numbers that have been dispatched
+      // Build a Set of posting numbers that have been dispatched (and not rejected)
       const dispatchedPostingNumbers = new Set<string>();
       for (const t of allTransfers) {
         for (const line of t.lines) {

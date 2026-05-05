@@ -806,14 +806,14 @@ const DispatchToGrinding: React.FC = () => {
                     <div className="p-1.5 bg-indigo-100 rounded-md"><MapPin className="w-4 h-4 text-indigo-600" /></div>
                     From Location (Source)
                   </div>
-                  <Select style={{ width: '100%' }} placeholder="Select source location" size="large" value={batchModal.fromLocationId || undefined}
+                  <Select style={{ width: '100%' }} placeholder="Select cleaning location" size="large" value={batchModal.fromLocationId || undefined}
                     onChange={(val) => setBatchModal((prev) => ({ ...prev, fromLocationId: val }))}
                     bordered={false} className="bg-white border border-gray-200 rounded-lg shadow-inner-sm"
                     showSearch filterOption={(input, option) => (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())}
                   >
-                    {locations.map((l) => <Option key={l.id} value={l.id}>{l.name} ({l.code}) - {l.type}</Option>)}
+                    {locations.filter(l => String(l.type).toUpperCase() === 'CLEANING').map((l) => <Option key={l.id} value={l.id}>{l.name} ({l.code}) - {l.type}</Option>)}
                   </Select>
-                  <p className="text-xs text-muted-foreground mt-2 px-1">Where the cleaned materials currently reside.</p>
+                  <p className="text-xs text-muted-foreground mt-2 px-1">Cleaning location where cleaned materials currently reside.</p>
                 </div>
                 
                 <div className="p-5 rounded-xl border bg-gradient-to-b from-white to-emerald-50/30 shadow-sm transition-hover hover:border-emerald-300 hover:shadow-md">
@@ -821,14 +821,14 @@ const DispatchToGrinding: React.FC = () => {
                     <div className="p-1.5 bg-emerald-100 rounded-md"><ArrowDownToLine className="w-4 h-4 text-emerald-600" /></div>
                     To Location (Destination)
                   </div>
-                  <Select style={{ width: '100%' }} placeholder="Select destination location" size="large" value={batchModal.toLocationId || undefined}
+                  <Select style={{ width: '100%' }} placeholder="Select grinding location" size="large" value={batchModal.toLocationId || undefined}
                     onChange={(val) => setBatchModal((prev) => ({ ...prev, toLocationId: val }))}
                     bordered={false} className="bg-white border border-gray-200 rounded-lg shadow-inner-sm"
                     showSearch filterOption={(input, option) => (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())}
                   >
-                    {locations.filter(l => l.id !== batchModal.fromLocationId).map((l) => <Option key={l.id} value={l.id}>{l.name} ({l.code}) - {l.type}</Option>)}
+                    {locations.filter(l => String(l.type).toUpperCase() === 'GRINDING' && l.id !== batchModal.fromLocationId).map((l) => <Option key={l.id} value={l.id}>{l.name} ({l.code}) - {l.type}</Option>)}
                   </Select>
-                  <p className="text-xs text-muted-foreground mt-2 px-1">The grinding unit or processing area destination.</p>
+                  <p className="text-xs text-muted-foreground mt-2 px-1">Grinding unit destination only.</p>
                 </div>
               </div>
             </motion.div>
@@ -850,7 +850,7 @@ const DispatchToGrinding: React.FC = () => {
                 <Select style={{ width: '100%' }} placeholder="Choose raw material" size="large" value={batchModal.rawMaterialId || undefined}
                   onChange={handleBatchMaterialSelect} showSearch bordered={false} className="bg-muted/30 border border-border rounded-lg"
                   filterOption={(input, option) => (option?.children?.toString() || '').toLowerCase().includes(input.toLowerCase())}>
-                  {availableMaterials.map((m) => <Option key={m.id} value={m.id}>{m.name} <span className="text-muted-foreground ml-1">({m.skuCode})</span></Option>)}
+                  {availableMaterials.filter((m) => String(m.category).toUpperCase() === 'RAW_MATERIAL').map((m) => <Option key={m.id} value={m.id}>{m.name} <span className="text-muted-foreground ml-1">({m.skuCode})</span></Option>)}
                 </Select>
               </div>
             </motion.div>
