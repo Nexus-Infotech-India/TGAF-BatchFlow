@@ -526,6 +526,7 @@ const CreateBOMPage: React.FC = () => {
                                                         <option value="gram">Gram</option>
                                                         <option value="KG">KG</option>
                                                         <option value="Ton">Ton</option>
+                                                        <option value="Piece">Piece</option>
                                                     </select>
                                                 </td>
                                                 <td className="px-4 py-2.5">
