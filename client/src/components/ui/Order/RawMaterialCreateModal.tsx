@@ -247,6 +247,7 @@ const RawMaterialCreateModal: React.FC<RawMaterialCreateModalProps> = ({
                                         <option value="gram">Gram</option>
                                         <option value="KG">KG</option>
                                         <option value="Ton">Ton</option>
+                                        <option value="Piece">Piece</option>
                                     </select>
                                 </div>
                             </div>
