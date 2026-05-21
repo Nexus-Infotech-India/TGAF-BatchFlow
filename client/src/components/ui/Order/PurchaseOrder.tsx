@@ -157,10 +157,16 @@ const PurchaseOrder = () => {
   };
 
   const handleRawMaterialSelect = (rawMaterial: RawMaterial) => {
+    const materialUnit = rawMaterial.unitOfMeasurement;
     setItems((prev) =>
       prev.map((item, i) =>
         i === rawMaterialModalIdx
-          ? { ...item, rawMaterialId: rawMaterial.id }
+          ? {
+              ...item,
+              rawMaterialId: rawMaterial.id,
+              // Lock unit to material's UOM if it's Piece (non-weight); otherwise default to KG
+              quantityUnit: materialUnit === 'Piece' ? 'Piece' : (item.quantityUnit || 'KG'),
+            }
           : item
       )
     );
@@ -203,9 +209,15 @@ const PurchaseOrder = () => {
     }
   };
 
+  // Subtotal for an item: Piece-priced items charge per Piece; weight-priced items charge per KG.
+  const itemSubtotal = (qty: number, unit: string, rate: number) => {
+    if (unit === 'Piece') return qty * rate;
+    return toKG(qty, unit) * rate;
+  };
+
   const calculateTotal = () => {
     return items.reduce(
-      (sum, item) => sum + toKG(item.quantityOrdered, item.quantityUnit) * item.rate,
+      (sum, item) => sum + itemSubtotal(item.quantityOrdered, item.quantityUnit, item.rate),
       0
     );
   };
@@ -562,22 +574,30 @@ const PurchaseOrder = () => {
                           required
                         />
                         <select
-                          className="bg-card border border-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-foreground min-w-[80px]"
+                          className="bg-card border border-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-foreground min-w-[80px] disabled:cursor-not-allowed disabled:opacity-70"
                           value={item.quantityUnit}
                           onChange={(e) =>
                             handleItemChange(idx, 'quantityUnit', e.target.value)
                           }
+                          disabled={selectedRawMaterials[idx]?.unitOfMeasurement === 'Piece'}
+                          title={selectedRawMaterials[idx]?.unitOfMeasurement === 'Piece' ? 'This material is sold per Piece — unit cannot be changed' : ''}
                         >
-                          <option value="gram">Gram</option>
-                          <option value="KG">KG</option>
-                          <option value="Ton">Ton</option>
+                          {selectedRawMaterials[idx]?.unitOfMeasurement === 'Piece' ? (
+                            <option value="Piece">Piece</option>
+                          ) : (
+                            <>
+                              <option value="gram">Gram</option>
+                              <option value="KG">KG</option>
+                              <option value="Ton">Ton</option>
+                            </>
+                          )}
                         </select>
                       </div>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-foreground mb-2">
-                        Rate per KG(₦)
+                        Rate per {item.quantityUnit === 'Piece' ? 'Piece' : 'KG'}(₦)
                       </label>
                       <div className="flex items-center gap-2">
                         <input
@@ -612,10 +632,12 @@ const PurchaseOrder = () => {
                     <div className="mt-3 pt-3 border-t border-border">
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-muted-foreground">
-                          Subtotal ({item.quantityOrdered} {item.quantityUnit} = {toKG(item.quantityOrdered, item.quantityUnit).toFixed(2)} KG × ₦{item.rate}/KG):
+                          {item.quantityUnit === 'Piece'
+                            ? `Subtotal (${item.quantityOrdered} Piece × ₦${item.rate}/Piece):`
+                            : `Subtotal (${item.quantityOrdered} ${item.quantityUnit} = ${toKG(item.quantityOrdered, item.quantityUnit).toFixed(2)} KG × ₦${item.rate}/KG):`}
                         </span>
                         <span className="font-medium text-foreground">
-                          ₦{(toKG(item.quantityOrdered, item.quantityUnit) * item.rate).toFixed(2)}
+                          ₦{itemSubtotal(item.quantityOrdered, item.quantityUnit, item.rate).toFixed(2)}
                         </span>
                       </div>
                     </div>

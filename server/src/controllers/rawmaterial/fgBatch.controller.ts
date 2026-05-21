@@ -227,20 +227,21 @@ export class FGBatchController {
         }
 
         const displayUnit = currentStockUnit;
-        // For non-weight units (Pcs, Boxes, Bags, etc.) skip gram conversion —
+        // For non-weight units (Piece, Pcs, Boxes, Bags, etc.) skip gram conversion —
         // just scale the BOM quantity directly to avoid nonsensical gram-based math.
-        const NON_WEIGHT_UNITS = ['pcs', 'boxes', 'bags', 'packets', 'rolls', 'sheets', 'units'];
+        const NON_WEIGHT_UNITS = ['piece', 'pieces', 'pcs', 'boxes', 'bags', 'packets', 'rolls', 'sheets', 'units'];
         const bomUnitLower = bomItem.unitOfMeasurement.toLowerCase();
         const displayUnitLower = displayUnit.toLowerCase();
         const isNonWeight = NON_WEIGHT_UNITS.includes(bomUnitLower) || NON_WEIGHT_UNITS.includes(displayUnitLower);
         let expectedQty: number;
         if (isNonWeight) {
-          // Direct scale — no gram conversion needed for count-based units
-          expectedQty = bomItem.quantity * scaleFactor;
+          // Direct scale — no gram conversion needed for count-based units.
+          // Ceiling-round so we never under-order a fractional piece.
+          expectedQty = Math.ceil(bomItem.quantity * scaleFactor);
         } else {
           expectedQty = fromGrams(scaledGrams, displayUnit);
         }
-        const roundedExpected = Math.round(expectedQty * 1000) / 1000;
+        const roundedExpected = isNonWeight ? expectedQty : Math.round(expectedQty * 1000) / 1000;
 
         const isPackaging = rm.category === 'PACKAGING_MATERIAL';
         const hasTransferBatches = availableSfgBatches.length > 0;

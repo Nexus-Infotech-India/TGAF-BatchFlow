@@ -28,17 +28,37 @@ import {
 
 const genId = () => `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
 
+interface PkgEntry {
+  id: string;
+  transferNumber: string | null;
+  rawMaterialId: string | null;
+  productName: string | null;
+  skuCode: string | null;
+  qty: number | null;
+  unit: string;
+}
+
 interface MachineAllocation {
   id: string;
   machineId: string;
   manPower: boolean;
   sfgTransferNumber: string | null;
   sfgConsumptionQty: number | null;
-  pkgTransferNumber: string | null;
-  laminateConsumptionQty: number | null;
-  laminateConsumptionUnit: string;
+  pkgEntries: PkgEntry[];
   notes: string;
 }
+
+const MAX_PKG_PER_MACHINE = 3;
+
+const newPkgEntry = (): PkgEntry => ({
+  id: genId(),
+  transferNumber: null,
+  rawMaterialId: null,
+  productName: null,
+  skuCode: null,
+  qty: null,
+  unit: 'KG',
+});
 
 const newEmptyAllocation = (): MachineAllocation => ({
   id: genId(),
@@ -46,9 +66,7 @@ const newEmptyAllocation = (): MachineAllocation => ({
   manPower: true,
   sfgTransferNumber: null,
   sfgConsumptionQty: null,
-  pkgTransferNumber: null,
-  laminateConsumptionQty: null,
-  laminateConsumptionUnit: 'KG',
+  pkgEntries: [newPkgEntry()],
   notes: '',
 });
 
@@ -71,6 +89,9 @@ function formatQty(val: number): string {
 }
 
 const LAMINATE_UNIT_OPTIONS = ['KG', 'Ton', 'gram'].map(u => ({ value: u, label: u }));
+
+const NON_WEIGHT_UNITS = new Set(['piece', 'pieces', 'pcs', 'boxes', 'bags', 'packets', 'rolls', 'sheets', 'units']);
+const isNonWeightUnit = (u?: string | null) => !!u && NON_WEIGHT_UNITS.has(u.toLowerCase());
 
 const NewFGProductionEntryPage: React.FC = () => {
   const navigate = useNavigate();
@@ -314,48 +335,109 @@ const NewFGProductionEntryPage: React.FC = () => {
   };
 
   /* ─── Packaging Transfer helpers ─── */
-  const getPkgConsumptionInfo = (): { transferNumbers: string[] } => {
-    const transferNumbers: string[] = [];
-    // Primary: use BOM-computed available batches (has accurate remainingQuantity)
+
+  /** All (transfer × pkgLine) pairs available across the BOM's packaging lines.
+   *  Each option corresponds to ONE packaging material from ONE transfer batch. */
+  interface PkgOption {
+    transferNumber: string;
+    rawMaterialId: string;
+    productName: string;
+    skuCode: string;
+    unit: string;
+    remainingQty: number; // remaining qty net of prior FG batch consumptions (from backend)
+  }
+  const getPkgOptions = (): PkgOption[] => {
+    const out: PkgOption[] = [];
+    const seen = new Set<string>();
     for (const line of consumptionLines) {
       if (!line?.isPackaging) continue;
       for (const batch of (line.availableSfgBatches || [])) {
-        if (batch?.transferNumber && (batch.remainingQuantity || 0) > 0 && !transferNumbers.includes(batch.transferNumber)) {
-          transferNumbers.push(batch.transferNumber);
-        }
+        if (!batch?.transferNumber) continue;
+        if ((batch.remainingQuantity || 0) <= 0) continue;
+        const rmId = line.rawMaterialId;
+        const key = `${batch.transferNumber}__${rmId}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+        out.push({
+          transferNumber: batch.transferNumber,
+          rawMaterialId: rmId,
+          productName: line.rawMaterialName,
+          skuCode: line.skuCode || '',
+          unit: batch.unit || line.unit || 'KG',
+          remainingQty: batch.remainingQuantity || 0,
+        });
       }
     }
-    // Fallback: if no consumption lines loaded yet, use raw transfers
-    if (transferNumbers.length === 0 && consumptionLines.length === 0) {
-      for (const transfer of pkgTransfers) {
-        if (!transferNumbers.includes(transfer.transferNumber)) {
-          transferNumbers.push(transfer.transferNumber);
-        }
-      }
-    }
-    return { transferNumbers };
+    return out;
   };
 
-  const getPkgTransferAvailable = (transferNumber: string) => {
-     if (!transferNumber) return { qty: 0, unit: 'KG', productName: '' };
-     // Prefer the backend-computed remaining qty (already net of past allocations)
-     const batch = findPkgBatchByTransfer(transferNumber);
-     const transfer = pkgTransfers.find(t => t.transferNumber === transferNumber);
-     // Pull product name from raw transfer lines if present
-     let name = '';
-     transfer?.lines?.forEach((l: any) => { name = l.productName || name; });
-     if (batch) {
-       return { qty: batch.remainingQuantity || 0, unit: batch.unit || 'KG', productName: name };
-     }
-     // Fallback to raw transfer qty if consumption data is unavailable
-     if (!transfer) return { qty: 0, unit: 'KG', productName: '' };
-     let sum = 0;
-     let un = 'KG';
-     transfer.lines?.forEach((l: any) => {
-         sum += l.quantity || 0;
-         un = l.unitOfMeasurement || 'KG';
-     });
-     return { qty: sum, unit: un, productName: name };
+  /** Returns remaining qty (in the line's display unit) for a (transfer × rawMaterial)
+   *  pair after accounting for what other allocations on this page already allocated.
+   *  Non-weight units (Piece etc.) are counted directly without any KG conversion. */
+  const getPkgRemainingFor = (rowId: string, transferNumber: string, rawMaterialId: string) => {
+    const opt = getPkgOptions().find(o => o.transferNumber === transferNumber && o.rawMaterialId === rawMaterialId);
+    if (!opt) return { qty: 0, unit: 'KG' };
+
+    const optUnit = opt.unit || 'KG';
+
+    // Non-weight (Piece, Box, etc.): count directly in the unit itself.
+    if (isNonWeightUnit(optUnit)) {
+      const used = allocations
+        .filter(a => a.id !== rowId)
+        .reduce((sum, a) => {
+          let rowUsed = 0;
+          for (const p of a.pkgEntries) {
+            if (p.transferNumber === transferNumber && p.rawMaterialId === rawMaterialId && p.qty != null) {
+              rowUsed += Number(p.qty) || 0;
+            }
+          }
+          return sum + rowUsed;
+        }, 0);
+      const remaining = Math.max(0, opt.remainingQty - used);
+      return { qty: Math.floor(remaining), unit: optUnit };
+    }
+
+    // Weight-based: normalize all rows' qty to KG so different weight units sum correctly.
+    const usedKg = allocations
+      .filter(a => a.id !== rowId)
+      .reduce((sum, a) => {
+        let rowUsed = 0;
+        for (const p of a.pkgEntries) {
+          if (p.transferNumber === transferNumber && p.rawMaterialId === rawMaterialId && p.qty != null) {
+            rowUsed += toGrams(Number(p.qty), p.unit || 'KG') / 1000;
+          }
+        }
+        return sum + rowUsed;
+      }, 0);
+
+    const totalAvailKg =
+      optUnit.toLowerCase() === 'kg' ? opt.remainingQty : toGrams(opt.remainingQty, optUnit) / 1000;
+    const remainingKg = Math.max(0, totalAvailKg - usedKg);
+
+    if (optUnit.toLowerCase() === 'kg') {
+      return { qty: Number(remainingKg.toFixed(3)), unit: 'KG' };
+    }
+    const factor = UNIT_TO_GRAMS[optUnit] ?? UNIT_TO_GRAMS[optUnit.toLowerCase()] ?? 1000;
+    return { qty: Number(((remainingKg * 1000) / factor).toFixed(3)), unit: optUnit };
+  };
+
+  /** Max qty for a PKG entry, in the entry's own unit. */
+  const getPkgEntryMax = (
+    rowId: string,
+    transferNumber: string | null,
+    rawMaterialId: string | null,
+    entryUnit: string
+  ): number | undefined => {
+    if (!transferNumber || !rawMaterialId) return undefined;
+    const remaining = getPkgRemainingFor(rowId, transferNumber, rawMaterialId);
+
+    // Non-weight: cap at the integer count remaining; no cross-unit conversion possible.
+    if (isNonWeightUnit(remaining.unit) || isNonWeightUnit(entryUnit)) {
+      return remaining.qty;
+    }
+    const remainingGrams = toGrams(remaining.qty, remaining.unit);
+    const rowFactor = UNIT_TO_GRAMS[entryUnit] ?? UNIT_TO_GRAMS[entryUnit.toLowerCase()] ?? 1000;
+    return Number((remainingGrams / rowFactor).toFixed(3));
   };
 
   /* ─── Allocation row helpers ─── */
@@ -367,6 +449,28 @@ const NewFGProductionEntryPage: React.FC = () => {
   };
   const removeAllocation = (id: string) => {
     setAllocations(prev => (prev.length === 1 ? prev : prev.filter(a => a.id !== id)));
+  };
+
+  /* ─── Per-row PKG entry helpers ─── */
+  const updatePkgEntry = (rowId: string, entryId: string, patch: Partial<PkgEntry>) => {
+    setAllocations(prev => prev.map(a => {
+      if (a.id !== rowId) return a;
+      return { ...a, pkgEntries: a.pkgEntries.map(p => (p.id === entryId ? { ...p, ...patch } : p)) };
+    }));
+  };
+  const addPkgEntry = (rowId: string) => {
+    setAllocations(prev => prev.map(a => {
+      if (a.id !== rowId) return a;
+      if (a.pkgEntries.length >= MAX_PKG_PER_MACHINE) return a;
+      return { ...a, pkgEntries: [...a.pkgEntries, newPkgEntry()] };
+    }));
+  };
+  const removePkgEntry = (rowId: string, entryId: string) => {
+    setAllocations(prev => prev.map(a => {
+      if (a.id !== rowId) return a;
+      if (a.pkgEntries.length === 1) return a;
+      return { ...a, pkgEntries: a.pkgEntries.filter(p => p.id !== entryId) };
+    }));
   };
 
   const handleMachineSelectForRow = (rowId: string, machineId: string) => {
@@ -442,56 +546,6 @@ const NewFGProductionEntryPage: React.FC = () => {
     if (!transferNumber) return planLeft || undefined;
     const transferLeft = getSfgRemainingForRow(rowId, transferNumber);
     return Math.min(transferLeft, planLeft);
-  };
-
-  /* PKG transfer KG already consumed by OTHER rows (excludes the given row).
-     Each row's laminate qty is in its own unit; we normalize to KG via toGrams. */
-  const pkgKgUsedByOtherRows = (rowId: string, transferNumber: string): number => {
-    if (!transferNumber) return 0;
-    return allocations
-      .filter(a => a.id !== rowId && a.pkgTransferNumber === transferNumber)
-      .reduce(
-        (s, a) =>
-          s +
-          (a.laminateConsumptionQty != null
-            ? toGrams(Number(a.laminateConsumptionQty), a.laminateConsumptionUnit || 'KG') / 1000
-            : 0),
-        0
-      );
-  };
-
-  /* Remaining qty of a PKG transfer (in transfer's own unit, typically KG)
-     after accounting for everything other rows have allocated. */
-  const getPkgRemainingForRow = (rowId: string, transferNumber: string) => {
-    const info = getPkgTransferAvailable(transferNumber);
-    const totalAvailKg =
-      info.unit && info.unit !== 'KG'
-        ? toGrams(info.qty, info.unit) / 1000
-        : info.qty;
-    const usedKg = pkgKgUsedByOtherRows(rowId, transferNumber);
-    const remainingKg = Math.max(0, totalAvailKg - usedKg);
-    // Convert back into transfer's display unit
-    if (info.unit && info.unit !== 'KG') {
-      const factor =
-        UNIT_TO_GRAMS[info.unit] ?? UNIT_TO_GRAMS[info.unit.toLowerCase()] ?? 1000;
-      return { qty: Number(((remainingKg * 1000) / factor).toFixed(3)), unit: info.unit };
-    }
-    return { qty: Number(remainingKg.toFixed(3)), unit: 'KG' };
-  };
-
-  /* Per-row laminate max in the row's selected unit. */
-  const getRowLaminateMax = (
-    rowId: string,
-    transferNumber: string | null,
-    rowUnit: string
-  ): number | undefined => {
-    if (!transferNumber) return undefined;
-    const remaining = getPkgRemainingForRow(rowId, transferNumber);
-    // remaining is in transfer's unit (typically KG); convert to row's unit
-    const remainingGrams = toGrams(remaining.qty, remaining.unit);
-    const rowFactor =
-      UNIT_TO_GRAMS[rowUnit] ?? UNIT_TO_GRAMS[rowUnit.toLowerCase()] ?? 1000;
-    return Number((remainingGrams / rowFactor).toFixed(3));
   };
 
   const proceedToMachineAllocation = () => {
@@ -577,26 +631,36 @@ const NewFGProductionEntryPage: React.FC = () => {
       }
     }
 
-    // Per-transfer PKG availability check (normalize all rows to KG)
-    const pkgKgPerTransfer: Record<string, number> = {};
+    // Per-(transfer, rawMaterial) PKG availability check.
+    // Weight units are normalized to KG; non-weight units (Piece/Box/etc.) are counted directly.
+    const pkgUsedPerKey: Record<string, { used: number; unit: string; isCount: boolean }> = {};
+    const pkgOpts = getPkgOptions();
     for (const a of allocations) {
-      if (!a.pkgTransferNumber) continue;
-      const rowKg =
-        a.laminateConsumptionQty != null
-          ? toGrams(Number(a.laminateConsumptionQty), a.laminateConsumptionUnit || 'KG') / 1000
-          : 0;
-      pkgKgPerTransfer[a.pkgTransferNumber] =
-        (pkgKgPerTransfer[a.pkgTransferNumber] || 0) + rowKg;
+      for (const p of a.pkgEntries) {
+        if (!p.transferNumber || !p.rawMaterialId || !p.qty) continue;
+        const key = `${p.transferNumber}__${p.rawMaterialId}`;
+        const opt = pkgOpts.find(o => o.transferNumber === p.transferNumber && o.rawMaterialId === p.rawMaterialId);
+        const lineUnit = opt?.unit || p.unit || 'KG';
+        const isCount = isNonWeightUnit(lineUnit);
+        if (!pkgUsedPerKey[key]) pkgUsedPerKey[key] = { used: 0, unit: lineUnit, isCount };
+        if (isCount) {
+          pkgUsedPerKey[key].used += Number(p.qty) || 0;
+        } else {
+          pkgUsedPerKey[key].used += toGrams(Number(p.qty), p.unit || 'KG') / 1000;
+        }
+      }
     }
-    for (const [trf, usedKg] of Object.entries(pkgKgPerTransfer)) {
-      const info = getPkgTransferAvailable(trf);
-      const availKg =
-        info.unit && info.unit !== 'KG'
-          ? toGrams(info.qty, info.unit) / 1000
-          : info.qty;
-      if (usedKg > availKg + 0.001) {
+    for (const [key, agg] of Object.entries(pkgUsedPerKey)) {
+      const [trf, rmId] = key.split('__');
+      const opt = pkgOpts.find(o => o.transferNumber === trf && o.rawMaterialId === rmId);
+      if (!opt) continue;
+      const avail = agg.isCount
+        ? opt.remainingQty
+        : (opt.unit.toLowerCase() === 'kg' ? opt.remainingQty : toGrams(opt.remainingQty, opt.unit) / 1000);
+      const dispUnit = agg.isCount ? agg.unit : 'KG';
+      if (agg.used > avail + 0.001) {
         message.error(
-          `Packaging transfer ${trf}: total allocated (${formatQty(usedKg)} KG) exceeds available (${formatQty(availKg)} KG).`
+          `${opt.productName} (${trf}): total allocated (${formatQty(agg.used)} ${dispUnit}) exceeds available (${formatQty(avail)} ${dispUnit}).`
         );
         return;
       }
@@ -639,38 +703,53 @@ const NewFGProductionEntryPage: React.FC = () => {
       }
     }
 
-    // 3) Packaging lines: per pkgLine, one record per (pkgRawMaterial × transfer)
-    //    summed across rows, with each row's qty converted to that line's BOM unit.
+    // 3) Packaging consumption: one record per (rawMaterial × transfer)
+    //    aggregated from every PKG entry on every allocation, converted to that
+    //    line's BOM unit so backend deduction matches.
     const packagingLines = consumptionLines.filter(c => c.isPackaging);
-    for (const pkgLine of packagingLines) {
-      const pkgPerTransfer: Record<string, number> = {};
-      for (const a of allocations) {
-        if (!a.pkgTransferNumber) continue;
-        const rowQty = Number(a.laminateConsumptionQty) || 0;
-        if (rowQty <= 0) continue;
-        const qtyGrams = toGrams(rowQty, a.laminateConsumptionUnit || 'KG');
-        const unitFactor =
-          UNIT_TO_GRAMS[pkgLine.unit] ??
-          UNIT_TO_GRAMS[pkgLine.unit?.toLowerCase()] ??
-          1000;
-        const qtyInBomUnit = unitFactor > 0 ? qtyGrams / unitFactor : 0;
-        if (qtyInBomUnit > 0) {
-          pkgPerTransfer[a.pkgTransferNumber] =
-            (pkgPerTransfer[a.pkgTransferNumber] || 0) + qtyInBomUnit;
+    const packagingLineByRmId: Record<string, any> = {};
+    for (const pl of packagingLines) packagingLineByRmId[pl.rawMaterialId] = pl;
+
+    const pkgAgg: Record<string, { transfer: string; line: any; qtyInBomUnit: number }> = {};
+    for (const a of allocations) {
+      for (const p of a.pkgEntries) {
+        if (!p.transferNumber || !p.rawMaterialId || !p.qty || p.qty <= 0) continue;
+        const pkgLine = packagingLineByRmId[p.rawMaterialId];
+        if (!pkgLine) continue;
+
+        // For non-weight units (Piece/Box/etc.), pass the count through unchanged.
+        // For weight units, convert through grams so the BOM unit aligns.
+        let qtyInBomUnit: number;
+        if (isNonWeightUnit(pkgLine.unit) || isNonWeightUnit(p.unit)) {
+          qtyInBomUnit = Number(p.qty) || 0;
+        } else {
+          const qtyGrams = toGrams(Number(p.qty), p.unit || 'KG');
+          const unitFactor =
+            UNIT_TO_GRAMS[pkgLine.unit] ??
+            UNIT_TO_GRAMS[pkgLine.unit?.toLowerCase()] ??
+            1000;
+          qtyInBomUnit = unitFactor > 0 ? qtyGrams / unitFactor : 0;
         }
+        if (qtyInBomUnit <= 0) continue;
+
+        const key = `${p.transferNumber}__${p.rawMaterialId}`;
+        if (!pkgAgg[key]) {
+          pkgAgg[key] = { transfer: p.transferNumber, line: pkgLine, qtyInBomUnit: 0 };
+        }
+        pkgAgg[key].qtyInBomUnit += qtyInBomUnit;
       }
-      for (const [trf, qty] of Object.entries(pkgPerTransfer)) {
-        payloadConsumptions.push({
-          rawMaterialId: pkgLine.rawMaterialId,
-          rawMaterialName: pkgLine.rawMaterialName,
-          expectedQuantity: pkgLine.expectedQuantity,
-          actualQuantity: qty,
-          unit: pkgLine.unit,
-          sourceType: 'PKG_TRANSFER',
-          batchNumber: trf,
-          dispatchId: '',
-        });
-      }
+    }
+    for (const { transfer, line, qtyInBomUnit } of Object.values(pkgAgg)) {
+      payloadConsumptions.push({
+        rawMaterialId: line.rawMaterialId,
+        rawMaterialName: line.rawMaterialName,
+        expectedQuantity: line.expectedQuantity,
+        actualQuantity: qtyInBomUnit,
+        unit: line.unit,
+        sourceType: 'PKG_TRANSFER',
+        batchNumber: transfer,
+        dispatchId: '',
+      });
     }
 
     if (payloadConsumptions.length === 0) {
@@ -693,6 +772,26 @@ const NewFGProductionEntryPage: React.FC = () => {
       const combinedNotes =
         transferNote + (transferNote && a.notes ? ' | ' : '') + (a.notes || '');
       const sfgKg = Number(a.sfgConsumptionQty) || 0;
+
+      // Detailed per-PKG breakdown for this machine
+      const packagingConsumptions = a.pkgEntries
+        .filter(p => p.transferNumber && p.rawMaterialId && p.qty && p.qty > 0)
+        .map(p => ({
+          rawMaterialId: p.rawMaterialId,
+          transferNumber: p.transferNumber,
+          productName: p.productName,
+          skuCode: p.skuCode,
+          quantity: Number(p.qty),
+          unitOfMeasurement: p.unit || 'KG',
+        }));
+
+      // Aggregate laminate qty in KG for the legacy single-field columns.
+      // Non-weight units (Piece/etc.) are skipped — they have no KG equivalent.
+      const aggLaminateKg = packagingConsumptions.reduce((s, p) => {
+        if (isNonWeightUnit(p.unitOfMeasurement)) return s;
+        return s + toGrams(Number(p.quantity), p.unitOfMeasurement) / 1000;
+      }, 0);
+
       return {
         machineId: a.machineId,
         allocatedQty: kgToPlanUnit(sfgKg),
@@ -700,12 +799,13 @@ const NewFGProductionEntryPage: React.FC = () => {
         instulationCapacity: m?.capacityQty || 0,
         instulationCapacityUnit:
           m?.capacityUnit === 'BOXES_PER_SHIFT' ? 'Boxes/Shift' : m?.capacityUnit,
-        laminateConsumptionQty: Number(a.laminateConsumptionQty) || 0,
-        laminateConsumptionUnit: a.laminateConsumptionUnit,
+        laminateConsumptionQty: aggLaminateKg,
+        laminateConsumptionUnit: 'KG',
         sfgConsumptionQty: sfgKg,
         sfgConsumptionUnit: 'KG',
         manPower: a.manPower,
         notes: combinedNotes,
+        packagingConsumptions,
       };
     });
 
@@ -1228,45 +1328,101 @@ const NewFGProductionEntryPage: React.FC = () => {
                               )}
                             </div>
 
-                            {/* Packaging */}
+                            {/* Packaging — up to 3 entries per machine */}
                             <div className="space-y-2">
-                              <label className="text-xs font-bold text-blue-700 flex items-center gap-1.5 uppercase">
-                                <Package size={12} /> Packaging Consumption
-                              </label>
-                              <Select
-                                placeholder="Select PKG Batch"
-                                value={row.pkgTransferNumber || undefined}
-                                onChange={v => updateAllocation(row.id, { pkgTransferNumber: v, laminateConsumptionQty: null })}
-                                options={getPkgConsumptionInfo().transferNumbers.map(t => {
-                                  const info = getPkgTransferAvailable(t);
-                                  const remaining = getPkgRemainingForRow(row.id, t);
-                                  return { value: t, label: `${t} — ${info.productName || 'Packaging'} (${formatQty(remaining.qty)} ${remaining.unit} remaining)` };
-                                })}
-                                className="w-full text-sm [&_.ant-select-selector]:rounded-sm"
-                                allowClear
-                              />
-                              <div className="flex gap-2">
-                                <InputNumber
-                                  min={0}
-                                  precision={3}
-                                  max={getRowLaminateMax(row.id, row.pkgTransferNumber, row.laminateConsumptionUnit)}
-                                  value={row.laminateConsumptionQty}
-                                  onChange={v => updateAllocation(row.id, { laminateConsumptionQty: v })}
-                                  className="w-full [&_.ant-input-number-input]:rounded-sm"
-                                  placeholder="Qty"
-                                  size="large"
-                                  disabled={!row.pkgTransferNumber}
-                                />
-                                <Select
-                                  value={row.laminateConsumptionUnit}
-                                  onChange={v => updateAllocation(row.id, { laminateConsumptionUnit: v })}
-                                  options={LAMINATE_UNIT_OPTIONS}
-                                  className="w-[80px] shrink-0 [&_.ant-select-selector]:rounded-sm"
-                                />
+                              <div className="flex items-center justify-between">
+                                <label className="text-xs font-bold text-blue-700 flex items-center gap-1.5 uppercase">
+                                  <Package size={12} /> Packaging Consumption
+                                </label>
+                                <span className="text-[10px] text-muted-foreground">
+                                  {row.pkgEntries.length}/{MAX_PKG_PER_MACHINE}
+                                </span>
                               </div>
-                              {row.pkgTransferNumber && (
-                                <div className="text-[11px] text-muted-foreground space-y-0.5">
-                                </div>
+                              {row.pkgEntries.map((p, pIdx) => {
+                                const pkgOpts = getPkgOptions();
+                                // Exclude options already chosen on this row by other PKG entries
+                                const chosenKeys = new Set(
+                                  row.pkgEntries
+                                    .filter((x, i) => i !== pIdx && x.transferNumber && x.rawMaterialId)
+                                    .map(x => `${x.transferNumber}__${x.rawMaterialId}`)
+                                );
+                                const visibleOpts = pkgOpts.filter(o => !chosenKeys.has(`${o.transferNumber}__${o.rawMaterialId}`));
+                                return (
+                                  <div key={p.id} className="border border-blue-100 rounded-sm p-2 bg-blue-50/30 space-y-1.5">
+                                    <div className="flex items-center gap-1.5">
+                                      <Select
+                                        placeholder="Select PKG Batch"
+                                        value={p.transferNumber && p.rawMaterialId ? `${p.transferNumber}__${p.rawMaterialId}` : undefined}
+                                        onChange={v => {
+                                          if (!v) {
+                                            updatePkgEntry(row.id, p.id, { transferNumber: null, rawMaterialId: null, productName: null, skuCode: null, qty: null });
+                                            return;
+                                          }
+                                          const opt = pkgOpts.find(o => `${o.transferNumber}__${o.rawMaterialId}` === v);
+                                          if (opt) {
+                                            updatePkgEntry(row.id, p.id, {
+                                              transferNumber: opt.transferNumber,
+                                              rawMaterialId: opt.rawMaterialId,
+                                              productName: opt.productName,
+                                              skuCode: opt.skuCode,
+                                              unit: opt.unit,
+                                              qty: null,
+                                            });
+                                          }
+                                        }}
+                                        options={visibleOpts.map(o => {
+                                          const remaining = getPkgRemainingFor(row.id, o.transferNumber, o.rawMaterialId);
+                                          return {
+                                            value: `${o.transferNumber}__${o.rawMaterialId}`,
+                                            label: `${o.transferNumber} — ${o.productName} (${formatQty(remaining.qty)} ${remaining.unit} remaining)`,
+                                          };
+                                        })}
+                                        className="flex-1 text-sm [&_.ant-select-selector]:rounded-sm"
+                                        allowClear
+                                      />
+                                      {row.pkgEntries.length > 1 && (
+                                        <button
+                                          type="button"
+                                          onClick={() => removePkgEntry(row.id, p.id)}
+                                          className="p-1 rounded-sm text-muted-foreground hover:text-red-500 hover:bg-red-50"
+                                          title="Remove this packaging entry"
+                                        >
+                                          <X size={14} />
+                                        </button>
+                                      )}
+                                    </div>
+                                    <div className="flex gap-2">
+                                      <InputNumber
+                                        min={0}
+                                        precision={3}
+                                        max={getPkgEntryMax(row.id, p.transferNumber, p.rawMaterialId, p.unit)}
+                                        value={p.qty}
+                                        onChange={v => updatePkgEntry(row.id, p.id, { qty: v })}
+                                        className="w-full [&_.ant-input-number-input]:rounded-sm"
+                                        placeholder="Qty"
+                                        size="middle"
+                                        disabled={!p.transferNumber}
+                                      />
+                                      <Select
+                                        value={p.unit}
+                                        onChange={v => updatePkgEntry(row.id, p.id, { unit: v })}
+                                        options={isNonWeightUnit(p.unit) ? [{ value: p.unit, label: p.unit }] : LAMINATE_UNIT_OPTIONS}
+                                        disabled={isNonWeightUnit(p.unit)}
+                                        className="w-[80px] shrink-0 [&_.ant-select-selector]:rounded-sm"
+                                        size="middle"
+                                      />
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                              {row.pkgEntries.length < MAX_PKG_PER_MACHINE && (
+                                <button
+                                  type="button"
+                                  onClick={() => addPkgEntry(row.id)}
+                                  className="w-full py-1.5 rounded-sm border border-dashed border-blue-300 text-[11px] font-semibold text-blue-600 hover:bg-blue-50 transition-colors"
+                                >
+                                  + Add Packaging Material
+                                </button>
                               )}
                             </div>
                           </div>

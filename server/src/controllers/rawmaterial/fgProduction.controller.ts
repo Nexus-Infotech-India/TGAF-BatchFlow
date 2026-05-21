@@ -190,6 +190,40 @@ export class FGProductionController {
       const machineEntryDatas = rawAllocations.map((a, i) => {
         const m = machineById[a.machineId];
         const machineBatchId = `${fgmbPrefix}${String(fgmbSeq + i).padStart(4, '0')}`;
+
+        // packagingConsumptions: optional array of detailed per-PKG consumption
+        // (one record per packaging material per machine). Used to support
+        // up to 3 different packaging materials on a single machine.
+        const pkgList = Array.isArray(a.packagingConsumptions) ? a.packagingConsumptions : [];
+        const pkgCreateData = pkgList
+          .filter((p: any) => p && (p.rawMaterialId || p.productName) && Number(p.quantity) > 0)
+          .map((p: any) => ({
+            rawMaterialId: p.rawMaterialId || null,
+            transferNumber: p.transferNumber || null,
+            productName: p.productName || null,
+            skuCode: p.skuCode || null,
+            quantity: Number(p.quantity) || 0,
+            unitOfMeasurement: p.unitOfMeasurement || p.unit || 'KG',
+          }));
+
+        // For backward compatibility, populate aggregated laminateConsumptionQty
+        // as the sum of all PKG entries in KG (or fall back to legacy single field).
+        let aggLaminateQty: number | null = null;
+        let aggLaminateUnit: string | null = null;
+        if (pkgCreateData.length > 0) {
+          const toKg = (val: number, unit: string) => {
+            const u = (unit || 'KG').toLowerCase();
+            if (u === 'gram' || u === 'g' || u === 'grams') return val / 1000;
+            if (u === 'ton' || u === 'tons' || u === 'mt') return val * 1000;
+            return val;
+          };
+          aggLaminateQty = pkgCreateData.reduce((s: number, p: any) => s + toKg(p.quantity, p.unitOfMeasurement), 0);
+          aggLaminateUnit = 'KG';
+        } else if (a.laminateConsumptionQty != null) {
+          aggLaminateQty = Number(a.laminateConsumptionQty);
+          aggLaminateUnit = a.laminateConsumptionUnit || null;
+        }
+
         return {
           machineBatchId,
           machineId: m.id,
@@ -205,12 +239,13 @@ export class FGProductionController {
           productName: a.productName || null,
           instulationCapacity: a.instulationCapacity != null ? Number(a.instulationCapacity) : null,
           instulationCapacityUnit: a.instulationCapacityUnit || null,
-          laminateConsumptionQty: a.laminateConsumptionQty != null ? Number(a.laminateConsumptionQty) : null,
-          laminateConsumptionUnit: a.laminateConsumptionUnit || null,
+          laminateConsumptionQty: aggLaminateQty,
+          laminateConsumptionUnit: aggLaminateUnit,
           sfgConsumptionQty: a.sfgConsumptionQty != null ? Number(a.sfgConsumptionQty) : null,
           sfgConsumptionUnit: a.sfgConsumptionUnit || null,
           manPower: a.manPower !== undefined ? Boolean(a.manPower) : true,
           notes: a.notes || null,
+          ...(pkgCreateData.length > 0 ? { packagingConsumptions: { create: pkgCreateData } } : {}),
         };
       });
 
@@ -260,7 +295,7 @@ export class FGProductionController {
             createdById: resolvedUserId,
             machineEntries: { create: machineEntryDatas },
           },
-          include: { machineEntries: true, machine: true },
+          include: { machineEntries: { include: { packagingConsumptions: true } }, machine: true },
         });
 
         await tx.fGBatch.update({

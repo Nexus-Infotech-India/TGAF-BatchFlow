@@ -879,17 +879,34 @@ export const generateCleaningHistoryPDF = (config: CleaningHistoryPDFConfig): vo
 
   drawRow(jc.map(c => ({ text: c.h, w: c.w, align: 'center' })), yPos, true); yPos += rowH;
 
+  const toBaseWeight = (val: number, fromU: string, toU: string) => {
+    const f = (fromU || 'kg').toLowerCase();
+    const t = (toU || 'kg').toLowerCase();
+    if (f === t) return val;
+    let valInKg = val;
+    if (f === 'gram' || f === 'grams') valInKg = val / 1000;
+    else if (f === 'ton' || f === 'tons') valInKg = val * 1000;
+    if (t === 'gram' || t === 'grams') return valInKg * 1000;
+    if (t === 'ton' || t === 'tons') return valInKg / 1000;
+    return valInKg;
+  };
+
   config.cleaningJobs.forEach((job, i) => {
     checkPage(rowH + 2);
-    const tw = (job.stoneWastageQty || 0) + (job.seedWastageQty || 0);
-    const net = Math.max(0, job.quantity - tw);
-    const wp = job.wastagePercentage ?? (job.quantity ? parseFloat(((tw / job.quantity) * 100).toFixed(2)) : 0);
+    const stoneUnit = (job.stoneWastageUnit || 'kg').toUpperCase();
+    const seedUnit = (job.seedWastageUnit || 'kg').toUpperCase();
+    const stoneInBase = toBaseWeight(job.stoneWastageQty || 0, job.stoneWastageUnit || 'kg', config.unit);
+    const seedInBase = toBaseWeight(job.seedWastageQty || 0, job.seedWastageUnit || 'kg', config.unit);
+    const totalWasteInBase = stoneInBase + seedInBase;
+    const net = Math.max(0, job.quantity - totalWasteInBase);
+    const wp = job.wastagePercentage ?? (job.quantity ? parseFloat(((totalWasteInBase / job.quantity) * 100).toFixed(2)) : 0);
     const wt = job.wastageType ?? (wp > 3 ? 'Abnormal Loss' : 'Normal Loss');
     const done = job.status === 'Cleaned';
     const bad = wt === 'Abnormal Loss';
     const wColor = done ? (bad ? [210, 38, 38] : [5, 140, 100]) : [120, 120, 135];
     const sColor = done ? [5, 140, 100] : [200, 120, 0];
     const fmtD = (d?: string) => d ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' }) : '--';
+    const fmtNet = Number.isInteger(net) ? `${net}` : net.toFixed(2);
 
     drawRow([
       { text: `LOT-${job.id}`, w: jc[0].w, bold: true },
@@ -897,9 +914,9 @@ export const generateCleaningHistoryPDF = (config: CleaningHistoryPDFConfig): vo
       { text: fmtD(job.startedAt), w: jc[2].w, align: 'center' },
       { text: fmtD(job.finishedAt), w: jc[3].w, align: 'center' },
       { text: `${job.quantity} ${config.unit}`, w: jc[4].w, align: 'center' },
-      { text: done ? `${job.stoneWastageQty || 0}` : '--', w: jc[5].w, align: 'center' },
-      { text: done ? `${job.seedWastageQty || 0}` : '--', w: jc[6].w, align: 'center' },
-      { text: done ? `${net} ${config.unit}` : '--', w: jc[7].w, align: 'center' },
+      { text: done ? `${job.stoneWastageQty || 0} ${stoneUnit}` : '--', w: jc[5].w, align: 'center' },
+      { text: done ? `${job.seedWastageQty || 0} ${seedUnit}` : '--', w: jc[6].w, align: 'center' },
+      { text: done ? `${fmtNet} ${config.unit}` : '--', w: jc[7].w, align: 'center' },
       { text: done ? `${wp}%` : '--', w: jc[8].w, align: 'center', bold: true, color: wColor },
       { text: done ? wt : '--', w: jc[9].w, align: 'center', bold: true, color: wColor },
       { text: job.status, w: jc[10].w, align: 'center', bold: true, color: sColor },

@@ -130,8 +130,6 @@ const ReceiveMaterialsPage: React.FC = () => {
             <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Transfer #</th>
             <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Route</th>
             <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Product</th>
-            <th className="px-4 py-3 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Bags</th>
-            <th className="px-4 py-3 text-right text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Qty (KG)</th>
             {!showActions && <th className="px-4 py-3 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Status</th>}
             {!showActions && <th className="px-4 py-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Date</th>}
             {showActions && <th className="px-4 py-3 text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Actions</th>}
@@ -141,7 +139,7 @@ const ReceiveMaterialsPage: React.FC = () => {
         <tbody className="divide-y divide-border">
           {transferList.length === 0 && (
             <tr>
-              <td colSpan={showActions ? 9 : 8} className="py-12 text-center text-muted-foreground">
+              <td colSpan={showActions ? 7 : 6} className="py-12 text-center text-muted-foreground">
                 <Inbox className="mx-auto mb-3 opacity-30" size={36} />
                 <p className="text-sm font-semibold">No transfers in this category</p>
               </td>
@@ -149,9 +147,6 @@ const ReceiveMaterialsPage: React.FC = () => {
           )}
           {transferList.map(t => {
             const isExpanded = expandedId === t.id;
-            const totalBags = t.lines.reduce((s, l) => s + (l.numberOfBags || 0), 0);
-            const totalQty = t.lines.reduce((s, l) => s + l.quantity, 0);
-            const unit = t.lines[0]?.unitOfMeasurement || 'KG';
             const productNames = [...new Set(t.lines.map(l => l.productName).filter(Boolean))];
             const sc = statusConfig[t.status] || statusConfig.SENT;
             const hasSfg = t.lines.some(l => !l.lineType || l.lineType === 'SFG');
@@ -185,16 +180,6 @@ const ReceiveMaterialsPage: React.FC = () => {
                         {hasPkg && <span className="text-[9px] font-bold px-1.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 rounded">PKG</span>}
                       </div>
                     </div>
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    {totalBags > 0 ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded-full font-bold text-xs border border-emerald-200">
-                        <Package size={10} /> {totalBags}
-                      </span>
-                    ) : '—'}
-                  </td>
-                  <td className="px-4 py-3 text-right font-bold text-emerald-600 text-[13px]">
-                    {totalQty.toLocaleString()} {unit}
                   </td>
                   {!showActions && (
                     <td className="px-4 py-3 text-center">
@@ -247,7 +232,7 @@ const ReceiveMaterialsPage: React.FC = () => {
                 {/* Expanded detail row */}
                 {isExpanded && (
                   <tr>
-                    <td colSpan={showActions ? 9 : 8} className="p-0">
+                    <td colSpan={showActions ? 7 : 6} className="p-0">
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}

@@ -145,14 +145,17 @@ const CreateBOMPage: React.FC = () => {
             if (selectedProduct.category === 'FINISHED_GOOD') {
                 allowedCategories = ['RAW_MATERIAL', 'SEMI_FINISHED_GOOD', 'PACKAGING_MATERIAL', 'BYPRODUCT'];
             } else if (selectedProduct.category === 'SEMI_FINISHED_GOOD') {
-                allowedCategories = ['RAW_MATERIAL', 'PACKAGING_MATERIAL', 'BYPRODUCT'];
+                allowedCategories = ['RAW_MATERIAL', 'SEMI_FINISHED_GOOD', 'PACKAGING_MATERIAL', 'BYPRODUCT'];
             }
         } else {
             // Default when no product is selected yet
             allowedCategories = ['RAW_MATERIAL', 'SEMI_FINISHED_GOOD', 'PACKAGING_MATERIAL', 'BYPRODUCT'];
         }
 
-        return rawMaterials.filter(rm => allowedCategories.includes(rm.category));
+        return rawMaterials.filter(rm =>
+            allowedCategories.includes(rm.category) &&
+            (!selectedProduct || rm.id !== selectedProduct.id)
+        );
     }, [rawMaterials, selectedProduct]);
 
     // ── Filtered BOMs ──
@@ -516,18 +519,20 @@ const CreateBOMPage: React.FC = () => {
                                                     </select>
                                                 </td>
                                                 <td className="px-4 py-2.5">
-                                                    <input type="number" min={0} step="0.01" value={item.quantity || ''} onChange={(e) => handleItemChange(idx, 'quantity', Number(e.target.value))}
+                                                    <input type="number" min={0} step="0.001" value={item.quantity || ''} onChange={(e) => handleItemChange(idx, 'quantity', Number(e.target.value))}
                                                         className="w-full rounded-lg px-2.5 py-2 text-sm outline-none transition-all duration-200" style={inputStyle} placeholder="0" {...focusHandlers} />
                                                 </td>
                                                 <td className="px-4 py-2.5">
-                                                    <select value={item.unitOfMeasurement} onChange={(e) => handleItemChange(idx, 'unitOfMeasurement', e.target.value)}
-                                                        className="w-full rounded-lg px-2.5 py-2 text-sm outline-none transition-all duration-200 cursor-pointer" style={inputStyle} {...focusHandlers}>
-                                                        <option value="">Select</option>
-                                                        <option value="gram">Gram</option>
-                                                        <option value="KG">KG</option>
-                                                        <option value="Ton">Ton</option>
-                                                        <option value="Piece">Piece</option>
-                                                    </select>
+                                                    <input
+                                                        type="text"
+                                                        value={item.unitOfMeasurement || ''}
+                                                        readOnly
+                                                        disabled
+                                                        title="Unit is taken from the selected material and cannot be changed"
+                                                        placeholder="—"
+                                                        className="w-full rounded-lg px-2.5 py-2 text-sm outline-none cursor-not-allowed"
+                                                        style={{ ...inputStyle, background: 'var(--muted)', color: 'var(--muted-foreground)' }}
+                                                    />
                                                 </td>
                                                 <td className="px-4 py-2.5">
                                                     <input value={item.notes} onChange={(e) => handleItemChange(idx, 'notes', e.target.value)}
@@ -688,7 +693,7 @@ const CreateBOMPage: React.FC = () => {
                         <table className="w-full table-auto">
                             <thead>
                                 <tr style={{ background: 'var(--muted)', borderBottom: '1px solid var(--border)' }}>
-                                    {['BOM Code', 'Product Name', 'Product Code', 'Unit', 'Output Qty', 'Items', 'Status', 'Actions'].map(h => (
+                                    {['BOM Code', 'Product Name', 'Product Code', 'BOM Type', 'Unit', 'Output Qty', 'Items', 'Status', 'Actions'].map(h => (
                                         <th key={h} className="px-5 py-3 text-left text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--muted-foreground)' }}>{h}</th>
                                     ))}
                                 </tr>
@@ -696,7 +701,7 @@ const CreateBOMPage: React.FC = () => {
                             <tbody>
                                 {loading ? (
                                     <tr>
-                                        <td colSpan={8} className="px-5 py-12 text-center">
+                                        <td colSpan={9} className="px-5 py-12 text-center">
                                             <div className="flex flex-col items-center gap-3">
                                                 <span className="inline-block w-8 h-8 border-[3px] rounded-full animate-spin" style={{ borderColor: 'var(--border)', borderTopColor: 'var(--primary)' }} />
                                                 <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>Loading BOMs…</span>
@@ -705,7 +710,7 @@ const CreateBOMPage: React.FC = () => {
                                     </tr>
                                 ) : filteredBOMs.length === 0 ? (
                                     <tr>
-                                        <td colSpan={8} className="px-5 py-12 text-center">
+                                        <td colSpan={9} className="px-5 py-12 text-center">
                                             <div className="flex flex-col items-center gap-2">
                                                 <div style={{ color: 'var(--muted-foreground)', opacity: 0.5 }}><IconBOM /></div>
                                                 <span className="text-sm" style={{ color: 'var(--muted-foreground)' }}>No BOMs found</span>
@@ -733,6 +738,21 @@ const CreateBOMPage: React.FC = () => {
                                                 </td>
                                                 <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{bom.productName}</td>
                                                 <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{bom.productCode || '-'}</td>
+                                                <td className="px-5 py-3.5">
+                                                    {(() => {
+                                                        const product = rawMaterials.find(r => r.name === bom.productName);
+                                                        const isSFG = product?.category === 'SEMI_FINISHED_GOOD';
+                                                        const isFG = product?.category === 'FINISHED_GOOD';
+                                                        const label = isSFG ? 'SFG' : isFG ? 'FG' : '—';
+                                                        const bg = isSFG ? 'color-mix(in srgb, #8b5cf6 14%, transparent)' : isFG ? 'color-mix(in srgb, #10b981 14%, transparent)' : 'var(--muted)';
+                                                        const color = isSFG ? '#7c3aed' : isFG ? '#059669' : 'var(--muted-foreground)';
+                                                        return (
+                                                            <span className="px-2.5 py-1 text-[11px] font-bold uppercase rounded-full" style={{ background: bg, color }}>
+                                                                {label}
+                                                            </span>
+                                                        );
+                                                    })()}
+                                                </td>
                                                 <td className="px-5 py-3.5 text-sm" style={{ color: 'var(--muted-foreground)' }}>{bom.unitOfMeasurement}</td>
                                                 <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>{bom.outputQuantity}</td>
                                                 <td className="px-5 py-3.5 text-sm font-medium" style={{ color: 'var(--foreground)' }}>

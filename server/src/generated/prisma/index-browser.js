@@ -1158,6 +1158,18 @@ exports.Prisma.FGProductionMachineEntryScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.FGProductionMachinePackagingScalarFieldEnum = {
+  id: 'id',
+  machineEntryId: 'machineEntryId',
+  rawMaterialId: 'rawMaterialId',
+  transferNumber: 'transferNumber',
+  productName: 'productName',
+  skuCode: 'skuCode',
+  quantity: 'quantity',
+  unitOfMeasurement: 'unitOfMeasurement',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.FGDowntimeRecordScalarFieldEnum = {
   id: 'id',
   machineEntryId: 'machineEntryId',
@@ -1515,6 +1527,7 @@ exports.Prisma.ModelName = {
   FGBatchConsumption: 'FGBatchConsumption',
   FGProductionEntry: 'FGProductionEntry',
   FGProductionMachineEntry: 'FGProductionMachineEntry',
+  FGProductionMachinePackaging: 'FGProductionMachinePackaging',
   FGDowntimeRecord: 'FGDowntimeRecord',
   Machine: 'Machine',
   FGProductionVerification: 'FGProductionVerification',

@@ -100,7 +100,7 @@ export class CleaningGrnController {
                 where: {
                     purchaseOrderItem: {
                         rawMaterial: {
-                            subcategory: 'Spice',
+                            category: 'RAW_MATERIAL',
                         },
                     },
                 },

@@ -24,7 +24,17 @@ import {
   Eye,
   Calendar,
   User,
+  Layers,
 } from 'lucide-react';
+
+const CATEGORY_DISPLAY: Record<string, string> = {
+  RAW_MATERIAL: 'Raw Material',
+  SEMI_FINISHED_GOOD: 'Semi-Finished Good',
+  FINISHED_GOOD: 'Finished Good',
+  PACKAGING_MATERIAL: 'Packaging Material',
+  BYPRODUCT: 'Byproduct',
+  WASTAGE: 'Wastage',
+};
 import { toast } from 'react-toastify';
 import {
   getRMQualityReports,
@@ -309,7 +319,14 @@ const RMQualityReport: React.FC = () => {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       if (response.data.success) {
-        setReceivedPOs(response.data.data);
+        // Only RAW_MATERIAL items get a quality report + GRN; drop other categories from the PO list
+        const rawOnly = (response.data.data || [])
+          .map((po: ReceivedPO) => ({
+            ...po,
+            items: (po.items || []).filter((it) => it.rawMaterial?.category === 'RAW_MATERIAL'),
+          }))
+          .filter((po: ReceivedPO) => po.items.length > 0);
+        setReceivedPOs(rawOnly);
       }
     } catch (error) {
       console.error('Failed to fetch received POs:', error);
@@ -856,7 +873,8 @@ const RMQualityReport: React.FC = () => {
                       </div>
                       <div className="space-y-2.5">
                         {[
-                          { icon: Package, label: 'Raw Material', value: selectedItem.rawMaterial.name },
+                          { icon: Package, label: 'Material', value: selectedItem.rawMaterial.name },
+                          { icon: Layers, label: 'Category', value: CATEGORY_DISPLAY[selectedItem.rawMaterial.category] || selectedItem.rawMaterial.category },
                           { icon: Building, label: 'Supplier', value: selectedPO!.vendor.name },
                           { icon: Hash, label: 'PO Number', value: selectedPO!.poNumber },
                           { icon: Package, label: 'Qty Ordered', value: `${selectedItem.quantityOrdered} ${selectedItem.quantityUnit || selectedItem.rawMaterial.unitOfMeasurement || ''}`.trim() },

@@ -425,7 +425,7 @@ export default function ProductionOutputEntryPage() {
                         </div>
 
                         {/* Read-Only Machine Metrics */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5 p-3 rounded-lg bg-muted/20 border border-border">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-5 p-3 rounded-lg bg-muted/20 border border-border">
                           <div>
                             <div className="text-[10px] font-bold text-muted-foreground uppercase">Installation Capacity</div>
                             <div className="font-semibold text-foreground">{alloc.machine?.capacityQty || '-'} {alloc.machine?.capacityUnit === 'BOXES_PER_SHIFT' ? 'Boxes / Shift' : alloc.machine?.capacityUnit}</div>
@@ -433,12 +433,6 @@ export default function ProductionOutputEntryPage() {
                           <div>
                             <div className="text-[10px] font-bold text-muted-foreground uppercase">Machine Speed</div>
                             <div className="font-semibold text-foreground">{alloc.machineSpeed || alloc.machine?.machineSpeed || '-'}</div>
-                          </div>
-                          <div>
-                            <div className="text-[10px] font-bold text-muted-foreground uppercase">Laminate Cons.</div>
-                            <div className="font-semibold text-foreground">
-                              {alloc.laminateConsumption !== null ? `${alloc.laminateConsumption} ${alloc.laminateConsumptionUnit || 'KG'}` : '-'}
-                            </div>
                           </div>
                           <div>
                             <div className="text-[10px] font-bold text-muted-foreground uppercase">SFG Cons.</div>

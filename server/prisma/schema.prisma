@@ -1595,6 +1595,21 @@ model FGProductionMachineEntry {
   machine         Machine           @relation(fields: [machineId], references: [id])
   downtimeRecords FGDowntimeRecord[]
   qualityReport   FGQualityReport?
+  packagingConsumptions FGProductionMachinePackaging[]
+}
+
+model FGProductionMachinePackaging {
+  id                String                   @id @default(uuid())
+  machineEntryId    String
+  rawMaterialId     String?
+  transferNumber    String?
+  productName       String?
+  skuCode           String?
+  quantity          Float                    @default(0)
+  unitOfMeasurement String                   @default("KG")
+  createdAt         DateTime                 @default(now())
+
+  machineEntry      FGProductionMachineEntry @relation(fields: [machineEntryId], references: [id], onDelete: Cascade)
 }
 
 model FGDowntimeRecord {

@@ -359,7 +359,7 @@ const ReceiveModal: React.FC<Props> = ({
                             <div className="space-y-3">
                                 <div>
                                     <label className="block text-xs font-medium text-muted-foreground mb-1">
-                                        Total Weight Received
+                                        {unit === 'Piece' ? 'Total Pieces Received' : 'Total Weight Received'}
                                     </label>
                                     <div className="flex items-center gap-2">
                                         <input
@@ -372,13 +372,17 @@ const ReceiveModal: React.FC<Props> = ({
                                             placeholder="Enter total weight"
                                         />
                                         <select
-                                            className="bg-muted/20 border border-border/30 rounded-lg px-2 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition cursor-pointer"
+                                            className="bg-muted/20 border border-border/30 rounded-lg px-2 py-2 text-sm text-foreground focus:outline-none focus:border-primary/50 transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
                                             value={inputUnit}
                                             onChange={(e) => setInputUnit(e.target.value)}
+                                            disabled={unit === 'Piece'}
+                                            title={unit === 'Piece' ? 'This material is measured in Piece — unit cannot be changed' : ''}
                                         >
-                                            {Array.from(new Set([unit, 'gram', 'KG', 'Ton'])).map(u => (
-                                                <option key={u} value={u}>{u}</option>
-                                            ))}
+                                            {unit === 'Piece'
+                                                ? <option value="Piece">Piece</option>
+                                                : Array.from(new Set([unit, 'gram', 'KG', 'Ton'])).map(u => (
+                                                    <option key={u} value={u}>{u}</option>
+                                                ))}
                                         </select>
                                     </div>
                                 </div>
@@ -426,13 +430,17 @@ const ReceiveModal: React.FC<Props> = ({
                                                     placeholder="Weight"
                                                 />
                                                 <select
-                                                    className="bg-muted/20 border border-border/30 rounded-lg px-2 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary/50 transition cursor-pointer"
+                                                    className="bg-muted/20 border border-border/30 rounded-lg px-2 py-1.5 text-sm text-foreground focus:outline-none focus:border-primary/50 transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-70"
                                                     value={inputUnit}
                                                     onChange={(e) => setInputUnit(e.target.value)}
+                                                    disabled={unit === 'Piece'}
+                                                    title={unit === 'Piece' ? 'This material is measured in Piece — unit cannot be changed' : ''}
                                                 >
-                                                    {Array.from(new Set([unit, 'gram', 'KG', 'Ton'])).map(u => (
-                                                        <option key={u} value={u}>{u}</option>
-                                                    ))}
+                                                    {unit === 'Piece'
+                                                        ? <option value="Piece">Piece</option>
+                                                        : Array.from(new Set([unit, 'gram', 'KG', 'Ton'])).map(u => (
+                                                            <option key={u} value={u}>{u}</option>
+                                                        ))}
                                                 </select>
                                             </div>
                                             {bags.length > 1 && (

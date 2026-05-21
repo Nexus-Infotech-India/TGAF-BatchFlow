@@ -84,6 +84,7 @@ const CreateMaterialTransferPage: React.FC = () => {
   const [selectedBatches, setSelectedBatches] = useState<Set<string>>(new Set());
   // Packaging
   const [packagingMaterials, setPackagingMaterials] = useState<PackagingMaterial[]>([]);
+  const [packagingStockMap, setPackagingStockMap] = useState<Record<string, { available: number; unit: string }>>({});
   const [selectedPkgMaterial, setSelectedPkgMaterial] = useState<PackagingMaterial | null>(null);
   const [pkgQuantity, setPkgQuantity] = useState<number | null>(null);
   const [pkgUnit, setPkgUnit] = useState<string>('KG');
@@ -117,11 +118,16 @@ const CreateMaterialTransferPage: React.FC = () => {
 
   const fetchPackagingMaterials = async () => {
     try {
-      const res = await api.get(API_ROUTES.RAW.GET_PRODUCTS, {
-        params: { category: 'PACKAGING_MATERIAL' }
-      });
-      const data = Array.isArray(res.data) ? res.data : (res.data?.data || []);
+      const [matRes, stockRes] = await Promise.all([
+        api.get(API_ROUTES.RAW.GET_PRODUCTS, { params: { category: 'PACKAGING_MATERIAL' } }),
+        api.get(API_ROUTES.RAW.GET_PACKAGING_SOURCE_STOCK, fromLocationId ? { params: { locationId: fromLocationId } } : undefined),
+      ]);
+      const data = Array.isArray(matRes.data) ? matRes.data : (matRes.data?.data || []);
       setPackagingMaterials(data.filter((p: any) => p.category === 'PACKAGING_MATERIAL'));
+      const stockList = stockRes.data?.data || [];
+      const map: Record<string, { available: number; unit: string }> = {};
+      for (const s of stockList) map[s.rawMaterialId] = { available: s.available, unit: s.unit };
+      setPackagingStockMap(map);
     } catch (e) {
       message.error('Failed to load packaging materials');
     }
@@ -591,23 +597,42 @@ const CreateMaterialTransferPage: React.FC = () => {
                     value={selectedPkgMaterial?.id || undefined}
                     onChange={id => { const mat = packagingMaterials.find(m => m.id === id); setSelectedPkgMaterial(mat || null); if (mat) setPkgUnit(mat.unitOfMeasurement || 'KG'); }}
                     optionFilterProp="label"
-                    options={packagingMaterials.map(m => ({ value: m.id, label: `${m.name} (${m.skuCode || 'NO-SKU'})` }))}
+                    options={packagingMaterials.map(m => {
+                      const stock = packagingStockMap[m.id];
+                      const availLabel = stock ? ` — Available: ${stock.available} ${stock.unit}` : ' — Available: 0';
+                      return { value: m.id, label: `${m.name} (${m.skuCode || 'NO-SKU'})${availLabel}` };
+                    })}
                   />
                 </div>
 
-                {selectedPkgMaterial && (
+                {selectedPkgMaterial && (() => {
+                  const stock = packagingStockMap[selectedPkgMaterial.id];
+                  const availableQty = stock?.available ?? 0;
+                  const availableUnit = stock?.unit || selectedPkgMaterial.unitOfMeasurement || 'KG';
+                  return (
                   <div className="border border-blue-200 rounded-xl p-5 bg-blue-50/40 space-y-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center"><Package size={16} className="text-blue-600" /></div>
-                      <div>
-                        <div className="text-sm font-bold">{selectedPkgMaterial.name}</div>
-                        <div className="text-[10px] text-muted-foreground">{selectedPkgMaterial.skuCode}</div>
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center"><Package size={16} className="text-blue-600" /></div>
+                        <div>
+                          <div className="text-sm font-bold">{selectedPkgMaterial.name}</div>
+                          <div className="text-[10px] text-muted-foreground">{selectedPkgMaterial.skuCode}</div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Available</div>
+                        <div className={`text-base font-extrabold ${availableQty > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                          {availableQty} <span className="text-[10px] font-medium opacity-70">{availableUnit}</span>
+                        </div>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1.5">Quantity</label>
-                        <InputNumber className="w-full" size="large" min={0.001} step={1} precision={3} value={pkgQuantity} onChange={setPkgQuantity} placeholder="Enter quantity" />
+                        <InputNumber className="w-full" size="large" min={0.001} max={availableQty || undefined} step={1} precision={3} value={pkgQuantity} onChange={setPkgQuantity} placeholder="Enter quantity" />
+                        {pkgQuantity != null && availableQty > 0 && pkgQuantity > availableQty && (
+                          <div className="text-[10px] text-red-500 mt-1 font-medium">Exceeds available stock</div>
+                        )}
                       </div>
                       <div>
                         <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1.5">Unit</label>
@@ -621,7 +646,8 @@ const CreateMaterialTransferPage: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                )}
+                  );
+                })()}
               </motion.div>
             )}
 
@@ -726,12 +752,17 @@ const CreateMaterialTransferPage: React.FC = () => {
               </Button>
             )}
 
-            {currentStep === 2 && selectedCategory === 'PACKAGING_MATERIAL' && (
-              <Button type="primary" size="large" onClick={addPackagingToCart} disabled={!selectedPkgMaterial || !pkgQuantity || pkgQuantity <= 0}
-                className="rounded-lg font-bold shadow-md" style={{ background: '#2563eb', border: 'none' }} icon={<ShoppingCart size={14} />}>
-                Add Packaging to Cart
-              </Button>
-            )}
+            {currentStep === 2 && selectedCategory === 'PACKAGING_MATERIAL' && (() => {
+              const stockAvail = selectedPkgMaterial ? (packagingStockMap[selectedPkgMaterial.id]?.available ?? 0) : 0;
+              const exceeds = !!(pkgQuantity && pkgQuantity > stockAvail);
+              return (
+                <Button type="primary" size="large" onClick={addPackagingToCart}
+                  disabled={!selectedPkgMaterial || !pkgQuantity || pkgQuantity <= 0 || stockAvail <= 0 || exceeds}
+                  className="rounded-lg font-bold shadow-md" style={{ background: '#2563eb', border: 'none' }} icon={<ShoppingCart size={14} />}>
+                  Add Packaging to Cart
+                </Button>
+              );
+            })()}
 
             {currentStep === 3 && (
               <Button type="primary" size="large" loading={submitting} onClick={handleSubmit} disabled={cartItems.length === 0}

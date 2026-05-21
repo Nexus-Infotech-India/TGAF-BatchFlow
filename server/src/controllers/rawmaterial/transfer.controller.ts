@@ -885,4 +885,80 @@ export class TransferController {
       res.status(500).json({ error: 'Failed to fetch packaging stock', details: error });
     }
   }
+
+  /**
+   * GET /raw/transfers/packaging-source-stock
+   * Returns available packaging-material stock at the source side:
+   * sum of received quantities (from PurchaseOrderItem receivals)
+   * minus quantities already transferred out via MaterialTransferLine (PACKAGING_MATERIAL).
+   * Optionally filtered by `locationId` (source location of the receival / outbound transfer).
+   */
+  static async getPackagingSourceStock(req: Request, res: Response) {
+    try {
+      const { locationId } = req.query;
+      const locId = typeof locationId === 'string' && locationId.length > 0 ? locationId : null;
+
+      const poItems = await prisma.purchaseOrderItem.findMany({
+        where: { rawMaterial: { category: 'PACKAGING_MATERIAL' } },
+        include: {
+          rawMaterial: true,
+          receivals: locId ? { where: { locationId: locId } } : true,
+        },
+      });
+
+      const stockMap: Record<string, {
+        rawMaterialId: string;
+        productName: string;
+        skuCode: string;
+        unit: string;
+        totalReceived: number;
+        totalTransferredOut: number;
+        available: number;
+      }> = {};
+
+      for (const item of poItems) {
+        const rmId = item.rawMaterialId;
+        const received = (item.receivals || []).reduce((sum, r) => sum + (r.totalWeight || 0), 0);
+        if (received <= 0) continue;
+        if (!stockMap[rmId]) {
+          stockMap[rmId] = {
+            rawMaterialId: rmId,
+            productName: item.rawMaterial.name,
+            skuCode: item.rawMaterial.skuCode,
+            unit: item.rawMaterial.unitOfMeasurement || 'KG',
+            totalReceived: 0,
+            totalTransferredOut: 0,
+            available: 0,
+          };
+        }
+        stockMap[rmId].totalReceived += received;
+      }
+
+      const transferWhere: any = {};
+      if (locId) transferWhere.fromLocationId = locId;
+      const transfers = await prisma.materialTransfer.findMany({
+        where: transferWhere,
+        include: { lines: { where: { lineType: 'PACKAGING_MATERIAL' } } },
+      });
+      for (const t of transfers) {
+        for (const line of t.lines) {
+          const rmId = line.rawMaterialId;
+          if (!rmId || !stockMap[rmId]) continue;
+          stockMap[rmId].totalTransferredOut += line.quantity || 0;
+        }
+      }
+
+      const data = Object.values(stockMap).map(s => ({
+        ...s,
+        totalReceived: Math.round(s.totalReceived * 1000) / 1000,
+        totalTransferredOut: Math.round(s.totalTransferredOut * 1000) / 1000,
+        available: Math.max(0, Math.round((s.totalReceived - s.totalTransferredOut) * 1000) / 1000),
+      }));
+
+      res.json({ success: true, data });
+    } catch (error) {
+      console.error('Error fetching packaging source stock:', error);
+      res.status(500).json({ error: 'Failed to fetch packaging source stock', details: error });
+    }
+  }
 }
