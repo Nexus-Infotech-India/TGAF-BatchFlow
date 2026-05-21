@@ -19,6 +19,9 @@ export const runScheduledMailJob = async (): Promise<{
     console.log(`Recipient: ${CLIENT_EMAIL}`);
     console.log('='.repeat(50));
 
+
+    
+
     const results = {
         qualityReports: { success: false, message: '' },
         batches: { success: false, message: '' }
