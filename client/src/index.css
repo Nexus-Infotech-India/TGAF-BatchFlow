@@ -672,3 +672,25 @@ textarea.ant-input {
   color: var(--foreground) !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
+
+/* Hide native number input spinners (Chrome / Safari / Edge / Opera) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+/* Hide native number input spinners (Firefox) */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Hide Ant Design InputNumber up/down handlers */
+.ant-input-number-handler-wrap {
+  display: none !important;
+}
+.ant-input-number-input {
+  padding-right: 11px !important;
+}

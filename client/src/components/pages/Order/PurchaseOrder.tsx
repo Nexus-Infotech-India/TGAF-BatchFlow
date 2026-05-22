@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
-import { CheckCircle, Clock, Package, Mail, ChevronUp, Eye, Trash2, Pencil } from 'lucide-react';
+import { CheckCircle, Clock, Package, Mail, ChevronUp, Eye, Trash2, Pencil, Search, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { Pagination } from 'antd';
@@ -91,6 +91,9 @@ const PurchaseOrderList: React.FC = () => {
     const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
     const [sendingMail, setSendingMail] = useState(false);
     const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+    // Search + filter
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState<'ALL' | 'PENDING' | 'PARTIALLY_RECEIVED' | 'RECEIVED'>('ALL');
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
@@ -203,7 +206,26 @@ const PurchaseOrderList: React.FC = () => {
         );
     }
 
-    const paginatedOrders = orders.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    // Filtered + searched orders
+    const filteredOrders = orders.filter((o) => {
+        // Status filter — applies if any item in the order matches
+        if (statusFilter !== 'ALL') {
+            const hasMatch = o.items.some((it) => it.status === statusFilter);
+            if (!hasMatch) return false;
+        }
+        // Search across PO number, vendor name, and any product name / SKU code
+        const q = searchTerm.trim().toLowerCase();
+        if (!q) return true;
+        if (o.poNumber.toLowerCase().includes(q)) return true;
+        if ((o.vendor?.name || '').toLowerCase().includes(q)) return true;
+        return o.items.some(
+            (it) =>
+                (it.rawMaterial?.name || '').toLowerCase().includes(q) ||
+                (it.rawMaterial?.skuCode || '').toLowerCase().includes(q)
+        );
+    });
+
+    const paginatedOrders = filteredOrders.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
     return (
         <div className="p-6 max-w-[95vw] mx-auto">
@@ -259,6 +281,60 @@ const PurchaseOrderList: React.FC = () => {
                         <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
                     </div>
                 ))}
+            </div>
+
+            {/* Search + Filter */}
+            <div className="flex flex-col sm:flex-row gap-3 mb-4">
+                <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+                    <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                        placeholder="Search by PO #, vendor, product or SKU..."
+                        className="w-full bg-card border border-border/30 rounded-lg pl-10 pr-9 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition"
+                    />
+                    {searchTerm && (
+                        <button
+                            type="button"
+                            onClick={() => setSearchTerm('')}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/40 transition"
+                            title="Clear search"
+                        >
+                            <X className="w-3.5 h-3.5" />
+                        </button>
+                    )}
+                </div>
+                <div className="flex items-center gap-2">
+                    {[
+                        { value: 'ALL', label: 'All' },
+                        { value: 'PENDING', label: 'Pending' },
+                        { value: 'PARTIALLY_RECEIVED', label: 'Partial' },
+                        { value: 'RECEIVED', label: 'Received' },
+                    ].map((opt) => {
+                        const active = statusFilter === opt.value;
+                        return (
+                            <button
+                                key={opt.value}
+                                type="button"
+                                onClick={() => {
+                                    setStatusFilter(opt.value as typeof statusFilter);
+                                    setCurrentPage(1);
+                                }}
+                                className={`px-3 py-2 rounded-lg text-xs font-semibold border transition ${
+                                    active
+                                        ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                                        : 'bg-card text-muted-foreground border-border/40 hover:bg-muted/40 hover:text-foreground'
+                                }`}
+                            >
+                                {opt.label}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
 
             {/* Table */}
@@ -482,11 +558,13 @@ const PurchaseOrderList: React.FC = () => {
                                     );
                                 })
                             )}
-                            {orders.length === 0 && (
+                            {filteredOrders.length === 0 && (
                                 <tr>
                                     <td colSpan={11} className="text-center py-12 text-muted-foreground">
                                         <Package className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                                        <p className="text-sm">No purchase orders found.</p>
+                                        <p className="text-sm">
+                                            {orders.length === 0 ? 'No purchase orders found.' : 'No orders match your search/filter.'}
+                                        </p>
                                     </td>
                                 </tr>
                             )}
@@ -496,12 +574,12 @@ const PurchaseOrderList: React.FC = () => {
             </div>
 
             {/* Pagination */}
-            {orders.length > pageSize && (
+            {filteredOrders.length > pageSize && (
                 <div className="flex justify-end mt-4 px-2">
                     <Pagination
                         current={currentPage}
                         pageSize={pageSize}
-                        total={orders.length}
+                        total={filteredOrders.length}
                         onChange={(page) => setCurrentPage(page)}
                         showSizeChanger={false}
                     />
