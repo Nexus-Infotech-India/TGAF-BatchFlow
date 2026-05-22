@@ -86,11 +86,7 @@ const PurchaseOrder = () => {
   const [rawMaterials, setRawMaterials] = useState<RawMaterial[]>([]);
   const MATERIAL_CATEGORIES = [
     { value: 'RAW_MATERIAL', label: 'Raw Material' },
-    { value: 'SEMI_FINISHED_GOOD', label: 'Semi-Finished Good' },
-    { value: 'FINISHED_GOOD', label: 'Finished Good' },
     { value: 'PACKAGING_MATERIAL', label: 'Packaging Material' },
-    { value: 'BYPRODUCT', label: 'Byproduct' },
-    { value: 'WASTAGE', label: 'Wastage' },
   ];
   const [vendorId, setVendorId] = useState('');
   const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
