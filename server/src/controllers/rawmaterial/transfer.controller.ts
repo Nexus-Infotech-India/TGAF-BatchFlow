@@ -365,17 +365,33 @@ export class TransferController {
       }
 
       const updated = await prisma.$transaction(async (tx) => {
-        const result = await tx.materialTransfer.update({
-          where: { id },
+        // Conditional update — only flip SENT → ACCEPTED. If a concurrent (or
+        // double-click) request already accepted this transfer, updateMany returns
+        // count: 0 and we bail without writing a second ledger entry.
+        const flip = await tx.materialTransfer.updateMany({
+          where: { id, status: 'SENT' },
           data: {
             status: 'ACCEPTED',
             acceptedById: req.user?.id || 'system',
             acceptedAt: new Date(),
           },
+        });
+
+        if (flip.count === 0) {
+          // Already accepted by another concurrent request; just return current state.
+          const current = await tx.materialTransfer.findUnique({
+            where: { id },
+            include: { lines: true, fromLocation: true, toLocation: true },
+          });
+          return current!;
+        }
+
+        const result = await tx.materialTransfer.findUnique({
+          where: { id },
           include: { lines: true, fromLocation: true, toLocation: true },
         });
 
-        const logType = result.direction === 'INBOUND_TO_GRINDING'
+        const logType = result!.direction === 'INBOUND_TO_GRINDING'
           ? 'TRANSFER_ACCEPTED'
           : 'OUTBOUND_TRANSFER_ACCEPTED';
 
@@ -383,35 +399,47 @@ export class TransferController {
           data: {
             type: logType,
             entity: 'MaterialTransfer',
-            entityId: result.id,
+            entityId: result!.id,
             userId: req.user?.id || 'system',
-            description: `Transfer ${result.transferNumber} accepted at ${result.toLocation.name}`,
+            description: `Transfer ${result!.transferNumber} accepted at ${result!.toLocation.name}`,
           },
         });
 
         // Loose SFG ledger: every SFG line with looseQty > 0 deposits that loose
         // quantity into the destination location's running ledger.
-        if (result.direction === 'OUTBOUND_FROM_GRINDING') {
-          for (const line of result.lines) {
+        // Pre-check existing TRANSFER_ACCEPT rows for this transfer to guarantee
+        // exactly-once accounting even if the request runs in unusual conditions.
+        if (result!.direction === 'OUTBOUND_FROM_GRINDING') {
+          const existing = await tx.looseStockLedger.findMany({
+            where: { sourceTransferId: result!.id, reason: 'TRANSFER_ACCEPT' },
+            select: { rawMaterialId: true, skuCode: true, productName: true },
+          });
+          const existingKeys = new Set(
+            existing.map((e) => `${e.rawMaterialId || ''}|${e.skuCode || ''}|${e.productName || ''}`)
+          );
+
+          for (const line of result!.lines) {
             const loose = Number(line.looseQty || 0);
             if (line.lineType !== 'SFG' || loose <= 0) continue;
+            const key = `${line.rawMaterialId || ''}|${line.skuCode || ''}|${line.productName || ''}`;
+            if (existingKeys.has(key)) continue; // already credited
             await tx.looseStockLedger.create({
               data: {
-                locationId: result.toLocationId,
+                locationId: result!.toLocationId,
                 rawMaterialId: line.rawMaterialId || null,
                 skuCode: line.skuCode || null,
                 productName: line.productName || null,
                 unitOfMeasurement: line.unitOfMeasurement || 'KG',
                 delta: loose,
                 reason: 'TRANSFER_ACCEPT',
-                sourceTransferId: result.id,
-                notes: `Loose remainder from transfer ${result.transferNumber}`,
+                sourceTransferId: result!.id,
+                notes: `Loose remainder from transfer ${result!.transferNumber}`,
               },
             });
           }
         }
 
-        return result;
+        return result!;
       }, { timeout: 15000 });
 
       res.json({ success: true, data: updated });
@@ -1022,21 +1050,7 @@ export class TransferController {
       const transferNumber = `${prefix}${String(seq).padStart(4, '0')}`;
 
       const result = await prisma.$transaction(async (tx) => {
-        // 1) Insert the negative loose ledger entry
-        await tx.looseStockLedger.create({
-          data: {
-            locationId,
-            rawMaterialId: rawMaterialId || null,
-            skuCode: skuCode || null,
-            productName: productName || null,
-            unitOfMeasurement: 'KG',
-            delta: -consumeKg,
-            reason: 'REBAG',
-            notes: `Re-bagged ${bags} bag(s) × ${bagKg} KG into ${transferNumber}`,
-          },
-        });
-
-        // 2) Create a synthetic ACCEPTED OUTBOUND_FROM_GRINDING transfer
+        // 1) Create a synthetic ACCEPTED OUTBOUND_FROM_GRINDING transfer
         //    at this location so the bagged qty becomes visible to consumers.
         const created = await tx.materialTransfer.create({
           data: {
@@ -1069,6 +1083,21 @@ export class TransferController {
           include: { lines: true },
         });
 
+        // 2) Insert the negative loose ledger entry, linked to the new rebag transfer
+        await tx.looseStockLedger.create({
+          data: {
+            locationId,
+            rawMaterialId: rawMaterialId || null,
+            skuCode: skuCode || null,
+            productName: productName || null,
+            unitOfMeasurement: 'KG',
+            delta: -consumeKg,
+            reason: 'REBAG',
+            sourceTransferId: created.id,
+            notes: `Re-bagged ${bags} bag(s) × ${bagKg} KG into ${transferNumber}`,
+          },
+        });
+
         await tx.transactionLog.create({
           data: {
             type: 'LOOSE_REBAG',
@@ -1086,6 +1115,61 @@ export class TransferController {
     } catch (error) {
       console.error('Error re-bagging loose stock:', error);
       res.status(500).json({ error: 'Failed to re-bag loose stock', details: error });
+    }
+  }
+
+  /**
+   * GET /raw/transfers/loose-stock/rebag-history?locationId=...
+   * Returns past re-bag events (negative LooseStockLedger rows where reason='REBAG'),
+   * joined with the synthetic OUTBOUND_FROM_GRINDING transfer they created.
+   */
+  static async getRebagHistory(req: Request, res: Response) {
+    try {
+      const { locationId } = req.query;
+      const where: any = { reason: 'REBAG' };
+      if (typeof locationId === 'string' && locationId.length > 0) where.locationId = locationId;
+
+      const rows = await prisma.looseStockLedger.findMany({
+        where,
+        include: { location: true },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      // Join with the corresponding rebag MaterialTransfer (via sourceTransferId) for bag info.
+      const transferIds = rows.map((r) => r.sourceTransferId).filter((x): x is string => !!x);
+      const transfers = transferIds.length > 0
+        ? await prisma.materialTransfer.findMany({
+            where: { id: { in: transferIds } },
+            include: { lines: true },
+          })
+        : [];
+      const transferById: Record<string, typeof transfers[number]> = {};
+      for (const t of transfers) transferById[t.id] = t;
+
+      const data = rows.map((r) => {
+        const transfer = r.sourceTransferId ? transferById[r.sourceTransferId] : null;
+        const line = transfer?.lines?.[0];
+        return {
+          id: r.id,
+          locationId: r.locationId,
+          locationName: r.location?.name || '',
+          productName: r.productName,
+          skuCode: r.skuCode,
+          rawMaterialId: r.rawMaterialId,
+          consumedKg: Math.abs(r.delta),
+          unit: r.unitOfMeasurement || 'KG',
+          bagsFormed: line?.numberOfBags || null,
+          bagSizeKg: line?.bagSizeKg || null,
+          transferNumber: transfer?.transferNumber || null,
+          rebagAt: r.createdAt,
+          notes: r.notes || null,
+        };
+      });
+
+      res.json({ success: true, data });
+    } catch (error) {
+      console.error('Error fetching rebag history:', error);
+      res.status(500).json({ error: 'Failed to fetch rebag history', details: error });
     }
   }
 

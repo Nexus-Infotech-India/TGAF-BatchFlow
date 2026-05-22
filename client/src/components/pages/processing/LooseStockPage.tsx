@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
 import { Button, message, Select, InputNumber, Modal } from 'antd';
 import { motion } from 'framer-motion';
-import { Package, RefreshCw, Layers, MapPin, ArrowRight } from 'lucide-react';
+import { Package, RefreshCw, Layers, MapPin, ArrowRight, History } from 'lucide-react';
 
 interface LooseStockRow {
   locationId: string;
@@ -12,6 +12,20 @@ interface LooseStockRow {
   productName: string | null;
   unit: string;
   available: number;
+}
+
+interface RebagHistoryRow {
+  id: string;
+  locationName: string;
+  productName: string | null;
+  skuCode: string | null;
+  consumedKg: number;
+  unit: string;
+  bagsFormed: number | null;
+  bagSizeKg: number | null;
+  transferNumber: string | null;
+  rebagAt: string;
+  notes: string | null;
 }
 
 interface LocationOption {
@@ -24,8 +38,10 @@ interface LocationOption {
 
 const LooseStockPage: React.FC = () => {
   const [rows, setRows] = useState<LooseStockRow[]>([]);
+  const [history, setHistory] = useState<RebagHistoryRow[]>([]);
   const [locations, setLocations] = useState<LocationOption[]>([]);
   const [loading, setLoading] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
   const [locationFilter, setLocationFilter] = useState<string | undefined>();
   const [rebagModal, setRebagModal] = useState<{ open: boolean; row: LooseStockRow | null; bags: number | null; bagSizeKg: number; submitting: boolean }>({
     open: false,
@@ -49,6 +65,20 @@ const LooseStockPage: React.FC = () => {
     }
   }, [locationFilter]);
 
+  const fetchHistory = useCallback(async () => {
+    setHistoryLoading(true);
+    try {
+      const res = await api.get(API_ROUTES.RAW.GET_REBAG_HISTORY, {
+        params: locationFilter ? { locationId: locationFilter } : undefined,
+      });
+      setHistory(res.data?.data || []);
+    } catch (err: any) {
+      message.error(err?.response?.data?.error || 'Failed to load re-bag history');
+    } finally {
+      setHistoryLoading(false);
+    }
+  }, [locationFilter]);
+
   const fetchLocations = async () => {
     try {
       const res = await api.get(API_ROUTES.RAW.GET_LOCATIONS);
@@ -60,7 +90,7 @@ const LooseStockPage: React.FC = () => {
   };
 
   useEffect(() => { fetchLocations(); }, []);
-  useEffect(() => { fetchRows(); }, [fetchRows]);
+  useEffect(() => { fetchRows(); fetchHistory(); }, [fetchRows, fetchHistory]);
 
   const openRebag = (row: LooseStockRow) => {
     const maxBags = Math.floor(row.available / 25);
@@ -87,6 +117,7 @@ const LooseStockPage: React.FC = () => {
       message.success(`Re-bagged ${rebagModal.bags} × ${rebagModal.bagSizeKg} KG = ${consumed} KG. Remaining loose: ${newAvail} KG`);
       setRebagModal({ open: false, row: null, bags: null, bagSizeKg: 25, submitting: false });
       fetchRows();
+      fetchHistory();
     } catch (err: any) {
       message.error(err?.response?.data?.error || 'Re-bag failed');
       setRebagModal((p) => ({ ...p, submitting: false }));
@@ -122,8 +153,8 @@ const LooseStockPage: React.FC = () => {
           </div>
           <Button
             icon={<RefreshCw size={14} />}
-            onClick={fetchRows}
-            loading={loading}
+            onClick={() => { fetchRows(); fetchHistory(); }}
+            loading={loading || historyLoading}
           >
             Refresh
           </Button>
@@ -205,6 +236,65 @@ const LooseStockPage: React.FC = () => {
                   </tr>
                 );
               })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Re-bag History */}
+        <div className="bg-card border border-border/30 rounded-xl overflow-hidden">
+          <div className="px-4 py-3 border-b border-border/30 flex items-center gap-2">
+            <History size={16} className="text-primary" />
+            <span className="text-sm font-bold uppercase tracking-wider text-foreground">Re-bag History</span>
+            <span className="text-xs text-muted-foreground">— past re-bags shown newest first</span>
+          </div>
+          <table className="w-full text-sm">
+            <thead className="bg-muted/30 border-b border-border/30">
+              <tr>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-muted-foreground">Date</th>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-muted-foreground">Location</th>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-muted-foreground">Material</th>
+                <th className="px-4 py-3 text-center text-xs font-bold uppercase tracking-wider text-muted-foreground">Bags Formed</th>
+                <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-muted-foreground">Qty Bagged</th>
+                <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-muted-foreground">Re-bag Transfer #</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border/30">
+              {historyLoading && (
+                <tr><td colSpan={6} className="py-10 text-center text-muted-foreground">Loading…</td></tr>
+              )}
+              {!historyLoading && history.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-10 text-center text-muted-foreground">
+                    <History className="mx-auto mb-2 opacity-30" size={28} />
+                    <p className="text-sm font-semibold">No re-bag events yet</p>
+                    <p className="text-xs mt-1">When you re-bag loose stock above, the action will be recorded here.</p>
+                  </td>
+                </tr>
+              )}
+              {history.map((h) => (
+                <tr key={h.id} className="hover:bg-muted/10">
+                  <td className="px-4 py-3 text-xs text-foreground whitespace-nowrap">
+                    {new Date(h.rebagAt).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </td>
+                  <td className="px-4 py-3 font-semibold text-foreground">{h.locationName}</td>
+                  <td className="px-4 py-3">
+                    <div className="font-semibold text-foreground">{h.productName || '—'}</div>
+                    <div className="text-xs text-muted-foreground font-mono">{h.skuCode || '—'}</div>
+                  </td>
+                  <td className="px-4 py-3 text-center">
+                    {h.bagsFormed != null ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-xs font-bold">
+                        {h.bagsFormed} × {h.bagSizeKg ?? 25} KG
+                      </span>
+                    ) : '—'}
+                  </td>
+                  <td className="px-4 py-3 text-right">
+                    <span className="font-extrabold text-indigo-600">{h.consumedKg}</span>{' '}
+                    <span className="text-xs text-muted-foreground">{h.unit}</span>
+                  </td>
+                  <td className="px-4 py-3 text-xs font-mono text-primary">{h.transferNumber || '—'}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

@@ -36,6 +36,7 @@ interface TransferLine {
   batchNumber?: string;
   numberOfBags?: number;
   bagSizeKg?: number;
+  looseQty?: number;
   totalPackedQty?: number;
   totalPackedUnit?: string;
 }
@@ -145,8 +146,9 @@ const StockVerification: React.FC = () => {
   const sentCount = transfers.filter((t) => t.status === 'SENT').length;
   const acceptedCount = transfers.filter((t) => t.status === 'ACCEPTED').length;
 
-  // Helper for mixed-unit quantity summation
-  const calculateTotalQuantity = (lines: { quantity: number; unitOfMeasurement: string; lineType?: string }[]) => {
+  // Helper for mixed-unit quantity summation — sums the BAGGED quantity per line
+  // (totalPackedQty when set, else falls back to the raw quantity).
+  const calculateTotalQuantity = (lines: { quantity: number; unitOfMeasurement: string; lineType?: string; totalPackedQty?: number; totalPackedUnit?: string }[]) => {
     if (!lines || lines.length === 0) return { qty: 0, unit: '' };
 
     const UNIT_TO_GRAMS: Record<string, number> = {
@@ -158,8 +160,12 @@ const StockVerification: React.FC = () => {
     const fromG = (g: number, u: string) => g / (UNIT_TO_GRAMS[u] ?? UNIT_TO_GRAMS[u.toLowerCase()] ?? 1);
 
     const sfgLine = lines.find((l) => l.lineType === 'SFG');
-    const targetUnit = sfgLine?.unitOfMeasurement || lines[0]?.unitOfMeasurement || 'KG';
-    const totalGrams = lines.reduce((s, l) => s + toG(l.quantity, l.unitOfMeasurement), 0);
+    const targetUnit = sfgLine?.totalPackedUnit || sfgLine?.unitOfMeasurement || lines[0]?.totalPackedUnit || lines[0]?.unitOfMeasurement || 'KG';
+    const totalGrams = lines.reduce((s, l) => {
+      const qty = l.totalPackedQty != null ? l.totalPackedQty : l.quantity;
+      const unit = l.totalPackedQty != null ? (l.totalPackedUnit || 'KG') : l.unitOfMeasurement;
+      return s + toG(qty, unit);
+    }, 0);
 
     return { qty: Number(fromG(totalGrams, targetUnit).toFixed(3)), unit: targetUnit };
   };
@@ -315,18 +321,27 @@ const StockVerification: React.FC = () => {
                                 </td>
                                 <td className="px-3 py-2 text-sm font-medium text-foreground">{line.productName || '-'}</td>
                                 <td className="px-3 py-2 text-sm text-foreground text-right font-semibold">
-                                  {line.quantity} {line.unitOfMeasurement}
+                                  {line.totalPackedQty != null
+                                    ? `${line.totalPackedQty} ${line.totalPackedUnit || 'KG'}`
+                                    : `${line.quantity} ${line.unitOfMeasurement}`}
                                 </td>
                                 <td className="px-3 py-2 text-sm text-right">
-                                  {line.numberOfBags ? (
-                                    <span className="inline-flex items-center gap-1">
-                                      <span className="font-bold text-amber-600">{line.numberOfBags}</span>
-                                      <span className="text-muted-foreground">× {line.bagSizeKg || 25} KG</span>
-                                      <span className="text-xs text-indigo-600 ml-1">({line.totalPackedQty} KG)</span>
-                                    </span>
-                                  ) : (
-                                    <span className="text-muted-foreground">-</span>
-                                  )}
+                                  <div className="flex flex-col items-end gap-0.5">
+                                    {line.numberOfBags ? (
+                                      <span className="inline-flex items-center gap-1">
+                                        <span className="font-bold text-amber-600">{line.numberOfBags}</span>
+                                        <span className="text-muted-foreground">× {line.bagSizeKg || 25} KG</span>
+                                        <span className="text-xs text-indigo-600 ml-1">({line.totalPackedQty} KG)</span>
+                                      </span>
+                                    ) : (
+                                      <span className="text-muted-foreground">-</span>
+                                    )}
+                                    {(line.looseQty || 0) > 0 && (
+                                      <span className="text-[11px] text-emerald-700 font-semibold">
+                                        + {line.looseQty} KG loose
+                                      </span>
+                                    )}
+                                  </div>
                                 </td>
                                 <td className="px-3 py-2 text-sm text-primary font-mono">{line.batchNumber || '-'}</td>
                               </tr>

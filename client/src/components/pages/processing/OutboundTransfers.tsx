@@ -62,6 +62,7 @@ interface TransferLine {
   batchNumber?: string;
   numberOfBags?: number;
   bagSizeKg?: number;
+  looseQty?: number;
   totalPackedQty?: number;
   totalPackedUnit?: string;
 }
@@ -322,7 +323,8 @@ const OutboundTransfers: React.FC = () => {
   const selectedPosting = completedPostings.find((p) => p.id === sendModal.selectedPostingId);
 
   // Helper for mixed-unit quantity summation
-  const calculateTotalQuantity = (lines: { quantity: number; unitOfMeasurement: string; lineType?: string }[]) => {
+  // Sums the BAGGED quantity per line (totalPackedQty when set, else raw quantity).
+  const calculateTotalQuantity = (lines: { quantity: number; unitOfMeasurement: string; lineType?: string; totalPackedQty?: number; totalPackedUnit?: string }[]) => {
     if (!lines || lines.length === 0) return { qty: 0, unit: '' };
 
     const UNIT_TO_GRAMS: Record<string, number> = {
@@ -334,8 +336,12 @@ const OutboundTransfers: React.FC = () => {
     const fromG = (g: number, u: string) => g / (UNIT_TO_GRAMS[u] ?? UNIT_TO_GRAMS[u.toLowerCase()] ?? 1);
 
     const sfgLine = lines.find((l) => l.lineType === 'SFG');
-    const targetUnit = sfgLine?.unitOfMeasurement || lines[0]?.unitOfMeasurement || 'KG';
-    const totalGrams = lines.reduce((s, l) => s + toG(l.quantity, l.unitOfMeasurement), 0);
+    const targetUnit = sfgLine?.totalPackedUnit || sfgLine?.unitOfMeasurement || lines[0]?.totalPackedUnit || lines[0]?.unitOfMeasurement || 'KG';
+    const totalGrams = lines.reduce((s, l) => {
+      const qty = l.totalPackedQty != null ? l.totalPackedQty : l.quantity;
+      const unit = l.totalPackedQty != null ? (l.totalPackedUnit || 'KG') : l.unitOfMeasurement;
+      return s + toG(qty, unit);
+    }, 0);
 
     return { qty: Number(fromG(totalGrams, targetUnit).toFixed(3)), unit: targetUnit };
   };
@@ -498,7 +504,9 @@ const OutboundTransfers: React.FC = () => {
                                 </td>
                                 <td className="px-3 py-2 text-sm font-medium text-foreground">{line.productName || '-'}</td>
                                 <td className="px-3 py-2 text-sm text-foreground text-right font-semibold">
-                                  {line.quantity} {line.unitOfMeasurement}
+                                  {line.totalPackedQty != null
+                                    ? `${line.totalPackedQty} ${line.totalPackedUnit || 'KG'}`
+                                    : `${line.quantity} ${line.unitOfMeasurement}`}
                                 </td>
                                 <td className="px-3 py-2 text-sm text-right">
                                   <div className="flex flex-col items-end gap-0.5">
