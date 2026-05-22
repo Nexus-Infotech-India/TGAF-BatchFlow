@@ -122,8 +122,6 @@ const NewFGProductionEntryPage: React.FC = () => {
 
   // SFG transfers for SFG consumption column
   const [sfgTransfers, setSfgTransfers] = useState<any[]>([]);
-  // Packaging transfers for Laminate/Packaging consumption column
-  const [pkgTransfers, setPkgTransfers] = useState<any[]>([]);
 
   /* ─── Fetch Base Data ─── */
   useEffect(() => {
@@ -183,17 +181,9 @@ const NewFGProductionEntryPage: React.FC = () => {
           ...t,
           lines: t.lines?.filter((l: any) => !l.lineType || l.lineType === 'SFG') || []
         }));
-        const pkgOnly = filtered.filter((t: any) =>
-          t.lines?.some((l: any) => l.lineType === 'PACKAGING_MATERIAL')
-        ).map((t: any) => ({
-          ...t,
-          lines: t.lines?.filter((l: any) => l.lineType === 'PACKAGING_MATERIAL') || []
-        }));
         setSfgTransfers(sfgOnly);
-        setPkgTransfers(pkgOnly);
       } catch {
         setSfgTransfers([]);
-        setPkgTransfers([]);
       }
     };
     fetchTransfers();
@@ -273,16 +263,6 @@ const NewFGProductionEntryPage: React.FC = () => {
   const findSfgBatchByTransfer = (transferNumber: string): any | null => {
     for (const line of consumptionLines) {
       if (!line?.isSFG) continue;
-      const batch = (line.availableSfgBatches || []).find(
-        (b: any) => b?.transferNumber === transferNumber
-      );
-      if (batch) return batch;
-    }
-    return null;
-  };
-  const findPkgBatchByTransfer = (transferNumber: string): any | null => {
-    for (const line of consumptionLines) {
-      if (!line?.isPackaging) continue;
       const batch = (line.availableSfgBatches || []).find(
         (b: any) => b?.transferNumber === transferNumber
       );

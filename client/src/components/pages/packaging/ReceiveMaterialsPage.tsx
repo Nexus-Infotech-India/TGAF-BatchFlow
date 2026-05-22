@@ -9,7 +9,6 @@ import {
   ChevronDown,
   ChevronUp,
   ClipboardCheck,
-  Package,
   Calendar,
   ArrowRight,
   Loader2,
