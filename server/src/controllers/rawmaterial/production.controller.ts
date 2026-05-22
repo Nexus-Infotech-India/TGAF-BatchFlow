@@ -165,6 +165,51 @@ export class ProductionController {
               };
             })
             .filter((b) => b.remainingQuantity > 0); // Only show batches with remaining qty
+        } else if (item.rawMaterial.category === 'SEMI_FINISHED_GOOD') {
+          // ── SFG input: pull availability from accepted OUTBOUND_FROM_GRINDING transfers.
+          //    Each transfer line stores quantity + transferredQuantity; remaining is the
+          //    difference. Match by rawMaterialId first, then fall back to productName.
+          const sfgTransfers = await prisma.materialTransfer.findMany({
+            where: { direction: 'OUTBOUND_FROM_GRINDING', status: 'ACCEPTED' },
+            include: { lines: true },
+            orderBy: { acceptedAt: 'desc' },
+          });
+          const matchingLines = sfgTransfers.flatMap((t) =>
+            t.lines
+              .filter(
+                (l) =>
+                  l.lineType === 'SFG' &&
+                  (l.rawMaterialId === item.rawMaterialId || l.productName === item.rawMaterial.name)
+              )
+              .map((l) => ({ transfer: t, line: l }))
+          );
+
+          if (matchingLines.length > 0) {
+            sourceType = 'BATCH';
+            currentStockUnit = matchingLines[0].line.unitOfMeasurement || item.rawMaterial.unitOfMeasurement;
+            availableBatches = matchingLines
+              .map(({ transfer, line }) => {
+                const remaining = (line.quantity || 0) - (line.transferredQuantity || 0);
+                return {
+                  dispatchId: transfer.id, // reused field to identify the source row
+                  batchNumber: transfer.transferNumber,
+                  totalQuantity: Math.round((line.quantity || 0) * 1000) / 1000,
+                  consumedQuantity: Math.round((line.transferredQuantity || 0) * 1000) / 1000,
+                  remainingQuantity: Math.round(Math.max(0, remaining) * 1000) / 1000,
+                  unit: line.unitOfMeasurement || item.rawMaterial.unitOfMeasurement,
+                };
+              })
+              .filter((b) => b.remainingQuantity > 0);
+          } else {
+            sourceType = 'STOCK';
+            const stocks = await prisma.currentStock.findMany({
+              where: { rawMaterialId: item.rawMaterialId },
+              include: { rawMaterial: true, warehouse: true },
+            });
+            currentStockQty = stocks.reduce((sum, s) => sum + s.currentQuantity, 0);
+            const stockWithUnit = stocks.find(s => s.quantityUnit && s.currentQuantity > 0) || stocks.find(s => s.quantityUnit) || stocks[0];
+            currentStockUnit = stockWithUnit?.quantityUnit || item.rawMaterial.unitOfMeasurement;
+          }
         } else {
           sourceType = 'STOCK';
           const stocks = await prisma.currentStock.findMany({
@@ -281,7 +326,7 @@ export class ProductionController {
         if (actualQty <= 0) continue;
 
         if (c.sourceType === 'BATCH' && c.batchNumber) {
-          // Check batch has enough remaining quantity
+          // First try a grinding dispatch (cleaning → grinding flow)
           const dispatch = await prisma.grindingDispatch.findUnique({
             where: { batchNumber: c.batchNumber },
             include: {
@@ -290,28 +335,54 @@ export class ProductionController {
             },
           });
 
-          if (!dispatch) {
-            res.status(400).json({
-              error: `Batch ${c.batchNumber} not found`,
-            });
-            return;
-          }
+          if (dispatch) {
+            // totalQuantity is stored in the lot's cleanedQuantityUnit (e.g. KG)
+            const storedUnit = (dispatch as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit || 'KG';
+            const displayUnit = dispatch.inputRawMaterial.unitOfMeasurement;
+            const consumedInGrams = toGrams(actualQty, c.unit || displayUnit);
+            const consumedInStoredUnit = fromGrams(consumedInGrams, storedUnit);
+            const remaining = dispatch.totalQuantity - (dispatch.consumedQuantity || 0);
+            const remainingInDisplayUnit = fromGrams(toGrams(remaining, storedUnit), displayUnit);
 
-          // totalQuantity is stored in the lot's cleanedQuantityUnit (e.g. KG)
-          const storedUnit = (dispatch as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit || 'KG';
-          const displayUnit = dispatch.inputRawMaterial.unitOfMeasurement;
-          const consumedInGrams = toGrams(actualQty, c.unit || displayUnit);
-          const consumedInStoredUnit = fromGrams(consumedInGrams, storedUnit);
-          const remaining = dispatch.totalQuantity - (dispatch.consumedQuantity || 0);
-          const remainingInDisplayUnit = fromGrams(toGrams(remaining, storedUnit), displayUnit);
-
-          if (consumedInStoredUnit > remaining) {
-            const bomItem = bom.items.find((i) => i.rawMaterialId === c.rawMaterialId);
-            const materialName = bomItem?.rawMaterial?.name || c.rawMaterialId;
-            res.status(400).json({
-              error: `Insufficient batch quantity for ${materialName}. Required: ${actualQty} ${c.unit || displayUnit}, Available in batch ${c.batchNumber}: ${Math.round(remainingInDisplayUnit * 1000) / 1000} ${displayUnit}`,
+            if (consumedInStoredUnit > remaining) {
+              const bomItem = bom.items.find((i) => i.rawMaterialId === c.rawMaterialId);
+              const materialName = bomItem?.rawMaterial?.name || c.rawMaterialId;
+              res.status(400).json({
+                error: `Insufficient batch quantity for ${materialName}. Required: ${actualQty} ${c.unit || displayUnit}, Available in batch ${c.batchNumber}: ${Math.round(remainingInDisplayUnit * 1000) / 1000} ${displayUnit}`,
+              });
+              return;
+            }
+          } else {
+            // Fall back: batchNumber may be an OUTBOUND_FROM_GRINDING transferNumber (SFG sitting in warehouse)
+            const sfgTransfer = await prisma.materialTransfer.findUnique({
+              where: { transferNumber: c.batchNumber },
+              include: { lines: true },
             });
-            return;
+            if (!sfgTransfer || sfgTransfer.direction !== 'OUTBOUND_FROM_GRINDING') {
+              res.status(400).json({ error: `Batch ${c.batchNumber} not found` });
+              return;
+            }
+            const sfgLine = sfgTransfer.lines.find(
+              (l) =>
+                l.lineType === 'SFG' &&
+                (l.rawMaterialId === c.rawMaterialId || l.productName === c.rawMaterialName)
+            );
+            if (!sfgLine) {
+              res.status(400).json({ error: `No matching SFG line in transfer ${c.batchNumber}` });
+              return;
+            }
+            const lineUnit = sfgLine.unitOfMeasurement || 'KG';
+            const consumedInGrams = toGrams(actualQty, c.unit || lineUnit);
+            const consumedInLineUnit = fromGrams(consumedInGrams, lineUnit);
+            const remainingInLineUnit = (sfgLine.quantity || 0) - (sfgLine.transferredQuantity || 0);
+            if (consumedInLineUnit > remainingInLineUnit + 1e-6) {
+              const bomItem = bom.items.find((i) => i.rawMaterialId === c.rawMaterialId);
+              const materialName = bomItem?.rawMaterial?.name || c.rawMaterialId;
+              res.status(400).json({
+                error: `Insufficient SFG in transfer ${c.batchNumber} for ${materialName}. Required: ${actualQty} ${c.unit || lineUnit}, Available: ${Math.round(remainingInLineUnit * 1000) / 1000} ${lineUnit}`,
+              });
+              return;
+            }
           }
         } else if (c.sourceType === 'STOCK') {
           // Check current stock has enough quantity
@@ -403,7 +474,7 @@ export class ProductionController {
           if (actualQty <= 0) continue;
 
           if (c.sourceType === 'BATCH' && c.batchNumber) {
-            // Find the dispatch by batch number with its raw material and lots to know the stored unit
+            // First try a grinding dispatch (cleaning → grinding flow)
             const dispatchWithMaterial = await tx.grindingDispatch.findUnique({
               where: { batchNumber: c.batchNumber },
               include: {
@@ -425,6 +496,32 @@ export class ProductionController {
                   consumedQuantity: Math.round(newConsumed * 1000) / 1000,
                 },
               });
+            } else {
+              // Fall back: batchNumber may be an OUTBOUND_FROM_GRINDING transferNumber (SFG sitting in warehouse)
+              const sfgTransfer = await tx.materialTransfer.findUnique({
+                where: { transferNumber: c.batchNumber },
+                include: { lines: true },
+              });
+              if (sfgTransfer && sfgTransfer.direction === 'OUTBOUND_FROM_GRINDING') {
+                const sfgLine = sfgTransfer.lines.find(
+                  (l) =>
+                    l.lineType === 'SFG' &&
+                    (l.rawMaterialId === c.rawMaterialId || l.productName === c.rawMaterialName)
+                );
+                if (sfgLine) {
+                  const lineUnit = sfgLine.unitOfMeasurement || 'KG';
+                  const consumedInGrams = toGrams(actualQty, c.unit || lineUnit);
+                  const consumedInLineUnit = fromGrams(consumedInGrams, lineUnit);
+                  const newTransferred = (sfgLine.transferredQuantity || 0) + consumedInLineUnit;
+                  await tx.materialTransferLine.update({
+                    where: { id: sfgLine.id },
+                    data: {
+                      transferredQuantity: Math.round(newTransferred * 1000) / 1000,
+                      transferredUnit: lineUnit,
+                    },
+                  });
+                }
+              }
             }
           } else if (c.sourceType === 'STOCK') {
             // Deduct from current stock

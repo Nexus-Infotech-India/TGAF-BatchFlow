@@ -156,6 +156,7 @@ const ProductionEntry: React.FC = () => {
   // Production quantity
   const [productionQty, setProductionQty] = useState<number | null>(null);
   const [productionUnit, setProductionUnit] = useState<string>('KG');
+  const [confirmComplete, setConfirmComplete] = useState(false);
 
   const [consumptionLines, setConsumptionLines] = useState<ConsumptionLine[]>([]);
   const [outputLines, setOutputLines] = useState<OutputLine[]>([]);
@@ -453,6 +454,37 @@ const ProductionEntry: React.FC = () => {
 
   const handleCompleteProduction = async () => {
     if (!completeModal.posting) return;
+
+    // Block byproduct + scrap exceeding total production. Compare in grams so
+    // mismatched units still validate correctly.
+    const sfgOutput = completeModal.posting.outputs.find((o) => o.outputType === 'SFG');
+    const totalQty = sfgOutput?.quantity ?? completeModal.posting.productionQty ?? 0;
+    const totalUnit = sfgOutput?.unit ?? completeModal.posting.productionUnit ?? 'KG';
+    const UNIT_TO_GRAMS: Record<string, number> = {
+      gram: 1, grams: 1, g: 1,
+      kg: 1000, KG: 1000, Kg: 1000,
+      ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000,
+      quintal: 100_000, Quintal: 100_000,
+    };
+    const toG = (q: number, u: string) =>
+      q * (UNIT_TO_GRAMS[u] ?? UNIT_TO_GRAMS[u?.toLowerCase()] ?? 1);
+    const totalG = toG(totalQty, totalUnit);
+    const bpG = toG(completeModal.byproductQty || 0, completeModal.byproductUnit);
+    const scG = toG(completeModal.scrapQty || 0, completeModal.scrapUnit);
+    if (bpG + scG > totalG + 0.001) {
+      message.error(
+        `Byproduct + Scrap (${completeModal.byproductQty || 0} ${completeModal.byproductUnit} + ${completeModal.scrapQty || 0} ${completeModal.scrapUnit}) cannot exceed total production (${totalQty} ${totalUnit}).`
+      );
+      return;
+    }
+
+    // Open the in-page confirmation step (avoids z-index issues that nested Modal.confirm has)
+    setConfirmComplete(true);
+  };
+
+  // Actual API call — fired only after the user confirms in the in-page popup
+  const doCompleteProduction = async () => {
+    if (!completeModal.posting) return;
     setCompleteModal((prev) => ({ ...prev, loading: true }));
     try {
       await api.put(API_ROUTES.RAW.COMPLETE_PRODUCTION(completeModal.posting.id), {
@@ -464,7 +496,8 @@ const ProductionEntry: React.FC = () => {
         scrapName: completeModal.scrapName || 'Scrap',
       });
       message.success(`Production ${completeModal.posting.postingNumber} completed!`);
-      setCompleteModal((prev) => ({ ...prev, visible: false }));
+      setConfirmComplete(false);
+      setCompleteModal((prev) => ({ ...prev, visible: false, loading: false }));
       fetchData();
     } catch (err: any) {
       message.error(err?.response?.data?.error || 'Failed to complete production');
@@ -745,6 +778,7 @@ const ProductionEntry: React.FC = () => {
                           <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase">Material</th>
                           <th className="px-3 py-2 text-center text-xs font-semibold text-muted-foreground uppercase w-20">Source</th>
                           <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase">Expected</th>
+                          <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase w-32">Available</th>
                           <th className="px-3 py-2 text-right text-xs font-semibold text-muted-foreground uppercase w-36">Actual *</th>
                           {consumptionLines.some((l) => l.sourceType === 'BATCH') && (
                             <th className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground uppercase w-44">Batch</th>
@@ -776,6 +810,30 @@ const ProductionEntry: React.FC = () => {
                             <td className="px-3 py-2.5 text-sm text-right">
                               <span className="font-semibold text-emerald-600">{line.expectedQuantity}</span>{' '}
                               <span className="text-muted-foreground text-xs">{line.unit}</span>
+                            </td>
+                            <td className="px-3 py-2.5 text-sm text-right">
+                              {(() => {
+                                if (line.sourceType === 'BATCH') {
+                                  const avail = (line.availableBatches || []).reduce(
+                                    (s, b) => s + (b.remainingQuantity || 0),
+                                    0
+                                  );
+                                  const insufficient = avail <= 0 || line.actualQuantity > avail;
+                                  return (
+                                    <span className={`font-semibold ${insufficient ? 'text-red-500' : 'text-foreground'}`}>
+                                      {avail}{' '}
+                                      <span className="text-muted-foreground text-xs">{line.availableBatches?.[0]?.unit || line.unit}</span>
+                                    </span>
+                                  );
+                                }
+                                const insufficient = line.currentStockQty <= 0 || line.actualQuantity > line.currentStockQty;
+                                return (
+                                  <span className={`font-semibold ${insufficient ? 'text-red-500' : 'text-foreground'}`}>
+                                    {line.currentStockQty}{' '}
+                                    <span className="text-muted-foreground text-xs">{line.currentStockUnit}</span>
+                                  </span>
+                                );
+                              })()}
                             </td>
                             <td className="px-3 py-2.5">
                               <div className="flex items-center gap-1 justify-end">
@@ -1201,14 +1259,24 @@ const ProductionEntry: React.FC = () => {
           {/* Net SFG Calculation */}
           {(() => {
             const { total, unit, net } = getNetSfgInModal();
+            const UNIT_TO_GRAMS_LOCAL: Record<string, number> = {
+              gram: 1, grams: 1, g: 1, kg: 1000, KG: 1000, Kg: 1000,
+              ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000, quintal: 100_000, Quintal: 100_000,
+            };
+            const toGramsLocal = (q: number, u: string) =>
+              q * (UNIT_TO_GRAMS_LOCAL[u] ?? UNIT_TO_GRAMS_LOCAL[u?.toLowerCase()] ?? 1);
+            const totalG = toGramsLocal(total, unit);
+            const usedG = toGramsLocal(completeModal.byproductQty || 0, completeModal.byproductUnit) +
+                          toGramsLocal(completeModal.scrapQty || 0, completeModal.scrapUnit);
+            const exceeds = usedG > totalG + 0.001;
             return (
-              <div className="rounded-xl border-2 border-emerald-500/30 bg-emerald-50/40 p-4">
-                <div className="text-xs font-bold text-emerald-700 uppercase tracking-wider mb-2">
-                  Net SFG Output (after deductions)
+              <div className={`rounded-xl border-2 p-4 ${exceeds ? 'border-red-500/40 bg-red-50/40' : 'border-emerald-500/30 bg-emerald-50/40'}`}>
+                <div className={`text-xs font-bold uppercase tracking-wider mb-2 ${exceeds ? 'text-red-700' : 'text-emerald-700'}`}>
+                  {exceeds ? '⚠ Byproduct + Scrap exceeds Total Production' : 'Net SFG Output (after deductions)'}
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-black text-emerald-600">{net}</span>
-                  <span className="text-lg text-emerald-500 font-semibold">{unit}</span>
+                  <span className={`text-3xl font-black ${exceeds ? 'text-red-600' : 'text-emerald-600'}`}>{net}</span>
+                  <span className={`text-lg font-semibold ${exceeds ? 'text-red-500' : 'text-emerald-500'}`}>{unit}</span>
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
                   = {total} {unit} (total) — {completeModal.byproductQty || 0} {completeModal.byproductUnit} (byproduct) — {completeModal.scrapQty || 0} {completeModal.scrapUnit} (scrap)
@@ -1218,15 +1286,83 @@ const ProductionEntry: React.FC = () => {
           })()}
 
           {/* Action buttons */}
+          {(() => {
+            const UNIT_TO_GRAMS_LOCAL: Record<string, number> = {
+              gram: 1, grams: 1, g: 1, kg: 1000, KG: 1000, Kg: 1000,
+              ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000, quintal: 100_000, Quintal: 100_000,
+            };
+            const toGramsLocal = (q: number, u: string) =>
+              q * (UNIT_TO_GRAMS_LOCAL[u] ?? UNIT_TO_GRAMS_LOCAL[u?.toLowerCase()] ?? 1);
+            const { total, unit } = getNetSfgInModal();
+            const totalG = toGramsLocal(total, unit);
+            const usedG = toGramsLocal(completeModal.byproductQty || 0, completeModal.byproductUnit) +
+                          toGramsLocal(completeModal.scrapQty || 0, completeModal.scrapUnit);
+            const exceeds = usedG > totalG + 0.001;
+            return (
+              <div className="flex justify-end gap-2 pt-3 border-t border-border">
+                <Button onClick={() => setCompleteModal((p) => ({ ...p, visible: false }))}>Cancel</Button>
+                <Button
+                  type="primary"
+                  loading={completeModal.loading}
+                  disabled={exceeds}
+                  onClick={handleCompleteProduction}
+                  style={{ background: exceeds ? undefined : 'linear-gradient(135deg, #10b981, #059669)', border: 'none', fontWeight: 600 }}
+                >
+                  <CheckCircle size={12} className="mr-1 inline" /> Complete Production
+                </Button>
+              </div>
+            );
+          })()}
+        </div>
+      </Modal>
+
+      {/* ─── Confirmation popup before actually completing production ─── */}
+      <Modal
+        open={confirmComplete}
+        title={
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="text-amber-500" size={18} />
+            <span>Are you sure?</span>
+          </div>
+        }
+        onCancel={() => setConfirmComplete(false)}
+        footer={null}
+        width={460}
+        zIndex={1100}
+        maskClosable={false}
+      >
+        <div className="space-y-3 text-sm mt-2">
+          <div className="text-muted-foreground">
+            Please re-check the unit and quantity. Once confirmed, this production will be marked complete and cannot be reversed.
+          </div>
+          {completeModal.posting && (() => {
+            const sfgOutput = completeModal.posting.outputs.find((o) => o.outputType === 'SFG');
+            const totalQty = sfgOutput?.quantity ?? completeModal.posting.productionQty ?? 0;
+            const totalUnit = sfgOutput?.unit ?? completeModal.posting.productionUnit ?? 'KG';
+            const net = getNetSfgInModal();
+            return (
+              <div className="rounded-md border border-border bg-muted/20 p-3 space-y-1.5">
+                <div className="flex justify-between"><span className="text-muted-foreground">Total Production:</span><span className="font-semibold">{totalQty} {totalUnit}</span></div>
+                <div className="flex justify-between"><span className="text-amber-700">Byproduct:</span><span className="font-semibold">{completeModal.byproductQty || 0} {completeModal.byproductUnit}</span></div>
+                <div className="flex justify-between"><span className="text-red-600">Scrap:</span><span className="font-semibold">{completeModal.scrapQty || 0} {completeModal.scrapUnit}</span></div>
+                <div className="flex justify-between border-t border-border pt-1.5 mt-1.5">
+                  <span className="text-emerald-700 font-semibold">Net SFG:</span>
+                  <span className="font-bold text-emerald-700">{net.net} {net.unit}</span>
+                </div>
+              </div>
+            );
+          })()}
           <div className="flex justify-end gap-2 pt-3 border-t border-border">
-            <Button onClick={() => setCompleteModal((p) => ({ ...p, visible: false }))}>Cancel</Button>
+            <Button onClick={() => setConfirmComplete(false)} disabled={completeModal.loading}>
+              Cancel, Re-check
+            </Button>
             <Button
               type="primary"
               loading={completeModal.loading}
-              onClick={handleCompleteProduction}
+              onClick={doCompleteProduction}
               style={{ background: 'linear-gradient(135deg, #10b981, #059669)', border: 'none', fontWeight: 600 }}
             >
-              <CheckCircle size={12} className="mr-1 inline" /> Complete Production
+              <CheckCircle size={12} className="mr-1 inline" /> Yes, Complete Production
             </Button>
           </div>
         </div>
