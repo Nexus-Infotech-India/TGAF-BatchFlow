@@ -111,6 +111,7 @@ const OutboundTransfers: React.FC = () => {
       batchNumber: string;
       numberOfBags?: number;
       bagSizeKg?: number;
+      looseQty?: number;
       totalPackedQty?: number;
       totalPackedUnit?: string;
     }[];
@@ -204,6 +205,7 @@ const OutboundTransfers: React.FC = () => {
       const BAG_SIZE_KG = 25;
       const numberOfBags = Math.floor(qtyInKg / BAG_SIZE_KG);
       const totalPackedQty = numberOfBags * BAG_SIZE_KG; // in KG
+      const looseQty = Math.round(Math.max(0, qtyInKg - totalPackedQty) * 1000) / 1000; // KG loose remainder
 
       return {
         lineType: o.outputType,
@@ -214,6 +216,7 @@ const OutboundTransfers: React.FC = () => {
         batchNumber: posting.postingNumber,
         numberOfBags,
         bagSizeKg: BAG_SIZE_KG,
+        looseQty,
         totalPackedQty,
         totalPackedUnit: 'KG',
       };
@@ -257,10 +260,13 @@ const OutboundTransfers: React.FC = () => {
       message.error('No valid SFG line items to dispatch');
       return;
     }
-    // Validate that every SFG line has bags calculated
-    const linesWithNoBags = validLines.filter((l) => !l.numberOfBags || l.numberOfBags <= 0);
-    if (linesWithNoBags.length > 0) {
-      message.error('SFG quantity is too small to fill even one 25 KG bag');
+    // Allow lines with 0 bags as long as some loose qty is being transferred —
+    // this still flows the material to the destination as reusable loose stock.
+    const linesWithNothing = validLines.filter(
+      (l) => (!l.numberOfBags || l.numberOfBags <= 0) && (!l.looseQty || l.looseQty <= 0)
+    );
+    if (linesWithNothing.length > 0) {
+      message.error('Each SFG line must have either bagged qty or loose qty');
       return;
     }
     setSendModal((p) => ({ ...p, loading: true }));
@@ -278,6 +284,7 @@ const OutboundTransfers: React.FC = () => {
           batchNumber: l.batchNumber,
           numberOfBags: l.numberOfBags,
           bagSizeKg: l.bagSizeKg,
+          looseQty: l.looseQty,
           totalPackedQty: l.totalPackedQty,
           totalPackedUnit: l.totalPackedUnit,
         })),
@@ -494,15 +501,22 @@ const OutboundTransfers: React.FC = () => {
                                   {line.quantity} {line.unitOfMeasurement}
                                 </td>
                                 <td className="px-3 py-2 text-sm text-right">
-                                  {line.numberOfBags ? (
-                                    <span className="inline-flex items-center gap-1">
-                                      <span className="font-bold text-amber-600">{line.numberOfBags}</span>
-                                      <span className="text-muted-foreground">× {line.bagSizeKg || 25} KG</span>
-                                      <span className="text-xs text-indigo-600 ml-1">({line.totalPackedQty} KG)</span>
-                                    </span>
-                                  ) : (
-                                    <span className="text-muted-foreground">-</span>
-                                  )}
+                                  <div className="flex flex-col items-end gap-0.5">
+                                    {line.numberOfBags ? (
+                                      <span className="inline-flex items-center gap-1">
+                                        <span className="font-bold text-amber-600">{line.numberOfBags}</span>
+                                        <span className="text-muted-foreground">× {line.bagSizeKg || 25} KG</span>
+                                        <span className="text-xs text-indigo-600 ml-1">({line.totalPackedQty} KG)</span>
+                                      </span>
+                                    ) : (
+                                      <span className="text-muted-foreground">-</span>
+                                    )}
+                                    {(line.looseQty || 0) > 0 && (
+                                      <span className="text-[11px] text-emerald-700 font-semibold">
+                                        + {line.looseQty} KG loose
+                                      </span>
+                                    )}
+                                  </div>
                                 </td>
                                 <td className="px-3 py-2 text-sm text-primary font-mono">{line.batchNumber || '-'}</td>
                               </tr>

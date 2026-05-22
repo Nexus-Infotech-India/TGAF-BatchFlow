@@ -381,6 +381,8 @@ export const API_ROUTES = {
     GET_SFG_WAREHOUSE_STOCK: `${BASE_URL}/raw/transfers/sfg-warehouse-stock`,
     GET_PACKAGING_STOCK: `${BASE_URL}/raw/transfers/packaging-stock`,
     GET_PACKAGING_SOURCE_STOCK: `${BASE_URL}/raw/transfers/packaging-source-stock`,
+    GET_LOOSE_STOCK: `${BASE_URL}/raw/transfers/loose-stock`,
+    REBAG_LOOSE_STOCK: `${BASE_URL}/raw/transfers/loose-stock/rebag`,
 
     // Production Posting
     POST_PRODUCTION: `${BASE_URL}/raw/production/post`,

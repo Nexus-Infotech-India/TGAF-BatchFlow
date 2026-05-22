@@ -274,6 +274,11 @@ export type Warehouse = $Result.DefaultSelection<Prisma.$WarehousePayload>
  */
 export type Location = $Result.DefaultSelection<Prisma.$LocationPayload>
 /**
+ * Model LooseStockLedger
+ * 
+ */
+export type LooseStockLedger = $Result.DefaultSelection<Prisma.$LooseStockLedgerPayload>
+/**
  * Model MaterialTransfer
  * 
  */
@@ -1458,6 +1463,16 @@ export class PrismaClient<
   get location(): Prisma.LocationDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.looseStockLedger`: Exposes CRUD operations for the **LooseStockLedger** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more LooseStockLedgers
+    * const looseStockLedgers = await prisma.looseStockLedger.findMany()
+    * ```
+    */
+  get looseStockLedger(): Prisma.LooseStockLedgerDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.materialTransfer`: Exposes CRUD operations for the **MaterialTransfer** model.
     * Example usage:
     * ```ts
@@ -2289,6 +2304,7 @@ export namespace Prisma {
     StockEntry: 'StockEntry',
     Warehouse: 'Warehouse',
     Location: 'Location',
+    LooseStockLedger: 'LooseStockLedger',
     MaterialTransfer: 'MaterialTransfer',
     MaterialTransferLine: 'MaterialTransferLine',
     ProductionPosting: 'ProductionPosting',
@@ -2341,7 +2357,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "fGPackagingMaster" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "fGProductionMachinePackaging" | "fGDowntimeRecord" | "machine" | "fGProductionVerification" | "fGQualityReport" | "fGQualityParameter"
+      modelProps: "activityLog" | "batch" | "exportLog" | "methodology" | "notification" | "permission" | "product" | "productParameter" | "role" | "unitOfMeasurement" | "user" | "batchDraft" | "standard" | "standardCategory" | "productStandardCategory" | "standardParameter" | "standardDefinition" | "batchParameterValue" | "trainingCalendar" | "training" | "trainingSession" | "trainingDocument" | "participant" | "trainingParticipant" | "attendance" | "trainingPhoto" | "trainingFeedback" | "feedbackForm" | "trainingFollowup" | "trainingNotification" | "trainingInviteToken" | "trainingSessionPhoto" | "auditor" | "audit" | "auditInspectionItem" | "department" | "finding" | "correctiveAction" | "auditDocument" | "preAuditChecklistItem" | "auditReminder" | "auditNotification" | "vendor" | "rawMaterialProduct" | "fGPackagingMaster" | "purchaseOrder" | "purchaseOrderItem" | "receivalEntry" | "receivalBag" | "stockEntry" | "warehouse" | "location" | "looseStockLedger" | "materialTransfer" | "materialTransferLine" | "productionPosting" | "productionConsumption" | "productionOutput" | "cleaningJob" | "cleaningLog" | "unfinishedStock" | "processingJob" | "finishedGood" | "byProduct" | "currentStock" | "transactionLog" | "reusableStock" | "rMQualityReport" | "rMQualityParameter" | "gRNbyPo" | "cleaningLot" | "processingBatchLot" | "billOfMaterial" | "bOMItem" | "seedWastageRecord" | "grindingDispatch" | "grindingDispatchLot" | "fGBatch" | "fGBatchConsumption" | "fGProductionEntry" | "fGProductionMachineEntry" | "fGProductionMachinePackaging" | "fGDowntimeRecord" | "machine" | "fGProductionVerification" | "fGQualityReport" | "fGQualityParameter"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -6193,6 +6209,80 @@ export namespace Prisma {
           }
         }
       }
+      LooseStockLedger: {
+        payload: Prisma.$LooseStockLedgerPayload<ExtArgs>
+        fields: Prisma.LooseStockLedgerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LooseStockLedgerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LooseStockLedgerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload>
+          }
+          findFirst: {
+            args: Prisma.LooseStockLedgerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LooseStockLedgerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload>
+          }
+          findMany: {
+            args: Prisma.LooseStockLedgerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload>[]
+          }
+          create: {
+            args: Prisma.LooseStockLedgerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload>
+          }
+          createMany: {
+            args: Prisma.LooseStockLedgerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LooseStockLedgerCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload>[]
+          }
+          delete: {
+            args: Prisma.LooseStockLedgerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload>
+          }
+          update: {
+            args: Prisma.LooseStockLedgerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload>
+          }
+          deleteMany: {
+            args: Prisma.LooseStockLedgerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LooseStockLedgerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LooseStockLedgerUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload>[]
+          }
+          upsert: {
+            args: Prisma.LooseStockLedgerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LooseStockLedgerPayload>
+          }
+          aggregate: {
+            args: Prisma.LooseStockLedgerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLooseStockLedger>
+          }
+          groupBy: {
+            args: Prisma.LooseStockLedgerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LooseStockLedgerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LooseStockLedgerCountArgs<ExtArgs>
+            result: $Utils.Optional<LooseStockLedgerCountAggregateOutputType> | number
+          }
+        }
+      }
       MaterialTransfer: {
         payload: Prisma.$MaterialTransferPayload<ExtArgs>
         fields: Prisma.MaterialTransferFieldRefs
@@ -8857,6 +8947,7 @@ export namespace Prisma {
     stockEntry?: StockEntryOmit
     warehouse?: WarehouseOmit
     location?: LocationOmit
+    looseStockLedger?: LooseStockLedgerOmit
     materialTransfer?: MaterialTransferOmit
     materialTransferLine?: MaterialTransferLineOmit
     productionPosting?: ProductionPostingOmit
@@ -10611,6 +10702,7 @@ export namespace Prisma {
     transfersTo: number
     dispatchesFrom: number
     dispatchesTo: number
+    looseStockEntries: number
   }
 
   export type LocationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10619,6 +10711,7 @@ export namespace Prisma {
     transfersTo?: boolean | LocationCountOutputTypeCountTransfersToArgs
     dispatchesFrom?: boolean | LocationCountOutputTypeCountDispatchesFromArgs
     dispatchesTo?: boolean | LocationCountOutputTypeCountDispatchesToArgs
+    looseStockEntries?: boolean | LocationCountOutputTypeCountLooseStockEntriesArgs
   }
 
   // Custom InputTypes
@@ -10665,6 +10758,13 @@ export namespace Prisma {
    */
   export type LocationCountOutputTypeCountDispatchesToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GrindingDispatchWhereInput
+  }
+
+  /**
+   * LocationCountOutputType without action
+   */
+  export type LocationCountOutputTypeCountLooseStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LooseStockLedgerWhereInput
   }
 
 
@@ -72447,6 +72547,7 @@ export namespace Prisma {
     transfersTo?: boolean | Location$transfersToArgs<ExtArgs>
     dispatchesFrom?: boolean | Location$dispatchesFromArgs<ExtArgs>
     dispatchesTo?: boolean | Location$dispatchesToArgs<ExtArgs>
+    looseStockEntries?: boolean | Location$looseStockEntriesArgs<ExtArgs>
     _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["location"]>
 
@@ -72493,6 +72594,7 @@ export namespace Prisma {
     transfersTo?: boolean | Location$transfersToArgs<ExtArgs>
     dispatchesFrom?: boolean | Location$dispatchesFromArgs<ExtArgs>
     dispatchesTo?: boolean | Location$dispatchesToArgs<ExtArgs>
+    looseStockEntries?: boolean | Location$looseStockEntriesArgs<ExtArgs>
     _count?: boolean | LocationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -72506,6 +72608,7 @@ export namespace Prisma {
       transfersTo: Prisma.$MaterialTransferPayload<ExtArgs>[]
       dispatchesFrom: Prisma.$GrindingDispatchPayload<ExtArgs>[]
       dispatchesTo: Prisma.$GrindingDispatchPayload<ExtArgs>[]
+      looseStockEntries: Prisma.$LooseStockLedgerPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -72916,6 +73019,7 @@ export namespace Prisma {
     transfersTo<T extends Location$transfersToArgs<ExtArgs> = {}>(args?: Subset<T, Location$transfersToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MaterialTransferPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dispatchesFrom<T extends Location$dispatchesFromArgs<ExtArgs> = {}>(args?: Subset<T, Location$dispatchesFromArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     dispatchesTo<T extends Location$dispatchesToArgs<ExtArgs> = {}>(args?: Subset<T, Location$dispatchesToArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GrindingDispatchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    looseStockEntries<T extends Location$looseStockEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Location$looseStockEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -73462,6 +73566,30 @@ export namespace Prisma {
   }
 
   /**
+   * Location.looseStockEntries
+   */
+  export type Location$looseStockEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
+    where?: LooseStockLedgerWhereInput
+    orderBy?: LooseStockLedgerOrderByWithRelationInput | LooseStockLedgerOrderByWithRelationInput[]
+    cursor?: LooseStockLedgerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LooseStockLedgerScalarFieldEnum | LooseStockLedgerScalarFieldEnum[]
+  }
+
+  /**
    * Location without action
    */
   export type LocationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -73477,6 +73605,1176 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: LocationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model LooseStockLedger
+   */
+
+  export type AggregateLooseStockLedger = {
+    _count: LooseStockLedgerCountAggregateOutputType | null
+    _avg: LooseStockLedgerAvgAggregateOutputType | null
+    _sum: LooseStockLedgerSumAggregateOutputType | null
+    _min: LooseStockLedgerMinAggregateOutputType | null
+    _max: LooseStockLedgerMaxAggregateOutputType | null
+  }
+
+  export type LooseStockLedgerAvgAggregateOutputType = {
+    delta: number | null
+  }
+
+  export type LooseStockLedgerSumAggregateOutputType = {
+    delta: number | null
+  }
+
+  export type LooseStockLedgerMinAggregateOutputType = {
+    id: string | null
+    locationId: string | null
+    rawMaterialId: string | null
+    skuCode: string | null
+    productName: string | null
+    unitOfMeasurement: string | null
+    delta: number | null
+    reason: string | null
+    sourceTransferId: string | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type LooseStockLedgerMaxAggregateOutputType = {
+    id: string | null
+    locationId: string | null
+    rawMaterialId: string | null
+    skuCode: string | null
+    productName: string | null
+    unitOfMeasurement: string | null
+    delta: number | null
+    reason: string | null
+    sourceTransferId: string | null
+    notes: string | null
+    createdAt: Date | null
+  }
+
+  export type LooseStockLedgerCountAggregateOutputType = {
+    id: number
+    locationId: number
+    rawMaterialId: number
+    skuCode: number
+    productName: number
+    unitOfMeasurement: number
+    delta: number
+    reason: number
+    sourceTransferId: number
+    notes: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type LooseStockLedgerAvgAggregateInputType = {
+    delta?: true
+  }
+
+  export type LooseStockLedgerSumAggregateInputType = {
+    delta?: true
+  }
+
+  export type LooseStockLedgerMinAggregateInputType = {
+    id?: true
+    locationId?: true
+    rawMaterialId?: true
+    skuCode?: true
+    productName?: true
+    unitOfMeasurement?: true
+    delta?: true
+    reason?: true
+    sourceTransferId?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type LooseStockLedgerMaxAggregateInputType = {
+    id?: true
+    locationId?: true
+    rawMaterialId?: true
+    skuCode?: true
+    productName?: true
+    unitOfMeasurement?: true
+    delta?: true
+    reason?: true
+    sourceTransferId?: true
+    notes?: true
+    createdAt?: true
+  }
+
+  export type LooseStockLedgerCountAggregateInputType = {
+    id?: true
+    locationId?: true
+    rawMaterialId?: true
+    skuCode?: true
+    productName?: true
+    unitOfMeasurement?: true
+    delta?: true
+    reason?: true
+    sourceTransferId?: true
+    notes?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type LooseStockLedgerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LooseStockLedger to aggregate.
+     */
+    where?: LooseStockLedgerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LooseStockLedgers to fetch.
+     */
+    orderBy?: LooseStockLedgerOrderByWithRelationInput | LooseStockLedgerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LooseStockLedgerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LooseStockLedgers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LooseStockLedgers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned LooseStockLedgers
+    **/
+    _count?: true | LooseStockLedgerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LooseStockLedgerAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LooseStockLedgerSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LooseStockLedgerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LooseStockLedgerMaxAggregateInputType
+  }
+
+  export type GetLooseStockLedgerAggregateType<T extends LooseStockLedgerAggregateArgs> = {
+        [P in keyof T & keyof AggregateLooseStockLedger]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLooseStockLedger[P]>
+      : GetScalarType<T[P], AggregateLooseStockLedger[P]>
+  }
+
+
+
+
+  export type LooseStockLedgerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LooseStockLedgerWhereInput
+    orderBy?: LooseStockLedgerOrderByWithAggregationInput | LooseStockLedgerOrderByWithAggregationInput[]
+    by: LooseStockLedgerScalarFieldEnum[] | LooseStockLedgerScalarFieldEnum
+    having?: LooseStockLedgerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LooseStockLedgerCountAggregateInputType | true
+    _avg?: LooseStockLedgerAvgAggregateInputType
+    _sum?: LooseStockLedgerSumAggregateInputType
+    _min?: LooseStockLedgerMinAggregateInputType
+    _max?: LooseStockLedgerMaxAggregateInputType
+  }
+
+  export type LooseStockLedgerGroupByOutputType = {
+    id: string
+    locationId: string
+    rawMaterialId: string | null
+    skuCode: string | null
+    productName: string | null
+    unitOfMeasurement: string
+    delta: number
+    reason: string
+    sourceTransferId: string | null
+    notes: string | null
+    createdAt: Date
+    _count: LooseStockLedgerCountAggregateOutputType | null
+    _avg: LooseStockLedgerAvgAggregateOutputType | null
+    _sum: LooseStockLedgerSumAggregateOutputType | null
+    _min: LooseStockLedgerMinAggregateOutputType | null
+    _max: LooseStockLedgerMaxAggregateOutputType | null
+  }
+
+  type GetLooseStockLedgerGroupByPayload<T extends LooseStockLedgerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LooseStockLedgerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LooseStockLedgerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LooseStockLedgerGroupByOutputType[P]>
+            : GetScalarType<T[P], LooseStockLedgerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LooseStockLedgerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    locationId?: boolean
+    rawMaterialId?: boolean
+    skuCode?: boolean
+    productName?: boolean
+    unitOfMeasurement?: boolean
+    delta?: boolean
+    reason?: boolean
+    sourceTransferId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["looseStockLedger"]>
+
+  export type LooseStockLedgerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    locationId?: boolean
+    rawMaterialId?: boolean
+    skuCode?: boolean
+    productName?: boolean
+    unitOfMeasurement?: boolean
+    delta?: boolean
+    reason?: boolean
+    sourceTransferId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["looseStockLedger"]>
+
+  export type LooseStockLedgerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    locationId?: boolean
+    rawMaterialId?: boolean
+    skuCode?: boolean
+    productName?: boolean
+    unitOfMeasurement?: boolean
+    delta?: boolean
+    reason?: boolean
+    sourceTransferId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["looseStockLedger"]>
+
+  export type LooseStockLedgerSelectScalar = {
+    id?: boolean
+    locationId?: boolean
+    rawMaterialId?: boolean
+    skuCode?: boolean
+    productName?: boolean
+    unitOfMeasurement?: boolean
+    delta?: boolean
+    reason?: boolean
+    sourceTransferId?: boolean
+    notes?: boolean
+    createdAt?: boolean
+  }
+
+  export type LooseStockLedgerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "locationId" | "rawMaterialId" | "skuCode" | "productName" | "unitOfMeasurement" | "delta" | "reason" | "sourceTransferId" | "notes" | "createdAt", ExtArgs["result"]["looseStockLedger"]>
+  export type LooseStockLedgerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+  }
+  export type LooseStockLedgerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+  }
+  export type LooseStockLedgerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    location?: boolean | LocationDefaultArgs<ExtArgs>
+  }
+
+  export type $LooseStockLedgerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "LooseStockLedger"
+    objects: {
+      location: Prisma.$LocationPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      locationId: string
+      rawMaterialId: string | null
+      skuCode: string | null
+      productName: string | null
+      unitOfMeasurement: string
+      delta: number
+      reason: string
+      sourceTransferId: string | null
+      notes: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["looseStockLedger"]>
+    composites: {}
+  }
+
+  type LooseStockLedgerGetPayload<S extends boolean | null | undefined | LooseStockLedgerDefaultArgs> = $Result.GetResult<Prisma.$LooseStockLedgerPayload, S>
+
+  type LooseStockLedgerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LooseStockLedgerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LooseStockLedgerCountAggregateInputType | true
+    }
+
+  export interface LooseStockLedgerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['LooseStockLedger'], meta: { name: 'LooseStockLedger' } }
+    /**
+     * Find zero or one LooseStockLedger that matches the filter.
+     * @param {LooseStockLedgerFindUniqueArgs} args - Arguments to find a LooseStockLedger
+     * @example
+     * // Get one LooseStockLedger
+     * const looseStockLedger = await prisma.looseStockLedger.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LooseStockLedgerFindUniqueArgs>(args: SelectSubset<T, LooseStockLedgerFindUniqueArgs<ExtArgs>>): Prisma__LooseStockLedgerClient<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one LooseStockLedger that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LooseStockLedgerFindUniqueOrThrowArgs} args - Arguments to find a LooseStockLedger
+     * @example
+     * // Get one LooseStockLedger
+     * const looseStockLedger = await prisma.looseStockLedger.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LooseStockLedgerFindUniqueOrThrowArgs>(args: SelectSubset<T, LooseStockLedgerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LooseStockLedgerClient<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LooseStockLedger that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LooseStockLedgerFindFirstArgs} args - Arguments to find a LooseStockLedger
+     * @example
+     * // Get one LooseStockLedger
+     * const looseStockLedger = await prisma.looseStockLedger.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LooseStockLedgerFindFirstArgs>(args?: SelectSubset<T, LooseStockLedgerFindFirstArgs<ExtArgs>>): Prisma__LooseStockLedgerClient<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first LooseStockLedger that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LooseStockLedgerFindFirstOrThrowArgs} args - Arguments to find a LooseStockLedger
+     * @example
+     * // Get one LooseStockLedger
+     * const looseStockLedger = await prisma.looseStockLedger.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LooseStockLedgerFindFirstOrThrowArgs>(args?: SelectSubset<T, LooseStockLedgerFindFirstOrThrowArgs<ExtArgs>>): Prisma__LooseStockLedgerClient<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more LooseStockLedgers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LooseStockLedgerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all LooseStockLedgers
+     * const looseStockLedgers = await prisma.looseStockLedger.findMany()
+     * 
+     * // Get first 10 LooseStockLedgers
+     * const looseStockLedgers = await prisma.looseStockLedger.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const looseStockLedgerWithIdOnly = await prisma.looseStockLedger.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LooseStockLedgerFindManyArgs>(args?: SelectSubset<T, LooseStockLedgerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a LooseStockLedger.
+     * @param {LooseStockLedgerCreateArgs} args - Arguments to create a LooseStockLedger.
+     * @example
+     * // Create one LooseStockLedger
+     * const LooseStockLedger = await prisma.looseStockLedger.create({
+     *   data: {
+     *     // ... data to create a LooseStockLedger
+     *   }
+     * })
+     * 
+     */
+    create<T extends LooseStockLedgerCreateArgs>(args: SelectSubset<T, LooseStockLedgerCreateArgs<ExtArgs>>): Prisma__LooseStockLedgerClient<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many LooseStockLedgers.
+     * @param {LooseStockLedgerCreateManyArgs} args - Arguments to create many LooseStockLedgers.
+     * @example
+     * // Create many LooseStockLedgers
+     * const looseStockLedger = await prisma.looseStockLedger.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LooseStockLedgerCreateManyArgs>(args?: SelectSubset<T, LooseStockLedgerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many LooseStockLedgers and returns the data saved in the database.
+     * @param {LooseStockLedgerCreateManyAndReturnArgs} args - Arguments to create many LooseStockLedgers.
+     * @example
+     * // Create many LooseStockLedgers
+     * const looseStockLedger = await prisma.looseStockLedger.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many LooseStockLedgers and only return the `id`
+     * const looseStockLedgerWithIdOnly = await prisma.looseStockLedger.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LooseStockLedgerCreateManyAndReturnArgs>(args?: SelectSubset<T, LooseStockLedgerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a LooseStockLedger.
+     * @param {LooseStockLedgerDeleteArgs} args - Arguments to delete one LooseStockLedger.
+     * @example
+     * // Delete one LooseStockLedger
+     * const LooseStockLedger = await prisma.looseStockLedger.delete({
+     *   where: {
+     *     // ... filter to delete one LooseStockLedger
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LooseStockLedgerDeleteArgs>(args: SelectSubset<T, LooseStockLedgerDeleteArgs<ExtArgs>>): Prisma__LooseStockLedgerClient<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one LooseStockLedger.
+     * @param {LooseStockLedgerUpdateArgs} args - Arguments to update one LooseStockLedger.
+     * @example
+     * // Update one LooseStockLedger
+     * const looseStockLedger = await prisma.looseStockLedger.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LooseStockLedgerUpdateArgs>(args: SelectSubset<T, LooseStockLedgerUpdateArgs<ExtArgs>>): Prisma__LooseStockLedgerClient<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more LooseStockLedgers.
+     * @param {LooseStockLedgerDeleteManyArgs} args - Arguments to filter LooseStockLedgers to delete.
+     * @example
+     * // Delete a few LooseStockLedgers
+     * const { count } = await prisma.looseStockLedger.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LooseStockLedgerDeleteManyArgs>(args?: SelectSubset<T, LooseStockLedgerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LooseStockLedgers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LooseStockLedgerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many LooseStockLedgers
+     * const looseStockLedger = await prisma.looseStockLedger.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LooseStockLedgerUpdateManyArgs>(args: SelectSubset<T, LooseStockLedgerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more LooseStockLedgers and returns the data updated in the database.
+     * @param {LooseStockLedgerUpdateManyAndReturnArgs} args - Arguments to update many LooseStockLedgers.
+     * @example
+     * // Update many LooseStockLedgers
+     * const looseStockLedger = await prisma.looseStockLedger.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more LooseStockLedgers and only return the `id`
+     * const looseStockLedgerWithIdOnly = await prisma.looseStockLedger.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LooseStockLedgerUpdateManyAndReturnArgs>(args: SelectSubset<T, LooseStockLedgerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one LooseStockLedger.
+     * @param {LooseStockLedgerUpsertArgs} args - Arguments to update or create a LooseStockLedger.
+     * @example
+     * // Update or create a LooseStockLedger
+     * const looseStockLedger = await prisma.looseStockLedger.upsert({
+     *   create: {
+     *     // ... data to create a LooseStockLedger
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the LooseStockLedger we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LooseStockLedgerUpsertArgs>(args: SelectSubset<T, LooseStockLedgerUpsertArgs<ExtArgs>>): Prisma__LooseStockLedgerClient<$Result.GetResult<Prisma.$LooseStockLedgerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of LooseStockLedgers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LooseStockLedgerCountArgs} args - Arguments to filter LooseStockLedgers to count.
+     * @example
+     * // Count the number of LooseStockLedgers
+     * const count = await prisma.looseStockLedger.count({
+     *   where: {
+     *     // ... the filter for the LooseStockLedgers we want to count
+     *   }
+     * })
+    **/
+    count<T extends LooseStockLedgerCountArgs>(
+      args?: Subset<T, LooseStockLedgerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LooseStockLedgerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a LooseStockLedger.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LooseStockLedgerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LooseStockLedgerAggregateArgs>(args: Subset<T, LooseStockLedgerAggregateArgs>): Prisma.PrismaPromise<GetLooseStockLedgerAggregateType<T>>
+
+    /**
+     * Group by LooseStockLedger.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LooseStockLedgerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LooseStockLedgerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LooseStockLedgerGroupByArgs['orderBy'] }
+        : { orderBy?: LooseStockLedgerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LooseStockLedgerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLooseStockLedgerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the LooseStockLedger model
+   */
+  readonly fields: LooseStockLedgerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for LooseStockLedger.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LooseStockLedgerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    location<T extends LocationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LocationDefaultArgs<ExtArgs>>): Prisma__LocationClient<$Result.GetResult<Prisma.$LocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the LooseStockLedger model
+   */
+  interface LooseStockLedgerFieldRefs {
+    readonly id: FieldRef<"LooseStockLedger", 'String'>
+    readonly locationId: FieldRef<"LooseStockLedger", 'String'>
+    readonly rawMaterialId: FieldRef<"LooseStockLedger", 'String'>
+    readonly skuCode: FieldRef<"LooseStockLedger", 'String'>
+    readonly productName: FieldRef<"LooseStockLedger", 'String'>
+    readonly unitOfMeasurement: FieldRef<"LooseStockLedger", 'String'>
+    readonly delta: FieldRef<"LooseStockLedger", 'Float'>
+    readonly reason: FieldRef<"LooseStockLedger", 'String'>
+    readonly sourceTransferId: FieldRef<"LooseStockLedger", 'String'>
+    readonly notes: FieldRef<"LooseStockLedger", 'String'>
+    readonly createdAt: FieldRef<"LooseStockLedger", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * LooseStockLedger findUnique
+   */
+  export type LooseStockLedgerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
+    /**
+     * Filter, which LooseStockLedger to fetch.
+     */
+    where: LooseStockLedgerWhereUniqueInput
+  }
+
+  /**
+   * LooseStockLedger findUniqueOrThrow
+   */
+  export type LooseStockLedgerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
+    /**
+     * Filter, which LooseStockLedger to fetch.
+     */
+    where: LooseStockLedgerWhereUniqueInput
+  }
+
+  /**
+   * LooseStockLedger findFirst
+   */
+  export type LooseStockLedgerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
+    /**
+     * Filter, which LooseStockLedger to fetch.
+     */
+    where?: LooseStockLedgerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LooseStockLedgers to fetch.
+     */
+    orderBy?: LooseStockLedgerOrderByWithRelationInput | LooseStockLedgerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LooseStockLedgers.
+     */
+    cursor?: LooseStockLedgerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LooseStockLedgers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LooseStockLedgers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LooseStockLedgers.
+     */
+    distinct?: LooseStockLedgerScalarFieldEnum | LooseStockLedgerScalarFieldEnum[]
+  }
+
+  /**
+   * LooseStockLedger findFirstOrThrow
+   */
+  export type LooseStockLedgerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
+    /**
+     * Filter, which LooseStockLedger to fetch.
+     */
+    where?: LooseStockLedgerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LooseStockLedgers to fetch.
+     */
+    orderBy?: LooseStockLedgerOrderByWithRelationInput | LooseStockLedgerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for LooseStockLedgers.
+     */
+    cursor?: LooseStockLedgerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LooseStockLedgers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LooseStockLedgers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of LooseStockLedgers.
+     */
+    distinct?: LooseStockLedgerScalarFieldEnum | LooseStockLedgerScalarFieldEnum[]
+  }
+
+  /**
+   * LooseStockLedger findMany
+   */
+  export type LooseStockLedgerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
+    /**
+     * Filter, which LooseStockLedgers to fetch.
+     */
+    where?: LooseStockLedgerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of LooseStockLedgers to fetch.
+     */
+    orderBy?: LooseStockLedgerOrderByWithRelationInput | LooseStockLedgerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing LooseStockLedgers.
+     */
+    cursor?: LooseStockLedgerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` LooseStockLedgers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` LooseStockLedgers.
+     */
+    skip?: number
+    distinct?: LooseStockLedgerScalarFieldEnum | LooseStockLedgerScalarFieldEnum[]
+  }
+
+  /**
+   * LooseStockLedger create
+   */
+  export type LooseStockLedgerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a LooseStockLedger.
+     */
+    data: XOR<LooseStockLedgerCreateInput, LooseStockLedgerUncheckedCreateInput>
+  }
+
+  /**
+   * LooseStockLedger createMany
+   */
+  export type LooseStockLedgerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many LooseStockLedgers.
+     */
+    data: LooseStockLedgerCreateManyInput | LooseStockLedgerCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * LooseStockLedger createManyAndReturn
+   */
+  export type LooseStockLedgerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * The data used to create many LooseStockLedgers.
+     */
+    data: LooseStockLedgerCreateManyInput | LooseStockLedgerCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LooseStockLedger update
+   */
+  export type LooseStockLedgerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a LooseStockLedger.
+     */
+    data: XOR<LooseStockLedgerUpdateInput, LooseStockLedgerUncheckedUpdateInput>
+    /**
+     * Choose, which LooseStockLedger to update.
+     */
+    where: LooseStockLedgerWhereUniqueInput
+  }
+
+  /**
+   * LooseStockLedger updateMany
+   */
+  export type LooseStockLedgerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update LooseStockLedgers.
+     */
+    data: XOR<LooseStockLedgerUpdateManyMutationInput, LooseStockLedgerUncheckedUpdateManyInput>
+    /**
+     * Filter which LooseStockLedgers to update
+     */
+    where?: LooseStockLedgerWhereInput
+    /**
+     * Limit how many LooseStockLedgers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * LooseStockLedger updateManyAndReturn
+   */
+  export type LooseStockLedgerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * The data used to update LooseStockLedgers.
+     */
+    data: XOR<LooseStockLedgerUpdateManyMutationInput, LooseStockLedgerUncheckedUpdateManyInput>
+    /**
+     * Filter which LooseStockLedgers to update
+     */
+    where?: LooseStockLedgerWhereInput
+    /**
+     * Limit how many LooseStockLedgers to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * LooseStockLedger upsert
+   */
+  export type LooseStockLedgerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the LooseStockLedger to update in case it exists.
+     */
+    where: LooseStockLedgerWhereUniqueInput
+    /**
+     * In case the LooseStockLedger found by the `where` argument doesn't exist, create a new LooseStockLedger with this data.
+     */
+    create: XOR<LooseStockLedgerCreateInput, LooseStockLedgerUncheckedCreateInput>
+    /**
+     * In case the LooseStockLedger was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LooseStockLedgerUpdateInput, LooseStockLedgerUncheckedUpdateInput>
+  }
+
+  /**
+   * LooseStockLedger delete
+   */
+  export type LooseStockLedgerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
+    /**
+     * Filter which LooseStockLedger to delete.
+     */
+    where: LooseStockLedgerWhereUniqueInput
+  }
+
+  /**
+   * LooseStockLedger deleteMany
+   */
+  export type LooseStockLedgerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which LooseStockLedgers to delete
+     */
+    where?: LooseStockLedgerWhereInput
+    /**
+     * Limit how many LooseStockLedgers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * LooseStockLedger without action
+   */
+  export type LooseStockLedgerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LooseStockLedger
+     */
+    select?: LooseStockLedgerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LooseStockLedger
+     */
+    omit?: LooseStockLedgerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LooseStockLedgerInclude<ExtArgs> | null
   }
 
 
@@ -74710,6 +76008,7 @@ export namespace Prisma {
     transferredQuantity: number | null
     numberOfBags: number | null
     bagSizeKg: number | null
+    looseQty: number | null
     totalPackedQty: number | null
   }
 
@@ -74718,6 +76017,7 @@ export namespace Prisma {
     transferredQuantity: number | null
     numberOfBags: number | null
     bagSizeKg: number | null
+    looseQty: number | null
     totalPackedQty: number | null
   }
 
@@ -74736,6 +76036,7 @@ export namespace Prisma {
     cleaningLotId: string | null
     numberOfBags: number | null
     bagSizeKg: number | null
+    looseQty: number | null
     totalPackedQty: number | null
     totalPackedUnit: string | null
     createdAt: Date | null
@@ -74756,6 +76057,7 @@ export namespace Prisma {
     cleaningLotId: string | null
     numberOfBags: number | null
     bagSizeKg: number | null
+    looseQty: number | null
     totalPackedQty: number | null
     totalPackedUnit: string | null
     createdAt: Date | null
@@ -74776,6 +76078,7 @@ export namespace Prisma {
     cleaningLotId: number
     numberOfBags: number
     bagSizeKg: number
+    looseQty: number
     totalPackedQty: number
     totalPackedUnit: number
     createdAt: number
@@ -74788,6 +76091,7 @@ export namespace Prisma {
     transferredQuantity?: true
     numberOfBags?: true
     bagSizeKg?: true
+    looseQty?: true
     totalPackedQty?: true
   }
 
@@ -74796,6 +76100,7 @@ export namespace Prisma {
     transferredQuantity?: true
     numberOfBags?: true
     bagSizeKg?: true
+    looseQty?: true
     totalPackedQty?: true
   }
 
@@ -74814,6 +76119,7 @@ export namespace Prisma {
     cleaningLotId?: true
     numberOfBags?: true
     bagSizeKg?: true
+    looseQty?: true
     totalPackedQty?: true
     totalPackedUnit?: true
     createdAt?: true
@@ -74834,6 +76140,7 @@ export namespace Prisma {
     cleaningLotId?: true
     numberOfBags?: true
     bagSizeKg?: true
+    looseQty?: true
     totalPackedQty?: true
     totalPackedUnit?: true
     createdAt?: true
@@ -74854,6 +76161,7 @@ export namespace Prisma {
     cleaningLotId?: true
     numberOfBags?: true
     bagSizeKg?: true
+    looseQty?: true
     totalPackedQty?: true
     totalPackedUnit?: true
     createdAt?: true
@@ -74961,6 +76269,7 @@ export namespace Prisma {
     cleaningLotId: string | null
     numberOfBags: number | null
     bagSizeKg: number | null
+    looseQty: number | null
     totalPackedQty: number | null
     totalPackedUnit: string | null
     createdAt: Date
@@ -75000,6 +76309,7 @@ export namespace Prisma {
     cleaningLotId?: boolean
     numberOfBags?: boolean
     bagSizeKg?: boolean
+    looseQty?: boolean
     totalPackedQty?: boolean
     totalPackedUnit?: boolean
     createdAt?: boolean
@@ -75021,6 +76331,7 @@ export namespace Prisma {
     cleaningLotId?: boolean
     numberOfBags?: boolean
     bagSizeKg?: boolean
+    looseQty?: boolean
     totalPackedQty?: boolean
     totalPackedUnit?: boolean
     createdAt?: boolean
@@ -75042,6 +76353,7 @@ export namespace Prisma {
     cleaningLotId?: boolean
     numberOfBags?: boolean
     bagSizeKg?: boolean
+    looseQty?: boolean
     totalPackedQty?: boolean
     totalPackedUnit?: boolean
     createdAt?: boolean
@@ -75063,12 +76375,13 @@ export namespace Prisma {
     cleaningLotId?: boolean
     numberOfBags?: boolean
     bagSizeKg?: boolean
+    looseQty?: boolean
     totalPackedQty?: boolean
     totalPackedUnit?: boolean
     createdAt?: boolean
   }
 
-  export type MaterialTransferLineOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transferId" | "lineType" | "rawMaterialId" | "productName" | "skuCode" | "quantity" | "transferredQuantity" | "transferredUnit" | "unitOfMeasurement" | "batchNumber" | "cleaningLotId" | "numberOfBags" | "bagSizeKg" | "totalPackedQty" | "totalPackedUnit" | "createdAt", ExtArgs["result"]["materialTransferLine"]>
+  export type MaterialTransferLineOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transferId" | "lineType" | "rawMaterialId" | "productName" | "skuCode" | "quantity" | "transferredQuantity" | "transferredUnit" | "unitOfMeasurement" | "batchNumber" | "cleaningLotId" | "numberOfBags" | "bagSizeKg" | "looseQty" | "totalPackedQty" | "totalPackedUnit" | "createdAt", ExtArgs["result"]["materialTransferLine"]>
   export type MaterialTransferLineInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transfer?: boolean | MaterialTransferDefaultArgs<ExtArgs>
   }
@@ -75099,6 +76412,7 @@ export namespace Prisma {
       cleaningLotId: string | null
       numberOfBags: number | null
       bagSizeKg: number | null
+      looseQty: number | null
       totalPackedQty: number | null
       totalPackedUnit: string | null
       createdAt: Date
@@ -75540,6 +76854,7 @@ export namespace Prisma {
     readonly cleaningLotId: FieldRef<"MaterialTransferLine", 'String'>
     readonly numberOfBags: FieldRef<"MaterialTransferLine", 'Int'>
     readonly bagSizeKg: FieldRef<"MaterialTransferLine", 'Float'>
+    readonly looseQty: FieldRef<"MaterialTransferLine", 'Float'>
     readonly totalPackedQty: FieldRef<"MaterialTransferLine", 'Float'>
     readonly totalPackedUnit: FieldRef<"MaterialTransferLine", 'String'>
     readonly createdAt: FieldRef<"MaterialTransferLine", 'DateTime'>
@@ -115314,6 +116629,23 @@ export namespace Prisma {
   export type LocationScalarFieldEnum = (typeof LocationScalarFieldEnum)[keyof typeof LocationScalarFieldEnum]
 
 
+  export const LooseStockLedgerScalarFieldEnum: {
+    id: 'id',
+    locationId: 'locationId',
+    rawMaterialId: 'rawMaterialId',
+    skuCode: 'skuCode',
+    productName: 'productName',
+    unitOfMeasurement: 'unitOfMeasurement',
+    delta: 'delta',
+    reason: 'reason',
+    sourceTransferId: 'sourceTransferId',
+    notes: 'notes',
+    createdAt: 'createdAt'
+  };
+
+  export type LooseStockLedgerScalarFieldEnum = (typeof LooseStockLedgerScalarFieldEnum)[keyof typeof LooseStockLedgerScalarFieldEnum]
+
+
   export const MaterialTransferScalarFieldEnum: {
     id: 'id',
     transferNumber: 'transferNumber',
@@ -115349,6 +116681,7 @@ export namespace Prisma {
     cleaningLotId: 'cleaningLotId',
     numberOfBags: 'numberOfBags',
     bagSizeKg: 'bagSizeKg',
+    looseQty: 'looseQty',
     totalPackedQty: 'totalPackedQty',
     totalPackedUnit: 'totalPackedUnit',
     createdAt: 'createdAt'
@@ -120739,6 +122072,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferListRelationFilter
     dispatchesFrom?: GrindingDispatchListRelationFilter
     dispatchesTo?: GrindingDispatchListRelationFilter
+    looseStockEntries?: LooseStockLedgerListRelationFilter
   }
 
   export type LocationOrderByWithRelationInput = {
@@ -120756,6 +122090,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferOrderByRelationAggregateInput
     dispatchesFrom?: GrindingDispatchOrderByRelationAggregateInput
     dispatchesTo?: GrindingDispatchOrderByRelationAggregateInput
+    looseStockEntries?: LooseStockLedgerOrderByRelationAggregateInput
   }
 
   export type LocationWhereUniqueInput = Prisma.AtLeast<{
@@ -120776,6 +122111,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferListRelationFilter
     dispatchesFrom?: GrindingDispatchListRelationFilter
     dispatchesTo?: GrindingDispatchListRelationFilter
+    looseStockEntries?: LooseStockLedgerListRelationFilter
   }, "id" | "code">
 
   export type LocationOrderByWithAggregationInput = {
@@ -120806,6 +122142,93 @@ export namespace Prisma {
     enabled?: BoolWithAggregatesFilter<"Location"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Location"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Location"> | Date | string
+  }
+
+  export type LooseStockLedgerWhereInput = {
+    AND?: LooseStockLedgerWhereInput | LooseStockLedgerWhereInput[]
+    OR?: LooseStockLedgerWhereInput[]
+    NOT?: LooseStockLedgerWhereInput | LooseStockLedgerWhereInput[]
+    id?: StringFilter<"LooseStockLedger"> | string
+    locationId?: StringFilter<"LooseStockLedger"> | string
+    rawMaterialId?: StringNullableFilter<"LooseStockLedger"> | string | null
+    skuCode?: StringNullableFilter<"LooseStockLedger"> | string | null
+    productName?: StringNullableFilter<"LooseStockLedger"> | string | null
+    unitOfMeasurement?: StringFilter<"LooseStockLedger"> | string
+    delta?: FloatFilter<"LooseStockLedger"> | number
+    reason?: StringFilter<"LooseStockLedger"> | string
+    sourceTransferId?: StringNullableFilter<"LooseStockLedger"> | string | null
+    notes?: StringNullableFilter<"LooseStockLedger"> | string | null
+    createdAt?: DateTimeFilter<"LooseStockLedger"> | Date | string
+    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+  }
+
+  export type LooseStockLedgerOrderByWithRelationInput = {
+    id?: SortOrder
+    locationId?: SortOrder
+    rawMaterialId?: SortOrderInput | SortOrder
+    skuCode?: SortOrderInput | SortOrder
+    productName?: SortOrderInput | SortOrder
+    unitOfMeasurement?: SortOrder
+    delta?: SortOrder
+    reason?: SortOrder
+    sourceTransferId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    location?: LocationOrderByWithRelationInput
+  }
+
+  export type LooseStockLedgerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: LooseStockLedgerWhereInput | LooseStockLedgerWhereInput[]
+    OR?: LooseStockLedgerWhereInput[]
+    NOT?: LooseStockLedgerWhereInput | LooseStockLedgerWhereInput[]
+    locationId?: StringFilter<"LooseStockLedger"> | string
+    rawMaterialId?: StringNullableFilter<"LooseStockLedger"> | string | null
+    skuCode?: StringNullableFilter<"LooseStockLedger"> | string | null
+    productName?: StringNullableFilter<"LooseStockLedger"> | string | null
+    unitOfMeasurement?: StringFilter<"LooseStockLedger"> | string
+    delta?: FloatFilter<"LooseStockLedger"> | number
+    reason?: StringFilter<"LooseStockLedger"> | string
+    sourceTransferId?: StringNullableFilter<"LooseStockLedger"> | string | null
+    notes?: StringNullableFilter<"LooseStockLedger"> | string | null
+    createdAt?: DateTimeFilter<"LooseStockLedger"> | Date | string
+    location?: XOR<LocationScalarRelationFilter, LocationWhereInput>
+  }, "id">
+
+  export type LooseStockLedgerOrderByWithAggregationInput = {
+    id?: SortOrder
+    locationId?: SortOrder
+    rawMaterialId?: SortOrderInput | SortOrder
+    skuCode?: SortOrderInput | SortOrder
+    productName?: SortOrderInput | SortOrder
+    unitOfMeasurement?: SortOrder
+    delta?: SortOrder
+    reason?: SortOrder
+    sourceTransferId?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: LooseStockLedgerCountOrderByAggregateInput
+    _avg?: LooseStockLedgerAvgOrderByAggregateInput
+    _max?: LooseStockLedgerMaxOrderByAggregateInput
+    _min?: LooseStockLedgerMinOrderByAggregateInput
+    _sum?: LooseStockLedgerSumOrderByAggregateInput
+  }
+
+  export type LooseStockLedgerScalarWhereWithAggregatesInput = {
+    AND?: LooseStockLedgerScalarWhereWithAggregatesInput | LooseStockLedgerScalarWhereWithAggregatesInput[]
+    OR?: LooseStockLedgerScalarWhereWithAggregatesInput[]
+    NOT?: LooseStockLedgerScalarWhereWithAggregatesInput | LooseStockLedgerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"LooseStockLedger"> | string
+    locationId?: StringWithAggregatesFilter<"LooseStockLedger"> | string
+    rawMaterialId?: StringNullableWithAggregatesFilter<"LooseStockLedger"> | string | null
+    skuCode?: StringNullableWithAggregatesFilter<"LooseStockLedger"> | string | null
+    productName?: StringNullableWithAggregatesFilter<"LooseStockLedger"> | string | null
+    unitOfMeasurement?: StringWithAggregatesFilter<"LooseStockLedger"> | string
+    delta?: FloatWithAggregatesFilter<"LooseStockLedger"> | number
+    reason?: StringWithAggregatesFilter<"LooseStockLedger"> | string
+    sourceTransferId?: StringNullableWithAggregatesFilter<"LooseStockLedger"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"LooseStockLedger"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"LooseStockLedger"> | Date | string
   }
 
   export type MaterialTransferWhereInput = {
@@ -120932,6 +122355,7 @@ export namespace Prisma {
     cleaningLotId?: StringNullableFilter<"MaterialTransferLine"> | string | null
     numberOfBags?: IntNullableFilter<"MaterialTransferLine"> | number | null
     bagSizeKg?: FloatNullableFilter<"MaterialTransferLine"> | number | null
+    looseQty?: FloatNullableFilter<"MaterialTransferLine"> | number | null
     totalPackedQty?: FloatNullableFilter<"MaterialTransferLine"> | number | null
     totalPackedUnit?: StringNullableFilter<"MaterialTransferLine"> | string | null
     createdAt?: DateTimeFilter<"MaterialTransferLine"> | Date | string
@@ -120953,6 +122377,7 @@ export namespace Prisma {
     cleaningLotId?: SortOrderInput | SortOrder
     numberOfBags?: SortOrderInput | SortOrder
     bagSizeKg?: SortOrderInput | SortOrder
+    looseQty?: SortOrderInput | SortOrder
     totalPackedQty?: SortOrderInput | SortOrder
     totalPackedUnit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -120977,6 +122402,7 @@ export namespace Prisma {
     cleaningLotId?: StringNullableFilter<"MaterialTransferLine"> | string | null
     numberOfBags?: IntNullableFilter<"MaterialTransferLine"> | number | null
     bagSizeKg?: FloatNullableFilter<"MaterialTransferLine"> | number | null
+    looseQty?: FloatNullableFilter<"MaterialTransferLine"> | number | null
     totalPackedQty?: FloatNullableFilter<"MaterialTransferLine"> | number | null
     totalPackedUnit?: StringNullableFilter<"MaterialTransferLine"> | string | null
     createdAt?: DateTimeFilter<"MaterialTransferLine"> | Date | string
@@ -120998,6 +122424,7 @@ export namespace Prisma {
     cleaningLotId?: SortOrderInput | SortOrder
     numberOfBags?: SortOrderInput | SortOrder
     bagSizeKg?: SortOrderInput | SortOrder
+    looseQty?: SortOrderInput | SortOrder
     totalPackedQty?: SortOrderInput | SortOrder
     totalPackedUnit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -121026,6 +122453,7 @@ export namespace Prisma {
     cleaningLotId?: StringNullableWithAggregatesFilter<"MaterialTransferLine"> | string | null
     numberOfBags?: IntNullableWithAggregatesFilter<"MaterialTransferLine"> | number | null
     bagSizeKg?: FloatNullableWithAggregatesFilter<"MaterialTransferLine"> | number | null
+    looseQty?: FloatNullableWithAggregatesFilter<"MaterialTransferLine"> | number | null
     totalPackedQty?: FloatNullableWithAggregatesFilter<"MaterialTransferLine"> | number | null
     totalPackedUnit?: StringNullableWithAggregatesFilter<"MaterialTransferLine"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"MaterialTransferLine"> | Date | string
@@ -128696,6 +130124,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
     dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
     dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+    looseStockEntries?: LooseStockLedgerCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateInput = {
@@ -128713,6 +130142,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
     dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
     dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+    looseStockEntries?: LooseStockLedgerUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUpdateInput = {
@@ -128730,6 +130160,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
     dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
     dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateInput = {
@@ -128747,6 +130178,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
     dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
     dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationCreateManyInput = {
@@ -128783,6 +130215,103 @@ export namespace Prisma {
     enabled?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LooseStockLedgerCreateInput = {
+    id?: string
+    rawMaterialId?: string | null
+    skuCode?: string | null
+    productName?: string | null
+    unitOfMeasurement?: string
+    delta: number
+    reason: string
+    sourceTransferId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+    location: LocationCreateNestedOneWithoutLooseStockEntriesInput
+  }
+
+  export type LooseStockLedgerUncheckedCreateInput = {
+    id?: string
+    locationId: string
+    rawMaterialId?: string | null
+    skuCode?: string | null
+    productName?: string | null
+    unitOfMeasurement?: string
+    delta: number
+    reason: string
+    sourceTransferId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LooseStockLedgerUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    delta?: FloatFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    sourceTransferId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    location?: LocationUpdateOneRequiredWithoutLooseStockEntriesNestedInput
+  }
+
+  export type LooseStockLedgerUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    delta?: FloatFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    sourceTransferId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LooseStockLedgerCreateManyInput = {
+    id?: string
+    locationId: string
+    rawMaterialId?: string | null
+    skuCode?: string | null
+    productName?: string | null
+    unitOfMeasurement?: string
+    delta: number
+    reason: string
+    sourceTransferId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LooseStockLedgerUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    delta?: FloatFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    sourceTransferId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LooseStockLedgerUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    locationId?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    delta?: FloatFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    sourceTransferId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type MaterialTransferCreateInput = {
@@ -128920,6 +130449,7 @@ export namespace Prisma {
     cleaningLotId?: string | null
     numberOfBags?: number | null
     bagSizeKg?: number | null
+    looseQty?: number | null
     totalPackedQty?: number | null
     totalPackedUnit?: string | null
     createdAt?: Date | string
@@ -128941,6 +130471,7 @@ export namespace Prisma {
     cleaningLotId?: string | null
     numberOfBags?: number | null
     bagSizeKg?: number | null
+    looseQty?: number | null
     totalPackedQty?: number | null
     totalPackedUnit?: string | null
     createdAt?: Date | string
@@ -128960,6 +130491,7 @@ export namespace Prisma {
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
     bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    looseQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -128981,6 +130513,7 @@ export namespace Prisma {
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
     bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    looseQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -129001,6 +130534,7 @@ export namespace Prisma {
     cleaningLotId?: string | null
     numberOfBags?: number | null
     bagSizeKg?: number | null
+    looseQty?: number | null
     totalPackedQty?: number | null
     totalPackedUnit?: string | null
     createdAt?: Date | string
@@ -129020,6 +130554,7 @@ export namespace Prisma {
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
     bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    looseQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -129040,6 +130575,7 @@ export namespace Prisma {
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
     bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    looseQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -135652,7 +137188,17 @@ export namespace Prisma {
     none?: MaterialTransferWhereInput
   }
 
+  export type LooseStockLedgerListRelationFilter = {
+    every?: LooseStockLedgerWhereInput
+    some?: LooseStockLedgerWhereInput
+    none?: LooseStockLedgerWhereInput
+  }
+
   export type MaterialTransferOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type LooseStockLedgerOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -135702,6 +137248,61 @@ export namespace Prisma {
     _max?: NestedEnumLocationTypeFilter<$PrismaModel>
   }
 
+  export type LocationScalarRelationFilter = {
+    is?: LocationWhereInput
+    isNot?: LocationWhereInput
+  }
+
+  export type LooseStockLedgerCountOrderByAggregateInput = {
+    id?: SortOrder
+    locationId?: SortOrder
+    rawMaterialId?: SortOrder
+    skuCode?: SortOrder
+    productName?: SortOrder
+    unitOfMeasurement?: SortOrder
+    delta?: SortOrder
+    reason?: SortOrder
+    sourceTransferId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LooseStockLedgerAvgOrderByAggregateInput = {
+    delta?: SortOrder
+  }
+
+  export type LooseStockLedgerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    locationId?: SortOrder
+    rawMaterialId?: SortOrder
+    skuCode?: SortOrder
+    productName?: SortOrder
+    unitOfMeasurement?: SortOrder
+    delta?: SortOrder
+    reason?: SortOrder
+    sourceTransferId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LooseStockLedgerMinOrderByAggregateInput = {
+    id?: SortOrder
+    locationId?: SortOrder
+    rawMaterialId?: SortOrder
+    skuCode?: SortOrder
+    productName?: SortOrder
+    unitOfMeasurement?: SortOrder
+    delta?: SortOrder
+    reason?: SortOrder
+    sourceTransferId?: SortOrder
+    notes?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type LooseStockLedgerSumOrderByAggregateInput = {
+    delta?: SortOrder
+  }
+
   export type EnumTransferDirectionFilter<$PrismaModel = never> = {
     equals?: $Enums.TransferDirection | EnumTransferDirectionFieldRefInput<$PrismaModel>
     in?: $Enums.TransferDirection[] | ListEnumTransferDirectionFieldRefInput<$PrismaModel>
@@ -135714,11 +137315,6 @@ export namespace Prisma {
     in?: $Enums.TransferStatus[] | ListEnumTransferStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.TransferStatus[] | ListEnumTransferStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumTransferStatusFilter<$PrismaModel> | $Enums.TransferStatus
-  }
-
-  export type LocationScalarRelationFilter = {
-    is?: LocationWhereInput
-    isNot?: LocationWhereInput
   }
 
   export type MaterialTransferLineListRelationFilter = {
@@ -135829,6 +137425,7 @@ export namespace Prisma {
     cleaningLotId?: SortOrder
     numberOfBags?: SortOrder
     bagSizeKg?: SortOrder
+    looseQty?: SortOrder
     totalPackedQty?: SortOrder
     totalPackedUnit?: SortOrder
     createdAt?: SortOrder
@@ -135839,6 +137436,7 @@ export namespace Prisma {
     transferredQuantity?: SortOrder
     numberOfBags?: SortOrder
     bagSizeKg?: SortOrder
+    looseQty?: SortOrder
     totalPackedQty?: SortOrder
   }
 
@@ -135857,6 +137455,7 @@ export namespace Prisma {
     cleaningLotId?: SortOrder
     numberOfBags?: SortOrder
     bagSizeKg?: SortOrder
+    looseQty?: SortOrder
     totalPackedQty?: SortOrder
     totalPackedUnit?: SortOrder
     createdAt?: SortOrder
@@ -135877,6 +137476,7 @@ export namespace Prisma {
     cleaningLotId?: SortOrder
     numberOfBags?: SortOrder
     bagSizeKg?: SortOrder
+    looseQty?: SortOrder
     totalPackedQty?: SortOrder
     totalPackedUnit?: SortOrder
     createdAt?: SortOrder
@@ -135887,6 +137487,7 @@ export namespace Prisma {
     transferredQuantity?: SortOrder
     numberOfBags?: SortOrder
     bagSizeKg?: SortOrder
+    looseQty?: SortOrder
     totalPackedQty?: SortOrder
   }
 
@@ -144469,6 +146070,13 @@ export namespace Prisma {
     connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
   }
 
+  export type LooseStockLedgerCreateNestedManyWithoutLocationInput = {
+    create?: XOR<LooseStockLedgerCreateWithoutLocationInput, LooseStockLedgerUncheckedCreateWithoutLocationInput> | LooseStockLedgerCreateWithoutLocationInput[] | LooseStockLedgerUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: LooseStockLedgerCreateOrConnectWithoutLocationInput | LooseStockLedgerCreateOrConnectWithoutLocationInput[]
+    createMany?: LooseStockLedgerCreateManyLocationInputEnvelope
+    connect?: LooseStockLedgerWhereUniqueInput | LooseStockLedgerWhereUniqueInput[]
+  }
+
   export type ReceivalEntryUncheckedCreateNestedManyWithoutLocationInput = {
     create?: XOR<ReceivalEntryCreateWithoutLocationInput, ReceivalEntryUncheckedCreateWithoutLocationInput> | ReceivalEntryCreateWithoutLocationInput[] | ReceivalEntryUncheckedCreateWithoutLocationInput[]
     connectOrCreate?: ReceivalEntryCreateOrConnectWithoutLocationInput | ReceivalEntryCreateOrConnectWithoutLocationInput[]
@@ -144502,6 +146110,13 @@ export namespace Prisma {
     connectOrCreate?: GrindingDispatchCreateOrConnectWithoutToLocationInput | GrindingDispatchCreateOrConnectWithoutToLocationInput[]
     createMany?: GrindingDispatchCreateManyToLocationInputEnvelope
     connect?: GrindingDispatchWhereUniqueInput | GrindingDispatchWhereUniqueInput[]
+  }
+
+  export type LooseStockLedgerUncheckedCreateNestedManyWithoutLocationInput = {
+    create?: XOR<LooseStockLedgerCreateWithoutLocationInput, LooseStockLedgerUncheckedCreateWithoutLocationInput> | LooseStockLedgerCreateWithoutLocationInput[] | LooseStockLedgerUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: LooseStockLedgerCreateOrConnectWithoutLocationInput | LooseStockLedgerCreateOrConnectWithoutLocationInput[]
+    createMany?: LooseStockLedgerCreateManyLocationInputEnvelope
+    connect?: LooseStockLedgerWhereUniqueInput | LooseStockLedgerWhereUniqueInput[]
   }
 
   export type EnumLocationTypeFieldUpdateOperationsInput = {
@@ -144578,6 +146193,20 @@ export namespace Prisma {
     deleteMany?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
   }
 
+  export type LooseStockLedgerUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<LooseStockLedgerCreateWithoutLocationInput, LooseStockLedgerUncheckedCreateWithoutLocationInput> | LooseStockLedgerCreateWithoutLocationInput[] | LooseStockLedgerUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: LooseStockLedgerCreateOrConnectWithoutLocationInput | LooseStockLedgerCreateOrConnectWithoutLocationInput[]
+    upsert?: LooseStockLedgerUpsertWithWhereUniqueWithoutLocationInput | LooseStockLedgerUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: LooseStockLedgerCreateManyLocationInputEnvelope
+    set?: LooseStockLedgerWhereUniqueInput | LooseStockLedgerWhereUniqueInput[]
+    disconnect?: LooseStockLedgerWhereUniqueInput | LooseStockLedgerWhereUniqueInput[]
+    delete?: LooseStockLedgerWhereUniqueInput | LooseStockLedgerWhereUniqueInput[]
+    connect?: LooseStockLedgerWhereUniqueInput | LooseStockLedgerWhereUniqueInput[]
+    update?: LooseStockLedgerUpdateWithWhereUniqueWithoutLocationInput | LooseStockLedgerUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: LooseStockLedgerUpdateManyWithWhereWithoutLocationInput | LooseStockLedgerUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: LooseStockLedgerScalarWhereInput | LooseStockLedgerScalarWhereInput[]
+  }
+
   export type ReceivalEntryUncheckedUpdateManyWithoutLocationNestedInput = {
     create?: XOR<ReceivalEntryCreateWithoutLocationInput, ReceivalEntryUncheckedCreateWithoutLocationInput> | ReceivalEntryCreateWithoutLocationInput[] | ReceivalEntryUncheckedCreateWithoutLocationInput[]
     connectOrCreate?: ReceivalEntryCreateOrConnectWithoutLocationInput | ReceivalEntryCreateOrConnectWithoutLocationInput[]
@@ -144646,6 +146275,34 @@ export namespace Prisma {
     update?: GrindingDispatchUpdateWithWhereUniqueWithoutToLocationInput | GrindingDispatchUpdateWithWhereUniqueWithoutToLocationInput[]
     updateMany?: GrindingDispatchUpdateManyWithWhereWithoutToLocationInput | GrindingDispatchUpdateManyWithWhereWithoutToLocationInput[]
     deleteMany?: GrindingDispatchScalarWhereInput | GrindingDispatchScalarWhereInput[]
+  }
+
+  export type LooseStockLedgerUncheckedUpdateManyWithoutLocationNestedInput = {
+    create?: XOR<LooseStockLedgerCreateWithoutLocationInput, LooseStockLedgerUncheckedCreateWithoutLocationInput> | LooseStockLedgerCreateWithoutLocationInput[] | LooseStockLedgerUncheckedCreateWithoutLocationInput[]
+    connectOrCreate?: LooseStockLedgerCreateOrConnectWithoutLocationInput | LooseStockLedgerCreateOrConnectWithoutLocationInput[]
+    upsert?: LooseStockLedgerUpsertWithWhereUniqueWithoutLocationInput | LooseStockLedgerUpsertWithWhereUniqueWithoutLocationInput[]
+    createMany?: LooseStockLedgerCreateManyLocationInputEnvelope
+    set?: LooseStockLedgerWhereUniqueInput | LooseStockLedgerWhereUniqueInput[]
+    disconnect?: LooseStockLedgerWhereUniqueInput | LooseStockLedgerWhereUniqueInput[]
+    delete?: LooseStockLedgerWhereUniqueInput | LooseStockLedgerWhereUniqueInput[]
+    connect?: LooseStockLedgerWhereUniqueInput | LooseStockLedgerWhereUniqueInput[]
+    update?: LooseStockLedgerUpdateWithWhereUniqueWithoutLocationInput | LooseStockLedgerUpdateWithWhereUniqueWithoutLocationInput[]
+    updateMany?: LooseStockLedgerUpdateManyWithWhereWithoutLocationInput | LooseStockLedgerUpdateManyWithWhereWithoutLocationInput[]
+    deleteMany?: LooseStockLedgerScalarWhereInput | LooseStockLedgerScalarWhereInput[]
+  }
+
+  export type LocationCreateNestedOneWithoutLooseStockEntriesInput = {
+    create?: XOR<LocationCreateWithoutLooseStockEntriesInput, LocationUncheckedCreateWithoutLooseStockEntriesInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutLooseStockEntriesInput
+    connect?: LocationWhereUniqueInput
+  }
+
+  export type LocationUpdateOneRequiredWithoutLooseStockEntriesNestedInput = {
+    create?: XOR<LocationCreateWithoutLooseStockEntriesInput, LocationUncheckedCreateWithoutLooseStockEntriesInput>
+    connectOrCreate?: LocationCreateOrConnectWithoutLooseStockEntriesInput
+    upsert?: LocationUpsertWithoutLooseStockEntriesInput
+    connect?: LocationWhereUniqueInput
+    update?: XOR<XOR<LocationUpdateToOneWithWhereWithoutLooseStockEntriesInput, LocationUpdateWithoutLooseStockEntriesInput>, LocationUncheckedUpdateWithoutLooseStockEntriesInput>
   }
 
   export type LocationCreateNestedOneWithoutTransfersFromInput = {
@@ -164910,6 +166567,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
     dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
     dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+    looseStockEntries?: LooseStockLedgerCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateWithoutReceivalEntriesInput = {
@@ -164926,6 +166584,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
     dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
     dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+    looseStockEntries?: LooseStockLedgerUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationCreateOrConnectWithoutReceivalEntriesInput = {
@@ -165064,6 +166723,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
     dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
     dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutReceivalEntriesInput = {
@@ -165080,6 +166740,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
     dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
     dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type WarehouseUpsertWithoutReceivalEntriesInput = {
@@ -166363,6 +168024,42 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type LooseStockLedgerCreateWithoutLocationInput = {
+    id?: string
+    rawMaterialId?: string | null
+    skuCode?: string | null
+    productName?: string | null
+    unitOfMeasurement?: string
+    delta: number
+    reason: string
+    sourceTransferId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LooseStockLedgerUncheckedCreateWithoutLocationInput = {
+    id?: string
+    rawMaterialId?: string | null
+    skuCode?: string | null
+    productName?: string | null
+    unitOfMeasurement?: string
+    delta: number
+    reason: string
+    sourceTransferId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
+  export type LooseStockLedgerCreateOrConnectWithoutLocationInput = {
+    where: LooseStockLedgerWhereUniqueInput
+    create: XOR<LooseStockLedgerCreateWithoutLocationInput, LooseStockLedgerUncheckedCreateWithoutLocationInput>
+  }
+
+  export type LooseStockLedgerCreateManyLocationInputEnvelope = {
+    data: LooseStockLedgerCreateManyLocationInput | LooseStockLedgerCreateManyLocationInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ReceivalEntryUpsertWithWhereUniqueWithoutLocationInput = {
     where: ReceivalEntryWhereUniqueInput
     update: XOR<ReceivalEntryUpdateWithoutLocationInput, ReceivalEntryUncheckedUpdateWithoutLocationInput>
@@ -166463,6 +168160,123 @@ export namespace Prisma {
     data: XOR<GrindingDispatchUpdateManyMutationInput, GrindingDispatchUncheckedUpdateManyWithoutToLocationInput>
   }
 
+  export type LooseStockLedgerUpsertWithWhereUniqueWithoutLocationInput = {
+    where: LooseStockLedgerWhereUniqueInput
+    update: XOR<LooseStockLedgerUpdateWithoutLocationInput, LooseStockLedgerUncheckedUpdateWithoutLocationInput>
+    create: XOR<LooseStockLedgerCreateWithoutLocationInput, LooseStockLedgerUncheckedCreateWithoutLocationInput>
+  }
+
+  export type LooseStockLedgerUpdateWithWhereUniqueWithoutLocationInput = {
+    where: LooseStockLedgerWhereUniqueInput
+    data: XOR<LooseStockLedgerUpdateWithoutLocationInput, LooseStockLedgerUncheckedUpdateWithoutLocationInput>
+  }
+
+  export type LooseStockLedgerUpdateManyWithWhereWithoutLocationInput = {
+    where: LooseStockLedgerScalarWhereInput
+    data: XOR<LooseStockLedgerUpdateManyMutationInput, LooseStockLedgerUncheckedUpdateManyWithoutLocationInput>
+  }
+
+  export type LooseStockLedgerScalarWhereInput = {
+    AND?: LooseStockLedgerScalarWhereInput | LooseStockLedgerScalarWhereInput[]
+    OR?: LooseStockLedgerScalarWhereInput[]
+    NOT?: LooseStockLedgerScalarWhereInput | LooseStockLedgerScalarWhereInput[]
+    id?: StringFilter<"LooseStockLedger"> | string
+    locationId?: StringFilter<"LooseStockLedger"> | string
+    rawMaterialId?: StringNullableFilter<"LooseStockLedger"> | string | null
+    skuCode?: StringNullableFilter<"LooseStockLedger"> | string | null
+    productName?: StringNullableFilter<"LooseStockLedger"> | string | null
+    unitOfMeasurement?: StringFilter<"LooseStockLedger"> | string
+    delta?: FloatFilter<"LooseStockLedger"> | number
+    reason?: StringFilter<"LooseStockLedger"> | string
+    sourceTransferId?: StringNullableFilter<"LooseStockLedger"> | string | null
+    notes?: StringNullableFilter<"LooseStockLedger"> | string | null
+    createdAt?: DateTimeFilter<"LooseStockLedger"> | Date | string
+  }
+
+  export type LocationCreateWithoutLooseStockEntriesInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryCreateNestedManyWithoutLocationInput
+    transfersFrom?: MaterialTransferCreateNestedManyWithoutFromLocationInput
+    transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
+    dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
+    dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationUncheckedCreateWithoutLooseStockEntriesInput = {
+    id?: string
+    code: string
+    name: string
+    type: $Enums.LocationType
+    address?: string | null
+    description?: string | null
+    enabled?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    receivalEntries?: ReceivalEntryUncheckedCreateNestedManyWithoutLocationInput
+    transfersFrom?: MaterialTransferUncheckedCreateNestedManyWithoutFromLocationInput
+    transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
+    dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
+    dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+  }
+
+  export type LocationCreateOrConnectWithoutLooseStockEntriesInput = {
+    where: LocationWhereUniqueInput
+    create: XOR<LocationCreateWithoutLooseStockEntriesInput, LocationUncheckedCreateWithoutLooseStockEntriesInput>
+  }
+
+  export type LocationUpsertWithoutLooseStockEntriesInput = {
+    update: XOR<LocationUpdateWithoutLooseStockEntriesInput, LocationUncheckedUpdateWithoutLooseStockEntriesInput>
+    create: XOR<LocationCreateWithoutLooseStockEntriesInput, LocationUncheckedCreateWithoutLooseStockEntriesInput>
+    where?: LocationWhereInput
+  }
+
+  export type LocationUpdateToOneWithWhereWithoutLooseStockEntriesInput = {
+    where?: LocationWhereInput
+    data: XOR<LocationUpdateWithoutLooseStockEntriesInput, LocationUncheckedUpdateWithoutLooseStockEntriesInput>
+  }
+
+  export type LocationUpdateWithoutLooseStockEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUpdateManyWithoutLocationNestedInput
+    transfersFrom?: MaterialTransferUpdateManyWithoutFromLocationNestedInput
+    transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
+    dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+  }
+
+  export type LocationUncheckedUpdateWithoutLooseStockEntriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumLocationTypeFieldUpdateOperationsInput | $Enums.LocationType
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    enabled?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    receivalEntries?: ReceivalEntryUncheckedUpdateManyWithoutLocationNestedInput
+    transfersFrom?: MaterialTransferUncheckedUpdateManyWithoutFromLocationNestedInput
+    transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
+    dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
+    dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+  }
+
   export type LocationCreateWithoutTransfersFromInput = {
     id?: string
     code: string
@@ -166477,6 +168291,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
     dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
     dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+    looseStockEntries?: LooseStockLedgerCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateWithoutTransfersFromInput = {
@@ -166493,6 +168308,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
     dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
     dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+    looseStockEntries?: LooseStockLedgerUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationCreateOrConnectWithoutTransfersFromInput = {
@@ -166514,6 +168330,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferCreateNestedManyWithoutFromLocationInput
     dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
     dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+    looseStockEntries?: LooseStockLedgerCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateWithoutTransfersToInput = {
@@ -166530,6 +168347,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferUncheckedCreateNestedManyWithoutFromLocationInput
     dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
     dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+    looseStockEntries?: LooseStockLedgerUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationCreateOrConnectWithoutTransfersToInput = {
@@ -166551,6 +168369,7 @@ export namespace Prisma {
     cleaningLotId?: string | null
     numberOfBags?: number | null
     bagSizeKg?: number | null
+    looseQty?: number | null
     totalPackedQty?: number | null
     totalPackedUnit?: string | null
     createdAt?: Date | string
@@ -166570,6 +168389,7 @@ export namespace Prisma {
     cleaningLotId?: string | null
     numberOfBags?: number | null
     bagSizeKg?: number | null
+    looseQty?: number | null
     totalPackedQty?: number | null
     totalPackedUnit?: string | null
     createdAt?: Date | string
@@ -166610,6 +168430,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
     dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
     dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutTransfersFromInput = {
@@ -166626,6 +168447,7 @@ export namespace Prisma {
     transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
     dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
     dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUpsertWithoutTransfersToInput = {
@@ -166653,6 +168475,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferUpdateManyWithoutFromLocationNestedInput
     dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
     dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutTransfersToInput = {
@@ -166669,6 +168492,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferUncheckedUpdateManyWithoutFromLocationNestedInput
     dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
     dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type MaterialTransferLineUpsertWithWhereUniqueWithoutTransferInput = {
@@ -166705,6 +168529,7 @@ export namespace Prisma {
     cleaningLotId?: StringNullableFilter<"MaterialTransferLine"> | string | null
     numberOfBags?: IntNullableFilter<"MaterialTransferLine"> | number | null
     bagSizeKg?: FloatNullableFilter<"MaterialTransferLine"> | number | null
+    looseQty?: FloatNullableFilter<"MaterialTransferLine"> | number | null
     totalPackedQty?: FloatNullableFilter<"MaterialTransferLine"> | number | null
     totalPackedUnit?: StringNullableFilter<"MaterialTransferLine"> | string | null
     createdAt?: DateTimeFilter<"MaterialTransferLine"> | Date | string
@@ -171323,6 +173148,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferCreateNestedManyWithoutFromLocationInput
     transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
     dispatchesTo?: GrindingDispatchCreateNestedManyWithoutToLocationInput
+    looseStockEntries?: LooseStockLedgerCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateWithoutDispatchesFromInput = {
@@ -171339,6 +173165,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferUncheckedCreateNestedManyWithoutFromLocationInput
     transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
     dispatchesTo?: GrindingDispatchUncheckedCreateNestedManyWithoutToLocationInput
+    looseStockEntries?: LooseStockLedgerUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationCreateOrConnectWithoutDispatchesFromInput = {
@@ -171360,6 +173187,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferCreateNestedManyWithoutFromLocationInput
     transfersTo?: MaterialTransferCreateNestedManyWithoutToLocationInput
     dispatchesFrom?: GrindingDispatchCreateNestedManyWithoutFromLocationInput
+    looseStockEntries?: LooseStockLedgerCreateNestedManyWithoutLocationInput
   }
 
   export type LocationUncheckedCreateWithoutDispatchesToInput = {
@@ -171376,6 +173204,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferUncheckedCreateNestedManyWithoutFromLocationInput
     transfersTo?: MaterialTransferUncheckedCreateNestedManyWithoutToLocationInput
     dispatchesFrom?: GrindingDispatchUncheckedCreateNestedManyWithoutFromLocationInput
+    looseStockEntries?: LooseStockLedgerUncheckedCreateNestedManyWithoutLocationInput
   }
 
   export type LocationCreateOrConnectWithoutDispatchesToInput = {
@@ -171491,6 +173320,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferUpdateManyWithoutFromLocationNestedInput
     transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
     dispatchesTo?: GrindingDispatchUpdateManyWithoutToLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutDispatchesFromInput = {
@@ -171507,6 +173337,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferUncheckedUpdateManyWithoutFromLocationNestedInput
     transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
     dispatchesTo?: GrindingDispatchUncheckedUpdateManyWithoutToLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUpsertWithoutDispatchesToInput = {
@@ -171534,6 +173365,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferUpdateManyWithoutFromLocationNestedInput
     transfersTo?: MaterialTransferUpdateManyWithoutToLocationNestedInput
     dispatchesFrom?: GrindingDispatchUpdateManyWithoutFromLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUpdateManyWithoutLocationNestedInput
   }
 
   export type LocationUncheckedUpdateWithoutDispatchesToInput = {
@@ -171550,6 +173382,7 @@ export namespace Prisma {
     transfersFrom?: MaterialTransferUncheckedUpdateManyWithoutFromLocationNestedInput
     transfersTo?: MaterialTransferUncheckedUpdateManyWithoutToLocationNestedInput
     dispatchesFrom?: GrindingDispatchUncheckedUpdateManyWithoutFromLocationNestedInput
+    looseStockEntries?: LooseStockLedgerUncheckedUpdateManyWithoutLocationNestedInput
   }
 
   export type GrindingDispatchLotUpsertWithWhereUniqueWithoutDispatchInput = {
@@ -180806,6 +182639,19 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type LooseStockLedgerCreateManyLocationInput = {
+    id?: string
+    rawMaterialId?: string | null
+    skuCode?: string | null
+    productName?: string | null
+    unitOfMeasurement?: string
+    delta: number
+    reason: string
+    sourceTransferId?: string | null
+    notes?: string | null
+    createdAt?: Date | string
+  }
+
   export type ReceivalEntryUpdateWithoutLocationInput = {
     id?: StringFieldUpdateOperationsInput | string
     weightMode?: EnumWeightModeFieldUpdateOperationsInput | $Enums.WeightMode
@@ -181044,6 +182890,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LooseStockLedgerUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    delta?: FloatFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    sourceTransferId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LooseStockLedgerUncheckedUpdateWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    delta?: FloatFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    sourceTransferId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LooseStockLedgerUncheckedUpdateManyWithoutLocationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rawMaterialId?: NullableStringFieldUpdateOperationsInput | string | null
+    skuCode?: NullableStringFieldUpdateOperationsInput | string | null
+    productName?: NullableStringFieldUpdateOperationsInput | string | null
+    unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    delta?: FloatFieldUpdateOperationsInput | number
+    reason?: StringFieldUpdateOperationsInput | string
+    sourceTransferId?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type MaterialTransferLineCreateManyTransferInput = {
     id?: string
     lineType: $Enums.TransferLineType
@@ -181058,6 +182943,7 @@ export namespace Prisma {
     cleaningLotId?: string | null
     numberOfBags?: number | null
     bagSizeKg?: number | null
+    looseQty?: number | null
     totalPackedQty?: number | null
     totalPackedUnit?: string | null
     createdAt?: Date | string
@@ -181077,6 +182963,7 @@ export namespace Prisma {
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
     bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    looseQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -181096,6 +182983,7 @@ export namespace Prisma {
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
     bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    looseQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -181115,6 +183003,7 @@ export namespace Prisma {
     cleaningLotId?: NullableStringFieldUpdateOperationsInput | string | null
     numberOfBags?: NullableIntFieldUpdateOperationsInput | number | null
     bagSizeKg?: NullableFloatFieldUpdateOperationsInput | number | null
+    looseQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedQty?: NullableFloatFieldUpdateOperationsInput | number | null
     totalPackedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

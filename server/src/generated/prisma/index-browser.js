@@ -743,6 +743,20 @@ exports.Prisma.LocationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LooseStockLedgerScalarFieldEnum = {
+  id: 'id',
+  locationId: 'locationId',
+  rawMaterialId: 'rawMaterialId',
+  skuCode: 'skuCode',
+  productName: 'productName',
+  unitOfMeasurement: 'unitOfMeasurement',
+  delta: 'delta',
+  reason: 'reason',
+  sourceTransferId: 'sourceTransferId',
+  notes: 'notes',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.MaterialTransferScalarFieldEnum = {
   id: 'id',
   transferNumber: 'transferNumber',
@@ -775,6 +789,7 @@ exports.Prisma.MaterialTransferLineScalarFieldEnum = {
   cleaningLotId: 'cleaningLotId',
   numberOfBags: 'numberOfBags',
   bagSizeKg: 'bagSizeKg',
+  looseQty: 'looseQty',
   totalPackedQty: 'totalPackedQty',
   totalPackedUnit: 'totalPackedUnit',
   createdAt: 'createdAt'
@@ -1499,6 +1514,7 @@ exports.Prisma.ModelName = {
   StockEntry: 'StockEntry',
   Warehouse: 'Warehouse',
   Location: 'Location',
+  LooseStockLedger: 'LooseStockLedger',
   MaterialTransfer: 'MaterialTransfer',
   MaterialTransferLine: 'MaterialTransferLine',
   ProductionPosting: 'ProductionPosting',

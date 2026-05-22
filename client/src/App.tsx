@@ -41,6 +41,7 @@ import DispatchToGrinding from './components/pages/processing/DispatchToGrinding
 import SFGProcessingPage from './components/pages/processing/SFGProcessingPage';
 import OutboundToSFGPage from './components/pages/processing/OutboundToSFGPage';
 import StockVerificationPage from './components/pages/processing/StockVerificationPage';
+import LooseStockPage from './components/pages/processing/LooseStockPage';
 import MaterialTransferPage from './components/pages/packaging/MaterialTransferPage';
 import CreateMaterialTransferPage from './components/pages/packaging/CreateMaterialTransferPage';
 import CreateFGBatchPage from './components/pages/packaging/CreateFGBatchPage';
@@ -1004,6 +1005,24 @@ const App = () => {
                   }
                   name="Stock Verification"
                   description="Verify and accept or reject incoming stock dispatches"
+                  permissionKey="manage_stock_verification"
+                />
+              }
+            />
+
+            <Route
+              path="/grinding/loose-stock"
+              element={
+                <PermissionedRoute
+                  path="/grinding/loose-stock"
+                  element={
+                    <SecureRoute
+                      element={<LooseStockPage />}
+                      permissionKey="manage_stock_verification"
+                    />
+                  }
+                  name="Loose Stock"
+                  description="View and re-bag accumulated loose SFG stock"
                   permissionKey="manage_stock_verification"
                 />
               }

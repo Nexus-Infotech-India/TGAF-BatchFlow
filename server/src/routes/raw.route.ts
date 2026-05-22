@@ -107,6 +107,8 @@ router.get('/transfers/sfg-warehouse-stock', TransferController.getSfgWarehouseS
 router.get('/transfers/outbound-stock-details', TransferController.getOutboundStockDetails);
 router.get('/transfers/packaging-stock', TransferController.getPackagingStock);
 router.get('/transfers/packaging-source-stock', TransferController.getPackagingSourceStock);
+router.get('/transfers/loose-stock', TransferController.getLooseStock);
+router.post('/transfers/loose-stock/rebag', TransferController.rebagLooseStock);
 router.get('/transfers/:id', TransferController.getTransferById);
 router.put('/transfers/:id/accept', TransferController.acceptTransfer);
 router.put('/transfers/:id/reject', TransferController.rejectTransfer);

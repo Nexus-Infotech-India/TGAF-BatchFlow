@@ -139,11 +139,14 @@ const CreateRawMaterialPage: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Delete this raw material?')) return;
+    setError('');
+    setSuccess('');
     try {
       await api.delete(API_ROUTES.RAW.DELETE_PRODUCT(id));
+      setSuccess('Material deleted successfully');
       fetchData();
-    } catch {
-      // ignore for now
+    } catch (err: any) {
+      setError(err?.response?.data?.error || 'Failed to delete material');
     }
   };
 

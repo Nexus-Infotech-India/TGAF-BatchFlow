@@ -304,6 +304,7 @@ export class TransferController {
                 cleaningLotId: line.cleaningLotId || null,
                 numberOfBags: line.numberOfBags != null ? Number(line.numberOfBags) : null,
                 bagSizeKg: line.bagSizeKg != null ? Number(line.bagSizeKg) : 25,
+                looseQty: line.looseQty != null ? Number(line.looseQty) : 0,
                 totalPackedQty: line.totalPackedQty != null ? Number(line.totalPackedQty) : null,
                 totalPackedUnit: line.totalPackedUnit || null,
                 // Initialize transferredQuantity as 0 for outbound lines
@@ -387,6 +388,28 @@ export class TransferController {
             description: `Transfer ${result.transferNumber} accepted at ${result.toLocation.name}`,
           },
         });
+
+        // Loose SFG ledger: every SFG line with looseQty > 0 deposits that loose
+        // quantity into the destination location's running ledger.
+        if (result.direction === 'OUTBOUND_FROM_GRINDING') {
+          for (const line of result.lines) {
+            const loose = Number(line.looseQty || 0);
+            if (line.lineType !== 'SFG' || loose <= 0) continue;
+            await tx.looseStockLedger.create({
+              data: {
+                locationId: result.toLocationId,
+                rawMaterialId: line.rawMaterialId || null,
+                skuCode: line.skuCode || null,
+                productName: line.productName || null,
+                unitOfMeasurement: line.unitOfMeasurement || 'KG',
+                delta: loose,
+                reason: 'TRANSFER_ACCEPT',
+                sourceTransferId: result.id,
+                notes: `Loose remainder from transfer ${result.transferNumber}`,
+              },
+            });
+          }
+        }
 
         return result;
       }, { timeout: 15000 });
@@ -883,6 +906,186 @@ export class TransferController {
     } catch (error) {
       console.error('Error fetching packaging stock:', error);
       res.status(500).json({ error: 'Failed to fetch packaging stock', details: error });
+    }
+  }
+
+  /**
+   * GET /raw/transfers/loose-stock?locationId=...
+   * Returns current loose SFG availability per (locationId, rawMaterialId).
+   * Computed as SUM(delta) over the LooseStockLedger.
+   */
+  static async getLooseStock(req: Request, res: Response) {
+    try {
+      const { locationId } = req.query;
+      const where: any = {};
+      if (typeof locationId === 'string' && locationId.length > 0) where.locationId = locationId;
+
+      const rows = await prisma.looseStockLedger.findMany({
+        where,
+        include: { location: true },
+      });
+
+      // Aggregate per (locationId, rawMaterialId or productName)
+      const map = new Map<string, {
+        locationId: string;
+        locationName: string;
+        rawMaterialId: string | null;
+        skuCode: string | null;
+        productName: string | null;
+        unit: string;
+        available: number;
+      }>();
+
+      for (const r of rows) {
+        const key = `${r.locationId}__${r.rawMaterialId || r.skuCode || r.productName || ''}`;
+        if (!map.has(key)) {
+          map.set(key, {
+            locationId: r.locationId,
+            locationName: r.location?.name || '',
+            rawMaterialId: r.rawMaterialId,
+            skuCode: r.skuCode,
+            productName: r.productName,
+            unit: r.unitOfMeasurement || 'KG',
+            available: 0,
+          });
+        }
+        const entry = map.get(key)!;
+        entry.available += Number(r.delta || 0);
+      }
+
+      const data = Array.from(map.values())
+        .map(e => ({ ...e, available: Math.round(e.available * 1000) / 1000 }))
+        .filter(e => e.available > 0);
+
+      res.json({ success: true, data });
+    } catch (error) {
+      console.error('Error fetching loose stock:', error);
+      res.status(500).json({ error: 'Failed to fetch loose stock', details: error });
+    }
+  }
+
+  /**
+   * POST /raw/transfers/loose-stock/rebag
+   * Body: { locationId, rawMaterialId?, skuCode?, productName?, bagsToForm, bagSizeKg }
+   * Converts looseQty into bagged inventory by:
+   *  - Inserting a negative LooseStockLedger row (REBAG) for bagsToForm × bagSizeKg
+   *  - Creating a synthetic OUTBOUND_FROM_GRINDING transfer with the rebagged qty
+   *    at the same location, so the bagged stock is visible to downstream consumers.
+   */
+  static async rebagLooseStock(req: Request, res: Response) {
+    try {
+      const { locationId, rawMaterialId, skuCode, productName, bagsToForm, bagSizeKg } = req.body || {};
+      const bags = Number(bagsToForm);
+      const bagKg = Number(bagSizeKg) || 25;
+
+      if (!locationId || !bags || bags <= 0) {
+        res.status(400).json({ error: 'locationId and a positive bagsToForm are required' });
+        return;
+      }
+
+      // Compute current available loose for the (location, material) key
+      const where: any = { locationId };
+      if (rawMaterialId) where.rawMaterialId = rawMaterialId;
+      else if (skuCode) where.skuCode = skuCode;
+      else if (productName) where.productName = productName;
+
+      const rows = await prisma.looseStockLedger.findMany({ where });
+      const available = rows.reduce((s, r) => s + Number(r.delta || 0), 0);
+      const consumeKg = bags * bagKg;
+
+      if (consumeKg > available + 1e-6) {
+        res.status(400).json({
+          error: `Insufficient loose stock. Available: ${Math.round(available * 1000) / 1000} KG, Requested: ${consumeKg} KG`,
+        });
+        return;
+      }
+
+      const location = await prisma.location.findUnique({ where: { id: locationId } });
+      if (!location) {
+        res.status(400).json({ error: 'Location not found' });
+        return;
+      }
+
+      // Generate a synthetic outbound transfer number for the re-bag
+      const today = new Date();
+      const dateStr = today.toISOString().slice(0, 10).replace(/-/g, '');
+      const prefix = `TRF-REBAG-${dateStr}-`;
+      const lastTransfer = await prisma.materialTransfer.findFirst({
+        where: { transferNumber: { startsWith: prefix } },
+        orderBy: { transferNumber: 'desc' },
+      });
+      let seq = 1;
+      if (lastTransfer?.transferNumber) {
+        const lastSeq = parseInt(lastTransfer.transferNumber.replace(prefix, ''), 10);
+        if (!isNaN(lastSeq)) seq = lastSeq + 1;
+      }
+      const transferNumber = `${prefix}${String(seq).padStart(4, '0')}`;
+
+      const result = await prisma.$transaction(async (tx) => {
+        // 1) Insert the negative loose ledger entry
+        await tx.looseStockLedger.create({
+          data: {
+            locationId,
+            rawMaterialId: rawMaterialId || null,
+            skuCode: skuCode || null,
+            productName: productName || null,
+            unitOfMeasurement: 'KG',
+            delta: -consumeKg,
+            reason: 'REBAG',
+            notes: `Re-bagged ${bags} bag(s) × ${bagKg} KG into ${transferNumber}`,
+          },
+        });
+
+        // 2) Create a synthetic ACCEPTED OUTBOUND_FROM_GRINDING transfer
+        //    at this location so the bagged qty becomes visible to consumers.
+        const created = await tx.materialTransfer.create({
+          data: {
+            transferNumber,
+            direction: 'OUTBOUND_FROM_GRINDING',
+            fromLocationId: locationId,
+            toLocationId: locationId,
+            status: 'ACCEPTED',
+            sentById: req.user?.id || 'system',
+            sentAt: new Date(),
+            acceptedById: req.user?.id || 'system',
+            acceptedAt: new Date(),
+            notes: `Re-bagged from loose stock at ${location.name}`,
+            lines: {
+              create: [{
+                lineType: 'SFG',
+                rawMaterialId: rawMaterialId || null,
+                productName: productName || null,
+                skuCode: skuCode || null,
+                quantity: consumeKg,
+                unitOfMeasurement: 'KG',
+                numberOfBags: bags,
+                bagSizeKg: bagKg,
+                looseQty: 0,
+                transferredQuantity: 0,
+                transferredUnit: 'KG',
+              }],
+            },
+          },
+          include: { lines: true },
+        });
+
+        await tx.transactionLog.create({
+          data: {
+            type: 'LOOSE_REBAG',
+            entity: 'MaterialTransfer',
+            entityId: created.id,
+            userId: req.user?.id || 'system',
+            description: `Re-bagged ${bags} × ${bagKg} KG = ${consumeKg} KG of ${productName || skuCode || rawMaterialId || 'SFG'} at ${location.name}`,
+          },
+        });
+
+        return { transfer: created, consumedKg: consumeKg, newAvailable: Math.round((available - consumeKg) * 1000) / 1000 };
+      }, { timeout: 15000 });
+
+      res.json({ success: true, data: result });
+    } catch (error) {
+      console.error('Error re-bagging loose stock:', error);
+      res.status(500).json({ error: 'Failed to re-bag loose stock', details: error });
     }
   }
 

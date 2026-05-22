@@ -94,6 +94,11 @@ export class CleaningGrnController {
      * Get all GRNs with their materials for cleaning
      * Returns GRN details along with received quantity & how much has been transferred to cleaning
      */
+    // Materials hard-excluded from the cleaning workflow.
+    // Add SKU codes (or names) here to skip them entirely from the cleaning list.
+    private static CLEANING_EXCLUDED_SKUS = ['SKU-003']; // Imported Chilli Powder - 25 Kg (already cleaned at source)
+    private static CLEANING_EXCLUDED_NAMES = ['Imported Chilli Powder - 25 Kg'];
+
     static async getGRNsForCleaning(req: Request, res: Response): Promise<void> {
         try {
             const grns = await prisma.gRNbyPo.findMany({
@@ -101,6 +106,8 @@ export class CleaningGrnController {
                     purchaseOrderItem: {
                         rawMaterial: {
                             category: 'RAW_MATERIAL',
+                            skuCode: { notIn: CleaningGrnController.CLEANING_EXCLUDED_SKUS },
+                            name: { notIn: CleaningGrnController.CLEANING_EXCLUDED_NAMES },
                         },
                     },
                 },

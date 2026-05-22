@@ -883,6 +883,26 @@ model Location {
   transfersTo   MaterialTransfer[] @relation("TransferToLocation")
   dispatchesFrom GrindingDispatch[] @relation("DispatchFromLocation")
   dispatchesTo   GrindingDispatch[] @relation("DispatchToLocation")
+  looseStockEntries LooseStockLedger[]
+}
+
+// Ledger of loose-SFG inventory at each warehouse/location.
+// Each row is a delta (positive on accept, negative on re-bag / consume).
+// Current available = SUM(delta) over (locationId, rawMaterialId).
+model LooseStockLedger {
+  id                String   @id @default(uuid())
+  locationId        String
+  rawMaterialId     String?
+  skuCode           String?
+  productName       String?
+  unitOfMeasurement String   @default("KG")
+  delta             Float
+  reason            String   // 'TRANSFER_ACCEPT' | 'REBAG' | 'CONSUME'
+  sourceTransferId  String?
+  notes             String?
+  createdAt         DateTime @default(now())
+
+  location          Location @relation(fields: [locationId], references: [id])
 }
 
 // ==================== MATERIAL TRANSFER ====================
@@ -943,6 +963,7 @@ model MaterialTransferLine {
   cleaningLotId       String?
   numberOfBags        Int?
   bagSizeKg           Float?           @default(25)
+  looseQty            Float?           @default(0)
   totalPackedQty      Float?
   totalPackedUnit     String?
   createdAt           DateTime         @default(now())

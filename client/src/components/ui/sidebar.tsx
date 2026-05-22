@@ -272,6 +272,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "Stock Verification",
           icon: <Shield className="sidebar-icon" size={18} />,
           permissionKey: "manage_stock_verification"
+        },
+        {
+          path: "/grinding/loose-stock",
+          name: "Loose Stock",
+          icon: <Layers className="sidebar-icon" size={18} />,
+          permissionKey: "manage_stock_verification"
         }
       ]
     },
