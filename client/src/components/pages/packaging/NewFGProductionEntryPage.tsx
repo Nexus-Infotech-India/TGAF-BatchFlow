@@ -14,7 +14,6 @@ import {
   Truck,
   ClipboardList,
   Target,
-  Scale,
   Sparkles,
   Boxes,
   Cog,

@@ -90,10 +90,6 @@ const CreateMaterialTransferPage: React.FC = () => {
   type PkgRow = { id: string; materialId: string | null; qty: number | null; unit: string };
   const newPkgRow = (): PkgRow => ({ id: `pkg-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, materialId: null, qty: null, unit: 'KG' });
   const [pkgRows, setPkgRows] = useState<PkgRow[]>([newPkgRow()]);
-  // Legacy singletons kept so existing flow paths don't break if any code reads them.
-  const [selectedPkgMaterial, setSelectedPkgMaterial] = useState<PackagingMaterial | null>(null);
-  const [pkgQuantity, setPkgQuantity] = useState<number | null>(null);
-  const [pkgUnit, setPkgUnit] = useState<string>('KG');
 
   // Cart + Notes
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -283,9 +279,6 @@ const CreateMaterialTransferPage: React.FC = () => {
     setSelectedStockItem(null);
     setBatchQuantities({});
     setSelectedBatches(new Set());
-    setSelectedPkgMaterial(null);
-    setPkgQuantity(null);
-    setPkgUnit('KG');
     setPkgRows([newPkgRow()]);
   };
 
