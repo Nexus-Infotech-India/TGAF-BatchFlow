@@ -134,7 +134,15 @@ const NewFGProductionEntryPage: React.FC = () => {
           api.get(API_ROUTES.RAW.GET_FG_BOMS),
         ]);
         const locData = locRes.data;
-        setLocations(Array.isArray(locData) ? locData : locData?.data || []);
+        const allLocations: any[] = Array.isArray(locData) ? locData : locData?.data || [];
+        // FG production happens on the production floor only — restrict to that location.
+        const prodFloors = allLocations.filter(
+          (l) => (l?.name || '').toLowerCase().trim() === 'production floor'
+        );
+        setLocations(prodFloors);
+        if (prodFloors.length > 0) {
+          setSelectedLocationId(prodFloors[0].id);
+        }
         setMachines(mchRes.data?.data || []);
         setBoms(bomRes.data?.data || []);
       } catch (err) {
@@ -902,12 +910,14 @@ const NewFGProductionEntryPage: React.FC = () => {
                         <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Production Location</label>
                       </div>
                       <Select
-                        className="w-full rounded-sm" size="large" placeholder="E.g. Packaging Area"
-                        value={selectedLocationId || undefined} onChange={setSelectedLocationId}
+                        className="w-full rounded-sm" size="large" placeholder="Production Floor"
+                        value={selectedLocationId || undefined}
+                        onChange={setSelectedLocationId}
                         options={locations.map(l => ({ value: l.id, label: l.name }))}
                         loading={fetchingBase}
+                        disabled
                       />
-                      <p className="mt-2 text-[11px] text-muted-foreground">Where the production will take place</p>
+                      <p className="mt-2 text-[11px] text-muted-foreground">FG production is locked to the Production Floor location.</p>
                     </div>
 
                     {/* Field 2: Target BOM */}
