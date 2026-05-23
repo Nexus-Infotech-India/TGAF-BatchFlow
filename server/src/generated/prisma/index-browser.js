@@ -1182,6 +1182,8 @@ exports.Prisma.FGProductionMachinePackagingScalarFieldEnum = {
   skuCode: 'skuCode',
   quantity: 'quantity',
   unitOfMeasurement: 'unitOfMeasurement',
+  wastageQty: 'wastageQty',
+  wastagePercentage: 'wastagePercentage',
   createdAt: 'createdAt'
 };
 

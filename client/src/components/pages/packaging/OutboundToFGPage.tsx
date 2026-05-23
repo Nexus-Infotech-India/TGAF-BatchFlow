@@ -206,7 +206,7 @@ const OutboundToFGPage: React.FC = () => {
                   <tr className="bg-muted/40">
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">FG Batch ID</th>
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Product</th>
-                    <th className="px-5 py-3.5 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Boxes / Shift</th>
+                    <th className="px-5 py-3.5 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Cartons / Shift</th>
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Destination</th>
                     <th className="px-5 py-3.5 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Status</th>
                   </tr>
@@ -322,7 +322,7 @@ const OutboundToFGPage: React.FC = () => {
                 </div>
                 <span className="font-bold text-lg text-violet-600">
                   {selectedEntry.machineEntries?.reduce((sum: number, m: any) => sum + (Number(m.todayAchieve) || 0), 0).toLocaleString() || 0}
-                  <span className="text-xs font-normal text-muted-foreground ml-1">Boxes / Shift</span>
+                  <span className="text-xs font-normal text-muted-foreground ml-1">Cartons / Shift</span>
                 </span>
               </div>
             </div>

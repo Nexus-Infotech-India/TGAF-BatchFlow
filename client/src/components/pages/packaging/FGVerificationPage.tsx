@@ -159,7 +159,7 @@ const FGVerificationPage: React.FC = () => {
                   <tr className="bg-muted/40">
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">FG Batch ID</th>
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Product</th>
-                    <th className="px-5 py-3.5 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Boxes / Shift</th>
+                    <th className="px-5 py-3.5 text-right text-xs font-bold text-muted-foreground uppercase tracking-wider">Cartons / Shift</th>
                     <th className="px-5 py-3.5 text-left text-xs font-bold text-muted-foreground uppercase tracking-wider">Destination</th>
                     <th className="px-5 py-3.5 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Status</th>
                     <th className="px-5 py-3.5 text-center text-xs font-bold text-muted-foreground uppercase tracking-wider">Actions</th>

@@ -104,10 +104,18 @@ const NewFGProductionEntryPage: React.FC = () => {
   const [fetchingBase, setFetchingBase] = useState(true);
 
   // Step 1: Selection & Planning
+  // Input is in CARTONS. We derive productionQty (weight) = cartons × BOM.outputQuantity.
+  // 1 BOM execution = 1 carton, so cartons is also the BOM scale factor.
   const [selectedLocationId, setSelectedLocationId] = useState('');
   const [selectedBomId, setSelectedBomId] = useState('');
+  const [plannedCartons, setPlannedCartons] = useState<number | null>(null);
+  // productionQty / productionUnit are derived from plannedCartons × BOM output.
+  // We still keep them in state because downstream consumption + submit payloads use them.
   const [productionQty, setProductionQty] = useState<number | null>(null);
   const [productionUnit, setProductionUnit] = useState('KG');
+
+  // Toggle to fall back to today's manual machine editor if the operator wants to override.
+  const [manualOverride, setManualOverride] = useState(false);
 
   // Materials & Consumptions
   const [consumptionLines, setConsumptionLines] = useState<any[]>([]);
@@ -252,6 +260,16 @@ const NewFGProductionEntryPage: React.FC = () => {
     setShowAvailability(false);
     setConsumptionLines([]);
   }, [selectedBomId, productionQty, productionUnit, selectedLocationId]);
+
+  /* ─── Re-derive productionQty from cartons whenever the BOM changes ─── */
+  useEffect(() => {
+    const bom = boms.find((b) => b.id === selectedBomId);
+    if (!bom || !plannedCartons || plannedCartons <= 0) {
+      return;
+    }
+    setProductionQty(Number((plannedCartons * bom.outputQuantity).toFixed(3)));
+    setProductionUnit(bom.unitOfMeasurement || 'KG');
+  }, [selectedBomId, boms, plannedCartons]);
 
   /* ─── Handle Check Availability button click ─── */
   const handleCheckAvailability = () => {
@@ -536,12 +554,95 @@ const NewFGProductionEntryPage: React.FC = () => {
     return Math.min(transferLeft, planLeft);
   };
 
+  /* ─── Auto-allocator: distribute cartons across free machines, largest first ─── */
+  // Pure function over (cartons, machines). Returns a deterministic plan of
+  // { machineId, cartons } rows. Invariants:
+  //   - sum(plan.cartons) === cartons  (when feasible)
+  //   - each row.cartons <= machine.capacityQty
+  //   - machines used in capacity-desc order; no row with 0 cartons.
+  const autoAllocateCartons = (
+    cartons: number,
+    machines: any[]
+  ): { machineId: string; cartons: number }[] => {
+    const free = machines
+      .filter((m) => !m.hasPendingAllocation && Number(m.capacityQty) > 0)
+      .sort((a, b) => Number(b.capacityQty) - Number(a.capacityQty));
+
+    let remaining = cartons;
+    const plan: { machineId: string; cartons: number }[] = [];
+    for (const m of free) {
+      if (remaining <= 0) break;
+      const cap = Math.floor(Number(m.capacityQty) || 0);
+      const take = Math.min(remaining, cap);
+      if (take > 0) {
+        plan.push({ machineId: m.id, cartons: take });
+        remaining -= take;
+      }
+    }
+    return plan;
+  };
+
+  /* ─── Build per-machine allocation rows from an auto plan ─── */
+  // For each machine slot, derive:
+  //   - sfgConsumptionQty (KG) = cartons × (SFG kg per carton from BOM consumption line)
+  //   - pkgEntries        = for every packaging line in BOM, one PkgEntry filled
+  //                         with cartons × (BOM per-carton qty) in the line's BOM unit,
+  //                         pointing at the first transfer that has remaining qty.
+  const buildAllocationsFromPlan = (
+    plan: { machineId: string; cartons: number }[]
+  ): MachineAllocation[] => {
+    const sfgLine = consumptionLines.find((l) => l.isSFG);
+    const pkgLines = consumptionLines.filter((l) => l.isPackaging);
+    const totalCartons = plan.reduce((s, p) => s + p.cartons, 0) || 1;
+
+    return plan.map((p) => {
+      const share = p.cartons / totalCartons; // proportional split
+
+      // SFG qty proportional to this machine's share, in KG (the BOM's expected unit
+      // for SFG is normalized to KG by the backend in fetchBomItems).
+      const sfgKg = sfgLine
+        ? Math.round((Number(sfgLine.expectedQuantity) || 0) * share * 1000) / 1000
+        : 0;
+
+      // Pick the first SFG batch with remaining qty as the default.
+      const sfgBatch = sfgLine?.availableSfgBatches?.find((b: any) => (b.remainingQuantity || 0) > 0);
+
+      // For each packaging line, take cartons × per-carton qty in that line's unit.
+      // Backend's expectedQuantity is the FULL plan qty in the line's display unit,
+      // so we just multiply by `share` (proportion of cartons).
+      const pkgEntries: PkgEntry[] = pkgLines.map((pl) => {
+        const lineQty = Math.round((Number(pl.expectedQuantity) || 0) * share * 1000) / 1000;
+        const optBatch = pl.availableSfgBatches?.find((b: any) => (b.remainingQuantity || 0) > 0);
+        return {
+          id: genId(),
+          transferNumber: optBatch?.transferNumber || null,
+          rawMaterialId: pl.rawMaterialId,
+          productName: pl.rawMaterialName,
+          skuCode: pl.skuCode || null,
+          qty: lineQty > 0 ? lineQty : null,
+          unit: pl.unit || optBatch?.unit || 'KG',
+        };
+      });
+
+      return {
+        id: genId(),
+        machineId: p.machineId,
+        manPower: true,
+        sfgTransferNumber: sfgBatch?.transferNumber || null,
+        sfgConsumptionQty: sfgKg > 0 ? sfgKg : null,
+        pkgEntries: pkgEntries.length > 0 ? pkgEntries : [newPkgEntry()],
+        notes: '',
+      };
+    });
+  };
+
   const proceedToMachineAllocation = () => {
-    if (!selectedLocationId || !selectedBomId || !productionQty) {
+    if (!selectedLocationId || !selectedBomId || !productionQty || !plannedCartons) {
       message.error('Please complete all planning fields');
       return;
     }
-    
+
+    // Validate material availability up-front (existing checks).
     for (const item of consumptionLines) {
        if (item.isSFG) {
           if (!item.availableSfgBatches || item.availableSfgBatches.length === 0) {
@@ -561,6 +662,23 @@ const NewFGProductionEntryPage: React.FC = () => {
        }
     }
 
+    // Capacity check: free machines must collectively cover the plan.
+    const freeMachines = outputMachines.filter((m) => !m.hasPendingAllocation && Number(m.capacityQty) > 0);
+    const totalFreeCapacity = freeMachines.reduce((s, m) => s + Math.floor(Number(m.capacityQty) || 0), 0);
+    if (totalFreeCapacity < plannedCartons) {
+      message.error(`Insufficient machine capacity: planned ${plannedCartons} cartons but only ${totalFreeCapacity} carton-slots free. Release a machine or reduce the plan.`);
+      return;
+    }
+
+    // Generate the auto-allocation and seed Step 2.
+    const plan = autoAllocateCartons(plannedCartons, outputMachines);
+    if (plan.length === 0) {
+      message.error('Auto-allocation failed: no free machines available.');
+      return;
+    }
+    const newAllocations = buildAllocationsFromPlan(plan);
+    setAllocations(newAllocations);
+    setManualOverride(false);
     setStep(1);
   };
 
@@ -786,7 +904,7 @@ const NewFGProductionEntryPage: React.FC = () => {
         productName: planProductName,
         instulationCapacity: m?.capacityQty || 0,
         instulationCapacityUnit:
-          m?.capacityUnit === 'BOXES_PER_SHIFT' ? 'Boxes/Shift' : m?.capacityUnit,
+          m?.capacityUnit === 'BOXES_PER_SHIFT' ? 'Cartons/Shift' : m?.capacityUnit,
         laminateConsumptionQty: aggLaminateKg,
         laminateConsumptionUnit: 'KG',
         sfgConsumptionQty: sfgKg,
@@ -838,7 +956,7 @@ const NewFGProductionEntryPage: React.FC = () => {
   ];
 
   const getCapacityLabel = (unit: string) => {
-    if (unit === 'BOXES_PER_SHIFT') return 'Boxes/Shift';
+    if (unit === 'BOXES_PER_SHIFT') return 'Cartons/Shift';
     if (unit === 'KG_PER_SHIFT') return 'KG/Shift';
     if (unit === 'TON_PER_SHIFT') return 'Ton/Shift';
     return unit;
@@ -936,35 +1054,65 @@ const NewFGProductionEntryPage: React.FC = () => {
                       <p className="mt-2 text-[11px] text-muted-foreground">Finished good you want to produce</p>
                     </div>
 
-                    {/* Field 3: Planned Production */}
+                    {/* Field 3: Planned Production (in CARTONS) */}
                     <div className="md:col-span-2 group rounded-md border border-border bg-card p-4 shadow-sm transition-all hover:border-emerald-400 hover:shadow-md">
                       <div className="flex items-center gap-2 mb-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-amber-100 text-amber-700 font-bold text-xs">03</div>
-                        <Scale size={16} className="text-amber-600" />
-                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Total Planned Production</label>
+                        <Boxes size={16} className="text-amber-600" />
+                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Planned Cartons</label>
                       </div>
                       <div className="flex items-center gap-3">
-                        <InputNumber min={0.001} step={1} className="w-full font-semibold rounded-sm" size="large" value={productionQty} onChange={setProductionQty} placeholder="E.g. 500" />
-                        <Select className="w-32 rounded-sm" size="large" value={productionUnit} onChange={setProductionUnit} options={['KG', 'Ton', 'gram'].map(u => ({ value: u, label: u }))} />
+                        <InputNumber
+                          min={1}
+                          step={1}
+                          precision={0}
+                          className="w-full font-semibold rounded-sm"
+                          size="large"
+                          value={plannedCartons}
+                          onChange={(v) => {
+                            const n = v != null ? Math.max(0, Math.floor(Number(v))) : null;
+                            setPlannedCartons(n);
+                            // Derive weight: 1 carton = 1 BOM execution → cartons × outputQuantity in BOM's unit.
+                            const bom = boms.find((b) => b.id === selectedBomId);
+                            if (bom && n) {
+                              setProductionQty(Number((n * bom.outputQuantity).toFixed(3)));
+                              setProductionUnit(bom.unitOfMeasurement || 'KG');
+                            } else {
+                              setProductionQty(null);
+                            }
+                          }}
+                          placeholder="E.g. 100"
+                        />
+                        <div className="text-xs text-muted-foreground font-semibold whitespace-nowrap px-2">cartons</div>
                         <Button
                           type="primary"
                           size="large"
                           onClick={handleCheckAvailability}
                           loading={loadingItems}
-                          disabled={!selectedLocationId || !selectedBomId || !productionQty || productionQty <= 0}
+                          disabled={!selectedLocationId || !selectedBomId || !plannedCartons || plannedCartons <= 0}
                           className="rounded-sm font-bold shadow-md border-0 whitespace-nowrap"
-                          style={{ background: (!selectedLocationId || !selectedBomId || !productionQty || productionQty <= 0) ? undefined : 'linear-gradient(135deg, #8b5cf6, #6d28d9)' }}
+                          style={{ background: (!selectedLocationId || !selectedBomId || !plannedCartons || plannedCartons <= 0) ? undefined : 'linear-gradient(135deg, #8b5cf6, #6d28d9)' }}
                           icon={<Search size={16} />}
                         >
                           Check Availability
                         </Button>
                       </div>
-                      <p className="mt-2 text-[11px] text-muted-foreground">Planned output quantity for this batch</p>
+                      {/* Derived weight preview */}
+                      {plannedCartons && selectedBomId && (() => {
+                        const bom = boms.find((b) => b.id === selectedBomId);
+                        if (!bom) return null;
+                        return (
+                          <p className="mt-2 text-[11px] text-emerald-700 font-medium">
+                            {plannedCartons} cartons × {bom.outputQuantity} {bom.unitOfMeasurement} per carton = <span className="font-bold">{Number((plannedCartons * bom.outputQuantity).toFixed(3))} {bom.unitOfMeasurement}</span> total
+                          </p>
+                        );
+                      })()}
+                      <p className="mt-1 text-[11px] text-muted-foreground">1 carton = 1 BOM execution. Material requirements scale automatically.</p>
                     </div>
                   </div>
 
                   {/* Plan Summary */}
-                  {selectedLocationId && selectedBomId && productionQty && (
+                  {selectedLocationId && selectedBomId && plannedCartons && (
                     <motion.div
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -987,7 +1135,10 @@ const NewFGProductionEntryPage: React.FC = () => {
                       <div className="h-4 w-px bg-emerald-200" />
                       <div className="flex items-center gap-1.5 text-xs text-emerald-800">
                         <Boxes size={12} />
-                        <span className="font-semibold">{productionQty} {productionUnit}</span>
+                        <span className="font-semibold">{plannedCartons} cartons</span>
+                        {productionQty != null && (
+                          <span className="text-emerald-700/70">({productionQty} {productionUnit})</span>
+                        )}
                       </div>
                     </motion.div>
                   )}
@@ -1195,7 +1346,119 @@ const NewFGProductionEntryPage: React.FC = () => {
                   </div>
                 ) : null}
 
-                {/* Allocation Rows */}
+                {/* Auto-allocation Summary + Override Toggle */}
+                <div className="rounded-md border border-emerald-200 bg-emerald-50/40 p-4 space-y-3">
+                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle size={16} className="text-emerald-600" />
+                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                        {manualOverride ? 'Manual Override Active' : 'Auto-Allocation'}
+                      </span>
+                      <span className="text-[11px] text-muted-foreground">
+                        — {plannedCartons || 0} cartons across {allocations.length} machine{allocations.length > 1 ? 's' : ''} (largest free machine first)
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (manualOverride) {
+                          // Switching back to auto — rebuild from plan
+                          if (plannedCartons) {
+                            const plan = autoAllocateCartons(plannedCartons, outputMachines);
+                            setAllocations(buildAllocationsFromPlan(plan));
+                          }
+                          setManualOverride(false);
+                        } else {
+                          setManualOverride(true);
+                        }
+                      }}
+                      className={`text-[11px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-sm border transition-colors ${
+                        manualOverride
+                          ? 'border-emerald-500 bg-emerald-500 text-white hover:bg-emerald-600'
+                          : 'border-emerald-300 bg-white text-emerald-700 hover:bg-emerald-100'
+                      }`}
+                    >
+                      {manualOverride ? 'Reset to Auto' : 'Override Allocation'}
+                    </button>
+                  </div>
+
+                  {!manualOverride && (
+                    <div className="overflow-x-auto rounded-sm border border-emerald-100 bg-white">
+                      <table className="w-full text-sm">
+                        <thead className="bg-emerald-50/70 border-b border-emerald-100">
+                          <tr>
+                            <th className="px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wider text-emerald-700">Machine</th>
+                            <th className="px-3 py-2 text-right text-[10px] font-bold uppercase tracking-wider text-emerald-700">Capacity</th>
+                            <th className="px-3 py-2 text-right text-[10px] font-bold uppercase tracking-wider text-emerald-700">Cartons Assigned</th>
+                            <th className="px-3 py-2 text-right text-[10px] font-bold uppercase tracking-wider text-emerald-700">SFG (KG)</th>
+                            <th className="px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wider text-emerald-700">Packaging</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-emerald-100/70">
+                          {allocations.map((row) => {
+                            const m = outputMachines.find((mm) => mm.id === row.machineId);
+                            return (
+                              <tr key={row.id} className="hover:bg-emerald-50/40">
+                                <td className="px-3 py-2">
+                                  <div className="font-semibold text-foreground">{m?.name || '—'}</div>
+                                  <div className="text-[10px] text-muted-foreground font-mono">{m?.machineId || ''}</div>
+                                </td>
+                                <td className="px-3 py-2 text-right text-xs text-muted-foreground">
+                                  {m?.capacityQty || 0} cartons/shift
+                                </td>
+                                <td className="px-3 py-2 text-right">
+                                  <span className="font-extrabold text-emerald-700">
+                                    {(() => {
+                                      // Derive cartons from sfgConsumptionQty / sfg-per-carton, OR from BOM
+                                      const bom = boms.find((b) => b.id === selectedBomId);
+                                      const sfgLine = consumptionLines.find((l) => l.isSFG);
+                                      if (!bom || !sfgLine || !plannedCartons) return '—';
+                                      // Sum of sfgKg = sfgLine.expectedQuantity (total for plan)
+                                      // → cartons for this row = (sfgConsumptionQty / total) × plannedCartons
+                                      const totalSfg = Number(sfgLine.expectedQuantity) || 0;
+                                      const rowSfg = Number(row.sfgConsumptionQty || 0);
+                                      if (totalSfg <= 0) return '—';
+                                      return Math.round((rowSfg / totalSfg) * plannedCartons);
+                                    })()}
+                                  </span>
+                                </td>
+                                <td className="px-3 py-2 text-right text-xs">
+                                  {row.sfgConsumptionQty != null ? `${formatQty(row.sfgConsumptionQty)} KG` : '—'}
+                                </td>
+                                <td className="px-3 py-2 text-xs">
+                                  {row.pkgEntries.filter((p) => p.qty && p.qty > 0).length === 0 ? (
+                                    <span className="text-muted-foreground">—</span>
+                                  ) : (
+                                    <div className="flex flex-col gap-0.5">
+                                      {row.pkgEntries
+                                        .filter((p) => p.qty && p.qty > 0)
+                                        .map((p) => (
+                                          <span key={p.id} className="text-foreground">
+                                            <span className="font-semibold">{p.qty} {p.unit}</span>
+                                            <span className="text-muted-foreground"> · {p.productName}</span>
+                                          </span>
+                                        ))}
+                                    </div>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  <p className="text-[11px] text-muted-foreground">
+                    {manualOverride
+                      ? 'You can change machines and quantities below. Click "Reset to Auto" to re-run the auto-allocator.'
+                      : 'The largest free machine is filled first; any remainder spills to the next machine. Tap "Override Allocation" to edit.'}
+                  </p>
+                </div>
+
+                {/* Allocation Rows — visible only in manual override mode */}
+                {manualOverride && (
+                <>
                 <div className="space-y-4">
                   {allocations.map((row, idx) => {
                     const machineOpts = availableMachinesForRow(row.id);
@@ -1446,6 +1709,8 @@ const NewFGProductionEntryPage: React.FC = () => {
                     Add Machine Allocation
                   </Button>
                 </div>
+                </>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

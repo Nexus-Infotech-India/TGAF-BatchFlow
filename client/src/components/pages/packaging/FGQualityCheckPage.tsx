@@ -370,9 +370,22 @@ export default function FGQualityCheckPage() {
                     className="w-full font-semibold"
                     options={(selectedEntry.machineEntries || []).map((me: any) => {
                       const isDone = me.qualityReport || submittedMachineIds.has(me.id);
+                      // Convert allocated FG qty into cartons using the BOM's outputQuantity.
+                      const bomOut = Number(selectedEntry.bom?.outputQuantity || 0);
+                      const bomUnit = (selectedEntry.bom?.unitOfMeasurement || me.actualFgUnit || 'KG').toUpperCase();
+                      const factor: Record<string, number> = { GRAM: 1, G: 1, KG: 1000, TON: 1_000_000 };
+                      const actualUnit = (me.actualFgUnit || 'KG').toUpperCase();
+                      const allocatedInBomUnit = bomOut > 0
+                        ? (Number(me.actualFgQty) || 0) * (factor[actualUnit] ?? 1) / (factor[bomUnit] ?? 1)
+                        : 0;
+                      const allocatedCartons = bomOut > 0 ? Math.round(allocatedInBomUnit / bomOut) : null;
+                      // Operator-entered achievement is already in cartons
+                      const achievedCartons = me.todayAchieve != null ? Number(me.todayAchieve) : null;
+                      const allocLabel = allocatedCartons != null ? `${allocatedCartons} cartons allocated` : `${me.actualFgQty} ${me.actualFgUnit} allocated`;
+                      const achievedLabel = achievedCartons != null ? ` · ${achievedCartons} cartons achieved` : '';
                       return {
                         value: me.id,
-                        label: `${me.machineName} (${me.machine?.machineId}) — ${me.actualFgQty} ${me.actualFgUnit}${isDone ? '  ✅ Done' : ''}`,
+                        label: `${me.machineName} (${me.machine?.machineId}) — ${allocLabel}${achievedLabel}${isDone ? '  ✅ Done' : ''}`,
                       };
                     })}
                   />
@@ -388,11 +401,25 @@ export default function FGQualityCheckPage() {
                       </div>
                       <div>
                         <span className="text-muted-foreground text-xs font-bold uppercase">Actual FG Qty</span>
-                        <div className="font-bold text-emerald-600">{selectedMachineEntry.actualFgQty} {selectedMachineEntry.actualFgUnit}</div>
+                        <div className="font-bold text-emerald-600">
+                          {(() => {
+                            const bomOut = Number(selectedEntry.bom?.outputQuantity || 0);
+                            const bomUnit = (selectedEntry.bom?.unitOfMeasurement || selectedMachineEntry.actualFgUnit || 'KG').toUpperCase();
+                            const factor: Record<string, number> = { GRAM: 1, G: 1, KG: 1000, TON: 1_000_000 };
+                            const actualUnit = (selectedMachineEntry.actualFgUnit || 'KG').toUpperCase();
+                            const actualInBomUnit = bomOut > 0
+                              ? (Number(selectedMachineEntry.actualFgQty) || 0) * (factor[actualUnit] ?? 1) / (factor[bomUnit] ?? 1)
+                              : 0;
+                            const cartons = bomOut > 0 ? Math.round(actualInBomUnit / bomOut) : null;
+                            return cartons != null
+                              ? `${cartons} cartons`
+                              : `${selectedMachineEntry.actualFgQty} ${selectedMachineEntry.actualFgUnit}`;
+                          })()}
+                        </div>
                       </div>
                       <div>
                         <span className="text-muted-foreground text-xs font-bold uppercase">Achievement</span>
-                        <div className="font-bold">{selectedMachineEntry.todayAchieve || '-'} Boxes</div>
+                        <div className="font-bold">{selectedMachineEntry.todayAchieve ?? '-'} cartons</div>
                       </div>
                       <div>
                         <span className="text-muted-foreground text-xs font-bold uppercase">Shift</span>

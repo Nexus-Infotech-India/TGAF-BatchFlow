@@ -347,14 +347,34 @@ export class FGProductionController {
         include: {
           machine: true,
           machineEntries: {
-            include: { machine: true, downtimeRecords: true, qualityReport: { include: { parameters: true } } },
+            include: {
+              machine: true,
+              downtimeRecords: true,
+              qualityReport: { include: { parameters: true } },
+              packagingConsumptions: true,
+            },
           },
           fgBatch: true,
           qualityReports: { include: { parameters: true } },
         },
         orderBy: { createdAt: 'desc' },
       });
-      res.json({ success: true, data: entries });
+
+      // Attach BOM info (outputQuantity, unitOfMeasurement) for each entry so the
+      // frontend can render cartons = targetQty / outputQuantity in the plan's unit.
+      const bomIds = Array.from(new Set(entries.map((e) => e.bomId).filter((x): x is string => !!x)));
+      const boms = bomIds.length > 0
+        ? await prisma.billOfMaterial.findMany({
+            where: { id: { in: bomIds } },
+            select: { id: true, bomCode: true, outputQuantity: true, unitOfMeasurement: true, productName: true },
+          })
+        : [];
+      const bomById: Record<string, typeof boms[number]> = {};
+      for (const b of boms) bomById[b.id] = b;
+
+      const enriched = entries.map((e) => ({ ...e, bom: bomById[e.bomId] || null }));
+
+      res.json({ success: true, data: enriched });
     } catch (error) {
       console.error('Error fetching production entries:', error);
       res.status(500).json({ error: 'Failed to fetch production entries', details: error });
@@ -506,6 +526,29 @@ export class FGProductionController {
               machineNotUtilizedHrs,
             },
           });
+
+          // Persist per-packaging-line wastages onto the existing
+          // FGProductionMachinePackaging rows (Option A: same table).
+          // The frontend sends `packagingWastages: [{ id?, rawMaterialId?, wastageQty, wastagePercentage }]`.
+          if (Array.isArray(input.packagingWastages) && input.packagingWastages.length > 0) {
+            for (const w of input.packagingWastages) {
+              const wasteQty = w?.wastageQty != null ? Number(w.wastageQty) : null;
+              const wastePct = w?.wastagePercentage != null ? Number(w.wastagePercentage) : null;
+              // Prefer the FGProductionMachinePackaging row id when provided (most reliable);
+              // otherwise resolve by (machineEntryId, rawMaterialId).
+              if (w?.id) {
+                await tx.fGProductionMachinePackaging.update({
+                  where: { id: String(w.id) },
+                  data: { wastageQty: wasteQty, wastagePercentage: wastePct },
+                });
+              } else if (w?.rawMaterialId) {
+                await tx.fGProductionMachinePackaging.updateMany({
+                  where: { machineEntryId: input.id, rawMaterialId: String(w.rawMaterialId) },
+                  data: { wastageQty: wasteQty, wastagePercentage: wastePct },
+                });
+              }
+            }
+          }
 
           // Create downtime records if machine has not-utilized hours
           if (Array.isArray(input.downtimeRecords) && input.downtimeRecords.length > 0) {

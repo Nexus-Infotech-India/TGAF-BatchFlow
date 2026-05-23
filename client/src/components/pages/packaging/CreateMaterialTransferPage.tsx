@@ -85,6 +85,12 @@ const CreateMaterialTransferPage: React.FC = () => {
   // Packaging
   const [packagingMaterials, setPackagingMaterials] = useState<PackagingMaterial[]>([]);
   const [packagingStockMap, setPackagingStockMap] = useState<Record<string, { available: number; unit: string }>>({});
+  // Multi-row selection: each row is one packaging material + qty + unit.
+  // Keeps the legacy singular state below in sync so other code reading them still works.
+  type PkgRow = { id: string; materialId: string | null; qty: number | null; unit: string };
+  const newPkgRow = (): PkgRow => ({ id: `pkg-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, materialId: null, qty: null, unit: 'KG' });
+  const [pkgRows, setPkgRows] = useState<PkgRow[]>([newPkgRow()]);
+  // Legacy singletons kept so existing flow paths don't break if any code reads them.
   const [selectedPkgMaterial, setSelectedPkgMaterial] = useState<PackagingMaterial | null>(null);
   const [pkgQuantity, setPkgQuantity] = useState<number | null>(null);
   const [pkgUnit, setPkgUnit] = useState<string>('KG');
@@ -217,21 +223,53 @@ const CreateMaterialTransferPage: React.FC = () => {
     setCurrentStep(3);
   };
 
+  /* ═══ Multi-row packaging helpers ═══ */
+  const addPkgRow = () => setPkgRows(prev => [...prev, newPkgRow()]);
+  const removePkgRow = (id: string) => setPkgRows(prev => (prev.length === 1 ? prev : prev.filter(r => r.id !== id)));
+  const updatePkgRow = (id: string, patch: Partial<PkgRow>) => setPkgRows(prev => prev.map(r => r.id === id ? { ...r, ...patch } : r));
+
+  // Push every valid pkg row into the cart in one go.
   const addPackagingToCart = () => {
-    if (!selectedPkgMaterial || !pkgQuantity || pkgQuantity <= 0) return message.error('Select material & enter quantity');
-    const newItem: CartItem = {
-      id: `pkg-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-      category: 'PACKAGING_MATERIAL',
-      rawMaterialId: selectedPkgMaterial.id,
-      productName: selectedPkgMaterial.name,
-      skuCode: selectedPkgMaterial.skuCode,
-      quantity: pkgQuantity,
-      unitOfMeasurement: pkgUnit,
-      fromLocationId, fromLocationName: getLocationName(fromLocationId),
-      toLocationId, toLocationName: getLocationName(toLocationId),
-    };
-    setCartItems(prev => [...prev, newItem]);
-    message.success(`Added ${selectedPkgMaterial.name}`);
+    const validRows = pkgRows.filter(r => r.materialId && r.qty != null && r.qty > 0);
+    if (validRows.length === 0) {
+      message.error('Select at least one packaging material & enter quantity');
+      return;
+    }
+
+    // Hard-fail: no row can exceed available stock; no duplicate material in two rows
+    const seen = new Set<string>();
+    for (const r of validRows) {
+      const mat = packagingMaterials.find(m => m.id === r.materialId);
+      if (!mat) continue;
+      if (seen.has(r.materialId!)) {
+        message.error(`${mat.name}: selected twice in this batch. Merge into one row.`);
+        return;
+      }
+      seen.add(r.materialId!);
+      const stock = packagingStockMap[r.materialId!]?.available ?? 0;
+      if (stock > 0 && (r.qty || 0) > stock) {
+        message.error(`${mat.name}: quantity exceeds available stock (${stock}).`);
+        return;
+      }
+    }
+
+    const newItems: CartItem[] = validRows.map(r => {
+      const mat = packagingMaterials.find(m => m.id === r.materialId)!;
+      return {
+        id: `pkg-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        category: 'PACKAGING_MATERIAL',
+        rawMaterialId: mat.id,
+        productName: mat.name,
+        skuCode: mat.skuCode,
+        quantity: r.qty!,
+        unitOfMeasurement: r.unit,
+        fromLocationId, fromLocationName: getLocationName(fromLocationId),
+        toLocationId, toLocationName: getLocationName(toLocationId),
+      };
+    });
+
+    setCartItems(prev => [...prev, ...newItems]);
+    message.success(`Added ${newItems.length} packaging item${newItems.length > 1 ? 's' : ''} to cart`);
     resetItemForm();
     setCurrentStep(3);
   };
@@ -248,6 +286,7 @@ const CreateMaterialTransferPage: React.FC = () => {
     setSelectedPkgMaterial(null);
     setPkgQuantity(null);
     setPkgUnit('KG');
+    setPkgRows([newPkgRow()]);
   };
 
   /* ═══ Navigation ═══ */
@@ -585,69 +624,127 @@ const CreateMaterialTransferPage: React.FC = () => {
               </motion.div>
             )}
 
-            {/* ═══ Step 2: Material — Packaging ═══ */}
+            {/* ═══ Step 2: Material — Packaging (multi-row) ═══ */}
             {currentStep === 2 && selectedCategory === 'PACKAGING_MATERIAL' && (
-              <motion.div key="step2-pkg" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-5">
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground mb-2 flex items-center">
-                    <Package size={14} className="mr-1.5" /> Select Packaging Material
+              <motion.div key="step2-pkg" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground flex items-center">
+                    <Package size={14} className="mr-1.5" /> Select Packaging Materials
                   </label>
-                  <Select
-                    className="w-full" size="large" showSearch placeholder="Select packaging material"
-                    value={selectedPkgMaterial?.id || undefined}
-                    onChange={id => { const mat = packagingMaterials.find(m => m.id === id); setSelectedPkgMaterial(mat || null); if (mat) setPkgUnit(mat.unitOfMeasurement || 'KG'); }}
-                    optionFilterProp="label"
-                    options={packagingMaterials.map(m => {
-                      const stock = packagingStockMap[m.id];
-                      const availLabel = stock ? ` — Available: ${stock.available} ${stock.unit}` : ' — Available: 0';
-                      return { value: m.id, label: `${m.name} (${m.skuCode || 'NO-SKU'})${availLabel}` };
-                    })}
-                  />
+                  <span className="text-[11px] text-muted-foreground">{pkgRows.length} row{pkgRows.length > 1 ? 's' : ''}</span>
                 </div>
 
-                {selectedPkgMaterial && (() => {
-                  const stock = packagingStockMap[selectedPkgMaterial.id];
+                {pkgRows.map((row, rIdx) => {
+                  const chosen = packagingMaterials.find(m => m.id === row.materialId) || null;
+                  const stock = chosen ? packagingStockMap[chosen.id] : undefined;
                   const availableQty = stock?.available ?? 0;
-                  const availableUnit = stock?.unit || selectedPkgMaterial.unitOfMeasurement || 'KG';
+                  const availableUnit = stock?.unit || chosen?.unitOfMeasurement || 'KG';
+                  // Hide materials already picked in another row from this row's dropdown
+                  const picked = new Set(pkgRows.filter(r => r.id !== row.id && r.materialId).map(r => r.materialId!));
+
                   return (
-                  <div className="border border-blue-200 rounded-xl p-5 bg-blue-50/40 space-y-4">
-                    <div className="flex items-center justify-between gap-2">
+                    <div key={row.id} className="border border-blue-200 rounded-xl p-4 bg-blue-50/40 space-y-3">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center"><Package size={16} className="text-blue-600" /></div>
-                        <div>
-                          <div className="text-sm font-bold">{selectedPkgMaterial.name}</div>
-                          <div className="text-[10px] text-muted-foreground">{selectedPkgMaterial.skuCode}</div>
+                        <div className="flex-1">
+                          <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1.5">Material #{rIdx + 1}</label>
+                          <Select
+                            className="w-full" size="large" showSearch placeholder="Select packaging material"
+                            value={row.materialId || undefined}
+                            onChange={id => {
+                              const mat = packagingMaterials.find(m => m.id === id);
+                              updatePkgRow(row.id, {
+                                materialId: id || null,
+                                unit: mat?.unitOfMeasurement || 'KG',
+                                qty: null,
+                              });
+                            }}
+                            optionFilterProp="label"
+                            options={packagingMaterials
+                              .filter(m => !picked.has(m.id))
+                              .map(m => ({
+                                value: m.id,
+                                label: `${m.name} (${m.skuCode || 'NO-SKU'})`,
+                              }))}
+                            allowClear
+                          />
                         </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Available</div>
-                        <div className={`text-base font-extrabold ${availableQty > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
-                          {availableQty} <span className="text-[10px] font-medium opacity-70">{availableUnit}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1.5">Quantity</label>
-                        <InputNumber className="w-full" size="large" min={0.001} max={availableQty || undefined} step={1} precision={3} value={pkgQuantity} onChange={setPkgQuantity} placeholder="Enter quantity" />
-                        {pkgQuantity != null && availableQty > 0 && pkgQuantity > availableQty && (
-                          <div className="text-[10px] text-red-500 mt-1 font-medium">Exceeds available stock</div>
+                        {pkgRows.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={() => removePkgRow(row.id)}
+                            className="p-2 rounded-lg text-muted-foreground hover:text-red-500 hover:bg-red-50 transition-colors mt-6"
+                            title="Remove this row"
+                          >
+                            <Trash2 size={16} />
+                          </button>
                         )}
                       </div>
-                      <div>
-                        <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1.5">Unit</label>
-                        <Select className="w-full" size="large" value={pkgUnit} onChange={setPkgUnit}
-                          options={[
-                            { value: 'KG', label: 'KG' }, { value: 'Ton', label: 'Ton' },
-                            { value: 'PCS', label: 'PCS (Pieces)' }, { value: 'Rolls', label: 'Rolls' },
-                            { value: 'Meters', label: 'Meters' }, { value: 'Sheets', label: 'Sheets' },
-                          ]}
-                        />
-                      </div>
+
+                      {chosen && (
+                        <>
+                          <div className="flex items-center justify-between bg-white/60 rounded-lg p-2 border border-blue-100">
+                            <div className="flex items-center gap-2">
+                              <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center"><Package size={14} className="text-blue-600" /></div>
+                              <div>
+                                <div className="text-xs font-bold">{chosen.name}</div>
+                                <div className="text-[10px] text-muted-foreground">{chosen.skuCode}</div>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Available</div>
+                              <div className={`text-sm font-extrabold ${availableQty > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                                {availableQty} <span className="text-[10px] font-medium opacity-70">{availableUnit}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1.5">Quantity</label>
+                              <InputNumber
+                                className="w-full"
+                                size="large"
+                                min={0.001}
+                                max={availableQty || undefined}
+                                step={1}
+                                precision={3}
+                                value={row.qty}
+                                onChange={v => updatePkgRow(row.id, { qty: v == null ? null : Number(v) })}
+                                placeholder="Enter quantity"
+                              />
+                              {row.qty != null && availableQty > 0 && row.qty > availableQty && (
+                                <div className="text-[10px] text-red-500 mt-1 font-medium">Exceeds available stock</div>
+                              )}
+                            </div>
+                            <div>
+                              <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1.5">Unit</label>
+                              <Select
+                                className="w-full"
+                                size="large"
+                                value={row.unit}
+                                disabled
+                                title={`Unit is locked to ${chosen.unitOfMeasurement || 'KG'} (from Material Master)`}
+                                options={[{ value: chosen.unitOfMeasurement || 'KG', label: chosen.unitOfMeasurement || 'KG' }]}
+                              />
+                              <p className="text-[10px] text-muted-foreground mt-1">Locked to master UOM</p>
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
-                  </div>
                   );
-                })()}
+                })}
+
+                {/* + Add another packaging row */}
+                {packagingMaterials.length > pkgRows.filter(r => r.materialId).length && (
+                  <button
+                    type="button"
+                    onClick={addPkgRow}
+                    className="w-full py-2.5 rounded-lg border border-dashed border-blue-300 bg-white/40 text-blue-700 font-semibold text-sm hover:bg-blue-50 transition-colors"
+                  >
+                    + Add Another Packaging Material
+                  </button>
+                )}
               </motion.div>
             )}
 
@@ -753,13 +850,18 @@ const CreateMaterialTransferPage: React.FC = () => {
             )}
 
             {currentStep === 2 && selectedCategory === 'PACKAGING_MATERIAL' && (() => {
-              const stockAvail = selectedPkgMaterial ? (packagingStockMap[selectedPkgMaterial.id]?.available ?? 0) : 0;
-              const exceeds = !!(pkgQuantity && pkgQuantity > stockAvail);
+              // Across all rows: every valid row must not exceed its material's available stock.
+              const validRows = pkgRows.filter(r => r.materialId && r.qty != null && r.qty > 0);
+              const anyExceeds = validRows.some(r => {
+                const stock = packagingStockMap[r.materialId!]?.available ?? 0;
+                return stock > 0 && (r.qty || 0) > stock;
+              });
+              const noValid = validRows.length === 0;
               return (
                 <Button type="primary" size="large" onClick={addPackagingToCart}
-                  disabled={!selectedPkgMaterial || !pkgQuantity || pkgQuantity <= 0 || stockAvail <= 0 || exceeds}
+                  disabled={noValid || anyExceeds}
                   className="rounded-lg font-bold shadow-md" style={{ background: '#2563eb', border: 'none' }} icon={<ShoppingCart size={14} />}>
-                  Add Packaging to Cart
+                  Add {validRows.length > 0 ? `${validRows.length} ` : ''}Packaging to Cart
                 </Button>
               );
             })()}

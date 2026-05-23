@@ -68,37 +68,77 @@ export default function ProductionOutputEntryPage() {
 
   const handleSelectEntry = (entry: any) => {
     setSelectedEntry(entry);
-    
+
+    // Carton math is derived from the BOM (1 BOM execution = 1 carton).
+    const bomOutputQty = Number(entry.bom?.outputQuantity || 0); // in BOM unit (gram/KG)
+    const bomOutputUnit = entry.bom?.unitOfMeasurement || entry.targetUnit || 'KG';
+
+    // Convert a qty in `unit` into the BOM's outputUnit so we can divide safely.
+    const toBomUnit = (qty: number, unit: string): number => {
+      if (!qty) return 0;
+      const u = (unit || '').toUpperCase();
+      const b = (bomOutputUnit || 'KG').toUpperCase();
+      const factor: Record<string, number> = { GRAM: 1, G: 1, KG: 1000, TON: 1_000_000 };
+      const q_g = qty * (factor[u] ?? 1);
+      const out = q_g / (factor[b] ?? 1);
+      return out;
+    };
+
     // Initialize machine inputs mapping
     const initInputs = entry.machineEntries.map((me: any) => {
+      // Allocated cartons for THIS machine (rounded — allocations are always whole cartons).
+      const allocatedCartons = bomOutputQty > 0
+        ? Math.round(toBomUnit(Number(me.allocatedQty) || 0, me.allocatedUnit) / bomOutputQty)
+        : 0;
+      // Allocated SFG (KG) for this machine
+      const sfgKg = me.sfgConsumptionQty != null ? Number(me.sfgConsumptionQty) : 0;
+      const sfgPerCartonKg = allocatedCartons > 0 ? sfgKg / allocatedCartons : 0;
+
+      // Build packaging-wastage rows from the machine's pre-allocated packaging consumptions.
+      // Each row mirrors a single FGProductionMachinePackaging record.
+      const packagingWastages = (me.packagingConsumptions || []).map((pc: any) => ({
+        id: pc.id,
+        rawMaterialId: pc.rawMaterialId,
+        productName: pc.productName,
+        skuCode: pc.skuCode,
+        allocatedQty: Number(pc.quantity) || 0,
+        unit: pc.unitOfMeasurement || 'KG',
+        wastageQty: pc.wastageQty ?? null,
+        wastagePercentage: pc.wastagePercentage ?? null,
+      }));
+
       return {
         id: me.id,
         machineBatchId: me.machineBatchId || null,
         machine: me.machine,
         allocatedQty: me.allocatedQty,
         allocatedUnit: me.allocatedUnit,
+        allocatedCartons,
+        sfgPerCartonKg,
         actualFgQty: me.allocatedQty,
         actualByproduct: 0,
         actualScrap: 0,
         machineSpeed: me.machine?.machineSpeed || null,
-        todayAchieve: null,
+        todayAchieve: null,                // in CARTONS now
         laminateConsumption: me.laminateConsumptionQty || null,
         laminateConsumptionUnit: me.laminateConsumptionUnit || null,
         sfgConsumption: me.sfgConsumptionQty || null,
         sfgConsumptionUnit: me.sfgConsumptionUnit || 'KG',
+        // Legacy laminate fields kept so existing payload/audit paths still work.
         laminateWastageKg: null,
         laminateWastageQty: null,
         laminateWastageUnit: 'KG',
         laminateWastagePercentage: 0,
         noManPower: me.manPower === false,
-        // New fields
         powderWastageKg: null,
         powderWastagePercentage: null,
         manPowerCount: null,
         shift: null,
         machineUtilizedHrs: null,
-        machineNotUtilizedHrs: 720, // default: full 12hr shift not utilized
+        machineNotUtilizedHrs: 720,
         downtimeRecords: [] as { startTime: string; stopTime: string; breakdownReason: string; remark: string }[],
+        // New per-packaging wastage rows
+        packagingWastages,
       };
     });
     setMachineInputs(initInputs);
@@ -110,39 +150,39 @@ export default function ProductionOutputEntryPage() {
       const next = [...prev];
       (next[index] as any)[field] = value;
 
-      if (['laminateWastageQty', 'laminateWastageUnit', 'laminateConsumption', 'laminateConsumptionUnit'].includes(field)) {
-        const consQty = next[index].laminateConsumption || 0;
-        const consUnit = next[index].laminateConsumptionUnit || 'KG';
-        const wasteQty = next[index].laminateWastageQty || 0;
-        const wasteUnit = next[index].laminateWastageUnit || 'KG';
+      // When operator types Today Achievement (in CARTONS), derive powder wastage
+      // from the gap and either zero-fill or clear packaging wastages.
+      if (field === 'todayAchieve') {
+        const row = next[index];
+        const target = Number(row.allocatedCartons) || 0;
+        const achieved = Number(value) || 0;
+        const shortfall = Math.max(0, target - achieved);
+        const sfgPerCarton = Number(row.sfgPerCartonKg) || 0;
+        const totalSfgKg = Number(row.sfgConsumption) || (sfgPerCarton * target);
 
-        const consInKg = convertToKg(consQty, consUnit);
-        const wasteInKg = convertToKg(wasteQty, wasteUnit);
+        // Powder wastage in KG
+        const powderKg = Number((shortfall * sfgPerCarton).toFixed(3));
+        row.powderWastageKg = powderKg;
+        row.powderWastagePercentage = totalSfgKg > 0
+          ? Number(((powderKg / totalSfgKg) * 100).toFixed(2))
+          : 0;
 
-        next[index].laminateWastageKg = wasteInKg;
-
-        if (consInKg > 0) {
-          next[index].laminateWastagePercentage = Number(((wasteInKg / consInKg) * 100).toFixed(2));
-        } else {
-          next[index].laminateWastagePercentage = 0;
+        // Target met → auto-zero all packaging wastages (editable later).
+        if (achieved === target && target > 0) {
+          row.packagingWastages = (row.packagingWastages || []).map((w: any) => ({
+            ...w,
+            wastageQty: 0,
+            wastagePercentage: 0,
+          }));
         }
-      } else if (field === 'laminateWastagePercentage') {
-        const consQty = next[index].laminateConsumption || 0;
-        const consUnit = next[index].laminateConsumptionUnit || 'KG';
-        const wasteUnit = next[index].laminateWastageUnit || 'KG';
 
-        const consInKg = convertToKg(consQty, consUnit);
-        if (consInKg > 0) {
-           const wasteInKg = (value / 100) * consInKg;
-           next[index].laminateWastageKg = wasteInKg;
-
-           if (wasteUnit.toUpperCase() === 'KG') next[index].laminateWastageQty = Number(wasteInKg.toFixed(4));
-           else if (wasteUnit.toUpperCase() === 'G' || wasteUnit.toUpperCase() === 'GRAM' || wasteUnit.toUpperCase() === 'GRAMS') next[index].laminateWastageQty = Number((wasteInKg * 1000).toFixed(2));
-           else next[index].laminateWastageQty = Number(wasteInKg.toFixed(4));
-        }
+        // Legacy laminate fields kept in sync for any downstream readers.
+        row.laminateWastageKg = 0;
+        row.laminateWastagePercentage = 0;
+        row.laminateWastageQty = 0;
       }
 
-      // Auto-calculate powder wastage percentage from KG
+      // Manual override of powder wastage (operator types a value directly)
       if (field === 'powderWastageKg') {
         const sfgCons = convertToKg(next[index].sfgConsumption || 0, next[index].sfgConsumptionUnit || 'KG');
         if (sfgCons > 0) {
@@ -157,6 +197,26 @@ export default function ProductionOutputEntryPage() {
         next[index].machineNotUtilizedHrs = Math.max(0, totalShiftMinutes - utilized);
       }
 
+      return next;
+    });
+  };
+
+  // Update one packaging-wastage cell on a machine row, auto-compute %.
+  const updatePackagingWastage = (machineIdx: number, pkgIdx: number, qty: number | null) => {
+    setMachineInputs((prev) => {
+      const next = [...prev];
+      const rows = [...(next[machineIdx].packagingWastages || [])];
+      const w = { ...rows[pkgIdx] };
+      const qtyNum = qty != null ? Number(qty) : null;
+      w.wastageQty = qtyNum;
+      const allocated = Number(w.allocatedQty) || 0;
+      if (qtyNum != null && allocated > 0) {
+        w.wastagePercentage = Number(((qtyNum / allocated) * 100).toFixed(2));
+      } else {
+        w.wastagePercentage = qtyNum != null ? 0 : null;
+      }
+      rows[pkgIdx] = w;
+      next[machineIdx] = { ...next[machineIdx], packagingWastages: rows };
       return next;
     });
   };
@@ -197,7 +257,27 @@ export default function ProductionOutputEntryPage() {
   const handleSubmit = async () => {
     if (!selectedEntry) return;
 
-    // Removed strict allocation validations since values are implicitly set or driven by backend
+    // Hard validations before submission
+    for (let i = 0; i < machineInputs.length; i++) {
+      const a = machineInputs[i];
+      const machineName = a.machine?.name || `Row ${i + 1}`;
+      // Allow zero achievement (full shift loss is valid), but require a value
+      if (a.todayAchieve == null) {
+        message.error(`${machineName}: enter today's achievement in cartons.`);
+        return;
+      }
+      if (a.allocatedCartons > 0 && a.todayAchieve > a.allocatedCartons) {
+        message.error(`${machineName}: achievement (${a.todayAchieve}) cannot exceed allocated cartons (${a.allocatedCartons}).`);
+        return;
+      }
+      // Block any packaging wastage exceeding the allocated qty for that line
+      for (const w of a.packagingWastages || []) {
+        if (w.wastageQty != null && w.allocatedQty > 0 && w.wastageQty > w.allocatedQty) {
+          message.error(`${machineName} — ${w.productName}: wastage (${w.wastageQty} ${w.unit}) exceeds allocated (${w.allocatedQty} ${w.unit}).`);
+          return;
+        }
+      }
+    }
 
     setSubmitting(true);
     try {
@@ -224,6 +304,13 @@ export default function ProductionOutputEntryPage() {
           machineUtilizedHrs: a.machineUtilizedHrs,
           machineNotUtilizedHrs: a.machineNotUtilizedHrs,
           downtimeRecords: a.downtimeRecords || [],
+          // New per-packaging wastages stored on FGProductionMachinePackaging rows.
+          packagingWastages: (a.packagingWastages || []).map((w: any) => ({
+            id: w.id,
+            rawMaterialId: w.rawMaterialId,
+            wastageQty: w.wastageQty,
+            wastagePercentage: w.wastagePercentage,
+          })),
         })),
         notes
       });
@@ -321,7 +408,14 @@ export default function ProductionOutputEntryPage() {
                               </td>
                               <td className="px-5 py-4 font-semibold text-foreground text-sm">{entry.fgProductName}</td>
                               <td className="px-5 py-4 text-right font-bold text-emerald-600 text-sm">
-                                {entry.targetQty} {entry.targetUnit}
+                                {(() => {
+                                  const bomOut = Number(entry.bom?.outputQuantity || 0);
+                                  if (bomOut > 0) {
+                                    const cartons = Math.round((Number(entry.targetQty) || 0) / bomOut);
+                                    return `${cartons} cartons`;
+                                  }
+                                  return `${entry.targetQty} ${entry.targetUnit}`;
+                                })()}
                               </td>
                               <td className="px-5 py-4 text-center text-sm font-semibold text-muted-foreground">
                                 {entry.machineEntries?.length || 0}
@@ -428,7 +522,7 @@ export default function ProductionOutputEntryPage() {
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-5 p-3 rounded-lg bg-muted/20 border border-border">
                           <div>
                             <div className="text-[10px] font-bold text-muted-foreground uppercase">Installation Capacity</div>
-                            <div className="font-semibold text-foreground">{alloc.machine?.capacityQty || '-'} {alloc.machine?.capacityUnit === 'BOXES_PER_SHIFT' ? 'Boxes / Shift' : alloc.machine?.capacityUnit}</div>
+                            <div className="font-semibold text-foreground">{alloc.machine?.capacityQty || '-'} {alloc.machine?.capacityUnit === 'BOXES_PER_SHIFT' ? 'Cartons / Shift' : alloc.machine?.capacityUnit}</div>
                           </div>
                           <div>
                             <div className="text-[10px] font-bold text-muted-foreground uppercase">Machine Speed</div>
@@ -447,9 +541,24 @@ export default function ProductionOutputEntryPage() {
                           <div className="space-y-1.5">
                             <label className="text-xs font-bold text-foreground uppercase tracking-wider">Today Achievement</label>
                             <div className="flex items-center gap-2">
-                              <InputNumber min={0} step={0.01} value={alloc.todayAchieve} onChange={(val) => updateInput(idx, 'todayAchieve', val || 0)} placeholder="0.00" size="large" className="w-full font-bold text-emerald-600" />
-                              <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">Boxes / Unit</span>
+                              <InputNumber
+                                min={0}
+                                max={alloc.allocatedCartons || undefined}
+                                step={1}
+                                precision={0}
+                                value={alloc.todayAchieve}
+                                onChange={(val) => updateInput(idx, 'todayAchieve', val == null ? null : Math.floor(Number(val)))}
+                                placeholder="0"
+                                size="large"
+                                className="w-full font-bold text-emerald-600"
+                              />
+                              <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">
+                                / {alloc.allocatedCartons || 0} cartons
+                              </span>
                             </div>
+                            {alloc.todayAchieve != null && alloc.allocatedCartons > 0 && alloc.todayAchieve > alloc.allocatedCartons && (
+                              <div className="text-[10px] text-red-600 font-medium">Cannot exceed allocated cartons</div>
+                            )}
                           </div>
                           <div className="space-y-1.5">
                             <label className="text-xs font-bold text-foreground uppercase tracking-wider flex items-center gap-1">
@@ -475,13 +584,16 @@ export default function ProductionOutputEntryPage() {
                           </div>
                         </div>
 
-                        {/* Row 2: Powder Wastage + Laminate Wastage */}
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-5 mb-4 p-4 rounded-xl border border-amber-200 bg-amber-50/30">
+                        {/* Row 2A: Powder Wastage — auto-filled from achievement shortfall, editable */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4 p-4 rounded-xl border border-amber-200 bg-amber-50/30">
                           <div className="space-y-1.5">
-                            <label className="text-xs font-bold text-amber-700 uppercase tracking-wider">Powder Wastage</label>
+                            <label className="text-xs font-bold text-amber-700 uppercase tracking-wider">Powder Wastage (auto)</label>
                             <div className="flex items-center gap-2">
                               <InputNumber min={0} step={0.001} value={alloc.powderWastageKg} onChange={(val) => updateInput(idx, 'powderWastageKg', val)} placeholder="0.000" size="large" className="w-full font-semibold" />
                               <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">KG</span>
+                            </div>
+                            <div className="text-[10px] text-amber-700/80">
+                              Computed from (target − achieved) × {alloc.sfgPerCartonKg ? alloc.sfgPerCartonKg.toFixed(3) : '0'} KG/carton. Editable.
                             </div>
                           </div>
                           <div className="space-y-1.5">
@@ -491,21 +603,76 @@ export default function ProductionOutputEntryPage() {
                               <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">%</span>
                             </div>
                           </div>
-                          <div className="space-y-1.5">
-                            <label className="text-xs font-bold text-blue-700 uppercase tracking-wider">Laminate Wastage</label>
-                            <div className="flex items-center gap-2">
-                              <InputNumber min={0} step={0.001} value={alloc.laminateWastageQty} onChange={(val) => updateInput(idx, 'laminateWastageQty', val || 0)} placeholder="0.000" size="large" className="w-full font-semibold flex-1" />
-                              <Select value={alloc.laminateWastageUnit} onChange={(val) => updateInput(idx, 'laminateWastageUnit', val)} size="large" options={[{ value: 'KG', label: 'KG' }, { value: 'G', label: 'G' }]} className="w-20 shrink-0 font-bold" />
-                            </div>
-                          </div>
-                          <div className="space-y-1.5">
-                            <label className="text-xs font-bold text-blue-700 uppercase tracking-wider">Laminate Wastage %</label>
-                            <div className="flex items-center gap-2">
-                              <InputNumber min={0} step={0.01} value={alloc.laminateWastagePercentage} onChange={(val) => updateInput(idx, 'laminateWastagePercentage', val || 0)} placeholder="0.00" size="large" className="w-full font-semibold" />
-                              <span className="text-[10px] font-bold text-muted-foreground whitespace-nowrap shrink-0">%</span>
-                            </div>
-                          </div>
                         </div>
+
+                        {/* Row 2B: Packaging Materials Wastage — one row per allocated packaging material */}
+                        {alloc.packagingWastages?.length > 0 && (
+                          <div className="mb-4 p-4 rounded-xl border border-blue-200 bg-blue-50/30">
+                            <div className="flex items-center gap-2 mb-3">
+                              <Package size={14} className="text-blue-700" />
+                              <span className="text-xs font-bold text-blue-700 uppercase tracking-wider">Packaging Materials Wastage</span>
+                              <span className="text-[10px] text-muted-foreground">Enter wastage per material — % auto-calculated from allocated qty</span>
+                            </div>
+                            <div className="overflow-x-auto rounded-sm border border-blue-100 bg-white">
+                              <table className="w-full text-sm">
+                                <thead className="bg-blue-50 border-b border-blue-100">
+                                  <tr>
+                                    <th className="px-3 py-2 text-left text-[10px] font-bold uppercase tracking-wider text-blue-700">Material</th>
+                                    <th className="px-3 py-2 text-right text-[10px] font-bold uppercase tracking-wider text-blue-700">Allocated</th>
+                                    <th className="px-3 py-2 text-right text-[10px] font-bold uppercase tracking-wider text-blue-700">Wastage</th>
+                                    <th className="px-3 py-2 text-right text-[10px] font-bold uppercase tracking-wider text-blue-700">Wastage %</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="divide-y divide-blue-100/70">
+                                  {alloc.packagingWastages.map((w: any, pkgIdx: number) => {
+                                    const exceeds = w.wastageQty != null && w.allocatedQty > 0 && w.wastageQty > w.allocatedQty;
+                                    const isPiece = String(w.unit || '').toLowerCase().includes('piece') || String(w.unit || '').toLowerCase() === 'pcs';
+                                    return (
+                                      <tr key={w.id || pkgIdx} className="hover:bg-blue-50/40">
+                                        <td className="px-3 py-2">
+                                          <div className="font-semibold text-foreground">{w.productName || '—'}</div>
+                                          <div className="text-[10px] text-muted-foreground font-mono">{w.skuCode || ''}</div>
+                                        </td>
+                                        <td className="px-3 py-2 text-right text-xs">
+                                          <span className="font-semibold text-foreground">{w.allocatedQty}</span>{' '}
+                                          <span className="text-muted-foreground">{w.unit}</span>
+                                        </td>
+                                        <td className="px-3 py-2 text-right">
+                                          <div className="flex items-center gap-1 justify-end">
+                                            <InputNumber
+                                              min={0}
+                                              max={w.allocatedQty || undefined}
+                                              step={isPiece ? 1 : 0.001}
+                                              precision={isPiece ? 0 : 3}
+                                              value={w.wastageQty}
+                                              onChange={(val) => updatePackagingWastage(idx, pkgIdx, val as number | null)}
+                                              placeholder={isPiece ? '0' : '0.000'}
+                                              size="small"
+                                              className={`w-24 font-semibold ${exceeds ? 'border-red-400' : ''}`}
+                                            />
+                                            <span className="text-[10px] text-muted-foreground font-medium shrink-0 min-w-[28px]">{w.unit}</span>
+                                          </div>
+                                          {exceeds && (
+                                            <div className="text-[10px] text-red-600 font-medium mt-0.5">Exceeds allocated</div>
+                                          )}
+                                        </td>
+                                        <td className="px-3 py-2 text-right">
+                                          {w.wastagePercentage != null ? (
+                                            <span className={`font-bold ${(w.wastagePercentage || 0) > 5 ? 'text-red-600' : 'text-blue-700'}`}>
+                                              {w.wastagePercentage}%
+                                            </span>
+                                          ) : (
+                                            <span className="text-muted-foreground text-xs">—</span>
+                                          )}
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        )}
 
                         {/* Row 3: Machine Utilization (Hours + Minutes) — 12hr shift */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-4 p-4 rounded-xl border border-emerald-200 bg-emerald-50/30">
@@ -645,14 +812,57 @@ export default function ProductionOutputEntryPage() {
                         </div>
                         {alloc.shift && <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700">{alloc.shift} Shift</span>}
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-                        <div><span className="text-muted-foreground">Achievement:</span> <span className="font-bold text-emerald-600">{alloc.todayAchieve || '-'} Boxes</span></div>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+                        <div><span className="text-muted-foreground">Achievement:</span> <span className="font-bold text-emerald-600">{alloc.todayAchieve ?? '-'} cartons</span></div>
                         <div><span className="text-muted-foreground">Man Power:</span> <span className="font-bold">{alloc.manPowerCount || '-'} persons</span></div>
-                        <div><span className="text-muted-foreground">Powder Wastage:</span> <span className="font-bold text-amber-600">{alloc.powderWastageKg || '-'} KG ({alloc.powderWastagePercentage || 0}%)</span></div>
-                        <div><span className="text-muted-foreground">Laminate Wastage:</span> <span className="font-bold text-amber-600">{alloc.laminateWastageQty || '-'} {alloc.laminateWastageUnit || 'KG'} ({alloc.laminateWastagePercentage || 0}%)</span></div>
+                        <div><span className="text-muted-foreground">Powder Wastage:</span> <span className="font-bold text-amber-600">{alloc.powderWastageKg ?? '-'} KG ({alloc.powderWastagePercentage ?? 0}%)</span></div>
                         <div><span className="text-muted-foreground">Utilized:</span> <span className="font-bold text-emerald-600">{alloc.machineUtilizedHrs ? `${Math.floor(alloc.machineUtilizedHrs / 60)}h ${alloc.machineUtilizedHrs % 60}m (${alloc.machineUtilizedHrs} min)` : '-'}</span></div>
                         <div><span className="text-muted-foreground">Not Utilized:</span> <span className="font-bold text-red-600">{alloc.machineNotUtilizedHrs ? `${Math.floor(alloc.machineNotUtilizedHrs / 60)}h ${alloc.machineNotUtilizedHrs % 60}m (${alloc.machineNotUtilizedHrs} min)` : '-'}</span></div>
                       </div>
+
+                      {/* Packaging Materials Wastage — review */}
+                      {alloc.packagingWastages?.length > 0 && (
+                        <div className="mt-3 border-t border-border pt-3">
+                          <h4 className="text-xs font-bold text-blue-700 uppercase mb-2 flex items-center gap-1.5">
+                            <Package size={12} /> Packaging Materials Wastage
+                          </h4>
+                          <div className="overflow-x-auto rounded-sm border border-blue-100/70">
+                            <table className="min-w-full text-xs">
+                              <thead className="bg-blue-50/60">
+                                <tr className="text-blue-700">
+                                  <th className="text-left py-1.5 px-2 font-bold uppercase tracking-wider">Material</th>
+                                  <th className="text-right py-1.5 px-2 font-bold uppercase tracking-wider">Allocated</th>
+                                  <th className="text-right py-1.5 px-2 font-bold uppercase tracking-wider">Wastage</th>
+                                  <th className="text-right py-1.5 px-2 font-bold uppercase tracking-wider">Wastage %</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-blue-100/40">
+                                {alloc.packagingWastages.map((w: any, pi: number) => (
+                                  <tr key={w.id || pi} className="hover:bg-blue-50/30">
+                                    <td className="py-1.5 px-2">
+                                      <div className="font-semibold text-foreground">{w.productName || '—'}</div>
+                                      <div className="text-[10px] text-muted-foreground font-mono">{w.skuCode || ''}</div>
+                                    </td>
+                                    <td className="py-1.5 px-2 text-right">
+                                      <span className="font-semibold">{w.allocatedQty}</span>{' '}
+                                      <span className="text-muted-foreground">{w.unit}</span>
+                                    </td>
+                                    <td className="py-1.5 px-2 text-right">
+                                      <span className="font-semibold text-amber-700">{w.wastageQty ?? '-'}</span>{' '}
+                                      <span className="text-muted-foreground">{w.unit}</span>
+                                    </td>
+                                    <td className="py-1.5 px-2 text-right">
+                                      <span className={`font-bold ${(w.wastagePercentage || 0) > 5 ? 'text-red-600' : 'text-blue-700'}`}>
+                                        {w.wastagePercentage != null ? `${w.wastagePercentage}%` : '—'}
+                                      </span>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
                       {alloc.downtimeRecords?.length > 0 && (
                         <div className="mt-3 border-t border-border pt-3">
                           <h4 className="text-xs font-bold text-red-600 uppercase mb-2">Downtime Records</h4>

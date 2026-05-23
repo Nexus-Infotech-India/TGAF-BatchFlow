@@ -108849,10 +108849,14 @@ export namespace Prisma {
 
   export type FGProductionMachinePackagingAvgAggregateOutputType = {
     quantity: number | null
+    wastageQty: number | null
+    wastagePercentage: number | null
   }
 
   export type FGProductionMachinePackagingSumAggregateOutputType = {
     quantity: number | null
+    wastageQty: number | null
+    wastagePercentage: number | null
   }
 
   export type FGProductionMachinePackagingMinAggregateOutputType = {
@@ -108864,6 +108868,8 @@ export namespace Prisma {
     skuCode: string | null
     quantity: number | null
     unitOfMeasurement: string | null
+    wastageQty: number | null
+    wastagePercentage: number | null
     createdAt: Date | null
   }
 
@@ -108876,6 +108882,8 @@ export namespace Prisma {
     skuCode: string | null
     quantity: number | null
     unitOfMeasurement: string | null
+    wastageQty: number | null
+    wastagePercentage: number | null
     createdAt: Date | null
   }
 
@@ -108888,6 +108896,8 @@ export namespace Prisma {
     skuCode: number
     quantity: number
     unitOfMeasurement: number
+    wastageQty: number
+    wastagePercentage: number
     createdAt: number
     _all: number
   }
@@ -108895,10 +108905,14 @@ export namespace Prisma {
 
   export type FGProductionMachinePackagingAvgAggregateInputType = {
     quantity?: true
+    wastageQty?: true
+    wastagePercentage?: true
   }
 
   export type FGProductionMachinePackagingSumAggregateInputType = {
     quantity?: true
+    wastageQty?: true
+    wastagePercentage?: true
   }
 
   export type FGProductionMachinePackagingMinAggregateInputType = {
@@ -108910,6 +108924,8 @@ export namespace Prisma {
     skuCode?: true
     quantity?: true
     unitOfMeasurement?: true
+    wastageQty?: true
+    wastagePercentage?: true
     createdAt?: true
   }
 
@@ -108922,6 +108938,8 @@ export namespace Prisma {
     skuCode?: true
     quantity?: true
     unitOfMeasurement?: true
+    wastageQty?: true
+    wastagePercentage?: true
     createdAt?: true
   }
 
@@ -108934,6 +108952,8 @@ export namespace Prisma {
     skuCode?: true
     quantity?: true
     unitOfMeasurement?: true
+    wastageQty?: true
+    wastagePercentage?: true
     createdAt?: true
     _all?: true
   }
@@ -109033,6 +109053,8 @@ export namespace Prisma {
     skuCode: string | null
     quantity: number
     unitOfMeasurement: string
+    wastageQty: number | null
+    wastagePercentage: number | null
     createdAt: Date
     _count: FGProductionMachinePackagingCountAggregateOutputType | null
     _avg: FGProductionMachinePackagingAvgAggregateOutputType | null
@@ -109064,6 +109086,8 @@ export namespace Prisma {
     skuCode?: boolean
     quantity?: boolean
     unitOfMeasurement?: boolean
+    wastageQty?: boolean
+    wastagePercentage?: boolean
     createdAt?: boolean
     machineEntry?: boolean | FGProductionMachineEntryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fGProductionMachinePackaging"]>
@@ -109077,6 +109101,8 @@ export namespace Prisma {
     skuCode?: boolean
     quantity?: boolean
     unitOfMeasurement?: boolean
+    wastageQty?: boolean
+    wastagePercentage?: boolean
     createdAt?: boolean
     machineEntry?: boolean | FGProductionMachineEntryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fGProductionMachinePackaging"]>
@@ -109090,6 +109116,8 @@ export namespace Prisma {
     skuCode?: boolean
     quantity?: boolean
     unitOfMeasurement?: boolean
+    wastageQty?: boolean
+    wastagePercentage?: boolean
     createdAt?: boolean
     machineEntry?: boolean | FGProductionMachineEntryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["fGProductionMachinePackaging"]>
@@ -109103,10 +109131,12 @@ export namespace Prisma {
     skuCode?: boolean
     quantity?: boolean
     unitOfMeasurement?: boolean
+    wastageQty?: boolean
+    wastagePercentage?: boolean
     createdAt?: boolean
   }
 
-  export type FGProductionMachinePackagingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "machineEntryId" | "rawMaterialId" | "transferNumber" | "productName" | "skuCode" | "quantity" | "unitOfMeasurement" | "createdAt", ExtArgs["result"]["fGProductionMachinePackaging"]>
+  export type FGProductionMachinePackagingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "machineEntryId" | "rawMaterialId" | "transferNumber" | "productName" | "skuCode" | "quantity" | "unitOfMeasurement" | "wastageQty" | "wastagePercentage" | "createdAt", ExtArgs["result"]["fGProductionMachinePackaging"]>
   export type FGProductionMachinePackagingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     machineEntry?: boolean | FGProductionMachineEntryDefaultArgs<ExtArgs>
   }
@@ -109131,6 +109161,8 @@ export namespace Prisma {
       skuCode: string | null
       quantity: number
       unitOfMeasurement: string
+      wastageQty: number | null
+      wastagePercentage: number | null
       createdAt: Date
     }, ExtArgs["result"]["fGProductionMachinePackaging"]>
     composites: {}
@@ -109564,6 +109596,8 @@ export namespace Prisma {
     readonly skuCode: FieldRef<"FGProductionMachinePackaging", 'String'>
     readonly quantity: FieldRef<"FGProductionMachinePackaging", 'Float'>
     readonly unitOfMeasurement: FieldRef<"FGProductionMachinePackaging", 'String'>
+    readonly wastageQty: FieldRef<"FGProductionMachinePackaging", 'Float'>
+    readonly wastagePercentage: FieldRef<"FGProductionMachinePackaging", 'Float'>
     readonly createdAt: FieldRef<"FGProductionMachinePackaging", 'DateTime'>
   }
     
@@ -117155,6 +117189,8 @@ export namespace Prisma {
     skuCode: 'skuCode',
     quantity: 'quantity',
     unitOfMeasurement: 'unitOfMeasurement',
+    wastageQty: 'wastageQty',
+    wastagePercentage: 'wastagePercentage',
     createdAt: 'createdAt'
   };
 
@@ -124929,6 +124965,8 @@ export namespace Prisma {
     skuCode?: StringNullableFilter<"FGProductionMachinePackaging"> | string | null
     quantity?: FloatFilter<"FGProductionMachinePackaging"> | number
     unitOfMeasurement?: StringFilter<"FGProductionMachinePackaging"> | string
+    wastageQty?: FloatNullableFilter<"FGProductionMachinePackaging"> | number | null
+    wastagePercentage?: FloatNullableFilter<"FGProductionMachinePackaging"> | number | null
     createdAt?: DateTimeFilter<"FGProductionMachinePackaging"> | Date | string
     machineEntry?: XOR<FGProductionMachineEntryScalarRelationFilter, FGProductionMachineEntryWhereInput>
   }
@@ -124942,6 +124980,8 @@ export namespace Prisma {
     skuCode?: SortOrderInput | SortOrder
     quantity?: SortOrder
     unitOfMeasurement?: SortOrder
+    wastageQty?: SortOrderInput | SortOrder
+    wastagePercentage?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     machineEntry?: FGProductionMachineEntryOrderByWithRelationInput
   }
@@ -124958,6 +124998,8 @@ export namespace Prisma {
     skuCode?: StringNullableFilter<"FGProductionMachinePackaging"> | string | null
     quantity?: FloatFilter<"FGProductionMachinePackaging"> | number
     unitOfMeasurement?: StringFilter<"FGProductionMachinePackaging"> | string
+    wastageQty?: FloatNullableFilter<"FGProductionMachinePackaging"> | number | null
+    wastagePercentage?: FloatNullableFilter<"FGProductionMachinePackaging"> | number | null
     createdAt?: DateTimeFilter<"FGProductionMachinePackaging"> | Date | string
     machineEntry?: XOR<FGProductionMachineEntryScalarRelationFilter, FGProductionMachineEntryWhereInput>
   }, "id">
@@ -124971,6 +125013,8 @@ export namespace Prisma {
     skuCode?: SortOrderInput | SortOrder
     quantity?: SortOrder
     unitOfMeasurement?: SortOrder
+    wastageQty?: SortOrderInput | SortOrder
+    wastagePercentage?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: FGProductionMachinePackagingCountOrderByAggregateInput
     _avg?: FGProductionMachinePackagingAvgOrderByAggregateInput
@@ -124991,6 +125035,8 @@ export namespace Prisma {
     skuCode?: StringNullableWithAggregatesFilter<"FGProductionMachinePackaging"> | string | null
     quantity?: FloatWithAggregatesFilter<"FGProductionMachinePackaging"> | number
     unitOfMeasurement?: StringWithAggregatesFilter<"FGProductionMachinePackaging"> | string
+    wastageQty?: FloatNullableWithAggregatesFilter<"FGProductionMachinePackaging"> | number | null
+    wastagePercentage?: FloatNullableWithAggregatesFilter<"FGProductionMachinePackaging"> | number | null
     createdAt?: DateTimeWithAggregatesFilter<"FGProductionMachinePackaging"> | Date | string
   }
 
@@ -133285,6 +133331,8 @@ export namespace Prisma {
     skuCode?: string | null
     quantity?: number
     unitOfMeasurement?: string
+    wastageQty?: number | null
+    wastagePercentage?: number | null
     createdAt?: Date | string
     machineEntry: FGProductionMachineEntryCreateNestedOneWithoutPackagingConsumptionsInput
   }
@@ -133298,6 +133346,8 @@ export namespace Prisma {
     skuCode?: string | null
     quantity?: number
     unitOfMeasurement?: string
+    wastageQty?: number | null
+    wastagePercentage?: number | null
     createdAt?: Date | string
   }
 
@@ -133309,6 +133359,8 @@ export namespace Prisma {
     skuCode?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: FloatFieldUpdateOperationsInput | number
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    wastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     machineEntry?: FGProductionMachineEntryUpdateOneRequiredWithoutPackagingConsumptionsNestedInput
   }
@@ -133322,6 +133374,8 @@ export namespace Prisma {
     skuCode?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: FloatFieldUpdateOperationsInput | number
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    wastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -133334,6 +133388,8 @@ export namespace Prisma {
     skuCode?: string | null
     quantity?: number
     unitOfMeasurement?: string
+    wastageQty?: number | null
+    wastagePercentage?: number | null
     createdAt?: Date | string
   }
 
@@ -133345,6 +133401,8 @@ export namespace Prisma {
     skuCode?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: FloatFieldUpdateOperationsInput | number
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    wastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -133357,6 +133415,8 @@ export namespace Prisma {
     skuCode?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: FloatFieldUpdateOperationsInput | number
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    wastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -139151,11 +139211,15 @@ export namespace Prisma {
     skuCode?: SortOrder
     quantity?: SortOrder
     unitOfMeasurement?: SortOrder
+    wastageQty?: SortOrder
+    wastagePercentage?: SortOrder
     createdAt?: SortOrder
   }
 
   export type FGProductionMachinePackagingAvgOrderByAggregateInput = {
     quantity?: SortOrder
+    wastageQty?: SortOrder
+    wastagePercentage?: SortOrder
   }
 
   export type FGProductionMachinePackagingMaxOrderByAggregateInput = {
@@ -139167,6 +139231,8 @@ export namespace Prisma {
     skuCode?: SortOrder
     quantity?: SortOrder
     unitOfMeasurement?: SortOrder
+    wastageQty?: SortOrder
+    wastagePercentage?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -139179,11 +139245,15 @@ export namespace Prisma {
     skuCode?: SortOrder
     quantity?: SortOrder
     unitOfMeasurement?: SortOrder
+    wastageQty?: SortOrder
+    wastagePercentage?: SortOrder
     createdAt?: SortOrder
   }
 
   export type FGProductionMachinePackagingSumOrderByAggregateInput = {
     quantity?: SortOrder
+    wastageQty?: SortOrder
+    wastagePercentage?: SortOrder
   }
 
   export type FGDowntimeRecordCountOrderByAggregateInput = {
@@ -174488,6 +174558,8 @@ export namespace Prisma {
     skuCode?: string | null
     quantity?: number
     unitOfMeasurement?: string
+    wastageQty?: number | null
+    wastagePercentage?: number | null
     createdAt?: Date | string
   }
 
@@ -174499,6 +174571,8 @@ export namespace Prisma {
     skuCode?: string | null
     quantity?: number
     unitOfMeasurement?: string
+    wastageQty?: number | null
+    wastagePercentage?: number | null
     createdAt?: Date | string
   }
 
@@ -174702,6 +174776,8 @@ export namespace Prisma {
     skuCode?: StringNullableFilter<"FGProductionMachinePackaging"> | string | null
     quantity?: FloatFilter<"FGProductionMachinePackaging"> | number
     unitOfMeasurement?: StringFilter<"FGProductionMachinePackaging"> | string
+    wastageQty?: FloatNullableFilter<"FGProductionMachinePackaging"> | number | null
+    wastagePercentage?: FloatNullableFilter<"FGProductionMachinePackaging"> | number | null
     createdAt?: DateTimeFilter<"FGProductionMachinePackaging"> | Date | string
   }
 
@@ -184198,6 +184274,8 @@ export namespace Prisma {
     skuCode?: string | null
     quantity?: number
     unitOfMeasurement?: string
+    wastageQty?: number | null
+    wastagePercentage?: number | null
     createdAt?: Date | string
   }
 
@@ -184236,6 +184314,8 @@ export namespace Prisma {
     skuCode?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: FloatFieldUpdateOperationsInput | number
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    wastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -184247,6 +184327,8 @@ export namespace Prisma {
     skuCode?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: FloatFieldUpdateOperationsInput | number
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    wastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -184258,6 +184340,8 @@ export namespace Prisma {
     skuCode?: NullableStringFieldUpdateOperationsInput | string | null
     quantity?: FloatFieldUpdateOperationsInput | number
     unitOfMeasurement?: StringFieldUpdateOperationsInput | string
+    wastageQty?: NullableFloatFieldUpdateOperationsInput | number | null
+    wastagePercentage?: NullableFloatFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

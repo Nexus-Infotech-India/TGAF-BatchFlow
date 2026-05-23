@@ -1620,17 +1620,21 @@ model FGProductionMachineEntry {
 }
 
 model FGProductionMachinePackaging {
-  id                String                   @id @default(uuid())
-  machineEntryId    String
-  rawMaterialId     String?
-  transferNumber    String?
-  productName       String?
-  skuCode           String?
-  quantity          Float                    @default(0)
-  unitOfMeasurement String                   @default("KG")
-  createdAt         DateTime                 @default(now())
+  id                  String                   @id @default(uuid())
+  machineEntryId      String
+  rawMaterialId       String?
+  transferNumber      String?
+  productName         String?
+  skuCode             String?
+  quantity            Float                    @default(0)
+  unitOfMeasurement   String                   @default("KG")
+  // Per-line wastage captured during the Production Output Entry step.
+  // Stored in the same unit as `quantity` (the BOM line's display unit).
+  wastageQty          Float?
+  wastagePercentage   Float?
+  createdAt           DateTime                 @default(now())
 
-  machineEntry      FGProductionMachineEntry @relation(fields: [machineEntryId], references: [id], onDelete: Cascade)
+  machineEntry        FGProductionMachineEntry @relation(fields: [machineEntryId], references: [id], onDelete: Cascade)
 }
 
 model FGDowntimeRecord {

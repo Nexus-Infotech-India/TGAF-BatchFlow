@@ -148,7 +148,7 @@ const FGProductionPage: React.FC = () => {
     /* Build one detail-table + downtime-table per machine */
     const machineSections = allMachines.map((me: any, idx: number) => {
       const machine = me.machine || {};
-      const capacityLabel = machine.capacityUnit === 'BOXES_PER_SHIFT' ? 'Boxes/Shift' : (machine.capacityUnit || '');
+      const capacityLabel = machine.capacityUnit === 'BOXES_PER_SHIFT' ? 'Cartons/Shift' : (machine.capacityUnit || '');
 
       const downtimeRows = (me.downtimeRecords || []).map((dt: any) =>
         `<tr>
@@ -451,21 +451,39 @@ const FGProductionPage: React.FC = () => {
                     </div>
                     
                     <div className="flex items-center gap-4">
-                      {/* Target Indicator */}
-                      <div className="text-right hidden sm:block">
-                        <div className="text-sm font-bold text-foreground">{entry.targetQty} {entry.targetUnit}</div>
-                        <div className="text-[10px] text-muted-foreground uppercase tracking-widest text-right">Target</div>
-                      </div>
+                      {/* Target Indicator — derive cartons from BOM outputQuantity */}
+                      {(() => {
+                        const bomOut = Number(entry.bom?.outputQuantity || 0);
+                        const targetCartons = bomOut > 0 ? Math.round((Number(entry.targetQty) || 0) / bomOut) : null;
+                        // Prefer totalAchievedBoxes (sum of operator-entered todayAchieve in cartons)
+                        // since totalActualFg may still reflect the originally-allocated FG weight.
+                        const achievedFromBoxes = Number(entry.totalAchievedBoxes || 0);
+                        const actualCartons = achievedFromBoxes > 0
+                          ? achievedFromBoxes
+                          : (bomOut > 0 ? Math.round((Number(entry.totalActualFg) || 0) / bomOut) : null);
+                        const isOnTarget = targetCartons != null && actualCartons != null
+                          ? actualCartons >= targetCartons * 0.95
+                          : false;
+                        return (
+                          <>
+                            <div className="text-right hidden sm:block">
+                              <div className="text-sm font-bold text-foreground">
+                                {targetCartons != null ? `${targetCartons} cartons` : `${entry.targetQty} ${entry.targetUnit}`}
+                              </div>
+                              <div className="text-[10px] text-muted-foreground uppercase tracking-widest text-right">Target</div>
+                            </div>
 
-                      {/* Actual Indicator if completed */}
-                      {entry.status === 'COMPLETED' && (
-                        <div className="text-right hidden sm:block">
-                          <div className={`text-sm font-bold ${entry.totalActualFg >= entry.targetQty * 0.95 ? 'text-emerald-600' : 'text-amber-600'}`}>
-                            {entry.totalActualFg || 0} {entry.targetUnit}
-                          </div>
-                          <div className="text-[10px] text-muted-foreground uppercase tracking-widest text-right">Actual</div>
-                        </div>
-                      )}
+                            {entry.status === 'COMPLETED' && (
+                              <div className="text-right hidden sm:block">
+                                <div className={`text-sm font-bold ${isOnTarget ? 'text-emerald-600' : 'text-amber-600'}`}>
+                                  {actualCartons != null ? `${actualCartons} cartons` : `${entry.totalActualFg || 0} ${entry.targetUnit}`}
+                                </div>
+                                <div className="text-[10px] text-muted-foreground uppercase tracking-widest text-right">Actual</div>
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
 
                       <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${
                         entry.status === 'COMPLETED'
@@ -528,13 +546,22 @@ const FGProductionPage: React.FC = () => {
                                     </div>
                                     <div>
                                       <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Allocated</div>
-                                      <div className="text-sm font-bold text-foreground">{m.allocatedQty || 0} {m.allocatedUnit}</div>
+                                      <div className="text-sm font-bold text-foreground">
+                                        {(() => {
+                                          const bomOut = Number(entry.bom?.outputQuantity || 0);
+                                          if (bomOut > 0) {
+                                            const cartons = Math.round((Number(m.allocatedQty) || 0) / bomOut);
+                                            return `${cartons} cartons`;
+                                          }
+                                          return `${m.allocatedQty || 0} ${m.allocatedUnit}`;
+                                        })()}
+                                      </div>
                                     </div>
                                     <div>
                                       <div className="text-[10px] text-emerald-600 uppercase tracking-wider mb-1">Today Achievement</div>
                                       <div className="text-sm font-bold text-emerald-600">
-                                        {m.todayAchieve || (entry.status === 'COMPLETED' ? '0' : '-')}
-                                        {entry.status === 'COMPLETED' && <span className="text-xs text-emerald-600/50 ml-1">Boxes</span>}
+                                        {m.todayAchieve != null ? m.todayAchieve : (entry.status === 'COMPLETED' ? 0 : '-')}
+                                        {entry.status === 'COMPLETED' && <span className="text-xs text-emerald-600/50 ml-1">cartons</span>}
                                       </div>
                                     </div>
                                     <div>
