@@ -125,7 +125,6 @@ const DispatchToGrinding: React.FC = () => {
   const [dispatches, setDispatches] = useState<GrindingDispatch[]>([]);
   const [, setWarehouses] = useState<WarehouseType[]>([]);
   const [locations, setLocations] = useState<LocationType[]>([]);
-  const [rawMaterials, setRawMaterials] = useState<RawMaterial[]>([]);
   const [availableLots, setAvailableLots] = useState<CleaningLot[]>([]);
   const [availableSeedWastageLots, setAvailableSeedWastageLots] = useState<CleaningLot[]>([]);
   const [loading, setLoading] = useState(false);
@@ -197,15 +196,6 @@ const DispatchToGrinding: React.FC = () => {
     }
   };
 
-  const fetchRawMaterials = async () => {
-    try {
-      const res = await api.get(API_ROUTES.RAW.GET_PRODUCTS);
-      setRawMaterials(res.data);
-    } catch {
-      message.error('Failed to fetch raw materials');
-    }
-  };
-
   const fetchAvailableLots = async (warehouseId?: string, rawMaterialId?: string) => {
     try {
       const params: any = {};
@@ -234,7 +224,6 @@ const DispatchToGrinding: React.FC = () => {
     fetchDispatches();
     fetchWarehouses();
     fetchLocations();
-    fetchRawMaterials();
   }, []);
 
   /* ─── Batch Modal Helpers ─── */
@@ -380,18 +369,21 @@ const DispatchToGrinding: React.FC = () => {
     return { value: Number((grams / unitFactor(unit)).toFixed(3)), unit };
   };
 
+  // Only materials that actually have cleaned lots (or seed wastage) waiting to go to
+  // grinding belong in this dropdown. Pulling from the full raw-material master also
+  // surfaced finished/imported products like "Imported Chilli Powder - 25 Kg" which
+  // never pass through cleaning.
   const availableMaterials = useMemo(() => {
     const materialIds = new Set<string>();
     const materials: RawMaterial[] = [];
-    [...availableLots, ...availableSeedWastageLots]
-      .forEach((lot) => {
-        if (!materialIds.has(lot.rawMaterialId)) { materialIds.add(lot.rawMaterialId); materials.push(lot.rawMaterial); }
-      });
-    rawMaterials.forEach((rm) => {
-      if (!materialIds.has(rm.id)) { materialIds.add(rm.id); materials.push(rm); }
+    [...availableLots, ...availableSeedWastageLots].forEach((lot) => {
+      if (!materialIds.has(lot.rawMaterialId)) {
+        materialIds.add(lot.rawMaterialId);
+        materials.push(lot.rawMaterial);
+      }
     });
     return materials;
-  }, [availableLots, availableSeedWastageLots, rawMaterials]);
+  }, [availableLots, availableSeedWastageLots]);
 
   /* ─── Submit Create Dispatch ─── */
   const handleCreateBatch = async () => {

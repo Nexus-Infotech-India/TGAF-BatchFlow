@@ -534,7 +534,14 @@ export class FGBatchController {
                   where: { id: c.dispatchId },
                 });
                 if (dispatch) {
-                  const newConsumed = (dispatch.consumedQuantity || 0) + actualQty;
+                  // consumedQuantity is stored in the dispatch's canonical totalQuantityUnit,
+                  // so convert the incoming consumption (which is in c.unit) before adding.
+                  const storedUnit = (dispatch as any).totalQuantityUnit || 'KG';
+                  const consumedInStoredUnit = fromGrams(
+                    toGrams(actualQty, c.unit || storedUnit),
+                    storedUnit
+                  );
+                  const newConsumed = (dispatch.consumedQuantity || 0) + consumedInStoredUnit;
                   await tx.grindingDispatch.update({
                     where: { id: c.dispatchId },
                     data: { consumedQuantity: Math.round(newConsumed * 1000) / 1000 },

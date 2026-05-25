@@ -340,8 +340,13 @@ export class ProductionController {
           });
 
           if (dispatch) {
-            // totalQuantity is stored in the lot's cleanedQuantityUnit (e.g. KG)
-            const storedUnit = (dispatch as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit || 'KG';
+            // Both totalQuantity and consumedQuantity are stored in the dispatch's canonical
+            // unit (totalQuantityUnit). Fall back to the first lot's unit for legacy rows
+            // that pre-date the totalQuantityUnit column.
+            const storedUnit =
+              (dispatch as any).totalQuantityUnit ||
+              (dispatch as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit ||
+              'KG';
             const displayUnit = dispatch.inputRawMaterial.unitOfMeasurement;
             const consumedInGrams = toGrams(actualQty, c.unit || displayUnit);
             const consumedInStoredUnit = fromGrams(consumedInGrams, storedUnit);
@@ -488,8 +493,13 @@ export class ProductionController {
             });
 
             if (dispatchWithMaterial) {
-              // totalQuantity is stored in the lot's cleanedQuantityUnit (e.g. KG)
-              const storedUnit = (dispatchWithMaterial as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit || 'KG';
+              // consumedQuantity is stored in the dispatch's canonical totalQuantityUnit,
+              // not in lots[0].cleanedQuantityUnit. Falling back keeps legacy dispatches
+              // (created before totalQuantityUnit existed) working too.
+              const storedUnit =
+                (dispatchWithMaterial as any).totalQuantityUnit ||
+                (dispatchWithMaterial as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit ||
+                'KG';
               const consumedInGrams = toGrams(actualQty, c.unit || storedUnit);
               const consumedInStoredUnit = fromGrams(consumedInGrams, storedUnit);
               const newConsumed = (dispatchWithMaterial.consumedQuantity || 0) + consumedInStoredUnit;
