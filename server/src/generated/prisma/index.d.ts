@@ -101025,6 +101025,7 @@ export namespace Prisma {
     fromLocationId: string | null
     toLocationId: string | null
     totalQuantity: number | null
+    totalQuantityUnit: string | null
     consumedQuantity: number | null
     status: $Enums.GrindingDispatchStatus | null
     sentAt: Date | null
@@ -101043,6 +101044,7 @@ export namespace Prisma {
     fromLocationId: string | null
     toLocationId: string | null
     totalQuantity: number | null
+    totalQuantityUnit: string | null
     consumedQuantity: number | null
     status: $Enums.GrindingDispatchStatus | null
     sentAt: Date | null
@@ -101061,6 +101063,7 @@ export namespace Prisma {
     fromLocationId: number
     toLocationId: number
     totalQuantity: number
+    totalQuantityUnit: number
     consumedQuantity: number
     status: number
     sentAt: number
@@ -101091,6 +101094,7 @@ export namespace Prisma {
     fromLocationId?: true
     toLocationId?: true
     totalQuantity?: true
+    totalQuantityUnit?: true
     consumedQuantity?: true
     status?: true
     sentAt?: true
@@ -101109,6 +101113,7 @@ export namespace Prisma {
     fromLocationId?: true
     toLocationId?: true
     totalQuantity?: true
+    totalQuantityUnit?: true
     consumedQuantity?: true
     status?: true
     sentAt?: true
@@ -101127,6 +101132,7 @@ export namespace Prisma {
     fromLocationId?: true
     toLocationId?: true
     totalQuantity?: true
+    totalQuantityUnit?: true
     consumedQuantity?: true
     status?: true
     sentAt?: true
@@ -101232,6 +101238,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    totalQuantityUnit: string
     consumedQuantity: number
     status: $Enums.GrindingDispatchStatus
     sentAt: Date
@@ -101269,6 +101276,7 @@ export namespace Prisma {
     fromLocationId?: boolean
     toLocationId?: boolean
     totalQuantity?: boolean
+    totalQuantityUnit?: boolean
     consumedQuantity?: boolean
     status?: boolean
     sentAt?: boolean
@@ -101292,6 +101300,7 @@ export namespace Prisma {
     fromLocationId?: boolean
     toLocationId?: boolean
     totalQuantity?: boolean
+    totalQuantityUnit?: boolean
     consumedQuantity?: boolean
     status?: boolean
     sentAt?: boolean
@@ -101313,6 +101322,7 @@ export namespace Prisma {
     fromLocationId?: boolean
     toLocationId?: boolean
     totalQuantity?: boolean
+    totalQuantityUnit?: boolean
     consumedQuantity?: boolean
     status?: boolean
     sentAt?: boolean
@@ -101334,6 +101344,7 @@ export namespace Prisma {
     fromLocationId?: boolean
     toLocationId?: boolean
     totalQuantity?: boolean
+    totalQuantityUnit?: boolean
     consumedQuantity?: boolean
     status?: boolean
     sentAt?: boolean
@@ -101345,7 +101356,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type GrindingDispatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "inputRawMaterialId" | "fromLocationId" | "toLocationId" | "totalQuantity" | "consumedQuantity" | "status" | "sentAt" | "acceptedAt" | "rejectedAt" | "rejectionReason" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["grindingDispatch"]>
+  export type GrindingDispatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "batchNumber" | "inputRawMaterialId" | "fromLocationId" | "toLocationId" | "totalQuantity" | "totalQuantityUnit" | "consumedQuantity" | "status" | "sentAt" | "acceptedAt" | "rejectedAt" | "rejectionReason" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["grindingDispatch"]>
   export type GrindingDispatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     inputRawMaterial?: boolean | RawMaterialProductDefaultArgs<ExtArgs>
     fromLocation?: boolean | LocationDefaultArgs<ExtArgs>
@@ -101379,6 +101390,7 @@ export namespace Prisma {
       fromLocationId: string
       toLocationId: string
       totalQuantity: number
+      totalQuantityUnit: string
       consumedQuantity: number
       status: $Enums.GrindingDispatchStatus
       sentAt: Date
@@ -101821,6 +101833,7 @@ export namespace Prisma {
     readonly fromLocationId: FieldRef<"GrindingDispatch", 'String'>
     readonly toLocationId: FieldRef<"GrindingDispatch", 'String'>
     readonly totalQuantity: FieldRef<"GrindingDispatch", 'Float'>
+    readonly totalQuantityUnit: FieldRef<"GrindingDispatch", 'String'>
     readonly consumedQuantity: FieldRef<"GrindingDispatch", 'Float'>
     readonly status: FieldRef<"GrindingDispatch", 'GrindingDispatchStatus'>
     readonly sentAt: FieldRef<"GrindingDispatch", 'DateTime'>
@@ -102295,7 +102308,9 @@ export namespace Prisma {
     dispatchId: string | null
     cleaningLotId: string | null
     allocatedQuantity: number | null
+    allocatedQuantityUnit: string | null
     seedWastageAllocated: number | null
+    seedWastageAllocatedUnit: string | null
     createdAt: Date | null
   }
 
@@ -102304,7 +102319,9 @@ export namespace Prisma {
     dispatchId: string | null
     cleaningLotId: string | null
     allocatedQuantity: number | null
+    allocatedQuantityUnit: string | null
     seedWastageAllocated: number | null
+    seedWastageAllocatedUnit: string | null
     createdAt: Date | null
   }
 
@@ -102313,7 +102330,9 @@ export namespace Prisma {
     dispatchId: number
     cleaningLotId: number
     allocatedQuantity: number
+    allocatedQuantityUnit: number
     seedWastageAllocated: number
+    seedWastageAllocatedUnit: number
     createdAt: number
     _all: number
   }
@@ -102334,7 +102353,9 @@ export namespace Prisma {
     dispatchId?: true
     cleaningLotId?: true
     allocatedQuantity?: true
+    allocatedQuantityUnit?: true
     seedWastageAllocated?: true
+    seedWastageAllocatedUnit?: true
     createdAt?: true
   }
 
@@ -102343,7 +102364,9 @@ export namespace Prisma {
     dispatchId?: true
     cleaningLotId?: true
     allocatedQuantity?: true
+    allocatedQuantityUnit?: true
     seedWastageAllocated?: true
+    seedWastageAllocatedUnit?: true
     createdAt?: true
   }
 
@@ -102352,7 +102375,9 @@ export namespace Prisma {
     dispatchId?: true
     cleaningLotId?: true
     allocatedQuantity?: true
+    allocatedQuantityUnit?: true
     seedWastageAllocated?: true
+    seedWastageAllocatedUnit?: true
     createdAt?: true
     _all?: true
   }
@@ -102448,7 +102473,9 @@ export namespace Prisma {
     dispatchId: string
     cleaningLotId: string
     allocatedQuantity: number
+    allocatedQuantityUnit: string
     seedWastageAllocated: number
+    seedWastageAllocatedUnit: string | null
     createdAt: Date
     _count: GrindingDispatchLotCountAggregateOutputType | null
     _avg: GrindingDispatchLotAvgAggregateOutputType | null
@@ -102476,7 +102503,9 @@ export namespace Prisma {
     dispatchId?: boolean
     cleaningLotId?: boolean
     allocatedQuantity?: boolean
+    allocatedQuantityUnit?: boolean
     seedWastageAllocated?: boolean
+    seedWastageAllocatedUnit?: boolean
     createdAt?: boolean
     dispatch?: boolean | GrindingDispatchDefaultArgs<ExtArgs>
     cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
@@ -102487,7 +102516,9 @@ export namespace Prisma {
     dispatchId?: boolean
     cleaningLotId?: boolean
     allocatedQuantity?: boolean
+    allocatedQuantityUnit?: boolean
     seedWastageAllocated?: boolean
+    seedWastageAllocatedUnit?: boolean
     createdAt?: boolean
     dispatch?: boolean | GrindingDispatchDefaultArgs<ExtArgs>
     cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
@@ -102498,7 +102529,9 @@ export namespace Prisma {
     dispatchId?: boolean
     cleaningLotId?: boolean
     allocatedQuantity?: boolean
+    allocatedQuantityUnit?: boolean
     seedWastageAllocated?: boolean
+    seedWastageAllocatedUnit?: boolean
     createdAt?: boolean
     dispatch?: boolean | GrindingDispatchDefaultArgs<ExtArgs>
     cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
@@ -102509,11 +102542,13 @@ export namespace Prisma {
     dispatchId?: boolean
     cleaningLotId?: boolean
     allocatedQuantity?: boolean
+    allocatedQuantityUnit?: boolean
     seedWastageAllocated?: boolean
+    seedWastageAllocatedUnit?: boolean
     createdAt?: boolean
   }
 
-  export type GrindingDispatchLotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dispatchId" | "cleaningLotId" | "allocatedQuantity" | "seedWastageAllocated" | "createdAt", ExtArgs["result"]["grindingDispatchLot"]>
+  export type GrindingDispatchLotOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "dispatchId" | "cleaningLotId" | "allocatedQuantity" | "allocatedQuantityUnit" | "seedWastageAllocated" | "seedWastageAllocatedUnit" | "createdAt", ExtArgs["result"]["grindingDispatchLot"]>
   export type GrindingDispatchLotInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     dispatch?: boolean | GrindingDispatchDefaultArgs<ExtArgs>
     cleaningLot?: boolean | CleaningLotDefaultArgs<ExtArgs>
@@ -102538,7 +102573,9 @@ export namespace Prisma {
       dispatchId: string
       cleaningLotId: string
       allocatedQuantity: number
+      allocatedQuantityUnit: string
       seedWastageAllocated: number
+      seedWastageAllocatedUnit: string | null
       createdAt: Date
     }, ExtArgs["result"]["grindingDispatchLot"]>
     composites: {}
@@ -102969,7 +103006,9 @@ export namespace Prisma {
     readonly dispatchId: FieldRef<"GrindingDispatchLot", 'String'>
     readonly cleaningLotId: FieldRef<"GrindingDispatchLot", 'String'>
     readonly allocatedQuantity: FieldRef<"GrindingDispatchLot", 'Float'>
+    readonly allocatedQuantityUnit: FieldRef<"GrindingDispatchLot", 'String'>
     readonly seedWastageAllocated: FieldRef<"GrindingDispatchLot", 'Float'>
+    readonly seedWastageAllocatedUnit: FieldRef<"GrindingDispatchLot", 'String'>
     readonly createdAt: FieldRef<"GrindingDispatchLot", 'DateTime'>
   }
     
@@ -117054,6 +117093,7 @@ export namespace Prisma {
     fromLocationId: 'fromLocationId',
     toLocationId: 'toLocationId',
     totalQuantity: 'totalQuantity',
+    totalQuantityUnit: 'totalQuantityUnit',
     consumedQuantity: 'consumedQuantity',
     status: 'status',
     sentAt: 'sentAt',
@@ -117073,7 +117113,9 @@ export namespace Prisma {
     dispatchId: 'dispatchId',
     cleaningLotId: 'cleaningLotId',
     allocatedQuantity: 'allocatedQuantity',
+    allocatedQuantityUnit: 'allocatedQuantityUnit',
     seedWastageAllocated: 'seedWastageAllocated',
+    seedWastageAllocatedUnit: 'seedWastageAllocatedUnit',
     createdAt: 'createdAt'
   };
 
@@ -124244,6 +124286,7 @@ export namespace Prisma {
     fromLocationId?: StringFilter<"GrindingDispatch"> | string
     toLocationId?: StringFilter<"GrindingDispatch"> | string
     totalQuantity?: FloatFilter<"GrindingDispatch"> | number
+    totalQuantityUnit?: StringFilter<"GrindingDispatch"> | string
     consumedQuantity?: FloatFilter<"GrindingDispatch"> | number
     status?: EnumGrindingDispatchStatusFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
@@ -124266,6 +124309,7 @@ export namespace Prisma {
     fromLocationId?: SortOrder
     toLocationId?: SortOrder
     totalQuantity?: SortOrder
+    totalQuantityUnit?: SortOrder
     consumedQuantity?: SortOrder
     status?: SortOrder
     sentAt?: SortOrder
@@ -124291,6 +124335,7 @@ export namespace Prisma {
     fromLocationId?: StringFilter<"GrindingDispatch"> | string
     toLocationId?: StringFilter<"GrindingDispatch"> | string
     totalQuantity?: FloatFilter<"GrindingDispatch"> | number
+    totalQuantityUnit?: StringFilter<"GrindingDispatch"> | string
     consumedQuantity?: FloatFilter<"GrindingDispatch"> | number
     status?: EnumGrindingDispatchStatusFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
@@ -124313,6 +124358,7 @@ export namespace Prisma {
     fromLocationId?: SortOrder
     toLocationId?: SortOrder
     totalQuantity?: SortOrder
+    totalQuantityUnit?: SortOrder
     consumedQuantity?: SortOrder
     status?: SortOrder
     sentAt?: SortOrder
@@ -124339,6 +124385,7 @@ export namespace Prisma {
     fromLocationId?: StringWithAggregatesFilter<"GrindingDispatch"> | string
     toLocationId?: StringWithAggregatesFilter<"GrindingDispatch"> | string
     totalQuantity?: FloatWithAggregatesFilter<"GrindingDispatch"> | number
+    totalQuantityUnit?: StringWithAggregatesFilter<"GrindingDispatch"> | string
     consumedQuantity?: FloatWithAggregatesFilter<"GrindingDispatch"> | number
     status?: EnumGrindingDispatchStatusWithAggregatesFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeWithAggregatesFilter<"GrindingDispatch"> | Date | string
@@ -124358,7 +124405,9 @@ export namespace Prisma {
     dispatchId?: StringFilter<"GrindingDispatchLot"> | string
     cleaningLotId?: StringFilter<"GrindingDispatchLot"> | string
     allocatedQuantity?: FloatFilter<"GrindingDispatchLot"> | number
+    allocatedQuantityUnit?: StringFilter<"GrindingDispatchLot"> | string
     seedWastageAllocated?: FloatFilter<"GrindingDispatchLot"> | number
+    seedWastageAllocatedUnit?: StringNullableFilter<"GrindingDispatchLot"> | string | null
     createdAt?: DateTimeFilter<"GrindingDispatchLot"> | Date | string
     dispatch?: XOR<GrindingDispatchScalarRelationFilter, GrindingDispatchWhereInput>
     cleaningLot?: XOR<CleaningLotScalarRelationFilter, CleaningLotWhereInput>
@@ -124369,7 +124418,9 @@ export namespace Prisma {
     dispatchId?: SortOrder
     cleaningLotId?: SortOrder
     allocatedQuantity?: SortOrder
+    allocatedQuantityUnit?: SortOrder
     seedWastageAllocated?: SortOrder
+    seedWastageAllocatedUnit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     dispatch?: GrindingDispatchOrderByWithRelationInput
     cleaningLot?: CleaningLotOrderByWithRelationInput
@@ -124383,7 +124434,9 @@ export namespace Prisma {
     dispatchId?: StringFilter<"GrindingDispatchLot"> | string
     cleaningLotId?: StringFilter<"GrindingDispatchLot"> | string
     allocatedQuantity?: FloatFilter<"GrindingDispatchLot"> | number
+    allocatedQuantityUnit?: StringFilter<"GrindingDispatchLot"> | string
     seedWastageAllocated?: FloatFilter<"GrindingDispatchLot"> | number
+    seedWastageAllocatedUnit?: StringNullableFilter<"GrindingDispatchLot"> | string | null
     createdAt?: DateTimeFilter<"GrindingDispatchLot"> | Date | string
     dispatch?: XOR<GrindingDispatchScalarRelationFilter, GrindingDispatchWhereInput>
     cleaningLot?: XOR<CleaningLotScalarRelationFilter, CleaningLotWhereInput>
@@ -124394,7 +124447,9 @@ export namespace Prisma {
     dispatchId?: SortOrder
     cleaningLotId?: SortOrder
     allocatedQuantity?: SortOrder
+    allocatedQuantityUnit?: SortOrder
     seedWastageAllocated?: SortOrder
+    seedWastageAllocatedUnit?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: GrindingDispatchLotCountOrderByAggregateInput
     _avg?: GrindingDispatchLotAvgOrderByAggregateInput
@@ -124411,7 +124466,9 @@ export namespace Prisma {
     dispatchId?: StringWithAggregatesFilter<"GrindingDispatchLot"> | string
     cleaningLotId?: StringWithAggregatesFilter<"GrindingDispatchLot"> | string
     allocatedQuantity?: FloatWithAggregatesFilter<"GrindingDispatchLot"> | number
+    allocatedQuantityUnit?: StringWithAggregatesFilter<"GrindingDispatchLot"> | string
     seedWastageAllocated?: FloatWithAggregatesFilter<"GrindingDispatchLot"> | number
+    seedWastageAllocatedUnit?: StringNullableWithAggregatesFilter<"GrindingDispatchLot"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"GrindingDispatchLot"> | Date | string
   }
 
@@ -132492,6 +132549,7 @@ export namespace Prisma {
     id?: string
     batchNumber: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -132514,6 +132572,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -132530,6 +132589,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -132552,6 +132612,7 @@ export namespace Prisma {
     fromLocationId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -132571,6 +132632,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -132586,6 +132648,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -132604,6 +132667,7 @@ export namespace Prisma {
     fromLocationId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -132618,7 +132682,9 @@ export namespace Prisma {
   export type GrindingDispatchLotCreateInput = {
     id?: string
     allocatedQuantity: number
+    allocatedQuantityUnit?: string
     seedWastageAllocated?: number
+    seedWastageAllocatedUnit?: string | null
     createdAt?: Date | string
     dispatch: GrindingDispatchCreateNestedOneWithoutLotsInput
     cleaningLot: CleaningLotCreateNestedOneWithoutGrindingDispatchLotsInput
@@ -132629,14 +132695,18 @@ export namespace Prisma {
     dispatchId: string
     cleaningLotId: string
     allocatedQuantity: number
+    allocatedQuantityUnit?: string
     seedWastageAllocated?: number
+    seedWastageAllocatedUnit?: string | null
     createdAt?: Date | string
   }
 
   export type GrindingDispatchLotUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantityUnit?: StringFieldUpdateOperationsInput | string
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocatedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dispatch?: GrindingDispatchUpdateOneRequiredWithoutLotsNestedInput
     cleaningLot?: CleaningLotUpdateOneRequiredWithoutGrindingDispatchLotsNestedInput
@@ -132647,7 +132717,9 @@ export namespace Prisma {
     dispatchId?: StringFieldUpdateOperationsInput | string
     cleaningLotId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantityUnit?: StringFieldUpdateOperationsInput | string
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocatedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -132656,14 +132728,18 @@ export namespace Prisma {
     dispatchId: string
     cleaningLotId: string
     allocatedQuantity: number
+    allocatedQuantityUnit?: string
     seedWastageAllocated?: number
+    seedWastageAllocatedUnit?: string | null
     createdAt?: Date | string
   }
 
   export type GrindingDispatchLotUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantityUnit?: StringFieldUpdateOperationsInput | string
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocatedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -132672,7 +132748,9 @@ export namespace Prisma {
     dispatchId?: StringFieldUpdateOperationsInput | string
     cleaningLotId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantityUnit?: StringFieldUpdateOperationsInput | string
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocatedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -138665,6 +138743,7 @@ export namespace Prisma {
     fromLocationId?: SortOrder
     toLocationId?: SortOrder
     totalQuantity?: SortOrder
+    totalQuantityUnit?: SortOrder
     consumedQuantity?: SortOrder
     status?: SortOrder
     sentAt?: SortOrder
@@ -138688,6 +138767,7 @@ export namespace Prisma {
     fromLocationId?: SortOrder
     toLocationId?: SortOrder
     totalQuantity?: SortOrder
+    totalQuantityUnit?: SortOrder
     consumedQuantity?: SortOrder
     status?: SortOrder
     sentAt?: SortOrder
@@ -138706,6 +138786,7 @@ export namespace Prisma {
     fromLocationId?: SortOrder
     toLocationId?: SortOrder
     totalQuantity?: SortOrder
+    totalQuantityUnit?: SortOrder
     consumedQuantity?: SortOrder
     status?: SortOrder
     sentAt?: SortOrder
@@ -138742,7 +138823,9 @@ export namespace Prisma {
     dispatchId?: SortOrder
     cleaningLotId?: SortOrder
     allocatedQuantity?: SortOrder
+    allocatedQuantityUnit?: SortOrder
     seedWastageAllocated?: SortOrder
+    seedWastageAllocatedUnit?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -138756,7 +138839,9 @@ export namespace Prisma {
     dispatchId?: SortOrder
     cleaningLotId?: SortOrder
     allocatedQuantity?: SortOrder
+    allocatedQuantityUnit?: SortOrder
     seedWastageAllocated?: SortOrder
+    seedWastageAllocatedUnit?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -138765,7 +138850,9 @@ export namespace Prisma {
     dispatchId?: SortOrder
     cleaningLotId?: SortOrder
     allocatedQuantity?: SortOrder
+    allocatedQuantityUnit?: SortOrder
     seedWastageAllocated?: SortOrder
+    seedWastageAllocatedUnit?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -165525,6 +165612,7 @@ export namespace Prisma {
     id?: string
     batchNumber: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -165545,6 +165633,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -165924,6 +166013,7 @@ export namespace Prisma {
     fromLocationId?: StringFilter<"GrindingDispatch"> | string
     toLocationId?: StringFilter<"GrindingDispatch"> | string
     totalQuantity?: FloatFilter<"GrindingDispatch"> | number
+    totalQuantityUnit?: StringFilter<"GrindingDispatch"> | string
     consumedQuantity?: FloatFilter<"GrindingDispatch"> | number
     status?: EnumGrindingDispatchStatusFilter<"GrindingDispatch"> | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFilter<"GrindingDispatch"> | Date | string
@@ -168006,6 +168096,7 @@ export namespace Prisma {
     id?: string
     batchNumber: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -168026,6 +168117,7 @@ export namespace Prisma {
     inputRawMaterialId: string
     toLocationId: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -168052,6 +168144,7 @@ export namespace Prisma {
     id?: string
     batchNumber: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -168072,6 +168165,7 @@ export namespace Prisma {
     inputRawMaterialId: string
     fromLocationId: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -172248,7 +172342,9 @@ export namespace Prisma {
   export type GrindingDispatchLotCreateWithoutCleaningLotInput = {
     id?: string
     allocatedQuantity: number
+    allocatedQuantityUnit?: string
     seedWastageAllocated?: number
+    seedWastageAllocatedUnit?: string | null
     createdAt?: Date | string
     dispatch: GrindingDispatchCreateNestedOneWithoutLotsInput
   }
@@ -172257,7 +172353,9 @@ export namespace Prisma {
     id?: string
     dispatchId: string
     allocatedQuantity: number
+    allocatedQuantityUnit?: string
     seedWastageAllocated?: number
+    seedWastageAllocatedUnit?: string | null
     createdAt?: Date | string
   }
 
@@ -172523,7 +172621,9 @@ export namespace Prisma {
     dispatchId?: StringFilter<"GrindingDispatchLot"> | string
     cleaningLotId?: StringFilter<"GrindingDispatchLot"> | string
     allocatedQuantity?: FloatFilter<"GrindingDispatchLot"> | number
+    allocatedQuantityUnit?: StringFilter<"GrindingDispatchLot"> | string
     seedWastageAllocated?: FloatFilter<"GrindingDispatchLot"> | number
+    seedWastageAllocatedUnit?: StringNullableFilter<"GrindingDispatchLot"> | string | null
     createdAt?: DateTimeFilter<"GrindingDispatchLot"> | Date | string
   }
 
@@ -173285,7 +173385,9 @@ export namespace Prisma {
   export type GrindingDispatchLotCreateWithoutDispatchInput = {
     id?: string
     allocatedQuantity: number
+    allocatedQuantityUnit?: string
     seedWastageAllocated?: number
+    seedWastageAllocatedUnit?: string | null
     createdAt?: Date | string
     cleaningLot: CleaningLotCreateNestedOneWithoutGrindingDispatchLotsInput
   }
@@ -173294,7 +173396,9 @@ export namespace Prisma {
     id?: string
     cleaningLotId: string
     allocatedQuantity: number
+    allocatedQuantityUnit?: string
     seedWastageAllocated?: number
+    seedWastageAllocatedUnit?: string | null
     createdAt?: Date | string
   }
 
@@ -173475,6 +173579,7 @@ export namespace Prisma {
     id?: string
     batchNumber: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -173496,6 +173601,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -173576,6 +173682,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -173597,6 +173704,7 @@ export namespace Prisma {
     fromLocationId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -181316,6 +181424,7 @@ export namespace Prisma {
     fromLocationId: string
     toLocationId: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -181660,6 +181769,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -181680,6 +181790,7 @@ export namespace Prisma {
     fromLocationId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -181698,6 +181809,7 @@ export namespace Prisma {
     fromLocationId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182687,6 +182799,7 @@ export namespace Prisma {
     inputRawMaterialId: string
     toLocationId: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -182704,6 +182817,7 @@ export namespace Prisma {
     inputRawMaterialId: string
     fromLocationId: string
     totalQuantity: number
+    totalQuantityUnit?: string
     consumedQuantity?: number
     status?: $Enums.GrindingDispatchStatus
     sentAt?: Date | string
@@ -182864,6 +182978,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182884,6 +182999,7 @@ export namespace Prisma {
     inputRawMaterialId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182902,6 +183018,7 @@ export namespace Prisma {
     inputRawMaterialId?: StringFieldUpdateOperationsInput | string
     toLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182917,6 +183034,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     batchNumber?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182937,6 +183055,7 @@ export namespace Prisma {
     inputRawMaterialId?: StringFieldUpdateOperationsInput | string
     fromLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -182955,6 +183074,7 @@ export namespace Prisma {
     inputRawMaterialId?: StringFieldUpdateOperationsInput | string
     fromLocationId?: StringFieldUpdateOperationsInput | string
     totalQuantity?: FloatFieldUpdateOperationsInput | number
+    totalQuantityUnit?: StringFieldUpdateOperationsInput | string
     consumedQuantity?: FloatFieldUpdateOperationsInput | number
     status?: EnumGrindingDispatchStatusFieldUpdateOperationsInput | $Enums.GrindingDispatchStatus
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -183645,7 +183765,9 @@ export namespace Prisma {
     id?: string
     dispatchId: string
     allocatedQuantity: number
+    allocatedQuantityUnit?: string
     seedWastageAllocated?: number
+    seedWastageAllocatedUnit?: string | null
     createdAt?: Date | string
   }
 
@@ -183676,7 +183798,9 @@ export namespace Prisma {
   export type GrindingDispatchLotUpdateWithoutCleaningLotInput = {
     id?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantityUnit?: StringFieldUpdateOperationsInput | string
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocatedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dispatch?: GrindingDispatchUpdateOneRequiredWithoutLotsNestedInput
   }
@@ -183685,7 +183809,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     dispatchId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantityUnit?: StringFieldUpdateOperationsInput | string
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocatedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -183693,7 +183819,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     dispatchId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantityUnit?: StringFieldUpdateOperationsInput | string
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocatedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -183741,14 +183869,18 @@ export namespace Prisma {
     id?: string
     cleaningLotId: string
     allocatedQuantity: number
+    allocatedQuantityUnit?: string
     seedWastageAllocated?: number
+    seedWastageAllocatedUnit?: string | null
     createdAt?: Date | string
   }
 
   export type GrindingDispatchLotUpdateWithoutDispatchInput = {
     id?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantityUnit?: StringFieldUpdateOperationsInput | string
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocatedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     cleaningLot?: CleaningLotUpdateOneRequiredWithoutGrindingDispatchLotsNestedInput
   }
@@ -183757,7 +183889,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     cleaningLotId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantityUnit?: StringFieldUpdateOperationsInput | string
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocatedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -183765,7 +183899,9 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     cleaningLotId?: StringFieldUpdateOperationsInput | string
     allocatedQuantity?: FloatFieldUpdateOperationsInput | number
+    allocatedQuantityUnit?: StringFieldUpdateOperationsInput | string
     seedWastageAllocated?: FloatFieldUpdateOperationsInput | number
+    seedWastageAllocatedUnit?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

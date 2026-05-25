@@ -617,127 +617,127 @@ const CreateMaterialTransferPage: React.FC = () => {
               </motion.div>
             )}
 
-            {/* ═══ Step 2: Material — Packaging (multi-row) ═══ */}
+            {/* ═══ Step 2: Material — Packaging (tabular) ═══ */}
             {currentStep === 2 && selectedCategory === 'PACKAGING_MATERIAL' && (
-              <motion.div key="step2-pkg" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-4">
+              <motion.div key="step2-pkg" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 10 }} className="space-y-3">
                 <div className="flex items-center justify-between">
                   <label className="text-xs font-bold uppercase tracking-wide text-muted-foreground flex items-center">
                     <Package size={14} className="mr-1.5" /> Select Packaging Materials
                   </label>
-                  <span className="text-[11px] text-muted-foreground">{pkgRows.length} row{pkgRows.length > 1 ? 's' : ''}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[11px] text-muted-foreground">{pkgRows.length} row{pkgRows.length > 1 ? 's' : ''}</span>
+                    {packagingMaterials.length > pkgRows.filter(r => r.materialId).length && (
+                      <Button
+                        size="small"
+                        type="primary"
+                        icon={<Plus size={14} />}
+                        onClick={addPkgRow}
+                      >
+                        Add New
+                      </Button>
+                    )}
+                  </div>
                 </div>
 
-                {pkgRows.map((row, rIdx) => {
-                  const chosen = packagingMaterials.find(m => m.id === row.materialId) || null;
-                  const stock = chosen ? packagingStockMap[chosen.id] : undefined;
-                  const availableQty = stock?.available ?? 0;
-                  const availableUnit = stock?.unit || chosen?.unitOfMeasurement || 'KG';
-                  // Hide materials already picked in another row from this row's dropdown
-                  const picked = new Set(pkgRows.filter(r => r.id !== row.id && r.materialId).map(r => r.materialId!));
+                <div className="border border-border rounded-lg overflow-hidden">
+                  <table className="w-full text-sm">
+                    <thead className="bg-muted/50">
+                      <tr className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+                        <th className="px-3 py-2 text-left w-10">#</th>
+                        <th className="px-3 py-2 text-left">Material</th>
+                        <th className="px-3 py-2 text-right w-32">Available</th>
+                        <th className="px-3 py-2 text-right w-36">Quantity</th>
+                        <th className="px-3 py-2 text-center w-24">Unit</th>
+                        <th className="px-3 py-2 text-center w-12"></th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {pkgRows.map((row, rIdx) => {
+                        const chosen = packagingMaterials.find(m => m.id === row.materialId) || null;
+                        const stock = chosen ? packagingStockMap[chosen.id] : undefined;
+                        const availableQty = stock?.available ?? 0;
+                        const availableUnit = stock?.unit || chosen?.unitOfMeasurement || 'KG';
+                        const picked = new Set(pkgRows.filter(r => r.id !== row.id && r.materialId).map(r => r.materialId!));
+                        const exceeds = row.qty != null && availableQty > 0 && row.qty > availableQty;
 
-                  return (
-                    <div key={row.id} className="border border-blue-200 rounded-xl p-4 bg-blue-50/40 space-y-3">
-                      <div className="flex items-center gap-2">
-                        <div className="flex-1">
-                          <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1.5">Material #{rIdx + 1}</label>
-                          <Select
-                            className="w-full" size="large" showSearch placeholder="Select packaging material"
-                            value={row.materialId || undefined}
-                            onChange={id => {
-                              const mat = packagingMaterials.find(m => m.id === id);
-                              updatePkgRow(row.id, {
-                                materialId: id || null,
-                                unit: mat?.unitOfMeasurement || 'KG',
-                                qty: null,
-                              });
-                            }}
-                            optionFilterProp="label"
-                            options={packagingMaterials
-                              .filter(m => !picked.has(m.id))
-                              .map(m => ({
-                                value: m.id,
-                                label: `${m.name} (${m.skuCode || 'NO-SKU'})`,
-                              }))}
-                            allowClear
-                          />
-                        </div>
-                        {pkgRows.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removePkgRow(row.id)}
-                            className="p-2 rounded-lg text-muted-foreground hover:text-red-500 hover:bg-red-50 transition-colors mt-6"
-                            title="Remove this row"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        )}
-                      </div>
-
-                      {chosen && (
-                        <>
-                          <div className="flex items-center justify-between bg-white/60 rounded-lg p-2 border border-blue-100">
-                            <div className="flex items-center gap-2">
-                              <div className="w-7 h-7 rounded-lg bg-blue-100 flex items-center justify-center"><Package size={14} className="text-blue-600" /></div>
-                              <div>
-                                <div className="text-xs font-bold">{chosen.name}</div>
-                                <div className="text-[10px] text-muted-foreground">{chosen.skuCode}</div>
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <div className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">Available</div>
-                              <div className={`text-sm font-extrabold ${availableQty > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
-                                {availableQty} <span className="text-[10px] font-medium opacity-70">{availableUnit}</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="grid grid-cols-2 gap-3">
-                            <div>
-                              <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1.5">Quantity</label>
+                        return (
+                          <tr key={row.id} className="bg-white dark:bg-card hover:bg-muted/20">
+                            <td className="px-3 py-2 text-xs text-muted-foreground font-semibold align-middle">{rIdx + 1}</td>
+                            <td className="px-3 py-2 align-middle">
+                              <Select
+                                className="w-full" size="small" showSearch placeholder="Select packaging material"
+                                value={row.materialId || undefined}
+                                onChange={id => {
+                                  const mat = packagingMaterials.find(m => m.id === id);
+                                  updatePkgRow(row.id, {
+                                    materialId: id || null,
+                                    unit: mat?.unitOfMeasurement || 'KG',
+                                    qty: null,
+                                  });
+                                }}
+                                optionFilterProp="label"
+                                options={packagingMaterials
+                                  .filter(m => !picked.has(m.id))
+                                  .map(m => ({
+                                    value: m.id,
+                                    label: `${m.name} (${m.skuCode || 'NO-SKU'})`,
+                                  }))}
+                                allowClear
+                              />
+                            </td>
+                            <td className="px-3 py-2 text-right align-middle">
+                              {chosen ? (
+                                <span className={`text-sm font-bold ${availableQty > 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                                  {availableQty} <span className="text-[10px] font-medium opacity-70">{availableUnit}</span>
+                                </span>
+                              ) : (
+                                <span className="text-xs text-muted-foreground/50">—</span>
+                              )}
+                            </td>
+                            <td className="px-3 py-2 align-middle">
                               <InputNumber
                                 className="w-full"
-                                size="large"
+                                size="small"
                                 min={0.001}
                                 max={availableQty || undefined}
                                 step={1}
                                 precision={3}
                                 value={row.qty}
                                 onChange={v => updatePkgRow(row.id, { qty: v == null ? null : Number(v) })}
-                                placeholder="Enter quantity"
+                                placeholder="Qty"
+                                disabled={!chosen}
+                                status={exceeds ? 'error' : undefined}
                               />
-                              {row.qty != null && availableQty > 0 && row.qty > availableQty && (
-                                <div className="text-[10px] text-red-500 mt-1 font-medium">Exceeds available stock</div>
+                              {exceeds && (
+                                <div className="text-[10px] text-red-500 mt-0.5 font-medium">Exceeds stock</div>
                               )}
-                            </div>
-                            <div>
-                              <label className="block text-[11px] font-bold uppercase text-muted-foreground mb-1.5">Unit</label>
-                              <Select
-                                className="w-full"
-                                size="large"
-                                value={row.unit}
-                                disabled
-                                title={`Unit is locked to ${chosen.unitOfMeasurement || 'KG'} (from Material Master)`}
-                                options={[{ value: chosen.unitOfMeasurement || 'KG', label: chosen.unitOfMeasurement || 'KG' }]}
-                              />
-                              <p className="text-[10px] text-muted-foreground mt-1">Locked to master UOM</p>
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
-
-                {/* + Add another packaging row */}
-                {packagingMaterials.length > pkgRows.filter(r => r.materialId).length && (
-                  <button
-                    type="button"
-                    onClick={addPkgRow}
-                    className="w-full py-2.5 rounded-lg border border-dashed border-blue-300 bg-white/40 text-blue-700 font-semibold text-sm hover:bg-blue-50 transition-colors"
-                  >
-                    + Add Another Packaging Material
-                  </button>
-                )}
+                            </td>
+                            <td className="px-3 py-2 text-center align-middle">
+                              <span
+                                className="inline-block px-2 py-1 rounded bg-muted/60 text-xs font-semibold text-muted-foreground"
+                                title={chosen ? `Locked to ${chosen.unitOfMeasurement || 'KG'} (Material Master)` : 'Select material first'}
+                              >
+                                {chosen ? row.unit || chosen.unitOfMeasurement || 'KG' : '—'}
+                              </span>
+                            </td>
+                            <td className="px-3 py-2 text-center align-middle">
+                              {pkgRows.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => removePkgRow(row.id)}
+                                  className="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-50 transition-colors"
+                                  title="Remove this row"
+                                >
+                                  <Trash2 size={14} />
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
               </motion.div>
             )}
 

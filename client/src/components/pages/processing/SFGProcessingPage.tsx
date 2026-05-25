@@ -13,6 +13,7 @@ interface GrindingDispatch {
   id: string;
   batchNumber: string;
   totalQuantity: number;
+  totalQuantityUnit?: string;
   status: string;
   sentAt?: string;
   acceptedAt?: string;
@@ -31,7 +32,9 @@ interface GrindingDispatch {
     id: string;
     cleaningLotId: string;
     allocatedQuantity: number;
+    allocatedQuantityUnit?: string;
     seedWastageAllocated: number;
+    seedWastageAllocatedUnit?: string | null;
     cleaningLot?: {
       lotNumber: string;
       cleaningJobId?: string;
@@ -149,6 +152,36 @@ const SFGProcessingPage: React.FC = () => {
 
   const pendingCount = dispatches.filter(d => d.status === 'SENT').length;
   const acceptedCount = dispatches.filter(d => d.status === 'ACCEPTED').length;
+
+  // Derive total + display unit from lot allocations so mixed units (KG + Ton + gram)
+  // sum correctly instead of being added as raw numbers.
+  const UNIT_TO_GRAMS: Record<string, number> = {
+    kg: 1000, KG: 1000, gram: 1, g: 1, G: 1,
+    ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000, tonne: 1_000_000,
+    quintal: 100_000, Quintal: 100_000, lb: 453.592, oz: 28.3495,
+  };
+  const unitFactor = (u: string) => UNIT_TO_GRAMS[u] ?? UNIT_TO_GRAMS[u.toLowerCase()] ?? 1;
+  const getDispatchTotal = (dispatch: GrindingDispatch): { value: number; unit: string } => {
+    const unit =
+      dispatch.totalQuantityUnit ||
+      dispatch.lots?.[0]?.allocatedQuantityUnit ||
+      dispatch.lots?.[0]?.cleaningLot?.cleanedQuantityUnit ||
+      dispatch.inputRawMaterial?.unitOfMeasurement ||
+      'KG';
+    if (!dispatch.lots || dispatch.lots.length === 0) {
+      return { value: dispatch.totalQuantity, unit };
+    }
+    let grams = 0;
+    for (const l of dispatch.lots) {
+      const cleanedUnit =
+        l.allocatedQuantityUnit || l.cleaningLot?.cleanedQuantityUnit || unit;
+      const seedUnit =
+        l.seedWastageAllocatedUnit || l.cleaningLot?.seedWastageUnit || cleanedUnit;
+      grams += (l.allocatedQuantity || 0) * unitFactor(cleanedUnit);
+      grams += (l.seedWastageAllocated || 0) * unitFactor(seedUnit);
+    }
+    return { value: Number((grams / unitFactor(unit)).toFixed(3)), unit };
+  };
 
   return (
     <motion.div className="min-h-screen bg-background">
@@ -306,7 +339,7 @@ const SFGProcessingPage: React.FC = () => {
                               </div>
                             </td>
                             <td className="px-4 py-3 whitespace-nowrap text-sm text-foreground text-right font-semibold">
-                              {dispatch.totalQuantity} {dispatch.lots?.[0]?.cleaningLot?.cleanedQuantityUnit || dispatch.inputRawMaterial?.unitOfMeasurement || ''}
+                              {(() => { const t = getDispatchTotal(dispatch); return `${t.value} ${t.unit}`; })()}
                             </td>
                             <td className="px-4 py-3 text-center">
                               {getStatusBadge(dispatch.status)}

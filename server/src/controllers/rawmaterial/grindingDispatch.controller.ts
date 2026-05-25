@@ -53,9 +53,19 @@ export class GrindingDispatchController {
         return;
       }
 
-      // Validate each lot and compute total quantity
-      let totalQuantity = 0;
-      const validatedLots: { lotId: string; allocatedQuantity: number; seedWastageAllocated: number; lotNumber: string }[] = [];
+      // Canonical unit for the stored total: the raw material's defined unit (fallback KG)
+      const totalUnit = rawMaterial.unitOfMeasurement || 'KG';
+
+      // Validate each lot and accumulate the total in grams to avoid mixed-unit drift
+      let totalGrams = 0;
+      const validatedLots: {
+        lotId: string;
+        allocatedQuantity: number;
+        allocatedQuantityUnit: string;
+        seedWastageAllocated: number;
+        seedWastageAllocatedUnit: string | null;
+        lotNumber: string;
+      }[] = [];
 
       for (const lotEntry of lots) {
         const lot = await prisma.cleaningLot.findUnique({
@@ -112,13 +122,22 @@ export class GrindingDispatchController {
           }
         }
 
-        validatedLots.push({ lotId: lot.id, allocatedQuantity, seedWastageAllocated, lotNumber: lot.lotNumber });
-        
         const allocUnit = lot.cleanedQuantityUnit || 'KG';
-        const allocGrams = toGrams(allocatedQuantity, allocUnit);
-        const seedGrams = toGrams(seedWastageAllocated, seedUnit);
-        totalQuantity += fromGrams(allocGrams + seedGrams, allocUnit);
+        validatedLots.push({
+          lotId: lot.id,
+          allocatedQuantity,
+          allocatedQuantityUnit: allocUnit,
+          seedWastageAllocated,
+          seedWastageAllocatedUnit: seedWastageAllocated > 0 ? seedUnit : null,
+          lotNumber: lot.lotNumber,
+        });
+
+        totalGrams += toGrams(allocatedQuantity, allocUnit);
+        totalGrams += toGrams(seedWastageAllocated, seedUnit);
       }
+
+      // Convert the accumulated grams once into the raw material's canonical unit
+      const totalQuantity = Number(fromGrams(totalGrams, totalUnit).toFixed(3));
 
       // Generate batch number: GD-YYYYMMDD-XXXX
       const today = new Date();
@@ -144,6 +163,7 @@ export class GrindingDispatchController {
             fromLocationId,
             toLocationId,
             totalQuantity,
+            totalQuantityUnit: totalUnit,
             status: 'SENT',
             sentAt: new Date(),
             notes: notes || null,
@@ -156,7 +176,9 @@ export class GrindingDispatchController {
               dispatchId: dispatch.id,
               cleaningLotId: lotEntry.lotId,
               allocatedQuantity: lotEntry.allocatedQuantity,
+              allocatedQuantityUnit: lotEntry.allocatedQuantityUnit,
               seedWastageAllocated: lotEntry.seedWastageAllocated,
+              seedWastageAllocatedUnit: lotEntry.seedWastageAllocatedUnit,
             },
           });
 

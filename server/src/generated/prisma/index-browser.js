@@ -1065,6 +1065,7 @@ exports.Prisma.GrindingDispatchScalarFieldEnum = {
   fromLocationId: 'fromLocationId',
   toLocationId: 'toLocationId',
   totalQuantity: 'totalQuantity',
+  totalQuantityUnit: 'totalQuantityUnit',
   consumedQuantity: 'consumedQuantity',
   status: 'status',
   sentAt: 'sentAt',
@@ -1081,7 +1082,9 @@ exports.Prisma.GrindingDispatchLotScalarFieldEnum = {
   dispatchId: 'dispatchId',
   cleaningLotId: 'cleaningLotId',
   allocatedQuantity: 'allocatedQuantity',
+  allocatedQuantityUnit: 'allocatedQuantityUnit',
   seedWastageAllocated: 'seedWastageAllocated',
+  seedWastageAllocatedUnit: 'seedWastageAllocatedUnit',
   createdAt: 'createdAt'
 };
 

@@ -287,6 +287,7 @@ model GrindingDispatch {
   fromLocationId     String
   toLocationId       String
   totalQuantity      Float
+  totalQuantityUnit  String                  @default("KG")
   status             GrindingDispatchStatus  @default(SENT)
   sentAt             DateTime                @default(now())
   acceptedAt         DateTime?
@@ -303,12 +304,14 @@ model GrindingDispatch {
 }
 
 model GrindingDispatchLot {
-  id                   String   @id @default(uuid())
-  dispatchId           String
-  cleaningLotId        String
-  allocatedQuantity    Float
-  seedWastageAllocated Float    @default(0)
-  createdAt            DateTime @default(now())
+  id                       String   @id @default(uuid())
+  dispatchId               String
+  cleaningLotId            String
+  allocatedQuantity        Float
+  allocatedQuantityUnit    String   @default("KG")
+  seedWastageAllocated     Float    @default(0)
+  seedWastageAllocatedUnit String?
+  createdAt                DateTime @default(now())
 
   dispatch    GrindingDispatch @relation(fields: [dispatchId], references: [id], onDelete: Cascade)
   cleaningLot CleaningLot      @relation(fields: [cleaningLotId], references: [id])

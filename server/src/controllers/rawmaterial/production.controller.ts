@@ -137,13 +137,17 @@ export class ProductionController {
         if (matchingDispatches.length > 0) {
           sourceType = 'BATCH';
           currentStockUnit = matchingDispatches[0].inputRawMaterial.unitOfMeasurement;
-          // ── FIX: Show remaining quantity (total - consumed) for each batch ──
-          // Convert from stored unit (lot's cleanedQuantityUnit) to display unit (raw material's UoM)
+          // Show remaining quantity (total - consumed) for each batch, converted from the
+          // dispatch's own canonical unit (set at create time) to the raw material's display unit.
           availableBatches = matchingDispatches
             .map((d) => {
               const consumed = (d as any).consumedQuantity || 0;
-              // Determine the unit in which totalQuantity was stored (from the cleaning lots)
-              const storedUnit = (d as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit || 'KG';
+              // Prefer the explicit unit stored on the dispatch; fall back to first lot's unit
+              // for rows created before this column existed.
+              const storedUnit =
+                (d as any).totalQuantityUnit ||
+                (d as any).lots?.[0]?.cleaningLot?.cleanedQuantityUnit ||
+                'KG';
               const displayUnit = d.inputRawMaterial.unitOfMeasurement;
 
               // Convert totalQuantity and consumed from stored unit to display unit

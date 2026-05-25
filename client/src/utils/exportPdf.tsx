@@ -695,11 +695,22 @@ export const generateGrindingDispatchPDF = (config: GrindingDispatchPDFConfig): 
       yPos += rowH;
     });
 
-    // Totals row
-    const totalAllocated = config.lots.reduce((s, l) => s + l.allocatedQty, 0);
-    const totalSeedWastage = config.lots.reduce((s, l) => s + l.seedWastage, 0);
+    // Totals row — convert each lot to grams in its own unit, then back to the display unit
+    // so a row showing 1 Ton plus a row showing 500 KG adds to 1500 KG instead of 501.
+    const UNIT_TO_GRAMS_PDF: Record<string, number> = {
+      kg: 1000, KG: 1000, gram: 1, g: 1, G: 1,
+      ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000, tonne: 1_000_000,
+      quintal: 100_000, Quintal: 100_000, lb: 453.592, oz: 28.3495,
+    };
+    const factor = (u: string) => UNIT_TO_GRAMS_PDF[u] ?? UNIT_TO_GRAMS_PDF[u.toLowerCase()] ?? 1;
     const unit = config.lots[0]?.unit || config.unit;
     const seedUnit = config.lots[0]?.seedWastageUnit || unit;
+    const totalAllocated = Number(
+      (config.lots.reduce((s, l) => s + l.allocatedQty * factor(l.unit || unit), 0) / factor(unit)).toFixed(3)
+    );
+    const totalSeedWastage = Number(
+      (config.lots.reduce((s, l) => s + l.seedWastage * factor(l.seedWastageUnit || l.unit || seedUnit), 0) / factor(seedUnit)).toFixed(3)
+    );
 
     yPos += 2;
     doc.setFillColor(235, 240, 250); doc.rect(margin, yPos, contentWidth, rowH, 'F');

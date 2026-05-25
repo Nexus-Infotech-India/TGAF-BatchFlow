@@ -90,10 +90,14 @@ const PurchaseOrder = () => {
   ];
   const [vendorId, setVendorId] = useState('');
   const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
-  const [orderDate, setOrderDate] = useState(() => {
-    const today = new Date();
-    return today.toISOString().slice(0, 10);
-  });
+  const todayStr = (() => {
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  })();
+  const [orderDate, setOrderDate] = useState(todayStr);
   const [expectedDate, setExpectedDate] = useState('');
   const [items, setItems] = useState([
     { rawMaterialId: '', quantityOrdered: 1, quantityUnit: 'KG', rate: 0 },
@@ -220,6 +224,10 @@ const PurchaseOrder = () => {
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    if (expectedDate && expectedDate < todayStr) {
+      setErrorMsg('Expected Delivery Date cannot be earlier than today.');
+      return;
+    }
     setLoading(true);
     setSuccessMsg('');
     setErrorMsg('');
@@ -422,6 +430,7 @@ const PurchaseOrder = () => {
                   id="expectedDate"
                   className="w-full bg-card/100 text-foreground border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                   value={expectedDate}
+                  min={todayStr}
                   onChange={(e) => setExpectedDate(e.target.value)}
                   required
                 />

@@ -91,7 +91,9 @@ interface DispatchLot {
   id: string;
   cleaningLotId: string;
   allocatedQuantity: number;
+  allocatedQuantityUnit?: string;
   seedWastageAllocated: number;
+  seedWastageAllocatedUnit?: string | null;
   cleaningLot: CleaningLot;
 }
 
@@ -102,6 +104,7 @@ interface GrindingDispatch {
   fromLocationId: string;
   toLocationId: string;
   totalQuantity: number;
+  totalQuantityUnit?: string;
   status: 'SENT' | 'ACCEPTED' | 'REJECTED';
   sentAt: string;
   acceptedAt: string | null;
@@ -342,6 +345,41 @@ const DispatchToGrinding: React.FC = () => {
   const filteredLots = availableLots;
   const filteredSeedWastageLots = availableSeedWastageLots;
 
+  // Convert a dispatch's lot allocations into a single total + display unit, regardless of
+  // whether individual lots used KG / Ton / gram / etc. Falls back to the stored totalQuantity
+  // only when there are no lots to derive from.
+  const UNIT_TO_GRAMS: Record<string, number> = {
+    kg: 1000, KG: 1000, gram: 1, g: 1, G: 1,
+    ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000, tonne: 1_000_000,
+    quintal: 100_000, Quintal: 100_000, lb: 453.592, oz: 28.3495,
+  };
+  const unitFactor = (unit: string) =>
+    UNIT_TO_GRAMS[unit] ?? UNIT_TO_GRAMS[unit.toLowerCase()] ?? 1;
+
+  const getDispatchTotal = (dispatch: GrindingDispatch): { value: number; unit: string } => {
+    // Prefer the unit stored on the dispatch row (set at create time). Fall back to
+    // deriving from the linked CleaningLot for rows created before that column existed.
+    const unit =
+      dispatch.totalQuantityUnit ||
+      dispatch.lots?.[0]?.allocatedQuantityUnit ||
+      dispatch.lots?.[0]?.cleaningLot?.cleanedQuantityUnit ||
+      dispatch.inputRawMaterial?.unitOfMeasurement ||
+      'KG';
+    if (!dispatch.lots || dispatch.lots.length === 0) {
+      return { value: dispatch.totalQuantity, unit };
+    }
+    let grams = 0;
+    for (const l of dispatch.lots) {
+      const cleanedUnit =
+        l.allocatedQuantityUnit || l.cleaningLot?.cleanedQuantityUnit || unit;
+      const seedUnit =
+        l.seedWastageAllocatedUnit || l.cleaningLot?.seedWastageUnit || cleanedUnit;
+      grams += (l.allocatedQuantity || 0) * unitFactor(cleanedUnit);
+      grams += (l.seedWastageAllocated || 0) * unitFactor(seedUnit);
+    }
+    return { value: Number((grams / unitFactor(unit)).toFixed(3)), unit };
+  };
+
   const availableMaterials = useMemo(() => {
     const materialIds = new Set<string>();
     const materials: RawMaterial[] = [];
@@ -416,14 +454,15 @@ const DispatchToGrinding: React.FC = () => {
   };
 
   const handleDownloadPDF = (dispatch: GrindingDispatch) => {
+    const total = getDispatchTotal(dispatch);
     generateGrindingDispatchPDF({
       batchNumber: dispatch.batchNumber,
       rawMaterialName: dispatch.inputRawMaterial?.name || '-',
       skuCode: dispatch.inputRawMaterial?.skuCode || '-',
-      unit: dispatch.lots?.[0]?.cleaningLot?.cleanedQuantityUnit || dispatch.inputRawMaterial?.unitOfMeasurement || '',
+      unit: total.unit,
       fromLocation: dispatch.fromLocation?.name || '-',
       toLocation: dispatch.toLocation?.name || '-',
-      totalQuantity: dispatch.totalQuantity,
+      totalQuantity: total.value,
       status: dispatch.status,
       sentAt: dispatch.sentAt,
       acceptedAt: dispatch.acceptedAt ? dispatch.acceptedAt : undefined,
@@ -622,7 +661,7 @@ const DispatchToGrinding: React.FC = () => {
                             </div>
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-sm text-foreground text-right font-semibold">
-                            {dispatch.totalQuantity} {dispatch.lots?.[0]?.cleaningLot?.cleanedQuantityUnit || dispatch.inputRawMaterial?.unitOfMeasurement || ''}
+                            {(() => { const t = getDispatchTotal(dispatch); return `${t.value} ${t.unit}`; })()}
                           </td>
                           <td className="px-4 py-4 text-center">
                             {getStatusBadge(dispatch.status)}
@@ -1097,7 +1136,7 @@ const DispatchToGrinding: React.FC = () => {
               </div>
               <div className="bg-muted/20 rounded-xl p-3 border border-border/50">
                 <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">Total Quantity</div>
-                <div className="text-sm font-bold">{viewModal.dispatch.totalQuantity} {viewModal.dispatch.lots?.[0]?.cleaningLot?.cleanedQuantityUnit || viewModal.dispatch.inputRawMaterial?.unitOfMeasurement || ''}</div>
+                <div className="text-sm font-bold">{(() => { const t = getDispatchTotal(viewModal.dispatch!); return `${t.value} ${t.unit}`; })()}</div>
               </div>
               <div className="bg-muted/20 rounded-xl p-3 border border-border/50">
                 <div className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold mb-1">From Location</div>
