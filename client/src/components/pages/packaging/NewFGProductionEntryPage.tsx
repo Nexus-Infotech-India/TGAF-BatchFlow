@@ -377,43 +377,46 @@ const NewFGProductionEntryPage: React.FC = () => {
   };
 
   /** Returns remaining qty (in the line's display unit) for a (transfer × rawMaterial)
-   *  pair after accounting for what other allocations on this page already allocated.
+   *  pair, accounting only for allocations on rows ABOVE the given row. This gives a
+   *  sequential / waterfall view: machine 1 sees the full base, machine 2 sees base
+   *  minus machine 1's take, machine 3 sees base minus machines 1+2, etc. — which
+   *  matches how the machines actually run.
    *  Non-weight units (Piece etc.) are counted directly without any KG conversion. */
   const getPkgRemainingFor = (rowId: string, transferNumber: string, rawMaterialId: string) => {
     const opt = getPkgOptions().find(o => o.transferNumber === transferNumber && o.rawMaterialId === rawMaterialId);
     if (!opt) return { qty: 0, unit: 'KG' };
 
     const optUnit = opt.unit || 'KG';
+    const currentIdx = allocations.findIndex(a => a.id === rowId);
+    // Rows above this one ("prior" machines) deduct from this row's available.
+    // If rowId is unknown (e.g. transient), treat it as last — all current rows count.
+    const priorRows = currentIdx === -1 ? allocations : allocations.slice(0, currentIdx);
 
     // Non-weight (Piece, Box, etc.): count directly in the unit itself.
     if (isNonWeightUnit(optUnit)) {
-      const used = allocations
-        .filter(a => a.id !== rowId)
-        .reduce((sum, a) => {
-          let rowUsed = 0;
-          for (const p of a.pkgEntries) {
-            if (p.transferNumber === transferNumber && p.rawMaterialId === rawMaterialId && p.qty != null) {
-              rowUsed += Number(p.qty) || 0;
-            }
-          }
-          return sum + rowUsed;
-        }, 0);
-      const remaining = Math.max(0, opt.remainingQty - used);
-      return { qty: Math.floor(remaining), unit: optUnit };
-    }
-
-    // Weight-based: normalize all rows' qty to KG so different weight units sum correctly.
-    const usedKg = allocations
-      .filter(a => a.id !== rowId)
-      .reduce((sum, a) => {
+      const used = priorRows.reduce((sum, a) => {
         let rowUsed = 0;
         for (const p of a.pkgEntries) {
           if (p.transferNumber === transferNumber && p.rawMaterialId === rawMaterialId && p.qty != null) {
-            rowUsed += toGrams(Number(p.qty), p.unit || 'KG') / 1000;
+            rowUsed += Number(p.qty) || 0;
           }
         }
         return sum + rowUsed;
       }, 0);
+      const remaining = Math.max(0, opt.remainingQty - used);
+      return { qty: Math.floor(remaining), unit: optUnit };
+    }
+
+    // Weight-based: normalize prior rows' qty to KG so different weight units sum correctly.
+    const usedKg = priorRows.reduce((sum, a) => {
+      let rowUsed = 0;
+      for (const p of a.pkgEntries) {
+        if (p.transferNumber === transferNumber && p.rawMaterialId === rawMaterialId && p.qty != null) {
+          rowUsed += toGrams(Number(p.qty), p.unit || 'KG') / 1000;
+        }
+      }
+      return sum + rowUsed;
+    }, 0);
 
     const totalAvailKg =
       optUnit.toLowerCase() === 'kg' ? opt.remainingQty : toGrams(opt.remainingQty, optUnit) / 1000;
@@ -519,30 +522,31 @@ const NewFGProductionEntryPage: React.FC = () => {
 
   /* ─── Live remaining helpers (UI-only — DB is updated only on submit) ─── */
 
-  /* SFG transfer KG already consumed by OTHER rows (excludes the given row).
+  /* SFG transfer KG already consumed by rows BEFORE the given row (sequential view).
      Used to (a) show remaining qty per transfer in the dropdown/caption,
      and (b) cap the InputNumber max so a row can't exceed transfer stock. */
   const sfgKgUsedByOtherRows = (rowId: string, transferNumber: string): number => {
     if (!transferNumber) return 0;
-    return allocations
-      .filter(a => a.id !== rowId && a.sfgTransferNumber === transferNumber)
+    const currentIdx = allocations.findIndex(a => a.id === rowId);
+    const priorRows = currentIdx === -1 ? allocations : allocations.slice(0, currentIdx);
+    return priorRows
+      .filter(a => a.sfgTransferNumber === transferNumber)
       .reduce((s, a) => s + (Number(a.sfgConsumptionQty) || 0), 0);
   };
 
-  /* Remaining KG of an SFG transfer after accounting for everything other rows
-     have already allocated to that transfer. */
+  /* Remaining KG of an SFG transfer after accounting for prior rows' allocations. */
   const getSfgRemainingForRow = (rowId: string, transferNumber: string) => {
     const totalAvail = getSfgTransferAvailable(transferNumber).qty;
     const used = sfgKgUsedByOtherRows(rowId, transferNumber);
     return Math.max(0, Number((totalAvail - used).toFixed(3)));
   };
 
-  /* Remaining KG of plan after other rows' SFG consumption. */
+  /* Remaining KG of plan after prior rows' SFG consumption (sequential view). */
   const planRemainingForRow = (rowId: string): number => {
-    const otherSum = allocations
-      .filter(a => a.id !== rowId)
-      .reduce((s, a) => s + (Number(a.sfgConsumptionQty) || 0), 0);
-    return Math.max(0, Number((planQtyKg - otherSum).toFixed(3)));
+    const currentIdx = allocations.findIndex(a => a.id === rowId);
+    const priorRows = currentIdx === -1 ? allocations : allocations.slice(0, currentIdx);
+    const priorSum = priorRows.reduce((s, a) => s + (Number(a.sfgConsumptionQty) || 0), 0);
+    return Math.max(0, Number((planQtyKg - priorSum).toFixed(3)));
   };
 
   /* Per-row SFG max: capped by both transfer remaining and plan remaining. */
@@ -583,10 +587,12 @@ const NewFGProductionEntryPage: React.FC = () => {
 
   /* ─── Build per-machine allocation rows from an auto plan ─── */
   // For each machine slot, derive:
-  //   - sfgConsumptionQty (KG) = cartons × (SFG kg per carton from BOM consumption line)
-  //   - pkgEntries        = for every packaging line in BOM, one PkgEntry filled
-  //                         with cartons × (BOM per-carton qty) in the line's BOM unit,
-  //                         pointing at the first transfer that has remaining qty.
+  //   - sfgConsumptionQty (KG) and a transfer that has enough remaining
+  //   - pkgEntries: one (or more) PkgEntry per BOM packaging line, drawn greedily
+  //     from transfers with the most remaining first. If no single transfer has
+  //     enough for the line's qty, splits across multiple transfers.
+  // Running `pkgUsed` / `sfgUsed` maps track in-progress consumption across all
+  // machines so machine N respects what machines 1..N-1 already took.
   const buildAllocationsFromPlan = (
     plan: { machineId: string; cartons: number }[]
   ): MachineAllocation[] => {
@@ -594,34 +600,95 @@ const NewFGProductionEntryPage: React.FC = () => {
     const pkgLines = consumptionLines.filter((l) => l.isPackaging);
     const totalCartons = plan.reduce((s, p) => s + p.cartons, 0) || 1;
 
-    return plan.map((p) => {
-      const share = p.cartons / totalCartons; // proportional split
+    const pkgUsed = new Map<string, number>(); // key = `${transferNumber}::${rawMaterialId}`
+    const sfgUsed = new Map<string, number>(); // key = transferNumber (KG)
 
-      // SFG qty proportional to this machine's share, in KG (the BOM's expected unit
-      // for SFG is normalized to KG by the backend in fetchBomItems).
+    return plan.map((p) => {
+      const share = p.cartons / totalCartons;
+
+      // ── SFG: pick a batch with enough effective remaining ──
       const sfgKg = sfgLine
         ? Math.round((Number(sfgLine.expectedQuantity) || 0) * share * 1000) / 1000
         : 0;
 
-      // Pick the first SFG batch with remaining qty as the default.
-      const sfgBatch = sfgLine?.availableSfgBatches?.find((b: any) => (b.remainingQuantity || 0) > 0);
+      let sfgBatch: any = null;
+      if (sfgLine?.availableSfgBatches?.length && sfgKg > 0) {
+        const eligible = sfgLine.availableSfgBatches
+          .map((b: any) => ({
+            ...b,
+            effRemaining: (b.remainingQuantity || 0) - (sfgUsed.get(b.transferNumber) || 0),
+          }))
+          .filter((b: any) => b.effRemaining > 0);
 
-      // For each packaging line, take cartons × per-carton qty in that line's unit.
-      // Backend's expectedQuantity is the FULL plan qty in the line's display unit,
-      // so we just multiply by `share` (proportion of cartons).
-      const pkgEntries: PkgEntry[] = pkgLines.map((pl) => {
-        const lineQty = Math.round((Number(pl.expectedQuantity) || 0) * share * 1000) / 1000;
-        const optBatch = pl.availableSfgBatches?.find((b: any) => (b.remainingQuantity || 0) > 0);
-        return {
-          id: genId(),
-          transferNumber: optBatch?.transferNumber || null,
-          rawMaterialId: pl.rawMaterialId,
-          productName: pl.rawMaterialName,
-          skuCode: pl.skuCode || null,
-          qty: lineQty > 0 ? lineQty : null,
-          unit: pl.unit || optBatch?.unit || 'KG',
-        };
-      });
+        // Prefer the smallest batch that still fits the requested qty (leaves bigger
+        // batches free for later machines). Fall back to the largest batch otherwise.
+        const fitting = eligible
+          .filter((b: any) => b.effRemaining >= sfgKg)
+          .sort((a: any, b: any) => a.effRemaining - b.effRemaining);
+        sfgBatch =
+          fitting[0] ||
+          eligible.sort((a: any, b: any) => b.effRemaining - a.effRemaining)[0] ||
+          null;
+
+        if (sfgBatch) {
+          sfgUsed.set(
+            sfgBatch.transferNumber,
+            (sfgUsed.get(sfgBatch.transferNumber) || 0) + sfgKg
+          );
+        }
+      }
+
+      // ── Packaging: split across batches when needed ──
+      const pkgEntries: PkgEntry[] = [];
+      for (const pl of pkgLines) {
+        let need = Math.round((Number(pl.expectedQuantity) || 0) * share * 1000) / 1000;
+        if (need <= 0) continue;
+
+        const batches = (pl.availableSfgBatches || [])
+          .map((b: any) => {
+            const key = `${b.transferNumber}::${pl.rawMaterialId}`;
+            return {
+              ...b,
+              key,
+              effRemaining: (b.remainingQuantity || 0) - (pkgUsed.get(key) || 0),
+            };
+          })
+          .filter((b: any) => b.effRemaining > 0)
+          .sort((a: any, b: any) => b.effRemaining - a.effRemaining); // largest first
+
+        while (need > 0 && batches.length > 0) {
+          const b = batches[0];
+          const take = Math.min(need, b.effRemaining);
+          const takeRounded = Number(take.toFixed(3));
+          pkgEntries.push({
+            id: genId(),
+            transferNumber: b.transferNumber,
+            rawMaterialId: pl.rawMaterialId,
+            productName: pl.rawMaterialName,
+            skuCode: pl.skuCode || null,
+            qty: takeRounded,
+            unit: pl.unit || b.unit || 'KG',
+          });
+          pkgUsed.set(b.key, (pkgUsed.get(b.key) || 0) + takeRounded);
+          b.effRemaining -= takeRounded;
+          need = Number((need - takeRounded).toFixed(3));
+          if (b.effRemaining <= 1e-6) batches.shift();
+        }
+
+        // Couldn't fully cover from any batch — leave the shortfall as an unfilled
+        // entry so the user can see the gap and pick something manually.
+        if (need > 1e-6) {
+          pkgEntries.push({
+            id: genId(),
+            transferNumber: null,
+            rawMaterialId: pl.rawMaterialId,
+            productName: pl.rawMaterialName,
+            skuCode: pl.skuCode || null,
+            qty: Number(need.toFixed(3)),
+            unit: pl.unit || 'KG',
+          });
+        }
+      }
 
       return {
         id: genId(),

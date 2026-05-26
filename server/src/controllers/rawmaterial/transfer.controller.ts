@@ -2,6 +2,25 @@ import { Request, Response } from 'express';
 import { PrismaClient } from '../../generated/prisma';
 const prisma = new PrismaClient();
 
+/* ─── Unit conversion helpers ─── */
+const UNIT_TO_GRAMS: Record<string, number> = {
+  gram: 1, grams: 1, g: 1, G: 1,
+  kg: 1000, KG: 1000, Kg: 1000,
+  ton: 1_000_000, Ton: 1_000_000, TON: 1_000_000, tonne: 1_000_000,
+  quintal: 100_000, Quintal: 100_000,
+  lb: 453.592, oz: 28.3495,
+};
+const unitFactor = (u?: string | null): number => {
+  if (!u) return 1;
+  return UNIT_TO_GRAMS[u] ?? UNIT_TO_GRAMS[u.toLowerCase()] ?? 1;
+};
+/** Convert `qty` from `fromUnit` to `toUnit`. Non-weight (Piece etc.) units have
+ *  factor 1, so they pass through untouched as long as both sides match. */
+const convertQty = (qty: number, fromUnit?: string | null, toUnit?: string | null) => {
+  if (!fromUnit || !toUnit || fromUnit === toUnit) return qty;
+  return (qty * unitFactor(fromUnit)) / unitFactor(toUnit);
+};
+
 export class TransferController {
   /**
    * Create an inbound transfer (Warehouse → Grinding).
@@ -1205,14 +1224,20 @@ export class TransferController {
 
       for (const item of poItems) {
         const rmId = item.rawMaterialId;
-        const received = (item.receivals || []).reduce((sum, r) => sum + (r.totalWeight || 0), 0);
+        const displayUnit = item.rawMaterial.unitOfMeasurement || 'KG';
+        // Each receival's totalWeight is in the PO item's quantityUnit (e.g. Ton).
+        // Convert to the master's display unit so 10 Ton + 100 KG = 10100 KG, not 110.
+        const received = (item.receivals || []).reduce(
+          (sum, r) => sum + convertQty(r.totalWeight || 0, item.quantityUnit, displayUnit),
+          0
+        );
         if (received <= 0) continue;
         if (!stockMap[rmId]) {
           stockMap[rmId] = {
             rawMaterialId: rmId,
             productName: item.rawMaterial.name,
             skuCode: item.rawMaterial.skuCode,
-            unit: item.rawMaterial.unitOfMeasurement || 'KG',
+            unit: displayUnit,
             totalReceived: 0,
             totalTransferredOut: 0,
             available: 0,
@@ -1231,7 +1256,13 @@ export class TransferController {
         for (const line of t.lines) {
           const rmId = line.rawMaterialId;
           if (!rmId || !stockMap[rmId]) continue;
-          stockMap[rmId].totalTransferredOut += line.quantity || 0;
+          // Transfer-line quantity is in its own unitOfMeasurement; convert into
+          // this material's display unit before subtracting.
+          stockMap[rmId].totalTransferredOut += convertQty(
+            line.quantity || 0,
+            line.unitOfMeasurement,
+            stockMap[rmId].unit
+          );
         }
       }
 
