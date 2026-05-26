@@ -207,28 +207,81 @@ const FGProductionPage: React.FC = () => {
           <tr>
             <td><span class="label">Pack Size:</span></td>
             <td class="value">${me.productName || entry.fgProductName || '-'}</td>
-            <td><span class="label">Laminate Wastage KG:</span></td>
-            <td class="value">${me.laminateWastageKg != null ? Number(me.laminateWastageKg).toFixed(2) + ' KG' : '-'}</td>
+            <td><span class="label">Powder Wastage %:</span></td>
+            <td class="value">${me.powderWastagePercentage != null ? me.powderWastagePercentage + '%' : '-'}</td>
             <td><span class="label">Shift:</span></td>
             <td class="value">${me.shift || '-'}</td>
           </tr>
           <tr>
             <td><span class="label">Batch No:</span></td>
             <td class="value">${entry.fgBatch?.batchNumber || '-'}</td>
-            <td><span class="label">Powder Wastage %:</span></td>
-            <td class="value">${me.powderWastagePercentage != null ? me.powderWastagePercentage + '%' : '-'}</td>
+            <td><span class="label">Allocated Qty:</span></td>
+            <td class="value">${me.allocatedQty || '-'} ${me.allocatedUnit || ''}</td>
             <td><span class="label">M/c Utilized:</span></td>
             <td class="value">${me.machineUtilizedHrs != null ? me.machineUtilizedHrs + ' minutes' : '-'}</td>
           </tr>
           <tr>
-            <td><span class="label">Allocated Qty:</span></td>
-            <td class="value">${me.allocatedQty || '-'} ${me.allocatedUnit || ''}</td>
-            <td><span class="label">Laminate Wastage %:</span></td>
-            <td class="value">${me.laminateWastagePercentage != null ? me.laminateWastagePercentage + '%' : '-'}</td>
+            <td><span class="label"></span></td>
+            <td class="value"></td>
+            <td><span class="label"></span></td>
+            <td class="value"></td>
             <td><span class="label">Non Utilized:</span></td>
             <td class="value">${me.machineNotUtilizedHrs != null ? me.machineNotUtilizedHrs + ' minutes' : '-'}</td>
           </tr>
         </table>
+
+        ${(() => {
+          const pkgs = Array.isArray(me.packagingConsumptions) ? me.packagingConsumptions : [];
+          if (pkgs.length === 0) {
+            // Fallback: surface the legacy single Laminate Wastage fields when no
+            // per-material rows exist (e.g. older completed entries).
+            if (me.laminateWastageKg == null && me.laminateWastagePercentage == null) return '';
+            return `
+            <div class="section-title">Packaging Materials Wastage</div>
+            <table class="dt-table">
+              <thead>
+                <tr>
+                  <th style="width:50%">Material</th>
+                  <th style="width:25%;text-align:right">Wastage</th>
+                  <th style="width:25%;text-align:right">Wastage %</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="border:1px solid #000;padding:6px 10px;font-size:12px;">Laminate (legacy)</td>
+                  <td style="border:1px solid #000;padding:6px 10px;font-size:12px;text-align:right;">${me.laminateWastageKg != null ? Number(me.laminateWastageKg).toFixed(2) + ' KG' : '-'}</td>
+                  <td style="border:1px solid #000;padding:6px 10px;font-size:12px;text-align:right;">${me.laminateWastagePercentage != null ? me.laminateWastagePercentage + '%' : '-'}</td>
+                </tr>
+              </tbody>
+            </table>`;
+          }
+          const rows = pkgs.map((p: any) => {
+            const pctNum = p.wastagePercentage;
+            const pctColor = pctNum != null && pctNum > 5 ? 'color:#b91c1c;font-weight:bold;' : '';
+            return `
+              <tr>
+                <td style="border:1px solid #000;padding:6px 10px;font-size:12px;">
+                  ${p.productName || '-'}${p.skuCode ? ` <span style="color:#777;font-size:10px;">(${p.skuCode})</span>` : ''}
+                </td>
+                <td style="border:1px solid #000;padding:6px 10px;font-size:12px;text-align:right;">${p.quantity ?? '-'} ${p.unitOfMeasurement || ''}</td>
+                <td style="border:1px solid #000;padding:6px 10px;font-size:12px;text-align:right;">${p.wastageQty ?? '-'} ${p.unitOfMeasurement || ''}</td>
+                <td style="border:1px solid #000;padding:6px 10px;font-size:12px;text-align:right;${pctColor}">${pctNum != null ? pctNum + '%' : '—'}</td>
+              </tr>`;
+          }).join('');
+          return `
+            <div class="section-title">Packaging Materials Wastage</div>
+            <table class="dt-table">
+              <thead>
+                <tr>
+                  <th style="width:35%">Material</th>
+                  <th style="width:22%;text-align:right">Allocated</th>
+                  <th style="width:22%;text-align:right">Wastage</th>
+                  <th style="width:21%;text-align:right">Wastage %</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>`;
+        })()}
 
         <div class="section-title">Down Time Status</div>
         <table class="dt-table">
@@ -535,7 +588,7 @@ const FGProductionPage: React.FC = () => {
                                         </span>
                                       </div>
                                     )}
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                     <div>
                                       <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Machine</div>
                                       <div className="text-sm font-semibold flex items-center gap-1.5">
@@ -564,18 +617,71 @@ const FGProductionPage: React.FC = () => {
                                         {entry.status === 'COMPLETED' && <span className="text-xs text-emerald-600/50 ml-1">cartons</span>}
                                       </div>
                                     </div>
-                                    <div>
-                                      <div className="text-[10px] text-amber-600 uppercase tracking-wider mb-1">Laminate Wastage</div>
-                                      <div className="text-sm font-semibold text-amber-600">
-                                        {m.laminateWastageKg || (entry.status === 'COMPLETED' ? '0' : '-')}
-                                        {entry.status === 'COMPLETED' && (
-                                          <span className="text-xs text-amber-600/50 ml-1">
-                                            Kg ({m.laminateWastagePercentage || '0'}%)
-                                          </span>
-                                        )}
-                                      </div>
                                     </div>
-                                    </div>
+
+                                    {/* Per-packaging-material wastage — captured during Production Output Entry */}
+                                    {(() => {
+                                      const pkgs = (m.packagingConsumptions || []) as any[];
+                                      if (pkgs.length === 0) {
+                                        // Fall back to the legacy single laminate field when no per-material rows exist.
+                                        if (m.laminateWastageKg == null && entry.status !== 'COMPLETED') return null;
+                                        return (
+                                          <div className="mt-3 pt-3 border-t border-border">
+                                            <div className="text-[10px] text-amber-600 uppercase tracking-wider mb-1">Laminate Wastage</div>
+                                            <div className="text-sm font-semibold text-amber-600">
+                                              {m.laminateWastageKg ?? 0} <span className="text-xs text-amber-600/50">Kg ({m.laminateWastagePercentage ?? 0}%)</span>
+                                            </div>
+                                          </div>
+                                        );
+                                      }
+                                      return (
+                                        <div className="mt-3 pt-3 border-t border-border">
+                                          <div className="text-[10px] text-amber-600 uppercase tracking-wider mb-2">Packaging Materials Wastage</div>
+                                          <div className="overflow-x-auto">
+                                            <table className="min-w-full text-xs">
+                                              <thead>
+                                                <tr className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                                                  <th className="text-left py-1 pr-3 font-semibold">Material</th>
+                                                  <th className="text-right py-1 px-2 font-semibold">Allocated</th>
+                                                  <th className="text-right py-1 px-2 font-semibold">Wastage</th>
+                                                  <th className="text-right py-1 pl-2 font-semibold">Wastage %</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                {pkgs.map((p: any) => {
+                                                  const pct = p.wastagePercentage;
+                                                  const pctClass =
+                                                    pct == null
+                                                      ? 'text-muted-foreground'
+                                                      : pct > 5
+                                                        ? 'text-red-600 font-bold'
+                                                        : 'text-amber-700 font-bold';
+                                                  return (
+                                                    <tr key={p.id} className="border-t border-border/60">
+                                                      <td className="py-1.5 pr-3 font-medium text-foreground">
+                                                        {p.productName || '-'}
+                                                        {p.skuCode && (
+                                                          <span className="ml-1 text-[10px] text-muted-foreground">({p.skuCode})</span>
+                                                        )}
+                                                      </td>
+                                                      <td className="py-1.5 px-2 text-right text-foreground/80">
+                                                        {p.quantity ?? '-'} <span className="text-[10px] text-muted-foreground">{p.unitOfMeasurement || ''}</span>
+                                                      </td>
+                                                      <td className="py-1.5 px-2 text-right font-semibold text-amber-600">
+                                                        {p.wastageQty ?? '-'} <span className="text-[10px] text-amber-600/60">{p.unitOfMeasurement || ''}</span>
+                                                      </td>
+                                                      <td className={`py-1.5 pl-2 text-right ${pctClass}`}>
+                                                        {pct != null ? `${pct}%` : '—'}
+                                                      </td>
+                                                    </tr>
+                                                  );
+                                                })}
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+                                      );
+                                    })()}
                                   </div>
                                 ))}
                               </div>
