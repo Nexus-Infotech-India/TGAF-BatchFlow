@@ -514,7 +514,9 @@ export default function ProductionOutputEntryPage() {
                           </div>
                           <div className="text-right">
                             <div className="text-xs text-muted-foreground font-semibold">Allocated</div>
-                            <div className="font-bold text-foreground">{alloc.allocatedQty} {alloc.allocatedUnit}</div>
+                            <div className="font-bold text-foreground">
+                              {alloc.allocatedCartons || 0} <span className="text-xs font-medium text-muted-foreground">cartons</span>
+                            </div>
                           </div>
                         </div>
 
