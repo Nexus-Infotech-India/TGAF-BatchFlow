@@ -37,12 +37,19 @@ interface PkgEntry {
   unit: string;
 }
 
+// One SFG lot drawn by a machine. A machine may split its required SFG across
+// several lots when no single transfer has enough remaining.
+interface SfgEntry {
+  id: string;
+  transferNumber: string | null;
+  qty: number | null;
+}
+
 interface MachineAllocation {
   id: string;
   machineId: string;
   manPower: boolean;
-  sfgTransferNumber: string | null;
-  sfgConsumptionQty: number | null;
+  sfgEntries: SfgEntry[];
   pkgEntries: PkgEntry[];
   notes: string;
 }
@@ -59,12 +66,21 @@ const newPkgEntry = (): PkgEntry => ({
   unit: 'KG',
 });
 
+const newSfgEntry = (): SfgEntry => ({
+  id: genId(),
+  transferNumber: null,
+  qty: null,
+});
+
+// Sum of a row's SFG lots, in KG.
+const rowSfgKg = (a: MachineAllocation): number =>
+  a.sfgEntries.reduce((s, e) => s + (Number(e.qty) || 0), 0);
+
 const newEmptyAllocation = (): MachineAllocation => ({
   id: genId(),
   machineId: '',
   manPower: true,
-  sfgTransferNumber: null,
-  sfgConsumptionQty: null,
+  sfgEntries: [newSfgEntry()],
   pkgEntries: [newPkgEntry()],
   notes: '',
 });
@@ -481,6 +497,17 @@ const NewFGProductionEntryPage: React.FC = () => {
     }));
   };
 
+  /* ─── Per-row SFG entry helper ─── */
+  // SFG lots are produced automatically by the auto-allocator (split across
+  // transfers as needed). The user can fine-tune a lot's transfer/qty here, but
+  // lots are not manually added or removed.
+  const updateSfgEntry = (rowId: string, entryId: string, patch: Partial<SfgEntry>) => {
+    setAllocations(prev => prev.map(a => {
+      if (a.id !== rowId) return a;
+      return { ...a, sfgEntries: a.sfgEntries.map(e => (e.id === entryId ? { ...e, ...patch } : e)) };
+    }));
+  };
+
   const handleMachineSelectForRow = (rowId: string, machineId: string) => {
     if (!machineId) {
       updateAllocation(rowId, { machineId: '' });
@@ -513,7 +540,7 @@ const NewFGProductionEntryPage: React.FC = () => {
   /* Plan qty is auto-split via per-row SFG consumption — sum (in KG) must match. */
   const planQtyKg = productionQty != null ? toGrams(productionQty, productionUnit) / 1000 : 0;
   const totalAllocatedKg = allocations.reduce(
-    (sum, a) => sum + (Number(a.sfgConsumptionQty) || 0),
+    (sum, a) => sum + rowSfgKg(a),
     0
   );
   const allocationDelta = Number((totalAllocatedKg - planQtyKg).toFixed(3));
@@ -522,38 +549,49 @@ const NewFGProductionEntryPage: React.FC = () => {
 
   /* ─── Live remaining helpers (UI-only — DB is updated only on submit) ─── */
 
-  /* SFG transfer KG already consumed by rows BEFORE the given row (sequential view).
-     Used to (a) show remaining qty per transfer in the dropdown/caption,
-     and (b) cap the InputNumber max so a row can't exceed transfer stock. */
-  const sfgKgUsedByOtherRows = (rowId: string, transferNumber: string): number => {
-    if (!transferNumber) return 0;
-    const currentIdx = allocations.findIndex(a => a.id === rowId);
-    const priorRows = currentIdx === -1 ? allocations : allocations.slice(0, currentIdx);
-    return priorRows
-      .filter(a => a.sfgTransferNumber === transferNumber)
-      .reduce((s, a) => s + (Number(a.sfgConsumptionQty) || 0), 0);
+  /* Walk SFG lots in (row order, then entry order) and sum the KG of every lot
+     sequenced strictly BEFORE the given lot. Optionally filter to one transfer.
+     This sequential / waterfall view is used to (a) show per-lot remaining in the
+     dropdown and (b) cap each lot's input so it can't exceed transfer/plan stock.
+     Sibling lots on the same machine are counted, so a machine can split its
+     required SFG across several transfers without double-spending. */
+  const sfgKgUsedBeforeEntry = (
+    rowId: string,
+    entryId: string,
+    transferNumber?: string,
+  ): number => {
+    let used = 0;
+    for (const a of allocations) {
+      const isCurrentRow = a.id === rowId;
+      for (const e of a.sfgEntries) {
+        if (isCurrentRow && e.id === entryId) return used; // reached the target lot
+        if (transferNumber && e.transferNumber !== transferNumber) continue;
+        used += Number(e.qty) || 0;
+      }
+    }
+    return used;
   };
 
-  /* Remaining KG of an SFG transfer after accounting for prior rows' allocations. */
-  const getSfgRemainingForRow = (rowId: string, transferNumber: string) => {
+  /* Remaining KG of a transfer available to a specific SFG lot (net of every lot
+     sequenced before it, including sibling lots on the same machine). */
+  const getSfgRemainingForEntry = (rowId: string, entryId: string, transferNumber: string) => {
     const totalAvail = getSfgTransferAvailable(transferNumber).qty;
-    const used = sfgKgUsedByOtherRows(rowId, transferNumber);
+    const used = sfgKgUsedBeforeEntry(rowId, entryId, transferNumber);
     return Math.max(0, Number((totalAvail - used).toFixed(3)));
   };
 
-  /* Remaining KG of plan after prior rows' SFG consumption (sequential view). */
-  const planRemainingForRow = (rowId: string): number => {
-    const currentIdx = allocations.findIndex(a => a.id === rowId);
-    const priorRows = currentIdx === -1 ? allocations : allocations.slice(0, currentIdx);
-    const priorSum = priorRows.reduce((s, a) => s + (Number(a.sfgConsumptionQty) || 0), 0);
-    return Math.max(0, Number((planQtyKg - priorSum).toFixed(3)));
+  /* Remaining KG of the plan available to a specific SFG lot (net of every lot
+     sequenced before it across all machines). */
+  const planRemainingForEntry = (rowId: string, entryId: string): number => {
+    const used = sfgKgUsedBeforeEntry(rowId, entryId);
+    return Math.max(0, Number((planQtyKg - used).toFixed(3)));
   };
 
-  /* Per-row SFG max: capped by both transfer remaining and plan remaining. */
-  const getRowSfgMaxKg = (rowId: string, transferNumber: string | null): number | undefined => {
-    const planLeft = planRemainingForRow(rowId);
+  /* Per-lot SFG max: capped by both transfer remaining and plan remaining. */
+  const getEntrySfgMaxKg = (rowId: string, entryId: string, transferNumber: string | null): number | undefined => {
+    const planLeft = planRemainingForEntry(rowId, entryId);
     if (!transferNumber) return planLeft || undefined;
-    const transferLeft = getSfgRemainingForRow(rowId, transferNumber);
+    const transferLeft = getSfgRemainingForEntry(rowId, entryId, transferNumber);
     return Math.min(transferLeft, planLeft);
   };
 
@@ -587,7 +625,9 @@ const NewFGProductionEntryPage: React.FC = () => {
 
   /* ─── Build per-machine allocation rows from an auto plan ─── */
   // For each machine slot, derive:
-  //   - sfgConsumptionQty (KG) and a transfer that has enough remaining
+  //   - sfgEntries: one (or more) SfgEntry drawn greedily from transfers with the
+  //     most remaining first. If no single transfer has enough for the machine's
+  //     required SFG, it splits across multiple transfers.
   //   - pkgEntries: one (or more) PkgEntry per BOM packaging line, drawn greedily
   //     from transfers with the most remaining first. If no single transfer has
   //     enough for the line's qty, splits across multiple transfers.
@@ -606,35 +646,36 @@ const NewFGProductionEntryPage: React.FC = () => {
     return plan.map((p) => {
       const share = p.cartons / totalCartons;
 
-      // ── SFG: pick a batch with enough effective remaining ──
+      // ── SFG: split the machine's required qty across batches when needed ──
       const sfgKg = sfgLine
         ? Math.round((Number(sfgLine.expectedQuantity) || 0) * share * 1000) / 1000
         : 0;
 
-      let sfgBatch: any = null;
+      const sfgEntries: SfgEntry[] = [];
       if (sfgLine?.availableSfgBatches?.length && sfgKg > 0) {
-        const eligible = sfgLine.availableSfgBatches
+        let need = sfgKg;
+        const batches = sfgLine.availableSfgBatches
           .map((b: any) => ({
             ...b,
             effRemaining: (b.remainingQuantity || 0) - (sfgUsed.get(b.transferNumber) || 0),
           }))
-          .filter((b: any) => b.effRemaining > 0);
+          .filter((b: any) => b.effRemaining > 0)
+          .sort((a: any, b: any) => b.effRemaining - a.effRemaining); // largest first
 
-        // Prefer the smallest batch that still fits the requested qty (leaves bigger
-        // batches free for later machines). Fall back to the largest batch otherwise.
-        const fitting = eligible
-          .filter((b: any) => b.effRemaining >= sfgKg)
-          .sort((a: any, b: any) => a.effRemaining - b.effRemaining);
-        sfgBatch =
-          fitting[0] ||
-          eligible.sort((a: any, b: any) => b.effRemaining - a.effRemaining)[0] ||
-          null;
+        while (need > 1e-6 && batches.length > 0) {
+          const b = batches[0];
+          const take = Number(Math.min(need, b.effRemaining).toFixed(3));
+          sfgEntries.push({ id: genId(), transferNumber: b.transferNumber, qty: take });
+          sfgUsed.set(b.transferNumber, (sfgUsed.get(b.transferNumber) || 0) + take);
+          b.effRemaining -= take;
+          need = Number((need - take).toFixed(3));
+          if (b.effRemaining <= 1e-6) batches.shift();
+        }
 
-        if (sfgBatch) {
-          sfgUsed.set(
-            sfgBatch.transferNumber,
-            (sfgUsed.get(sfgBatch.transferNumber) || 0) + sfgKg
-          );
+        // Couldn't fully cover from any batch — leave the shortfall as an unfilled
+        // lot so the user can see the gap and pick something manually.
+        if (need > 1e-6) {
+          sfgEntries.push({ id: genId(), transferNumber: null, qty: Number(need.toFixed(3)) });
         }
       }
 
@@ -694,8 +735,7 @@ const NewFGProductionEntryPage: React.FC = () => {
         id: genId(),
         machineId: p.machineId,
         manPower: true,
-        sfgTransferNumber: sfgBatch?.transferNumber || null,
-        sfgConsumptionQty: sfgKg > 0 ? sfgKg : null,
+        sfgEntries: sfgEntries.length > 0 ? sfgEntries : [newSfgEntry()],
         pkgEntries: pkgEntries.length > 0 ? pkgEntries : [newPkgEntry()],
         notes: '',
       };
@@ -762,13 +802,30 @@ const NewFGProductionEntryPage: React.FC = () => {
         message.error(`Row ${i + 1}: select a machine.`);
         return;
       }
-      if (!a.sfgConsumptionQty || a.sfgConsumptionQty <= 0) {
-        message.error(`Row ${i + 1}: enter the SFG consumption quantity.`);
+      // Each SFG lot must be fully filled (transfer + qty); at least one is required.
+      const filledSfg = a.sfgEntries.filter(e => e.transferNumber && e.qty && e.qty > 0);
+      if (filledSfg.length === 0) {
+        message.error(`Row ${i + 1}: add at least one SFG lot with a transfer and quantity.`);
         return;
       }
-      if (!a.sfgTransferNumber) {
-        message.error(`Row ${i + 1}: select an SFG transfer.`);
-        return;
+      for (const e of a.sfgEntries) {
+        if (e.transferNumber && (!e.qty || e.qty <= 0)) {
+          message.error(`Row ${i + 1}: enter a quantity for SFG lot ${e.transferNumber}.`);
+          return;
+        }
+        if (!e.transferNumber && e.qty && e.qty > 0) {
+          message.error(`Row ${i + 1}: select an SFG transfer for the lot with quantity ${formatQty(e.qty)} KG.`);
+          return;
+        }
+      }
+      // Disallow the same transfer twice on one machine — it would double-count stock.
+      const seenSfg = new Set<string>();
+      for (const e of filledSfg) {
+        if (seenSfg.has(e.transferNumber!)) {
+          message.error(`Row ${i + 1}: SFG transfer ${e.transferNumber} is selected more than once. Combine it into a single lot.`);
+          return;
+        }
+        seenSfg.add(e.transferNumber!);
       }
     }
 
@@ -785,12 +842,14 @@ const NewFGProductionEntryPage: React.FC = () => {
       return;
     }
 
-    // Per-transfer SFG availability check
+    // Per-transfer SFG availability check (summed across every lot on every row)
     const sfgPerTransfer: Record<string, number> = {};
     for (const a of allocations) {
-      if (a.sfgTransferNumber) {
-        sfgPerTransfer[a.sfgTransferNumber] =
-          (sfgPerTransfer[a.sfgTransferNumber] || 0) + (Number(a.sfgConsumptionQty) || 0);
+      for (const e of a.sfgEntries) {
+        if (e.transferNumber && e.qty && e.qty > 0) {
+          sfgPerTransfer[e.transferNumber] =
+            (sfgPerTransfer[e.transferNumber] || 0) + (Number(e.qty) || 0);
+        }
       }
     }
     for (const [trf, used] of Object.entries(sfgPerTransfer)) {
@@ -940,10 +999,14 @@ const NewFGProductionEntryPage: React.FC = () => {
     // Build per-machine allocation payload for the production entry
     const machineAllocations = allocations.map(a => {
       const m = outputMachines.find(om => om.id === a.machineId);
-      const transferNote = a.sfgTransferNumber ? `SFG Transfer: ${a.sfgTransferNumber}` : '';
+      // List every SFG lot this machine drew from (with its qty) in the notes.
+      const sfgLots = a.sfgEntries.filter(e => e.transferNumber && e.qty && e.qty > 0);
+      const transferNote = sfgLots.length
+        ? `SFG Transfer: ${sfgLots.map(e => `${e.transferNumber} (${formatQty(Number(e.qty))} KG)`).join(', ')}`
+        : '';
       const combinedNotes =
         transferNote + (transferNote && a.notes ? ' | ' : '') + (a.notes || '');
-      const sfgKg = Number(a.sfgConsumptionQty) || 0;
+      const sfgKg = rowSfgKg(a);
 
       // Detailed per-PKG breakdown for this machine
       const packagingConsumptions = a.pkgEntries
@@ -1475,21 +1538,21 @@ const NewFGProductionEntryPage: React.FC = () => {
                                 <td className="px-3 py-2 text-right">
                                   <span className="font-extrabold text-emerald-700">
                                     {(() => {
-                                      // Derive cartons from sfgConsumptionQty / sfg-per-carton, OR from BOM
+                                      // Derive cartons from the row's total SFG / sfg-per-carton, OR from BOM
                                       const bom = boms.find((b) => b.id === selectedBomId);
                                       const sfgLine = consumptionLines.find((l) => l.isSFG);
                                       if (!bom || !sfgLine || !plannedCartons) return '—';
                                       // Sum of sfgKg = sfgLine.expectedQuantity (total for plan)
-                                      // → cartons for this row = (sfgConsumptionQty / total) × plannedCartons
+                                      // → cartons for this row = (row SFG total / total) × plannedCartons
                                       const totalSfg = Number(sfgLine.expectedQuantity) || 0;
-                                      const rowSfg = Number(row.sfgConsumptionQty || 0);
+                                      const rowSfg = rowSfgKg(row);
                                       if (totalSfg <= 0) return '—';
                                       return Math.round((rowSfg / totalSfg) * plannedCartons);
                                     })()}
                                   </span>
                                 </td>
                                 <td className="px-3 py-2 text-right text-xs">
-                                  {row.sfgConsumptionQty != null ? `${formatQty(row.sfgConsumptionQty)} KG` : '—'}
+                                  {rowSfgKg(row) > 0 ? `${formatQty(rowSfgKg(row))} KG` : '—'}
                                 </td>
                                 <td className="px-3 py-2 text-xs">
                                   {row.pkgEntries.filter((p) => p.qty && p.qty > 0).length === 0 ? (
@@ -1610,41 +1673,59 @@ const NewFGProductionEntryPage: React.FC = () => {
 
                           {/* SFG & Packaging Consumption per row */}
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-border">
-                            {/* SFG */}
+                            {/* SFG — auto-allocated; splits across lots automatically when one transfer can't cover the machine's required qty */}
                             <div className="space-y-2">
-                              <label className="text-xs font-bold text-emerald-700 flex items-center gap-1.5 uppercase">
-                                <Truck size={12} /> SFG Consumption
-                              </label>
-                              <Select
-                                placeholder="Select SFG Batch"
-                                value={row.sfgTransferNumber || undefined}
-                                onChange={v => updateAllocation(row.id, { sfgTransferNumber: v, sfgConsumptionQty: null })}
-                                options={getSfgConsumptionInfo().transferNumbers.map(t => {
-                                  const remaining = getSfgRemainingForRow(row.id, t);
-                                  return { value: t, label: `${t} — ${formatQty(remaining)} KG remaining` };
-                                })}
-                                className="w-full text-sm [&_.ant-select-selector]:rounded-sm"
-                                allowClear
-                              />
-                              <div className="flex gap-2">
-                                <InputNumber
-                                  min={0}
-                                  precision={3}
-                                  max={getRowSfgMaxKg(row.id, row.sfgTransferNumber)}
-                                  value={row.sfgConsumptionQty}
-                                  onChange={v => updateAllocation(row.id, { sfgConsumptionQty: v })}
-                                  className="w-full [&_.ant-input-number-input]:rounded-sm"
-                                  placeholder="Allocate Qty"
-                                  size="large"
-                                  disabled={!row.sfgTransferNumber}
-                                />
-                                <div className="flex items-center justify-center font-bold text-muted-foreground text-xs bg-muted px-3 rounded-sm border border-border">KG</div>
+                              <div className="flex items-center justify-between">
+                                <label className="text-xs font-bold text-emerald-700 flex items-center gap-1.5 uppercase">
+                                  <Truck size={12} /> SFG Consumption
+                                </label>
+                                {row.sfgEntries.length > 1 && (
+                                  <span className="text-[10px] text-muted-foreground">
+                                    {row.sfgEntries.length} lots (auto)
+                                  </span>
+                                )}
                               </div>
-                              {row.sfgTransferNumber && (
-                                <div className="text-[11px] text-muted-foreground space-y-0.5">
-                                  
-                                </div>
-                              )}
+                              {row.sfgEntries.map((e) => {
+                                const allTransfers = getSfgConsumptionInfo().transferNumbers;
+                                // Exclude transfers already chosen by other lots on this row.
+                                const chosen = new Set(
+                                  row.sfgEntries
+                                    .filter(x => x.id !== e.id && x.transferNumber)
+                                    .map(x => x.transferNumber)
+                                );
+                                const visibleTransfers = allTransfers.filter(
+                                  t => !chosen.has(t) || t === e.transferNumber
+                                );
+                                return (
+                                  <div key={e.id} className="border border-emerald-100 rounded-sm p-2 bg-emerald-50/30 space-y-1.5">
+                                    <Select
+                                      placeholder="Select SFG Batch"
+                                      value={e.transferNumber || undefined}
+                                      onChange={v => updateSfgEntry(row.id, e.id, { transferNumber: v || null, qty: null })}
+                                      options={visibleTransfers.map(t => {
+                                        const remaining = getSfgRemainingForEntry(row.id, e.id, t);
+                                        return { value: t, label: `${t} — ${formatQty(remaining)} KG remaining` };
+                                      })}
+                                      className="w-full text-sm [&_.ant-select-selector]:rounded-sm"
+                                      allowClear
+                                    />
+                                    <div className="flex gap-2">
+                                      <InputNumber
+                                        min={0}
+                                        precision={3}
+                                        max={getEntrySfgMaxKg(row.id, e.id, e.transferNumber)}
+                                        value={e.qty}
+                                        onChange={v => updateSfgEntry(row.id, e.id, { qty: v })}
+                                        className="w-full [&_.ant-input-number-input]:rounded-sm"
+                                        placeholder="Allocate Qty"
+                                        size="middle"
+                                        disabled={!e.transferNumber}
+                                      />
+                                      <div className="flex items-center justify-center font-bold text-muted-foreground text-xs bg-muted px-3 rounded-sm border border-border">KG</div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
                             </div>
 
                             {/* Packaging — up to 3 entries per machine */}
