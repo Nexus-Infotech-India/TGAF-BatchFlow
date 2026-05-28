@@ -30,6 +30,13 @@ function fromGrams(grams: number, unit: string): number {
   return grams / factor;
 }
 
+// True only for mass units. Used to exclude count-based units (Piece/Bag) when
+// summing consumed material into a production weight.
+function isWeightUnit(unit: string): boolean {
+  if (!unit) return false;
+  return (UNIT_TO_GRAMS[unit] ?? UNIT_TO_GRAMS[unit.toLowerCase()]) !== undefined;
+}
+
 export class ProductionController {
   /**
    * GET /production/consumption-data
@@ -434,6 +441,27 @@ export class ProductionController {
       }
       const postingNumber = `${prefix}${String(seq).padStart(4, '0')}`;
 
+      // ── Derive ACTUAL gross production from consumed ingredient mass ──
+      // The SFG output must reflect what physically went into the grinder, not the
+      // planned quantity the operator originally typed. Sum the actual consumed
+      // weight of ingredient materials (excludes packaging and count-based units
+      // like "Piece"); byproduct/scrap are then deducted from this at completion.
+      const sfgUnit = sfgOutputs[0]?.unit || productionUnit || 'KG';
+      let grossGrams = 0;
+      for (const c of consumptions) {
+        const actualQty = Number(c.actualQuantity) || 0;
+        if (actualQty <= 0) continue;
+        const unit = c.unit || sfgUnit;
+        if (!isWeightUnit(unit)) continue; // skip pieces/bags
+        const bomItem = bom.items.find((i) => i.rawMaterialId === c.rawMaterialId);
+        if (bomItem?.rawMaterial?.category === 'PACKAGING_MATERIAL') continue;
+        grossGrams += toGrams(actualQty, unit);
+      }
+      const hasGross = grossGrams > 0;
+      const grossSfgQty = hasGross
+        ? Math.round(fromGrams(grossGrams, sfgUnit) * 1000) / 1000
+        : Number(sfgOutputs[0]?.quantity) || (productionQty ? Number(productionQty) : 0);
+
       const posting = await prisma.$transaction(async (tx) => {
         const created = await tx.productionPosting.create({
           data: {
@@ -442,8 +470,8 @@ export class ProductionController {
             bomId,
             locationId,
             shiftDate: new Date(shiftDate),
-            productionQty: productionQty ? Number(productionQty) : null,
-            productionUnit: productionUnit || null,
+            productionQty: hasGross ? grossSfgQty : (productionQty ? Number(productionQty) : null),
+            productionUnit: productionUnit || sfgUnit || null,
             status: 'POSTED',
             notes: notes || null,
             postedById: req.user?.id || 'system',
@@ -465,7 +493,10 @@ export class ProductionController {
                 outputType: o.outputType,
                 productName: o.productName,
                 skuCode: o.skuCode || null,
-                quantity: Number(o.quantity),
+                quantity:
+                  o.outputType === 'SFG' && hasGross && sfgOutputs.length === 1
+                    ? grossSfgQty
+                    : Number(o.quantity),
                 unit: o.unit || 'KG',
                 batchNumber: o.batchNumber || null,
               })),
@@ -578,7 +609,7 @@ export class ProductionController {
             entity: 'ProductionPosting',
             entityId: created.id,
             userId: req.user?.id || 'system',
-            description: `Production posted: ${postingNumber}. SFG: ${sfgOutputs[0]?.productName || 'N/A'}, Qty: ${productionQty || ''} ${productionUnit || ''}, Location: ${location.name}`,
+            description: `Production posted: ${postingNumber}. SFG: ${sfgOutputs[0]?.productName || 'N/A'}, Qty: ${hasGross ? grossSfgQty : (productionQty || '')} ${sfgUnit}, Location: ${location.name}`,
           },
         });
 
