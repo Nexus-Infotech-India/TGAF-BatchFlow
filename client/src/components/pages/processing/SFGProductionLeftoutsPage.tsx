@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Input, message, Empty, Spin } from 'antd';
 import { motion } from 'framer-motion';
-import { Recycle, Search, MapPin, Factory, AlertTriangle } from 'lucide-react';
+import { Recycle, Search, MapPin, AlertTriangle } from 'lucide-react';
 import api, { API_ROUTES } from '../../../utils/api';
 
 const PAGE_SIZE = 10;

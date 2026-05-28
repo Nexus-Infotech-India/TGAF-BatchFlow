@@ -209,26 +209,6 @@ export default function ProductionOutputEntryPage() {
     });
   };
 
-  // Update one packaging-wastage cell on a machine row, auto-compute %.
-  const updatePackagingWastage = (machineIdx: number, pkgIdx: number, qty: number | null) => {
-    setMachineInputs((prev) => {
-      const next = [...prev];
-      const rows = [...(next[machineIdx].packagingWastages || [])];
-      const w = { ...rows[pkgIdx] };
-      const qtyNum = qty != null ? Number(qty) : null;
-      w.wastageQty = qtyNum;
-      const allocated = Number(w.allocatedQty) || 0;
-      if (qtyNum != null && allocated > 0) {
-        w.wastagePercentage = Number(((qtyNum / allocated) * 100).toFixed(2));
-      } else {
-        w.wastagePercentage = qtyNum != null ? 0 : null;
-      }
-      rows[pkgIdx] = w;
-      next[machineIdx] = { ...next[machineIdx], packagingWastages: rows };
-      return next;
-    });
-  };
-
   // The same packaging material can arrive as several allocation lines (e.g. two
   // carton batches). Collapse them by material+unit so the operator sees ONE row
   // with the combined allocated qty and enters a single wastage against that total.
