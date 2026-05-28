@@ -39,6 +39,7 @@ import CleaningRawMaterialList from './components/pages/cleanning/allItems';
 import TransactionalLog from './components/pages/Order/TransactionalLog';
 import DispatchToGrinding from './components/pages/processing/DispatchToGrinding';
 import SFGProcessingPage from './components/pages/processing/SFGProcessingPage';
+import SFGProductionLeftoutsPage from './components/pages/processing/SFGProductionLeftoutsPage';
 import OutboundToSFGPage from './components/pages/processing/OutboundToSFGPage';
 import StockVerificationPage from './components/pages/processing/StockVerificationPage';
 import LooseStockPage from './components/pages/processing/LooseStockPage';
@@ -49,6 +50,7 @@ import ReceiveMaterialsPage from './components/pages/packaging/ReceiveMaterialsP
 import FGProductionPage from './components/pages/packaging/FGProductionPage';
 import NewFGProductionEntryPage from './components/pages/packaging/NewFGProductionEntryPage';
 import ProductionOutputEntryPage from './components/pages/packaging/ProductionOutputEntryPage';
+import FGProductionLeftoutsPage from './components/pages/packaging/FGProductionLeftoutsPage';
 import FGQualityCheckPage from './components/pages/packaging/FGQualityCheckPage';
 import OutboundToFGPage from './components/pages/packaging/OutboundToFGPage';
 import FGVerificationPage from './components/pages/packaging/FGVerificationPage';
@@ -109,14 +111,17 @@ const App = () => {
     { path: '/raw/processing-list', name: 'Processing List', description: 'View all processing raw materials ready for processing', permissionKey: 'process_raw_materials' },
     { path: '/grinding/dispatch', name: 'Dispatch to Grinding', description: 'Send cleaned RM batches to grinding unit', permissionKey: 'send_cleaned_to_grinding' },
     { path: '/grinding/sfg-processing', name: 'SFG Processing', description: 'Manage processing batches and production entries', permissionKey: 'manage_processing_list' },
+    { path: '/grinding/sfg-production-leftouts', name: 'SFG Production Leftouts', description: 'View byproduct & scrap totals and batch-wise from SFG production', permissionKey: 'view_sfg_production_leftouts' },
     { path: '/grinding/outbound-sfg', name: 'Outbound to SFG WH', description: 'Dispatch SFG output to warehouse', permissionKey: 'dispatch_to_sfg' },
     { path: '/grinding/stock-verification', name: 'Stock Verification', description: 'Verify and accept or reject incoming stock dispatches', permissionKey: 'manage_stock_verification' },
+    { path: '/grinding/loose-stock', name: 'Loose Stock', description: 'View and re-bag accumulated loose SFG stock', permissionKey: 'manage_loose_stock' },
     { path: '/packaging/material-transfer', name: 'Material Transfer', description: 'Transfer SFG & packing materials to packaging production', permissionKey: 'manage_pkg_material_transfer' },
     { path: '/packaging/create-fg-batch', name: 'Create FG Batch', description: 'Create new FG batches from transferring materials', permissionKey: 'manage_pkg_material_transfer' },
     { path: '/packaging/receive-materials', name: 'Receive Materials', description: 'Accept or reject incoming materials at packaging', permissionKey: 'manage_pkg_receive_materials' },
     { path: '/packaging/fg-production', name: 'FG Production Entry', description: 'Machine-wise FG production with BOM-based input tracking', permissionKey: 'manage_fg_production' },
     { path: '/packaging/new-production-entry', name: 'New Production Entry', description: 'Create new machine-wise FG production entry', permissionKey: 'manage_fg_production' },
     { path: '/packaging/production-output-entry', name: 'Production Output Entry', description: 'Record actual machine-wise FG output', permissionKey: 'manage_fg_production' },
+    { path: '/packaging/fg-production-leftouts', name: 'FG Production Leftouts', description: 'View machine-wise wastage from FG production output', permissionKey: 'view_fg_production_leftouts' },
     { path: '/packaging/fg-quality-check', name: 'FG Quality Check', description: 'Perform quality checks on completed FG production', permissionKey: 'manage_fg_production' },
     { path: '/packaging/outbound-fg', name: 'Outbound to FG WH', description: 'Dispatch FG from machine locations to FG warehouse', permissionKey: 'manage_pkg_outbound_fg' },
     { path: '/packaging/fg-verification', name: 'FG Verification', description: 'Accept or reject FG and scrap at FG warehouse', permissionKey: 'manage_fg_verification' },
@@ -975,6 +980,24 @@ const App = () => {
             />
 
             <Route
+              path="/grinding/sfg-production-leftouts"
+              element={
+                <PermissionedRoute
+                  path="/grinding/sfg-production-leftouts"
+                  element={
+                    <SecureRoute
+                      element={<SFGProductionLeftoutsPage />}
+                      permissionKey="view_sfg_production_leftouts"
+                    />
+                  }
+                  name="SFG Production Leftouts"
+                  description="View byproduct & scrap totals and batch-wise from SFG production"
+                  permissionKey="view_sfg_production_leftouts"
+                />
+              }
+            />
+
+            <Route
               path="/grinding/outbound-sfg"
               element={
                 <PermissionedRoute
@@ -1018,12 +1041,12 @@ const App = () => {
                   element={
                     <SecureRoute
                       element={<LooseStockPage />}
-                      permissionKey="manage_stock_verification"
+                      permissionKey="manage_loose_stock"
                     />
                   }
                   name="Loose Stock"
                   description="View and re-bag accumulated loose SFG stock"
-                  permissionKey="manage_stock_verification"
+                  permissionKey="manage_loose_stock"
                 />
               }
             />
@@ -1188,6 +1211,24 @@ const App = () => {
                   name="Production Output Entry"
                   description="Record actual machine-wise FG output"
                   permissionKey="manage_fg_production"
+                />
+              }
+            />
+
+            <Route
+              path="/packaging/fg-production-leftouts"
+              element={
+                <PermissionedRoute
+                  path="/packaging/fg-production-leftouts"
+                  element={
+                    <SecureRoute
+                      element={<FGProductionLeftoutsPage />}
+                      permissionKey="view_fg_production_leftouts"
+                    />
+                  }
+                  name="FG Production Leftouts"
+                  description="View machine-wise wastage from FG production output"
+                  permissionKey="view_fg_production_leftouts"
                 />
               }
             />

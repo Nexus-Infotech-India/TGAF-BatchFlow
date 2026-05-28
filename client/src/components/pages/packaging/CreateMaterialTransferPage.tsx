@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import api, { API_ROUTES } from '../../../utils/api';
 import { Button, message, Select, InputNumber, Input, Checkbox } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -78,6 +78,11 @@ const CreateMaterialTransferPage: React.FC = () => {
   // Step 2: Material selection
   // SFG
   const [sfgStock, setSfgStock] = useState<SfgStockItem[]>([]);
+  // SFG products that are consumed as an input in at least one active FG BOM.
+  // Only these may be transferred to production — SFGs not used by any FG recipe
+  // (e.g. an SFG that's only an upstream component) are hidden from the picker.
+  const [allowedSfgKeys, setAllowedSfgKeys] = useState<Set<string>>(new Set());
+  const [bomsLoaded, setBomsLoaded] = useState(false);
   const [loadingStock, setLoadingStock] = useState(false);
   const [selectedStockItem, setSelectedStockItem] = useState<SfgStockItem | null>(null);
   const [batchQuantities, setBatchQuantities] = useState<Record<string, number | null>>({});
@@ -135,9 +140,41 @@ const CreateMaterialTransferPage: React.FC = () => {
     }
   };
 
+  // Collect the SFG inputs used across all active FG BOMs (matched by id + sku).
+  const fetchFgBomSfgInputs = async () => {
+    try {
+      const res = await api.get(API_ROUTES.RAW.GET_FG_BOMS);
+      const boms = res.data?.data || res.data || [];
+      const keys = new Set<string>();
+      for (const bom of boms) {
+        for (const item of bom.items || []) {
+          if (item?.rawMaterial?.category === 'SEMI_FINISHED_GOOD') {
+            if (item.rawMaterialId) keys.add(item.rawMaterialId);
+            if (item.rawMaterial?.skuCode) keys.add(String(item.rawMaterial.skuCode).toLowerCase());
+          }
+        }
+      }
+      setAllowedSfgKeys(keys);
+    } catch {
+      // If FG BOMs can't load, leave the filter inactive rather than hiding everything.
+    } finally {
+      setBomsLoaded(true);
+    }
+  };
+
   useEffect(() => {
     fetchLocations();
+    fetchFgBomSfgInputs();
   }, []);
+
+  // Restrict the SFG picker to SFGs that some FG BOM actually consumes. Until the
+  // BOMs load (or if none map), show everything so the picker is never empty by mistake.
+  const visibleSfgStock = useMemo(() => {
+    if (!bomsLoaded || allowedSfgKeys.size === 0) return sfgStock;
+    return sfgStock.filter(
+      (s) => allowedSfgKeys.has(s.rawMaterialId) || allowedSfgKeys.has((s.skuCode || '').toLowerCase())
+    );
+  }, [sfgStock, allowedSfgKeys, bomsLoaded]);
 
   /* ═══ SFG Handlers ═══ */
 
@@ -161,6 +198,19 @@ const CreateMaterialTransferPage: React.FC = () => {
   const handleBatchQtyChange = (batchNumber: string, value: number | null) => {
     setBatchQuantities(prev => ({ ...prev, [batchNumber]: value }));
   };
+
+  // Hide batches with no available bags — only show lots that can actually be allocated.
+  const visibleBatches = useMemo(() => {
+    if (!selectedStockItem) return [];
+    const unit = selectedStockItem.unit.toLowerCase();
+    return selectedStockItem.batches.filter((b) => {
+      const safeBag = b.bagSizeKg || 25;
+      const avail = (typeof b.availableBags === 'number' && !isNaN(b.availableBags) && b.availableBags > 0)
+        ? b.availableBags
+        : Math.floor(((unit === 'ton' || unit === 'mt') ? b.availableQty * 1000 : b.availableQty) / safeBag);
+      return avail > 0;
+    });
+  }, [selectedStockItem]);
 
   const totalSelectedBags = selectedStockItem
     ? selectedStockItem.batches.reduce((sum, b) => selectedBatches.has(b.batchNumber) ? sum + Number(batchQuantities[b.batchNumber] || 0) : sum, 0)
@@ -517,7 +567,7 @@ const CreateMaterialTransferPage: React.FC = () => {
                       <Loader2 className="animate-spin text-violet-500 mb-2" size={24} />
                       <div className="text-xs text-muted-foreground">Loading warehouse stock...</div>
                     </div>
-                  ) : sfgStock.length === 0 ? (
+                  ) : visibleSfgStock.length === 0 ? (
                     <div className="border border-dashed border-border rounded-xl p-8 text-center bg-muted/10">
                       <Package size={28} className="mx-auto text-muted-foreground/40 mb-3" />
                       <p className="text-sm font-semibold">No SFG stock available in warehouse</p>
@@ -527,7 +577,7 @@ const CreateMaterialTransferPage: React.FC = () => {
                       className="w-full" size="large" showSearch placeholder="Select SFG item"
                       value={selectedStockItem ? `${selectedStockItem.rawMaterialId}__${selectedStockItem.warehouseLocationId}` : undefined}
                       onChange={handleSelectStockItem} optionFilterProp="label"
-                      options={sfgStock.map(stock => {
+                      options={visibleSfgStock.map(stock => {
                         const displayBags = stock.totalAvailableBags != null && !isNaN(stock.totalAvailableBags)
                           ? stock.totalAvailableBags
                           : stock.batches.reduce((sum, b) => sum + Math.floor(((stock.unit.toLowerCase() === 'ton' || stock.unit.toLowerCase() === 'mt') ? b.availableQty * 1000 : b.availableQty) / (b.bagSizeKg || 25)), 0);
@@ -562,7 +612,7 @@ const CreateMaterialTransferPage: React.FC = () => {
                     <div className="border border-border rounded-lg bg-white dark:bg-card overflow-hidden mb-4">
                       <div className="px-4 py-2.5 bg-muted/20 border-b border-border flex items-center justify-between">
                         <span className="font-bold text-[10px] tracking-widest uppercase text-muted-foreground">Source Batches</span>
-                        <span className="text-[10px] text-muted-foreground">{selectedStockItem.batches.length} lots</span>
+                        <span className="text-[10px] text-muted-foreground">{visibleBatches.length} lots</span>
                       </div>
                       <div className="max-h-[260px] overflow-y-auto">
                         <table className="w-full text-left text-sm table-fixed">
@@ -577,7 +627,7 @@ const CreateMaterialTransferPage: React.FC = () => {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-border">
-                            {selectedStockItem.batches.map(batch => {
+                            {visibleBatches.map(batch => {
                               const isChecked = selectedBatches.has(batch.batchNumber);
                               const allocBags = batchQuantities[batch.batchNumber] || 0;
                               const safeBag = batch.bagSizeKg || 25;

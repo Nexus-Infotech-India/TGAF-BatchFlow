@@ -23,7 +23,7 @@ const AppLayout = () => {
   // Update page title based on route
   useEffect(() => {
     const path = location.pathname;
-    let title = 'BatchFlow';
+    let title = 'NexInventory';
     let currentNavStack = [{ title: 'Home', path: '/' }];
 
     if (path.includes('/dashboard')) {

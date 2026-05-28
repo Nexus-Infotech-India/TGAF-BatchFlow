@@ -27,7 +27,8 @@ import {
   ClipboardCheck,
   Settings2,
   ShieldCheck,
-  Beaker
+  Beaker,
+  Recycle
 } from "lucide-react";
 import { usePermissions } from "../../hooks/permission";
 
@@ -262,6 +263,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           permissionKey: "manage_processing_list"
         },
         {
+          path: "/grinding/sfg-production-leftouts",
+          name: "SFG Production Leftouts",
+          icon: <Recycle className="sidebar-icon" size={18} />,
+          permissionKey: "view_sfg_production_leftouts"
+        },
+        {
           path: "/grinding/outbound-sfg",
           name: "Outbound to SFG WH",
           icon: <ArrowUpFromLine className="sidebar-icon" size={18} />,
@@ -277,7 +284,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           path: "/grinding/loose-stock",
           name: "Loose Stock",
           icon: <Layers className="sidebar-icon" size={18} />,
-          permissionKey: "manage_stock_verification"
+          permissionKey: "manage_loose_stock"
         }
       ]
     },
@@ -310,6 +317,12 @@ const Sidebar: React.FC<SidebarProps> = ({ onToggle, pageTitle = 'Dashboard' }) 
           name: "Production Output Entry",
           icon: <ClipboardCheck className="sidebar-icon" size={18} />,
           permissionKey: "manage_fg_production"
+        },
+        {
+          path: "/packaging/fg-production-leftouts",
+          name: "FG Production Leftouts",
+          icon: <Recycle className="sidebar-icon" size={18} />,
+          permissionKey: "view_fg_production_leftouts"
         },
         {
           path: "/packaging/fg-quality-check",

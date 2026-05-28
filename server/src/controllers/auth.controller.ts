@@ -529,7 +529,7 @@ export class AuthController {
             }
           }
         });
-      });
+      }, { timeout: 15000 });
 
       // Log role creation
       await prisma.activityLog.create({

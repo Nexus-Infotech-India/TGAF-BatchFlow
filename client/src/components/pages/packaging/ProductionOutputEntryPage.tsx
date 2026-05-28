@@ -167,14 +167,22 @@ export default function ProductionOutputEntryPage() {
           ? Number(((powderKg / totalSfgKg) * 100).toFixed(2))
           : 0;
 
-        // Target met → auto-zero all packaging wastages (editable later).
-        if (achieved === target && target > 0) {
-          row.packagingWastages = (row.packagingWastages || []).map((w: any) => ({
+        // Packaging wastage mirrors powder wastage: the materials allocated to the
+        // shortfall cartons are wasted. Auto-fill each line = allocated × (shortfall /
+        // target); a met/over target yields 0. Operator can still override after.
+        const wasteFrac = target > 0 ? shortfall / target : 0;
+        row.packagingWastages = (row.packagingWastages || []).map((w: any) => {
+          const alloc = Number(w.allocatedQty) || 0;
+          const u = String(w.unit || '').toLowerCase();
+          const isPiece = u.includes('piece') || u === 'pcs';
+          const raw = alloc * wasteFrac;
+          const wasteQty = isPiece ? Math.round(raw) : Math.round(raw * 1000) / 1000;
+          return {
             ...w,
-            wastageQty: 0,
-            wastagePercentage: 0,
-          }));
-        }
+            wastageQty: wasteQty,
+            wastagePercentage: alloc > 0 ? Number(((wasteQty / alloc) * 100).toFixed(2)) : 0,
+          };
+        });
 
         // Legacy laminate fields kept in sync for any downstream readers.
         row.laminateWastageKg = 0;
@@ -216,6 +224,68 @@ export default function ProductionOutputEntryPage() {
         w.wastagePercentage = qtyNum != null ? 0 : null;
       }
       rows[pkgIdx] = w;
+      next[machineIdx] = { ...next[machineIdx], packagingWastages: rows };
+      return next;
+    });
+  };
+
+  // The same packaging material can arrive as several allocation lines (e.g. two
+  // carton batches). Collapse them by material+unit so the operator sees ONE row
+  // with the combined allocated qty and enters a single wastage against that total.
+  const groupPackaging = (rows: any[]) => {
+    const map = new Map<string, any>();
+    (rows || []).forEach((w, idx) => {
+      const key = `${w.rawMaterialId || w.skuCode || w.productName}__${w.unit || ''}`;
+      let g = map.get(key);
+      if (!g) {
+        g = { key, productName: w.productName, skuCode: w.skuCode, unit: w.unit, allocatedQty: 0, wastageQty: null, memberIdxs: [] };
+        map.set(key, g);
+      }
+      g.allocatedQty += Number(w.allocatedQty) || 0;
+      g.memberIdxs.push(idx);
+      if (w.wastageQty != null) g.wastageQty = (g.wastageQty || 0) + Number(w.wastageQty);
+    });
+    return Array.from(map.values()).map((g) => ({
+      ...g,
+      allocatedQty: Math.round(g.allocatedQty * 1000) / 1000,
+      wastagePercentage:
+        g.wastageQty != null && g.allocatedQty > 0
+          ? Number(((g.wastageQty / g.allocatedQty) * 100).toFixed(2))
+          : g.wastageQty != null ? 0 : null,
+    }));
+  };
+
+  // Split a wastage total (entered against the combined row) back onto the underlying
+  // packaging records, proportional to each line's allocated qty, so the stored
+  // per-record values still sum to what the operator typed.
+  const updateGroupedPackagingWastage = (machineIdx: number, memberIdxs: number[], total: number | null) => {
+    setMachineInputs((prev) => {
+      const next = [...prev];
+      const rows = [...(next[machineIdx].packagingWastages || [])];
+      if (total == null) {
+        memberIdxs.forEach((i) => { rows[i] = { ...rows[i], wastageQty: null, wastagePercentage: null }; });
+      } else {
+        const members = memberIdxs.map((i) => rows[i]);
+        const totalAllocated = members.reduce((s, m) => s + (Number(m.allocatedQty) || 0), 0);
+        const isPiece = members.some((m) => {
+          const u = String(m.unit || '').toLowerCase();
+          return u.includes('piece') || u === 'pcs';
+        });
+        const roundQ = (v: number) => (isPiece ? Math.round(v) : Math.round(v * 1000) / 1000);
+        const pct = totalAllocated > 0 ? Number(total) / totalAllocated : 0;
+        let remaining = Number(total);
+        memberIdxs.forEach((i, k) => {
+          const alloc = Number(rows[i].allocatedQty) || 0;
+          const raw = k === memberIdxs.length - 1 ? remaining : roundQ(alloc * pct);
+          const share = Math.max(0, Math.min(alloc, roundQ(raw)));
+          remaining = roundQ(remaining - share);
+          rows[i] = {
+            ...rows[i],
+            wastageQty: share,
+            wastagePercentage: alloc > 0 ? Number(((share / alloc) * 100).toFixed(2)) : 0,
+          };
+        });
+      }
       next[machineIdx] = { ...next[machineIdx], packagingWastages: rows };
       return next;
     });
@@ -626,11 +696,11 @@ export default function ProductionOutputEntryPage() {
                                   </tr>
                                 </thead>
                                 <tbody className="divide-y divide-blue-100/70">
-                                  {alloc.packagingWastages.map((w: any, pkgIdx: number) => {
+                                  {groupPackaging(alloc.packagingWastages).map((w: any) => {
                                     const exceeds = w.wastageQty != null && w.allocatedQty > 0 && w.wastageQty > w.allocatedQty;
                                     const isPiece = String(w.unit || '').toLowerCase().includes('piece') || String(w.unit || '').toLowerCase() === 'pcs';
                                     return (
-                                      <tr key={w.id || pkgIdx} className="hover:bg-blue-50/40">
+                                      <tr key={w.key} className="hover:bg-blue-50/40">
                                         <td className="px-3 py-2">
                                           <div className="font-semibold text-foreground">{w.productName || '—'}</div>
                                           <div className="text-[10px] text-muted-foreground font-mono">{w.skuCode || ''}</div>
@@ -647,7 +717,7 @@ export default function ProductionOutputEntryPage() {
                                               step={isPiece ? 1 : 0.001}
                                               precision={isPiece ? 0 : 3}
                                               value={w.wastageQty}
-                                              onChange={(val) => updatePackagingWastage(idx, pkgIdx, val as number | null)}
+                                              onChange={(val) => updateGroupedPackagingWastage(idx, w.memberIdxs, val as number | null)}
                                               placeholder={isPiece ? '0' : '0.000'}
                                               size="small"
                                               className={`w-24 font-semibold ${exceeds ? 'border-red-400' : ''}`}
@@ -839,8 +909,8 @@ export default function ProductionOutputEntryPage() {
                                 </tr>
                               </thead>
                               <tbody className="divide-y divide-blue-100/40">
-                                {alloc.packagingWastages.map((w: any, pi: number) => (
-                                  <tr key={w.id || pi} className="hover:bg-blue-50/30">
+                                {groupPackaging(alloc.packagingWastages).map((w: any) => (
+                                  <tr key={w.key} className="hover:bg-blue-50/30">
                                     <td className="py-1.5 px-2">
                                       <div className="font-semibold text-foreground">{w.productName || '—'}</div>
                                       <div className="text-[10px] text-muted-foreground font-mono">{w.skuCode || ''}</div>
