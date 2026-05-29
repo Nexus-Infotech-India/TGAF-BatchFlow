@@ -14,7 +14,6 @@ import {
   Truck,
   ClipboardList,
   Target,
-  Sparkles,
   Boxes,
   Cog,
   Gauge,
@@ -1095,30 +1094,13 @@ const NewFGProductionEntryPage: React.FC = () => {
     <motion.div className="min-h-screen bg-gradient-to-br from-emerald-50/40 via-background to-teal-50/30 p-4 md:p-8" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="max-w-7xl mx-auto">
         {/* Page Header */}
-        <div className="relative mb-6 overflow-hidden rounded-md border border-emerald-100 bg-gradient-to-r from-white via-emerald-50/50 to-teal-50/60 shadow-sm">
-          <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-emerald-400/10 blur-3xl" />
-          <div className="absolute -bottom-16 left-1/3 h-40 w-40 rounded-full bg-teal-400/10 blur-3xl" />
-          <div className="relative flex items-center gap-4 p-5 md:p-6">
-            <Button
-              icon={<ArrowLeft size={18} />}
-              onClick={() => navigate('/packaging/fg-production')}
-              className="rounded-sm shadow-sm border-emerald-200 hover:border-emerald-400"
-              size="large"
-            />
-            <div className="flex h-12 w-12 items-center justify-center rounded-md bg-gradient-to-br from-emerald-500 to-teal-600 shadow-md">
-              <Sparkles size={22} className="text-white" />
-            </div>
-            <div className="flex-1">
-              <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                New Production Plan
-              </h1>
-              <p className="text-sm text-muted-foreground mt-0.5">Select location, plan raw materials, and allocate to machines</p>
-            </div>
-            <div className="hidden md:flex items-center gap-2 rounded-md border border-emerald-200 bg-white/70 backdrop-blur px-3 py-2 shadow-sm">
-              <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-bold text-emerald-700">Step {step + 1} of {stepItems.length}</span>
-            </div>
-          </div>
+        <div className="mb-4 flex items-center gap-3">
+          <Button
+            icon={<ArrowLeft size={18} />}
+            onClick={() => navigate('/packaging/fg-production')}
+            className="rounded-sm border-emerald-200 hover:border-emerald-400"
+          />
+          <h1 className="text-2xl font-bold text-emerald-700">New Production Plan</h1>
         </div>
 
         <motion.div className="bg-card rounded-sm p-4 mb-6 border border-border shadow-sm">
@@ -1147,13 +1129,14 @@ const NewFGProductionEntryPage: React.FC = () => {
                 </div>
 
                 {/* Form Card */}
-                <div className="relative rounded-md border border-border bg-gradient-to-br from-emerald-50/40 via-card to-teal-50/30 p-5 md:p-6 shadow-sm">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="rounded-xl border border-border bg-card p-5 md:p-7 shadow-sm space-y-6">
+                  {/* Location + Target product */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                     {/* Field 1: Location */}
-                    <div className="group rounded-md border border-border bg-card p-4 shadow-sm transition-all hover:border-emerald-400 hover:shadow-md">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-emerald-100 text-emerald-700 font-bold text-xs">01</div>
-                        <MapPin size={16} className="text-emerald-600" />
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-100 text-emerald-700 font-bold text-[11px]">01</span>
+                        <MapPin size={15} className="text-emerald-600" />
                         <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Production Location</label>
                       </div>
                       <Select
@@ -1164,14 +1147,14 @@ const NewFGProductionEntryPage: React.FC = () => {
                         loading={fetchingBase}
                         disabled
                       />
-                      <p className="mt-2 text-[11px] text-muted-foreground">FG production is locked to the Production Floor location.</p>
+                      <p className="mt-1.5 text-[11px] text-muted-foreground">FG production is locked to the Production Floor location.</p>
                     </div>
 
                     {/* Field 2: Target BOM */}
-                    <div className="group rounded-md border border-border bg-card p-4 shadow-sm transition-all hover:border-emerald-400 hover:shadow-md">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-violet-100 text-violet-700 font-bold text-xs">02</div>
-                        <Target size={16} className="text-violet-600" />
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="flex h-6 w-6 items-center justify-center rounded-md bg-violet-100 text-violet-700 font-bold text-[11px]">02</span>
+                        <Target size={15} className="text-violet-600" />
                         <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Target FG Item (BOM)</label>
                       </div>
                       <Select
@@ -1180,17 +1163,21 @@ const NewFGProductionEntryPage: React.FC = () => {
                         options={boms.map(b => ({ value: b.id, label: b.productName }))}
                         loading={fetchingBase}
                       />
-                      <p className="mt-2 text-[11px] text-muted-foreground">Finished good you want to produce</p>
+                      <p className="mt-1.5 text-[11px] text-muted-foreground">Finished good you want to produce</p>
                     </div>
+                  </div>
 
-                    {/* Field 3: Planned Production (in CARTONS) */}
-                    <div className="md:col-span-2 group rounded-md border border-border bg-card p-4 shadow-sm transition-all hover:border-emerald-400 hover:shadow-md">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-sm bg-amber-100 text-amber-700 font-bold text-xs">03</div>
-                        <Boxes size={16} className="text-amber-600" />
-                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Planned Cartons</label>
-                      </div>
-                      <div className="flex items-center gap-3">
+                  <div className="h-px w-full bg-border" />
+
+                  {/* Field 3: Planned Production (in CARTONS) */}
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="flex h-6 w-6 items-center justify-center rounded-md bg-amber-100 text-amber-700 font-bold text-[11px]">03</span>
+                      <Boxes size={15} className="text-amber-600" />
+                      <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Planned Cartons</label>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                      <div className="flex items-center gap-2 flex-1 min-w-0">
                         <InputNumber
                           min={1}
                           step={1}
@@ -1212,32 +1199,32 @@ const NewFGProductionEntryPage: React.FC = () => {
                           }}
                           placeholder="E.g. 100"
                         />
-                        <div className="text-xs text-muted-foreground font-semibold whitespace-nowrap px-2">cartons</div>
-                        <Button
-                          type="primary"
-                          size="large"
-                          onClick={handleCheckAvailability}
-                          loading={loadingItems}
-                          disabled={!selectedLocationId || !selectedBomId || !plannedCartons || plannedCartons <= 0}
-                          className="rounded-sm font-bold shadow-md border-0 whitespace-nowrap"
-                          style={{ background: (!selectedLocationId || !selectedBomId || !plannedCartons || plannedCartons <= 0) ? undefined : 'linear-gradient(135deg, #8b5cf6, #6d28d9)' }}
-                          icon={<Search size={16} />}
-                        >
-                          Check Availability
-                        </Button>
+                        <span className="text-xs text-muted-foreground font-semibold whitespace-nowrap">cartons</span>
                       </div>
-                      {/* Derived weight preview */}
-                      {plannedCartons && selectedBomId && (() => {
-                        const bom = boms.find((b) => b.id === selectedBomId);
-                        if (!bom) return null;
-                        return (
-                          <p className="mt-2 text-[11px] text-emerald-700 font-medium">
-                            {plannedCartons} cartons × {bom.outputQuantity} {bom.unitOfMeasurement} per carton = <span className="font-bold">{Number((plannedCartons * bom.outputQuantity).toFixed(3))} {bom.unitOfMeasurement}</span> total
-                          </p>
-                        );
-                      })()}
-                      <p className="mt-1 text-[11px] text-muted-foreground">1 carton = 1 BOM execution. Material requirements scale automatically.</p>
+                      <Button
+                        type="primary"
+                        size="large"
+                        onClick={handleCheckAvailability}
+                        loading={loadingItems}
+                        disabled={!selectedLocationId || !selectedBomId || !plannedCartons || plannedCartons <= 0}
+                        className="rounded-sm font-bold shadow-md border-0 whitespace-nowrap"
+                        style={{ background: (!selectedLocationId || !selectedBomId || !plannedCartons || plannedCartons <= 0) ? undefined : 'linear-gradient(135deg, #8b5cf6, #6d28d9)' }}
+                        icon={<Search size={16} />}
+                      >
+                        Check Availability
+                      </Button>
                     </div>
+                    {/* Derived weight preview */}
+                    {plannedCartons && selectedBomId && (() => {
+                      const bom = boms.find((b) => b.id === selectedBomId);
+                      if (!bom) return null;
+                      return (
+                        <p className="mt-2 text-[11px] text-emerald-700 font-medium">
+                          {plannedCartons} cartons × {bom.outputQuantity} {bom.unitOfMeasurement} per carton = <span className="font-bold">{Number((plannedCartons * bom.outputQuantity).toFixed(3))} {bom.unitOfMeasurement}</span> total
+                        </p>
+                      );
+                    })()}
+                    <p className="mt-1 text-[11px] text-muted-foreground">1 carton = 1 BOM execution. Material requirements scale automatically.</p>
                   </div>
 
                   {/* Plan Summary */}
@@ -1245,7 +1232,7 @@ const NewFGProductionEntryPage: React.FC = () => {
                     <motion.div
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="mt-5 flex flex-wrap items-center gap-3 rounded-md border border-emerald-200 bg-emerald-50/60 px-4 py-3"
+                      className="flex flex-wrap items-center gap-3 rounded-lg border border-emerald-200 bg-emerald-50/60 px-4 py-3"
                     >
                       <div className="flex items-center gap-2">
                         <CheckCircle size={16} className="text-emerald-600" />

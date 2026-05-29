@@ -1,4 +1,5 @@
 import axios from "axios";
+import { notifyError, humanizeError } from "./notify";
 
 // Create an Axios instance
 const api = axios.create({
@@ -15,6 +16,19 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// Global safety net: any failed request shows a plain-language alert, so no
+// process can fail silently. A handler that wants to fully control its own error
+// messaging can opt out by passing { skipGlobalErrorToast: true } in the request config.
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (!(error?.config as any)?.skipGlobalErrorToast) {
+      notifyError(humanizeError(error));
+    }
+    return Promise.reject(error);
+  }
+);
 
 // ...existing code...
 
